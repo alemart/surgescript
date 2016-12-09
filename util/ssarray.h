@@ -1,0 +1,41 @@
+/*
+ * SurgeScript
+ * A lightweight programming language for computer games and interactive apps
+ * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ *
+ * util/ssarray.h
+ * SurgeScript expandable arrays
+ */
+
+#include "util.h"
+
+/*
+ * SSARRAY()
+ * declares an array of a certain type
+ */
+#define SSARRAY(type, arr)                    type* arr; int arr##_len, arr##_cap;
+
+/*
+ * ssarray_init()
+ * initializes the array
+ */
+#define ssarray_init(arr)                     (arr##_len = 0, arr##_cap = 4, arr = ssmalloc(arr##_cap * sizeof(*arr)))
+
+/*
+ * ssarray_release()
+ * releases the array
+ */
+#define ssarray_release(arr)                  (arr##_len = arr##_cap = 0, arr = (arr ? ssfree(arr) : NULL))
+
+/*
+ * ssarray_push()
+ * pushes element 'x' into the array, returning the new length of the array
+ */
+#define ssarray_push(arr, x)                  \
+    (*(((arr##_len >= arr##_cap) ? (arr = ssrealloc(arr, (arr##_cap *= 2) * sizeof(*arr))) : arr) + (arr##_len)) = (x), ++arr##_len)
+
+/*
+ * ssarray_length()
+ * returns the length of the array
+ */
+#define ssarray_length(arr)                   (arr##_len)
