@@ -17,24 +17,16 @@
 #include "runtime/program.h"
 #include "runtime/program_pool.h"
 #include "runtime/object_pool.h"
-struct surgescript_var2_t
-{
-    enum surgescript_vartype_t type;
-    union {
-        float number;
-        int boolean;
-        char* string;
-        unsigned handle;
-        void* lambda;
-    };
-};
+
 void setup(surgescript_program_t* program, surgescript_program_t* called_program)
 {
     surgescript_program_label_t loop = surgescript_program_create_label(program);
     surgescript_program_label_t loop2 = surgescript_program_create_label(program);
-    surgescript_program_add_text(program, "Contador:");
-    surgescript_program_add_text(program, "ale");
 
+    surgescript_program_add_text(program, "Contador:");
+    surgescript_program_add_text(program, "fun2");
+
+    // hello
     surgescript_program_add_line(program, SSOP_ASSIGN_STRING, SSOP(0), SSOP(0), SSNOP); // t[0] = text[0]
     surgescript_program_add_line(program, SSOP_OUT, SSOP(0), SSNOP, SSNOP);  // print t[0]
 
@@ -67,7 +59,10 @@ void setup(surgescript_program_t* program, surgescript_program_t* called_program
         surgescript_program_add_line(program, SSOP_DEC, SSOP(2), SSNOP, SSNOP); // t[2] -= 1
         surgescript_program_add_line(program, SSOP_JMP_IF_NOTZERO, SSOP(loop2), SSOP(2), SSNOP); // jmp loop2 if t[2] <> 0
 
-    printf("sz = %lu, %u\n", sizeof(struct surgescript_var2_t), sizeof(surgescript_vartype_t));
+    // call other program
+    surgescript_program_add_line(program, SSOP_ASSIGN_STRING, SSOP(0), SSOP(1), SSNOP); // t[0] = text[1]
+    surgescript_program_add_line(program, SSOP_ASSIGN_OBJECTHANDLE, SSOP(1), SSOP(0), SSNOP); // t[1] = (object)0
+    surgescript_program_add_line(program, SSOP_CALL, SSOP(0), SSOP(1), SSOP(0));
 }
 
 void setup2(surgescript_program_t* program)
@@ -90,12 +85,13 @@ int main()
     setup2(called_program);
     setup(program, called_program);
 
+    surgescript_programpool_put(program_pool, "null", "fun1", program);
+    surgescript_programpool_put(program_pool, "null", "fun2", called_program);
+
     puts("oie!\n");
-    surgescript_program_run_update(program, runtimeenv);
-    surgescript_program_run_render(program, runtimeenv);
+    surgescript_program_run(program, runtimeenv);
     puts("EOF\n");
 
-    surgescript_program_destroy(program);
     surgescript_renv_destroy(runtimeenv);
     surgescript_heap_destroy(heap);
     surgescript_stack_destroy(stack);

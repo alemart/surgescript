@@ -17,7 +17,7 @@
 #include "../util/util.h"
 
 /* how many temporary vars does a runtime environment have? */
-static const int MAX_TMPVARS = 3;
+static const int MAX_TMPVARS = 4; /* used for calculations. the last one is used as a return value (for functions) */
 
 
 /*

@@ -12,6 +12,13 @@
 
 #include "renv.h"
 
+/*
+ * A program is composed by:
+ * 1. operations = a sequence of ( operator, operand_a, operand_b, operand_c )
+ * 2. labels = indexes of operations
+ * 3. string literals
+ */
+
 /* programs */
 typedef struct surgescript_program_t surgescript_program_t;
 struct surgescript_program_t;
@@ -97,10 +104,10 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_JMP_IF_LOWEROREQUAL,       // ip = label[a] if t[b] <= t[c]
     SSOP_JMP_IF_GREATEROREQUAL,     // ip = label[a] if t[b] >= t[c]
     SSOP_JMP_IF_ZERO,               // ip = label[a] if t[b] == 0
-    SSOP_JMP_IF_NOTZERO,            // ip = label[a] if t[b] <> 0
+    SSOP_JMP_IF_NOTZERO,            // ip = label[a] if t[b] <> 
 
-    SSOP_CALL = 0x90,               // t[a] = call program t[a] from object t[b] with n = c parameters
-    SSOP_CALL_USERFUN,              // t[a] = call user-defined function named text[a] with n = b parameters
+    SSOP_CALL = 0x90,               // t[a] = call program having name text[t[a]] from object whose handle is t[b] with n = c parameters
+    SSOP_CALL_USERFUN,              // t[a] = call user-defined function named text[t[a]] with n = b parameters
     SSOP_ROOT_HANDLE,               // t[a] = handle to the root object in the object pool
     SSOP_SELF_HANDLE,               // t[a] = handle to this object (self) in the object pool
     SSOP_STATE,                     // t[a] = name of the current state of this object
@@ -128,12 +135,13 @@ int surgescript_program_add_text(surgescript_program_t* program, const char* tex
 /* program data */
 int surgescript_program_arity(const surgescript_program_t* program); /* what's the arity of this program? */
 const char* surgescript_program_get_text(const surgescript_program_t* program, int index); /* reads a string literal (text[index]) from the program */
-int surgescript_program_find_text(const surgescript_program_t* program, const char* text); /* finds index such that text[index] == text, or -1 if not found */
+int surgescript_program_find_text(const surgescript_program_t* program, const char* text); /* finds the first index such that text[index] == text, or -1 if not found */
 int surgescript_program_text_count(const surgescript_program_t* program); /* how many string literals exist in the program? */
 
 
 /* execute the program */
-void surgescript_program_run_update(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
-void surgescript_program_run_render(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
+void surgescript_program_run(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
+//void surgescript_program_run_update(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
+//void surgescript_program_run_render(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
 
 #endif

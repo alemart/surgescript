@@ -17,8 +17,6 @@ typedef struct surgescript_object_t surgescript_object_t;
 struct surgescript_program_t;
 struct surgescript_heap_t;
 
-
-
 /* public methods */
 
 /* these are handled by the object pool */
@@ -35,6 +33,6 @@ unsigned surgescript_object_child(const surgescript_object_t* object, int index)
 int surgescript_object_child_count(const surgescript_object_t* object);
 
 void surgescript_object_set_name(surgescript_object_t* object, const char* name);
-void surgescript_object_register_program(surgescript_object_t* object, const char* fun_name, struct surgescript_program_t* program);
+//void surgescript_object_register_program(surgescript_object_t* object, const char* fun_name, struct surgescript_program_t* program); // n preciso
 
 #endif

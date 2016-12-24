@@ -72,7 +72,7 @@ void surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
         HASH_ADD_KEYPTR(hh, pool->hash, pair->signature, strlen(pair->signature), pair);
     }
     else
-        ssfatal("Runtime Error: duplicate entry \"%s.%s\" in the program pool", object_name, program_name);
+        ssfatal("Runtime Error: duplicate function \"%s\" in object \"%s\".", program_name, object_name);
 }
 
 /*
