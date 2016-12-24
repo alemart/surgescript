@@ -53,7 +53,7 @@ surgescript_programpool_t* surgescript_programpool_destroy(surgescript_programpo
     HASH_ITER(hh, pool->hash, it, tmp) {
         HASH_DEL(pool->hash, it);
         ssfree(it->signature);
-        surgescript_programpool_destroy(it->program);
+        surgescript_program_destroy(it->program);
         ssfree(it);
     }
     return ssfree(pool);

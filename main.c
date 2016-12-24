@@ -83,7 +83,7 @@ int main()
     surgescript_heap_t* heap = surgescript_heap_create();
     surgescript_programpool_t* program_pool = surgescript_programpool_create();
     surgescript_objectpool_t* object_pool = surgescript_objectpool_create(NULL);
-    surgescript_program_runtimeenv_t* runtimeenv = surgescript_program_runtimeenv_create(NULL, stack, heap, program_pool, object_pool);
+    const surgescript_renv_t* runtimeenv = surgescript_renv_create(NULL, stack, heap, program_pool, object_pool);
     surgescript_program_t* program = surgescript_program_create(0, 0);
     surgescript_program_t* called_program = surgescript_program_create(0, 0);
 
@@ -91,16 +91,12 @@ int main()
     setup(program, called_program);
 
     puts("oie!\n");
-    surgescript_program_run_init(called_program, runtimeenv);
-    surgescript_program_run_init(program, runtimeenv);
     surgescript_program_run_update(program, runtimeenv);
     surgescript_program_run_render(program, runtimeenv);
-    surgescript_program_run_release(program, runtimeenv);
-    surgescript_program_run_release(called_program, runtimeenv);
     puts("EOF\n");
 
     surgescript_program_destroy(program);
-    surgescript_program_runtimeenv_destroy(runtimeenv);
+    surgescript_renv_destroy(runtimeenv);
     surgescript_heap_destroy(heap);
     surgescript_stack_destroy(stack);
     surgescript_programpool_destroy(program_pool);

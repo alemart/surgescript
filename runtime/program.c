@@ -17,8 +17,7 @@
 #include "heap.h"
 #include "stack.h"
 #include "object.h"
-#include "lambda.h"
-#include "runtime_environment.h"
+#include "renv.h"
 #include "../util/util.h"
 #include "../util/ssarray.h"
 
@@ -44,7 +43,7 @@ struct surgescript_program_operation_t
     surgescript_program_operand_t a, b, c;
 };
 
-static inline void run_instruction(surgescript_program_t* program, surgescript_program_runtimeenv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c);
+static inline void run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c);
 
 /* delayed BUILT-IN calls (used for rendering) */
 struct surgescript_program_delayedcalls_t
@@ -211,19 +210,10 @@ int surgescript_program_arity(const surgescript_program_t* program)
 }
 
 /*
- * surgescript_program_run_init()
- * Initializes a written program (runs only once per object)
- */
-void surgescript_program_run_init(surgescript_program_t* program, surgescript_program_runtimeenv_t* runtime_environment)
-{
-    /* init built-in calls */
-}
-
-/*
  * surgescript_program_run_update()
  * Runs a written program
  */
-void surgescript_program_run_update(surgescript_program_t* program, surgescript_program_runtimeenv_t* runtime_environment)
+void surgescript_program_run_update(surgescript_program_t* program, const surgescript_renv_t* runtime_environment)
 {
     program->delayedcalls = surgescript_program_delayedcalls_create();
     program->ip = 0;
@@ -235,22 +225,11 @@ void surgescript_program_run_update(surgescript_program_t* program, surgescript_
  * surgescript_program_run_render()
  * Rendering routines of a written program (called after update)
  */
-void surgescript_program_run_render(surgescript_program_t* program, surgescript_program_runtimeenv_t* runtime_environment)
+void surgescript_program_run_render(surgescript_program_t* program, const surgescript_renv_t* runtime_environment)
 {
-    surgescript_program_delayedcalls_run(program->delayedcalls, runtime_environment->self);
+    surgescript_program_delayedcalls_run(program->delayedcalls, surgescript_renv_owner(runtime_environment));
     program->delayedcalls = surgescript_program_delayedcalls_destroy(program->delayedcalls);
 }
-
-/*
- * surgescript_program_run_release()
- * Releases a written program (runs only once per object)
- */
-void surgescript_program_run_release(surgescript_program_t* program, surgescript_program_runtimeenv_t* runtime_environment)
-{
-    /* release built-in calls */
-}
-
-
 
 /* -------------------------------
  * private stuff
@@ -301,10 +280,10 @@ void surgescript_program_delayedcalls_run(surgescript_program_delayedcalls_t* de
 }
 
 /* runs an instruction */
-void run_instruction(surgescript_program_t* program, surgescript_program_runtimeenv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c)
+void run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c)
 {
     /* temporary variables */
-    surgescript_var_t** t = runtime_environment->tmp;
+    surgescript_var_t** t = surgescript_renv_tmp(runtime_environment);
 
     /* run the instruction */
     switch(instruction) {
@@ -347,18 +326,18 @@ void run_instruction(surgescript_program_t* program, surgescript_program_runtime
             surgescript_var_set_objecthandle(t[a.u], b.u);
             break;
 
-        case SSOP_ASSIGN_LAMBDA: {
+        /*case SSOP_ASSIGN_LAMBDA: {
             surgescript_object_t* o = surgescript_objectpool_get(runtime_environment->object_pool, surgescript_var_get_number(t[b.u]));
             if(o != NULL) {
                 surgescript_var_set_lambda(t[a.u], surgescript_program_lambda_create(
                     surgescript_programpool_get(
                         runtime_environment->program_pool,
-                        surgescript_object_name(o), /* TODO: inheritance */
+                        surgescript_object_name(o), // TODO: inheritance
                         program->text[b.u]
                     ),
-                    surgescript_program_runtimeenv_create(
+                    surgescript_renv_create(
                         o,
-                        runtime_environment->stack,
+                        surgescript_renv_stack(runtime_environment),
                         surgescript_object_heap(o),
                         runtime_environment->program_pool,
                         runtime_environment->object_pool
@@ -366,43 +345,43 @@ void run_instruction(surgescript_program_t* program, surgescript_program_runtime
                 ));
             }
             else
-                ssfatal("Runtime Error: null pointer exception - accessing invalid object in %s", surgescript_object_name(runtime_environment->self));
+                ssfatal("Runtime Error: null pointer exception - accessing invalid object in %s", surgescript_object_name(surgescript_renv_owner(runtime_environment)));
             break;
-        }
+        }*/
 
         /* heap operations */
         case SSOP_STORE:
-            surgescript_var_copy(surgescript_heap_at(runtime_environment->heap, (surgescript_heapptr_t)surgescript_var_get_number(t[a.u])), t[b.u]);
+            surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[a.u])), t[b.u]);
             break;
 
         case SSOP_LOAD:
-            surgescript_var_copy(t[a.u], surgescript_heap_at(runtime_environment->heap, (surgescript_heapptr_t)surgescript_var_get_number(t[b.u])));
+            surgescript_var_copy(t[a.u], surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[b.u])));
             break;
 
         case SSOP_MALLOC:
-            surgescript_var_set_number(t[a.u], surgescript_heap_malloc(runtime_environment->heap));
+            surgescript_var_set_number(t[a.u], surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
             break;
 
         case SSOP_FREE:
-            surgescript_heap_free(runtime_environment->heap, (surgescript_heapptr_t)surgescript_var_get_number(t[a.u]));
+            surgescript_heap_free(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[a.u]));
             break;
 
         /* stack operations */
         case SSOP_PUSH:
-            surgescript_var_copy(surgescript_stack_push(runtime_environment->stack), t[a.u]);
+            surgescript_var_copy(surgescript_stack_push(surgescript_renv_stack(runtime_environment)), t[a.u]);
             break;
 
         case SSOP_POP:
-            surgescript_var_copy(t[a.u], surgescript_stack_top(runtime_environment->stack));
-            surgescript_stack_pop(runtime_environment->stack);
+            surgescript_var_copy(t[a.u], surgescript_stack_top(surgescript_renv_stack(runtime_environment)));
+            surgescript_stack_pop(surgescript_renv_stack(runtime_environment));
             break;
 
         case SSOP_PEEK:
-            surgescript_var_copy(t[a.u], surgescript_stack_at(runtime_environment->stack, (int)b.u));
+            surgescript_var_copy(t[a.u], surgescript_stack_at(surgescript_renv_stack(runtime_environment), (int)b.u));
             break;
 
         case SSOP_POKE:
-            surgescript_var_copy(surgescript_stack_at(runtime_environment->stack, (int)a.u),  t[b.u]);
+            surgescript_var_copy(surgescript_stack_at(surgescript_renv_stack(runtime_environment), (int)a.u),  t[b.u]);
             break;
 
         /* basic arithmetic */
@@ -618,7 +597,7 @@ void run_instruction(surgescript_program_t* program, surgescript_program_runtime
         /* function calls */
         /* FIXME: is render needed at all? */
 
-        case SSOP_CALL: {
+        /*case SSOP_CALL: {
             const surgescript_program_lambda_t* lambda = surgescript_var_get_lambda(t[a.u]);
             if(lambda != NULL) {
                 const surgescript_program_t* prog = surgescript_program_lambda_program(lambda);
@@ -627,10 +606,14 @@ void run_instruction(surgescript_program_t* program, surgescript_program_runtime
                 if(expected_params == actual_params)
                     surgescript_program_lambda_run_update(lambda);
                 else
-                    ssfatal("Runtime Error: a function called in %s expected %d parameters, but received %d", surgescript_object_name(runtime_environment->self), expected_params, actual_params);
+                    ssfatal("Runtime Error: a function called in %s expected %d parameters, but received %d", surgescript_object_name(surgescript_renv_owner(runtime_environment)), expected_params, actual_params);
             }
             else
-                ssfatal("Runtime Error: in %s, can't perform a function call on something that isn't a function", surgescript_object_name(runtime_environment->self));
+                ssfatal("Runtime Error: in %s, can't perform a function call on something that isn't a function", surgescript_object_name(surgescript_renv_owner(runtime_environment)));
+            break;
+        }*/
+        case SSOP_CALL: {
+            /* TODO */
             break;
         }
 

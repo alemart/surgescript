@@ -10,7 +10,7 @@
 #ifndef _SURGESCRIPT_RUNTIME_PROGRAM_H
 #define _SURGESCRIPT_RUNTIME_PROGRAM_H
 
-#include "runtime_environment.h"
+#include "renv.h"
 
 /* programs */
 typedef struct surgescript_program_t surgescript_program_t;
@@ -45,7 +45,6 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_ASSIGN_NUMBER,             // t[a] = b
     SSOP_ASSIGN_STRING,             // t[a] = text[b]
     SSOP_ASSIGN_OBJECTHANDLE,       // t[a] = b
-    SSOP_ASSIGN_LAMBDA,             // t[a] = function named text[c] of object whose handle is t[b] >> TODO: inheritance
 
     SSOP_STORE = 0x20,              // *(t[a]) = t[b]
     SSOP_LOAD,                      // t[a] = *(t[b])
@@ -100,7 +99,7 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_JMP_IF_ZERO,               // ip = label[a] if t[b] == 0
     SSOP_JMP_IF_NOTZERO,            // ip = label[a] if t[b] <> 0
 
-    SSOP_CALL = 0x90,               // t[a] = call lambda t[a] with n = b parameters
+    SSOP_CALL = 0x90,               // t[a] = call program t[a] from object t[b] with n = c parameters
     SSOP_CALL_USERFUN,              // t[a] = call user-defined function named text[a] with n = b parameters
     SSOP_ROOT_HANDLE,               // t[a] = handle to the root object in the object pool
     SSOP_SELF_HANDLE,               // t[a] = handle to this object (self) in the object pool
@@ -134,9 +133,7 @@ int surgescript_program_text_count(const surgescript_program_t* program); /* how
 
 
 /* execute the program */
-void surgescript_program_run_init(surgescript_program_t* program, struct surgescript_program_runtimeenv_t* runtime_environment); /* runs only once per object */
-void surgescript_program_run_update(surgescript_program_t* program, struct surgescript_program_runtimeenv_t* runtime_environment);
-void surgescript_program_run_render(surgescript_program_t* program, struct surgescript_program_runtimeenv_t* runtime_environment);
-void surgescript_program_run_release(surgescript_program_t* program, struct surgescript_program_runtimeenv_t* runtime_environment); /* runs only once per object */
+void surgescript_program_run_update(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
+void surgescript_program_run_render(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
 
 #endif

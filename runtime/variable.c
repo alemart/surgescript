@@ -14,7 +14,6 @@
 #include <limits.h>
 #include <float.h>
 #include "variable.h"
-#include "lambda.h"
 #include "../util/util.h"
 
 
@@ -33,15 +32,12 @@ struct surgescript_var_t
         int boolean;
         char* string;
         unsigned handle;
-        surgescript_program_lambda_t* lambda;
     };
 };
 
 /* helpers */
 #define RELEASE_DATA(var)       if(var->type == SSVAR_STRING) \
-                                    ssfree(var->string); \
-                                else if(var->type == SSVAR_LAMBDA) \
-                                    surgescript_program_lambda_destroy(var->lambda)
+                                    ssfree(var->string);
 /*static float string2number(const char* str);*/
 
 
@@ -140,19 +136,6 @@ surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsi
     return var;
 }
 
-/*
- * surgescript_var_set_lambda()
- * Sets the variable to a lambda
- */
-surgescript_var_t* surgescript_var_set_lambda(surgescript_var_t* var, surgescript_program_lambda_t* lambda)
-{
-    RELEASE_DATA(var);
-    var->type = SSVAR_LAMBDA;
-    var->lambda = lambda;
-    return var;
-}
-
-
 
 
 /* retrieve the value stored in a variable */
@@ -172,9 +155,11 @@ int surgescript_var_get_bool(const surgescript_var_t* var)
         return *(var->string) != 0 ? SSVAR_TRUE : SSVAR_FALSE;
     case SSVAR_NULL:
         return SSVAR_FALSE;
-    default:
+    case SSVAR_OBJECTHANDLE:
         return SSVAR_TRUE;
     }
+
+    return SSVAR_FALSE;
 }
 
 /*
@@ -190,9 +175,13 @@ float surgescript_var_get_number(const surgescript_var_t* var)
         return var->boolean ? 1.0f : 0.0f;
     case SSVAR_STRING:
         return atof(var->string);
-    default:
+    case SSVAR_NULL:
+        return 0.0f;
+    case SSVAR_OBJECTHANDLE:
         return 0.0f;
     }
+
+    return 0.0f;
 }
 
 /*
@@ -225,16 +214,6 @@ unsigned surgescript_var_get_objecthandle(const surgescript_var_t* var)
     return var->type == SSVAR_OBJECTHANDLE ? var->handle : 0;
 }
 
-/*
- * surgescript_var_get_lambda()
- * Gets the lambda
- */
-const surgescript_program_lambda_t* surgescript_var_get_lambda(const surgescript_var_t* var)
-{
-    return var->type == SSVAR_LAMBDA ? var->lambda : NULL;
-}
-
-
 
 /* misc */
 
@@ -259,9 +238,6 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
         break;
     case SSVAR_OBJECTHANDLE:
         dst->handle = src->handle;
-        break;
-    case SSVAR_LAMBDA:
-        dst->lambda = surgescript_program_lambda_clone(src->lambda);
         break;
     default:
         break;
@@ -296,30 +272,25 @@ surgescript_vartype_t surgescript_var_type(const surgescript_var_t* var)
 char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t bufsize)
 {
     switch(var->type) {
-    case SSVAR_STRING:
-        return surgescript_util_strncpy(buf, var->string, bufsize);
-    case SSVAR_BOOL:
-        return surgescript_util_strncpy(buf, var->boolean ? "true" : "false", bufsize);
-    case SSVAR_NULL:
-        return surgescript_util_strncpy(buf, "null", bufsize);
-    case SSVAR_NUMBER: {
-        char tmp[33];
-        if(var->number == (long)(var->number) || var->number <= LONG_MIN || var->number >= LONG_MAX)
-            sprintf(tmp, "%ld", (long)(var->number)); /* is integer */
-        else
-            sprintf(tmp, "%f", var->number);
-        return surgescript_util_strncpy(buf, tmp, bufsize);
-    }
-    case SSVAR_OBJECTHANDLE: {
-        char tmp[48];
-        sprintf(tmp, "[object @ 0x%x]", var->handle);
-        return surgescript_util_strncpy(buf, tmp, bufsize);
-    }
-    case SSVAR_LAMBDA: {
-        char tmp[48];
-        sprintf(tmp, "[fun @ 0x%p]", var->lambda);
-        return surgescript_util_strncpy(buf, tmp, bufsize);
-    }
+        case SSVAR_STRING:
+            return surgescript_util_strncpy(buf, var->string, bufsize);
+        case SSVAR_BOOL:
+            return surgescript_util_strncpy(buf, var->boolean ? "true" : "false", bufsize);
+        case SSVAR_NULL:
+            return surgescript_util_strncpy(buf, "null", bufsize);
+        case SSVAR_NUMBER: {
+            char tmp[33];
+            if(var->number == (long)(var->number) || var->number <= LONG_MIN || var->number >= LONG_MAX)
+                sprintf(tmp, "%ld", (long)(var->number)); /* is integer */
+            else
+                sprintf(tmp, "%f", var->number);
+            return surgescript_util_strncpy(buf, tmp, bufsize);
+        }
+        case SSVAR_OBJECTHANDLE: {
+            char tmp[48];
+            sprintf(tmp, "[object @ 0x%x]", var->handle);
+            return surgescript_util_strncpy(buf, tmp, bufsize);
+        }
     }
 
     return buf;
@@ -344,8 +315,6 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             return a->handle != b->handle ? (a->handle > b->handle ? 1 : -1) : 0;
         case SSVAR_STRING:
             return strcmp(a->string, b->string);
-        case SSVAR_LAMBDA:
-            return a->lambda != b->lambda ? (a->lambda > b->lambda ? 1 : -1) : 0;
         default:
             return 0;
         }
@@ -378,11 +347,6 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
         else if(a->type == SSVAR_OBJECTHANDLE || b->type == SSVAR_OBJECTHANDLE) {
             unsigned x = surgescript_var_get_objecthandle(a);
             unsigned y = surgescript_var_get_objecthandle(b);
-            return x != y ? (x < y ? -1 : 1) : 0;
-        }
-        else if(a->type == SSVAR_LAMBDA || b->type == SSVAR_LAMBDA) {
-            const surgescript_program_lambda_t* x = surgescript_var_get_lambda(a);
-            const surgescript_program_lambda_t* y = surgescript_var_get_lambda(b);
             return x != y ? (x < y ? -1 : 1) : 0;
         }
         else

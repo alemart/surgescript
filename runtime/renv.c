@@ -3,11 +3,11 @@
  * A lightweight programming language for computer games and interactive apps
  * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
- * runtime/runtime_environment.c
+ * runtime/renv.c
  * SurgeScript runtime environment (used to execute surgescript programs)
  */
 
-#include "runtime_environment.h"
+#include "renv.h"
 #include "variable.h"
 #include "heap.h"
 #include "stack.h"
@@ -21,15 +21,15 @@ static const int MAX_TMPVARS = 3;
 
 
 /*
- * surgescript_program_runtimeenv_create()
+ * surgescript_renv_create()
  * Creates a runtime environment
  */
-surgescript_program_runtimeenv_t* surgescript_program_runtimeenv_create(surgescript_object_t* self, surgescript_stack_t* stack, surgescript_heap_t* heap, surgescript_programpool_t* program_pool, surgescript_objectpool_t* object_pool)
+const surgescript_renv_t* surgescript_renv_create(surgescript_object_t* owner, surgescript_stack_t* stack, surgescript_heap_t* heap, surgescript_programpool_t* program_pool, surgescript_objectpool_t* object_pool)
 {
     int i;
-    surgescript_program_runtimeenv_t* runtime_environment = ssmalloc(sizeof *runtime_environment);
+    surgescript_renv_t* runtime_environment = ssmalloc(sizeof *runtime_environment);
 
-    runtime_environment->self = self;
+    runtime_environment->owner = owner; 
     runtime_environment->stack = stack;
     runtime_environment->heap = heap;
     runtime_environment->program_pool = program_pool;
@@ -42,15 +42,15 @@ surgescript_program_runtimeenv_t* surgescript_program_runtimeenv_create(surgescr
 }
 
 /*
- * surgescript_program_runtimeenv_clone()
+ * surgescript_renv_clone()
  * Clones a runtime environment
  */
-surgescript_program_runtimeenv_t* surgescript_program_runtimeenv_clone(const surgescript_program_runtimeenv_t* runtime_environment)
+const surgescript_renv_t* surgescript_renv_clone(const surgescript_renv_t* runtime_environment)
 {
     int i;
-    surgescript_program_runtimeenv_t* clone = ssmalloc(sizeof *clone);
+    surgescript_renv_t* clone = ssmalloc(sizeof *clone);
 
-    clone->self = runtime_environment->self;
+    clone->owner = runtime_environment->owner;
     clone->stack = runtime_environment->stack;
     clone->heap = runtime_environment->heap;
     clone->program_pool = runtime_environment->program_pool;
@@ -63,15 +63,23 @@ surgescript_program_runtimeenv_t* surgescript_program_runtimeenv_clone(const sur
 }
 
 /*
- * surgescript_program_runtimeenv_destroy()
+ * surgescript_renv_destroy()
  * Destroys a runtime environment
  */
-surgescript_program_runtimeenv_t* surgescript_program_runtimeenv_destroy(surgescript_program_runtimeenv_t* runtime_environment)
+const surgescript_renv_t* surgescript_renv_destroy(const surgescript_renv_t* runtime_environment)
 {
     int i;
     for(i = 0; i < MAX_TMPVARS; i++)
         surgescript_var_destroy(runtime_environment->tmp[i]);
     ssfree(runtime_environment->tmp);
-    ssfree(runtime_environment);
+    ssfree((surgescript_renv_t*)runtime_environment);
     return NULL;
 }
+
+/* inline getters */
+extern struct surgescript_object_t* surgescript_renv_owner(const surgescript_renv_t* renv);
+extern struct surgescript_stack_t* surgescript_renv_stack(const surgescript_renv_t* renv);
+extern struct surgescript_heap_t* surgescript_renv_heap(const surgescript_renv_t* renv);
+extern struct surgescript_programpool_t* surgescript_renv_programpool(const surgescript_renv_t* renv);
+extern struct surgescript_objectpool_t* surgescript_renv_objectpool(const surgescript_renv_t* renv);
+extern struct surgescript_var_t** surgescript_renv_tmp(const surgescript_renv_t* renv);
