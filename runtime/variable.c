@@ -19,9 +19,6 @@
 
 /* private stuff */
 
-/* boolean values */
-const int SSVAR_TRUE = -1;
-const int SSVAR_FALSE = 0;
 
 /* the variable struct */
 struct surgescript_var_t
@@ -29,7 +26,7 @@ struct surgescript_var_t
     enum surgescript_vartype_t type;
     union {
         float number;
-        int boolean;
+        bool boolean;
         char* string;
         unsigned handle;
     };
@@ -92,11 +89,11 @@ surgescript_var_t* surgescript_var_set_null(surgescript_var_t* var)
  * surgescript_var_set_bool()
  * Sets the variable to a boolean variable
  */
-surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, int boolean)
+surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, bool boolean)
 {
     RELEASE_DATA(var);
     var->type = SSVAR_BOOL;
-    var->boolean = boolean ? SSVAR_TRUE : SSVAR_FALSE;
+    var->boolean = boolean ? true : false;
     return var;
 }
 
@@ -144,22 +141,22 @@ surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsi
  * surgescript_var_get_bool()
  * Gets the boolean value of a variable
  */
-int surgescript_var_get_bool(const surgescript_var_t* var)
+bool surgescript_var_get_bool(const surgescript_var_t* var)
 {
     switch(var->type) {
     case SSVAR_BOOL:
         return var->boolean;
     case SSVAR_NUMBER:
-        return var->number != 0 ? SSVAR_TRUE : SSVAR_FALSE;
+        return var->number != 0 ? true : false;
     case SSVAR_STRING:
-        return *(var->string) != 0 ? SSVAR_TRUE : SSVAR_FALSE;
+        return *(var->string) != 0 ? true : false;
     case SSVAR_NULL:
-        return SSVAR_FALSE;
+        return false;
     case SSVAR_OBJECTHANDLE:
-        return SSVAR_TRUE;
+        return true;
     }
 
-    return SSVAR_FALSE;
+    return false;
 }
 
 /*
@@ -308,7 +305,7 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
     if(a->type == b->type) {
         switch(a->type) {
         case SSVAR_BOOL:
-            return a->boolean ^ b->boolean ? (a->boolean ? 1 : -1) : 0;
+            return a->boolean != b->boolean ? (a->boolean ? 1 : -1) : 0;
         case SSVAR_NUMBER:
             return fabsf(a->number - b->number) >= FLT_EPSILON ? (a->number > b->number ? 1 : -1) : 0;
         case SSVAR_OBJECTHANDLE:

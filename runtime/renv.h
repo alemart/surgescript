@@ -19,7 +19,7 @@ struct surgescript_objectpool_t;
 
 /* a program, to be run, needs a runtime environment (renv) */
 /* this is composed by an owner object, plus heap-stack-etc, plus some unique temporary variables */
-/* --- instead of messing with this directly, use the functions below instead --- */
+/* --- instead of messing with this directly, use the functions below --- */
 typedef struct surgescript_renv_t surgescript_renv_t;
 struct surgescript_renv_t
 {
@@ -34,7 +34,7 @@ struct surgescript_renv_t
 /* creates a new renv */
 const surgescript_renv_t* surgescript_renv_create(struct surgescript_object_t* owner, struct surgescript_stack_t* stack, struct surgescript_heap_t* heap, struct surgescript_programpool_t* program_pool, struct surgescript_objectpool_t* object_pool);
 
-/* clones an existing renv (except for the temporary variables) */
+/* clones an existing renv (the temporary variables are allocated anew) */
 const surgescript_renv_t* surgescript_renv_clone(const surgescript_renv_t* runtime_environment);
 
 /* destroys a renv */

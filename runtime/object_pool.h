@@ -10,7 +10,7 @@
 #ifndef _SURGESCRIPT_RUNTIME_OBJECTPOOL_H
 #define _SURGESCRIPT_RUNTIME_OBJECTPOOL_H
 
-/* types */
+/* opaque types */
 typedef struct surgescript_objectpool_t surgescript_objectpool_t;
 typedef unsigned surgescript_objectpool_handle_t;
 
@@ -27,7 +27,6 @@ struct surgescript_object_t* surgescript_objectpool_get(surgescript_objectpool_t
 surgescript_objectpool_handle_t surgescript_objectpool_delete(surgescript_objectpool_t* pool, surgescript_objectpool_handle_t handle);
 
 /* utilities */
-surgescript_objectpool_handle_t surgescript_objectpool_get_null(surgescript_objectpool_t* pool); /* handle to NULL */
 surgescript_objectpool_handle_t surgescript_objectpool_get_root(surgescript_objectpool_t* pool); /* handle to the root object */
 
 #endif

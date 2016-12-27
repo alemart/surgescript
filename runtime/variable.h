@@ -11,6 +11,7 @@
 #define _SURGESCRIPT_RUNTIME_VARIABLE_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 /* some types */
 typedef enum surgescript_vartype_t surgescript_vartype_t;
@@ -28,11 +29,6 @@ enum surgescript_vartype_t {
     SSVAR_OBJECTHANDLE
 };
 
-/* boolean values */
-extern const int SSVAR_TRUE;
-extern const int SSVAR_FALSE;
-
-
 
 
 
@@ -43,14 +39,14 @@ surgescript_var_t* surgescript_var_create();
 surgescript_var_t* surgescript_var_destroy(surgescript_var_t* var);
 
 /* retrieve the value stored in a variable */
-int surgescript_var_get_bool(const surgescript_var_t* var);
+bool surgescript_var_get_bool(const surgescript_var_t* var);
 float surgescript_var_get_number(const surgescript_var_t* var);
 char* surgescript_var_get_string(const surgescript_var_t* var); /* warning: allocates a new buffer; you have to ssfree() this */
 unsigned surgescript_var_get_objecthandle(const surgescript_var_t* var);
 
 /* sets the value of a variable */
 surgescript_var_t* surgescript_var_set_null(surgescript_var_t* var);
-surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, int boolean);
+surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, bool boolean);
 surgescript_var_t* surgescript_var_set_number(surgescript_var_t* var, float number);
 surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char* string);
 surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsigned handle);

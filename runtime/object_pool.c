@@ -31,8 +31,8 @@ surgescript_objectpool_t* surgescript_objectpool_create(surgescript_object_t* ro
     surgescript_objectpool_t* pool = ssmalloc(sizeof *pool);
     ssarray_init(pool->data);
 
-    surgescript_objectpool_put(pool, NULL);
     surgescript_objectpool_put(pool, root);
+    /*surgescript_objectpool_put(pool, NULL);*/
 
     return pool;
 }
@@ -71,10 +71,13 @@ surgescript_objectpool_handle_t surgescript_objectpool_put(surgescript_objectpoo
  */
 surgescript_object_t* surgescript_objectpool_get(surgescript_objectpool_t* pool, surgescript_objectpool_handle_t handle)
 {
-    if(handle < ssarray_length(pool->data)) /* handle is unsigned; therefore, not lower than zero */
-        return pool->data[handle];
-    else
-        return NULL;
+    if(handle < ssarray_length(pool->data)) { /* handle is unsigned; therefore, not lower than zero */
+        if(pool->data[handle] != NULL)
+            return pool->data[handle];
+    }
+
+    ssfatal("Null pointer exception (can't find object @ 0x%X)", handle);
+    return NULL;
 }
 
 /*
@@ -95,10 +98,10 @@ surgescript_objectpool_handle_t surgescript_objectpool_delete(surgescript_object
  * surgescript_objectpool_get_null()
  * Returns a handle to a NULL pointer in the object pool
  */
-surgescript_objectpool_handle_t surgescript_objectpool_get_null(surgescript_objectpool_t* pool)
+/*surgescript_objectpool_handle_t surgescript_objectpool_get_null(surgescript_objectpool_t* pool)
 {
-    return 0;
-}
+    return 1;
+}*/
 
 /*
  * surgescript_objectpool_get_root()
@@ -106,5 +109,5 @@ surgescript_objectpool_handle_t surgescript_objectpool_get_null(surgescript_obje
  */
 surgescript_objectpool_handle_t surgescript_objectpool_get_root(surgescript_objectpool_t* pool)
 {
-    return 1;
+    return 0;
 }

@@ -25,7 +25,7 @@
 
 /* forward declarations */
 typedef struct surgescript_program_operation_t surgescript_program_operation_t;
-typedef struct surgescript_program_delayedcalls_t surgescript_program_delayedcalls_t;
+/*typedef struct surgescript_program_delayedcalls_t surgescript_program_delayedcalls_t;*/
 
 /* the program structure */
 struct surgescript_program_t
@@ -35,7 +35,7 @@ struct surgescript_program_t
     SSARRAY(surgescript_program_operation_t, line); /* a set of operations (or lines of code) */
     SSARRAY(surgescript_program_label_t, label); /* labels (label[j] is the index of a line of code, j is a label) */
     SSARRAY(char*, text); /* read-only text data */
-    surgescript_program_delayedcalls_t* delayedcalls; /* used for rendering */
+    /*surgescript_program_delayedcalls_t* delayedcalls;*/ /* used for rendering */
 };
 
 /* an operation / command */
@@ -81,7 +81,7 @@ surgescript_program_t* surgescript_program_create(int arity, int num_local_vars)
     ssarray_init(program->line);
     ssarray_init(program->label);
     ssarray_init(program->text);
-    program->delayedcalls = NULL;
+    /*program->delayedcalls = NULL;*/
 
     return program;
 }
@@ -452,21 +452,21 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
 
         case SSOP_NOT:
             if(surgescript_var_get_bool(t[a.u]))
-                surgescript_var_set_bool(t[a.u], SSVAR_FALSE);
+                surgescript_var_set_bool(t[a.u], false);
             else
-                surgescript_var_set_bool(t[a.u], SSVAR_TRUE);
+                surgescript_var_set_bool(t[a.u], true);
             break;
 
         case SSOP_AND:
             if(surgescript_var_get_bool(t[a.u])) /* short-circuit operator */
                 surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[b.u]));
             else
-                surgescript_var_set_bool(t[a.u], SSVAR_FALSE);
+                surgescript_var_set_bool(t[a.u], false);
             break;
 
         case SSOP_OR:
             if(surgescript_var_get_bool(t[a.u])) /* short-circuit operator */
-                surgescript_var_set_bool(t[a.u], SSVAR_TRUE);
+                surgescript_var_set_bool(t[a.u], true);
             else
                 surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[b.u]));
             break;
@@ -640,6 +640,7 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
                 /* the parameters are pushed onto the stack (reverse order) */
                 surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
                 const surgescript_renv_t* renv_clone = surgescript_renv_clone(runtime_environment);
+                // alterar heap e objeto
 
                 surgescript_stack_pushenv(stack, prog->num_local_vars);
                 surgescript_program_run(prog, renv_clone);

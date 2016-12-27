@@ -32,7 +32,14 @@
  * pushes element 'x' into the array, returning the new length of the array
  */
 #define ssarray_push(arr, x)                  \
-    (*(((arr##_len >= arr##_cap) ? (arr = ssrealloc(arr, (arr##_cap *= 2) * sizeof(*arr))) : arr) + (arr##_len)) = (x), ++arr##_len)
+    (*(((arr##_len >= arr##_cap) ? (arr = ssrealloc(arr, (arr##_cap *= 2) * sizeof(*(arr)))) : arr) + (arr##_len)) = (x), ++arr##_len)
+
+/*
+ * ssarray_remove()
+ * removes the index-th element from the array. Must give index >= 0
+ */
+ #define ssarray_remove(arr, index)           \
+    do { for(int j = (index) + 1; j < (arr##_len); j++) { memmove((arr) + j - 1, (arr) + j, sizeof(*(arr))); } if(arr##_len > (index)) arr##_len--; } while(0)
 
 /*
  * ssarray_length()
