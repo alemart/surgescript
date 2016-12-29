@@ -3,17 +3,17 @@
  * A lightweight programming language for computer games and interactive apps
  * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
- * util/object_pool.c
- * SurgeScript object pool
+ * util/object_manager.c
+ * SurgeScript object manager
  */
 
-#include "object_pool.h"
+#include "object_manager.h"
 #include "object.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
 
 /* types */
-struct surgescript_objectpool_t
+struct surgescript_objectmanager_t
 {
     SSARRAY(surgescript_object_t*, data);
 };
@@ -23,25 +23,25 @@ struct surgescript_objectpool_t
  * ------------------------------- */
 
 /*
- * surgescript_objectpool_create()
- * Creates a new object pool
+ * surgescript_objectmanager_create()
+ * Creates a new object manager
  */
-surgescript_objectpool_t* surgescript_objectpool_create(surgescript_object_t* root)
+surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_object_t* root)
 {
-    surgescript_objectpool_t* pool = ssmalloc(sizeof *pool);
+    surgescript_objectmanager_t* pool = ssmalloc(sizeof *pool);
     ssarray_init(pool->data);
 
-    surgescript_objectpool_put(pool, root);
-    /*surgescript_objectpool_put(pool, NULL);*/
+    surgescript_objectmanager_put(pool, NULL);
+    surgescript_objectmanager_put(pool, root);
 
     return pool;
 }
 
 /*
- * surgescript_objectpool_destroy()
- * Destroys an object pool
+ * surgescript_objectmanager_destroy()
+ * Destroys an object manager
  */
-surgescript_objectpool_t* surgescript_objectpool_destroy(surgescript_objectpool_t* pool)
+surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objectmanager_t* pool)
 {
     int i, len = ssarray_length(pool->data);
 
@@ -56,20 +56,20 @@ surgescript_objectpool_t* surgescript_objectpool_destroy(surgescript_objectpool_
 
 
 /*
- * surgescript_objectpool_put()
+ * surgescript_objectmanager_put()
  * Puts an object in the pool
  */
-surgescript_objectpool_handle_t surgescript_objectpool_put(surgescript_objectpool_t* pool, surgescript_object_t* object)
+surgescript_objectmanager_handle_t surgescript_objectmanager_put(surgescript_objectmanager_t* pool, surgescript_object_t* object)
 {
     ssarray_push(pool->data, object);
     return ssarray_length(pool->data) - 1;
 }
 
 /*
- * surgescript_objectpool_get()
+ * surgescript_objectmanager_get()
  * Gets an object from the pool (returns NULL if not found)
  */
-surgescript_object_t* surgescript_objectpool_get(surgescript_objectpool_t* pool, surgescript_objectpool_handle_t handle)
+surgescript_object_t* surgescript_objectmanager_get(surgescript_objectmanager_t* pool, surgescript_objectmanager_handle_t handle)
 {
     if(handle < ssarray_length(pool->data)) { /* handle is unsigned; therefore, not lower than zero */
         if(pool->data[handle] != NULL)
@@ -81,10 +81,10 @@ surgescript_object_t* surgescript_objectpool_get(surgescript_objectpool_t* pool,
 }
 
 /*
- * surgescript_objectpool_delete()
+ * surgescript_objectmanager_delete()
  * Deletes an object from the pool
  */
-surgescript_objectpool_handle_t surgescript_objectpool_delete(surgescript_objectpool_t* pool, surgescript_objectpool_handle_t handle)
+surgescript_objectmanager_handle_t surgescript_objectmanager_delete(surgescript_objectmanager_t* pool, surgescript_objectmanager_handle_t handle)
 {
     if(handle < ssarray_length(pool->data)) {
         if(pool->data[handle] != NULL)
@@ -95,19 +95,19 @@ surgescript_objectpool_handle_t surgescript_objectpool_delete(surgescript_object
 }
 
 /*
- * surgescript_objectpool_get_null()
- * Returns a handle to a NULL pointer in the object pool
+ * surgescript_objectmanager_get_null()
+ * Returns a handle to a NULL pointer in the object manager
  */
-/*surgescript_objectpool_handle_t surgescript_objectpool_get_null(surgescript_objectpool_t* pool)
-{
-    return 1;
-}*/
-
-/*
- * surgescript_objectpool_get_root()
- * Returns a handle to the root object in the pool
- */
-surgescript_objectpool_handle_t surgescript_objectpool_get_root(surgescript_objectpool_t* pool)
+surgescript_objectmanager_handle_t surgescript_objectmanager_get_null(surgescript_objectmanager_t* pool)
 {
     return 0;
+}
+
+/*
+ * surgescript_objectmanager_get_root()
+ * Returns a handle to the root object in the pool
+ */
+surgescript_objectmanager_handle_t surgescript_objectmanager_get_root(surgescript_objectmanager_t* pool)
+{
+    return 1;
 }

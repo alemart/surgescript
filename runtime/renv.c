@@ -13,7 +13,7 @@
 #include "stack.h"
 #include "object.h"
 #include "program_pool.h"
-#include "object_pool.h"
+#include "object_manager.h"
 #include "../util/util.h"
 
 /* how many temporary vars does a runtime environment have? */
@@ -24,7 +24,7 @@ static const int MAX_TMPVARS = 4; /* used for calculations. the last one is used
  * surgescript_renv_create()
  * Creates a runtime environment
  */
-const surgescript_renv_t* surgescript_renv_create(surgescript_object_t* owner, surgescript_stack_t* stack, surgescript_heap_t* heap, surgescript_programpool_t* program_pool, surgescript_objectpool_t* object_pool)
+const surgescript_renv_t* surgescript_renv_create(surgescript_object_t* owner, surgescript_stack_t* stack, surgescript_heap_t* heap, surgescript_programpool_t* program_pool, surgescript_objectmanager_t* object_manager)
 {
     int i;
     surgescript_renv_t* runtime_environment = ssmalloc(sizeof *runtime_environment);
@@ -33,7 +33,7 @@ const surgescript_renv_t* surgescript_renv_create(surgescript_object_t* owner, s
     runtime_environment->stack = stack;
     runtime_environment->heap = heap;
     runtime_environment->program_pool = program_pool;
-    runtime_environment->object_pool = object_pool;
+    runtime_environment->object_manager = object_manager;
     runtime_environment->tmp = ssmalloc(MAX_TMPVARS * sizeof *(runtime_environment->tmp));
     for(i = 0; i < MAX_TMPVARS; i++)
         runtime_environment->tmp[i] = surgescript_var_create();
@@ -54,7 +54,7 @@ const surgescript_renv_t* surgescript_renv_clone(const surgescript_renv_t* runti
     clone->stack = runtime_environment->stack;
     clone->heap = runtime_environment->heap;
     clone->program_pool = runtime_environment->program_pool;
-    clone->object_pool = runtime_environment->object_pool;
+    clone->object_manager = runtime_environment->object_manager;
     clone->tmp = ssmalloc(MAX_TMPVARS * sizeof *(clone->tmp));
     for(i = 0; i < MAX_TMPVARS; i++)
         clone->tmp[i] = surgescript_var_create();
@@ -81,5 +81,5 @@ extern struct surgescript_object_t* surgescript_renv_owner(const surgescript_ren
 extern struct surgescript_stack_t* surgescript_renv_stack(const surgescript_renv_t* renv);
 extern struct surgescript_heap_t* surgescript_renv_heap(const surgescript_renv_t* renv);
 extern struct surgescript_programpool_t* surgescript_renv_programpool(const surgescript_renv_t* renv);
-extern struct surgescript_objectpool_t* surgescript_renv_objectpool(const surgescript_renv_t* renv);
+extern struct surgescript_objectmanager_t* surgescript_renv_objectmanager(const surgescript_renv_t* renv);
 extern struct surgescript_var_t** surgescript_renv_tmp(const surgescript_renv_t* renv);

@@ -16,7 +16,7 @@
 #include "runtime/stack.h"
 #include "runtime/program.h"
 #include "runtime/program_pool.h"
-#include "runtime/object_pool.h"
+#include "runtime/object_manager.h"
 
 void setup(surgescript_program_t* program, surgescript_program_t* called_program)
 {
@@ -77,8 +77,8 @@ int main()
     surgescript_stack_t* stack = surgescript_stack_create();
     surgescript_heap_t* heap = surgescript_heap_create();
     surgescript_programpool_t* program_pool = surgescript_programpool_create();
-    surgescript_objectpool_t* object_pool = surgescript_objectpool_create(NULL);
-    const surgescript_renv_t* runtimeenv = surgescript_renv_create(NULL, stack, heap, program_pool, object_pool);
+    surgescript_objectmanager_t* object_manager = surgescript_objectmanager_create(NULL);
+    const surgescript_renv_t* runtimeenv = surgescript_renv_create(NULL, stack, heap, program_pool, object_manager);
     surgescript_program_t* program = surgescript_program_create(0, 0);
     surgescript_program_t* called_program = surgescript_program_create(0, 0);
 
@@ -96,7 +96,7 @@ int main()
     surgescript_heap_destroy(heap);
     surgescript_stack_destroy(stack);
     surgescript_programpool_destroy(program_pool);
-    surgescript_objectpool_destroy(object_pool);
+    surgescript_objectmanager_destroy(object_manager);
 /*
     int i, j;
     SSARRAY(int, x);

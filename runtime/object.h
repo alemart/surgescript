@@ -18,15 +18,15 @@ typedef const char* surgescript_object_annotation_param_t;
 
 /* forward declarations */
 struct surgescript_programpool_t;
-struct surgescript_objectpool_t;
+struct surgescript_objectmanager_t;
 struct surgescript_program_t;
 struct surgescript_stack_t;
 struct surgescript_heap_t;
 
 /* public methods */
 
-/* these are handled by the object pool */
-surgescript_object_t* surgescript_object_create(const char* name, struct surgescript_objectpool_t* object_pool, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack); /* creates a new blank object */
+/* these are handled by the object manager */
+surgescript_object_t* surgescript_object_create(const char* name, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack); /* creates a new blank object */
 surgescript_object_t* surgescript_object_destroy(surgescript_object_t* object); /* destroys an object */
 //surgescript_object_t* surgescript_object_clone(const surgescript_object_t* object, unsigned parent); /* clones an existing object, but not its children nor its heap/state */
 
@@ -35,8 +35,8 @@ const char* surgescript_object_name(const surgescript_object_t* object); /* what
 struct surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object); /* each object has its own heap */
 
 /* object tree */
-unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer (in the object pool) */
-unsigned surgescript_object_parent(const surgescript_object_t* object); /* parent object (in the object pool) */
+unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer (in the object manager) */
+unsigned surgescript_object_parent(const surgescript_object_t* object); /* parent object (in the object manager) */
 unsigned surgescript_object_child(const surgescript_object_t* object, int index); /* n-th child */
 int surgescript_object_child_count(const surgescript_object_t* object); /* how many children there are? */
 unsigned surgescript_object_find_child(const surgescript_object_t* object, const char* name); /* find 1st child whose name equals name */

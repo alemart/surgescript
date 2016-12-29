@@ -19,6 +19,14 @@
 
 /* private stuff */
 
+/* possible variable types */
+enum surgescript_vartype_t {
+    SSVAR_NULL,
+    SSVAR_BOOL,
+    SSVAR_NUMBER,
+    SSVAR_STRING,
+    SSVAR_OBJECTHANDLE
+};
 
 /* the variable struct */
 struct surgescript_var_t
@@ -254,12 +262,23 @@ surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var)
 }
 
 /*
- * surgescript_var_type()
- * Returns the type of a variable
+ * surgescript_var_typename()
+ * Returns the typename of a variable
  */
-surgescript_vartype_t surgescript_var_type(const surgescript_var_t* var)
+const char* surgescript_var_typename(const surgescript_var_t* var)
 {
-    return var->type;
+    switch(var->type) {
+        case SSVAR_NUMBER:
+            return "number";
+        case SSVAR_BOOL:
+            return "boolean";
+        case SSVAR_STRING:
+            return "string";
+        case SSVAR_NULL:
+            return "null";
+        case SSVAR_OBJECTHANDLE:
+            return "object";
+    }
 }
 
 /*

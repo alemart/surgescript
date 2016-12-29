@@ -13,22 +13,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-/* some types */
-typedef enum surgescript_vartype_t surgescript_vartype_t;
+/* the variable type */
 typedef struct surgescript_var_t surgescript_var_t;
-
-/* the variable */
-struct surgescript_var_t;
-
-/* possible variable types */
-enum surgescript_vartype_t {
-    SSVAR_NULL,
-    SSVAR_BOOL,
-    SSVAR_NUMBER,
-    SSVAR_STRING,
-    SSVAR_OBJECTHANDLE
-};
-
 
 
 
@@ -52,7 +38,7 @@ surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char
 surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsigned handle);
 
 /* misc */
-surgescript_vartype_t surgescript_var_type(const surgescript_var_t* var);
+const char* surgescript_var_typename(const surgescript_var_t* var);
 surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescript_var_t* src); /* similar to strcpy */
 surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var); /* similar to strdup */
 char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t bufsize); /* copies var to buf and returns buf, converting var to string if necessary (similar to itoa / strncpy) */

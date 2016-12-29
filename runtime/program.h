@@ -88,8 +88,11 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_ATAN2,                     // t[a] = atan2(t[a], t[b])
     SSOP_CEIL,                      // t[a] = ceil(t[a])
     SSOP_FLOOR,                     // t[a] = floor(t[a]])
+
+    SSOP_TYPEOF = 0x60,             // t[a] = typeof(t[a])
     SSOP_STRLEN,                    // t[a] = strlen(t[a])
     SSOP_STRMID,                    // t[a] = substr(t[a], t[b], t[c])
+    SSOP_STRCAT,                    // t[a] = strcat(t[a], t[b])
     SSOP_STRAT,                     // t[a] = t[a][t[b]]
     SSOP_TOBOOL,                    // t[a] = bool(t[a])
     SSOP_TONUMBER,                  // t[a] = number(t[a])
@@ -98,18 +101,18 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_JMP = 0x70,                // ip = label[a]
     SSOP_JMP_IF_TRUE,               // ip = label[a] if t[b]
     SSOP_JMP_IF_EQUAL,              // ip = label[a] if t[b] == t[c]
-    SSOP_JMP_IF_NOTEQUAL,           // ip = label[a] if t[b] <> t[c]
+    SSOP_JMP_IF_NOTEQUAL,           // ip = label[a] if t[b] != t[c]
     SSOP_JMP_IF_LOWER,              // ip = label[a] if t[b] < t[c]
     SSOP_JMP_IF_GREATER,            // ip = label[a] if t[b] > t[c]
     SSOP_JMP_IF_LOWEROREQUAL,       // ip = label[a] if t[b] <= t[c]
     SSOP_JMP_IF_GREATEROREQUAL,     // ip = label[a] if t[b] >= t[c]
     SSOP_JMP_IF_ZERO,               // ip = label[a] if t[b] == 0
-    SSOP_JMP_IF_NOTZERO,            // ip = label[a] if t[b] <> 
+    SSOP_JMP_IF_NOTZERO,            // ip = label[a] if t[b] != 0
 
-    SSOP_CALL = 0x90,               // t[a] = call program having name text[t[a]] from object whose handle is t[b] with n = c parameters
+    SSOP_CALL = 0x80,               // t[a] = call program having name text[t[a]] from object whose handle is t[b] with n = c parameters
     SSOP_CALL_USERFUN,              // t[a] = call user-defined function named text[t[a]] with n = b parameters
-    SSOP_ROOT_HANDLE,               // t[a] = handle to the root object in the object pool
-    SSOP_SELF_HANDLE,               // t[a] = handle to this object (self) in the object pool
+    SSOP_ROOT_HANDLE,               // t[a] = handle to the root object in the object manager
+    SSOP_SELF_HANDLE,               // t[a] = handle to this object (self) in the object manager
     SSOP_STATE,                     // t[a] = name of the current state of this object
     // get handles to: self, root, parent
     SSOP_DESTROY,                   // destroys the object (i.e., schedules a destroy)

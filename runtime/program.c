@@ -18,7 +18,7 @@
 #include "stack.h"
 #include "object.h"
 #include "renv.h"
-#include "object_pool.h"
+#include "object_manager.h"
 #include "program_pool.h"
 #include "../util/util.h"
 #include "../util/ssarray.h"
@@ -341,7 +341,7 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
             break;
 
         /*case SSOP_ASSIGN_LAMBDA: {
-            surgescript_object_t* o = surgescript_objectpool_get(runtime_environment->object_pool, surgescript_var_get_number(t[b.u]));
+            surgescript_object_t* o = surgescript_objectmanager_get(runtime_environment->object_manager, surgescript_var_get_number(t[b.u]));
             if(o != NULL) {
                 surgescript_var_set_lambda(t[a.u], surgescript_program_lambda_create(
                     surgescript_programpool_get(
@@ -354,7 +354,7 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
                         surgescript_renv_stack(runtime_environment),
                         surgescript_object_heap(o),
                         runtime_environment->program_pool,
-                        runtime_environment->object_pool
+                        runtime_environment->object_manager
                     )
                 ));
             }
@@ -412,17 +412,7 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
             break;
 
         case SSOP_ADD:
-            if(surgescript_var_type(t[a.u]) == SSVAR_STRING || surgescript_var_type(t[b.u]) == SSVAR_STRING) {
-                char* str1 = surgescript_var_get_string(t[a.u]);
-                char* str2 = surgescript_var_get_string(t[b.u]);
-                char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
-                surgescript_var_set_string(t[a.u], strcat(strcpy(str, str1), str2));
-                ssfree(str);
-                ssfree(str2);
-                ssfree(str1);
-            }
-            else
-                surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) + surgescript_var_get_number(t[b.u]));
+            surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) + surgescript_var_get_number(t[b.u]));
             break;
 
         case SSOP_SUB:
@@ -475,7 +465,11 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
             surgescript_var_copy(t[a.u], t[b.u]);
             break;
 
-        /* math & utility operations */
+        /* utility operations */
+        case SSOP_TYPEOF:
+            surgescript_var_set_string(t[a.u], surgescript_var_typename(t[a.u]));
+            break;
+
         case SSOP_TOBOOL:
             surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[a.u]));
             break;
@@ -514,6 +508,19 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
 
             ssfree(substr);
             ssfree(str);
+            break;
+        }
+
+        case SSOP_STRCAT: {
+            char* str1 = surgescript_var_get_string(t[a.u]);
+            char* str2 = surgescript_var_get_string(t[b.u]);
+            char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
+
+            surgescript_var_set_string(t[a.u], strcat(strcpy(str, str1), str2));
+
+            ssfree(str);
+            ssfree(str2);
+            ssfree(str1);
             break;
         }
 
@@ -631,7 +638,7 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
             unsigned object_handle = surgescript_var_get_objecthandle(t[b.u]);
             int params = c.u;
 
-            surgescript_object_t* object = surgescript_objectpool_get(surgescript_renv_objectpool(runtime_environment), object_handle);
+            surgescript_object_t* object = surgescript_objectmanager_get(surgescript_renv_objectmanager(runtime_environment), object_handle);
             const char* object_name = surgescript_object_name(object);
             surgescript_program_t* prog = surgescript_programpool_get(surgescript_renv_programpool(runtime_environment), object_name, program_name);
             int expected_params = prog->arity;
