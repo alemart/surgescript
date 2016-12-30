@@ -22,7 +22,7 @@ struct surgescript_objectmanager_t;
 /* --- instead of messing with this directly, use the functions below --- */
 typedef struct surgescript_renv_t
 {
-    struct surgescript_object_t* owner; /* pointer to the object this program refers to (i.e., the "owner") */
+    struct surgescript_object_t* owner; /* pointer to the object the program refers to (i.e., the "owner") */
     struct surgescript_stack_t* stack; /* pointer to the stack */
     struct surgescript_heap_t* heap; /* pointer to the heap */
     struct surgescript_programpool_t* program_pool; /* pointer to the program pool */

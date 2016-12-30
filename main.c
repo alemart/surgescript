@@ -77,7 +77,7 @@ int main()
     surgescript_stack_t* stack = surgescript_stack_create();
     surgescript_heap_t* heap = surgescript_heap_create();
     surgescript_programpool_t* program_pool = surgescript_programpool_create();
-    surgescript_objectmanager_t* object_manager = surgescript_objectmanager_create(NULL);
+    surgescript_objectmanager_t* object_manager = surgescript_objectmanager_create(program_pool, stack);
     const surgescript_renv_t* runtimeenv = surgescript_renv_create(NULL, stack, heap, program_pool, object_manager);
     surgescript_program_t* program = surgescript_program_create(0, 0);
     surgescript_program_t* called_program = surgescript_program_create(0, 0);

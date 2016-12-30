@@ -13,7 +13,7 @@
  * SSARRAY()
  * declares an array of a certain type
  */
-#define SSARRAY(type, arr)                    type* arr; int arr##_len, arr##_cap;
+#define SSARRAY(type, arr)                    type* arr; size_t arr##_len, arr##_cap;
 
 /*
  * ssarray_init()

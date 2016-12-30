@@ -25,14 +25,10 @@ struct surgescript_heap_t;
 
 /* public methods */
 
-/* these are handled by the object manager */
-surgescript_object_t* surgescript_object_create(const char* name, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack); /* creates a new blank object */
-surgescript_object_t* surgescript_object_destroy(surgescript_object_t* object); /* destroys an object */
-//surgescript_object_t* surgescript_object_clone(const surgescript_object_t* object, unsigned parent); /* clones an existing object, but not its children nor its heap/state */
-
 /* properties */
 const char* surgescript_object_name(const surgescript_object_t* object); /* what's my name? */
 struct surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object); /* each object has its own heap */
+void* surgescript_object_userdata(const surgescript_object_t* object); /* custom user-data (if any) */
 
 /* object tree */
 unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer (in the object manager) */
@@ -50,11 +46,6 @@ const char* surgescript_object_state(const surgescript_object_t *object); /* eac
 void surgescript_object_set_state(surgescript_object_t* object, const char* state_name); /* sets a state; default is "main" */
 bool surgescript_object_is_killed(const surgescript_object_t* object); /* has this object been killed? */
 void surgescript_object_kill(surgescript_object_t* object); /* will destroy the object as soon as the opportunity arises */
-
-/* life-cycle (handled by the pool) */
-void surgescript_object_init(surgescript_object_t* object);
-void surgescript_object_update(surgescript_object_t* object); /* runs my programs */
-void surgescript_object_release(surgescript_object_t* object);
 
 /* annotations: an annotation is a string plus a set of zero or more annotation parameters (which are also strings) */
 /*void surgescript_object_add_annotation(surgescript_object_t* object, const char* annotation);

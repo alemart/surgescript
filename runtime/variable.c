@@ -279,6 +279,8 @@ const char* surgescript_var_typename(const surgescript_var_t* var)
         case SSVAR_OBJECTHANDLE:
             return "object";
     }
+
+    return "unknown";
 }
 
 /*
