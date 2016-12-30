@@ -13,10 +13,6 @@
 #include <stdlib.h>
 #include "util.h"
 
-/* booleans */
-const int SSTRUE = 1;
-const int SSFALSE = 0;
-
 /* private stuff */
 static void my_log(const char* message);
 static void my_fatal(const char* message);
@@ -75,7 +71,7 @@ void* surgescript_util_realloc(void* ptr, size_t bytes)
  */
 void surgescript_util_log(const char* fmt, ...)
 {
-    char buf[1024] = "surgescript: ";
+    char buf[1024] = "[surgescript] ";
     int len = strlen(buf);
     va_list args;
 
@@ -92,7 +88,7 @@ void surgescript_util_log(const char* fmt, ...)
  */
 void surgescript_util_fatal(const char* fmt, ...)
 {
-    char buf[1024] = "surgescript error! ";
+    char buf[1024] = "[surgescript-error] ";
     int len = strlen(buf);
     va_list args;
 
@@ -123,8 +119,10 @@ char* surgescript_util_strncpy(char* dst, const char* src, size_t n)
 {
     char *p = dst;
 
-    while(*src && --n)
-        *(dst++) = *(src++);
+    if(n && src) {
+        while(*src && --n)
+            *(dst++) = *(src++);
+    }
 
     *dst = 0;
     return p;

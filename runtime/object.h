@@ -25,6 +25,10 @@ struct surgescript_heap_t;
 
 /* public methods */
 
+/* programs */
+bool surgescript_object_update(surgescript_object_t* object); /* runs my programs */
+bool surgescript_object_update_fulltree(surgescript_object_t* object); /* runs my programs and those of my children */
+
 /* properties */
 const char* surgescript_object_name(const surgescript_object_t* object); /* what's my name? */
 struct surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object); /* each object has its own heap */

@@ -24,7 +24,7 @@ struct surgescript_object_t
     /* general properties */
     char* name; /* my name */
     surgescript_heap_t* heap; /* each object has its own heap */
-    const surgescript_renv_t* renv; /* runtime environment */
+    surgescript_renv_t* renv; /* runtime environment */
 
     /* object tree */
     unsigned handle; /* "this" pointer in the object manager */
@@ -32,8 +32,8 @@ struct surgescript_object_t
     SSARRAY(unsigned, child); /* handles to the children */
 
     /* state */
-    bool is_killed; /* am i scheduled to be destroyed? */
     bool is_active; /* can i run programs? */
+    bool is_killed; /* am i scheduled to be destroyed? */
     char* state_name; /* current state name */
 
     /* user-data */
@@ -75,12 +75,12 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->heap = surgescript_heap_create();
     obj->renv = surgescript_renv_create(obj, stack, obj->heap, program_pool, object_manager);
 
-    obj->handle = handle;
+    obj->handle = handle; /* handle == parent implies I am a root */
     obj->parent = handle;
     ssarray_init(obj->child);
 
-    obj->is_killed = false;
     obj->is_active = true;
+    obj->is_killed = false;
     obj->state_name = surgescript_util_strdup(INITIAL_STATE);
 
     obj->user_data = user_data;
@@ -89,7 +89,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
 
     /* validation procedure */
     if(!object_exists(program_pool, name))
-        ssfatal("Object \"%s\" doesn't exist", name);
+        ssfatal("Runtime Error: object \"%s\" doesn't exist", name);
 
     return obj;
 }
@@ -100,33 +100,21 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
  */
 surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
 {
-    /* clear up the children */
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(obj->renv);
+
+    /* am I root? */
     if(obj->parent != obj->handle) {
-        /* i am not root */
-        surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(obj->renv);
         surgescript_object_t* parent = surgescript_objectmanager_get(manager, obj->parent);
-
-        surgescript_object_remove_child(parent, obj->handle);
-
-        for(int i = 0; i < ssarray_length(obj->child); i++) {
-            surgescript_object_t* child = surgescript_objectmanager_get(manager, obj->child[i]);
-            child->parent = obj->parent; /* modify the parent of the children */
-            surgescript_object_add_child(parent, child->handle); /* modify the children of the parent */
-        }
+        surgescript_object_remove_child(parent, obj->handle); /* no? well, I am a root now! */
     }
-    else {
-        /* i am a root */
-        surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(obj->renv);
-
+    else
         sslog("Destroying the root object...");
 
-        for(int i = 0; i < ssarray_length(obj->child); i++) {
-            surgescript_object_t* child = surgescript_objectmanager_get(manager, obj->child[i]);
-            child->parent = child->handle; /* the child is a root now */
-            surgescript_objectmanager_delete(manager, child->handle); /* clear up everyone */
-        }
-        
-        sslog("Done!");
+    /* clear up the children */
+    for(int i = 0; i < ssarray_length(obj->child); i++) {
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, obj->child[i]);
+        child->parent = child->handle; /* the child is a root now */
+        surgescript_objectmanager_delete(manager, child->handle); /* clear up everyone! */
     }
     ssarray_release(obj->child);
 
@@ -209,9 +197,9 @@ unsigned surgescript_object_child(const surgescript_object_t* object, int index)
     if(index >= 0 && index < ssarray_length(object->child))
         return object->child[index];
     else if(index >= 0)
-        ssfatal("Can't obtain child #%d of object 0x%X (\"%s\"): object has %d %s", index, object->handle, object->name, ssarray_length(object->child), ssarray_length(object->child) != 1 ? "children" : "child");
+        ssfatal("Runtime Error: can't obtain child #%d of object 0x%X (\"%s\"): object has %d %s", index, object->handle, object->name, ssarray_length(object->child), ssarray_length(object->child) != 1 ? "children" : "child");
     else
-        ssfatal("Can't obtain child #%d of object 0x%X (\"%s\"): negative index", index, object->handle, object->name);
+        ssfatal("Runtime Error: can't obtain child #%d of object 0x%X (\"%s\"): negative index", index, object->handle, object->name);
 
     return 0;
 }
@@ -239,13 +227,13 @@ unsigned surgescript_object_find_child(const surgescript_object_t* object, const
             return child->handle;
     }
 
-    ssfatal("Object 0x%X (\"%s\") has no child named \"%s\"", object->handle, object->name, name);
+    ssfatal("Runtime Error: object 0x%X (\"%s\") has no child named \"%s\"", object->handle, object->name, name);
     return 0;
 }
 
 /*
  * surgescript_object_add_child()
- * Adds a child to this object
+ * Adds a child to this object (adds the link)
  */
 void surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle)
 {
@@ -258,10 +246,10 @@ void surgescript_object_add_child(surgescript_object_t* object, unsigned child_h
             return;
     }
 
-    /* check if the child does not belong to someone else */
+    /* check if the child belongs to someone else */
     child = surgescript_objectmanager_get(manager, child_handle);
     if(child->parent != child->handle)
-        ssfatal("Can't add child 0x%X (\"%s\") to object 0x%X (\"%s\"): child already registered", child->handle, child->name, object->handle, object->name);
+        ssfatal("Runtime Error: can't add child 0x%X (\"%s\") to object 0x%X (\"%s\"): child already registered", child->handle, child->name, object->handle, object->name);
 
     /* add it */
     ssarray_push(object->child, child->handle);
@@ -270,7 +258,7 @@ void surgescript_object_add_child(surgescript_object_t* object, unsigned child_h
 
 /*
  * surgescript_object_remove_child()
- * Removes a child having this handle from this object
+ * Removes a child having this handle from this object (removes the link)
  */
 bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle)
 {
@@ -281,18 +269,7 @@ bool surgescript_object_remove_child(surgescript_object_t* object, unsigned chil
         if(object->child[i] == child_handle) {
             surgescript_object_t* child = surgescript_objectmanager_get(manager, child_handle);
             ssarray_remove(object->child, i);
-
-            if(object->handle == object->parent) {
-                /* i am root */
-                child->parent = child->handle;
-                sslog("Removing child of a root...");
-                surgescript_objectmanager_delete(manager, child_handle); /* clear things up */
-            }
-            else {
-                /* i am not root */
-                child->parent = object->parent;
-            }
-
+            child->parent = child->handle; /* the child is now a root */
             return true;
         }
     }
@@ -365,8 +342,6 @@ void surgescript_object_kill(surgescript_object_t* object)
 }
 
 
-
-
 /* life-cycle */
 
 /*
@@ -375,35 +350,18 @@ void surgescript_object_kill(surgescript_object_t* object)
  */
 void surgescript_object_init(surgescript_object_t* object)
 {
+    static const char* CONSTRUCTOR_FUN = "__constructor";
+    surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+
     if(object->on_init) {
         if(!object->on_init(object))
             sslog("Warning: object 0x%X on_init() callback returned false", object->handle);
     }
 
-    run_state(object, INITIAL_STATE);
-}
-
-/*
- * surgescript_object_update()
- * Updates this object; runs my programs
- */
-void surgescript_object_update(surgescript_object_t* object)
-{
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-
-    /* update myself */
-    if(object->is_active)
-        run_state(object, object->state_name);
-
-    /* update my children */
-    for(int i = 0; i < ssarray_length(object->child); i++) {
-        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        surgescript_object_update(child);
+    if(surgescript_programpool_exists(program_pool, object->name, CONSTRUCTOR_FUN)) {
+        surgescript_program_t* constructor = surgescript_programpool_get(program_pool, object->name, CONSTRUCTOR_FUN);
+        surgescript_program_run(constructor, object->renv);
     }
-
-    /* check if I am destroyed */
-    if(object->is_killed)
-        surgescript_objectmanager_delete(manager, object->handle);
 }
 
 /*
@@ -412,11 +370,66 @@ void surgescript_object_update(surgescript_object_t* object)
  */
 void surgescript_object_release(surgescript_object_t* object)
 {
+    static const char* DESTRUCTOR_FUN = "__destructor";
+    surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+
+    if(surgescript_programpool_exists(program_pool, object->name, DESTRUCTOR_FUN)) {
+        surgescript_program_t* destructor = surgescript_programpool_get(program_pool, object->name, DESTRUCTOR_FUN);
+        surgescript_program_run(destructor, object->renv);
+    }
+
     if(object->on_release) {
         if(!object->on_release(object))
             sslog("Warning: object 0x%X on_release() callback returned false", object->handle);
     }
 }
+
+/*
+ * surgescript_object_update()
+ * Updates this object; runs my programs
+ */
+bool surgescript_object_update(surgescript_object_t* object)
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+
+    /* update myself */
+    if(object->is_active)
+        run_state(object, object->state_name);
+
+    /* check if I am destroyed */
+    if(object->is_killed) {
+        surgescript_objectmanager_delete(manager, object->handle);
+        return false;
+    }
+
+    /* success! */
+    return true;
+}
+
+/*
+ * surgescript_object_update_fulltree()
+ * runs my programs and those of my children
+ */
+bool surgescript_object_update_fulltree(surgescript_object_t* object)
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+
+    /* update myself */
+    if(surgescript_object_update(object)) {
+        /* if I still exist, update my children */
+        for(int i = 0; i < ssarray_length(object->child); i++) {
+            surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+            surgescript_object_update_fulltree(child);
+        }
+
+        /* success! */
+        return true;
+    }
+
+    /* I have been removed */
+    return false;
+}
+
 
 
 
@@ -426,20 +439,18 @@ void surgescript_object_release(surgescript_object_t* object)
 /* private stuff */
 char* state2fun(const char* state)
 {
-    /* fun = STATE2FUN_PREFIX + state */
-    static const char* STATE2FUN_PREFIX = ":state ";
-    char *fun = ssmalloc((strlen(state) + strlen(STATE2FUN_PREFIX) + 1) * sizeof(char));
-    return strcat(strcpy(fun, STATE2FUN_PREFIX), state);
+    /* fun = STATE2FUN + state */
+    static const char* STATE2FUN = "state:";
+    char *fun = ssmalloc((strlen(state) + strlen(STATE2FUN) + 1) * sizeof(char));
+    return strcat(strcpy(fun, STATE2FUN), state);
 }
 
 void run_state(surgescript_object_t* object, const char* state_name)
 {
     char *fun_name = state2fun(state_name);
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
-    surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, state_name);
-
+    surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
     surgescript_program_run(program, object->renv);
-
     ssfree(fun_name);
 }
 

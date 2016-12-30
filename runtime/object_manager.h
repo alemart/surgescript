@@ -28,14 +28,15 @@ struct surgescript_stack_t;
 /* life-cycle */
 surgescript_objectmanager_t* surgescript_objectmanager_create(struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack);
 surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objectmanager_t* manager);
-bool surgescript_objectmanager_update(surgescript_objectmanager_t* manager); /* updates all objects; returns false when there are no more objects present */
 
 /* operations */
 surgescript_objectmanager_handle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, const char* object_name, void* user_data, bool (*on_init)(struct surgescript_object_t*), bool (*on_release)(struct surgescript_object_t*)); /* spawns a new object; user_data and callbacks may be NULL */
+bool surgescript_objectmanager_exists(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t handle); /* does the specified handle points to a valid object? */
 struct surgescript_object_t* surgescript_objectmanager_get(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t handle); /* returns NULL if the object is not found */
 bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t handle); /* deletes an existing object; returns true on success */
 
 /* utilities */
+int surgescript_objectmanager_count(surgescript_objectmanager_t* manager); /* how many objects there are? */
 surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
 
 #endif

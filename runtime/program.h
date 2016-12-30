@@ -76,7 +76,9 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_AND,                       // t[a] = t[a] and t[b]
     SSOP_OR,                        // t[a] = t[a] or t[b]
     SSOP_COPY,                      // t[a] = t[b]
+    SSOP_NEG,                       // t[a] = -t[a]
 
+/* -- move to userfun
     SSOP_EXP = 0x50,                // t[a] = exp(t[a])
     SSOP_LOG,                       // t[a] = ln(t[a])
     SSOP_SIN,                       // t[a] = sin(t[a])
@@ -88,9 +90,10 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_ATAN2,                     // t[a] = atan2(t[a], t[b])
     SSOP_CEIL,                      // t[a] = ceil(t[a])
     SSOP_FLOOR,                     // t[a] = floor(t[a]])
+*/
 
     SSOP_TYPEOF = 0x60,             // t[a] = typeof(t[a])
-    SSOP_STRLEN,                    // t[a] = strlen(t[a])
+    SSOP_STRLEN,                    // t[a] = strlen(t[a]) -- FIXME: move to userfun
     SSOP_STRMID,                    // t[a] = substr(t[a], t[b], t[c])
     SSOP_STRCAT,                    // t[a] = strcat(t[a], t[b])
     SSOP_STRAT,                     // t[a] = t[a][t[b]]
@@ -143,8 +146,6 @@ int surgescript_program_text_count(const surgescript_program_t* program); /* how
 
 
 /* execute the program */
-void surgescript_program_run(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
-//void surgescript_program_run_update(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
-//void surgescript_program_run_render(surgescript_program_t* program, const struct surgescript_renv_t* runtime_environment);
+void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment);
 
 #endif

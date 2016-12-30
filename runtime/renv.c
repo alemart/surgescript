@@ -24,7 +24,7 @@ static const int MAX_TMPVARS = 4; /* used for calculations. the last one is used
  * surgescript_renv_create()
  * Creates a runtime environment
  */
-const surgescript_renv_t* surgescript_renv_create(surgescript_object_t* owner, surgescript_stack_t* stack, surgescript_heap_t* heap, surgescript_programpool_t* program_pool, surgescript_objectmanager_t* object_manager)
+surgescript_renv_t* surgescript_renv_create(surgescript_object_t* owner, surgescript_stack_t* stack, surgescript_heap_t* heap, surgescript_programpool_t* program_pool, surgescript_objectmanager_t* object_manager)
 {
     int i;
     surgescript_renv_t* runtime_environment = ssmalloc(sizeof *runtime_environment);
@@ -42,44 +42,24 @@ const surgescript_renv_t* surgescript_renv_create(surgescript_object_t* owner, s
 }
 
 /*
- * surgescript_renv_clone()
- * Clones a runtime environment
- */
-const surgescript_renv_t* surgescript_renv_clone(const surgescript_renv_t* runtime_environment)
-{
-    int i;
-    surgescript_renv_t* clone = ssmalloc(sizeof *clone);
-
-    clone->owner = runtime_environment->owner;
-    clone->stack = runtime_environment->stack;
-    clone->heap = runtime_environment->heap;
-    clone->program_pool = runtime_environment->program_pool;
-    clone->object_manager = runtime_environment->object_manager;
-    clone->tmp = ssmalloc(MAX_TMPVARS * sizeof *(clone->tmp));
-    for(i = 0; i < MAX_TMPVARS; i++)
-        clone->tmp[i] = surgescript_var_create();
-
-    return clone;
-}
-
-/*
  * surgescript_renv_destroy()
  * Destroys a runtime environment
  */
-const surgescript_renv_t* surgescript_renv_destroy(const surgescript_renv_t* runtime_environment)
+surgescript_renv_t* surgescript_renv_destroy(surgescript_renv_t* runtime_environment)
 {
-    int i;
-    for(i = 0; i < MAX_TMPVARS; i++)
+    for(int i = 0; i < MAX_TMPVARS; i++)
         surgescript_var_destroy(runtime_environment->tmp[i]);
+
     ssfree(runtime_environment->tmp);
-    ssfree((surgescript_renv_t*)runtime_environment);
+    ssfree(runtime_environment);
+    
     return NULL;
 }
 
 /* inline getters */
-extern struct surgescript_object_t* surgescript_renv_owner(const surgescript_renv_t* renv);
-extern struct surgescript_stack_t* surgescript_renv_stack(const surgescript_renv_t* renv);
-extern struct surgescript_heap_t* surgescript_renv_heap(const surgescript_renv_t* renv);
-extern struct surgescript_programpool_t* surgescript_renv_programpool(const surgescript_renv_t* renv);
-extern struct surgescript_objectmanager_t* surgescript_renv_objectmanager(const surgescript_renv_t* renv);
-extern struct surgescript_var_t** surgescript_renv_tmp(const surgescript_renv_t* renv);
+extern struct surgescript_object_t* surgescript_renv_owner(surgescript_renv_t* renv);
+extern struct surgescript_stack_t* surgescript_renv_stack(surgescript_renv_t* renv);
+extern struct surgescript_heap_t* surgescript_renv_heap(surgescript_renv_t* renv);
+extern struct surgescript_programpool_t* surgescript_renv_programpool(surgescript_renv_t* renv);
+extern struct surgescript_objectmanager_t* surgescript_renv_objectmanager(surgescript_renv_t* renv);
+extern struct surgescript_var_t** surgescript_renv_tmp(surgescript_renv_t* renv);

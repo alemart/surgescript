@@ -45,7 +45,7 @@ struct surgescript_program_operation_t
     surgescript_program_operand_t a, b, c;
 };
 
-static inline void run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c);
+static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c);
 
 /* delayed BUILT-IN calls (used for rendering) */
 /* calls fun(self, params, num_params) when called */
@@ -216,7 +216,7 @@ int surgescript_program_arity(const surgescript_program_t* program)
  * surgescript_program_run()
  * Runs a written program
  */
-void surgescript_program_run(surgescript_program_t* program, const surgescript_renv_t* runtime_environment)
+void surgescript_program_run(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
 {
     program->ip = 0;
     while(program->ip < ssarray_length(program->line))
@@ -294,7 +294,7 @@ void surgescript_program_delayedcalls_run(surgescript_program_delayedcalls_t* de
 }*/
 
 /* runs an instruction */
-void run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c)
+void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c)
 {
     /* temporary variables */
     surgescript_var_t** t = surgescript_renv_tmp(runtime_environment);
@@ -463,6 +463,10 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
 
         case SSOP_COPY:
             surgescript_var_copy(t[a.u], t[b.u]);
+            break;
+
+        case SSOP_NEG:
+            surgescript_var_set_number(t[a.u], -surgescript_var_get_number(t[a.u]));
             break;
 
         /* utility operations */
@@ -646,15 +650,20 @@ void run_instruction(surgescript_program_t* program, const surgescript_renv_t* r
             if(params == expected_params) {
                 /* the parameters are pushed onto the stack (reverse order) */
                 surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
-                const surgescript_renv_t* renv_clone = surgescript_renv_clone(runtime_environment);
-                // alterar heap e objeto
+                surgescript_renv_t* callee_runtime_environment = surgescript_renv_create(
+                    object,
+                    stack,
+                    surgescript_object_heap(object),
+                    surgescript_renv_programpool(runtime_environment),
+                    surgescript_renv_objectmanager(runtime_environment)
+                );
 
                 surgescript_stack_pushenv(stack, prog->num_local_vars);
-                surgescript_program_run(prog, renv_clone);
+                surgescript_program_run(prog, callee_runtime_environment);
                 surgescript_stack_popenv(stack);
 
-                surgescript_var_copy(t[0], *(surgescript_renv_tmp(renv_clone)+3)); /* t[0] = prog's return value (if any) */
-                surgescript_renv_destroy(renv_clone);
+                surgescript_var_copy(t[0], *(surgescript_renv_tmp(callee_runtime_environment)+3)); /* t[0] = prog's return value (if any) */
+                surgescript_renv_destroy(callee_runtime_environment);
             }
             else
                 ssfatal("Runtime Error: function \"%s.%s\" (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(runtime_environment)), expected_params, params);

@@ -60,19 +60,35 @@ surgescript_programpool_t* surgescript_programpool_destroy(surgescript_programpo
 }
 
 /*
+ * surgescript_programpool_exists()
+ * Does the specified program exist in the pool?
+ */
+bool surgescript_programpool_exists(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
+{
+    surgescript_programpool_hashpair_t* pair = NULL;
+    char* signature = generate_signature(object_name, program_name);
+    HASH_FIND_STR(pool->hash, signature, pair);
+    ssfree(signature);
+    return pair != NULL;
+}
+
+/*
  * surgescript_programpool_put()
  * Puts a program in the pool
  */
-void surgescript_programpool_put(surgescript_programpool_t* pool, const char* object_name, const char* program_name, surgescript_program_t* program)
+bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* object_name, const char* program_name, surgescript_program_t* program)
 {
-    if(surgescript_programpool_get(pool, object_name, program_name) == NULL) {
+    if(!surgescript_programpool_exists(pool, object_name, program_name)) {
         surgescript_programpool_hashpair_t* pair = ssmalloc(sizeof *pair);
         pair->signature = generate_signature(object_name, program_name);
         pair->program = program;
         HASH_ADD_KEYPTR(hh, pool->hash, pair->signature, strlen(pair->signature), pair);
+        return true;
     }
-    else
-        ssfatal("Runtime Error: duplicate function \"%s\" in object \"%s\".", program_name, object_name);
+    else {
+        ssfatal("Runtime Error: duplicate function \"%s\" in object \"%s\"", program_name, object_name);
+        return false;
+    }
 }
 
 /*
@@ -85,7 +101,13 @@ surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* po
     char* signature = generate_signature(object_name, program_name);
     HASH_FIND_STR(pool->hash, signature, pair);
     ssfree(signature);
-    return pair ? pair->program : NULL;
+
+    if(!pair) {
+        ssfatal("Runtime Error: can't find function \"%s\" in object \"%s\"", program_name, object_name);
+        return NULL;
+    }
+    else
+        return pair->program;
 }
 
 
