@@ -29,7 +29,7 @@
  */
 
 /* constants */
-static const size_t SSSTACK_INITIAL_SIZE = 1048576; /*20480 * 2;*/
+static const size_t SSSTACK_INITIAL_SIZE = 102400; /* 100K */
 
 /* the stack structure */
 struct surgescript_stack_t
@@ -88,7 +88,7 @@ surgescript_stack_t* surgescript_stack_destroy(surgescript_stack_t* stack)
 surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack, surgescript_var_t* var)
 {
     if(++stack->sp >= stack->size) {
-        ssfatal("surgescript_stack_push(): stack overflow.");
+        ssfatal("Runtime Error: surgescript_stack_push() - stack overflow");
         return NULL;
     }
 
@@ -106,7 +106,7 @@ void surgescript_stack_pop(surgescript_stack_t* stack)
         stack->sp--;
     }
     else
-        ssfatal("surgescript_stack_pop(): empty stack.");
+        ssfatal("Runtime Error: can't surgescript_stack_pop() - empty stack");
 }
 
 /*
@@ -143,7 +143,7 @@ void surgescript_stack_popenv(surgescript_stack_t* stack)
         stack->bp = prev_bp;
     }
     else
-        ssfatal("surgescript_stack_popenv(): empty stack.");
+        ssfatal("Runtime Error: surgescript_stack_popenv() has found an empty stack");
 }
 
 
@@ -159,14 +159,16 @@ surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack)
 
 /*
  * surgescript_stack_at()
- * Gets the (base+offset)-th element from the stack, offset > 0
+ * Gets the (base+offset)-th element from the stack
  */
 surgescript_var_t* surgescript_stack_at(surgescript_stack_t* stack, int offset)
 {
-    if(offset > 0 && stack->bp + offset <= stack->sp)
-        return stack->data[stack->bp + offset];
+    int idx = stack->bp + offset;
 
-    ssfatal("surgescript_stack_at(): can't get an element (%d) that is out of bounds [%d, %d].", stack->bp + offset, stack->bp + 1, stack->sp);
+    if(idx >= 0 && idx <= stack->sp)
+        return stack->data[idx];
+
+    ssfatal("Runtime Error: surgescript_stack_at() can't get an element (%d) that is out of bounds [%d, %d]", idx, 0, stack->sp);
     return NULL;
 }
 

@@ -116,7 +116,6 @@ typedef union surgescript_program_operand_t surgescript_program_operand_t;
 union surgescript_program_operand_t {
     unsigned u;
     float f;
-    surgescript_program_cfunction_t c;
 };
 #define SSNOP surgescript_program_operand_u(0)
 #define SSOP(x) surgescript_program_operand_u(x)
