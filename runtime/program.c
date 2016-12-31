@@ -254,11 +254,9 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
     surgescript_var_t** param = program->arity > 0 ? ssmalloc(program->arity * sizeof(*param)) : NULL;
     surgescript_var_t* return_value = NULL;
 
-    /* grab parameters from the stack */
-    for(int i = 0; i < program->arity; i++) {
-        param[i] = surgescript_var_clone(surgescript_stack_top(stack));
-        surgescript_stack_pop(stack);
-    }
+    /* grab parameters from the stack (stacked in reverse order) */
+    for(int i = 1; i <= program->arity; i++)
+        param[i-1] = surgescript_stack_at(stack, -i);
 
     /* call C-function */
     return_value = cprogram->cfunction(caller, (const surgescript_var_t**)param, program->arity);
@@ -268,11 +266,8 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
     }
 
     /* release parameters */
-    if(param) {
-        for(int i = 0; i < program->arity; i++)
-            surgescript_var_destroy(param[i]);
+    if(param)
         ssfree(param);
-    }
 }
 
 /* runs an instruction */
