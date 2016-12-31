@@ -19,13 +19,14 @@
 #include "runtime/program_pool.h"
 #include "runtime/object_manager.h"
 
-void setup(surgescript_program_t* program, surgescript_program_t* called_program)
+/* setup some programs */
+static void setup(surgescript_program_t* program)
 {
     surgescript_program_label_t loop = surgescript_program_new_label(program);
     surgescript_program_label_t loop2 = surgescript_program_new_label(program);
 
     surgescript_program_add_text(program, "Fibonacci sequence:");
-    surgescript_program_add_text(program, "__constructor");
+    surgescript_program_add_text(program, "call_c");
 
     // count 1 .. 10
     surgescript_program_add_line(program, SSOP_MOVF, SSOPu(1), SSOPf(10)); // t[1] = 10 (last)
@@ -53,7 +54,6 @@ void setup(surgescript_program_t* program, surgescript_program_t* called_program
         surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOP()); // pop t[0] (t[0] <= t[1]) (fib(x-2))
         surgescript_program_add_line(program, SSOP_ADD, SSOPu(0), SSOPu(1)); // t[0] += t[1] (fib(x))
         surgescript_program_add_line(program, SSOP_OUT, SSOPu(0), SSOP());  // print fib(x)
-        //surgescript_program_add_line(program, SSOP_OUT, SSOPu(2), SSOP());  // print counter
         surgescript_program_add_line(program, SSOP_DEC, SSOPu(2), SSOP()); // t[2] -= 1
         surgescript_program_add_line(program, SSOP_PUSH, SSOPu(1), SSOP()); // push fib(x-1)
         surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOP()); // push fib(x)
@@ -70,14 +70,27 @@ void setup(surgescript_program_t* program, surgescript_program_t* called_program
     surgescript_program_add_line(program, SSOP_MOVH, SSOPu(1), SSOPu(1)); // t[1] = (object)1
     surgescript_program_add_line(program, SSOP_MOVF, SSOPu(2), SSOPf(0)); // t[2] = 0
     surgescript_program_add_line(program, SSOP_CALL, SSOPu(0), SSOPu(1)); // call it!
+    surgescript_program_add_line(program, SSOP_OUT, SSOPu(2), SSOP()); // print the return value
 }
 
-void setup2(surgescript_program_t* program)
+static void setup2(surgescript_program_t* program)
 {
     surgescript_program_add_text(program, "Olá, mundo!");
     surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOPu(0)); // t[0] = text[0]
     surgescript_program_add_line(program, SSOP_OUT, SSOPu(0), SSOP());  // print t[0]
 }
+
+static surgescript_var_t* my_cfun(surgescript_object_t* caller, const surgescript_var_t** param, int num_params)
+{
+    surgescript_var_t* var = surgescript_var_create();
+    static int x = 0;
+
+    printf("heeeeeey from C! " __FILE__ ":%d\n", __LINE__);
+
+    return surgescript_var_set_number(var, 1337 + x++);
+}
+
+
 
 int main()
 {
@@ -85,13 +98,15 @@ int main()
     surgescript_programpool_t* program_pool = surgescript_programpool_create();
     surgescript_objectmanager_t* object_manager = surgescript_objectmanager_create(program_pool, stack);
     surgescript_program_t* program = surgescript_program_create(0, 0);
-    surgescript_program_t* called_program = surgescript_program_create(0, 0);
+    surgescript_program_t* program2 = surgescript_program_create(0, 0);
+    surgescript_program_t* cprogram = surgescript_cprogram_create(0, my_cfun);
 
-    setup2(called_program);
-    setup(program, called_program);
+    setup(program);
+    setup2(program2);
 
     surgescript_programpool_put(program_pool, "Application", "state:main", program);
-    surgescript_programpool_put(program_pool, "Application", "__constructor", called_program);
+    surgescript_programpool_put(program_pool, "Application", "__constructor", program2);
+    surgescript_programpool_put(program_pool, "Application", "call_c", cprogram);
     surgescript_objectmanager_spawn(object_manager, "Application", NULL, NULL, NULL);
 
     int it = 0;

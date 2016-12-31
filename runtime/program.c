@@ -79,10 +79,10 @@ surgescript_program_t* surgescript_program_create(int arity, int num_local_vars)
 }
 
 /*
- * surgescript_program_cfunction_create()
+ * surgescript_cprogram_create()
  * Creates a program that encapsulates a C-function
  */
-surgescript_program_t* surgescript_program_cfunction_create(int arity, surgescript_program_cfunction_t cfunction)
+surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_program_cfunction_t cfunction)
 {
     surgescript_cprogram_t* cprogram = ssmalloc(sizeof *cprogram);
     cprogram->cfunction = cfunction;
@@ -569,7 +569,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 surgescript_stack_popenv(stack);
 
                 /* callee_tmp[3] is the return value of the program */
-                surgescript_var_copy(t[a.u], *(surgescript_renv_tmp(callee_runtime_environment) + 3));
+                surgescript_var_copy(t[2], *(surgescript_renv_tmp(callee_runtime_environment) + 3));
                 surgescript_renv_destroy(callee_runtime_environment);
             }
             else

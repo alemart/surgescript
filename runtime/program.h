@@ -65,7 +65,7 @@ inline surgescript_program_operand_t surgescript_program_operand_i(int i) { surg
 
 /* life-cycle: create, destroy & run */
 surgescript_program_t* surgescript_program_create(int arity, int num_local_vars);
-surgescript_program_t* surgescript_program_cfunction_create(int arity, surgescript_program_cfunction_t cfunction);
+surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_program_cfunction_t cfunction);
 surgescript_program_t* surgescript_program_destroy(surgescript_program_t* program);
 void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment);
 
