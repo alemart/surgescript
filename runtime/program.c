@@ -23,45 +23,40 @@
 #include "../util/util.h"
 #include "../util/ssarray.h"
 
-/* forward declarations */
-typedef struct surgescript_program_operation_t surgescript_program_operation_t;
-/*typedef struct surgescript_program_delayedcalls_t surgescript_program_delayedcalls_t;*/
-
-
-/* the program structure */
-struct surgescript_program_t
-{
-    int arity, num_local_vars; /* config */
-    int ip; /* instruction pointer */
-    SSARRAY(surgescript_program_operation_t, line); /* a set of operations (or lines of code) */
-    SSARRAY(surgescript_program_label_t, label); /* labels (label[j] is the index of a line of code, j is a label) */
-    SSARRAY(char*, text); /* read-only text data */
-    /*surgescript_program_delayedcalls_t* delayedcalls;*/ /* used for rendering */
-};
-
 /* an operation / command */
+typedef struct surgescript_program_operation_t surgescript_program_operation_t;
 struct surgescript_program_operation_t
 {
     surgescript_program_operator_t instruction;
     surgescript_program_operand_t a, b, c;
 };
 
-static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c);
-
-/* delayed BUILT-IN calls (used for rendering) */
-/* calls fun(self, params, num_params) when called */
-/*struct surgescript_program_delayedcalls_t
+/* the program structure */
+struct surgescript_program_t
 {
-    void (*fun)(surgescript_object_t*, surgescript_var_t**, int);
-    surgescript_var_t** param;
-    int num_params;
-    surgescript_program_delayedcalls_t* next;
+    int arity, num_local_vars; /* config */
+    int ip; /* instruction pointer */
+    void (*run)(surgescript_program_t*, surgescript_renv_t*); /* run function; strategy pattern */
+
+    SSARRAY(surgescript_program_operation_t, line); /* a set of operations (or lines of code) */
+    SSARRAY(surgescript_program_label_t, label); /* labels (label[j] is the index of a line of code, j is a label) */
+    SSARRAY(char*, text); /* read-only text data */
 };
 
-static surgescript_program_delayedcalls_t* surgescript_program_delayedcalls_create();
-static surgescript_program_delayedcalls_t* surgescript_program_delayedcalls_destroy(surgescript_program_delayedcalls_t* delayedcalls);
-static surgescript_program_delayedcalls_t* surgescript_program_delayedcalls_add(surgescript_program_delayedcalls_t* delayedcalls, void (*fun)(surgescript_object_t*, surgescript_var_t**, int), surgescript_var_t** param, int num_params);
-static void surgescript_program_delayedcalls_run(surgescript_program_delayedcalls_t* delayedcalls, surgescript_object_t* self);*/
+/* a program that encapsulates a C-function */
+typedef struct surgescript_cprogram_t surgescript_cprogram_t;
+struct surgescript_cprogram_t
+{
+    surgescript_program_t program; /* base class */
+    surgescript_program_cfunction_t cfunction; /* pointer to the C-function */
+};
+
+/* utilities */
+static surgescript_program_t* init_program(surgescript_program_t* program, int arity, int num_local_vars, void (*run_function)(surgescript_program_t*, surgescript_renv_t*));
+static void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
+static void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
+static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c);
+
 
 /* -------------------------------
  * public methods
@@ -74,17 +69,18 @@ static void surgescript_program_delayedcalls_run(surgescript_program_delayedcall
 surgescript_program_t* surgescript_program_create(int arity, int num_local_vars)
 {
     surgescript_program_t* program = ssmalloc(sizeof *program);
+    return init_program(program, arity, num_local_vars, run_program);
+}
 
-    program->arity = arity;
-    program->num_local_vars = num_local_vars;
-    program->ip = 0;
-
-    ssarray_init(program->line);
-    ssarray_init(program->label);
-    ssarray_init(program->text);
-    /*program->delayedcalls = NULL;*/
-
-    return program;
+/*
+ * surgescript_program_cfunction_create()
+ * Creates a program that encapsulates a C-function
+ */
+surgescript_program_t* surgescript_program_cfunction_create(int arity, surgescript_program_cfunction_t cfunction)
+{
+    surgescript_cprogram_t* cprogram = ssmalloc(sizeof *cprogram);
+    cprogram->cfunction = cfunction;
+    return init_program((surgescript_program_t*)cprogram, arity, 0, run_cprogram);
 }
 
 /*
@@ -219,80 +215,65 @@ int surgescript_program_arity(const surgescript_program_t* program)
  */
 void surgescript_program_run(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
 {
-    program->ip = 0;
-    while(program->ip < ssarray_length(program->line))
-        run_instruction(program, runtime_environment, program->line[program->ip].instruction, program->line[program->ip].a, program->line[program->ip].b, program->line[program->ip].c);
+    program->run(program, runtime_environment);
 }
-
-/*
- * surgescript_program_run_update()
- * Runs a written program
- */
-/*void surgescript_program_run_update(surgescript_program_t* program, const surgescript_renv_t* runtime_environment)
-{
-    program->delayedcalls = surgescript_program_delayedcalls_create();
-    program->ip = 0;
-    while(program->ip < ssarray_length(program->line))
-        run_instruction(program, runtime_environment, program->line[program->ip].instruction, program->line[program->ip].a, program->line[program->ip].b, program->line[program->ip].c);
-}*/
-
-/*
- * surgescript_program_run_render()
- * Rendering routines of a written program (called after update)
- */
-/*void surgescript_program_run_render(surgescript_program_t* program, const surgescript_renv_t* runtime_environment)
-{
-    surgescript_program_delayedcalls_run(program->delayedcalls, surgescript_renv_owner(runtime_environment));
-    program->delayedcalls = surgescript_program_delayedcalls_destroy(program->delayedcalls);
-}*/
 
 /* -------------------------------
  * private stuff
  * ------------------------------- */
 
-/* delayed calls */
-/*surgescript_program_delayedcalls_t* surgescript_program_delayedcalls_create()
+/* initializes a program */
+surgescript_program_t* init_program(surgescript_program_t* program, int arity, int num_local_vars, void (*run_function)(surgescript_program_t*, surgescript_renv_t*))
 {
-    return NULL;
+    program->arity = arity;
+    program->num_local_vars = num_local_vars;
+    program->ip = 0;
+    program->run = run_function;
+
+    ssarray_init(program->line);
+    ssarray_init(program->label);
+    ssarray_init(program->text);
+
+    return program;
 }
 
-surgescript_program_delayedcalls_t* surgescript_program_delayedcalls_destroy(surgescript_program_delayedcalls_t* delayedcalls)
+/* runs a program */
+void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
 {
-    int i;
+    program->ip = 0;
+    while(program->ip < ssarray_length(program->line))
+        run_instruction(program, runtime_environment, program->line[program->ip].instruction, program->line[program->ip].a, program->line[program->ip].b, program->line[program->ip].c);
+}
 
-    if(delayedcalls) {
-        surgescript_program_delayedcalls_destroy(delayedcalls->next);
-        for(i = 0; i < delayedcalls->num_params; i++)
-            surgescript_var_destroy(delayedcalls->param[i]);
-        ssfree(delayedcalls->param);
-        ssfree(delayedcalls);
+/* runs a C-program */
+void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
+{
+    surgescript_cprogram_t* cprogram = (surgescript_cprogram_t*)program;
+    surgescript_object_t* caller = surgescript_renv_owner(runtime_environment);
+    surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
+    surgescript_var_t** param = program->arity > 0 ? ssmalloc(program->arity * sizeof(*param)) : NULL;
+    surgescript_var_t* return_value = NULL;
+
+    /* grab parameters from the stack */
+    for(int i = 0; i < program->arity; i++) {
+        param[i] = surgescript_var_clone(surgescript_stack_top(stack));
+        surgescript_stack_pop(stack);
     }
 
-    return NULL;
-}
-
-surgescript_program_delayedcalls_t* surgescript_program_delayedcalls_add(surgescript_program_delayedcalls_t* delayedcalls, void (*fun)(surgescript_object_t*, surgescript_var_t**, int), surgescript_var_t** param, int num_params)
-{
-    int i;
-    surgescript_program_delayedcalls_t* node = ssmalloc(sizeof *node);
-
-    node->fun = fun;
-    node->num_params = num_params;
-    node->param = ssmalloc(num_params * sizeof(*(node->param)));
-    for(i = 0; i < num_params; i++)
-        node->param[i] = surgescript_var_clone(param[i]);
-
-    node->next = delayedcalls;
-    return node;
-}
-
-void surgescript_program_delayedcalls_run(surgescript_program_delayedcalls_t* delayedcalls, surgescript_object_t* self)
-{
-    if(delayedcalls) {
-        surgescript_program_delayedcalls_run(delayedcalls->next, self);
-        delayedcalls->fun(self, delayedcalls->param, delayedcalls->num_params);
+    /* call C-function */
+    return_value = cprogram->cfunction(caller, (const surgescript_var_t**)param, program->arity);
+    if(return_value != NULL) {
+        surgescript_var_copy(*(surgescript_renv_tmp(runtime_environment) + 3), return_value);
+        surgescript_var_destroy(return_value);
     }
-}*/
+
+    /* release parameters */
+    if(param) {
+        for(int i = 0; i < program->arity; i++)
+            surgescript_var_destroy(param[i]);
+        ssfree(param);
+    }
+}
 
 /* runs an instruction */
 void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c)
@@ -400,6 +381,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         /* basic arithmetic */
+        case SSOP_MOV:
+            surgescript_var_copy(t[a.u], t[b.u]);
+            break;
+
         case SSOP_ZERO:
             surgescript_var_set_number(t[a.u], 0.0f);
             break;
@@ -460,10 +445,6 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 surgescript_var_set_bool(t[a.u], true);
             else
                 surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[b.u]));
-            break;
-
-        case SSOP_COPY:
-            surgescript_var_copy(t[a.u], t[b.u]);
             break;
 
         case SSOP_NEG:
@@ -621,23 +602,6 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         /* function calls */
-        /* FIXME: is render needed at all? */
-
-        /*case SSOP_CALL: {
-            const surgescript_program_lambda_t* lambda = surgescript_var_get_lambda(t[a.u]);
-            if(lambda != NULL) {
-                const surgescript_program_t* prog = surgescript_program_lambda_program(lambda);
-                int expected_params = prog->arity;
-                int actual_params = (int)b.u;
-                if(expected_params == actual_params)
-                    surgescript_program_lambda_run_update(lambda);
-                else
-                    ssfatal("Runtime Error: a function called in %s expected %d parameters, but received %d", surgescript_object_name(surgescript_renv_owner(runtime_environment)), expected_params, actual_params);
-            }
-            else
-                ssfatal("Runtime Error: in %s, can't perform a function call on something that isn't a function", surgescript_object_name(surgescript_renv_owner(runtime_environment)));
-            break;
-        }*/
         case SSOP_CALL: {
             char* program_name = surgescript_var_get_string(t[a.u]);
             unsigned object_handle = surgescript_var_get_objecthandle(t[b.u]);
@@ -663,7 +627,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 surgescript_program_run(prog, callee_runtime_environment);
                 surgescript_stack_popenv(stack);
 
-                surgescript_var_copy(t[0], *(surgescript_renv_tmp(callee_runtime_environment)+3)); /* t[0] = prog's return value (if any) */
+                surgescript_var_copy(t[0], *(surgescript_renv_tmp(callee_runtime_environment)+3)); /* callee_tmp[3] = prog's return value */
                 surgescript_renv_destroy(callee_runtime_environment);
             }
             else
@@ -673,14 +637,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
         }
 
-        /* modify program->delayedcalls here */
-        /* surgescript_program_delayedcalls_t* surgescript_program_delayedcalls_add(surgescript_program_delayedcalls_t* delayedcalls, void (*fun)(surgescript_object_t*, surgescript_var_t**, int), surgescript_var_t** param, int num_params); */
-        /* FIXME: is render needed at all? */
-        case SSOP_CALL_USERFUN: {
-            break;
-        }
-
-        case SSOP_HALT:
+        case SSOP_RET:
             program->ip = ssarray_length(program->line);
             return;
     }

@@ -49,7 +49,8 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_PEEK,                      // t[a] = stack[base + b]
     SSOP_POKE,                      // stack[base + a] = t[b]
 
-    SSOP_ZERO = 0x40,               // t[a] = 0
+    SSOP_MOV = 0x40,                // t[a] = t[b]
+    SSOP_ZERO,                      // t[a] = 0
     SSOP_INC,                       // t[a] = t[a] + 1
     SSOP_DEC,                       // t[a] = t[a] - 1
     SSOP_ADD,                       // t[a] = t[a] + t[b]
@@ -61,7 +62,6 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_NOT,                       // t[a] = not t[a]
     SSOP_AND,                       // t[a] = t[a] and t[b]
     SSOP_OR,                        // t[a] = t[a] or t[b]
-    SSOP_COPY,                      // t[a] = t[b]
     SSOP_NEG,                       // t[a] = -t[a]
 
 /* -- move to userfun
@@ -98,14 +98,14 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_JMP_IF_ZERO,               // ip = label[a] if t[b] == 0
     SSOP_JMP_IF_NOTZERO,            // ip = label[a] if t[b] != 0
 
-    SSOP_CALL = 0x80,               // t[a] = call program having name text[t[a]] from object whose handle is t[b] with n = c parameters
-    SSOP_CALL_USERFUN,              // t[a] = call user-defined function named text[t[a]] with n = b parameters
+    SSOP_CALL = 0x80,               // t[a] = call program named text[t[a]] of the object having handle t[b] with n = c parameters
+    SSOP_RET,                       // returns, halting the program
+
     SSOP_ROOT_HANDLE,               // t[a] = handle to the root object in the object manager
     SSOP_SELF_HANDLE,               // t[a] = handle to this object (self) in the object manager
     SSOP_STATE,                     // t[a] = name of the current state of this object
     // get handles to: self, root, parent
     SSOP_DESTROY,                   // destroys the object (i.e., schedules a destroy)
-    SSOP_HALT,                      // halt program
 };
 
 /* C-functions can also be encapsulated in programs */
