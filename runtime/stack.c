@@ -163,7 +163,7 @@ surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack)
  */
 surgescript_var_t* surgescript_stack_at(surgescript_stack_t* stack, int offset)
 {
-    int idx = stack->bp + offset;
+    const int idx = stack->bp + offset;
 
     if(idx >= 0 && idx <= stack->sp)
         return stack->data[idx];

@@ -24,54 +24,59 @@ void setup(surgescript_program_t* program, surgescript_program_t* called_program
     surgescript_program_label_t loop = surgescript_program_new_label(program);
     surgescript_program_label_t loop2 = surgescript_program_new_label(program);
 
-    surgescript_program_add_text(program, "Contador:");
-    surgescript_program_add_text(program, "fun2");
+    surgescript_program_add_text(program, "Fibonacci sequence:");
+    surgescript_program_add_text(program, "__constructor");
+
+    // count 1 .. 10
+    surgescript_program_add_line(program, SSOP_MOVF, SSOPu(1), SSOPf(10)); // t[1] = 10 (last)
+    surgescript_program_add_line(program, SSOP_MOVF, SSOPu(0), SSOPf(1)); // t[0] = 1 (counter)
+    surgescript_program_add_label(program, loop);
+        surgescript_program_add_line(program, SSOP_OUT, SSOPu(0), SSOP()); // print counter
+        surgescript_program_add_line(program, SSOP_INC, SSOPu(0), SSOP()); // counter++
+        surgescript_program_add_line(program, SSOP_CMP, SSOPu(0), SSOPu(1)); // cmp counter, last
+        surgescript_program_add_line(program, SSOP_JLE, SSOPu(loop), SSOP()); // jmp loop if counter <= last
 
     // hello
-    surgescript_program_add_line(program, SSOP_ASSIGN_STRING, SSOP(0), SSOP(0), SSNOP); // t[0] = text[0]
-    surgescript_program_add_line(program, SSOP_OUT, SSOP(0), SSNOP, SSNOP);  // print t[0]
+    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOP()); // t[0] = text[0]
+    surgescript_program_add_line(program, SSOP_OUT, SSOPu(0), SSOP());  // print t[0]
 
-/*
-    // count 1 .. 10
-    surgescript_program_add_line(program, SSOP_ZERO, SSOP(0), SSNOP, SSNOP); // t[0] = 0
-    surgescript_program_add_line(program, SSOP_ASSIGN_NUMBER, SSOP(1), SSOPf(10), SSNOP); // t[1] = 10
-    surgescript_program_add_label(program, loop);
-        surgescript_program_add_line(program, SSOP_INC, SSOP(0), SSNOP, SSNOP); // t[0] += 1
-        surgescript_program_add_line(program, SSOP_OUT, SSOP(0), SSNOP, SSNOP);  // print t[0]
-        surgescript_program_add_line(program, SSOP_JMP_IF_LOWER, SSOP(loop), SSOP(0), SSOP(1)); // jmp loop if t[0] < t[1]
-
-    // print strlen(text[1])
-    surgescript_program_add_line(program, SSOP_ASSIGN_STRING, SSOP(0), SSOP(1), SSNOP); // t[0] = text[1]
-    surgescript_program_add_line(program, SSOP_STRLEN, SSOP(0), SSNOP, SSNOP); // t[0] = strlen(t[0])
-    surgescript_program_add_line(program, SSOP_OUT, SSOP(0), SSNOP, SSNOP);  // print t[0]
-*/
-    // print fib(1) .. fib(10), where fib(x) = fib(x-1) + fib(x-2)
-    surgescript_program_add_line(program, SSOP_ZERO, SSOP(0), SSNOP, SSNOP); // t[0] = 0
-    surgescript_program_add_line(program, SSOP_PUSH, SSOP(0), SSNOP, SSNOP); // push 0
-    surgescript_program_add_line(program, SSOP_INC, SSOP(0), SSNOP, SSNOP); // t[0] = 1
-    surgescript_program_add_line(program, SSOP_PUSH, SSOP(0), SSNOP, SSNOP); // push 1
-    surgescript_program_add_line(program, SSOP_ASSIGN_NUMBER, SSOP(2), SSOPf(15), SSNOP); // t[2] = 15
+    // print fib(1) .. fib(n), where fib(x) = fib(x-1) + fib(x-2) and n = 20
+    surgescript_program_add_line(program, SSOP_MOVF, SSOPu(0), SSOPf(0)); // t[0] = 0
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOP()); // push t[0]
+    surgescript_program_add_line(program, SSOP_INC, SSOPu(0), SSOP()); // t[0] = 1
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOP()); // push t[0]
+    surgescript_program_add_line(program, SSOP_MOVF, SSOPu(0), SSOPf(20)); // t[0] = 20 (counter)
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOP()); // push t[0]
     surgescript_program_add_label(program, loop2);
-        surgescript_program_add_line(program, SSOP_POP, SSOP(1), SSNOP, SSNOP); // pop t[1] (fib(x-1))
-        surgescript_program_add_line(program, SSOP_POP, SSOP(0), SSNOP, SSNOP); // pop t[0] (t[0] <= t[1]) (fib(x-2))
-        surgescript_program_add_line(program, SSOP_ADD, SSOP(0), SSOP(1), SSNOP); // t[0] += t[1] (fib(x))
-        surgescript_program_add_line(program, SSOP_OUT, SSOP(0), SSNOP, SSNOP);  // print fib(x)
-        surgescript_program_add_line(program, SSOP_PUSH, SSOP(1), SSNOP, SSNOP); // push fib(x-1)
-        surgescript_program_add_line(program, SSOP_PUSH, SSOP(0), SSNOP, SSNOP); // push fib(x)
-        surgescript_program_add_line(program, SSOP_DEC, SSOP(2), SSNOP, SSNOP); // t[2] -= 1
-        surgescript_program_add_line(program, SSOP_JMP_IF_NOTZERO, SSOP(loop2), SSOP(2), SSNOP); // jmp loop2 if t[2] <> 0
+        surgescript_program_add_line(program, SSOP_POP, SSOPu(2), SSOP()); // pop t[2] (counter)
+        surgescript_program_add_line(program, SSOP_POP, SSOPu(1), SSOP()); // pop t[1] (fib(x-1))
+        surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOP()); // pop t[0] (t[0] <= t[1]) (fib(x-2))
+        surgescript_program_add_line(program, SSOP_ADD, SSOPu(0), SSOPu(1)); // t[0] += t[1] (fib(x))
+        surgescript_program_add_line(program, SSOP_OUT, SSOPu(0), SSOP());  // print fib(x)
+        //surgescript_program_add_line(program, SSOP_OUT, SSOPu(2), SSOP());  // print counter
+        surgescript_program_add_line(program, SSOP_DEC, SSOPu(2), SSOP()); // t[2] -= 1
+        surgescript_program_add_line(program, SSOP_PUSH, SSOPu(1), SSOP()); // push fib(x-1)
+        surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOP()); // push fib(x)
+        surgescript_program_add_line(program, SSOP_PUSH, SSOPu(2), SSOP()); // push counter
+        surgescript_program_add_line(program, SSOP_MOVF, SSOPu(0), SSOPf(0)); // t[0] = 0
+        surgescript_program_add_line(program, SSOP_CMP, SSOPu(2), SSOPu(0)); // cmp t[2], t[0]
+        surgescript_program_add_line(program, SSOP_JG, SSOPu(loop2), SSOP()); // jmp loop2 if t[2] > 0
+    surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOP()); // pop counter
+    surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOP()); // pop fib(x-1)
+    surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOP()); // pop fib(x)
 
     // call other program
-    surgescript_program_add_line(program, SSOP_ASSIGN_STRING, SSOP(0), SSOP(1), SSNOP); // t[0] = text[1]
-    surgescript_program_add_line(program, SSOP_ASSIGN_OBJECTHANDLE, SSOP(1), SSOP(1), SSNOP); // t[1] = (object)1
-    //surgescript_program_add_line(program, SSOP_CALL, SSOP(0), SSOP(1), SSOP(0));
+    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOPu(1)); // t[0] = text[1]
+    surgescript_program_add_line(program, SSOP_MOVH, SSOPu(1), SSOPu(1)); // t[1] = (object)1
+    surgescript_program_add_line(program, SSOP_MOVF, SSOPu(2), SSOPf(0)); // t[2] = 0
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(0), SSOPu(1)); // call it!
 }
 
 void setup2(surgescript_program_t* program)
 {
     surgescript_program_add_text(program, "Olá, mundo!");
-    surgescript_program_add_line(program, SSOP_ASSIGN_STRING, SSOP(0), SSOP(0), SSNOP); // t[0] = text[0]
-    surgescript_program_add_line(program, SSOP_OUT, SSOP(0), SSNOP, SSNOP);  // print t[0]
+    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOPu(0)); // t[0] = text[0]
+    surgescript_program_add_line(program, SSOP_OUT, SSOPu(0), SSOP());  // print t[0]
 }
 
 int main()

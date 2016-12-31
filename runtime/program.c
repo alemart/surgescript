@@ -28,7 +28,7 @@ typedef struct surgescript_program_operation_t surgescript_program_operation_t;
 struct surgescript_program_operation_t
 {
     surgescript_program_operator_t instruction;
-    surgescript_program_operand_t a, b, c;
+    surgescript_program_operand_t a, b;
 };
 
 /* the program structure */
@@ -55,7 +55,13 @@ struct surgescript_cprogram_t
 static surgescript_program_t* init_program(surgescript_program_t* program, int arity, int num_local_vars, void (*run_function)(surgescript_program_t*, surgescript_renv_t*));
 static void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
 static void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
-static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c);
+static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b);
+
+/* inlines */
+surgescript_program_operand_t surgescript_program_operand_u(unsigned u);
+surgescript_program_operand_t surgescript_program_operand_f(float f);
+surgescript_program_operand_t surgescript_program_operand_b(bool b);
+surgescript_program_operand_t surgescript_program_operand_i(int i);
 
 
 /* -------------------------------
@@ -102,35 +108,15 @@ surgescript_program_t* surgescript_program_destroy(surgescript_program_t* progra
     return NULL;
 }
 
-/*
- * surgescript_program_operand_u()
- * Operand constructor (unsigned)
- */
-surgescript_program_operand_t surgescript_program_operand_u(unsigned u)
-{
-    surgescript_program_operand_t op = { .u = u };
-    return op;
-}
-
-/*
- * surgescript_program_operand_f()
- * Operand constructor (float)
- */
-surgescript_program_operand_t surgescript_program_operand_f(float f)
-{
-    surgescript_program_operand_t op = { .f = f };
-    return op;
-}
-
 
 
 /*
  * surgescript_program_add_line()
  * Adds a line of code to a program
  */
-void surgescript_program_add_line(surgescript_program_t* program, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c)
+void surgescript_program_add_line(surgescript_program_t* program, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b)
 {
-    surgescript_program_operation_t line = { op, a, b, c };
+    surgescript_program_operation_t line = { op, a, b };
     ssarray_push(program->line, line);
 }
 
@@ -242,7 +228,7 @@ void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_env
 {
     program->ip = 0;
     while(program->ip < ssarray_length(program->line))
-        run_instruction(program, runtime_environment, program->line[program->ip].instruction, program->line[program->ip].a, program->line[program->ip].b, program->line[program->ip].c);
+        run_instruction(program, runtime_environment, program->line[program->ip].instruction, program->line[program->ip].a, program->line[program->ip].b);
 }
 
 /* runs a C-program */
@@ -259,7 +245,7 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
         param[i-1] = surgescript_stack_at(stack, -i);
 
     /* call C-function */
-    return_value = cprogram->cfunction(caller, (const surgescript_var_t**)param, program->arity);
+    return_value = (surgescript_var_t*)(cprogram->cfunction(caller, (const surgescript_var_t**)param, program->arity));
     if(return_value != NULL) {
         surgescript_var_copy(*(surgescript_renv_tmp(runtime_environment) + 3), return_value);
         surgescript_var_destroy(return_value);
@@ -271,7 +257,7 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
 }
 
 /* runs an instruction */
-void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c)
+void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b)
 {
     /* temporary variables */
     surgescript_var_t** t = surgescript_renv_tmp(runtime_environment);
@@ -297,48 +283,33 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         }
 
         /* assignment operations */
-        case SSOP_ASSIGN_NULL:
+        case SSOP_MOVN: /* move null */
             surgescript_var_set_null(t[a.u]);
             break;
 
-        case SSOP_ASSIGN_BOOL:
-            surgescript_var_set_bool(t[a.u], b.u);
+        case SSOP_MOVB: /* move boolean */
+            surgescript_var_set_bool(t[a.u], b.b);
             break;
 
-        case SSOP_ASSIGN_NUMBER:
+        case SSOP_MOVF: /* move number (float) */
             surgescript_var_set_number(t[a.u], b.f);
             break;
 
-        case SSOP_ASSIGN_STRING:
+        case SSOP_MOVS: /* move string */
             surgescript_var_set_string(t[a.u], program->text[b.u]);
             break;
 
-        case SSOP_ASSIGN_OBJECTHANDLE:
+        case SSOP_MOVH: /* move handle (object handle) */
             surgescript_var_set_objecthandle(t[a.u], b.u);
             break;
 
-        /*case SSOP_ASSIGN_LAMBDA: {
-            surgescript_object_t* o = surgescript_objectmanager_get(runtime_environment->object_manager, surgescript_var_get_number(t[b.u]));
-            if(o != NULL) {
-                surgescript_var_set_lambda(t[a.u], surgescript_program_lambda_create(
-                    surgescript_programpool_get(
-                        runtime_environment->program_pool,
-                        surgescript_object_name(o), // TODO: inheritance
-                        program->text[b.u]
-                    ),
-                    surgescript_renv_create(
-                        o,
-                        surgescript_renv_stack(runtime_environment),
-                        surgescript_object_heap(o),
-                        runtime_environment->program_pool,
-                        runtime_environment->object_manager
-                    )
-                ));
-            }
-            else
-                ssfatal("Runtime Error: null pointer exception - accessing invalid object in %s", surgescript_object_name(surgescript_renv_owner(runtime_environment)));
+        case SSOP_MOVC: /* move caller object ("this" pointer) */
+            surgescript_var_set_objecthandle(t[a.u], surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
             break;
-        }*/
+
+        case SSOP_MOVT: /* move temp */
+            surgescript_var_copy(t[a.u], t[b.u]);
+            break;
 
         /* heap operations */
         case SSOP_STORE:
@@ -349,13 +320,13 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_copy(t[a.u], surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[b.u])));
             break;
 
-        case SSOP_MALLOC:
+        /*case SSOP_MALLOC:
             surgescript_var_set_number(t[a.u], surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
             break;
 
         case SSOP_FREE:
             surgescript_heap_free(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[a.u]));
-            break;
+            break;*/
 
         /* stack operations */
         case SSOP_PUSH:
@@ -367,22 +338,18 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_stack_pop(surgescript_renv_stack(runtime_environment));
             break;
 
-        case SSOP_PEEK:
-            surgescript_var_copy(t[a.u], surgescript_stack_at(surgescript_renv_stack(runtime_environment), (int)b.u));
+        case SSOP_SPEEK:
+            surgescript_var_copy(t[a.u], surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i));
             break;
 
-        case SSOP_POKE:
-            surgescript_var_copy(surgescript_stack_at(surgescript_renv_stack(runtime_environment), (int)a.u),  t[b.u]);
+        case SSOP_SPOKE:
+            surgescript_var_copy(surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i),  t[a.u]);
             break;
 
         /* basic arithmetic */
-        case SSOP_MOV:
-            surgescript_var_copy(t[a.u], t[b.u]);
-            break;
-
-        case SSOP_ZERO:
+        /*case SSOP_ZERO:
             surgescript_var_set_number(t[a.u], 0.0f);
-            break;
+            break;*/
 
         case SSOP_INC:
             surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) + 1.0f); /* TODO: inc op */
@@ -413,19 +380,16 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 surgescript_var_set_number(t[a.u], -INFINITY * sssign(surgescript_var_get_number(t[b.u])));
             break;
 
-        case SSOP_MOD:
+        /*case SSOP_MOD:
             surgescript_var_set_number(t[a.u], fmodf(surgescript_var_get_number(t[a.u]), surgescript_var_get_number(t[b.u])));
-            break;
+            break;*/
 
-        case SSOP_POW:
+        /*case SSOP_POW:
             surgescript_var_set_number(t[a.u], powf(surgescript_var_get_number(t[a.u]), surgescript_var_get_number(t[b.u])));
-            break;
+            break;*/
 
         case SSOP_NOT:
-            if(surgescript_var_get_bool(t[a.u]))
-                surgescript_var_set_bool(t[a.u], false);
-            else
-                surgescript_var_set_bool(t[a.u], true);
+            surgescript_var_set_bool(t[a.u], !surgescript_var_get_bool(t[a.u]));
             break;
 
         case SSOP_AND:
@@ -447,6 +411,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         /* utility operations */
+/*
         case SSOP_TYPEOF:
             surgescript_var_set_string(t[a.u], surgescript_var_typename(t[a.u]));
             break;
@@ -468,7 +433,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_STRLEN: {
             char* buf = surgescript_var_get_string(t[a.u]);
-            int len = strlen(buf); /* TODO: utf-8 compat */
+            int len = strlen(buf); // TODO: utf-8 compat
             surgescript_var_set_number(t[a.u], len);
             ssfree(buf);
             break;
@@ -479,7 +444,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             char* str = surgescript_var_get_string(t[a.u]);
             int start = surgescript_var_get_number(t[b.u]);
             int length = surgescript_var_get_number(t[c.u]);
-            int n = strlen(str); /* TODO: utf-8 compat */
+            int n = strlen(str); // TODO: utf-8 compat
 
             start = ssclamp(start, 0, n);
             length = ssclamp(length, 0, n - start);
@@ -508,7 +473,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         case SSOP_STRAT: {
             char* str = surgescript_var_get_string(t[a.u]);
             int index = surgescript_var_get_number(t[b.u]);
-            int n = strlen(str); /* TODO: utf-8 compat */
+            int n = strlen(str); // TODO: utf-8 compat
 
             char buf[2] = { ' ', '\0' };
             if(index >= 0 && index < n)
@@ -518,78 +483,58 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             ssfree(str);
             break;
         }
-
+*/
         /* jumping */
         case SSOP_JMP:
             program->ip = program->label[a.u];
             return;
 
-        case SSOP_JMP_IF_TRUE:
-            if(surgescript_var_get_bool(t[b.u])) {
+        case SSOP_CMP:
+            surgescript_var_set_number(t[2], surgescript_var_compare(t[a.u], t[b.u]));
+            break;
+
+        case SSOP_JE:
+            if(surgescript_var_get_number(t[2]) == 0) {
                 program->ip = program->label[a.u];
                 return;
             }
             else
                 break;
 
-        case SSOP_JMP_IF_EQUAL:
-            if(surgescript_var_compare(t[b.u], t[c.u]) == 0) {
+        case SSOP_JNE:
+            if(surgescript_var_get_number(t[2]) != 0) {
                 program->ip = program->label[a.u];
                 return;
             }
             else
                 break;
 
-        case SSOP_JMP_IF_NOTEQUAL:
-            if(surgescript_var_compare(t[b.u], t[c.u]) != 0) {
+        case SSOP_JL:
+            if(surgescript_var_get_number(t[2]) < 0) {
                 program->ip = program->label[a.u];
                 return;
             }
             else
                 break;
 
-        case SSOP_JMP_IF_LOWER:
-            if(surgescript_var_compare(t[b.u], t[c.u]) < 0) {
+        case SSOP_JG:
+            if(surgescript_var_get_number(t[2]) > 0) {
                 program->ip = program->label[a.u];
                 return;
             }
             else
                 break;
 
-        case SSOP_JMP_IF_GREATER:
-            if(surgescript_var_compare(t[b.u], t[c.u]) > 0) {
+        case SSOP_JLE:
+            if(surgescript_var_get_number(t[2]) <= 0) {
                 program->ip = program->label[a.u];
                 return;
             }
             else
                 break;
 
-        case SSOP_JMP_IF_LOWEROREQUAL:
-            if(surgescript_var_compare(t[b.u], t[c.u]) <= 0) {
-                program->ip = program->label[a.u];
-                return;
-            }
-            else
-                break;
-
-        case SSOP_JMP_IF_GREATEROREQUAL:
-            if(surgescript_var_compare(t[b.u], t[c.u]) >= 0) {
-                program->ip = program->label[a.u];
-                return;
-            }
-            else
-                break;
-
-        case SSOP_JMP_IF_ZERO:
-            if(fabsf(surgescript_var_get_number(t[b.u])) <= FLT_EPSILON) {
-                program->ip = program->label[a.u];
-                return;
-            }
-            else
-                break;
-
-        case SSOP_JMP_IF_NOTZERO:
-            if(fabsf(surgescript_var_get_number(t[b.u])) > FLT_EPSILON) {
+        case SSOP_JGE:
+            if(surgescript_var_get_number(t[2]) >= 0) {
                 program->ip = program->label[a.u];
                 return;
             }
@@ -600,7 +545,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         case SSOP_CALL: {
             char* program_name = surgescript_var_get_string(t[a.u]);
             unsigned object_handle = surgescript_var_get_objecthandle(t[b.u]);
-            int params = c.u;
+            int params = (int)surgescript_var_get_number(t[2]);
 
             surgescript_object_t* object = surgescript_objectmanager_get(surgescript_renv_objectmanager(runtime_environment), object_handle);
             const char* object_name = surgescript_object_name(object);
@@ -618,11 +563,13 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                     surgescript_renv_objectmanager(runtime_environment)
                 );
 
+                /* push an environment and call the program */
                 surgescript_stack_pushenv(stack, prog->num_local_vars);
                 surgescript_program_run(prog, callee_runtime_environment);
                 surgescript_stack_popenv(stack);
 
-                surgescript_var_copy(t[0], *(surgescript_renv_tmp(callee_runtime_environment)+3)); /* callee_tmp[3] = prog's return value */
+                /* callee_tmp[3] is the return value of the program */
+                surgescript_var_copy(t[a.u], *(surgescript_renv_tmp(callee_runtime_environment) + 3));
                 surgescript_renv_destroy(callee_runtime_environment);
             }
             else
