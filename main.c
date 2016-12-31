@@ -83,11 +83,11 @@ static void setup2(surgescript_program_t* program)
 static surgescript_var_t* my_cfun(surgescript_object_t* caller, const surgescript_var_t** param, int num_params)
 {
     surgescript_var_t* var = surgescript_var_create();
-    static int x = 0;
 
     printf("heeeeeey from C! " __FILE__ ":%d\n", __LINE__);
+    surgescript_object_kill(caller);
 
-    return surgescript_var_set_number(var, 1337 + x++);
+    return surgescript_var_set_string(var, "Today is " __DATE__);
 }
 
 
@@ -109,14 +109,10 @@ int main()
     surgescript_programpool_put(program_pool, "Application", "call_c", cprogram);
     surgescript_objectmanager_spawn(object_manager, "Application", NULL, NULL, NULL);
 
-    int it = 0;
     surgescript_objectmanager_handle_t root_handle = surgescript_objectmanager_root(object_manager);
-    while(surgescript_objectmanager_exists(object_manager, root_handle)) { // while the root object exists
-        printf("Iteracao #%d\n", ++it);
+    while(surgescript_objectmanager_exists(object_manager, root_handle)) { /* while the root object exists */
         surgescript_object_t* root = surgescript_objectmanager_get(object_manager, root_handle);
         surgescript_object_update_fulltree(root);
-        if(it == 10)
-            surgescript_objectmanager_delete(object_manager, root_handle);
     }
 
     surgescript_stack_destroy(stack);
