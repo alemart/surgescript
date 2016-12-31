@@ -14,6 +14,7 @@
 #include <limits.h>
 #include <float.h>
 #include "variable.h"
+#include "object.h"
 #include "../util/util.h"
 
 
@@ -40,9 +41,24 @@ struct surgescript_var_t
     };
 };
 
+/* reference counting */
+extern void surgescript_object_increment_reference_count(surgescript_object_t* object);
+extern void surgescript_object_decrement_reference_count(surgescript_object_t* object);
+
 /* helpers */
 #define RELEASE_DATA(var)       if(var->type == SSVAR_STRING) \
                                     ssfree(var->string);
+                                /*
+                                else if(var->type == SSVAR_OBJECTHANDLE) \
+                                    surgescript_object_decrement_reference_count( \
+                                        surgescript_objectmanager_get( \
+                                            surgescript_vm_objectmanager( \
+                                                surgescript_vm() \
+                                            ),
+                                            var->handle
+                                        )
+                                    );
+                                */
 /*static float string2number(const char* str);*/
 
 
@@ -138,6 +154,14 @@ surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsi
     RELEASE_DATA(var);
     var->type = SSVAR_OBJECTHANDLE;
     var->handle = handle;
+    /*surgescript_object_increment_reference_count(
+        surgescript_objectmanager_get(
+            surgescript_vm_objectmanager(
+                surgescript_vm()
+            ),
+            var->handle
+        )
+    );*/
     return var;
 }
 

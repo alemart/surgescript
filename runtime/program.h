@@ -26,20 +26,6 @@ struct surgescript_program_t;
 /* labels */
 typedef unsigned surgescript_program_label_t;
 
-/* operands */
-typedef union surgescript_program_operand_t surgescript_program_operand_t;
-union surgescript_program_operand_t {
-    unsigned u;
-    float f;
-};
-
-surgescript_program_operand_t surgescript_program_operand_u(unsigned u);
-surgescript_program_operand_t surgescript_program_operand_f(float f);
-
-#define SSNOP surgescript_program_operand_u(0)
-#define SSOP(x) surgescript_program_operand_u(x)
-#define SSOPf(x) surgescript_program_operand_f(x)
-
 /* operators */
 typedef enum surgescript_program_operator_t surgescript_program_operator_t;
 enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) that belong to the object. then,
@@ -122,30 +108,46 @@ enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) 
     SSOP_HALT,                      // halt program
 };
 
+/* C-functions can also be encapsulated in programs */
+typedef struct surgescript_var_t* (*surgescript_program_cfunction_t)(struct surgescript_object_t*, const struct surgescript_var_t**, int);
+
+/* operands */
+typedef union surgescript_program_operand_t surgescript_program_operand_t;
+union surgescript_program_operand_t {
+    unsigned u;
+    float f;
+    surgescript_program_cfunction_t c;
+};
+#define SSNOP surgescript_program_operand_u(0)
+#define SSOP(x) surgescript_program_operand_u(x)
+#define SSOPf(x) surgescript_program_operand_f(x)
+
+
+
 
 /* public methods */
 
 
-/* create & destroy */
+/* life-cycle: create, destroy & run */
 surgescript_program_t* surgescript_program_create(int arity, int num_local_vars);
+surgescript_program_t* surgescript_program_cfunction_create(int arity, surgescript_program_cfunction_t cfunction);
 surgescript_program_t* surgescript_program_destroy(surgescript_program_t* program);
-
+void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment);
 
 /* write the program */
-surgescript_program_label_t surgescript_program_create_label(surgescript_program_t* program); /* creates and returns a new label */
+surgescript_program_label_t surgescript_program_new_label(surgescript_program_t* program); /* creates and returns a new label */
 void surgescript_program_add_label(surgescript_program_t* program, surgescript_program_label_t label); /* adds a label to the current line of code in the program */
 void surgescript_program_add_line(surgescript_program_t* program, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_program_operand_t c); /* adds a line of code to the program */
 int surgescript_program_add_text(surgescript_program_t* program, const char* text); /* adds a read-only string to the program, returning its index */
 
-
 /* program data */
-int surgescript_program_arity(const surgescript_program_t* program); /* what's the arity of this program? */
+int surgescript_program_arity(const surgescript_program_t* program); /* what's the arity of this program? (i.e., how many parameters does it take) */
 const char* surgescript_program_get_text(const surgescript_program_t* program, int index); /* reads a string literal (text[index]) from the program */
 int surgescript_program_find_text(const surgescript_program_t* program, const char* text); /* finds the first index such that text[index] == text, or -1 if not found */
 int surgescript_program_text_count(const surgescript_program_t* program); /* how many string literals exist in the program? */
 
-
-/* execute the program */
-void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment);
+/* operand helpers */
+surgescript_program_operand_t surgescript_program_operand_u(unsigned u);
+surgescript_program_operand_t surgescript_program_operand_f(float f);
 
 #endif

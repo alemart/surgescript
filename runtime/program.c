@@ -27,6 +27,7 @@
 typedef struct surgescript_program_operation_t surgescript_program_operation_t;
 /*typedef struct surgescript_program_delayedcalls_t surgescript_program_delayedcalls_t;*/
 
+
 /* the program structure */
 struct surgescript_program_t
 {
@@ -157,10 +158,10 @@ int surgescript_program_add_text(surgescript_program_t* program, const char* tex
 }
 
 /*
- * surgescript_program_create_label()
+ * surgescript_program_new_label()
  * Creates and returns a new label
  */
-surgescript_program_label_t surgescript_program_create_label(surgescript_program_t* program)
+surgescript_program_label_t surgescript_program_new_label(surgescript_program_t* program)
 {
     ssarray_push(program->label, 0);
     return ssarray_length(program->label) - 1;
@@ -382,7 +383,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         /* stack operations */
         case SSOP_PUSH:
-            surgescript_var_copy(surgescript_stack_push(surgescript_renv_stack(runtime_environment)), t[a.u]);
+            surgescript_var_copy(surgescript_stack_push(surgescript_renv_stack(runtime_environment), surgescript_var_create()), t[a.u]);
             break;
 
         case SSOP_POP:

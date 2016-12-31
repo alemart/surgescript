@@ -21,8 +21,8 @@
 
 void setup(surgescript_program_t* program, surgescript_program_t* called_program)
 {
-    surgescript_program_label_t loop = surgescript_program_create_label(program);
-    surgescript_program_label_t loop2 = surgescript_program_create_label(program);
+    surgescript_program_label_t loop = surgescript_program_new_label(program);
+    surgescript_program_label_t loop2 = surgescript_program_new_label(program);
 
     surgescript_program_add_text(program, "Contador:");
     surgescript_program_add_text(program, "fun2");
@@ -64,7 +64,7 @@ void setup(surgescript_program_t* program, surgescript_program_t* called_program
     // call other program
     surgescript_program_add_line(program, SSOP_ASSIGN_STRING, SSOP(0), SSOP(1), SSNOP); // t[0] = text[1]
     surgescript_program_add_line(program, SSOP_ASSIGN_OBJECTHANDLE, SSOP(1), SSOP(1), SSNOP); // t[1] = (object)1
-    surgescript_program_add_line(program, SSOP_CALL, SSOP(0), SSOP(1), SSOP(0));
+    //surgescript_program_add_line(program, SSOP_CALL, SSOP(0), SSOP(1), SSOP(0));
 }
 
 void setup2(surgescript_program_t* program)
@@ -86,7 +86,7 @@ int main()
     setup(program, called_program);
 
     surgescript_programpool_put(program_pool, "Application", "state:main", program);
-    surgescript_programpool_put(program_pool, "Application", "fun2", called_program);
+    surgescript_programpool_put(program_pool, "Application", "__constructor", called_program);
     surgescript_objectmanager_spawn(object_manager, "Application", NULL, NULL, NULL);
 
     int it = 0;

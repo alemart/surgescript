@@ -31,10 +31,11 @@ struct surgescript_object_t
     unsigned parent; /* handle to the parent in the object manager */
     SSARRAY(unsigned, child); /* handles to the children */
 
-    /* state */
+    /* inner state */
     bool is_active; /* can i run programs? */
     bool is_killed; /* am i scheduled to be destroyed? */
     char* state_name; /* current state name */
+    int reference_count; /* how many things point to me? */
 
     /* user-data */
     void* user_data; /* custom user-data */
@@ -82,6 +83,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->is_active = true;
     obj->is_killed = false;
     obj->state_name = surgescript_util_strdup(INITIAL_STATE);
+    obj->reference_count = 0;
 
     obj->user_data = user_data;
     obj->on_init = on_init;
@@ -341,6 +343,34 @@ void surgescript_object_kill(surgescript_object_t* object)
     object->is_killed = true;
 }
 
+/*
+ * surgescript_object_increment_reference_count()
+ * Increments the reference counter
+ */
+void surgescript_object_increment_reference_count(surgescript_object_t* object)
+{
+    object->reference_count++;
+}
+
+/*
+ * surgescript_object_decrement_reference_count()
+ * Decrements the reference counter
+ */
+void surgescript_object_decrement_reference_count(surgescript_object_t* object)
+{
+    object->reference_count--;
+}
+
+/*
+ * surgescript_object_reference_count()
+ * Returns how many things are pointing to me
+ */
+int surgescript_object_reference_count(surgescript_object_t* object)
+{
+    return object->reference_count;
+}
+
+
 
 /* life-cycle */
 
@@ -360,6 +390,8 @@ void surgescript_object_init(surgescript_object_t* object)
 
     if(surgescript_programpool_exists(program_pool, object->name, CONSTRUCTOR_FUN)) {
         surgescript_program_t* constructor = surgescript_programpool_get(program_pool, object->name, CONSTRUCTOR_FUN);
+        if(surgescript_program_arity(constructor) != 0)
+            ssfatal("Runtime Error: Object \"%s\" %s() cannot receive parameters", object->name, CONSTRUCTOR_FUN);
         surgescript_program_run(constructor, object->renv);
     }
 }
@@ -375,6 +407,8 @@ void surgescript_object_release(surgescript_object_t* object)
 
     if(surgescript_programpool_exists(program_pool, object->name, DESTRUCTOR_FUN)) {
         surgescript_program_t* destructor = surgescript_programpool_get(program_pool, object->name, DESTRUCTOR_FUN);
+        if(surgescript_program_arity(destructor) != 0)
+            ssfatal("Runtime Error: Object \"%s\" %s() cannot receive parameters", object->name, DESTRUCTOR_FUN);
         surgescript_program_run(destructor, object->renv);
     }
 

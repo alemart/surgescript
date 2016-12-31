@@ -29,7 +29,7 @@
  */
 
 /* constants */
-static const size_t SSSTACK_INITIAL_SIZE = 20480 * 2;
+static const size_t SSSTACK_INITIAL_SIZE = 1048576; /*20480 * 2;*/
 
 /* the stack structure */
 struct surgescript_stack_t
@@ -83,16 +83,16 @@ surgescript_stack_t* surgescript_stack_destroy(surgescript_stack_t* stack)
 
 /*
  * surgescript_stack_push()
- * Pushes a variable onto the stack (the var is automatically allocated)
+ * Pushes a variable onto the stack
  */
-surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack)
+surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack, surgescript_var_t* var)
 {
     if(++stack->sp >= stack->size) {
         ssfatal("surgescript_stack_push(): stack overflow.");
         return NULL;
     }
 
-    return stack->data[stack->sp] = surgescript_var_create();
+    return stack->data[stack->sp] = var;
 }
 
 /*
@@ -116,13 +116,13 @@ void surgescript_stack_pop(surgescript_stack_t* stack)
 void surgescript_stack_pushenv(surgescript_stack_t* stack, int num_vars)
 {
     /* push prev BP & set new BP */
-    surgescript_var_t* prev_bp = surgescript_stack_push(stack);
+    surgescript_var_t* prev_bp = surgescript_stack_push(stack, surgescript_var_create());
     surgescript_var_set_number(prev_bp, stack->bp);
     stack->bp = stack->sp;
 
     /* allocates the variables */
     while(num_vars--)
-        surgescript_stack_push(stack);
+        surgescript_stack_push(stack, surgescript_var_create());
 }
 
 /*
