@@ -27,9 +27,9 @@ surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm);
 /* bool surgescript_vm_compile(surgescript_vm_t* vm, ...); */
 
 void surgescript_vm_launch(surgescript_vm_t* vm); /* boots up the vm */
-bool surgescript_vm_is_active(surgescript_vm_t* vm); /* is the vm active? */
-void surgescript_vm_update(surgescript_vm_t* vm); /* updates the vm */
+bool surgescript_vm_update(surgescript_vm_t* vm); /* updates the vm */
 void surgescript_vm_kill(surgescript_vm_t* vm); /* terminates the vm */
+bool surgescript_vm_is_active(surgescript_vm_t* vm); /* is the vm active? */
 
 surgescript_programpool_t* surgescript_vm_programpool(const surgescript_vm_t* vm); /* gets the program pool */
 surgescript_objectmanager_t* surgescript_vm_objectmanager(const surgescript_vm_t* vm); /* gets the object manager */

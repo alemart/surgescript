@@ -27,6 +27,9 @@ object_manager: runtime/object_manager.c runtime/object_manager.h object utils
 renv: runtime/renv.c runtime/renv.h heap stack variable program_pool object_manager utils
 	$(CC) $(CFLAGS) -c runtime/renv.c
 
+vm: runtime/vm.c runtime/vm.h stack program_pool object_manager program object variable
+	$(CC) $(CFLAGS) -c runtime/vm.c
+
 object: runtime/object.c runtime/object.h program utils
 	$(CC) $(CFLAGS) -c runtime/object.c
 
@@ -36,8 +39,8 @@ utils: util/util.c util/util.h
 main: main.c utils variable
 	$(CC) $(CFLAGS) -c main.c
 
-all: main utils variable heap stack program program_pool object renv
-	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o variable.o heap.o stack.o program.o program_pool.o object_manager.o renv.o object.o -lm
+all: main utils variable heap stack program program_pool object renv vm
+	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o variable.o heap.o stack.o program.o program_pool.o object_manager.o renv.o object.o vm.o -lm
 
 clean:
 	$(RM) $(TARGET) *.o

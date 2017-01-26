@@ -436,17 +436,32 @@ bool surgescript_object_update(surgescript_object_t* object)
         return false;
     }
 
-    /* if I still exist, update my children */
-    for(int i = 0; i < ssarray_length(object->child); i++) {
-        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        surgescript_object_update(child);
-    }
-
     /* success! */
     return true;
 }
 
+/*
+ * surgescript_object_traverse_tree()
+ * Traverses the object tree, calling the callback function for each object
+ * If the callback returns false, the traversal is stopped, returning false
+ */
+bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*))
+{
+    if(!object->is_killed) {
+        if(callback(object)) {
+            surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+            for(int i = 0; i < ssarray_length(object->child); i++) {
+                surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+                if(!surgescript_object_traverse_tree(child, callback))
+                    return false;
+            }
+        }
+        else
+            return false;
+    }
 
+    return true;
+}
 
 
 

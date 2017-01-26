@@ -72,9 +72,15 @@ bool surgescript_vm_is_active(surgescript_vm_t* vm)
  * surgescript_vm_update()
  * Updates the VM
  */
-void surgescript_vm_update(surgescript_vm_t* vm)
+bool surgescript_vm_update(surgescript_vm_t* vm)
 {
-
+    if(surgescript_vm_is_active(vm)) {
+        surgescript_object_t* root = surgescript_vm_root_object(vm);
+        surgescript_object_traverse_tree(root, surgescript_object_update);
+        return surgescript_vm_is_active(vm);
+    }
+    else
+        return false;
 }
 
 /*

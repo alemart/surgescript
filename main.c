@@ -1,23 +1,15 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/main.c
- * SurgeScript entry point
+ * SurgeScript Runtime Engine entry point
  */
 
 /* test file */
 #include <stdio.h>
-#include "util/util.h"
-#include "util/ssarray.h"
-#include "runtime/variable.h"
-#include "runtime/heap.h"
-#include "runtime/stack.h"
-#include "runtime/program.h"
-#include "runtime/object.h"
-#include "runtime/program_pool.h"
-#include "runtime/object_manager.h"
+#include "runtime/vm.h"
 
 /* setup some programs */
 static void setup(surgescript_program_t* program)
@@ -83,10 +75,8 @@ static void setup2(surgescript_program_t* program)
 static surgescript_var_t* my_cfun(surgescript_object_t* caller, const surgescript_var_t** param, int num_params)
 {
     surgescript_var_t* var = surgescript_var_create();
-
     printf("heeeeeey from C! " __FILE__ ":%d\n", __LINE__);
     surgescript_object_kill(caller);
-
     return surgescript_var_set_string(var, "Today is " __DATE__);
 }
 
@@ -94,29 +84,23 @@ static surgescript_var_t* my_cfun(surgescript_object_t* caller, const surgescrip
 
 int main()
 {
-    surgescript_stack_t* stack = surgescript_stack_create();
-    surgescript_programpool_t* program_pool = surgescript_programpool_create();
-    surgescript_objectmanager_t* object_manager = surgescript_objectmanager_create(program_pool, stack);
+    surgescript_vm_t* vm = surgescript_vm_create();
+
+    surgescript_programpool_t* program_pool = surgescript_vm_programpool(vm);
     surgescript_program_t* program = surgescript_program_create(0, 0);
     surgescript_program_t* program2 = surgescript_program_create(0, 0);
     surgescript_program_t* cprogram = surgescript_cprogram_create(0, my_cfun);
-
     setup(program);
     setup2(program2);
-
     surgescript_programpool_put(program_pool, "Application", "state:main", program);
     surgescript_programpool_put(program_pool, "Application", "__constructor", program2);
     surgescript_programpool_put(program_pool, "Application", "call_c", cprogram);
-    surgescript_objectmanager_spawn(object_manager, "Application", NULL, NULL, NULL);
 
-    surgescript_objectmanager_handle_t root_handle = surgescript_objectmanager_root(object_manager);
-    while(surgescript_objectmanager_exists(object_manager, root_handle)) { /* while the root object exists */
-        surgescript_object_t* root = surgescript_objectmanager_get(object_manager, root_handle);
-        surgescript_object_update(root);
+    surgescript_vm_launch(vm);
+    while(surgescript_vm_update(vm)) {
+        ;
     }
 
-    surgescript_stack_destroy(stack);
-    surgescript_programpool_destroy(program_pool);
-    surgescript_objectmanager_destroy(object_manager);
+    surgescript_vm_destroy(vm);
     return 0;
 }

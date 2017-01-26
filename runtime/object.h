@@ -29,8 +29,8 @@ struct surgescript_heap_t;
 /* public methods */
 
 /* programs */
-/* TODO: traverse tree w/ callback fun */
-bool surgescript_object_update(surgescript_object_t* object); /* runs my programs, and those of my children */
+bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
+bool surgescript_object_update(surgescript_object_t* object); /* runs my programs */
 
 /* properties */
 const char* surgescript_object_name(const surgescript_object_t* object); /* what's my name? */
