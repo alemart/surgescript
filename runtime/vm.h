@@ -1,0 +1,38 @@
+/*
+ * SurgeScript
+ * A lightweight programming language for computer games and interactive apps
+ * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ *
+ * util/vm.h
+ * SurgeScript Virtual Machine for the Runtime Environment
+ */
+
+#ifndef _SURGESCRIPT_RUNTIME_VM_H
+#define _SURGESCRIPT_RUNTIME_VM_H
+
+#include <stdbool.h>
+#include "program.h"
+#include "object.h"
+#include "program_pool.h"
+#include "object_manager.h"
+#include "variable.h"
+
+/* types */
+typedef struct surgescript_vm_t surgescript_vm_t;
+
+/* api */
+surgescript_vm_t* surgescript_vm_create();
+surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm);
+
+/* bool surgescript_vm_compile(surgescript_vm_t* vm, ...); */
+
+void surgescript_vm_launch(surgescript_vm_t* vm); /* boots up the vm */
+void surgescript_vm_update(surgescript_vm_t* vm); /* updates the vm */
+void surgescript_vm_kill(surgescript_vm_t* vm); /* terminates the vm */
+bool surgescript_vm_is_active(surgescript_vm_t* vm); /* is the vm active? */
+
+surgescript_object_t* surgescript_vm_root_object(surgescript_vm_t* vm); /* root object */
+surgescript_object_t* surgescript_vm_spawn_object(surgescript_vm_t* vm, const surgescript_object_t* parent, const char* object_name, void* user_data, bool (*on_init)(struct surgescript_object_t*), bool (*on_release)(struct surgescript_object_t*)); /* user_data and callbacks may be NULL */
+void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const char* fun_name, surgescript_program_cfunction_t cfun, int arity); /* binds a C function to an object */
+
+#endif
