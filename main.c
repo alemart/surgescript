@@ -112,7 +112,7 @@ int main()
     surgescript_objectmanager_handle_t root_handle = surgescript_objectmanager_root(object_manager);
     while(surgescript_objectmanager_exists(object_manager, root_handle)) { /* while the root object exists */
         surgescript_object_t* root = surgescript_objectmanager_get(object_manager, root_handle);
-        surgescript_object_update_fulltree(root);
+        surgescript_object_update(root);
     }
 
     surgescript_stack_destroy(stack);

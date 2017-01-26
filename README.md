@@ -69,4 +69,4 @@ In a terminal, type:
 $ make
 ```
 
-© 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+© 2016  Alexandre Martins &lt;alemartf(at)gmail(dot)com&gt;

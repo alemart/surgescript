@@ -420,7 +420,7 @@ void surgescript_object_release(surgescript_object_t* object)
 
 /*
  * surgescript_object_update()
- * Updates this object; runs my programs
+ * Updates this object; runs my programs and those of my children
  */
 bool surgescript_object_update(surgescript_object_t* object)
 {
@@ -436,34 +436,15 @@ bool surgescript_object_update(surgescript_object_t* object)
         return false;
     }
 
+    /* if I still exist, update my children */
+    for(int i = 0; i < ssarray_length(object->child); i++) {
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+        surgescript_object_update(child);
+    }
+
     /* success! */
     return true;
 }
-
-/*
- * surgescript_object_update_fulltree()
- * runs my programs and those of my children
- */
-bool surgescript_object_update_fulltree(surgescript_object_t* object)
-{
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-
-    /* update myself */
-    if(surgescript_object_update(object)) {
-        /* if I still exist, update my children */
-        for(int i = 0; i < ssarray_length(object->child); i++) {
-            surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-            surgescript_object_update_fulltree(child);
-        }
-
-        /* success! */
-        return true;
-    }
-
-    /* I have been removed */
-    return false;
-}
-
 
 
 

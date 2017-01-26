@@ -23,15 +23,14 @@ struct surgescript_program_t;
 struct surgescript_stack_t;
 struct surgescript_heap_t;
 
-/* TODO: reference counting on variables */
 
 
 
 /* public methods */
 
 /* programs */
-bool surgescript_object_update(surgescript_object_t* object); /* runs my programs */
-bool surgescript_object_update_fulltree(surgescript_object_t* object); /* runs my programs and those of my children */
+/* TODO: traverse tree w/ callback fun */
+bool surgescript_object_update(surgescript_object_t* object); /* runs my programs, and those of my children */
 
 /* properties */
 const char* surgescript_object_name(const surgescript_object_t* object); /* what's my name? */
@@ -48,8 +47,8 @@ void surgescript_object_add_child(surgescript_object_t* object, unsigned child_h
 bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle); /* removes a child having this handle from this object */
 
 /* life operations */
-//bool surgescript_object_is_active(const surgescript_object_t* object); /* am i active? an object runs its programs iff it's active */
-//void surgescript_object_set_active(surgescript_object_t* object, bool active); /* sets whether i am active or not; default is true */
+bool surgescript_object_is_active(const surgescript_object_t* object); /* am i active? an object runs its programs iff it's active */
+void surgescript_object_set_active(surgescript_object_t* object, bool active); /* sets whether i am active or not; default is true */
 const char* surgescript_object_state(const surgescript_object_t *object); /* each object is a state machine. in which state am i in? */
 void surgescript_object_set_state(surgescript_object_t* object, const char* state_name); /* sets a state; default is "main" */
 bool surgescript_object_is_killed(const surgescript_object_t* object); /* has this object been killed? */
