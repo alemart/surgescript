@@ -29,7 +29,6 @@ struct surgescript_heap_t;
 /* public methods */
 
 /* programs */
-bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
 bool surgescript_object_update(surgescript_object_t* object); /* runs my programs */
 
 /* properties */
@@ -45,15 +44,16 @@ int surgescript_object_child_count(const surgescript_object_t* object); /* how m
 unsigned surgescript_object_find_child(const surgescript_object_t* object, const char* name); /* find 1st child whose name equals name */
 void surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle); /* adds a child to this object */
 bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle); /* removes a child having this handle from this object */
+bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
 
 /* life operations */
-bool surgescript_object_is_active(const surgescript_object_t* object); /* am i active? an object runs its programs iff it's active */
-void surgescript_object_set_active(surgescript_object_t* object, bool active); /* sets whether i am active or not; default is true */
 const char* surgescript_object_state(const surgescript_object_t *object); /* each object is a state machine. in which state am i in? */
 void surgescript_object_set_state(surgescript_object_t* object, const char* state_name); /* sets a state; default is "main" */
+bool surgescript_object_is_active(const surgescript_object_t* object); /* am i active? an object runs its programs iff it's active */
+void surgescript_object_set_active(surgescript_object_t* object, bool active); /* sets whether i am active or not; default is true */
 bool surgescript_object_is_killed(const surgescript_object_t* object); /* has this object been killed? */
 void surgescript_object_kill(surgescript_object_t* object); /* will destroy the object as soon as the opportunity arises */
-int surgescript_object_reference_count(surgescript_object_t* object); /* how many things point to me? */
+bool surgescript_object_is_reachable(const surgescript_object_t* object); /* is this object reachable through some other? */
 
 /* annotations: an annotation is a string plus a set of zero or more annotation parameters (which are also strings) */
 /*void surgescript_object_add_annotation(surgescript_object_t* object, const char* annotation);

@@ -44,7 +44,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     surgescript_objectmanager_t* manager = ssmalloc(sizeof *manager);
 
     ssarray_init(manager->data);
-    ssarray_push(manager->data, NULL); /* NULL is the first element */
+    ssarray_push(manager->data, NULL); /* NULL is *always* the first element */
 
     manager->count = 0;
     manager->program_pool = program_pool;

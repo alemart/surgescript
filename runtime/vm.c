@@ -55,6 +55,7 @@ surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
  */
 void surgescript_vm_launch(surgescript_vm_t* vm)
 {
+    /* Creates the root object */
     surgescript_objectmanager_spawn(vm->object_manager, ROOT_OBJECT_NAME, NULL, NULL, NULL);
 }
 
@@ -128,7 +129,8 @@ surgescript_object_t* surgescript_vm_root_object(surgescript_vm_t* vm)
 surgescript_object_t* surgescript_vm_spawn_object(surgescript_vm_t* vm, surgescript_object_t* parent, const char* object_name, void* user_data, bool (*on_init)(struct surgescript_object_t*), bool (*on_release)(struct surgescript_object_t*))
 {
     surgescript_objectmanager_handle_t child_handle = surgescript_objectmanager_spawn(vm->object_manager, object_name, user_data, on_init, on_release);
-    surgescript_object_add_child(parent, child_handle);
+    if(parent)
+        surgescript_object_add_child(parent, child_handle);
     return surgescript_objectmanager_get(vm->object_manager, child_handle);
 }
 

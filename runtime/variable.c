@@ -41,10 +41,6 @@ struct surgescript_var_t
     };
 };
 
-/* reference counting */
-extern void surgescript_object_increment_reference_count(surgescript_object_t* object);
-extern void surgescript_object_decrement_reference_count(surgescript_object_t* object);
-
 /* helpers */
 #define RELEASE_DATA(var)       if(var->type == SSVAR_STRING) \
                                     ssfree(var->string);
@@ -59,7 +55,6 @@ extern void surgescript_object_decrement_reference_count(surgescript_object_t* o
                                         )
                                     );
                                 */
-/*static float string2number(const char* str);*/
 
 
 
@@ -240,6 +235,7 @@ char* surgescript_var_get_string(const surgescript_var_t* var)
  */
 unsigned surgescript_var_get_objecthandle(const surgescript_var_t* var)
 {
+    /* return null if var doesn't store a handle */
     return var->type == SSVAR_OBJECTHANDLE ? var->handle : 0;
 }
 
@@ -395,48 +391,3 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             return 0; /* this shouldn't happen */
     }
 }
-
-
-
-/* -------------------------------
- * private methods
- * ------------------------------- */
-
-/* converts a string to a float */
-#if 0
-float string2number(const char* str)
-{
-    float sign = 1.0f, mult = 1.0f;
-    float x = 0.0f, y = 0.0f;
-    const char* p = str;
-
-    /* skip spaces */
-    while(*p && (*p == ' ' || *p == '\t' || *p == '\n' || *p == '\r'))
-        p++;
-
-    /* minus sign? */
-    if(*p && *p == '-') {
-        sign = -1.0f;
-        p++;
-    }
-
-    /* get the integer part of the number */
-    while(*p >= '0' && *p <= '9') {
-        x = x * 10.0f + (float)(*p - '0');
-        p++;
-    }
-
-    /* got a decimal point? */
-    if(*p && *p == '.') {
-        p++;
-        while(*p >= '0' && *p <= '9') {
-            mult *= 0.1f;
-            y = y + (float)(*p - '0') * mult;
-            p++;
-        }
-    }
-
-    /* done! */
-    return sign * (x + y);
-}
-#endif

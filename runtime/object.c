@@ -32,10 +32,10 @@ struct surgescript_object_t
     SSARRAY(unsigned, child); /* handles to the children */
 
     /* inner state */
+    char* state_name; /* current state name */
     bool is_active; /* can i run programs? */
     bool is_killed; /* am i scheduled to be destroyed? */
-    char* state_name; /* current state name */
-    int reference_count; /* how many things point to me? */
+    bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
 
     /* user-data */
     void* user_data; /* custom user-data */
@@ -50,6 +50,8 @@ static char* state2fun(const char* state);
 static void run_state(surgescript_object_t* object, const char* state_name);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
 
+/* garbage-collection */
+static void mark_reachables(surgescript_object_t* object);
 
 
 /* -------------------------------
@@ -80,10 +82,10 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->parent = handle;
     ssarray_init(obj->child);
 
+    obj->state_name = surgescript_util_strdup(INITIAL_STATE);
     obj->is_active = true;
     obj->is_killed = false;
-    obj->state_name = surgescript_util_strdup(INITIAL_STATE);
-    obj->reference_count = 0;
+    obj->is_reachable = true;
 
     obj->user_data = user_data;
     obj->on_init = on_init;
@@ -344,30 +346,12 @@ void surgescript_object_kill(surgescript_object_t* object)
 }
 
 /*
- * surgescript_object_increment_reference_count()
- * Increments the reference counter
+ * surgescript_object_is_reachable()
+ * Is this object reachable through some other? garbage-collector stuff
  */
-void surgescript_object_increment_reference_count(surgescript_object_t* object)
+bool surgescript_object_is_reachable(const surgescript_object_t* object)
 {
-    object->reference_count++;
-}
-
-/*
- * surgescript_object_decrement_reference_count()
- * Decrements the reference counter
- */
-void surgescript_object_decrement_reference_count(surgescript_object_t* object)
-{
-    object->reference_count--;
-}
-
-/*
- * surgescript_object_reference_count()
- * Returns how many things are pointing to me
- */
-int surgescript_object_reference_count(surgescript_object_t* object)
-{
-    return object->reference_count;
+    return object->is_reachable;
 }
 
 
@@ -490,4 +474,14 @@ bool object_exists(surgescript_programpool_t* program_pool, const char* object_n
     surgescript_program_t* program = surgescript_programpool_get(program_pool, object_name, fun_name);
     ssfree(fun_name);
     return program != NULL;
+}
+
+void mark_reachables(surgescript_object_t* object)
+{
+    /* mark all reachable objects starting from object */
+    int j;
+    
+
+    object->is_reachable = true;
+
 }

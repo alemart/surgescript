@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/heap.h
  * SurgeScript heap
@@ -26,5 +26,6 @@ surgescript_heap_t* surgescript_heap_destroy(surgescript_heap_t* heap);
 surgescript_heapptr_t surgescript_heap_malloc(surgescript_heap_t* heap);
 surgescript_heapptr_t surgescript_heap_free(surgescript_heap_t* heap, surgescript_heapptr_t ptr);
 struct surgescript_var_t* surgescript_heap_at(surgescript_heap_t* heap, surgescript_heapptr_t ptr);
+void surgescript_heap_scan_objects(surgescript_heap_t* heap, void* userdata, void (*callback)(unsigned,void*));
 
 #endif

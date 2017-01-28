@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/heap.c
  * SurgeScript heap
@@ -106,4 +106,19 @@ surgescript_var_t* surgescript_heap_at(surgescript_heap_t* heap, surgescript_hea
     }
     else
         return NULL;
+}
+
+/*
+ * surgescript_heap_scan_objects()
+ * Scans all the objects in the heap, calling callback for each one of them
+ */
+void surgescript_heap_scan_objects(surgescript_heap_t* heap, void* userdata, void (*callback)(unsigned,void*))
+{
+    for(surgescript_heapptr_t ptr = 0; ptr < heap->size; ptr++) {
+        if(heap->mem[ptr] != NULL) {
+            unsigned handle = surgescript_var_get_objecthandle(heap->mem[ptr]);
+            if(handle != 0) /* if heap->mem[ptr] is an object and not null */
+                callback(handle, userdata);
+        }
+    }
 }
