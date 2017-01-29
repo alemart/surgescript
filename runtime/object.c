@@ -156,6 +156,15 @@ surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object)
 }
 
 /*
+ * surgescript_object_manager()
+ * Returns a pointer to the object manager
+ */
+surgescript_objectmanager_t* surgescript_object_manager(const surgescript_object_t* object)
+{
+    return surgescript_renv_objectmanager(object->renv);
+}
+
+/*
  * surgescript_object_userdata()
  * custom user-data (if any)
  */

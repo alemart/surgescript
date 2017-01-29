@@ -31,7 +31,7 @@
     F( SSOP_MOVF, "movf" )                           /* t[a] = (number)b */ \
     F( SSOP_MOVS, "movs" )                             /* t[a] = text[b] */ \
     F( SSOP_MOVH, "movh" )                           /* t[a] = (object)b */ \
-    F( SSOP_MOVC, "movc" )             /* t[a] = handle to caller object */ \
+    F( SSOP_MOVC, "movc" )    /* t[a] = handle to caller object ("this") */ \
     F( SSOP_MOVT, "movt" )                                /* t[a] = t[b] */ \
                                                                             \
     F( SSOP_STORE, "store" )                           /* *(t[a]) = t[b] */ \
@@ -67,30 +67,5 @@
                                     /* with n = t[2] parameters, storing */ \
                               /* in t[2] the return value of the program */ \
     F( SSOP_RET, "ret" )                 /* returns, halting the program */
-
-/* -- move to userfun
-    SSOP_EXP = 0x50,                // t[a] = exp(t[a])
-    SSOP_LOG,                       // t[a] = ln(t[a])
-    SSOP_SIN,                       // t[a] = sin(t[a])
-    SSOP_COS,                       // t[a] = cos(t[a])
-    SSOP_TAN,                       // t[a] = tan(t[a])
-    SSOP_ASIN,                      // t[a] = asin(t[a])
-    SSOP_ACOS,                      // t[a] = acos(t[a])
-    SSOP_ATAN,                      // t[a] = atan(t[a])
-    SSOP_ATAN2,                     // t[a] = atan2(t[a], t[b])
-    SSOP_CEIL,                      // t[a] = ceil(t[a])
-    SSOP_FLOOR,                     // t[a] = floor(t[a]])
-
-    SSOP_TYPEOF = 0x60,             // t[a] = typeof(t[a])
-    SSOP_STRLEN,                    // t[a] = strlen(t[a]) -- FIXME: move to userfun
-    SSOP_STRMID,                    // t[a] = substr(t[a], t[b], t[c])
-    SSOP_STRCAT,                    // t[a] = strcat(t[a], t[b])
-    SSOP_STRAT,                     // t[a] = t[a][t[b]]
-    SSOP_TOBOOL,                    // t[a] = bool(t[a])
-    SSOP_TONUMBER,                  // t[a] = number(t[a])
-    SSOP_TOSTRING,                  // t[a] = string(t[a])
-
-    handle to root, parent and so on...
-*/
 
 #endif

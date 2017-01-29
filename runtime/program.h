@@ -13,6 +13,8 @@
 #include <stdbool.h>
 #include "renv.h"
 #include "program_operators.h"
+#include "variable.h"
+#include "object.h"
 
 /*
  * A program is composed by:
@@ -26,7 +28,7 @@ typedef struct surgescript_program_t surgescript_program_t;
 struct surgescript_program_t;
 
 /* C-functions can also be encapsulated in programs */
-typedef struct surescript_var_t* (*surgescript_program_cfunction_t)(struct surgescript_object_t*, const struct surgescript_var_t**, int);
+typedef surgescript_var_t* (*surgescript_program_cfunction_t)(surgescript_object_t*, const surgescript_var_t**, int);
 
 /* labels */
 typedef unsigned surgescript_program_label_t;

@@ -34,6 +34,7 @@ bool surgescript_object_update(surgescript_object_t* object); /* runs my program
 /* properties */
 const char* surgescript_object_name(const surgescript_object_t* object); /* what's my name? */
 struct surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object); /* each object has its own heap */
+struct surgescript_objectmanager_t* surgescript_object_manager(const surgescript_object_t* object); /* pointer to the object manager */
 void* surgescript_object_userdata(const surgescript_object_t* object); /* custom user-data (if any) */
 
 /* object tree */

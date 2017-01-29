@@ -98,16 +98,29 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
 surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
     surgescript_programpool_hashpair_t* pair = NULL;
-    char* signature = generate_signature(object_name, program_name);
+    char* signature = NULL;
+    
+    /* find the program */
+    signature = generate_signature(object_name, program_name);
     HASH_FIND_STR(pool->hash, signature, pair);
     ssfree(signature);
 
+    /* if there is no such program */
     if(!pair) {
-        ssfatal("Runtime Error: can't find function \"%s\" in object \"%s\"", program_name, object_name);
-        return NULL;
+        /* try locating it in a common base for all objects */
+        signature = generate_signature("Object", program_name);
+        HASH_FIND_STR(pool->hash, signature, pair);
+        ssfree(signature);
+
+        /* really, the program doesn't exist */
+        if(!pair) {
+            ssfatal("Runtime Error: can't find function \"%s\" in object \"%s\"", program_name, object_name);
+            return NULL;
+        }
     }
-    else
-        return pair->program;
+
+    /* found it! */
+    return pair->program;
 }
 
 

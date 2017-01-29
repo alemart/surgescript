@@ -76,7 +76,7 @@ void surgescript_util_log(const char* fmt, ...)
     va_list args;
 
     va_start(args, fmt);
-    vsprintf(buf+len, fmt, args);
+    vsnprintf(buf+len, sizeof(buf)-len, fmt, args);
     va_end(args);
 
     log_function(buf);
@@ -93,7 +93,7 @@ void surgescript_util_fatal(const char* fmt, ...)
     va_list args;
 
     va_start(args, fmt);
-    vsprintf(buf+len, fmt, args);
+    vsnprintf(buf+len, sizeof(buf)-len, fmt, args);
     va_end(args);
 
     log_function(buf);

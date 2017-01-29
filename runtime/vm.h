@@ -35,7 +35,7 @@ surgescript_programpool_t* surgescript_vm_programpool(const surgescript_vm_t* vm
 surgescript_objectmanager_t* surgescript_vm_objectmanager(const surgescript_vm_t* vm); /* gets the object manager */
 
 surgescript_object_t* surgescript_vm_root_object(surgescript_vm_t* vm); /* root object */
-surgescript_object_t* surgescript_vm_spawn_object(surgescript_vm_t* vm, surgescript_object_t* parent, const char* object_name, void* user_data, bool (*on_init)(struct surgescript_object_t*), bool (*on_release)(struct surgescript_object_t*)); /* user_data and callbacks may be NULL */
+surgescript_object_t* surgescript_vm_spawn_object(surgescript_vm_t* vm, surgescript_object_t* parent, const char* object_name, void* user_data); /* user_data may be NULL */
 void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const char* fun_name, surgescript_program_cfunction_t cfun, int num_params); /* binds a C function to an object */
 
 #endif
