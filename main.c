@@ -67,7 +67,7 @@ static void setup(surgescript_program_t* program)
 
 static void setup2(surgescript_program_t* program)
 {
-    surgescript_program_add_text(program, "Olá, mundo!");
+    surgescript_program_add_text(program, "Tchau, mundo!");
     surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOPu(0)); // t[0] = text[0]
     surgescript_program_add_line(program, SSOP_OUT, SSOPu(0), SSOP());  // print t[0]
 }
@@ -93,7 +93,7 @@ int main()
     setup(program);
     setup2(program2);
     surgescript_programpool_put(program_pool, "Application", "state:main", program);
-    surgescript_programpool_put(program_pool, "Application", "__constructor", program2);
+    surgescript_programpool_put(program_pool, "Application", "__destructor", program2);
     surgescript_programpool_put(program_pool, "Application", "call_c", cprogram);
 
     surgescript_vm_launch(vm);

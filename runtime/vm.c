@@ -78,6 +78,7 @@ bool surgescript_vm_update(surgescript_vm_t* vm)
     if(surgescript_vm_is_active(vm)) {
         surgescript_object_t* root = surgescript_vm_root_object(vm);
         surgescript_object_traverse_tree(root, surgescript_object_update);
+        surgescript_objectmanager_collectgarbage(vm->object_manager);
         return surgescript_vm_is_active(vm);
     }
     else

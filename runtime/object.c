@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * util/object.c
  * SurgeScript object
@@ -39,8 +39,8 @@ struct surgescript_object_t
 
     /* user-data */
     void* user_data; /* custom user-data */
-    bool (*on_init)(surgescript_object_t*); /* callback executed on user_data when the object inits */
-    bool (*on_release)(surgescript_object_t*); /* callback executed when the object gets released */
+    bool (*on_init)(surgescript_object_t*); /* callback to be executed when the object inits */
+    bool (*on_release)(surgescript_object_t*); /* callback to be executed when the object gets released */
 };
 
 
@@ -49,10 +49,6 @@ static const char* INITIAL_STATE = "main";
 static char* state2fun(const char* state);
 static void run_state(surgescript_object_t* object, const char* state_name);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
-
-/* garbage-collection */
-static void mark_reachables(surgescript_object_t* object);
-
 
 /* -------------------------------
  * public methods
@@ -85,7 +81,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->state_name = surgescript_util_strdup(INITIAL_STATE);
     obj->is_active = true;
     obj->is_killed = false;
-    obj->is_reachable = true;
+    obj->is_reachable = false;
 
     obj->user_data = user_data;
     obj->on_init = on_init;
@@ -354,6 +350,15 @@ bool surgescript_object_is_reachable(const surgescript_object_t* object)
     return object->is_reachable;
 }
 
+/*
+ * surgescript_object_set_reachable()
+ * Sets whether this object is reachable through some other or not
+ */
+void surgescript_object_set_reachable(surgescript_object_t* object, bool reachable)
+{
+    object->is_reachable = reachable;
+}
+
 
 
 /* life-cycle */
@@ -410,15 +415,15 @@ bool surgescript_object_update(surgescript_object_t* object)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
 
-    /* update myself */
-    if(object->is_active)
-        run_state(object, object->state_name);
-
     /* check if I am destroyed */
     if(object->is_killed) {
         surgescript_objectmanager_delete(manager, object->handle);
         return false;
     }
+
+    /* update myself */
+    if(object->is_active)
+        run_state(object, object->state_name);
 
     /* success! */
     return true;
@@ -427,21 +432,17 @@ bool surgescript_object_update(surgescript_object_t* object)
 /*
  * surgescript_object_traverse_tree()
  * Traverses the object tree, calling the callback function for each object
- * If the callback returns false, the traversal is stopped, returning false
+ * If the callback returns false, the traversal doesn't go to the children
  */
 bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*))
 {
-    if(!object->is_killed) {
-        if(callback(object)) {
-            surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-            for(int i = 0; i < ssarray_length(object->child); i++) {
-                surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-                if(!surgescript_object_traverse_tree(child, callback))
-                    return false;
-            }
-        }
-        else
-            return false;
+    if(!callback(object))
+        return false;
+
+    for(int i = 0; i < ssarray_length(object->child); i++) {
+        surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+        surgescript_object_traverse_tree(child, callback);
     }
 
     return true;
@@ -474,14 +475,4 @@ bool object_exists(surgescript_programpool_t* program_pool, const char* object_n
     surgescript_program_t* program = surgescript_programpool_get(program_pool, object_name, fun_name);
     ssfree(fun_name);
     return program != NULL;
-}
-
-void mark_reachables(surgescript_object_t* object)
-{
-    /* mark all reachable objects starting from object */
-    int j;
-    
-
-    object->is_reachable = true;
-
 }

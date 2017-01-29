@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * util/object.h
  * SurgeScript object
@@ -53,7 +53,6 @@ bool surgescript_object_is_active(const surgescript_object_t* object); /* am i a
 void surgescript_object_set_active(surgescript_object_t* object, bool active); /* sets whether i am active or not; default is true */
 bool surgescript_object_is_killed(const surgescript_object_t* object); /* has this object been killed? */
 void surgescript_object_kill(surgescript_object_t* object); /* will destroy the object as soon as the opportunity arises */
-bool surgescript_object_is_reachable(const surgescript_object_t* object); /* is this object reachable through some other? */
 
 /* annotations: an annotation is a string plus a set of zero or more annotation parameters (which are also strings) */
 /*void surgescript_object_add_annotation(surgescript_object_t* object, const char* annotation);

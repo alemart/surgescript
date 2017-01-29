@@ -29,5 +29,6 @@ void surgescript_stack_popenv(surgescript_stack_t* stack); /* pops an environmen
 struct surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack); /* gets the topmost element */
 struct surgescript_var_t* surgescript_stack_at(surgescript_stack_t* stack, int offset); /* gets stack[base + offset] */
 int surgescript_stack_empty(surgescript_stack_t* stack); /* is the stack empty? */
+void surgescript_stack_scan_objects(surgescript_stack_t* stack, void* userdata, void (*callback)(unsigned,void*));
 
 #endif
