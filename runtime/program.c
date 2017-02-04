@@ -360,7 +360,17 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_ADD:
-            surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) + surgescript_var_get_number(t[b.u]));
+            if(*surgescript_var_typename(t[a.u]) == 's' || *surgescript_var_typename(t[b.u]) == 's') {
+                char* str1 = surgescript_var_get_string(t[a.u]);
+                char* str2 = surgescript_var_get_string(t[b.u]);
+                char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
+                surgescript_var_set_string(t[a.u], strcat(strcpy(str, str1), str2));
+                ssfree(str);
+                ssfree(str2);
+                ssfree(str1);
+            }
+            else
+                surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) + surgescript_var_get_number(t[b.u]));
             break;
 
         case SSOP_SUB:
@@ -411,27 +421,26 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         /* utility operations */
-/*
-        case SSOP_TYPEOF:
+        case SSOP_TYPE:
             surgescript_var_set_string(t[a.u], surgescript_var_typename(t[a.u]));
             break;
 
-        case SSOP_TOBOOL:
+        case SSOP_BOOL:
             surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[a.u]));
             break;
 
-        case SSOP_TONUMBER:
+        case SSOP_VAL:
             surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]));
             break;
 
-        case SSOP_TOSTRING: {
+        case SSOP_STR: {
             char* buf = surgescript_var_get_string(t[a.u]);
             surgescript_var_set_string(t[a.u], buf);
             ssfree(buf);
             break;
         }
 
-        case SSOP_STRLEN: {
+        /*case SSOP_STRLEN: {
             char* buf = surgescript_var_get_string(t[a.u]);
             int len = strlen(buf); // TODO: utf-8 compat
             surgescript_var_set_number(t[a.u], len);

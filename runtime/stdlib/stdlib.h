@@ -4,7 +4,7 @@
  * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/stdlib/stdlib.h
- * SurgeScript Runtime Engine Standard Library
+ * SurgeScript Standard Library
  */
 
 #ifndef _SURGESCRIPT_RUNTIME_STDLIB_STDLIB_H

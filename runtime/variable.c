@@ -316,17 +316,14 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
             return surgescript_util_strncpy(buf, var->boolean ? "true" : "false", bufsize);
         case SSVAR_NULL:
             return surgescript_util_strncpy(buf, "null", bufsize);
+        case SSVAR_OBJECTHANDLE:
+            return surgescript_util_strncpy(buf, "[object]", bufsize);
         case SSVAR_NUMBER: {
             char tmp[33];
-            if(var->number == (long)(var->number) || var->number <= LONG_MIN || var->number >= LONG_MAX)
-                sprintf(tmp, "%ld", (long)(var->number)); /* is integer */
+            if(var->number <= LONG_MIN || var->number >= LONG_MAX || var->number == (long)(var->number))
+                sprintf(tmp, "%ld", (long)(var->number)); /* it is an integer */
             else
                 sprintf(tmp, "%f", var->number);
-            return surgescript_util_strncpy(buf, tmp, bufsize);
-        }
-        case SSVAR_OBJECTHANDLE: {
-            char tmp[48];
-            sprintf(tmp, "[object @ 0x%x]", var->handle);
             return surgescript_util_strncpy(buf, tmp, bufsize);
         }
     }

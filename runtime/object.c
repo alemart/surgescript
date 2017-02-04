@@ -39,8 +39,6 @@ struct surgescript_object_t
 
     /* user-data */
     void* user_data; /* custom user-data */
-    bool (*on_init)(surgescript_object_t*); /* callback to be executed when the object inits */
-    bool (*on_release)(surgescript_object_t*); /* callback to be executed when the object gets released */
 };
 
 
@@ -66,7 +64,7 @@ static bool object_exists(surgescript_programpool_t* program_pool, const char* o
  * surgescript_object_create()
  * Creates a new blank object
  */
-surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, void* user_data, bool (*on_init)(surgescript_object_t*), bool (*on_release)(surgescript_object_t*))
+surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, void* user_data)
 {
     surgescript_object_t* obj = ssmalloc(sizeof *obj);
 
@@ -84,8 +82,6 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->is_reachable = false;
 
     obj->user_data = user_data;
-    obj->on_init = on_init;
-    obj->on_release = on_release;
 
     /* validation procedure */
     if(!object_exists(program_pool, name))
@@ -378,12 +374,13 @@ void surgescript_object_set_reachable(surgescript_object_t* object, bool reachab
  */
 void surgescript_object_init(surgescript_object_t* object)
 {
-    static const char* CONSTRUCTOR_FUN = "__constructor";
+    static const char* CONSTRUCTOR_FUN = "__constructor"; /* regular constructor */
+    static const char* PRE_CONSTRUCTOR_FUN = "__ssconstructor"; /* a constructor reserved for the VM */
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
 
-    if(object->on_init) {
-        if(!object->on_init(object))
-            sslog("Warning: object 0x%X on_init() callback returned false", object->handle);
+    if(surgescript_programpool_exists(program_pool, object->name, PRE_CONSTRUCTOR_FUN)) {
+        surgescript_program_t* pre_constructor = surgescript_programpool_get(program_pool, object->name, PRE_CONSTRUCTOR_FUN);
+        surgescript_program_run(pre_constructor, object->renv);
     }
 
     if(surgescript_programpool_exists(program_pool, object->name, CONSTRUCTOR_FUN)) {
@@ -408,11 +405,6 @@ void surgescript_object_release(surgescript_object_t* object)
         if(surgescript_program_arity(destructor) != 0)
             ssfatal("Runtime Error: Object \"%s\" %s() cannot receive parameters", object->name, DESTRUCTOR_FUN);
         surgescript_program_run(destructor, object->renv);
-    }
-
-    if(object->on_release) {
-        if(!object->on_release(object))
-            sslog("Warning: object 0x%X on_release() callback returned false", object->handle);
     }
 }
 

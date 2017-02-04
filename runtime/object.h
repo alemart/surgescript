@@ -35,7 +35,11 @@ bool surgescript_object_update(surgescript_object_t* object); /* runs my program
 const char* surgescript_object_name(const surgescript_object_t* object); /* what's my name? */
 struct surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object); /* each object has its own heap */
 struct surgescript_objectmanager_t* surgescript_object_manager(const surgescript_object_t* object); /* pointer to the object manager */
+
+/* user data and annotations */
 void* surgescript_object_userdata(const surgescript_object_t* object); /* custom user-data (if any) */
+// todo: set user data
+// todo: on_annotation()
 
 /* object tree */
 unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer (in the object manager) */
@@ -54,11 +58,5 @@ bool surgescript_object_is_active(const surgescript_object_t* object); /* am i a
 void surgescript_object_set_active(surgescript_object_t* object, bool active); /* sets whether i am active or not; default is true */
 bool surgescript_object_is_killed(const surgescript_object_t* object); /* has this object been killed? */
 void surgescript_object_kill(surgescript_object_t* object); /* will destroy the object as soon as the opportunity arises */
-
-/* annotations: an annotation is a string plus a set of zero or more annotation parameters (which are also strings) */
-/*void surgescript_object_add_annotation(surgescript_object_t* object, const char* annotation);
-void surgescript_object_add_anotation_parameter(surgescript_object_t* object, const char* annotation, const char* param);
-int surgescript_object_annotation_exists(surgescript_object_t* object, const char* annotation);
-const char** surgescript_object_annotation_parameters(surgescript_object_t* object, const char* annotation, int *num_params);*/
 
 #endif
