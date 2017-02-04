@@ -375,14 +375,14 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             return fabsf(x - y) >= FLT_EPSILON ? (x > y ? 1 : -1) : 0;
         }
         else if(a->type == SSVAR_BOOL || b->type == SSVAR_BOOL) {
-            int x = surgescript_var_get_bool(a);
-            int y = surgescript_var_get_bool(b);
-            return x ^ y ? (x ? 1 : -1) : 0;
+            bool x = surgescript_var_get_bool(a);
+            bool y = surgescript_var_get_bool(b);
+            return x != y ? (x ? 1 : -1) : 0;
         }
         else if(a->type == SSVAR_OBJECTHANDLE || b->type == SSVAR_OBJECTHANDLE) {
             unsigned x = surgescript_var_get_objecthandle(a);
             unsigned y = surgescript_var_get_objecthandle(b);
-            return x != y ? (x < y ? -1 : 1) : 0;
+            return x != y ? (x > y ? 1 : -1) : 0;
         }
         else
             return 0; /* this shouldn't happen */

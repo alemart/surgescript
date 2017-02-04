@@ -56,6 +56,7 @@ static surgescript_program_t* init_program(surgescript_program_t* program, int a
 static void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
 static void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
 static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b);
+static void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned object_handle, const char* program_name, int number_of_given_params, surgescript_var_t* return_value);
 
 /* inlines */
 surgescript_program_operand_t surgescript_program_operand_u(unsigned u);
@@ -434,9 +435,18 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_STR: {
-            char* buf = surgescript_var_get_string(t[a.u]);
-            surgescript_var_set_string(t[a.u], buf);
-            ssfree(buf);
+            if(strcmp(surgescript_var_typename(t[a.u]), "object") != 0) {
+                /* if it's not an object, convert to string */
+                char* buf = surgescript_var_get_string(t[a.u]);
+                surgescript_var_set_string(t[a.u], buf);
+                ssfree(buf);
+            }
+            else {
+                /* if it's an object, call its toString() method */
+                const char* program_name = "toString";
+                unsigned object_handle = surgescript_var_get_objecthandle(t[a.u]);
+                call_object_method(runtime_environment, object_handle, program_name, 0, t[a.u]);
+            }
             break;
         }
 
@@ -554,36 +564,9 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         case SSOP_CALL: {
             char* program_name = surgescript_var_get_string(t[a.u]);
             unsigned object_handle = surgescript_var_get_objecthandle(t[b.u]);
-            int params = (int)surgescript_var_get_number(t[2]);
-
-            surgescript_object_t* object = surgescript_objectmanager_get(surgescript_renv_objectmanager(runtime_environment), object_handle);
-            const char* object_name = surgescript_object_name(object);
-            surgescript_program_t* prog = surgescript_programpool_get(surgescript_renv_programpool(runtime_environment), object_name, program_name);
-            int expected_params = prog->arity;
-
-            if(params == expected_params) {
-                /* the parameters are pushed onto the stack (reverse order) */
-                surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
-                surgescript_renv_t* callee_runtime_environment = surgescript_renv_create(
-                    object,
-                    stack,
-                    surgescript_object_heap(object),
-                    surgescript_renv_programpool(runtime_environment),
-                    surgescript_renv_objectmanager(runtime_environment)
-                );
-
-                /* push an environment and call the program */
-                surgescript_stack_pushenv(stack, prog->num_local_vars);
-                surgescript_program_run(prog, callee_runtime_environment);
-                surgescript_stack_popenv(stack);
-
-                /* callee_tmp[3] is the return value of the program */
-                surgescript_var_copy(t[2], *(surgescript_renv_tmp(callee_runtime_environment) + 3));
-                surgescript_renv_destroy(callee_runtime_environment);
-            }
-            else
-                ssfatal("Runtime Error: function \"%s.%s\" (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(runtime_environment)), expected_params, params);
-
+            int number_of_given_params = (int)surgescript_var_get_number(t[2]);
+            surgescript_var_t* return_value = t[2];
+            call_object_method(runtime_environment, object_handle, program_name, number_of_given_params, return_value);
             free(program_name);
             break;
         }
@@ -595,4 +578,36 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
     /* next line */
     program->ip++;
+}
+
+/* calls a method */
+void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned object_handle, const char* program_name, int number_of_given_params, surgescript_var_t* return_value)
+{
+    surgescript_object_t* object = surgescript_objectmanager_get(surgescript_renv_objectmanager(caller_runtime_environment), object_handle);
+    const char* object_name = surgescript_object_name(object);
+    surgescript_program_t* prog = surgescript_programpool_get(surgescript_renv_programpool(caller_runtime_environment), object_name, program_name);
+    int expected_params = prog->arity;
+
+    if(number_of_given_params == expected_params) {
+        /* the parameters are pushed onto the stack (reverse order) */
+        surgescript_stack_t* stack = surgescript_renv_stack(caller_runtime_environment);
+        surgescript_renv_t* callee_runtime_environment = surgescript_renv_create(
+            object,
+            stack,
+            surgescript_object_heap(object),
+            surgescript_renv_programpool(caller_runtime_environment),
+            surgescript_renv_objectmanager(caller_runtime_environment)
+        );
+
+        /* push an environment and call the program */
+        surgescript_stack_pushenv(stack, prog->num_local_vars);
+        surgescript_program_run(prog, callee_runtime_environment);
+        surgescript_stack_popenv(stack);
+
+        /* callee_tmp[3] is the return value of the program */
+        surgescript_var_copy(return_value, *(surgescript_renv_tmp(callee_runtime_environment) + 3));
+        surgescript_renv_destroy(callee_runtime_environment);
+    }
+    else
+        ssfatal("Runtime Error: function \"%s.%s\" (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), expected_params, number_of_given_params);
 }

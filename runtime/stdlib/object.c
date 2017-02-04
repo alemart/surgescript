@@ -76,9 +76,7 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 /* toString() method */
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char buf[128];
-    snprintf(buf, sizeof(buf), "[object \"%s\"]", surgescript_object_name(object));
-    return surgescript_var_set_string(surgescript_var_create(), buf);
+    return surgescript_var_set_string(surgescript_var_create(), "[object]");
 }
 
 /* what's the name of this object? */
