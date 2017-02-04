@@ -251,6 +251,8 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
         surgescript_var_copy(*(surgescript_renv_tmp(runtime_environment) + 3), return_value);
         surgescript_var_destroy(return_value);
     }
+    else
+        surgescript_var_set_null(*(surgescript_renv_tmp(runtime_environment) + 3));
 
     /* release parameters */
     if(param)
