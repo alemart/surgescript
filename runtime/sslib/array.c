@@ -267,7 +267,7 @@ surgescript_var_t* med3(surgescript_var_t* a, surgescript_var_t* b, surgescript_
 
     if(ab >= 0 && ac >= 0) /* a = max(a, b, c) */
         return bc >= 0 ? b : c;
-    else if(ab < 0 && bc >= 0) /* b = max(a, b, c) */
+    else if(ab <= 0 && bc >= 0) /* b = max(a, b, c) */
         return ac >= 0 ? a : c;
     else /* c = max(a, b, c) */
         return ab >= 0 ? a : b;
