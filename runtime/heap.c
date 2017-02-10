@@ -13,6 +13,7 @@
 
 /* constants */
 static const size_t SSHEAP_INITIAL_SIZE = 16;
+static const size_t SSHEAP_MAX_SIZE = 10 * 1024 * 1024; /* 10M cells max */
 
 /* the heap structure */
 struct surgescript_heap_t
@@ -71,6 +72,11 @@ surgescript_heapptr_t surgescript_heap_malloc(surgescript_heap_t* heap)
             heap->mem[heap->ptr] = surgescript_var_create();
             return heap->ptr;
         }
+    }
+
+    if(heap->size * 2 >= SSHEAP_MAX_SIZE) { /* just in case... */
+        ssfatal("surgescript_heap_malloc(): max size exceeded.");
+        return heap->size - 1;
     }
 
     sslog("surgescript_heap_malloc(): resizing the heap to %d cells.", heap->size * 2);

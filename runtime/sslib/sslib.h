@@ -3,7 +3,7 @@
  * A lightweight programming language for computer games and interactive apps
  * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
- * runtime/stdlib/stdlib.h
+ * runtime/sslib/sslib.h
  * SurgeScript Standard Library
  */
 
@@ -14,6 +14,6 @@
 struct surgescript_vm_t;
 
 /* Register common methods to all objects */
-void surgescript_stdlib_register_object(struct surgescript_vm_t* vm);
+void surgescript_sslib_register_object(struct surgescript_vm_t* vm);
 
 #endif

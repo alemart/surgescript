@@ -82,6 +82,7 @@ surgescript_program_t* surgescript_program_create(int arity, int num_local_vars)
 /*
  * surgescript_cprogram_create()
  * Creates a program that encapsulates a C-function
+ * Please note that this C-function must return a newly-allocated surgescript_var_t*, or NULL
  */
 surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_program_cfunction_t cfunction)
 {

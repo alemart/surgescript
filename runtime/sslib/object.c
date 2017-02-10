@@ -7,7 +7,6 @@
  * SurgeScript standard library: common routines for all objects
  */
 
-#include <stdio.h>
 #include "../vm.h"
 #include "../../util/util.h"
 
@@ -22,10 +21,10 @@ static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surge
 
 
 /*
- * surgescript_stdlib_register_object()
+ * surgescript_sslib_register_object()
  * Register common methods to all objects
  */
-void surgescript_stdlib_register_object(surgescript_vm_t* vm)
+void surgescript_sslib_register_object(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Object", "app", fun_app, 0);
     surgescript_vm_bind(vm, "Object", "parent", fun_parent, 0);

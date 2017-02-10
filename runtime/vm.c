@@ -9,7 +9,7 @@
 
 #include "vm.h"
 #include "stack.h"
-#include "stdlib/stdlib.h"
+#include "sslib/sslib.h"
 #include "../util/util.h"
 
 /* VM */
@@ -56,8 +56,8 @@ surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
  */
 void surgescript_vm_launch(surgescript_vm_t* vm)
 {
-    /* Load the standard library */
-    surgescript_stdlib_register_object(vm);
+    /* Load the surgescript library */
+    surgescript_sslib_register_object(vm);
 
     /* Creates the root object */
     surgescript_objectmanager_spawn(vm->object_manager, surgescript_objectmanager_root(vm->object_manager), ROOT_OBJECT_NAME, NULL);
