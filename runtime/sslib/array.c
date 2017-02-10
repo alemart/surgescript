@@ -31,6 +31,7 @@ static surgescript_var_t* fun_reverse(surgescript_object_t* object, const surges
 #define ARRAY_LENGTH(heap)      ((int)surgescript_var_get_number(surgescript_heap_at((heap), LENGTH_ADDR)))
 static void quicksort(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end);
 static inline surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end);
+static inline surgescript_var_t* med3(surgescript_var_t* a, surgescript_var_t* b, surgescript_var_t* c);
 static const surgescript_heapptr_t LENGTH_ADDR = 0; /* the length of the array is allocated on the first address */
 static const surgescript_heapptr_t BASE_ADDR = 1;   /* array elements come later */
 
@@ -245,6 +246,7 @@ surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t 
     surgescript_var_t* pivot = surgescript_heap_at(heap, end);
     surgescript_heapptr_t p = begin;
 
+    surgescript_var_swap(pivot, med3(surgescript_heap_at(heap, begin), surgescript_heap_at(heap, begin + (end-begin)/2), pivot));
     for(surgescript_heapptr_t i = begin; i < end - 1; i++) {
         if(surgescript_var_compare(surgescript_heap_at(heap, i), pivot) <= 0) {
             surgescript_var_swap(surgescript_heap_at(heap, i), surgescript_heap_at(heap, p));
@@ -254,4 +256,19 @@ surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t 
 
     surgescript_var_swap(surgescript_heap_at(heap, p), pivot);
     return p;
+}
+
+/* returns the median of 3 variables */
+surgescript_var_t* med3(surgescript_var_t* a, surgescript_var_t* b, surgescript_var_t* c)
+{
+    int ab = surgescript_var_compare(a, b);
+    int bc = surgescript_var_compare(b, c);
+    int ac = surgescript_var_compare(a, c);
+
+    if(ab >= 0 && ac >= 0) /* a = max(a, b, c) */
+        return bc >= 0 ? b : c;
+    else if(ab < 0 && bc >= 0) /* b = max(a, b, c) */
+        return ac >= 0 ? a : c;
+    else /* c = max(a, b, c) */
+        return ab >= 0 ? a : b;
 }
