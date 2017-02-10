@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/variable.c
  * SurgeScript variables
@@ -387,4 +387,15 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
         else
             return 0; /* this shouldn't happen */
     }
+}
+
+/*
+ * surgescript_var_swap()
+ * Swaps the contents of a and b (faster than copying stuff with surgescript_var_copy)
+ */
+void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b)
+{
+    surgescript_var_t t = *a;
+    *a = *b;
+    *b = t;
 }

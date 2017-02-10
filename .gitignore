@@ -2,6 +2,7 @@
 # http://git-scm.com/docs/gitignore
 
 # vscode
+.vscode
 .vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
@@ -22,4 +23,5 @@ Session.vim
 
 # mine
 *.o
+*.a
 surgescript

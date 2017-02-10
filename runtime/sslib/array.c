@@ -16,35 +16,43 @@
 static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-
 static surgescript_var_t* fun_push(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_pop(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_shift(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_unshift(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-
 static surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_reverse(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
 #define ORDINAL(j)              (((j) == 1) ? "st" : (((j) == 2) ? "nd" : (((j) == 3) ? "rd" : "th")))
 #define ARRAY_LENGTH(heap)      ((int)surgescript_var_get_number(surgescript_heap_at((heap), LENGTH_ADDR)))
-#define SWAP(a, b, tmp)         do { surgescript_var_copy((tmp), (a)); surgescript_var_copy((a), (b)); surgescript_var_copy((b), (tmp)); } while(0)
+static void quicksort(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end);
+static inline surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end);
 static const surgescript_heapptr_t LENGTH_ADDR = 0; /* the length of the array is allocated on the first address */
 static const surgescript_heapptr_t BASE_ADDR = 1;   /* array elements come later */
-
 
 
 /*
  * surgescript_sslib_register_array()
  * Register the methods of the SurgeScript Arrays
  */
-void surgescript_sslib_register_array()
+void surgescript_sslib_register_array(surgescript_vm_t* vm)
 {
-    ;
+    surgescript_vm_bind(vm, "Array", "__constructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "Array", "__destructor", fun_destructor, 0);
+    surgescript_vm_bind(vm, "Array", "state:main", fun_main, 0);
+    surgescript_vm_bind(vm, "Array", "get", fun_get, 1);
+    surgescript_vm_bind(vm, "Array", "set", fun_set, 2);
+    surgescript_vm_bind(vm, "Array", "length", fun_length, 0);
+    surgescript_vm_bind(vm, "Array", "push", fun_push, 1);
+    surgescript_vm_bind(vm, "Array", "pop", fun_pop, 0);
+    surgescript_vm_bind(vm, "Array", "shift", fun_shift, 0);
+    surgescript_vm_bind(vm, "Array", "unshift", fun_unshift, 1);
+    surgescript_vm_bind(vm, "Array", "sort", fun_sort, 0);
+    surgescript_vm_bind(vm, "Array", "reverse", fun_reverse, 0);
 }
 
 
@@ -67,12 +75,14 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
 /* destructor */
 surgescript_var_t* fun_destructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
+    /* the heap gets freed anyway, so why bother? */
     return NULL;
 }
 
-/* main state: does nothing */
+/* main state */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
+    /* do nothing */
     return NULL;
 }
 
@@ -197,17 +207,51 @@ surgescript_var_t* fun_unshift(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_reverse(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
-    surgescript_var_t* tmp = surgescript_var_create();
     int length = ARRAY_LENGTH(heap);
 
     for(int i = 0; i < length / 2; i++) {
         surgescript_var_t* a = surgescript_heap_at(heap, BASE_ADDR + i);
         surgescript_var_t* b = surgescript_heap_at(heap, BASE_ADDR + (length - 1 - i));
-        SWAP(a, b, tmp);
+        surgescript_var_swap(a, b);
     }
 
-    surgescript_var_destroy(tmp);
     return NULL;
 }
 
-surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+/* sorts the array */
+surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    quicksort(heap, BASE_ADDR, BASE_ADDR + ARRAY_LENGTH(heap) - 1);
+    return NULL;
+}
+
+
+/* utilities */
+
+/* quicksort algorithm: sorts heap[begin .. end] */
+void quicksort(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end)
+{
+    if(begin < end) {
+        surgescript_heapptr_t p = partition(heap, begin, end);
+        quicksort(heap, begin, p-1);
+        quicksort(heap, p+1, end);
+    }
+}
+
+/* returns ptr such that heap[begin .. ptr-1] <= heap[ptr] < heap[ptr+1 .. end], where begin <= end */
+surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end)
+{
+    surgescript_var_t* pivot = surgescript_heap_at(heap, end);
+    surgescript_heapptr_t p = begin;
+
+    for(surgescript_heapptr_t i = begin; i < end - 1; i++) {
+        if(surgescript_var_compare(surgescript_heap_at(heap, i), pivot) <= 0) {
+            surgescript_var_swap(surgescript_heap_at(heap, i), surgescript_heap_at(heap, p));
+            p++;
+        }
+    }
+
+    surgescript_var_swap(surgescript_heap_at(heap, p), pivot);
+    return p;
+}
