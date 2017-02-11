@@ -319,7 +319,7 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
         case SSVAR_OBJECTHANDLE:
             return surgescript_util_strncpy(buf, "[object]", bufsize);
         case SSVAR_NUMBER: {
-            char tmp[33];
+            char tmp[32];
             if(var->number <= LONG_MIN || var->number >= LONG_MAX || var->number == (long)(var->number))
                 sprintf(tmp, "%ld", (long)(var->number)); /* it is an integer */
             else
