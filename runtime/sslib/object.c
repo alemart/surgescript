@@ -18,6 +18,7 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_changestate(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_name(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -33,6 +34,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "changeState", fun_changestate, 1);
     surgescript_vm_bind(vm, "Object", "name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
+    surgescript_vm_bind(vm, "Object", "hasMemberFunction", fun_hasfun, 1);
 }
 
 
@@ -91,4 +93,11 @@ surgescript_var_t* fun_changestate(surgescript_object_t* object, const surgescri
     surgescript_object_set_state(object, state);
     ssfree(state);
     return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
+}
+
+/* does this object have a member function called param[0] ? */
+surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* TODO */
+    return NULL;
 }

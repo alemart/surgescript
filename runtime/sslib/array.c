@@ -25,6 +25,7 @@ static surgescript_var_t* fun_shift(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_unshift(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_reverse(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
 #define ORDINAL(j)              (((j) == 1) ? "st" : (((j) == 2) ? "nd" : (((j) == 3) ? "rd" : "th")))
@@ -54,6 +55,7 @@ void surgescript_sslib_register_array(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Array", "unshift", fun_unshift, 1);
     surgescript_vm_bind(vm, "Array", "sort", fun_sort, 0);
     surgescript_vm_bind(vm, "Array", "reverse", fun_reverse, 0);
+    surgescript_vm_bind(vm, "Array", "indexOf", fun_indexof, 1);
 }
 
 
@@ -225,6 +227,22 @@ surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescript_var_
     surgescript_heap_t* heap = surgescript_object_heap(object);
     quicksort(heap, BASE_ADDR, BASE_ADDR + ARRAY_LENGTH(heap) - 1);
     return NULL;
+}
+
+/* finds the first i such that array[i] == param[0], or -1 if there is no such a match */
+surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* haystack = surgescript_object_heap(object);
+    const surgescript_var_t* needle = param[0];
+    int length = ARRAY_LENGTH(haystack);
+
+    for(int i = 0; i < length; i++) {
+        surgescript_var_t* element = surgescript_heap_at(haystack, BASE_ADDR + i);
+        if(surgescript_var_compare(element, needle) == 0)
+            return surgescript_var_set_number(surgescript_var_create(), i);
+    }
+
+    return surgescript_var_set_number(surgescript_var_create(), -1);
 }
 
 
