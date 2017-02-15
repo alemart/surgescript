@@ -7,6 +7,9 @@
  * SurgeScript expandable arrays
  */
 
+#ifndef _SURGESCRIPT_SSARRAY_H
+#define _SURGESCRIPT_SSARRAY_H
+
 #include "util.h"
 
 /*
@@ -46,3 +49,5 @@
  * returns the length of the array
  */
 #define ssarray_length(arr)                   (arr##_len)
+
+#endif

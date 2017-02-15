@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * util/util.h
  * SurgeScript utilities
@@ -25,7 +25,7 @@
 #define ssclamp(x, min, max)        ssmax(ssmin(x, max), min)
 #define sssign(x)                   ((x) >= 0 ? 1 : -1)
 #define sstok(x)                    #x
-#define ssassert(expr)              do { if(!(expr)) ssfatal("%s", /*__func__ ": "*/ __FILE__ ":" sstok(__LINE__) " assertion `" sstok(expr) "` failed."); } while(0)
+#define ssassert(expr)              do { if(!(expr)) ssfatal("%s", sstok(__func__) ": " __FILE__ ":" sstok(__LINE__) " assertion `" sstok(expr) "` failed."); } while(0)
 
 /* public routines */
 void* surgescript_util_malloc(size_t bytes); /* memory allocation */
