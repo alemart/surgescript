@@ -265,7 +265,7 @@ surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t 
     surgescript_heapptr_t p = begin;
 
     surgescript_var_swap(pivot, med3(surgescript_heap_at(heap, begin), surgescript_heap_at(heap, begin + (end-begin)/2), pivot));
-    for(surgescript_heapptr_t i = begin; i < end - 1; i++) {
+    for(surgescript_heapptr_t i = begin; i <= end - 1; i++) {
         if(surgescript_var_compare(surgescript_heap_at(heap, i), pivot) <= 0) {
             surgescript_var_swap(surgescript_heap_at(heap, i), surgescript_heap_at(heap, p));
             p++;
