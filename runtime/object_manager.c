@@ -155,10 +155,10 @@ bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surg
 }
 
 /*
- * surgescript_objectmanager_get_null()
+ * surgescript_objectmanager_null()
  * Returns a handle to a NULL pointer in the object manager
  */
-surgescript_objectmanager_handle_t surgescript_objectmanager_get_null(surgescript_objectmanager_t* manager)
+surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager)
 {
     return NULL_HANDLE;
 }

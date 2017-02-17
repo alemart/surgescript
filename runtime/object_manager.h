@@ -38,6 +38,7 @@ bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surg
 /* utilities */
 int surgescript_objectmanager_count(surgescript_objectmanager_t* manager); /* how many objects there are? */
 surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
+surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */
 void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manager); /* runs the garbage collector */
 
 #endif
