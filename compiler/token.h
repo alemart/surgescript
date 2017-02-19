@@ -20,6 +20,8 @@
     F( SSTOK_SEMICOLON, ";" )                                                   \
     F( SSTOK_COMMA, "," )                                                       \
     F( SSTOK_DOT, "." )                                                         \
+    F( SSTOK_CONDITIONALOP, "?" )                                               \
+    F( SSTOK_COLON, ":" )                                                       \
     F( SSTOK_LPAREN, "(" )                                                      \
     F( SSTOK_RPAREN, ")" )                                                      \
     F( SSTOK_LBRACKET, "[" )                                                    \
@@ -27,7 +29,10 @@
     F( SSTOK_LCURLY, "{" )                                                      \
     F( SSTOK_RCURLY, "}" )                                                      \
     F( SSTOK_ASSIGNOP, "=" )                                                    \
-    F( SSTOK_BINARYOP, "binary operator" )                                      \
+    F( SSTOK_ARITHMETICOP, "arithmetic operator" )                              \
+    F( SSTOK_ARITHASSIGNOP, "arithmetic-assignment operator" )                  \
+    F( SSTOK_RELATIONALOP, "relational operator" )                              \
+    F( SSTOK_BOOLEANOP, "boolean operator" )                                    \
     F( SSTOK_OBJECT, "object" )                                                 \
     F( SSTOK_FUN, "fun" )                                                       \
     F( SSTOK_RETURN, "return" )                                                 \
@@ -38,7 +43,6 @@
     F( SSTOK_IN, "in" )                                                         \
     F( SSTOK_BREAK, "break" )                                                   \
     F( SSTOK_CONTINUE, "continue" )                                             \
-    F( SSTOK_EOF, "end-of-file" )                                               \
     F( SSTOK_UNKNOWN, "unknown" )
 
 typedef struct surgescript_token_t surgescript_token_t;
