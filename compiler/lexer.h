@@ -11,12 +11,13 @@
 #define _SURGESCRIPT_COMPILER_LEXER_H
 
 typedef struct surgescript_lexer_t surgescript_lexer_t;
-typedef struct surgescript_token_t surgescript_token_t;
+struct surgescript_token_t;
 
 surgescript_lexer_t* surgescript_lexer_create();
 surgescript_lexer_t* surgescript_lexer_destroy(surgescript_lexer_t* lexer);
 
-bool surgescript_lexer_feed(surgescript_lexer_t* lexer, const char* code); /* feeds some code to the lexer */
-surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer); /* scans the next token */
+void surgescript_lexer_set(surgescript_lexer_t* lexer, const char* code); /* sets the code to be read */
+struct surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer); /* scans the next token */
+void surgescript_lexer_rewind(surgescript_lexer_t* lexer); /* rewinds the scanning on one token */
 
 #endif

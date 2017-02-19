@@ -28,11 +28,15 @@
     F( SSTOK_RBRACKET, "]" )                                                    \
     F( SSTOK_LCURLY, "{" )                                                      \
     F( SSTOK_RCURLY, "}" )                                                      \
+    F( SSTOK_NOTOP, "!" )                                                       \
     F( SSTOK_ASSIGNOP, "=" )                                                    \
-    F( SSTOK_ARITHMETICOP, "arithmetic operator" )                              \
-    F( SSTOK_ARITHASSIGNOP, "arithmetic-assignment operator" )                  \
+    F( SSTOK_ADDITIVEOP, "additive operator" )                                  \
+    F( SSTOK_MULTIPLICATIVEOP, "multiplicative operator" )                      \
+    F( SSTOK_ADDITIVEASSIGNOP, "additive-assignment operator" )                 \
+    F( SSTOK_MULTIPLICATIVEASSIGNOP, "multiplicative-assignment operator" )     \
+    F( SSTOK_INCDECOP, "increment-decrement operator" )                         \
     F( SSTOK_RELATIONALOP, "relational operator" )                              \
-    F( SSTOK_BOOLEANOP, "boolean operator" )                                    \
+    F( SSTOK_ANDOROP, "and-or boolean operator" )                               \
     F( SSTOK_OBJECT, "object" )                                                 \
     F( SSTOK_FUN, "fun" )                                                       \
     F( SSTOK_RETURN, "return" )                                                 \
@@ -43,7 +47,7 @@
     F( SSTOK_IN, "in" )                                                         \
     F( SSTOK_BREAK, "break" )                                                   \
     F( SSTOK_CONTINUE, "continue" )                                             \
-    F( SSTOK_UNKNOWN, "unknown" )
+    F( SSTOK_UNKNOWN, "<unknown>" )
 
 typedef struct surgescript_token_t surgescript_token_t;
 typedef enum surgescript_tokentype_t {
