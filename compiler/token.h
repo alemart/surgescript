@@ -14,7 +14,8 @@
     F( SSTOK_IDENTIFIER, "identifier" )                                         \
     F( SSTOK_NUMBER, "number" )                                                 \
     F( SSTOK_STRING, "string" )                                                 \
-    F( SSTOK_BOOL, "boolean" )                                                  \
+    F( SSTOK_TRUE, "true" )                                                     \
+    F( SSTOK_FALSE, "false" )                                                   \
     F( SSTOK_NULL, "null" )                                                     \
     F( SSTOK_SEMICOLON, ";" )                                                   \
     F( SSTOK_COMMA, "," )                                                       \
@@ -25,9 +26,8 @@
     F( SSTOK_RBRACKET, "]" )                                                    \
     F( SSTOK_LCURLY, "{" )                                                      \
     F( SSTOK_RCURLY, "}" )                                                      \
-    F( SSTOK_UNARYOP, "unary operator" )                                        \
+    F( SSTOK_ASSIGNOP, "=" )                                                    \
     F( SSTOK_BINARYOP, "binary operator" )                                      \
-    F( SSTOK_ASSIGNOP, "assignment operator" )                                  \
     F( SSTOK_OBJECT, "object" )                                                 \
     F( SSTOK_FUN, "fun" )                                                       \
     F( SSTOK_RETURN, "return" )                                                 \
@@ -47,10 +47,11 @@ typedef enum surgescript_tokentype_t {
     SURGESCRIPT_TOKEN_TYPES(TOKEN_CODE)
 } surgescript_tokentype_t;
 
-surgescript_token_t* surgescript_token_create(surgescript_tokentype_t type, const char* lexeme);
+surgescript_token_t* surgescript_token_create(surgescript_tokentype_t type, const char* lexeme, int linenumber);
 surgescript_token_t* surgescript_token_destroy(surgescript_token_t* token);
 surgescript_tokentype_t surgescript_token_type(const surgescript_token_t* token);
 const char* surgescript_token_lexeme(const surgescript_token_t* token);
+int surgescript_token_linenumber(const surgescript_token_t* token);
 const char* surgescript_tokentype_name(surgescript_tokentype_t type);
 
 #endif

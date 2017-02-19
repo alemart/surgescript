@@ -15,6 +15,7 @@ struct surgescript_token_t
 {
     surgescript_tokentype_t type;
     char* lexeme;
+    int linenumber;
 };
 
 /* the names of the tokens */
@@ -27,11 +28,12 @@ static const char* token_name[] = {
  * surgescript_token_create()
  * Creates a new token, given a type and a lexeme
  */
-surgescript_token_t* surgescript_token_create(surgescript_tokentype_t type, const char* lexeme)
+surgescript_token_t* surgescript_token_create(surgescript_tokentype_t type, const char* lexeme, int linenumber)
 {
     surgescript_token_t* token = ssmalloc(sizeof *token);
     token->type = type;
     token->lexeme = surgescript_util_strdup(lexeme);
+    token->linenumber = linenumber;
     return token;
 }
 
@@ -63,6 +65,14 @@ const char* surgescript_token_lexeme(const surgescript_token_t* token)
     return token->lexeme;
 }
 
+/*
+ * surgescript_token_linenumber()
+ * The number of the line in which this token has appeared
+ */
+int surgescript_token_linenumber(const surgescript_token_t* token)
+{
+    return token->linenumber;
+}
 
 
 /*

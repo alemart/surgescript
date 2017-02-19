@@ -44,6 +44,9 @@ sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c heap u
 token: compiler/token.h compiler/token.c utils
 	$(CC) $(CFLAGS) -c compiler/token.c
 
+lexer: compiler/lexer.h compiler/lexer.c token utils
+	$(CC) $(CFLAGS) -c compiler/lexer.c
+
 main: main.c utils variable
 	$(CC) $(CFLAGS) -c main.c
 
