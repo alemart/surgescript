@@ -10,7 +10,10 @@
 /* test file */
 #include <stdio.h>
 #include "runtime/vm.h"
+#include "compiler/token.h"
+#include "compiler/lexer.h"
 
+#if 0
 /* setup some programs */
 static void setup(surgescript_program_t* program)
 {
@@ -81,7 +84,6 @@ static surgescript_var_t* my_cfun(surgescript_object_t* caller, const surgescrip
 }
 
 
-
 int main()
 {
     surgescript_vm_t* vm = surgescript_vm_create();
@@ -102,5 +104,48 @@ int main()
     }
 
     surgescript_vm_destroy(vm);
+    return 0;
+}
+#endif
+
+static void print_token(surgescript_token_t* token)
+{
+    static int last_line = 0;
+    int line = surgescript_token_linenumber(token);
+    const char* name = surgescript_tokentype_name(surgescript_token_type(token));
+
+    if(line != last_line) {
+        printf("\n%d.\t", line);
+        last_line = line;
+    }
+
+    printf("(%s, \"%s\") ", name, surgescript_token_lexeme(token));
+}
+
+/* testing the lexical analyzer */
+int main()
+{
+    surgescript_lexer_t* lexer;
+    surgescript_token_t* token;
+    char buf[10240];
+    int bufidx, c;
+
+    /* read from stdin */
+    while((c = getchar()) != EOF) {
+        if(bufidx < sizeof(buf) / sizeof(char) - 1)
+            buf[bufidx++] = c;
+    }
+    buf[bufidx] = 0;
+
+    /* call lexer */
+    puts("----- Tokens: -----");
+    lexer = surgescript_lexer_create();
+    surgescript_lexer_set(lexer, buf);
+    while((token = surgescript_lexer_scan(lexer)) != NULL)
+        print_token(token);
+    surgescript_lexer_destroy(lexer);
+    puts("\n");
+
+    /* done */
     return 0;
 }
