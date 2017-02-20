@@ -172,7 +172,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         /* quote type */
         const char quo = *(lexer->p);
 
-        /* skip starting quote */
+        /* skip starting quote mark */
         lexer->p++;
 
         /* read string contents */
@@ -182,12 +182,13 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
                 switch(*(++lexer->p)) {
                     case '\\': bufadd(lexer, '\\'); break;
                     case '\'': bufadd(lexer, '\''); break;
-                    case '"': bufadd(lexer, '""'); break;
+                    case '"': bufadd(lexer, '"'); break;
                     case 'n': bufadd(lexer, '\n'); break;
                     case 'r': bufadd(lexer, '\r'); break;
                     case 't': bufadd(lexer, '\t'); break;
                     case 'f': bufadd(lexer, '\f'); break;
                     case 'v': bufadd(lexer, '\v'); break;
+                    case 'b': bufadd(lexer, '\b'); break;
                     default:
                         ssfatal("Invalid character '\\%c' around \"%s\" on line %d.", *(lexer->p) != 0 ? *(lexer->p) : '0', lexer->buf, lexer->line);
                         break;
@@ -210,7 +211,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         if(*(lexer->p) != quo)
             ssfatal("Unexpected end of string around \"%s\" on line %d.", lexer->buf, lexer->line); /* found a NULL character */
         else
-            lexer->p++; /* skip ending '"' */
+            lexer->p++; /* skip ending quotation mark */
 
         /* done! */
         return surgescript_token_create(SSTOK_STRING, lexer->buf, lexer->line);
