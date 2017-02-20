@@ -14,6 +14,7 @@ object "MyObject" {
 		a = a + 1;
 		a--;
 		++a;
+		c++++;
 		b = -57;
 		pi = 3.14159;
 		msg += "Hello, world!"; // yeah!

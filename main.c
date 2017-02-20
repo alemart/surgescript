@@ -9,6 +9,7 @@
 
 /* test file */
 #include <stdio.h>
+#include "util/util.h"
 #include "runtime/vm.h"
 #include "compiler/token.h"
 #include "compiler/lexer.h"
@@ -131,6 +132,7 @@ int main()
     int bufidx, c;
 
     /* read from stdin */
+    sslog("Reading from <stdin>...");
     while((c = getchar()) != EOF) {
         if(bufidx < sizeof(buf) / sizeof(char) - 1)
             buf[bufidx++] = c;
@@ -139,7 +141,6 @@ int main()
 
     /* call lexer */
     puts("----- Tokens: -----");
-    sslog("Reading from <stdin>...");
     lexer = surgescript_lexer_create();
     surgescript_lexer_set(lexer, buf);
     while((token = surgescript_lexer_scan(lexer)) != NULL)
