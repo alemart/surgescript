@@ -25,7 +25,7 @@ object "MyObject" {
 		this.test();
 
 		if(1 == 2)
-			destroy();
+			destroy(); (x, y) => x + y
 
 arr[1] = 2;
 	}

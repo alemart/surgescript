@@ -220,6 +220,13 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         return surgescript_token_create(SSTOK_DOT, lexer->buf, lexer->line);       
     }
 
+    /* arrow operator */
+    if(*(lexer->p) == '=' && *(lexer->p + 1) == '>') {
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_ARROWOP, lexer->buf, lexer->line);       
+    }
+
     /* parenthesis */
     if(*(lexer->p) == '(') {
         bufadd(lexer, *(lexer->p++));
@@ -257,7 +264,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     }
 
     /* assignment operator */
-    if(*(lexer->p) == '=' && *(lexer->p + 1) != '=') { /* just a simple '=' for attribution */
+    if(*(lexer->p) == '=' && *(lexer->p + 1) != '=' && *(lexer->p + 1) != '>') { /* just a simple '=' for attribution */
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_ASSIGNOP, lexer->buf, lexer->line);
     }

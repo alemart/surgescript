@@ -29,6 +29,7 @@
     F( SSTOK_LCURLY, "{" )                                                      \
     F( SSTOK_RCURLY, "}" )                                                      \
     F( SSTOK_NOTOP, "!" )                                                       \
+    F( SSTOK_ARROWOP, "=>" )                                                    \
     F( SSTOK_ASSIGNOP, "=" )                                                    \
     F( SSTOK_ADDITIVEOP, "additive operator" )                                  \
     F( SSTOK_MULTIPLICATIVEOP, "multiplicative operator" )                      \
