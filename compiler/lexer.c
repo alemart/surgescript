@@ -30,7 +30,7 @@ struct surgescript_lexer_t
 };
 
 /* keywords */
-static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE };
+static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE };
 static int indexof_keyword(const char* identifier);
 static inline void bufadd(surgescript_lexer_t* lexer, char c);
 static inline void bufclear(surgescript_lexer_t* lexer);
@@ -135,7 +135,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
             }
 
             if(*(lexer->p) == 0)
-                ssfatal("Unexpected end of commentary block on line %d.", lexer->line);
+                ssfatal("Unexpected end of commentary block around line %d.", lexer->ll);
             else
                 lexer->p += 2;
 

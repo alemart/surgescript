@@ -41,6 +41,7 @@
     F( SSTOK_STATE, "state" )                                                   \
     F( SSTOK_FUN, "fun" )                                                       \
     F( SSTOK_RETURN, "return" )                                                 \
+    F( SSTOK_THIS, "this" )                                                     \
     F( SSTOK_IF, "if" )                                                         \
     F( SSTOK_ELSE, "else" )                                                     \
     F( SSTOK_WHILE, "while" )                                                   \
