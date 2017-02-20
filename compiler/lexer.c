@@ -26,7 +26,6 @@ struct surgescript_lexer_t
     const char* lp; /* last position of the auxiliary pointer */
     int ll; /* line number of the last scan */
     int line; /* current line */
-    //SSARRAY(surgescript_token_t*, tokens);
 };
 
 /* keywords */
@@ -52,7 +51,6 @@ static inline void skipspaces(surgescript_lexer_t* lexer);
 surgescript_lexer_t* surgescript_lexer_create()
 {
     surgescript_lexer_t* lexer = ssmalloc(sizeof *lexer);
-    //ssarray_init(lexer->tokens);
     lexer->buf[0] = 0;
     lexer->bufptr = 0;
     lexer->p = 0;
@@ -68,29 +66,8 @@ surgescript_lexer_t* surgescript_lexer_create()
  */
 surgescript_lexer_t* surgescript_lexer_destroy(surgescript_lexer_t* lexer)
 {
-    //ssarray_release(lexer->tokens);
     return ssfree(lexer);
 }
-
-/*
- * surgescript_lexer_tokens()
- * Returns the tokens read by the lexer so far
- */
-/*surgescript_token_t* surgescript_lexer_tokens(surgescript_lexer_t* lexer, int* num_tokens)
-{
-    *num_tokens = ssarray_length(lexer->tokens);
-    return lexer->tokens;
-}*/
-
-/*
- * surgescript_lexer_clear()
- * clears all tokens read by the lexer so far
- */
-/*void surgescript_lexer_clear(surgescript_lexer_t* lexer)
-{
-    ssarray_release(lexer->tokens);
-    ssarray_init(lexer->tokens);
-}*/
 
 /*
  * surgescript_lexer_set()
@@ -148,10 +125,6 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     /* read number */
     if(isdigit(*(lexer->p)) || (*(lexer->p) == '.' && isdigit(*(lexer->p + 1)))) {
         bool dot = false;
-
-        /* got a unary operator */
-        /*if((*(lexer->p) == '+' || *(lexer->p) == '-') && is_unary_predecessor(lexer->last))
-            bufadd(lexer, *(lexer->p++));*/
 
         /* read the number */
         while(isnumeric(*(lexer->p))) {
