@@ -38,6 +38,7 @@
     F( SSTOK_RELATIONALOP, "relational operator" )                              \
     F( SSTOK_ANDOROP, "and-or boolean operator" )                               \
     F( SSTOK_OBJECT, "object" )                                                 \
+    F( SSTOK_STATE, "state" )                                                   \
     F( SSTOK_FUN, "fun" )                                                       \
     F( SSTOK_RETURN, "return" )                                                 \
     F( SSTOK_IF, "if" )                                                         \
