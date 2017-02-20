@@ -139,6 +139,7 @@ int main()
 
     /* call lexer */
     puts("----- Tokens: -----");
+    sslog("Reading from <stdin>...");
     lexer = surgescript_lexer_create();
     surgescript_lexer_set(lexer, buf);
     while((token = surgescript_lexer_scan(lexer)) != NULL)
