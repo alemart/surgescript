@@ -34,6 +34,7 @@ static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL
 static int indexof_keyword(const char* identifier);
 static inline void bufadd(surgescript_lexer_t* lexer, char c);
 static inline void bufclear(surgescript_lexer_t* lexer);
+static inline void skipspaces(surgescript_lexer_t* lexer);
 
 /* helpers */
 #define isidchar(c)                 (isalnum(c) || (c) == '_' || (c) == '$')  /* is c an identifier-char? */
@@ -118,10 +119,30 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     bufclear(lexer);
 
     /* skip spaces */
-    while(isspace(*(lexer->p))) {
-        if('\n' == *(lexer->p))
-            lexer->line++;
-        lexer->p++;
+    skipspaces(lexer);
+
+    /* skip comments */
+    while(1) {
+        if(*(lexer->p) == '/' && *(lexer->p + 1) == '/') { /* single-line comments */
+            while(*(lexer->p) != '\n' && *(lexer->p) != 0)
+                lexer->p++;
+            skipspaces(lexer);
+        }
+        else if(*(lexer->p) == '/' && *(lexer->p + 1) == '*') { /* multiline comments */
+            while(!(*(lexer->p) == '*' && *(lexer->p + 1) == '/') && *(lexer->p) != 0) {
+                if('\n' == *(lexer->p++))
+                    lexer->line++;
+            }
+
+            if(*(lexer->p) == 0)
+                ssfatal("Unexpected end of commentary block on line %d.", lexer->line);
+            else
+                lexer->p += 2;
+
+            skipspaces(lexer);
+        }
+        else
+            break;
     }
 
     /* read number */
@@ -182,7 +203,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
 
         /* is everything ok? */
         if(*(lexer->p) != '"')
-            ssfatal("Unexpected end of string around \"%s\" on line %d.", lexer->buf, lexer->line);
+            ssfatal("Unexpected end of string around \"%s\" on line %d.", lexer->buf, lexer->line); /* found a NULL character */
         else
             lexer->p++; /* skip ending '"' */
 
@@ -303,11 +324,11 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     }
 
     /* multiplicative operators */
-    if(*(lexer->p) == '*' && *(lexer->p + 1) != '=') {
+    if(*(lexer->p) == '*' && *(lexer->p + 1) != '=' && *(lexer->p + 1) != '/') {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_MULTIPLICATIVEOP, lexer->buf, lexer->line);       
     }
-    else if(*(lexer->p) == '/' && *(lexer->p + 1) != '=') {
+    else if(*(lexer->p) == '/' && *(lexer->p + 1) != '=' && *(lexer->p + 1) != '/' && *(lexer->p + 1) != '*') {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_MULTIPLICATIVEOP, lexer->buf, lexer->line);       
     }
@@ -421,7 +442,7 @@ void bufadd(surgescript_lexer_t* lexer, char c)
         lexer->buf[lexer->bufptr] = 0;
     }
     else
-        ssfatal("This token is too large! See '%s' around line %d.", lexer->buf, lexer->line);
+        ssfatal("This token is too large! See \"%s\" around line %d.", lexer->buf, lexer->line);
 }
 
 /* clears the stringbuffer */
@@ -429,4 +450,14 @@ void bufclear(surgescript_lexer_t* lexer)
 {
     lexer->buf[0] = 0;
     lexer->bufptr = 0;
+}
+
+/* skips white spaces */
+void skipspaces(surgescript_lexer_t* lexer)
+{
+    while(isspace(*(lexer->p))) {
+        if('\n' == *(lexer->p))
+            lexer->line++;
+        lexer->p++;
+    }
 }
