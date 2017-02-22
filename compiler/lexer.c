@@ -13,8 +13,8 @@
 #include "lexer.h"
 #include "token.h"
 #include "../util/util.h"
-#include "../util/ssarray.h"
 
+/* size of the internal buffer */
 #define BUFSIZE                     1024
 
 /* lexer */
@@ -405,7 +405,7 @@ void surgescript_lexer_rewind(surgescript_lexer_t* lexer)
 
 /* private stuff */
 
-/* is the given keyword an identifier? returns its index in keywords[], or -1 if not found */
+/* is the given keyword an identifier? returns its index in keyword[], or -1 if not found */
 int indexof_keyword(const char* identifier)
 {
     const int length = sizeof(keyword) / sizeof(surgescript_tokentype_t);

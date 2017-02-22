@@ -129,7 +129,7 @@ int main()
     surgescript_lexer_t* lexer;
     surgescript_token_t* token;
     char buf[10240];
-    int bufidx, c;
+    int bufidx = 0, c;
 
     /* read from stdin */
     sslog("Reading from <stdin>...");
@@ -143,8 +143,10 @@ int main()
     puts("----- Tokens: -----");
     lexer = surgescript_lexer_create();
     surgescript_lexer_set(lexer, buf);
-    while((token = surgescript_lexer_scan(lexer)) != NULL)
+    while((token = surgescript_lexer_scan(lexer)) != NULL) {
         print_token(token);
+        surgescript_token_destroy(token);
+    }
     surgescript_lexer_destroy(lexer);
     puts("\n");
 
