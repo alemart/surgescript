@@ -10,6 +10,8 @@
 #ifndef _SURGESCRIPT_COMPILER_LEXER_H
 #define _SURGESCRIPT_COMPILER_LEXER_H
 
+#include <stdbool.h>
+
 typedef struct surgescript_lexer_t surgescript_lexer_t;
 struct surgescript_token_t;
 

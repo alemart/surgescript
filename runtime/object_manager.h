@@ -40,5 +40,6 @@ int surgescript_objectmanager_count(surgescript_objectmanager_t* manager); /* ho
 surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
 surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */
 void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manager); /* runs the garbage collector */
+struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */
 
 #endif

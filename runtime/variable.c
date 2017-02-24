@@ -165,6 +165,15 @@ surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsi
 /* retrieve the value stored in a variable */
 
 /*
+ * surgescript_var_is_null()
+ * Is this variable null?
+ */
+bool surgescript_var_is_null(const surgescript_var_t* var)
+{
+    return var->type == SSVAR_NULL;
+}
+
+/*
  * surgescript_var_get_bool()
  * Gets the boolean value of a variable
  */

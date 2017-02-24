@@ -182,6 +182,15 @@ int surgescript_objectmanager_count(surgescript_objectmanager_t* manager)
 }
 
 /*
+ * surgescript_objectmanager_programpool()
+ * pointer to the program pool
+ */
+surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager)
+{
+    return manager->program_pool;
+}
+
+/*
  * surgescript_objectmanager_collectgarbage()
  * Run a cycle of the garbage collector (incremental mark-and-sweep algorithm)
  */
