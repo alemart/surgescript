@@ -396,10 +396,14 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
  * surgescript_lexer_rewind()
  * Rewinds the scanning on one token
  */
-void surgescript_lexer_rewind(surgescript_lexer_t* lexer)
+bool surgescript_lexer_rewind(surgescript_lexer_t* lexer)
 {
+    bool val = (lexer->p != lexer->lp);
+
     lexer->p = lexer->lp;
     lexer->line = lexer->ll;
+    
+    return val;
 }
 
 

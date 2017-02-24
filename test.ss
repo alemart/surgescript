@@ -1,8 +1,18 @@
 // test
 // by alemart
 object "MyObject" {
-	requires "0.2.0"
+	notes {
+		"requires": "0.2.0",
+		"editor": "SD_SURGE 0",
+		//"label": "Hello!"
+		//"category": "Enemies",
+		"hidden": true,
+		"awake": true,
+	}
+
 	length = 0;
+	N = spawn("Notes").get("editor")
+
 	-.520000000000001,
 		$var = +2;
 		$2 = -1;

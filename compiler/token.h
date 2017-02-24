@@ -50,6 +50,7 @@
     F( SSTOK_IN, "in" )                                                         \
     F( SSTOK_BREAK, "break" )                                                   \
     F( SSTOK_CONTINUE, "continue" )                                             \
+    F( SSTOK_NOTES, "notes" )                                                   \
     F( SSTOK_UNKNOWN, "<unknown>" )
 
 typedef struct surgescript_token_t surgescript_token_t;
