@@ -13,6 +13,8 @@
 #include "runtime/vm.h"
 #include "compiler/token.h"
 #include "compiler/lexer.h"
+#include "compiler/parser.h"
+#include "compiler/parsetree.h"
 
 #if 0
 /* setup some programs */
@@ -109,6 +111,7 @@ int main()
 }
 #endif
 
+#if 0
 static void print_token(surgescript_token_t* token)
 {
     static int last_line = 0;
@@ -151,5 +154,22 @@ int main()
     puts("\n");
 
     /* done */
+    return 0;
+}
+#endif
+
+/* testing the parser */
+int main()
+{
+    surgescript_parser_t* parser = surgescript_parser_create();
+    surgescript_parsetree_t* tree;
+
+    tree = surgescript_parser_parsefile(parser, "./test.ss");
+    if(tree) {
+        puts("Parsed file.");
+        surgescript_parsetree_destroy(tree);
+    }
+
+    surgescript_parser_destroy(parser);
     return 0;
 }
