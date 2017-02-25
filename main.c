@@ -167,6 +167,7 @@ int main()
     tree = surgescript_parser_parsefile(parser, "./test.ss");
     if(tree) {
         puts("Parsed file.");
+        surgescript_parsetree_emit(tree);
         surgescript_parsetree_destroy(tree);
     }
 

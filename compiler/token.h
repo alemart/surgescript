@@ -65,5 +65,6 @@ surgescript_tokentype_t surgescript_token_type(const surgescript_token_t* token)
 const char* surgescript_token_lexeme(const surgescript_token_t* token);
 int surgescript_token_linenumber(const surgescript_token_t* token);
 const char* surgescript_tokentype_name(surgescript_tokentype_t type);
+surgescript_token_t* surgescript_token_clone(surgescript_token_t* token);
 
 #endif

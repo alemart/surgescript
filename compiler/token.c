@@ -83,3 +83,17 @@ const char* surgescript_tokentype_name(surgescript_tokentype_t type)
 {
     return token_name[type];
 }
+
+
+/*
+ * surgescript_token_clone()
+ * Clones a token
+ */
+surgescript_token_t* surgescript_token_clone(surgescript_token_t* token)
+{
+    surgescript_token_t* clone = ssmalloc(sizeof *clone);
+    clone->type = token->type;
+    clone->lexeme = surgescript_util_strdup(token->lexeme);
+    clone->linenumber = token->linenumber;
+    return clone;
+}
