@@ -28,16 +28,16 @@
     F( SSTOK_RBRACKET, "]" )                                                    \
     F( SSTOK_LCURLY, "{" )                                                      \
     F( SSTOK_RCURLY, "}" )                                                      \
-    F( SSTOK_NOTOP, "!" )                                                       \
     F( SSTOK_ARROWOP, "=>" )                                                    \
-    F( SSTOK_ASSIGNOP, "=" )                                                    \
+    F( SSTOK_LOGICALNOTOP, "!" )                                                \
+    F( SSTOK_LOGICALANDOP, "&&" )                                               \
+    F( SSTOK_LOGICALOROP, "||" )                                                \
+    F( SSTOK_ASSIGNOP, "assignment operator" )                                  \
     F( SSTOK_ADDITIVEOP, "additive operator" )                                  \
     F( SSTOK_MULTIPLICATIVEOP, "multiplicative operator" )                      \
-    F( SSTOK_ADDITIVEASSIGNOP, "additive-assignment operator" )                 \
-    F( SSTOK_MULTIPLICATIVEASSIGNOP, "multiplicative-assignment operator" )     \
     F( SSTOK_INCDECOP, "increment-decrement operator" )                         \
     F( SSTOK_RELATIONALOP, "relational operator" )                              \
-    F( SSTOK_ANDOROP, "and-or boolean operator" )                               \
+    F( SSTOK_EQUALITYOP, "equality operator" )                                  \
     F( SSTOK_OBJECT, "object" )                                                 \
     F( SSTOK_STATE, "state" )                                                   \
     F( SSTOK_FUN, "fun" )                                                       \
@@ -50,7 +50,8 @@
     F( SSTOK_IN, "in" )                                                         \
     F( SSTOK_BREAK, "break" )                                                   \
     F( SSTOK_CONTINUE, "continue" )                                             \
-    F( SSTOK_NOTES, "notes" )                                                   \
+    F( SSTOK_TYPEOF, "typeof" )                                                 \
+    F( SSTOK_EMOTICON, "emoticon" )                                             \
     F( SSTOK_UNKNOWN, "<unknown>" )
 
 typedef struct surgescript_token_t surgescript_token_t;

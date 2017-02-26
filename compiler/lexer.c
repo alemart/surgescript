@@ -29,7 +29,7 @@ struct surgescript_lexer_t
 };
 
 /* keywords */
-static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE };
+static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE, SSTOK_TYPEOF, SSTOK_EMOTICON };
 static int indexof_keyword(const char* identifier);
 static inline void bufadd(surgescript_lexer_t* lexer, char c);
 static inline void bufclear(surgescript_lexer_t* lexer);
@@ -39,6 +39,7 @@ static inline void skipspaces(surgescript_lexer_t* lexer);
 #define isidchar(c)                 (isalnum(c) || (c) == '_' || (c) == '$')  /* is c an identifier-char? */
 #define isnumeric(c)                (isdigit(c) || (c) == '.') /* is c a char belonging to a number? */
 #define iswhitespace(c)             ((c) == ' ' || (c) == '\t' || (c) == '\n' || (c) == '\r' || (c) == '\f' || (c) == '\v')
+#define isemoticonmouth(c)          ((c) == '(' || (c) == 'O' || (c) == 'o' || (c) == 'p' || (c) == 'P' || (c) == ')')
 
 
 
@@ -209,7 +210,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     }
 
     /* colon operator */
-    if(*(lexer->p) == ':') {
+    if(*(lexer->p) == ':' && *(lexer->p + 1) != '-') {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_COLON, lexer->buf, lexer->line);       
     }
@@ -257,30 +258,53 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         return surgescript_token_create(SSTOK_RCURLY, lexer->buf, lexer->line);
     }
 
-    /* not operator */
+    /* logical not operator */
     if(*(lexer->p) == '!' && *(lexer->p + 1) != '=') {
         bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_NOTOP, lexer->buf, lexer->line);       
+        return surgescript_token_create(SSTOK_LOGICALNOTOP, lexer->buf, lexer->line);       
     }
 
-    /* assignment operator */
+    /* assignment operators */
     if(*(lexer->p) == '=' && *(lexer->p + 1) != '=' && *(lexer->p + 1) != '>') { /* just a simple '=' for attribution */
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_ASSIGNOP, lexer->buf, lexer->line);
     }
+    else if(*(lexer->p) == '+' && *(lexer->p + 1) == '=') {
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_ASSIGNOP, lexer->buf, lexer->line);
+    }
+    else if(*(lexer->p) == '-' && *(lexer->p + 1) == '=') {
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_ASSIGNOP, lexer->buf, lexer->line);
+    }
+    else if(*(lexer->p) == '*' && *(lexer->p + 1) == '=') {
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_ASSIGNOP, lexer->buf, lexer->line);
+    }
+    else if(*(lexer->p) == '/' && *(lexer->p + 1) == '=') {
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_ASSIGNOP, lexer->buf, lexer->line);
+    }
 
-    /* relational operators */
+
+    /* equality operators */
     if(*(lexer->p) == '=' && *(lexer->p + 1) == '=') {
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_RELATIONALOP, lexer->buf, lexer->line);
+        return surgescript_token_create(SSTOK_EQUALITYOP, lexer->buf, lexer->line);
     }
     else if(*(lexer->p) == '!' && *(lexer->p + 1) == '=') {
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_RELATIONALOP, lexer->buf, lexer->line);
+        return surgescript_token_create(SSTOK_EQUALITYOP, lexer->buf, lexer->line);
     }
-    else if(*(lexer->p) == '>' && *(lexer->p + 1) != '=') {
+
+    /* relational operators */
+    if(*(lexer->p) == '>' && *(lexer->p + 1) != '=') {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_RELATIONALOP, lexer->buf, lexer->line);
     }
@@ -289,7 +313,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_RELATIONALOP, lexer->buf, lexer->line);
     }
-    else if(*(lexer->p) == '<' && *(lexer->p + 1) != '=') {
+    else if(*(lexer->p) == '<' && *(lexer->p + 1) != '=' && *(lexer->p + 1) != '3') {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_RELATIONALOP, lexer->buf, lexer->line);
     }
@@ -319,40 +343,18 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         return surgescript_token_create(SSTOK_MULTIPLICATIVEOP, lexer->buf, lexer->line);       
     }
     
-    /* additive-assignment operators */
-    if(*(lexer->p) == '+' && *(lexer->p + 1) == '=') {
-        bufadd(lexer, *(lexer->p++));
-        bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_ADDITIVEASSIGNOP, lexer->buf, lexer->line);
-    }
-    else if(*(lexer->p) == '-' && *(lexer->p + 1) == '=') {
-        bufadd(lexer, *(lexer->p++));
-        bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_ADDITIVEASSIGNOP, lexer->buf, lexer->line);
-    }
-
-    /* multiplicative-assignment operators */
-    if(*(lexer->p) == '*' && *(lexer->p + 1) == '=') {
-        bufadd(lexer, *(lexer->p++));
-        bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_MULTIPLICATIVEASSIGNOP, lexer->buf, lexer->line);
-    }
-    else if(*(lexer->p) == '/' && *(lexer->p + 1) == '=') {
-        bufadd(lexer, *(lexer->p++));
-        bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_MULTIPLICATIVEASSIGNOP, lexer->buf, lexer->line);
-    }
-
-    /* and-or boolean operators */
+    /* logical and operator */
     if(*(lexer->p) == '&' && *(lexer->p + 1) == '&') {
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_ANDOROP, lexer->buf, lexer->line);
+        return surgescript_token_create(SSTOK_LOGICALANDOP, lexer->buf, lexer->line);
     }
-    else if(*(lexer->p) == '|' && *(lexer->p + 1) == '|') {
+
+    /* logical or operator */
+    if(*(lexer->p) == '|' && *(lexer->p + 1) == '|') {
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_ANDOROP, lexer->buf, lexer->line);
+        return surgescript_token_create(SSTOK_LOGICALOROP, lexer->buf, lexer->line);
     }
 
     /* increment-decrement operators */
@@ -365,6 +367,19 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_INCDECOP, lexer->buf, lexer->line);
+    }
+
+    /* read emoticon */
+    if((*(lexer->p) == ':' && *(lexer->p + 1) == '-' && isemoticonmouth(*(lexer->p + 2))) || !strncmp(lexer->p, "$_$", 3)) {
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line);
+    }
+    else if(*(lexer->p) == '<' && *(lexer->p + 1) == '3') {
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line);              
     }
 
     /* read an identifier */
