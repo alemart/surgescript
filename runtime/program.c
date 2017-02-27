@@ -317,20 +317,20 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         /* heap operations */
         case SSOP_STORE:
-            surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[a.u])), t[b.u]);
+            surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[b.u])), t[a.u]);
             break;
 
         case SSOP_LOAD:
             surgescript_var_copy(t[a.u], surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[b.u])));
             break;
 
-        /*case SSOP_MALLOC:
-            surgescript_var_set_number(t[a.u], surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
+        case SSOP_PEEK:
+            surgescript_var_copy(t[a.u], surgescript_heap_at(surgescript_renv_heap(runtime_environment), b.u));
             break;
 
-        case SSOP_FREE:
-            surgescript_heap_free(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[a.u]));
-            break;*/
+        case SSOP_POKE:
+            surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), b.u), t[a.u]);
+            break;
 
         /* stack operations */
         case SSOP_PUSH:

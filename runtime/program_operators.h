@@ -34,8 +34,10 @@
     F( SSOP_MOVC, "movc" )    /* t[a] = handle to caller object ("this") */ \
     F( SSOP_MOVT, "movt" )                                /* t[a] = t[b] */ \
                                                                             \
-    F( SSOP_STORE, "store" )                           /* *(t[a]) = t[b] */ \
     F( SSOP_LOAD, "load" )                             /* t[a] = *(t[b]) */ \
+    F( SSOP_STORE, "store" )                           /* *(t[b]) = t[a] */ \
+    F( SSOP_PEEK, "peek" )                                /* t[a] = (*b) */ \
+    F( SSOP_POKE, "poke" )                                /* (*b) = t[a] */ \
                                                                             \
     F( SSOP_PUSH, "push" )                                  /* push t[a] */ \
     F( SSOP_POP, "pop" )                                     /* pop t[a] */ \
