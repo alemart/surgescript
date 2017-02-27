@@ -12,25 +12,26 @@
 
 #include <stdlib.h>
 
-/* common aliases */
-#define ssmalloc                    surgescript_util_malloc
-#define ssfree                      surgescript_util_free
-#define ssrealloc                   surgescript_util_realloc
-#define sslog                       surgescript_util_log
-#define ssfatal                     surgescript_util_fatal
-
 /* macros */
 #define ssmin(a, b)                 ((a) < (b) ? (a) : (b))
 #define ssmax(a, b)                 ((a) >= (b) ? (a) : (b))
 #define ssclamp(x, min, max)        ssmax(ssmin(x, max), min)
 #define sssign(x)                   ((x) >= 0 ? 1 : -1)
 #define sstok(x)                    #x
-#define ssassert(expr)              do { if(!(expr)) ssfatal("%s", sstok(__func__) ": " __FILE__ ":" sstok(__LINE__) " assertion `" sstok(expr) "` failed."); } while(0)
+#define ssstr(x)                    sstok(x)
+#define ssassert(expr)              do { if(!(expr)) ssfatal("%s", "In " __FILE__ ":" ssstr(__LINE__) ": assertion `" sstok(expr) "` failed."); } while(0)
+
+/* common aliases */
+#define ssmalloc(n)                 surgescript_util_malloc((n), __FILE__ ":" ssstr(__LINE__))
+#define ssrealloc(p, n)             surgescript_util_realloc((p), (n), __FILE__ ":" ssstr(__LINE__))
+#define ssfree                      surgescript_util_free
+#define sslog                       surgescript_util_log
+#define ssfatal                     surgescript_util_fatal
 
 /* public routines */
-void* surgescript_util_malloc(size_t bytes); /* memory allocation */
+void* surgescript_util_malloc(size_t bytes, const char* location); /* memory allocation */
+void* surgescript_util_realloc(void* ptr, size_t bytes, const char* location); /* memory reallocation */
 void* surgescript_util_free(void* ptr); /* memory deallocation */
-void* surgescript_util_realloc(void* ptr, size_t bytes); /* memory reallocation */
 
 void surgescript_util_log(const char* fmt, ...); /* logs a message */
 void surgescript_util_fatal(const char* fmt, ...); /* logs a message and kills the app */

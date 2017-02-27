@@ -10,8 +10,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include "symtable.h"
-#include "../runtime/heap.h"
-#include "../runtime/stack.h"
 #include "../runtime/program.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
@@ -69,6 +67,7 @@ surgescript_symtable_t* surgescript_symtable_destroy(surgescript_symtable_t* sym
     for(int i = 0; i < ssarray_length(symtable->entry); i++)
         ssfree(symtable->entry[i].symbol);
 
+    ssarray_release(symtable->entry);
     return ssfree(symtable); /* don't mess with the parent */
 }
 
@@ -79,7 +78,7 @@ bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const cha
     else if(!symtable->parent)
         return false;
     else
-        return surgescript_symtable_has_symbol(symtable->parent, symbol);
+        return surgescript_symtable_has_symbol(symtable->parent, symbol); /* tail recursion */
 }
 
 void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_heapptr_t address)

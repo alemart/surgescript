@@ -14,6 +14,7 @@
 #include "util.h"
 
 /* private stuff */
+static void crash(const char* location);
 static void my_log(const char* message);
 static void my_fatal(const char* message);
 static void (*log_function)(const char* message) = my_log;
@@ -29,12 +30,26 @@ static void (*fatal_function)(const char* message) = my_fatal;
  * surgescript_util_malloc()
  * Memory allocation routine
  */
-void* surgescript_util_malloc(size_t bytes)
+void* surgescript_util_malloc(size_t bytes, const char* location)
 {
     void *m = malloc(bytes);
 
     if(m == NULL)
-        surgescript_util_fatal(__FILE__ ": Out of memory");
+        crash(location);
+
+    return m;
+}
+
+/*
+ * surgescript_util_realloc()
+ * Memory reallocation routine
+ */
+void* surgescript_util_realloc(void* ptr, size_t bytes, const char* location)
+{
+    void *m = realloc(ptr, bytes);
+
+    if(m == NULL)
+        crash(location);
 
     return m;
 }
@@ -49,20 +64,6 @@ void* surgescript_util_free(void* ptr)
         free(ptr);
 
     return NULL;
-}
-
-/*
- * surgescript_util_realloc()
- * Memory reallocation routine
- */
-void* surgescript_util_realloc(void* ptr, size_t bytes)
-{
-    void *m = realloc(ptr, bytes);
-
-    if(m == NULL)
-        surgescript_util_fatal(__FILE__ ": Out of memory");
-
-    return m;
 }
 
 /*
@@ -151,4 +152,15 @@ void my_log(const char* message)
 void my_fatal(const char* message)
 {
     ;
+}
+
+void crash(const char* location) /* out of memory error */
+{
+    static char buf[64] = "Out of memory in ";
+    
+    strncat(buf, location, sizeof(buf) - 1);
+
+    fputs(buf, stderr);
+    fatal_function(buf);
+    exit(1); /* just in case */
 }
