@@ -364,17 +364,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_ADD:
-            if(*surgescript_var_typename(t[a.u]) == 's' || *surgescript_var_typename(t[b.u]) == 's') {
-                char* str1 = surgescript_var_get_string(t[a.u]);
-                char* str2 = surgescript_var_get_string(t[b.u]);
-                char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
-                surgescript_var_set_string(t[a.u], strcat(strcpy(str, str1), str2));
-                ssfree(str);
-                ssfree(str2);
-                ssfree(str1);
-            }
-            else
-                surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) + surgescript_var_get_number(t[b.u]));
+            surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) + surgescript_var_get_number(t[b.u]));
             break;
 
         case SSOP_SUB:
@@ -429,6 +419,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_string(t[a.u], surgescript_var_typename(t[a.u]));
             break;
 
+        case SSOP_TC:
+            surgescript_var_set_number(t[2], *(surgescript_var_typename(t[a.u])));
+            break;
+
         case SSOP_BOOL:
             surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[a.u]));
             break;
@@ -450,6 +444,17 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 unsigned object_handle = surgescript_var_get_objecthandle(t[a.u]);
                 call_object_method(runtime_environment, object_handle, program_name, 0, t[a.u]);
             }
+            break;
+        }
+
+        case SSOP_CAT: {
+            char* str1 = surgescript_var_get_string(t[a.u]);
+            char* str2 = surgescript_var_get_string(t[b.u]);
+            char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
+            surgescript_var_set_string(t[a.u], strcat(strcpy(str, str1), str2));
+            ssfree(str);
+            ssfree(str2);
+            ssfree(str1);
             break;
         }
 
@@ -476,19 +481,6 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
             ssfree(substr);
             ssfree(str);
-            break;
-        }
-
-        case SSOP_STRCAT: {
-            char* str1 = surgescript_var_get_string(t[a.u]);
-            char* str2 = surgescript_var_get_string(t[b.u]);
-            char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
-
-            surgescript_var_set_string(t[a.u], strcat(strcpy(str, str1), str2));
-
-            ssfree(str);
-            ssfree(str2);
-            ssfree(str1);
             break;
         }
 
@@ -569,7 +561,15 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             unsigned object_handle = surgescript_var_get_objecthandle(t[b.u]);
             int number_of_given_params = (int)surgescript_var_get_number(t[2]);
             surgescript_var_t* return_value = t[2];
-            call_object_method(runtime_environment, object_handle, program_name, number_of_given_params, return_value);
+
+            if(strcmp(surgescript_var_typename(t[b.u]), "object") != 0) {
+                char* thing = surgescript_var_get_string(t[b.u]);
+                ssfatal("Runtime Error: can't call %s() on %s \"%s\"", program_name, surgescript_var_typename(t[b.u]), thing);
+                ssfree(thing);
+            }
+            else
+                call_object_method(runtime_environment, object_handle, program_name, number_of_given_params, return_value);
+
             free(program_name);
             break;
         }

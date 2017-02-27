@@ -10,6 +10,8 @@
 #ifndef _SURGESCRIPT_COMPILER_PARSETREE_H
 #define _SURGESCRIPT_COMPILER_PARSETREE_H
 
+#include "nodecontext.h"
+
 typedef struct surgescript_parsetree_t surgescript_parsetree_t;
 struct surgescript_program_t;
 
@@ -18,16 +20,15 @@ surgescript_parsetree_t* surgescript_parsetree_create(); /* create an empty tree
 void surgescript_parsetree_emit(surgescript_parsetree_t* tree); /* emit code */
 surgescript_parsetree_t* surgescript_parsetree_destroy(surgescript_parsetree_t* tree); /* destroy a parse tree */
 
-/* constant expressions */
-surgescript_parsetree_t* surgescript_parsetree_create_bool(struct surgescript_program_t* program, bool value);
-surgescript_parsetree_t* surgescript_parsetree_create_number(struct surgescript_program_t* program, float value);
-surgescript_parsetree_t* surgescript_parsetree_create_string(struct surgescript_program_t* program, const char* value);
-surgescript_parsetree_t* surgescript_parsetree_create_null(struct surgescript_program_t* program);
-
 /* object list & declarations */
-surgescript_parsetree_t* surgescript_parsetree_create_objectlist(const char* name, surgescript_parsetree_t* objectdecl, surgescript_parsetree_t* objectlist);
+surgescript_parsetree_t* surgescript_parsetree_create_objectlist(surgescript_parsetree_t* object, surgescript_parsetree_t* objectlist);
+surgescript_parsetree_t* surgescript_parsetree_create_object(surgescript_nodecontext_t context, surgescript_parsetree_t* objectdecl);
+surgescript_parsetree_t* surgescript_parsetree_create_objectdecl(surgescript_nodecontext_t context, surgescript_parsetree_t* notelist, surgescript_parsetree_t* vardecllist, surgescript_parsetree_t* statedecllist, surgescript_parsetree_t* fundecllist);
 
-/* operators */
-surgescript_parsetree_t* surgescript_parsetree_create_unary(struct surgescript_program_t* program, const char* unaryop, surgescript_parsetree_t* value);
+/* constants */
+surgescript_parsetree_t* surgescript_parsetree_create_bool(surgescript_nodecontext_t context, bool value);
+surgescript_parsetree_t* surgescript_parsetree_create_number(surgescript_nodecontext_t context, float value);
+surgescript_parsetree_t* surgescript_parsetree_create_string(surgescript_nodecontext_t context, const char* value);
+surgescript_parsetree_t* surgescript_parsetree_create_null(surgescript_nodecontext_t context);
 
 #endif

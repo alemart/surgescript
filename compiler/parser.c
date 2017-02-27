@@ -15,6 +15,7 @@
 #include "lexer.h"
 #include "token.h"
 #include "parsetree.h"
+#include "../runtime/program.h"
 #include "../util/util.h"
 
 /* the parser */
@@ -23,24 +24,63 @@ struct surgescript_parser_t
     surgescript_token_t* lookahead;
     surgescript_lexer_t* lexer;
     char* filename;
-    // programa q estou examinando aki (usa pilha)
 };
 
 /* helpers */
 static surgescript_parsetree_t* parse(surgescript_parser_t* parser);
+static inline bool gottype(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
 static void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
 static bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
-static bool gottype(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
-static void check_if_eof(surgescript_parser_t* parser);
+static void expect(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
+static void expect_something(surgescript_parser_t* parser);
 static const char* ssbasename(const char* path);
 static surgescript_parsetree_t* emptytree();
 
 /* non-terminals */
 static surgescript_parsetree_t* objectlist(surgescript_parser_t* parser);
-static surgescript_parsetree_t* objectdecl(surgescript_parser_t* parser);
-static surgescript_parsetree_t* signedconst(surgescript_parser_t* parser);
-static surgescript_parsetree_t* signednum(surgescript_parser_t* parser);
-static surgescript_parsetree_t* signedval(surgescript_parser_t* parser);
+static surgescript_parsetree_t* object(surgescript_parser_t* parser);
+static surgescript_parsetree_t* objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+
+static surgescript_parsetree_t* notelist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* notelist1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* note(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* endnote(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+
+static surgescript_parsetree_t* vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* statedecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* fundecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+
+static surgescript_parsetree_t* expr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* logicalorexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* logicalorexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* logicalandexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* logicalandexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* equalityexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* equalityexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* relationalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* relationalexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* additiveexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* additiveexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* multiplicativeexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* multiplicativeexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+
+static surgescript_parsetree_t* stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* blockstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* exprstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_parsetree_t* jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 
 /* public api */
@@ -123,7 +163,13 @@ surgescript_parsetree_t* surgescript_parser_parsemem(surgescript_parser_t* parse
     return parse(parser);
 }
 
-/* privates */
+
+
+
+
+/* privates & helpers */
+
+
 
 /* parses a script */
 surgescript_parsetree_t* parse(surgescript_parser_t* parser)
@@ -132,140 +178,27 @@ surgescript_parsetree_t* parse(surgescript_parser_t* parser)
     return objectlist(parser);
 }
 
-surgescript_parsetree_t* objectlist(surgescript_parser_t* parser)
+/* does the lookahead symbol have the given type? */
+bool gottype(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
-    if(parser->lookahead) {
-        surgescript_parsetree_t* node;
-        surgescript_parsetree_t* decl;
-        surgescript_parsetree_t* list;
-        surgescript_token_t* name;
-
-        /* read the object */
-        match(parser, SSTOK_OBJECT);
-        name = surgescript_token_clone(parser->lookahead);
-        match(parser, SSTOK_STRING);
-        match(parser, SSTOK_LCURLY);
-        decl = objectdecl(parser);
-        match(parser, SSTOK_RCURLY);
-
-        /* read other objects */
-        list = objectlist(parser);
-        node = surgescript_parsetree_create_objectlist(surgescript_token_lexeme(name), decl, list);
-        surgescript_token_destroy(name);
-        return node;
-    }
-    else
-        return emptytree(); /* end of file */
+    return parser->lookahead && surgescript_token_type(parser->lookahead) == symbol;
 }
-
-surgescript_parsetree_t* objectdecl(surgescript_parser_t* parser)
-{
-    return signedconst(parser);
-}
-
-surgescript_parsetree_t* signedconst(surgescript_parser_t* parser)
-{
-    surgescript_token_t* token = parser->lookahead;
-    surgescript_parsetree_t* node = NULL;
-    
-    check_if_eof(parser);
-
-    switch(surgescript_token_type(token)) {
-        case SSTOK_NULL:
-            node = surgescript_parsetree_create_null(NULL);
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_TRUE:
-            node = surgescript_parsetree_create_bool(NULL, true);
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_FALSE:
-            node = surgescript_parsetree_create_bool(NULL, false);
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_STRING:
-            node = surgescript_parsetree_create_string(NULL, surgescript_token_lexeme(token));
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_NUMBER:
-        case SSTOK_ADDITIVEOP:
-            node = signednum(parser);
-            break;
-
-        default:
-            ssfatal("Parse Error: expected a signedconst value on %s near line %d.", parser->filename, surgescript_token_linenumber(token));
-            break;
-    }
-
-    return node;
-}
-
-surgescript_parsetree_t* signednum(surgescript_parser_t* parser)
-{
-    surgescript_token_t* token = parser->lookahead;
-
-    if(gottype(parser, SSTOK_ADDITIVEOP)) {
-        float value = 0.0;
-        bool plus = !strcmp(surgescript_token_lexeme(token), "+");
-
-        match(parser, SSTOK_ADDITIVEOP);
-        if(gottype(parser, SSTOK_NUMBER))
-            value = atof(surgescript_token_lexeme(token));
-        match(parser, SSTOK_NUMBER);
-
-        return surgescript_parsetree_create_number(NULL, plus ? value : -value);
-    }
-    else if(gottype(parser, SSTOK_NUMBER)) {
-        float value = atof(surgescript_token_lexeme(token));
-        match(parser, SSTOK_NUMBER);
-        return surgescript_parsetree_create_number(NULL, value);
-    }
-
-    match(parser, SSTOK_NUMBER); /* will throw an error */
-    return surgescript_parsetree_create_number(NULL, 0.0f);
-}
-
-surgescript_parsetree_t* signedval(surgescript_parser_t* parser)
-{
-    /* TODO */
-    return signednum(parser);
-}
-
-
-/* helpers */
 
 /* match a symbol; throw a fatal error if the symbol is not matched */
 void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
-    if(parser->lookahead && surgescript_token_type(parser->lookahead) == symbol) {
+    if(gottype(parser, symbol)) {
         surgescript_token_destroy(parser->lookahead);
         parser->lookahead = surgescript_lexer_scan(parser->lexer); /* grab next symbol */
     }
-    else if(parser->lookahead) {
-        ssfatal(
-            "Parse Error: expected \"%s\" on %s near line %d.",
-            surgescript_tokentype_name(symbol),
-            parser->filename,
-            surgescript_token_linenumber(parser->lookahead)
-        );
-    }
-    else {
-        ssfatal(
-            "Parse Error: unexpected end of file on %s (did you forget a %s?)",
-            parser->filename,
-            surgescript_tokentype_name(symbol)
-        );
-    }
+    else
+        expect(parser, symbol);
 }
 
 /* match the given symbol or the empty symbol */
 bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
-    if(parser->lookahead && surgescript_token_type(parser->lookahead) == symbol) {
+    if(gottype(parser, symbol)) {
         match(parser, symbol);
         return true;
     }
@@ -273,18 +206,32 @@ bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
         return false;
 }
 
-/* does the lookahead symbol have the given type? */
-bool gottype(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
+/* throw an error if the lookahead is not of the expected type */
+void expect(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
-    return parser->lookahead && surgescript_token_type(parser->lookahead) == symbol;
+    if(parser->lookahead && surgescript_token_type(parser->lookahead) != symbol) {
+        ssfatal(
+            "Parse Error: expected \"%s\" on %s near line %d.",
+            surgescript_tokentype_name(symbol),
+            parser->filename,
+            surgescript_token_linenumber(parser->lookahead)
+        );
+    }
+    else if(NULL == parser->lookahead) {
+         ssfatal(
+            "Parse Error: unexpected end of the file on %s (did you forget a \"%s\"?)",
+            parser->filename,
+            surgescript_tokentype_name(symbol)
+        );
+    }
 }
 
 /* check if we have reached the end of the file; throw an error if so */
-void check_if_eof(surgescript_parser_t* parser)
+void expect_something(surgescript_parser_t* parser)
 {
     if(NULL == parser->lookahead) {
          ssfatal(
-            "Parse Error: unexpected end of file on %s",
+            "Parse Error: unexpected end of file on %s.",
             parser->filename
         );
     }   
@@ -308,3 +255,175 @@ surgescript_parsetree_t* emptytree()
 {
     return surgescript_parsetree_create();
 }
+
+
+
+
+
+
+
+/* non-terminals of the grammar */
+
+surgescript_parsetree_t* objectlist(surgescript_parser_t* parser)
+{
+    if(parser->lookahead) {
+        surgescript_parsetree_t* node;
+        surgescript_parsetree_t* objectnode;
+        surgescript_parsetree_t* objectlistnode;
+
+        objectnode = object(parser);
+        objectlistnode = objectlist(parser);
+
+        node = surgescript_parsetree_create_objectlist(objectnode, objectlistnode);
+        return node;
+    }
+    else
+        return emptytree(); /* end of file */
+}
+
+surgescript_parsetree_t* object(surgescript_parser_t* parser)
+{
+    surgescript_parsetree_t* objectdeclnode;
+    surgescript_nodecontext_t context;
+
+    match(parser, SSTOK_OBJECT);
+    expect(parser, SSTOK_STRING);
+    context = nodecontext(
+        surgescript_util_strdup(surgescript_token_lexeme(parser->lookahead)), /* object name */
+        NULL, /* symbol table */
+        surgescript_program_create(0, 0) /* object constructor */
+    );
+    match(parser, SSTOK_STRING);
+    match(parser, SSTOK_LCURLY);
+    objectdeclnode = objectdecl(parser, context);
+    match(parser, SSTOK_RCURLY);
+
+    return surgescript_parsetree_create_object(context, objectdeclnode);
+}
+
+surgescript_parsetree_t* objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_parsetree_t* notelistnode;
+    surgescript_parsetree_t* vardecllistnode;
+    surgescript_parsetree_t* statedecllistnode;
+    surgescript_parsetree_t* fundecllistnode;
+
+    notelistnode = emptytree();
+    vardecllistnode = emptytree();
+    statedecllistnode = emptytree();
+    fundecllistnode = emptytree();
+
+    return surgescript_parsetree_create_objectdecl(context, notelistnode, vardecllistnode, statedecllistnode, fundecllistnode);
+}
+
+
+
+
+/* notes */
+
+surgescript_parsetree_t* signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_token_t* token;
+    surgescript_parsetree_t* node;
+    
+    expect_something(parser);
+    token = parser->lookahead;
+
+    switch(surgescript_token_type(token)) {
+        case SSTOK_NULL:
+            node = surgescript_parsetree_create_null(context);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_TRUE:
+            node = surgescript_parsetree_create_bool(context, true);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_FALSE:
+            node = surgescript_parsetree_create_bool(context, false);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_STRING:
+            node = surgescript_parsetree_create_string(context, surgescript_token_lexeme(token));
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_NUMBER:
+        case SSTOK_ADDITIVEOP:
+            node = signednum(parser, context);
+            break;
+
+        default:
+            ssfatal("Parse Error: expected a signedconst value on %s near line %d.", parser->filename, surgescript_token_linenumber(token));
+            return emptytree();
+    }
+
+    return node;
+}
+
+surgescript_parsetree_t* signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_token_t* token;
+    
+    expect_something(parser);
+    token = parser->lookahead;
+
+    if(gottype(parser, SSTOK_ADDITIVEOP)) {
+        float value = 0.0;
+        bool plus = !strcmp(surgescript_token_lexeme(token), "+");
+
+        match(parser, SSTOK_ADDITIVEOP);
+        if(gottype(parser, SSTOK_NUMBER))
+            value = atof(surgescript_token_lexeme(token));
+        match(parser, SSTOK_NUMBER);
+
+        return surgescript_parsetree_create_number(context, plus ? value : -value);
+    }
+    else if(gottype(parser, SSTOK_NUMBER)) {
+        float value = atof(surgescript_token_lexeme(token));
+        match(parser, SSTOK_NUMBER);
+        return surgescript_parsetree_create_number(context, value);
+    }
+
+    expect(parser, SSTOK_NUMBER); /* will throw an error */
+    return emptytree();
+}
+
+
+surgescript_parsetree_t* vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* statedecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* fundecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+
+surgescript_parsetree_t* expr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* logicalorexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* logicalorexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* logicalandexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* logicalandexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* equalityexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* equalityexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* relationalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* relationalexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* additiveexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* additiveexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* multiplicativeexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* multiplicativeexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+
+surgescript_parsetree_t* stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* blockstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* exprstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+surgescript_parsetree_t* jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+
+

@@ -12,6 +12,9 @@
 
 /*
  * SurgeScript grammar:
+ * (e is the empty symbol)
+ *
+ *
  *
  * <script> := <objectlist> // start here
  *
@@ -33,7 +36,10 @@
  * <statedecl> := state string { <stmtlist> }
  *
  * <fundecllist> := <fundecl> <fundecllist> | e
- * <fundecl> := fun identifier ( <funargs> ) { <stmtlist> }
+ * <fundecl> := fun identifier ( ) { <stmtlist> }
+ *           |  fun identifier ( <funargs> ) { <stmtlist> }
+ * <funargs> := identifier <funargs1>
+ * <funargs1> := , identifier <funargs1> | e
  *
  *
  *
@@ -52,11 +58,21 @@
  * <additiveexpr1> := additiveop <multiplicativeexpr> <additiveexpr1> | e
  * <multiplicativeexpr> := <unaryexpr> <multiplicativeexpr1>
  * <multiplicativeexpr1> := multiplicativeop <unaryexpr> <multiplicativeexpr1> | e
- * <unaryexpr> := + <unaryexpr> | - <unaryexpr> | ! <unaryexpr>
+ * <unaryexpr> := + <unaryexpr> | - <unaryexpr>
+ *             |  ++ <unaryexpr> | -- <unaryexpr>
+ *             |  ! <unaryexpr>
  *             |  typeof <unaryexpr> | typeof ( <unaryexpr> )
- *             |  <primaryexpr>
+ *             |  <postfixexpr>
+ * <postfixexpr> := identifier . <postfixexpr>
+ *               |  identifier ( ) <postfixexpr>
+ *               |  identifier ( <funargsexprlist> ) <postfixexpr>
+ *               |  identifier [ <expr> ] <postfixexpr>
+ *               |  <primaryexpr>
  * <primaryexpr> := identifier | <constant> | ( <expr> )
  * <constant> := number | string | true | false | null
+ * <funargsexprlist> := <assignexpr> <funargsexprlist1>
+ * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e
+ *
  *
  *
  * <stmtlist> := <stmt> <stmtlist> | e

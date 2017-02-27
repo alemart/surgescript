@@ -22,16 +22,17 @@ typedef struct surgescript_parsetree_string_t surgescript_parsetree_string_t;
 typedef struct surgescript_parsetree_bool_t surgescript_parsetree_bool_t;
 typedef struct surgescript_parsetree_null_t surgescript_parsetree_null_t;
 typedef struct surgescript_parsetree_objectlist_t surgescript_parsetree_objectlist_t;
-typedef struct surgescript_parsetree_unary_t surgescript_parsetree_unary_t;
+typedef struct surgescript_parsetree_object_t surgescript_parsetree_object_t;
+typedef struct surgescript_parsetree_objectdecl_t surgescript_parsetree_objectdecl_t;
 
 /* basic tree */
 struct surgescript_parsetree_t
 {
-    surgescript_program_t* program; /* the program we belong to (may be NULL) */
+    surgescript_nodecontext_t context; /* the context of this node */
     void (*emit)(surgescript_parsetree_t*); /* method for emitting code */
     void (*release)(surgescript_parsetree_t*); /* destructor */
 };
-static surgescript_parsetree_t* init_tree(void* tree, surgescript_program_t* program, void (*emit)(surgescript_parsetree_t*), void (*release)(surgescript_parsetree_t*));
+static inline surgescript_parsetree_t* init_tree(void* tree, surgescript_nodecontext_t context, void (*emit)(surgescript_parsetree_t*), void (*release)(surgescript_parsetree_t*));
 static void emit_tree(surgescript_parsetree_t* tree);
 static void release_tree(surgescript_parsetree_t* tree);
 
@@ -69,24 +70,32 @@ static void emit_null(surgescript_parsetree_t* tree);
 struct surgescript_parsetree_objectlist_t
 {
     surgescript_parsetree_t base;
-    char* name;
-    surgescript_parsetree_t* objectdecl;
+    surgescript_parsetree_t* object;
     surgescript_parsetree_t* objectlist;
 };
 static void emit_objectlist(surgescript_parsetree_t* tree);
 static void release_objectlist(surgescript_parsetree_t* tree);
 
-
-
-/* operators */
-struct surgescript_parsetree_unary_t
+struct surgescript_parsetree_object_t
 {
     surgescript_parsetree_t base;
-    char unaryop;
-    surgescript_parsetree_t* value;
+    surgescript_parsetree_t* objectdecl;
 };
-static void emit_unary(surgescript_parsetree_t* tree);
-static void release_unary(surgescript_parsetree_t* tree);
+static void emit_object(surgescript_parsetree_t* tree);
+static void release_object(surgescript_parsetree_t* tree);
+
+struct surgescript_parsetree_objectdecl_t
+{
+    surgescript_parsetree_t base;
+    surgescript_parsetree_t* notelist;
+    surgescript_parsetree_t* vardecllist;
+    surgescript_parsetree_t* statedecllist;
+    surgescript_parsetree_t* fundecllist;
+};
+static void emit_objectdecl(surgescript_parsetree_t* tree);
+static void release_objectdecl(surgescript_parsetree_t* tree);
+
+
 
 
 
@@ -99,7 +108,7 @@ static void release_unary(surgescript_parsetree_t* tree);
 surgescript_parsetree_t* surgescript_parsetree_create()
 {
     surgescript_parsetree_t* node = ssmalloc(sizeof *node);
-    return init_tree(node, NULL, NULL, NULL);
+    return init_tree(node, nodecontext(NULL, NULL, NULL), NULL, NULL);
 }
 
 /*
@@ -123,149 +132,70 @@ void surgescript_parsetree_emit(surgescript_parsetree_t* tree)
 
 
 
-
-
-
-
-
+/* Constants */
 
 /*
  * surgescript_parsetree_create_null()
  * Creates a null node
  */
-surgescript_parsetree_t* surgescript_parsetree_create_null(surgescript_program_t* program)
+surgescript_parsetree_t* surgescript_parsetree_create_null(surgescript_nodecontext_t context)
 {
-    surgescript_parsetree_null_t* tree = ssmalloc(sizeof *tree);
-    return init_tree(tree, program, emit_null, NULL);
+    surgescript_parsetree_null_t* node = ssmalloc(sizeof *node);
+    return init_tree(node, context, emit_null, NULL);
 }
+
+void emit_null(surgescript_parsetree_t* tree)
+{
+    printf("\tnull\n");
+    ;
+}
+
 
 /*
  * surgescript_parsetree_create_bool()
  * Creates a boolean node
  */
-surgescript_parsetree_t* surgescript_parsetree_create_bool(surgescript_program_t* program, bool value)
+surgescript_parsetree_t* surgescript_parsetree_create_bool(surgescript_nodecontext_t context, bool value)
 {
-    surgescript_parsetree_number_t* tree = ssmalloc(sizeof *tree);
-    tree->value = value;
-    return init_tree(tree, program, emit_bool, NULL);
-}
-
-/*
- * surgescript_parsetree_create_number()
- * Creates a numeric node
- */
-surgescript_parsetree_t* surgescript_parsetree_create_number(surgescript_program_t* program, float value)
-{
-    surgescript_parsetree_number_t* tree = ssmalloc(sizeof *tree);
-    tree->value = value;
-    return init_tree(tree, program, emit_number, NULL);
-}
-
-/*
- * surgescript_parsetree_create_string()
- * Creates a text node
- */
-surgescript_parsetree_t* surgescript_parsetree_create_string(surgescript_program_t* program, const char* value)
-{
-    surgescript_parsetree_string_t* tree = ssmalloc(sizeof *tree);
-    tree->value = surgescript_util_strdup(value);
-    return init_tree(tree, program, emit_string, release_string);
-}
-
-
-
-
-
-
-
-
-
-
-
-/*
- * surgescript_parsetree_create_objectlist()
- * A list of objects
- */
-surgescript_parsetree_t* surgescript_parsetree_create_objectlist(const char* name, surgescript_parsetree_t* objectdecl, surgescript_parsetree_t* objectlist)
-{
-    surgescript_parsetree_objectlist_t* node = ssmalloc(sizeof *node);
-    node->name = surgescript_util_strdup(name);
-    node->objectdecl = objectdecl;
-    node->objectlist = objectlist;
-    return init_tree(node, NULL, emit_objectlist, release_objectlist);
-}
-
-
-
-
-
-
-
-
-/*
- * surgescript_parser_create_unary()
- * Create a unary operator
- */
-surgescript_parsetree_t* surgescript_parsetree_create_unary(struct surgescript_program_t* program, const char* unaryop, surgescript_parsetree_t* value)
-{
-    surgescript_parsetree_unary_t* node = ssmalloc(sizeof *node);
-    node->unaryop = unaryop[0];
+    surgescript_parsetree_number_t* node = ssmalloc(sizeof *node);
     node->value = value;
-    return init_tree(node, program, emit_unary, release_unary);
-}
-
-
-
-/*
- * surgescript_()
- * 
- */
-
-
-
-
-/* privates */
-
-/* helper for initializing trees */
-surgescript_parsetree_t* init_tree(void* tree, surgescript_program_t* program, void (*emit)(surgescript_parsetree_t*), void (*release)(surgescript_parsetree_t*))
-{
-    surgescript_parsetree_t* node = (surgescript_parsetree_t*)tree;
-    node->program = program;
-    node->emit = emit ? emit : emit_tree;
-    node->release = release ? release : release_tree;
-    return node;
-}
-
-/* do nothing (generate no-operation code) */
-void emit_tree(surgescript_parsetree_t* tree)
-{
-    ;
-}
-
-/* just release itself (useful for releasing basic trees) */
-void release_tree(surgescript_parsetree_t* tree)
-{
-    ssfree(tree);
-}
-
-
-
-
-/* code generation: constants */
-void emit_number(surgescript_parsetree_t* tree)
-{
-    surgescript_parsetree_number_t* node = (surgescript_parsetree_number_t*)tree;
-    printf("\t%f\n", node->value);
+    return init_tree(node, context, emit_bool, NULL);
 }
 
 void emit_bool(surgescript_parsetree_t* tree)
 {
     ;
 }
-void emit_null(surgescript_parsetree_t* tree)
+
+/*
+ * surgescript_parsetree_create_number()
+ * Creates a numeric node
+ */
+surgescript_parsetree_t* surgescript_parsetree_create_number(surgescript_nodecontext_t context, float value)
 {
-    printf("\tnull\n");
-    ;
+    surgescript_parsetree_number_t* node = ssmalloc(sizeof *node);
+    node->value = value;
+    return init_tree(node, context, emit_number, NULL);
+}
+
+void emit_number(surgescript_parsetree_t* tree)
+{
+    surgescript_parsetree_number_t* node = (surgescript_parsetree_number_t*)tree;
+    printf("\t%f\n", node->value);
+}
+
+
+
+
+/*
+ * surgescript_parsetree_create_string()
+ * Creates a text node
+ */
+surgescript_parsetree_t* surgescript_parsetree_create_string(surgescript_nodecontext_t context, const char* value)
+{
+    surgescript_parsetree_string_t* node = ssmalloc(sizeof *node);
+    node->value = surgescript_util_strdup(value);
+    return init_tree(node, context, emit_string, release_string);
 }
 
 void emit_string(surgescript_parsetree_t* tree)
@@ -281,35 +211,149 @@ void release_string(surgescript_parsetree_t* tree)
 }
 
 
-/* object list & decl */
+
+
+
+/* object list & decls */
+/* (comment headers omitted) */
+
+/* object list */
+surgescript_parsetree_t* surgescript_parsetree_create_objectlist(surgescript_parsetree_t* object, surgescript_parsetree_t* objectlist)
+{
+    surgescript_parsetree_objectlist_t* node = ssmalloc(sizeof *node);
+    node->object = object;
+    node->objectlist = objectlist;
+    return init_tree(node, nodecontext(NULL, NULL, NULL), emit_objectlist, release_objectlist);
+}
+
 void emit_objectlist(surgescript_parsetree_t* tree)
 {
     surgescript_parsetree_objectlist_t* node = (surgescript_parsetree_objectlist_t*)tree;
-    printf("Object \"%s\":\n", node->name);
-    node->objectdecl->emit(node->objectdecl);
+    printf("Object list:\n");
+    node->object->emit(node->object);
     node->objectlist->emit(node->objectlist);
 }
 
 void release_objectlist(surgescript_parsetree_t* tree)
 {
     surgescript_parsetree_objectlist_t* node = (surgescript_parsetree_objectlist_t*)tree;
+    node->object->release(node->object);
     node->objectlist->release(node->objectlist);
+    release_tree(tree);
+}
+
+
+
+/* object */
+surgescript_parsetree_t* surgescript_parsetree_create_object(surgescript_nodecontext_t context, surgescript_parsetree_t* objectdecl)
+{
+    surgescript_parsetree_object_t* node = ssmalloc(sizeof *node);
+    node->objectdecl = objectdecl;
+    return init_tree(node, context, emit_object, release_object);
+}
+
+void emit_object(surgescript_parsetree_t* tree)
+{
+    surgescript_parsetree_object_t* node = (surgescript_parsetree_object_t*)tree;
+    printf("\t%s:\n", tree->context.object_name);
+    node->objectdecl->emit(node->objectdecl);
+}
+
+void release_object(surgescript_parsetree_t* tree)
+{
+    surgescript_parsetree_object_t* node = (surgescript_parsetree_object_t*)tree;
     node->objectdecl->release(node->objectdecl);
-    ssfree(node->name);
+    ssfree((char*)(tree->context.object_name));
+    // TODO: free symbol table
     release_tree(tree);
 }
 
-/* operators */
-void emit_unary(surgescript_parsetree_t* tree)
+
+
+/* object declarations */
+surgescript_parsetree_t* surgescript_parsetree_create_objectdecl(surgescript_nodecontext_t context, surgescript_parsetree_t* notelist, surgescript_parsetree_t* vardecllist, surgescript_parsetree_t* statedecllist, surgescript_parsetree_t* fundecllist)
 {
-    surgescript_parsetree_unary_t* node = (surgescript_parsetree_unary_t*)tree;
-    putchar(node->unaryop);
-    node->value->emit(node->value);
+    surgescript_parsetree_objectdecl_t* node = ssmalloc(sizeof *node);
+    node->notelist = notelist;
+    node->vardecllist = vardecllist;
+    node->statedecllist = statedecllist;
+    node->fundecllist = fundecllist;
+    return init_tree(node, context, emit_objectdecl, release_objectdecl);
 }
 
-void release_unary(surgescript_parsetree_t* tree)
+void emit_objectdecl(surgescript_parsetree_t* tree)
 {
-    surgescript_parsetree_unary_t* node = (surgescript_parsetree_unary_t*)tree;
-    node->value->release(node->value);
+    surgescript_parsetree_objectdecl_t* node = (surgescript_parsetree_objectdecl_t*)tree;
+    printf("\t\tdeclarations of %s => %p\n", tree->context.object_name, tree->context.program);
+    node->notelist->emit(node->notelist);
+    node->vardecllist->emit(node->vardecllist);
+    node->statedecllist->emit(node->statedecllist);
+    node->fundecllist->emit(node->fundecllist);
+}
+
+void release_objectdecl(surgescript_parsetree_t* tree)
+{
+    surgescript_parsetree_objectdecl_t* node = (surgescript_parsetree_objectdecl_t*)tree;
+    node->notelist->release(node->notelist);
+    node->vardecllist->release(node->vardecllist);
+    node->statedecllist->release(node->statedecllist);
+    node->fundecllist->release(node->fundecllist);
     release_tree(tree);
+}
+
+
+
+/*
+
+
+surgescript_parsetree_t* surgescript_parsetree_create_uuu(surgescript_nodecontext_t context)
+{
+    surgescript_parsetree_uuu_t* node = ssmalloc(sizeof *node);
+    return init_tree(node, context, emit_uuu, release_uuu);
+}
+
+void emit_uuu(surgescript_parsetree_t* tree)
+{
+    surgescript_parsetree_uuu_t* node = (surgescript_parsetree_uuu_t*)tree;
+}
+
+void release_uuu(surgescript_parsetree_t* tree)
+{
+    surgescript_parsetree_uuu_t* node = (surgescript_parsetree_uuu_t*)tree;
+    release_tree(tree);
+}
+
+
+*/
+
+/*
+ * surgescript_()
+ * 
+ */
+
+
+
+
+/* privates */
+
+/* helper for initializing trees */
+surgescript_parsetree_t* init_tree(void* tree, surgescript_nodecontext_t context, void (*emit)(surgescript_parsetree_t*), void (*release)(surgescript_parsetree_t*))
+{
+    surgescript_parsetree_t* node = (surgescript_parsetree_t*)tree;
+    node->context = context;
+    node->emit = emit ? emit : emit_tree;
+    node->release = release ? release : release_tree;
+    return node;
+}
+
+/* do nothing */
+void emit_tree(surgescript_parsetree_t* tree)
+{
+    ;
+}
+
+/* just release itself (useful for releasing basic trees, i.e., leaf nodes) */
+void release_tree(surgescript_parsetree_t* tree)
+{
+    ssfree(tree);
 }
