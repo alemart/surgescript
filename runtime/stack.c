@@ -34,9 +34,9 @@ static const size_t SSSTACK_INITIAL_SIZE = 102400; /* 100K */
 /* the stack structure */
 struct surgescript_stack_t
 {
-    size_t size;                /* size of the stack */
-    int sp, bp;                 /* pointers */
-    surgescript_var_t** data;   /* stack data */
+    size_t size;                     /* size of the stack */
+    surgescript_stackptr_t sp, bp;   /* pointers */
+    surgescript_var_t** data;        /* stack data */
 };
 
 
@@ -69,9 +69,7 @@ surgescript_stack_t* surgescript_stack_create()
  */
 surgescript_stack_t* surgescript_stack_destroy(surgescript_stack_t* stack)
 {
-    int i;
-
-    for(i = stack->size - 1; i >= 0; i--) {
+    for(surgescript_stackptr_t i = stack->size - 1; i >= 0; i--) {
         if(stack->data[i] != NULL)
             surgescript_var_destroy(stack->data[i]);
     }
@@ -133,7 +131,7 @@ void surgescript_stack_popenv(surgescript_stack_t* stack)
 {
     if(stack->sp > 0) {
         /* get previous bp & deallocate everything in between */
-        int i, prev_bp = surgescript_var_get_number(stack->data[stack->bp]);
+        surgescript_stackptr_t i, prev_bp = surgescript_var_get_number(stack->data[stack->bp]);
         for(i = stack->sp; i >= stack->bp; i--) {
             if(stack->data[i] != NULL)
                 stack->data[i] = surgescript_var_destroy(stack->data[i]);
@@ -161,9 +159,9 @@ surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack)
  * surgescript_stack_at()
  * Gets the (base+offset)-th element from the stack
  */
-surgescript_var_t* surgescript_stack_at(surgescript_stack_t* stack, int offset)
+surgescript_var_t* surgescript_stack_at(surgescript_stack_t* stack, surgescript_stackptr_t offset)
 {
-    const int idx = stack->bp + offset;
+    const surgescript_stackptr_t idx = stack->bp + offset;
 
     if(idx >= 0 && idx <= stack->sp)
         return stack->data[idx];
@@ -187,7 +185,7 @@ int surgescript_stack_empty(surgescript_stack_t* stack)
  */
 void surgescript_stack_scan_objects(surgescript_stack_t* stack, void* userdata, void (*callback)(unsigned,void*))
 {
-    for(int i = stack->sp - 1; i >= 0; i--) { /* check all environments */
+    for(surgescript_stackptr_t i = stack->sp - 1; i >= 0; i--) { /* check all environments */
         if(stack->data[i] != NULL) {
             unsigned handle = surgescript_var_get_objecthandle(stack->data[i]);
             if(handle != 0) /* if it is an object and not null */
