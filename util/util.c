@@ -133,9 +133,9 @@ char* surgescript_util_strncpy(char* dst, const char* src, size_t n)
  * surgescript_util_strdup()
  * Copies a string into another, allocating the required memory
  */
-char* surgescript_util_strdup(const char* src)
+char* surgescript_util_strdup(const char* src, const char* location)
 {
-    char* str = ssmalloc(sizeof(char) * (1 + strlen(src)));
+    char* str = surgescript_util_malloc(sizeof(char) * (1 + strlen(src)), location);
     return strcpy(str, src);
 }
 
@@ -159,8 +159,9 @@ void crash(const char* location) /* out of memory error */
     static char buf[64] = "Out of memory in ";
     
     strncat(buf, location, sizeof(buf) - 1);
+    buf[sizeof(buf) - 1] = 0;
 
-    fputs(buf, stderr);
+    log_function(buf);
     fatal_function(buf);
     exit(1); /* just in case */
 }

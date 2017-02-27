@@ -136,7 +136,7 @@ surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char
 {
     RELEASE_DATA(var);
     var->type = SSVAR_STRING;
-    var->string = surgescript_util_strdup(string);
+    var->string = ssstrdup(string);
     return var;
 }
 
@@ -225,15 +225,15 @@ char* surgescript_var_get_string(const surgescript_var_t* var)
 {
     switch(var->type) {
     case SSVAR_STRING:
-        return surgescript_util_strdup(var->string);
+        return ssstrdup(var->string);
     case SSVAR_BOOL:
-        return surgescript_util_strdup(var->boolean ? "true" : "false");
+        return ssstrdup(var->boolean ? "true" : "false");
     case SSVAR_NULL:
-        return surgescript_util_strdup("null");
+        return ssstrdup("null");
     default: {
         char buf[128];
         surgescript_var_to_string(var, buf, sizeof(buf) / sizeof(char));
-        return surgescript_util_strdup(buf);
+        return ssstrdup(buf);
     }
     }
 }
@@ -268,7 +268,7 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
         dst->number = src->number;
         break;
     case SSVAR_STRING:
-        dst->string = surgescript_util_strdup(src->string);
+        dst->string = ssstrdup(src->string);
         break;
     case SSVAR_OBJECTHANDLE:
         dst->handle = src->handle;

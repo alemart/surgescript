@@ -32,7 +32,7 @@ surgescript_token_t* surgescript_token_create(surgescript_tokentype_t type, cons
 {
     surgescript_token_t* token = ssmalloc(sizeof *token);
     token->type = type;
-    token->lexeme = surgescript_util_strdup(lexeme);
+    token->lexeme = ssstrdup(lexeme);
     token->linenumber = linenumber;
     return token;
 }
@@ -93,7 +93,7 @@ surgescript_token_t* surgescript_token_clone(surgescript_token_t* token)
 {
     surgescript_token_t* clone = ssmalloc(sizeof *clone);
     clone->type = token->type;
-    clone->lexeme = surgescript_util_strdup(token->lexeme);
+    clone->lexeme = ssstrdup(token->lexeme);
     clone->linenumber = token->linenumber;
     return clone;
 }

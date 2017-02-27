@@ -95,7 +95,7 @@ surgescript_parser_t* surgescript_parser_create()
     surgescript_parser_t* parser = ssmalloc(sizeof *parser);
     parser->lookahead = NULL;
     parser->lexer = surgescript_lexer_create();
-    parser->filename = surgescript_util_strdup("<unspecified>");
+    parser->filename = ssstrdup("<unspecified>");
     return parser;
 }
 
@@ -137,7 +137,7 @@ surgescript_parsetree_t* surgescript_parser_parsefile(surgescript_parser_t* pars
 
         /* parse it */
         ssfree(parser->filename);
-        parser->filename = surgescript_util_strdup(ssbasename(absolute_path));
+        parser->filename = ssstrdup(ssbasename(absolute_path));
         surgescript_lexer_set(parser->lexer, data);
         tree = parse(parser);
 
@@ -158,7 +158,7 @@ surgescript_parsetree_t* surgescript_parser_parsefile(surgescript_parser_t* pars
 surgescript_parsetree_t* surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_in_memory)
 {
     ssfree(parser->filename);
-    parser->filename = surgescript_util_strdup("<memory>");
+    parser->filename = ssstrdup("<memory>");
     surgescript_lexer_set(parser->lexer, code_in_memory);
     return parse(parser);
 }
@@ -289,7 +289,7 @@ surgescript_parsetree_t* object(surgescript_parser_t* parser)
     match(parser, SSTOK_OBJECT);
     expect(parser, SSTOK_STRING);
     context = nodecontext(
-        surgescript_util_strdup(surgescript_token_lexeme(parser->lookahead)), /* object name */
+        ssstrdup(surgescript_token_lexeme(parser->lookahead)), /* object name */
         NULL, /* symbol table */
         surgescript_program_create(0, 0) /* object constructor */
     );

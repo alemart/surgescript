@@ -84,7 +84,7 @@ bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const cha
 void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_heapptr_t address)
 {
     if(indexof_symbol(symtable, symbol) < 0) {
-        char* symname = surgescript_util_strdup(symbol);
+        char* symname = ssstrdup(symbol);
         surgescript_symtable_entry_t entry = { .symbol = symname, .heapaddr = address, .vtable = &heapvt };
         ssarray_push(symtable->entry, entry);
     }
@@ -95,7 +95,7 @@ void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, cons
 void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_stackptr_t address)
 {
     if(indexof_symbol(symtable, symbol) < 0) {
-        char* symname = surgescript_util_strdup(symbol);
+        char* symname = ssstrdup(symbol);
         surgescript_symtable_entry_t entry = { .symbol = symname, .stackaddr = address, .vtable = &stackvt };
         ssarray_push(symtable->entry, entry);
     }

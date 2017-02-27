@@ -68,7 +68,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
 {
     surgescript_object_t* obj = ssmalloc(sizeof *obj);
 
-    obj->name = surgescript_util_strdup(name);
+    obj->name = ssstrdup(name);
     obj->heap = surgescript_heap_create();
     obj->renv = surgescript_renv_create(obj, stack, obj->heap, program_pool, object_manager);
 
@@ -76,7 +76,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->parent = handle;
     ssarray_init(obj->child);
 
-    obj->state_name = surgescript_util_strdup(INITIAL_STATE);
+    obj->state_name = ssstrdup(INITIAL_STATE);
     obj->is_active = true;
     obj->is_killed = false;
     obj->is_reachable = false;
@@ -325,7 +325,7 @@ const char* surgescript_object_state(const surgescript_object_t *object)
 void surgescript_object_set_state(surgescript_object_t* object, const char* state_name)
 {
     ssfree(object->state_name);
-    object->state_name = surgescript_util_strdup(state_name ? state_name : INITIAL_STATE);
+    object->state_name = ssstrdup(state_name ? state_name : INITIAL_STATE);
 }
 
 /*

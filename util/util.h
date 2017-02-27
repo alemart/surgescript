@@ -27,6 +27,7 @@
 #define ssfree                      surgescript_util_free
 #define sslog                       surgescript_util_log
 #define ssfatal                     surgescript_util_fatal
+#define ssstrdup(str)               surgescript_util_strdup((str), __FILE__ ":" ssstr(__LINE__))
 
 /* public routines */
 void* surgescript_util_malloc(size_t bytes, const char* location); /* memory allocation */
@@ -38,6 +39,6 @@ void surgescript_util_fatal(const char* fmt, ...); /* logs a message and kills t
 void surgescript_util_set_error_functions(void (*log)(const char*), void (*fatal)(const char*)); /* set custom error functions */
 
 char* surgescript_util_strncpy(char* dst, const char* src, size_t n); /* strcpy */
-char* surgescript_util_strdup(const char* src); /* strdup */
+char* surgescript_util_strdup(const char* src, const char* location); /* strdup */
 
 #endif

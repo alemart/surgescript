@@ -194,7 +194,7 @@ void emit_number(surgescript_parsetree_t* tree)
 surgescript_parsetree_t* surgescript_parsetree_create_string(surgescript_nodecontext_t context, const char* value)
 {
     surgescript_parsetree_string_t* node = ssmalloc(sizeof *node);
-    node->value = surgescript_util_strdup(value);
+    node->value = ssstrdup(value);
     return init_tree(node, context, emit_string, release_string);
 }
 

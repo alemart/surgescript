@@ -137,7 +137,7 @@ void surgescript_program_add_label(surgescript_program_t* program, surgescript_p
  */
 int surgescript_program_add_text(surgescript_program_t* program, const char* text)
 {
-    ssarray_push(program->text, surgescript_util_strdup(text));
+    ssarray_push(program->text, ssstrdup(text));
     return ssarray_length(program->text) - 1;
 }
 
