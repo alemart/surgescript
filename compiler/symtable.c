@@ -46,8 +46,8 @@ struct surgescript_symtable_entry_t
 /* what's a symbol table? */
 struct surgescript_symtable_t
 {
-    surgescript_symtable_t* parent;
-    SSARRAY(surgescript_symtable_entry_t, entry);
+    surgescript_symtable_t* parent; /* pointer to its parent (parent scope) */
+    SSARRAY(surgescript_symtable_entry_t, entry); /* an entry of the symbol table */
 };
 
 
@@ -160,15 +160,20 @@ void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char
 
 /*
  * surgescript_symtable_count()
- * How many symbols does this table have? Use deepcount == true if you want to take into account
- * the symbols of the parent (and the parent of the parent, and so on) as well
+ * How many symbols does this table have?
  */
-int surgescript_symtable_count(surgescript_symtable_t* symtable, bool deepcount)
+int surgescript_symtable_count(surgescript_symtable_t* symtable)
 {
-    if(!deepcount)
-        return ssarray_length(symtable->entry);
+    return ssarray_length(symtable->entry);
+}
 
-    return symtable ? ssarray_length(symtable->entry) + surgescript_symtable_count(symtable->parent, true) : 0;
+/*
+ * surgescript_symtable_deepcount()
+ * How many symbols does this table have, including the parent (and its parent, and so on) ?
+ */
+int surgescript_symtable_deepcount(surgescript_symtable_t* symtable)
+{
+    return symtable ? ssarray_length(symtable->entry) + surgescript_symtable_deepcount(symtable->parent) : 0;
 }
 
 

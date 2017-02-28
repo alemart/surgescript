@@ -34,6 +34,9 @@ void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char
 bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const char* symbol);
 
 /* count the number of symbols */
-int surgescript_symtable_count(surgescript_symtable_t* symtable, bool deepcount);
+int surgescript_symtable_count(surgescript_symtable_t* symtable);
+
+/* count the number of symbols, including the parent */
+int surgescript_symtable_deepcount(surgescript_symtable_t* symtable);
 
 #endif
