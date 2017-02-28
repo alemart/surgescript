@@ -16,7 +16,7 @@
 #include "compiler/parser.h"
 #include "compiler/parsetree.h"
 
-#if 1
+#if 0
 /* setup some programs */
 static void setup(surgescript_program_t* program)
 {
@@ -168,18 +168,16 @@ int main()
 }
 #endif
 
-#if 0
+#if 1
 /* testing the parser */
 int main()
 {
     surgescript_parser_t* parser = surgescript_parser_create();
-    surgescript_parsetree_t* tree;
+    bool success;
 
-    tree = surgescript_parser_parsefile(parser, "./test.ss");
-    if(tree) {
+    success = surgescript_parser_parsefile(parser, "./test.ss");
+    if(success) {
         puts("Parsed file.");
-        surgescript_parsetree_emit(tree);
-        surgescript_parsetree_destroy(tree);
     }
 
     surgescript_parser_destroy(parser);

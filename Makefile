@@ -47,17 +47,20 @@ token: compiler/token.h compiler/token.c utils
 lexer: compiler/lexer.h compiler/lexer.c token utils
 	$(CC) $(CFLAGS) -c compiler/lexer.c
 
-parsetree: compiler/parsetree.h compiler/parsetree.c token utils object_manager program_pool program
-	$(CC) $(CFLAGS) -c compiler/parsetree.c
-
-parser: compiler/parser.h compiler/parser.c lexer token utils
+parser: compiler/parser.h compiler/parser.c lexer token utils codegen
 	$(CC) $(CFLAGS) -c compiler/parser.c
+
+symtable: compiler/symtable.h compiler/symtable.c utils heap stack program
+	$(CC) $(CFLAGS) -c compiler/symtable.c
+
+codegen: compiler/codegen.h compiler/codegen.c utils symtable object_manager program_pool program
+	$(CC) $(CFLAGS) -c compiler/codegen.c
 
 main: main.c utils variable
 	$(CC) $(CFLAGS) -c main.c
 
-all: main utils variable heap stack program program_pool object renv vm sslib token lexer parser parsetree
-	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o variable.o heap.o stack.o program.o program_pool.o object_manager.o renv.o object.o vm.o sslib.a token.o lexer.o parser.o parsetree.o -lm
+all: main utils variable heap stack program program_pool object renv vm sslib token lexer parser symtable codegen
+	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o variable.o heap.o stack.o program.o program_pool.o object_manager.o renv.o object.o vm.o sslib.a token.o lexer.o parser.o symtable.o codegen.o -lm
 
 clean:
 	$(RM) $(TARGET) *.o

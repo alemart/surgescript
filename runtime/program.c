@@ -218,7 +218,7 @@ void surgescript_program_run(surgescript_program_t* program, surgescript_renv_t*
 }
 
 /* dump the program to a file */
-void surgescript_program_dump(const surgescript_program_t* program, FILE* fp)
+void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 {
     int i;
     char hex[2][16];
@@ -688,7 +688,7 @@ void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned
 /* writes data to buf, in hex/little-endian format (writes 9 bytes) */
 char* hexdump32(long data, char* buf)
 {
-    snprintf(buf, 9, "%08x", data);
+    snprintf(buf, 9, "%08lx", (unsigned long)data);
     return buf;
 }
 

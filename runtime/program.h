@@ -84,6 +84,6 @@ int surgescript_program_arity(const surgescript_program_t* program); /* what's t
 const char* surgescript_program_get_text(const surgescript_program_t* program, int index); /* reads a string literal (text[index]) from the program */
 int surgescript_program_find_text(const surgescript_program_t* program, const char* text); /* finds the first index such that text[index] == text, or -1 if not found */
 int surgescript_program_text_count(const surgescript_program_t* program); /* how many string literals exist in the program? */
-void surgescript_program_dump(const surgescript_program_t* program, FILE* fp); /* dump the program to a file */
+void surgescript_program_dump(surgescript_program_t* program, FILE* fp); /* dump the program to a file */
 
 #endif

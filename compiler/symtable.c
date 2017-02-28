@@ -17,17 +17,17 @@
 /* utilities */
 typedef struct surgescript_symtable_entry_t surgescript_symtable_entry_t;
 typedef struct surgescript_symtable_entry_vtable_t surgescript_symtable_entry_vtable_t;
-static void read_from_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k);
-static void read_from_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k);
-static void write_to_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k);
-static void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k);
+static void read_from_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+static void read_from_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+static void write_to_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+static void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static int indexof_symbol(surgescript_symtable_t* symtable, const char* symbol);
 
 /* vtable for the entries of the symbol table */
 struct surgescript_symtable_entry_vtable_t
 {
-    void (*read)(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k);
-    void (*write)(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k);
+    void (*read)(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+    void (*write)(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 };
 static const surgescript_symtable_entry_vtable_t heapvt = { read_from_heap, write_to_heap };
 static const surgescript_symtable_entry_vtable_t stackvt = { read_from_stack, write_to_stack };
@@ -126,7 +126,7 @@ void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, con
  * surgescript_symtable_emit_write()
  * Emits SurgeScript program code so that the contents of t[k] are written to the memory location pointed by the symbol
  */
-void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, int k)
+void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, unsigned k)
 {
     int j;
 
@@ -144,7 +144,7 @@ void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const cha
  * surgescript_symtable_emit_read()
  * Emits SurgeScript program code so that the contents of the memory location pointed by the symbol are read to t[k]
  */
-void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, int k)
+void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, unsigned k)
 {
     int j;
 
@@ -203,7 +203,7 @@ void write_to_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* p
 {
     surgescript_heapptr_t address = entry->heapaddr;
     surgescript_program_add_line(program, SSOP_POKE, SSOPu(k), SSOPu(address));
-    puts(sstok(__func__)) "write to heap");
+    puts(sstok(__func__) "write to heap");
 }
 
 void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)

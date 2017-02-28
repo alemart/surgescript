@@ -94,16 +94,16 @@
  *
  */
 
+#include <stdbool.h>
+
 typedef struct surgescript_parser_t surgescript_parser_t;
-struct surgescript_parsetree_t;
 
 /* create & destroy */
 surgescript_parser_t* surgescript_parser_create();
 surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser);
 
 /* parse a script */
-struct surgescript_parsetree_t* surgescript_parser_parsefile(surgescript_parser_t* parser, const char* absolute_path);
-struct surgescript_parsetree_t* surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_in_memory);
-
+bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* absolute_path);
+bool surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_in_memory);
 
 #endif
