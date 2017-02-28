@@ -14,7 +14,6 @@
 #include "compiler/token.h"
 #include "compiler/lexer.h"
 #include "compiler/parser.h"
-#include "compiler/parsetree.h"
 
 #if 0
 /* setup some programs */
@@ -172,7 +171,9 @@ int main()
 /* testing the parser */
 int main()
 {
-    surgescript_parser_t* parser = surgescript_parser_create();
+    surgescript_vm_t* vm = surgescript_vm_create();
+    surgescript_programpool_t* program_pool = surgescript_vm_programpool(vm);
+    surgescript_parser_t* parser = surgescript_parser_create(program_pool);
     bool success;
 
     success = surgescript_parser_parsefile(parser, "./test.ss");
@@ -180,7 +181,13 @@ int main()
         puts("Parsed file.");
     }
 
+    surgescript_program_dump(surgescript_programpool_get(program_pool, "test", "__ssconstructor"), stdout);
     surgescript_parser_destroy(parser);
+    surgescript_vm_destroy(vm);
+
+    float test = 0.0f;
+    *((unsigned*)&test) = 0x40490fd0;
+    printf("== test %f\n", test);
     return 0;
 }
 #endif

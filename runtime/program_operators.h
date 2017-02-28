@@ -34,6 +34,7 @@
     F( SSOP_MOVC, "movc" )    /* t[a] = handle to caller object ("this") */ \
     F( SSOP_MOVT, "movt" )                                /* t[a] = t[b] */ \
                                                                             \
+    F( SSOP_ALOC, "aloc" )                /* t[a] = allocate memory cell */ \
     F( SSOP_LOAD, "load" )                             /* t[a] = *(t[b]) */ \
     F( SSOP_STORE, "store" )                           /* *(t[b]) = t[a] */ \
     F( SSOP_PEEK, "peek" )                                /* t[a] = (*b) */ \

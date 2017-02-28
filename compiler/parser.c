@@ -17,6 +17,7 @@
 #include "nodecontext.h"
 #include "symtable.h"
 #include "codegen.h"
+#include "../runtime/program_pool.h"
 #include "../runtime/program.h"
 #include "../util/util.h"
 
@@ -26,6 +27,7 @@ struct surgescript_parser_t
     surgescript_token_t* lookahead;
     surgescript_lexer_t* lexer;
     char* filename;
+    surgescript_programpool_t* program_pool;
 };
 
 /* helpers */
@@ -91,12 +93,13 @@ static void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t con
  * surgescript_parser_create()
  * Creates a new parser
  */
-surgescript_parser_t* surgescript_parser_create()
+surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* program_pool)
 {
     surgescript_parser_t* parser = ssmalloc(sizeof *parser);
     parser->lookahead = NULL;
     parser->lexer = surgescript_lexer_create();
     parser->filename = ssstrdup("<unspecified>");
+    parser->program_pool = program_pool;
     return parser;
 }
 
@@ -164,8 +167,16 @@ bool surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_
     return true;
 }
 
-
-
+/*
+ * surgescript_parser_filename()
+ * Returns the file being processed
+ */
+/*
+const char* surgescript_parser_filename(surgescript_parser_t* parser)
+{
+    return parser->filename;
+}
+*/
 
 
 /* privates & helpers */
@@ -285,13 +296,24 @@ void object(surgescript_parser_t* parser)
     objectdecl(parser, context);
     match(parser, SSTOK_RCURLY);
 
-    /* TODO: registrar construtor */
+    surgescript_programpool_put(parser->program_pool,  object_name, "__ssconstructor", context.program);
     surgescript_symtable_destroy(context.symbol_table);
     ssfree(object_name);
 }
 
 void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    surgescript_program_label_t start = surgescript_program_new_label(context.program);
+    surgescript_program_label_t end = surgescript_program_new_label(context.program);
+
+    /* allocate variables */
+    emit_object_header(context, start, end);
+
+    /* read non-terminals */
+    signedconst(parser, context);
+
+    /* tell the program how many variables should be allocated */
+    emit_object_footer(context, start, end);
 }
 
 
@@ -348,20 +370,20 @@ void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     if(gottype(parser, SSTOK_ADDITIVEOP)) {
         float value = 0.0;
         bool plus = (strcmp(surgescript_token_lexeme(token), "+") == 0);
-
+        
         match(parser, SSTOK_ADDITIVEOP);
-        if(gottype(parser, SSTOK_NUMBER))
+        if(gottype(parser, SSTOK_NUMBER)) {
             value = atof(surgescript_token_lexeme(token));
+            emit_number(context, plus ? value : -value);
+        }
         match(parser, SSTOK_NUMBER);
-
-        emit_number(context, plus ? value : -value);
     }
     else if(gottype(parser, SSTOK_NUMBER)) {
         emit_number(context, atof(surgescript_token_lexeme(token)));
         match(parser, SSTOK_NUMBER);
     }
-
-    expect(parser, SSTOK_NUMBER); /* will throw an error */
+    else
+        expect(parser, SSTOK_NUMBER); /* will throw an error */
 }
 
 

@@ -12,6 +12,7 @@
 
 struct surgescript_symtable_t;
 struct surgescript_program_t;
+struct surgescript_programpool_t;
 
 /* node context */
 typedef struct surgescript_nodecontext_t

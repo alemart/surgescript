@@ -148,8 +148,13 @@ void surgescript_program_add_label(surgescript_program_t* program, surgescript_p
  */
 int surgescript_program_add_text(surgescript_program_t* program, const char* text)
 {
-    ssarray_push(program->text, ssstrdup(text));
-    return ssarray_length(program->text) - 1;
+    int idx = surgescript_program_find_text(program, text);
+    if(idx < 0) { /* if the text isn't already there */
+        ssarray_push(program->text, ssstrdup(text));
+        return ssarray_length(program->text) - 1;
+    }
+    else
+        return idx;
 }
 
 /*
@@ -386,6 +391,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         /* heap operations */
+        case SSOP_ALOC:
+            surgescript_var_set_number(t[a.u], surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
+            break;
+
         case SSOP_STORE:
             surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[b.u])), t[a.u]);
             break;
