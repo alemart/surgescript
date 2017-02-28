@@ -44,19 +44,9 @@ struct surgescript_var_t
 /* helpers */
 #define RELEASE_DATA(var)       if(var->type == SSVAR_STRING) \
                                     ssfree(var->string);
-                                /*
-                                else if(var->type == SSVAR_OBJECTHANDLE) \
-                                    surgescript_object_decrement_reference_count( \
-                                        surgescript_objectmanager_get( \
-                                            surgescript_vm_objectmanager( \
-                                                surgescript_vm() \
-                                            ),
-                                            var->handle
-                                        )
-                                    );
-                                */
 
-
+/* privates */
+static const char* typeof_var(const surgescript_var_t* var);
 
 /* -------------------------------
  * public methods
@@ -291,35 +281,22 @@ surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var)
 }
 
 /*
- * surgescript_var_typename()
- * Returns the typename of a variable
- */
-const char* surgescript_var_typename(const surgescript_var_t* var)
-{
-    switch(var->type) {
-        case SSVAR_NUMBER:
-            return "number";
-        case SSVAR_BOOL:
-            return "boolean";
-        case SSVAR_STRING:
-            return "string";
-        case SSVAR_NULL:
-            return "null";
-        case SSVAR_OBJECTHANDLE:
-            return "object";
-    }
-
-    return "unknown";
-}
-
-/*
  * surgescript_var_typecode()
  * Returns an integer representing the type of the variable
  * (each type has its own code)
  */
 int surgescript_var_typecode(const surgescript_var_t* var)
 {
-    return (int)(*(surgescript_var_typename(var)));
+    return (int)(*(typeof_var(var)));
+}
+
+/*
+ * surgescript_var_type2code()
+ * Given a type_name (that may be NULL), return its corresponding type code
+ */
+int surgescript_var_type2code(const char* type_name)
+{
+    return type_name ? *type_name : 0;
 }
 
 /*
@@ -417,4 +394,38 @@ void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b)
     surgescript_var_t t = *a;
     *a = *b;
     *b = t;
+}
+
+/*
+ * surgescript_var_get_rawbits()
+ * Returns the binary value stored in the variable
+ */
+unsigned surgescript_var_get_rawbits(const surgescript_var_t* var)
+{
+    const unsigned* rawbits = &(var->handle);
+    return *rawbits;
+}
+
+
+
+/* privates */
+
+/* what's the name of the type of the variable? */
+const char* typeof_var(const surgescript_var_t* var)
+{
+    /* all first letters should be different; see typecode() above */
+    switch(var->type) {
+        case SSVAR_NUMBER:
+            return "number";
+        case SSVAR_BOOL:
+            return "boolean";
+        case SSVAR_STRING:
+            return "string";
+        case SSVAR_OBJECTHANDLE:
+            return "object";
+        case SSVAR_NULL:
+            return ""; /* first character is '\0' */
+    }
+
+    return "unknown";
 }

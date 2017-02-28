@@ -493,15 +493,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_number(t[a.u], -surgescript_var_get_number(t[a.u]));
             break;
 
-        /* utility operations */
-        case SSOP_TYPE:
-            surgescript_var_set_string(t[a.u], surgescript_var_typename(t[a.u]));
-            break;
-
-        case SSOP_TCHK:
-            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - b.i);
-            break;
-
+        /* casting */
         case SSOP_BOOL:
             surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[a.u]));
             break;
@@ -511,7 +503,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_STR: {
-            if(strcmp(surgescript_var_typename(t[a.u]), "object") != 0) {
+            if(surgescript_var_typecode(t[b.u]) != surgescript_var_type2code("object")) {
                 /* if it's not an object, convert to string */
                 char* buf = surgescript_var_get_string(t[a.u]);
                 surgescript_var_set_string(t[a.u], buf);
@@ -577,14 +569,39 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
         }
 */
+        /* comparing */
+        case SSOP_CMP:
+            surgescript_var_set_number(t[2], surgescript_var_compare(t[a.u], t[b.u]));
+            break;
+
+        case SSOP_TEST:
+            surgescript_var_set_number(t[2], surgescript_var_get_rawbits(t[a.u]) & surgescript_var_get_rawbits(t[b.u]));
+            break;
+
+        case SSOP_TCHK0:
+            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code(NULL));
+            break;
+
+        case SSOP_TCHKB:
+            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code("boolean"));
+            break;
+
+        case SSOP_TCHKN:
+            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code("number"));
+            break;
+
+        case SSOP_TCHKS:
+            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code("string"));
+            break;
+
+        case SSOP_TCHKO:
+            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code("object"));
+            break;
+
         /* jumping */
         case SSOP_JMP:
             program->ip = a.u;
             return;
-
-        case SSOP_CMP:
-            surgescript_var_set_number(t[2], surgescript_var_compare(t[a.u], t[b.u]));
-            break;
 
         case SSOP_JE:
             if(surgescript_var_get_number(t[2]) == 0) {
@@ -641,9 +658,9 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             int number_of_given_params = (int)surgescript_var_get_number(t[2]);
             surgescript_var_t* return_value = t[2];
 
-            if(strcmp(surgescript_var_typename(t[b.u]), "object") != 0) {
+            if(surgescript_var_typecode(t[b.u]) != surgescript_var_type2code("object")) {
                 char* thing = surgescript_var_get_string(t[b.u]);
-                ssfatal("Runtime Error: can't call %s() on %s \"%s\"", program_name, surgescript_var_typename(t[b.u]), thing);
+                ssfatal("Runtime Error: can't call %s() on \"%s\"", program_name, thing);
                 ssfree(thing);
             }
             else

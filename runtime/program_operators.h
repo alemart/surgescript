@@ -56,15 +56,20 @@
     F( SSOP_AND, "and" )                         /* t[a] = t[a] and t[b] */ \
     F( SSOP_OR, "or" )                            /* t[a] = t[a] or t[b] */ \
                                                                             \
-    F( SSOP_TYPE, "type" )                      /* t[a] = typename(t[a]) */ \
     F( SSOP_BOOL, "bool" )                          /* t[a] = bool(t[a]) */ \
     F( SSOP_VAL, "val" )                          /* t[a] = number(t[a]) */ \
     F( SSOP_STR, "str" )                          /* t[a] = string(t[a]) */ \
     F( SSOP_CAT, "cat" )                    /* t[a] = strcat(t[a], t[b]) */ \
-    F( SSOP_TCHK, "tchk" )                  /* t[2] = typecheck(t[a], b) */ \
+                                                                            \
+    F( SSOP_TEST, "test" )                         /* t[2] = t[a] & t[b] */ \
+    F( SSOP_TCHK0, "tchk0" )             /* t[2] = typecheck(t[a], null) */ \
+    F( SSOP_TCHKB, "tchkb" )             /* t[2] = typecheck(t[a], bool) */ \
+    F( SSOP_TCHKN, "tchkn" )           /* t[2] = typecheck(t[a], number) */ \
+    F( SSOP_TCHKS, "tchks" )           /* t[2] = typecheck(t[a], string) */ \
+    F( SSOP_TCHKO, "tchko" )           /* t[2] = typecheck(t[a], object) */ \
+    F( SSOP_CMP, "cmp" )                   /* t[2] = compare(t[a], t[b]) */ \
                                                                             \
     F( SSOP_JMP, "jmp" )                                    /* jump to a */ \
-    F( SSOP_CMP, "cmp" )                    /* t[2] = compare t[a], t[b] */ \
     F( SSOP_JE, "je" )                    /* jump to line a if t[2] == 0 */ \
     F( SSOP_JNE, "jne" )                  /* jump to line a if t[2] != 0 */ \
     F( SSOP_JG, "jg" )                     /* jump to line a if t[2] > 0 */ \
