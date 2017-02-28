@@ -70,7 +70,6 @@ static inline surgescript_program_operand_t surgescript_program_operand_i(int i)
 surgescript_program_t* surgescript_program_create(int arity); /* create a new program */
 surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_program_cfunction_t cfunction); /* a C-program must return a newly-allocated surgescript_var_t*, or NULL */
 surgescript_program_t* surgescript_program_destroy(surgescript_program_t* program); /* called by the program pool */
-void surgescript_program_set_locals(surgescript_program_t* program, int num_local_vars); /* sets the number of stack variables used by this program */
 void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment); /* run the program */
 
 /* write the program */

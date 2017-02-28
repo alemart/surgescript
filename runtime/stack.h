@@ -25,7 +25,7 @@ surgescript_stack_t* surgescript_stack_create();
 surgescript_stack_t* surgescript_stack_destroy(surgescript_stack_t* stack);
 struct surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack, struct surgescript_var_t* var); /* pushes var on the stack */
 void surgescript_stack_pop(surgescript_stack_t* stack); /* pops and deallocates a var from the stack */
-void surgescript_stack_pushenv(surgescript_stack_t* stack, int num_vars); /* pushes an environment */
+void surgescript_stack_pushenv(surgescript_stack_t* stack); /* pushes an environment */
 void surgescript_stack_popenv(surgescript_stack_t* stack); /* pops an environment */
 struct surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack); /* gets the topmost element */
 struct surgescript_var_t* surgescript_stack_at(surgescript_stack_t* stack, surgescript_stackptr_t offset); /* gets stack[base + offset] */

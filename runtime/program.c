@@ -34,7 +34,7 @@ struct surgescript_program_operation_t
 /* the program structure */
 struct surgescript_program_t
 {
-    int arity, num_local_vars; /* config */
+    int arity; /* config */
     int ip; /* instruction pointer */
     void (*run)(surgescript_program_t*, surgescript_renv_t*); /* run function; strategy pattern */
 
@@ -112,15 +112,6 @@ surgescript_program_t* surgescript_program_destroy(surgescript_program_t* progra
     ssfree(program);
 
     return NULL;
-}
-
-/*
- * surgescript_program_set_locals()
- * Sets the number of stack variables used by this program
- */
-void surgescript_program_set_locals(surgescript_program_t* program, int num_local_vars)
-{
-    program->num_local_vars = num_local_vars;
 }
 
 /*
@@ -206,7 +197,7 @@ int surgescript_program_text_count(const surgescript_program_t* program)
 
 /*
  * surgescript_program_arity()
- * what's the arity of this program?
+ * What's the arity of this program?
  */
 int surgescript_program_arity(const surgescript_program_t* program)
 {
@@ -235,9 +226,8 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
     fprintf(fp,
         "{\n"
         "    \"arity\": %d\n"
-        "    \"locals\": %d\n"
         "    \"code\": [\n",
-    program->arity, program->num_local_vars);
+    program->arity);
 
     /* print code */
     for(i = 0; i < ssarray_length(program->line); i++) {
@@ -287,7 +277,6 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, surgescript_renv_t*))
 {
     program->arity = arity;
-    program->num_local_vars = 0;
     program->ip = 0;
     program->run = run_function;
 
@@ -699,7 +688,7 @@ void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned
         );
 
         /* push an environment and call the program */
-        surgescript_stack_pushenv(stack, prog->num_local_vars);
+        surgescript_stack_pushenv(stack);
         surgescript_program_run(prog, callee_runtime_environment);
         surgescript_stack_popenv(stack);
 

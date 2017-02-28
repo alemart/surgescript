@@ -109,18 +109,14 @@ void surgescript_stack_pop(surgescript_stack_t* stack)
 
 /*
  * surgescript_stack_pushenv()
- * Pushes an environment to the stack, allocating num_vars variables
+ * Pushes an environment to the stack
  */
-void surgescript_stack_pushenv(surgescript_stack_t* stack, int num_vars)
+void surgescript_stack_pushenv(surgescript_stack_t* stack)
 {
     /* push prev BP & set new BP */
     surgescript_var_t* prev_bp = surgescript_stack_push(stack, surgescript_var_create());
     surgescript_var_set_number(prev_bp, stack->bp);
     stack->bp = stack->sp;
-
-    /* allocates the variables */
-    while(num_vars-- > 0)
-        surgescript_stack_push(stack, surgescript_var_create());
 }
 
 /*
