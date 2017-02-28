@@ -25,10 +25,10 @@ void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, cons
 void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_stackptr_t address);
 
 /* emit surgescript program code so that t[k] is written to the address of the symbol */
-void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, int k);
+void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, unsigned k);
 
 /* emit surgescript program code so that the content stored by the symbol is read to t[k] */
-void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, int k);
+void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, unsigned k);
 
 /* does the table have a certain symbol? */
 bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const char* symbol);

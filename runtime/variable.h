@@ -39,6 +39,7 @@ surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char
 surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsigned handle);
 
 /* misc */
+int surgescript_var_typecode(const surgescript_var_t* var);
 const char* surgescript_var_typename(const surgescript_var_t* var);
 surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescript_var_t* src); /* similar to strcpy */
 surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var); /* similar to strdup */

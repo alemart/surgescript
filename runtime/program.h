@@ -10,6 +10,7 @@
 #ifndef _SURGESCRIPT_RUNTIME_PROGRAM_H
 #define _SURGESCRIPT_RUNTIME_PROGRAM_H
 
+#include <stdio.h>
 #include <stdbool.h>
 #include "renv.h"
 #include "program_operators.h"
@@ -66,10 +67,11 @@ inline surgescript_program_operand_t surgescript_program_operand_i(int i) { surg
 
 
 /* life-cycle: create, destroy & run */
-surgescript_program_t* surgescript_program_create(int arity, int num_local_vars);
+surgescript_program_t* surgescript_program_create(int arity); /* create a new program */
 surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_program_cfunction_t cfunction); /* a C-program must return a newly-allocated surgescript_var_t*, or NULL */
 surgescript_program_t* surgescript_program_destroy(surgescript_program_t* program); /* called by the program pool */
-void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment);
+void surgescript_program_set_locals(surgescript_program_t* program, int num_local_vars); /* sets the number of stack variables used by this program */
+void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment); /* run the program */
 
 /* write the program */
 surgescript_program_label_t surgescript_program_new_label(surgescript_program_t* program); /* creates and returns a new label */
@@ -82,5 +84,6 @@ int surgescript_program_arity(const surgescript_program_t* program); /* what's t
 const char* surgescript_program_get_text(const surgescript_program_t* program, int index); /* reads a string literal (text[index]) from the program */
 int surgescript_program_find_text(const surgescript_program_t* program, const char* text); /* finds the first index such that text[index] == text, or -1 if not found */
 int surgescript_program_text_count(const surgescript_program_t* program); /* how many string literals exist in the program? */
+void surgescript_program_dump(const surgescript_program_t* program, FILE* fp); /* dump the program to a file */
 
 #endif

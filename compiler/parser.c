@@ -291,7 +291,7 @@ surgescript_parsetree_t* object(surgescript_parser_t* parser)
     context = nodecontext(
         ssstrdup(surgescript_token_lexeme(parser->lookahead)), /* object name */
         NULL, /* symbol table */
-        surgescript_program_create(0, 0) /* object constructor */
+        surgescript_program_create(0) /* object constructor */
     );
     match(parser, SSTOK_STRING);
     match(parser, SSTOK_LCURLY);

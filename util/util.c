@@ -139,6 +139,25 @@ char* surgescript_util_strdup(const char* src, const char* location)
     return strcpy(str, src);
 }
 
+/*
+ * surgescript_util_htob()
+ * Convert a 32-bit number from host to big-endian notation
+ */
+unsigned long surgescript_util_htob(unsigned long x)
+{
+    static const union { int i; char c[sizeof(int)]; } u = { .i = 1 };
+    return *(u.c) ? ((x & 0xFF000000) >> 24) | ((x & 0x00FF0000) >> 8) | ((x & 0x0000FF00) << 8) | ((x & 0x000000FF) << 24) : x;
+}
+
+/*
+ * surgescript_util_btoh()
+ * Convert a 32-bit number from big to host-endian notation
+ */
+
+unsigned long surgescript_util_btoh(unsigned long x)
+{
+    return surgescript_util_htob(x);
+}
 
 
 /* -------------------------------

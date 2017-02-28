@@ -41,4 +41,7 @@ void surgescript_util_set_error_functions(void (*log)(const char*), void (*fatal
 char* surgescript_util_strncpy(char* dst, const char* src, size_t n); /* strcpy */
 char* surgescript_util_strdup(const char* src, const char* location); /* strdup */
 
+unsigned long surgescript_util_htob(unsigned long x); /* host to big-endian */
+unsigned long surgescript_util_btoh(unsigned long x); /* big to host-endian */
+
 #endif

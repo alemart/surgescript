@@ -56,14 +56,14 @@
     F( SSOP_OR, "or" )                            /* t[a] = t[a] or t[b] */ \
                                                                             \
     F( SSOP_TYPE, "type" )                      /* t[a] = typename(t[a]) */ \
-    F( SSOP_TC, "tc" )                          /* t[2] = typecode(t[a]) */ \
     F( SSOP_BOOL, "bool" )                          /* t[a] = bool(t[a]) */ \
     F( SSOP_VAL, "val" )                          /* t[a] = number(t[a]) */ \
     F( SSOP_STR, "str" )                          /* t[a] = string(t[a]) */ \
     F( SSOP_CAT, "cat" )                    /* t[a] = strcat(t[a], t[b]) */ \
+    F( SSOP_TCHK, "tchk" )                  /* t[2] = typecheck(t[a], b) */ \
                                                                             \
-    F( SSOP_JMP, "jmp" )                             /* jump to label[a] */ \
     F( SSOP_CMP, "cmp" )                    /* t[2] = compare t[a], t[b] */ \
+    F( SSOP_JMP, "jmp" )                             /* jump to label[a] */ \
     F( SSOP_JE, "je" )                  /* jump to label[a] if t[2] == 0 */ \
     F( SSOP_JNE, "jne" )                /* jump to label[a] if t[2] != 0 */ \
     F( SSOP_JG, "jg" )                   /* jump to label[a] if t[2] > 0 */ \

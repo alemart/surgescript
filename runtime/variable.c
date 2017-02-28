@@ -313,6 +313,16 @@ const char* surgescript_var_typename(const surgescript_var_t* var)
 }
 
 /*
+ * surgescript_var_typecode()
+ * Returns an integer representing the type of the variable
+ * (each type has its own code)
+ */
+int surgescript_var_typecode(const surgescript_var_t* var)
+{
+    return (int)(*(surgescript_var_typename(var)));
+}
+
+/*
  * surgescript_var_to_string()
  * Converts a variable of any type to a string to be stored in a buffer of bufsize bytes
  */

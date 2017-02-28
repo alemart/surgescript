@@ -51,18 +51,21 @@ struct surgescript_cprogram_t
     surgescript_program_cfunction_t cfunction; /* pointer to the C-function */
 };
 
+/* the names of the instructions */
+static const char* instruction_name[] = {
+    #define PRINT_NAME(x, y) y,
+    SURGESCRIPT_PROGRAM_OPERATORS(PRINT_NAME)
+};
+
 /* utilities */
-static surgescript_program_t* init_program(surgescript_program_t* program, int arity, int num_local_vars, void (*run_function)(surgescript_program_t*, surgescript_renv_t*));
+static surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, surgescript_renv_t*));
 static void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
 static void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
 static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b);
 static void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned object_handle, const char* program_name, int number_of_given_params, surgescript_var_t* return_value);
-
-/* inlines */
-surgescript_program_operand_t surgescript_program_operand_u(unsigned u);
-surgescript_program_operand_t surgescript_program_operand_f(float f);
-surgescript_program_operand_t surgescript_program_operand_b(bool b);
-surgescript_program_operand_t surgescript_program_operand_i(int i);
+static char* hexdump32(long data, char* buf); /* writes 9 bytes to buf */
+static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
+static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 
 
 /* -------------------------------
@@ -73,10 +76,10 @@ surgescript_program_operand_t surgescript_program_operand_i(int i);
  * surgescript_program_create()
  * Creates a new program (aka function call)
  */
-surgescript_program_t* surgescript_program_create(int arity, int num_local_vars)
+surgescript_program_t* surgescript_program_create(int arity)
 {
     surgescript_program_t* program = ssmalloc(sizeof *program);
-    return init_program(program, arity, num_local_vars, run_program);
+    return init_program(program, arity, run_program);
 }
 
 /*
@@ -88,7 +91,7 @@ surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_progra
 {
     surgescript_cprogram_t* cprogram = ssmalloc(sizeof *cprogram);
     cprogram->cfunction = cfunction;
-    return init_program((surgescript_program_t*)cprogram, arity, 0, run_cprogram);
+    return init_program((surgescript_program_t*)cprogram, arity, run_cprogram);
 }
 
 /*
@@ -110,7 +113,14 @@ surgescript_program_t* surgescript_program_destroy(surgescript_program_t* progra
     return NULL;
 }
 
-
+/*
+ * surgescript_program_set_locals()
+ * Sets the number of stack variables used by this program
+ */
+void surgescript_program_set_locals(surgescript_program_t* program, int num_local_vars)
+{
+    program->num_local_vars = num_local_vars;
+}
 
 /*
  * surgescript_program_add_line()
@@ -206,15 +216,70 @@ void surgescript_program_run(surgescript_program_t* program, surgescript_renv_t*
     program->run(program, runtime_environment);
 }
 
+/* dump the program to a file */
+void surgescript_program_dump(const surgescript_program_t* program, FILE* fp)
+{
+    int i;
+    char hex[2][16];
+    surgescript_program_operation_t* op;
+
+    /* print header */
+    fprintf(fp,
+        "{\n"
+        "    \"arity\": %d\n"
+        "    \"locals\": %d\n"
+        "    \"code\": [\n",
+    program->arity, program->num_local_vars);
+
+    /* print code */
+    for(i = 0; i < ssarray_length(program->line); i++) {
+        op = &(program->line[i]);
+        hexdump32(!is_jump_instruction(op->instruction) ? op->a.i : program->label[op->a.u], hex[0]);
+        hexdump32(op->b.i, hex[1]);
+        fprintf(fp,
+            "        \"%s\t  %s    %s\"%s\n",
+            instruction_name[op->instruction], hex[0], hex[1],
+            (i < ssarray_length(program->line) - 1) ? "," : ""
+        );
+    }
+
+    /* print text section */
+    fprintf(fp,
+        "    ],\n"
+        "    \"text\": [\n"
+    );
+
+    for(i = 0; i < ssarray_length(program->text); i++) {
+        fputs("        \"", fp);
+        fputs_escaped(program->text[i], fp);
+        fputs((i < ssarray_length(program->text) - 1) ? "\",\n" : "\"\n", fp);
+    }
+
+    /* print footer */
+    fprintf(fp, "    ]\n}\n");
+
+    /* print labels */
+    /*fprintf(fp,
+        "    ],\n"
+        "    \"labels\": [ "
+    );
+
+    for(i = 0; i < ssarray_length(program->label); i++)
+        fprintf(fp, "%d%s ", program->label[i], (i < ssarray_length(program->label) - 1) ? "," : "");*/
+
+    /* print footer */
+    /*fprintf(fp, "]\n}\n");*/
+}
+
 /* -------------------------------
  * private stuff
  * ------------------------------- */
 
 /* initializes a program */
-surgescript_program_t* init_program(surgescript_program_t* program, int arity, int num_local_vars, void (*run_function)(surgescript_program_t*, surgescript_renv_t*))
+surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, surgescript_renv_t*))
 {
     program->arity = arity;
-    program->num_local_vars = num_local_vars;
+    program->num_local_vars = 0;
     program->ip = 0;
     program->run = run_function;
 
@@ -397,14 +462,14 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_AND:
-            if(surgescript_var_get_bool(t[a.u])) /* short-circuit operator */
+            if(surgescript_var_get_bool(t[a.u]))
                 surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[b.u]));
             else
                 surgescript_var_set_bool(t[a.u], false);
             break;
 
         case SSOP_OR:
-            if(surgescript_var_get_bool(t[a.u])) /* short-circuit operator */
+            if(surgescript_var_get_bool(t[a.u]))
                 surgescript_var_set_bool(t[a.u], true);
             else
                 surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[b.u]));
@@ -419,8 +484,8 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_string(t[a.u], surgescript_var_typename(t[a.u]));
             break;
 
-        case SSOP_TC:
-            surgescript_var_set_number(t[2], *(surgescript_var_typename(t[a.u])));
+        case SSOP_TCHK:
+            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - b.i);
             break;
 
         case SSOP_BOOL:
@@ -613,4 +678,47 @@ void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned
     }
     else
         ssfatal("Runtime Error: function \"%s.%s\" (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), expected_params, number_of_given_params);
+}
+
+/* writes data to buf, in hex/little-endian format (writes 9 bytes) */
+char* hexdump32(long data, char* buf)
+{
+    snprintf(buf, 9, "%08x", data);
+    return buf;
+}
+
+/* works like fputs, but escapes the string */
+void fputs_escaped(const char* str, FILE* fp)
+{
+    for(const char* p = str; p && *p; p++) {
+        switch(*p) {
+            case '\\': fputs("\\\\", fp); break;
+            case '\"': fputs("\\\"", fp); break;
+            case '\'': fputs("\\'", fp); break;
+            case '\n': fputs("\\n", fp); break;
+            case '\r': fputs("\\r", fp); break;
+            case '\t': fputs("\\t", fp); break;
+            case '\v': fputs("\\v", fp); break;
+            case '\f': fputs("\\f", fp); break;
+            default: fputc(*p, fp); break;
+        }
+    }
+}
+
+/* is this a jump instruction? */
+bool is_jump_instruction(surgescript_program_operator_t instruction)
+{
+    switch(instruction)
+    {
+        case SSOP_JMP:
+        case SSOP_JE:
+        case SSOP_JNE:
+        case SSOP_JG:
+        case SSOP_JGE:
+        case SSOP_JL:
+        case SSOP_JLE:
+            return true;
+        default:
+            return false;
+    }
 }

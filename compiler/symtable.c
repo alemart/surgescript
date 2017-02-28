@@ -153,22 +153,30 @@ int indexof_symbol(surgescript_symtable_t* symtable, const char* symbol)
     return -1;
 }
 
-void read_from_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k)
+void read_from_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-
+    surgescript_heapptr_t address = entry->heapaddr;
+    surgescript_program_add_line(program, SSOP_PEEK, SSOPu(k), SSOPu(address));
+    puts(sstok(__func__) "read from heap");
 }
 
-void read_from_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k)
+void read_from_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-
+    surgescript_stackptr_t address = entry->stackaddr;
+    surgescript_program_add_line(program, SSOP_SPEEK, SSOPu(k), SSOPi(address));
+    puts(sstok(__func__) "read from stack");
 }
 
-void write_to_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k)
+void write_to_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-
+    surgescript_heapptr_t address = entry->heapaddr;
+    surgescript_program_add_line(program, SSOP_POKE, SSOPu(k), SSOPu(address));
+    puts(sstok(__func__)) "write to heap");
 }
 
-void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, int k)
+void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-
+    surgescript_stackptr_t address = entry->stackaddr;
+    surgescript_program_add_line(program, SSOP_SPOKE, SSOPu(k), SSOPi(address));
+    puts(sstok(__func__) "write to stack");
 }

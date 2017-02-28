@@ -92,8 +92,8 @@ int main()
     surgescript_vm_t* vm = surgescript_vm_create();
 
     surgescript_programpool_t* program_pool = surgescript_vm_programpool(vm);
-    surgescript_program_t* program = surgescript_program_create(0, 0);
-    surgescript_program_t* program2 = surgescript_program_create(0, 0);
+    surgescript_program_t* program = surgescript_program_create(0);
+    surgescript_program_t* program2 = surgescript_program_create(0);
     surgescript_program_t* cprogram = surgescript_cprogram_create(0, my_cfun);
     setup(program);
     setup2(program2);
@@ -105,6 +105,16 @@ int main()
     while(surgescript_vm_update(vm)) {
         ;
     }
+
+    surgescript_program_dump(program, stderr);
+    puts("============");
+    surgescript_program_dump(program2, stderr);
+    puts("============");
+
+    float f = 0;
+    long l = 0x3f800000;
+    memcpy(&f, &l, sizeof(f));
+    printf("float: %f\n", f);
 
     surgescript_vm_destroy(vm);
     return 0;
@@ -158,6 +168,7 @@ int main()
 }
 #endif
 
+#if 1
 /* testing the parser */
 int main()
 {
@@ -174,3 +185,4 @@ int main()
     surgescript_parser_destroy(parser);
     return 0;
 }
+#endif

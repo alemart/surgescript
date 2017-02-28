@@ -119,7 +119,7 @@ void surgescript_stack_pushenv(surgescript_stack_t* stack, int num_vars)
     stack->bp = stack->sp;
 
     /* allocates the variables */
-    while(num_vars--)
+    while(num_vars-- > 0)
         surgescript_stack_push(stack, surgescript_var_create());
 }
 
