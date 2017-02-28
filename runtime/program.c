@@ -66,6 +66,7 @@ static void call_object_method(surgescript_renv_t* caller_runtime_environment, u
 static char* hexdump32(long data, char* buf); /* writes 9 bytes to buf */
 static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
+static bool remove_labels(surgescript_program_t* program);
 
 
 /* -------------------------------
@@ -223,6 +224,8 @@ void surgescript_program_dump(const surgescript_program_t* program, FILE* fp)
     char hex[2][16];
     surgescript_program_operation_t* op;
 
+    remove_labels(program);
+
     /* print header */
     fprintf(fp,
         "{\n"
@@ -234,11 +237,11 @@ void surgescript_program_dump(const surgescript_program_t* program, FILE* fp)
     /* print code */
     for(i = 0; i < ssarray_length(program->line); i++) {
         op = &(program->line[i]);
-        hexdump32(!is_jump_instruction(op->instruction) ? op->a.i : program->label[op->a.u], hex[0]);
-        hexdump32(op->b.i, hex[1]);
         fprintf(fp,
             "        \"%s\t  %s    %s\"%s\n",
-            instruction_name[op->instruction], hex[0], hex[1],
+            instruction_name[op->instruction],
+            hexdump32(op->a.i, hex[0]),
+            hexdump32(op->b.i, hex[1]),
             (i < ssarray_length(program->line) - 1) ? "," : ""
         );
     }
@@ -293,6 +296,8 @@ surgescript_program_t* init_program(surgescript_program_t* program, int arity, v
 /* runs a program */
 void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
 {
+    remove_labels(program);
+
     program->ip = 0;
     while(program->ip < ssarray_length(program->line))
         run_instruction(program, runtime_environment, program->line[program->ip].instruction, program->line[program->ip].a, program->line[program->ip].b);
@@ -565,7 +570,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 */
         /* jumping */
         case SSOP_JMP:
-            program->ip = program->label[a.u];
+            program->ip = a.u;
             return;
 
         case SSOP_CMP:
@@ -574,7 +579,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JE:
             if(surgescript_var_get_number(t[2]) == 0) {
-                program->ip = program->label[a.u];
+                program->ip = a.u;
                 return;
             }
             else
@@ -582,7 +587,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JNE:
             if(surgescript_var_get_number(t[2]) != 0) {
-                program->ip = program->label[a.u];
+                program->ip = a.u;
                 return;
             }
             else
@@ -590,7 +595,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JL:
             if(surgescript_var_get_number(t[2]) < 0) {
-                program->ip = program->label[a.u];
+                program->ip = a.u;
                 return;
             }
             else
@@ -598,7 +603,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JG:
             if(surgescript_var_get_number(t[2]) > 0) {
-                program->ip = program->label[a.u];
+                program->ip = a.u;
                 return;
             }
             else
@@ -606,7 +611,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JLE:
             if(surgescript_var_get_number(t[2]) <= 0) {
-                program->ip = program->label[a.u];
+                program->ip = a.u;
                 return;
             }
             else
@@ -614,7 +619,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JGE:
             if(surgescript_var_get_number(t[2]) >= 0) {
-                program->ip = program->label[a.u];
+                program->ip = a.u;
                 return;
             }
             else
@@ -721,4 +726,28 @@ bool is_jump_instruction(surgescript_program_operator_t instruction)
         default:
             return false;
     }
+}
+
+/* removes all labels from the program, placing the correct line numbers
+   on all jump instructions. Returns true if there were removed labels. */
+bool remove_labels(surgescript_program_t* program)
+{
+    if(ssarray_length(program->label) > 0) {
+        /* correct all jump instructions */
+        for(int i = 0; i < ssarray_length(program->line); i++) {
+            if(is_jump_instruction(program->line[i].instruction)) {
+                surgescript_program_label_t label = program->line[i].a.u;
+                if(label >= 0 && label < ssarray_length(program->label))
+                    program->line[i].a.u = program->label[label];
+                else
+                    ssfatal("Runtime Error: invalid jump instruction - unknown label.");
+            }
+        }
+
+        /* no more labels */
+        ssarray_length(program->label) = 0;
+        return true;
+    }
+    else
+        return false;
 }

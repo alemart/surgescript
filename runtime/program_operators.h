@@ -62,14 +62,14 @@
     F( SSOP_CAT, "cat" )                    /* t[a] = strcat(t[a], t[b]) */ \
     F( SSOP_TCHK, "tchk" )                  /* t[2] = typecheck(t[a], b) */ \
                                                                             \
+    F( SSOP_JMP, "jmp" )                                    /* jump to a */ \
     F( SSOP_CMP, "cmp" )                    /* t[2] = compare t[a], t[b] */ \
-    F( SSOP_JMP, "jmp" )                             /* jump to label[a] */ \
-    F( SSOP_JE, "je" )                  /* jump to label[a] if t[2] == 0 */ \
-    F( SSOP_JNE, "jne" )                /* jump to label[a] if t[2] != 0 */ \
-    F( SSOP_JG, "jg" )                   /* jump to label[a] if t[2] > 0 */ \
-    F( SSOP_JGE, "jge" )                /* jump to label[a] if t[2] >= 0 */ \
-    F( SSOP_JL, "jl" )                   /* jump to label[a] if t[2] < 0 */ \
-    F( SSOP_JLE, "jle" )                /* jump to label[a] if t[2] <= 0 */ \
+    F( SSOP_JE, "je" )                    /* jump to line a if t[2] == 0 */ \
+    F( SSOP_JNE, "jne" )                  /* jump to line a if t[2] != 0 */ \
+    F( SSOP_JG, "jg" )                     /* jump to line a if t[2] > 0 */ \
+    F( SSOP_JGE, "jge" )                  /* jump to line a if t[2] >= 0 */ \
+    F( SSOP_JL, "jl" )                     /* jump to line a if t[2] < 0 */ \
+    F( SSOP_JLE, "jle" )                  /* jump to line a if t[2] <= 0 */ \
                                                                             \
     F( SSOP_CALL, "call" )              /* call program named text[t[a]] */ \
                                      /* of the object having handle t[b] */ \

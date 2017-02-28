@@ -16,7 +16,7 @@
 #include "compiler/parser.h"
 #include "compiler/parsetree.h"
 
-#if 0
+#if 1
 /* setup some programs */
 static void setup(surgescript_program_t* program)
 {
@@ -168,7 +168,7 @@ int main()
 }
 #endif
 
-#if 1
+#if 0
 /* testing the parser */
 int main()
 {

@@ -53,7 +53,10 @@ struct surgescript_symtable_t
 
 /* public api */
 
-
+/*
+ * surgescript_symtable_create()
+ * Creates a symbol table
+ */
 surgescript_symtable_t* surgescript_symtable_create(surgescript_symtable_t* parent)
 {
     surgescript_symtable_t* symtable = ssmalloc(sizeof *symtable);
@@ -62,6 +65,10 @@ surgescript_symtable_t* surgescript_symtable_create(surgescript_symtable_t* pare
     return symtable;
 }
 
+/*
+ * surgescript_symtable_destroy()
+ * Destroys an existing symbol table
+ */
 surgescript_symtable_t* surgescript_symtable_destroy(surgescript_symtable_t* symtable)
 {
     for(int i = 0; i < ssarray_length(symtable->entry); i++)
@@ -71,6 +78,10 @@ surgescript_symtable_t* surgescript_symtable_destroy(surgescript_symtable_t* sym
     return ssfree(symtable); /* don't mess with the parent */
 }
 
+/*
+ * surgescript_symtable_has_symbol()
+ * Does the symbol table have the informed symbol?
+ */
 bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const char* symbol)
 {
     if(indexof_symbol(symtable, symbol) >= 0)
@@ -81,6 +92,10 @@ bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const cha
         return surgescript_symtable_has_symbol(symtable->parent, symbol); /* tail recursion */
 }
 
+/*
+ * surgescript_symtable_put_heap_symbol()
+ * Puts a symbol on the table that is stored on the heap
+ */
 void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_heapptr_t address)
 {
     if(indexof_symbol(symtable, symbol) < 0) {
@@ -92,6 +107,10 @@ void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, cons
         ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
 }
 
+/*
+ * surgescript_symtable_put_stack_symbol()
+ * Puts a symbol on the table that is stored on the stack
+ */
 void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_stackptr_t address)
 {
     if(indexof_symbol(symtable, symbol) < 0) {
@@ -103,6 +122,10 @@ void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, con
         ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
 }
 
+/*
+ * surgescript_symtable_emit_write()
+ * Emits SurgeScript program code so that the contents of t[k] are written to the memory location pointed by the symbol
+ */
 void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, int k)
 {
     int j;
@@ -117,6 +140,10 @@ void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const cha
         ssfatal("Compile Error: undefined symbol \"%s\".", symbol);
 }
 
+/*
+ * surgescript_symtable_emit_read()
+ * Emits SurgeScript program code so that the contents of the memory location pointed by the symbol are read to t[k]
+ */
 void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, int k)
 {
     int j;
@@ -131,6 +158,11 @@ void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char
         ssfatal("Compile Error: undefined symbol \"%s\".", symbol);
 }
 
+/*
+ * surgescript_symtable_count()
+ * How many symbols does this table have? Use deepcount == true if you want to take into account
+ * the symbols of the parent (and the parent of the parent, and so on) as well
+ */
 int surgescript_symtable_count(surgescript_symtable_t* symtable, bool deepcount)
 {
     if(!deepcount)
