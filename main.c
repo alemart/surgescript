@@ -15,14 +15,14 @@
 #include "compiler/lexer.h"
 #include "compiler/parser.h"
 
-#if 0
+#if 1
 /* setup some programs */
 static void setup(surgescript_program_t* program)
 {
     surgescript_program_label_t loop = surgescript_program_new_label(program);
     surgescript_program_label_t loop2 = surgescript_program_new_label(program);
 
-    surgescript_program_add_text(program, "Fibonacci sequence:");
+    surgescript_program_add_text(program, "Fibonacci sequence !!!");
     surgescript_program_add_text(program, "call_c");
 
     // count 1 .. 10
@@ -63,10 +63,18 @@ static void setup(surgescript_program_t* program)
     surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOP()); // pop fib(x)
 
     // call other program
-    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOPu(1)); // t[0] = text[1]
-    surgescript_program_add_line(program, SSOP_MOVH, SSOPu(1), SSOPu(1)); // t[1] = (object)1
-    surgescript_program_add_line(program, SSOP_MOVF, SSOPu(2), SSOPf(0)); // t[2] = 0
-    surgescript_program_add_line(program, SSOP_CALL, SSOPu(0), SSOPu(1)); // call it!
+    surgescript_program_add_line(program, SSOP_MOVF, SSOPu(2), SSOPf(3.14159)); // t[2] = anything
+    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(1), SSOPu(1)); // t[1] = anything
+    surgescript_program_add_line(program, SSOP_MOVO, SSOPu(0), SSOPu(1)); // t[0] = (object)1
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(1), SSOPu(0)); // push anything
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(2), SSOPu(0)); // push anything
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0)); // push (object)1
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(1), SSOPu(2)); // call fun text[a = 1] with n = 1 params
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(1), SSOPu(2)); // call fun text[a = 1] with n = 1 params
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(1), SSOPu(2)); // call fun text[a = 1] with n = 1 params
+    surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOPu(0)); // pop (object)1
+    surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOPu(0)); // pop anything
+    surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOPu(0)); // pop anything
     surgescript_program_add_line(program, SSOP_OUT, SSOPu(2), SSOP()); // print the return value
 }
 
@@ -81,6 +89,7 @@ static surgescript_var_t* my_cfun(surgescript_object_t* caller, const surgescrip
 {
     surgescript_var_t* var = surgescript_var_create();
     printf("heeeeeey from C! " __FILE__ ":%d\n", __LINE__);
+    printf("I have received %d params: %f, %s\n", num_params, num_params > 0 ? surgescript_var_get_number(param[0]) : 0, num_params > 1 ? surgescript_var_get_string(param[1]) : "-");
     surgescript_object_kill(caller);
     return surgescript_var_set_string(var, "Today is " __DATE__);
 }
@@ -93,7 +102,7 @@ int main()
     surgescript_programpool_t* program_pool = surgescript_vm_programpool(vm);
     surgescript_program_t* program = surgescript_program_create(0);
     surgescript_program_t* program2 = surgescript_program_create(0);
-    surgescript_program_t* cprogram = surgescript_cprogram_create(0, my_cfun);
+    surgescript_program_t* cprogram = surgescript_cprogram_create(2, my_cfun);
     setup(program);
     setup2(program2);
     surgescript_programpool_put(program_pool, "Application", "state:main", program);
@@ -167,7 +176,7 @@ int main()
 }
 #endif
 
-#if 1
+#if 0
 /* testing the parser */
 int main()
 {

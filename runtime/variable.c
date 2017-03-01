@@ -46,7 +46,7 @@ struct surgescript_var_t
                                     ssfree(var->string);
 
 /* privates */
-static const char* typeof_var(const surgescript_var_t* var);
+static inline const char* typeof_var(const surgescript_var_t* var);
 
 /* -------------------------------
  * public methods
@@ -426,6 +426,6 @@ const char* typeof_var(const surgescript_var_t* var)
         case SSVAR_NULL:
             return ""; /* first character is '\0' */
     }
-
+    
     return "unknown";
 }

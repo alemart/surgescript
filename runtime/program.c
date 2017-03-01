@@ -63,10 +63,12 @@ static void run_program(surgescript_program_t* program, surgescript_renv_t* runt
 static void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
 static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b);
 static void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned object_handle, const char* program_name, int number_of_given_params, surgescript_var_t* return_value);
-static char* hexdump32(long data, char* buf); /* writes 9 bytes to buf */
+static char* hexdump32(unsigned data, char* buf); /* writes 9 bytes to buf */
 static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static bool remove_labels(surgescript_program_t* program);
+static inline int fast_float_sign(float f);
+static inline int fast_float_sign1(float f);
 
 
 /* -------------------------------
@@ -235,8 +237,8 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
         fprintf(fp,
             "        \"%s\t  %s    %s\"%s\n",
             instruction_name[op->instruction],
-            hexdump32(op->a.i, hex[0]),
-            hexdump32(op->b.i, hex[1]),
+            hexdump32(op->a.u, hex[0]),
+            hexdump32(op->b.u, hex[1]),
             (i < ssarray_length(program->line) - 1) ? "," : ""
         );
     }
@@ -308,7 +310,7 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
 
     /* grab parameters from the stack (stacked in reverse order) */
     for(int i = 1; i <= program->arity; i++)
-        param[i-1] = surgescript_stack_at(stack, -i);
+        param[i-1] = surgescript_stack_at(stack, -i-1);
 
     /* call C-function */
     return_value = (surgescript_var_t*)(cprogram->cfunction(caller, (const surgescript_var_t**)param, program->arity));
@@ -328,7 +330,8 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
 void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b)
 {
     /* temporary variables */
-    surgescript_var_t** t = surgescript_renv_tmp(runtime_environment);
+    surgescript_var_t** _t = surgescript_renv_tmp(runtime_environment);
+    #define t(k)             _t[(k.u) & 3]
 
     /* run the instruction */
     switch(instruction) {
@@ -337,7 +340,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_OUT: {
-            char* str = surgescript_var_get_string(t[a.u]);
+            char* str = surgescript_var_get_string(t(a));
             printf("%s\n", str);
             ssfree(str);
             break;
@@ -346,172 +349,136 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         case SSOP_IN: {
             char buf[81];
             scanf("%80s", buf);
-            surgescript_var_set_string(t[a.u], buf);
+            surgescript_var_set_string(t(a), buf);
             break;
         }
 
         /* assignment operations */
         case SSOP_MOVN: /* move null */
-            surgescript_var_set_null(t[a.u]);
+            surgescript_var_set_null(t(a));
             break;
 
         case SSOP_MOVB: /* move boolean */
-            surgescript_var_set_bool(t[a.u], b.b);
+            surgescript_var_set_bool(t(a), b.b);
             break;
 
         case SSOP_MOVF: /* move number (float) */
-            surgescript_var_set_number(t[a.u], b.f);
+            surgescript_var_set_number(t(a), b.f);
             break;
 
         case SSOP_MOVS: /* move string */
-            surgescript_var_set_string(t[a.u], program->text[b.u]);
+            if(b.u < ssarray_length(program->text))
+                surgescript_var_set_string(t(a), program->text[b.u]);
             break;
 
-        case SSOP_MOVH: /* move handle (object handle) */
-            surgescript_var_set_objecthandle(t[a.u], b.u);
+        case SSOP_MOVO: /* move object handle */
+            surgescript_var_set_objecthandle(t(a), b.u);
             break;
 
         case SSOP_MOVC: /* move caller object ("this" pointer) */
-            surgescript_var_set_objecthandle(t[a.u], surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
+            surgescript_var_set_objecthandle(t(a), surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
             break;
 
         case SSOP_MOVT: /* move temp */
-            surgescript_var_copy(t[a.u], t[b.u]);
+            surgescript_var_copy(t(a), t(b));
             break;
 
         /* heap operations */
         case SSOP_ALOC:
-            surgescript_var_set_number(t[a.u], surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
+            surgescript_var_set_number(t(a), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
             break;
 
         case SSOP_STORE:
-            surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[b.u])), t[a.u]);
+            surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t(b))), t(a));
             break;
 
         case SSOP_LOAD:
-            surgescript_var_copy(t[a.u], surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t[b.u])));
+            surgescript_var_copy(t(a), surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t(b))));
             break;
 
         case SSOP_PEEK:
-            surgescript_var_copy(t[a.u], surgescript_heap_at(surgescript_renv_heap(runtime_environment), b.u));
+            surgescript_var_copy(t(a), surgescript_heap_at(surgescript_renv_heap(runtime_environment), b.u));
             break;
 
         case SSOP_POKE:
-            surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), b.u), t[a.u]);
+            surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), b.u), t(a));
             break;
 
         /* stack operations */
         case SSOP_PUSH:
-            surgescript_var_copy(surgescript_stack_push(surgescript_renv_stack(runtime_environment), surgescript_var_create()), t[a.u]);
+            surgescript_var_copy(surgescript_stack_push(surgescript_renv_stack(runtime_environment), surgescript_var_create()), t(a));
             break;
 
         case SSOP_POP:
-            surgescript_var_copy(t[a.u], surgescript_stack_top(surgescript_renv_stack(runtime_environment)));
+            surgescript_var_copy(t(a), surgescript_stack_top(surgescript_renv_stack(runtime_environment)));
             surgescript_stack_pop(surgescript_renv_stack(runtime_environment));
             break;
 
         case SSOP_SPEEK:
-            surgescript_var_copy(t[a.u], surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i));
+            surgescript_var_copy(t(a), surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i));
             break;
 
         case SSOP_SPOKE:
-            surgescript_var_copy(surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i),  t[a.u]);
+            surgescript_var_copy(surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i),  t(a));
             break;
 
         /* basic arithmetic */
-        /*case SSOP_ZERO:
-            surgescript_var_set_number(t[a.u], 0.0f);
-            break;*/
-
         case SSOP_INC:
-            surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) + 1.0f); /* TODO: inc op */
+            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) + 1.0f); /* TODO: inc op */
             break;
 
         case SSOP_DEC:
-            surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) - 1.0f); /* TODO: dec op */
+            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) - 1.0f); /* TODO: dec op */
             break;
 
         case SSOP_ADD:
-            surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) + surgescript_var_get_number(t[b.u]));
+            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) + surgescript_var_get_number(t(b)));
             break;
 
         case SSOP_SUB:
-            surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) - surgescript_var_get_number(t[b.u]));
+            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) - surgescript_var_get_number(t(b)));
             break;
 
         case SSOP_MUL:
-            surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) * surgescript_var_get_number(t[b.u]));
+            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) * surgescript_var_get_number(t(b)));
             break;
 
         case SSOP_DIV:
-            if(fabsf(surgescript_var_get_number(t[b.u])) >= FLT_EPSILON)
-                surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]) / surgescript_var_get_number(t[b.u]));
-            else if(surgescript_var_get_number(t[a.u]) >= 0.0f)
-                surgescript_var_set_number(t[a.u], INFINITY * sssign(surgescript_var_get_number(t[b.u])));
+            if(fast_float_sign(surgescript_var_get_number(t(b))) != 0)
+                surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) / surgescript_var_get_number(t(b)));
+            else if(fast_float_sign(surgescript_var_get_number(t(a))) >= 0)
+                surgescript_var_set_number(t(a), INFINITY * fast_float_sign1(surgescript_var_get_number(t(b))));
             else
-                surgescript_var_set_number(t[a.u], -INFINITY * sssign(surgescript_var_get_number(t[b.u])));
-            break;
-
-        /*case SSOP_MOD:
-            surgescript_var_set_number(t[a.u], fmodf(surgescript_var_get_number(t[a.u]), surgescript_var_get_number(t[b.u])));
-            break;*/
-
-        /*case SSOP_POW:
-            surgescript_var_set_number(t[a.u], powf(surgescript_var_get_number(t[a.u]), surgescript_var_get_number(t[b.u])));
-            break;*/
-
-        case SSOP_NOT:
-            surgescript_var_set_bool(t[a.u], !surgescript_var_get_bool(t[a.u]));
-            break;
-
-        case SSOP_AND:
-            if(surgescript_var_get_bool(t[a.u]))
-                surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[b.u]));
-            else
-                surgescript_var_set_bool(t[a.u], false);
-            break;
-
-        case SSOP_OR:
-            if(surgescript_var_get_bool(t[a.u]))
-                surgescript_var_set_bool(t[a.u], true);
-            else
-                surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[b.u]));
+                surgescript_var_set_number(t(a), -INFINITY * fast_float_sign1(surgescript_var_get_number(t(b))));
             break;
 
         case SSOP_NEG:
-            surgescript_var_set_number(t[a.u], -surgescript_var_get_number(t[a.u]));
+            surgescript_var_set_number(t(a), -surgescript_var_get_number(t(a)));
             break;
 
-        /* casting */
-        case SSOP_BOOL:
-            surgescript_var_set_bool(t[a.u], surgescript_var_get_bool(t[a.u]));
+        case SSOP_NOT:
+            surgescript_var_set_bool(t(a), !surgescript_var_get_bool(t(a)));
             break;
 
-        case SSOP_VAL:
-            surgescript_var_set_number(t[a.u], surgescript_var_get_number(t[a.u]));
+        case SSOP_AND:
+            if(surgescript_var_get_bool(t(a)))
+                surgescript_var_set_bool(t(a), surgescript_var_get_bool(t(b)));
+            else
+                surgescript_var_set_bool(t(a), false);
             break;
 
-        case SSOP_STR: {
-            if(surgescript_var_typecode(t[b.u]) != surgescript_var_type2code("object")) {
-                /* if it's not an object, convert to string */
-                char* buf = surgescript_var_get_string(t[a.u]);
-                surgescript_var_set_string(t[a.u], buf);
-                ssfree(buf);
-            }
-            else {
-                /* if it's an object, call its toString() method */
-                const char* program_name = "toString";
-                unsigned object_handle = surgescript_var_get_objecthandle(t[a.u]);
-                call_object_method(runtime_environment, object_handle, program_name, 0, t[a.u]);
-            }
+        case SSOP_OR:
+            if(surgescript_var_get_bool(t(a)))
+                surgescript_var_set_bool(t(a), true);
+            else
+                surgescript_var_set_bool(t(a), surgescript_var_get_bool(t(b)));
             break;
-        }
 
         case SSOP_CAT: {
-            char* str1 = surgescript_var_get_string(t[a.u]);
-            char* str2 = surgescript_var_get_string(t[b.u]);
+            char* str1 = surgescript_var_get_string(t(a));
+            char* str2 = surgescript_var_get_string(t(b));
             char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
-            surgescript_var_set_string(t[a.u], strcat(strcpy(str, str1), str2));
+            surgescript_var_set_string(t(a), strcat(strcpy(str, str1), str2));
             ssfree(str);
             ssfree(str2);
             ssfree(str1);
@@ -519,25 +486,25 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         }
 
         /*case SSOP_STRLEN: {
-            char* buf = surgescript_var_get_string(t[a.u]);
+            char* buf = surgescript_var_get_string(t(a));
             int len = strlen(buf); // TODO: utf-8 compat
-            surgescript_var_set_number(t[a.u], len);
+            surgescript_var_set_number(t(a), len);
             ssfree(buf);
             break;
         }
 
         case SSOP_STRMID: {
             char* substr;
-            char* str = surgescript_var_get_string(t[a.u]);
-            int start = surgescript_var_get_number(t[b.u]);
+            char* str = surgescript_var_get_string(t(a));
+            int st(a)rt = surgescript_var_get_number(t(b));
             int length = surgescript_var_get_number(t[c.u]);
             int n = strlen(str); // TODO: utf-8 compat
 
-            start = ssclamp(start, 0, n);
-            length = ssclamp(length, 0, n - start);
+            st(a)rt = ssclamp(st(a)rt, 0, n);
+            length = ssclamp(length, 0, n - st(a)rt);
             substr = ssmalloc((1 + length) * sizeof(*substr));
-            surgescript_util_strncpy(substr, str + start, length);
-            surgescript_var_set_string(t[a.u], substr);
+            surgescript_util_strncpy(substr, str + st(a)rt, length);
+            surgescript_var_set_string(t(a), substr);
 
             ssfree(substr);
             ssfree(str);
@@ -545,46 +512,72 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         }
 
         case SSOP_STRAT: {
-            char* str = surgescript_var_get_string(t[a.u]);
-            int index = surgescript_var_get_number(t[b.u]);
+            char* str = surgescript_var_get_string(t(a));
+            int index = surgescript_var_get_number(t(b));
             int n = strlen(str); // TODO: utf-8 compat
 
             char buf[2] = { ' ', '\0' };
             if(index >= 0 && index < n)
                 buf[0] = str[index];
-            surgescript_var_set_string(t[a.u], buf);
+            surgescript_var_set_string(t(a), buf);
 
             ssfree(str);
             break;
         }
 */
+
+        /* casting */
+        case SSOP_BOOL:
+            surgescript_var_set_bool(t(a), surgescript_var_get_bool(t(a)));
+            break;
+
+        case SSOP_VAL:
+            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)));
+            break;
+
+        case SSOP_STR: {
+            char* buf = surgescript_var_get_string(t(a));
+            surgescript_var_set_string(t(a), buf);
+            ssfree(buf);
+            break;
+            /*
+                const char* program_name = "toString";
+                unsigned object_handle = surgescript_var_get_objecthandle(t(a));
+                call_object_method(runtime_environment, object_handle, program_name, 0, t(a));
+            */
+        }
+
         /* comparing */
         case SSOP_CMP:
-            surgescript_var_set_number(t[2], surgescript_var_compare(t[a.u], t[b.u]));
+            surgescript_var_set_number(_t[2], surgescript_var_compare(t(a), t(b)));
             break;
 
         case SSOP_TEST:
-            surgescript_var_set_number(t[2], surgescript_var_get_rawbits(t[a.u]) & surgescript_var_get_rawbits(t[b.u]));
+            surgescript_var_set_number(_t[2], surgescript_var_get_rawbits(t(a)) & surgescript_var_get_rawbits(t(b)));
+            break;
+
+        case SSOP_TCHK:
+            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_typecode(t(b)));
             break;
 
         case SSOP_TCHK0:
-            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code(NULL));
+            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code(NULL));
             break;
 
         case SSOP_TCHKB:
-            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code("boolean"));
+            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("boolean"));
             break;
 
         case SSOP_TCHKN:
-            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code("number"));
+            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("number"));
             break;
 
         case SSOP_TCHKS:
-            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code("string"));
+            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("string"));
             break;
 
         case SSOP_TCHKO:
-            surgescript_var_set_number(t[2], surgescript_var_typecode(t[a.u]) - surgescript_var_type2code("object"));
+            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("object"));
             break;
 
         /* jumping */
@@ -593,7 +586,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             return;
 
         case SSOP_JE:
-            if(surgescript_var_get_number(t[2]) == 0) {
+            if(fast_float_sign(surgescript_var_get_number(_t[2])) == 0) {
                 program->ip = a.u;
                 return;
             }
@@ -601,7 +594,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JNE:
-            if(surgescript_var_get_number(t[2]) != 0) {
+            if(fast_float_sign(surgescript_var_get_number(_t[2])) != 0) {
                 program->ip = a.u;
                 return;
             }
@@ -609,7 +602,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JL:
-            if(surgescript_var_get_number(t[2]) < 0) {
+            if(fast_float_sign(surgescript_var_get_number(_t[2])) < 0) {
                 program->ip = a.u;
                 return;
             }
@@ -617,7 +610,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JG:
-            if(surgescript_var_get_number(t[2]) > 0) {
+            if(fast_float_sign(surgescript_var_get_number(_t[2])) > 0) {
                 program->ip = a.u;
                 return;
             }
@@ -625,7 +618,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JLE:
-            if(surgescript_var_get_number(t[2]) <= 0) {
+            if(fast_float_sign(surgescript_var_get_number(_t[2])) <= 0) {
                 program->ip = a.u;
                 return;
             }
@@ -633,7 +626,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JGE:
-            if(surgescript_var_get_number(t[2]) >= 0) {
+            if(fast_float_sign(surgescript_var_get_number(_t[2])) >= 0) {
                 program->ip = a.u;
                 return;
             }
@@ -642,20 +635,11 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         /* function calls */
         case SSOP_CALL: {
-            char* program_name = surgescript_var_get_string(t[a.u]);
-            unsigned object_handle = surgescript_var_get_objecthandle(t[b.u]);
-            int number_of_given_params = (int)surgescript_var_get_number(t[2]);
-            surgescript_var_t* return_value = t[2];
-
-            if(surgescript_var_typecode(t[b.u]) != surgescript_var_type2code("object")) {
-                char* thing = surgescript_var_get_string(t[b.u]);
-                ssfatal("Runtime Error: can't call %s() on \"%s\"", program_name, thing);
-                ssfree(thing);
-            }
-            else
-                call_object_method(runtime_environment, object_handle, program_name, number_of_given_params, return_value);
-
-            free(program_name);
+            const char* program_name = (a.u < ssarray_length(program->text)) ? program->text[a.u] : "";
+            unsigned object_handle = surgescript_var_get_objecthandle(surgescript_stack_top(surgescript_renv_stack(runtime_environment)));
+            unsigned number_of_given_params = b.u;
+            surgescript_var_t* return_value = _t[2];
+            call_object_method(runtime_environment, object_handle, program_name, number_of_given_params, return_value);
             break;
         }
 
@@ -701,9 +685,9 @@ void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned
 }
 
 /* writes data to buf, in hex/little-endian format (writes 9 bytes) */
-char* hexdump32(long data, char* buf)
+char* hexdump32(unsigned data, char* buf)
 {
-    snprintf(buf, 9, "%08lx", (unsigned long)data);
+    snprintf(buf, 9, "%08ux", data);
     return buf;
 }
 
@@ -765,4 +749,20 @@ bool remove_labels(surgescript_program_t* program)
     }
     else
         return false;
+}
+
+/* returns -1 if f < 0, 0 if if == 0, 1 if f > 0 */
+int fast_float_sign(float f)
+{
+    /* IEEE-754 floating-point representation */
+    if((*((int*)&f) & 0x7FFFFFFF) == 0)
+        return 0;
+    else
+        return 1 - ((*((int*)&f) & 0x80000000) >> 30);
+}
+
+/* returns -1 if f <= -0, 1 if f >= +0 */
+int fast_float_sign1(float f)
+{
+    return 1 - ((*((int*)&f) & 0x80000000) >> 30);
 }

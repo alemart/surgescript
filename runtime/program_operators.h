@@ -30,7 +30,7 @@
     F( SSOP_MOVB, "movb" )                             /* t[a] = (bool)b */ \
     F( SSOP_MOVF, "movf" )                           /* t[a] = (number)b */ \
     F( SSOP_MOVS, "movs" )                             /* t[a] = text[b] */ \
-    F( SSOP_MOVH, "movh" )                           /* t[a] = (object)b */ \
+    F( SSOP_MOVO, "movo" )                           /* t[a] = (object)b */ \
     F( SSOP_MOVC, "movc" )    /* t[a] = handle to caller object ("this") */ \
     F( SSOP_MOVT, "movt" )                                /* t[a] = t[b] */ \
                                                                             \
@@ -55,13 +55,14 @@
     F( SSOP_NOT, "not" )                              /* t[a] = not t[a] */ \
     F( SSOP_AND, "and" )                         /* t[a] = t[a] and t[b] */ \
     F( SSOP_OR, "or" )                            /* t[a] = t[a] or t[b] */ \
+    F( SSOP_CAT, "cat" )                    /* t[a] = strcat(t[a], t[b]) */ \
                                                                             \
     F( SSOP_BOOL, "bool" )                          /* t[a] = bool(t[a]) */ \
     F( SSOP_VAL, "val" )                          /* t[a] = number(t[a]) */ \
     F( SSOP_STR, "str" )                          /* t[a] = string(t[a]) */ \
-    F( SSOP_CAT, "cat" )                    /* t[a] = strcat(t[a], t[b]) */ \
                                                                             \
     F( SSOP_TEST, "test" )                         /* t[2] = t[a] & t[b] */ \
+    F( SSOP_TCHK, "tchk" )               /* t[2] = typecheck(t[a], t[b]) */ \
     F( SSOP_TCHK0, "tchk0" )             /* t[2] = typecheck(t[a], null) */ \
     F( SSOP_TCHKB, "tchkb" )             /* t[2] = typecheck(t[a], bool) */ \
     F( SSOP_TCHKN, "tchkn" )           /* t[2] = typecheck(t[a], number) */ \
@@ -77,9 +78,9 @@
     F( SSOP_JL, "jl" )                     /* jump to line a if t[2] < 0 */ \
     F( SSOP_JLE, "jle" )                  /* jump to line a if t[2] <= 0 */ \
                                                                             \
-    F( SSOP_CALL, "call" )              /* call program named text[t[a]] */ \
-                                     /* of the object having handle t[b] */ \
-                                    /* with n = t[2] parameters, storing */ \
+    F( SSOP_CALL, "call" )                 /* call program named text[a] */ \
+                                      /* of the object at the top of the */ \
+                                 /* stack with n = b parameters, storing */ \
                               /* in t[2] the return value of the program */ \
     F( SSOP_RET, "ret" )                 /* returns, halting the program */
 
