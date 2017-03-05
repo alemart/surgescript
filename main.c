@@ -15,7 +15,7 @@
 #include "compiler/lexer.h"
 #include "compiler/parser.h"
 
-#if 1
+#if 0
 /* setup some programs */
 static void setup(surgescript_program_t* program)
 {
@@ -174,9 +174,14 @@ int main()
     /* done */
     return 0;
 }
-#endif
+#else
+static surgescript_var_t* my_cfun(surgescript_object_t* caller, const surgescript_var_t** param, int num_params)
+{
+    printf("Hello, Application!\n");
+    surgescript_object_kill(caller);
+    return NULL;
+}
 
-#if 0
 /* testing the parser */
 int main()
 {
@@ -186,17 +191,22 @@ int main()
     bool success;
 
     success = surgescript_parser_parsefile(parser, "./test.ss");
-    if(success) {
-        puts("Parsed file.");
-    }
+    if(!success)
+        puts("Error when parsing file.");
 
-    surgescript_program_dump(surgescript_programpool_get(program_pool, "test", "__ssconstructor"), stdout);
+    surgescript_vm_bind(vm, "Application", "state:main", my_cfun, 0);
+    surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "__ssconstructor"), stdout);
     surgescript_parser_destroy(parser);
+
+    surgescript_vm_launch(vm);
+    while(surgescript_vm_update(vm)) {
+        ;
+    }
     surgescript_vm_destroy(vm);
 
-    float test = 0.0f;
-    *((unsigned*)&test) = 0x40490fd0;
-    printf("== test %f\n", test);
+    union { float f; long l; unsigned u; } x;
+    x.u = 0x1;
+    printf("== test %f, %x, %u\n", x.f, x.l, x.u);
     return 0;
 }
 #endif

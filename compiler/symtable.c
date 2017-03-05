@@ -103,8 +103,8 @@ void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, cons
         surgescript_symtable_entry_t entry = { .symbol = symname, .heapaddr = address, .vtable = &heapvt };
         ssarray_push(symtable->entry, entry);
     }
-    else
-        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
+    /*else
+        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);*/
 }
 
 /*
@@ -118,8 +118,8 @@ void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, con
         surgescript_symtable_entry_t entry = { .symbol = symname, .stackaddr = address, .vtable = &stackvt };
         ssarray_push(symtable->entry, entry);
     }
-    else
-        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
+    /*else
+        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);*/
 }
 
 /*
@@ -176,6 +176,15 @@ int surgescript_symtable_deepcount(surgescript_symtable_t* symtable)
     return symtable ? ssarray_length(symtable->entry) + surgescript_symtable_deepcount(symtable->parent) : 0;
 }
 
+
+/*
+ * surgescript_symtable_has_parent()
+ * Does this table have a parent?
+ */
+bool surgescript_symtable_has_parent(surgescript_symtable_t* symtable)
+{
+    return symtable->parent != NULL;
+}
 
 /* privates */
 

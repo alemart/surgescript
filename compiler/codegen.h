@@ -18,6 +18,19 @@
 void emit_object_header(surgescript_nodecontext_t context, surgescript_program_label_t start, surgescript_program_label_t end);
 void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_label_t start, surgescript_program_label_t end);
 
+/* declarations */
+void emit_vardecl(surgescript_nodecontext_t context, const char* identifier);
+
+/* expressions */
+void emit_assignexpr(surgescript_nodecontext_t context, const char* identifier, const char* assignop);
+void emit_conditionalexpr1(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done);
+void emit_conditionalexpr2(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done);
+void emit_conditionalexpr3(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done);
+void emit_logicalorexpr1(surgescript_nodecontext_t context, surgescript_program_label_t done);
+void emit_logicalorexpr2(surgescript_nodecontext_t context, surgescript_program_label_t done);
+void emit_logicalandexpr1(surgescript_nodecontext_t context, surgescript_program_label_t done);
+void emit_logicalandexpr2(surgescript_nodecontext_t context, surgescript_program_label_t done);
+
 /* constants */
 void emit_null(surgescript_nodecontext_t context);
 void emit_bool(surgescript_nodecontext_t context, bool value);

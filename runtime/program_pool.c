@@ -7,6 +7,7 @@
  * SurgeScript program pool
  */
 
+#include <string.h>
 #include "program_pool.h"
 #include "program.h"
 #include "../util/uthash.h"
@@ -114,7 +115,11 @@ surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* po
 
         /* really, the program doesn't exist */
         if(!pair) {
-            ssfatal("Runtime Error: can't find function \"%s\" in object \"%s\"", program_name, object_name);
+            if(strncmp(program_name, "state:", 6) == 0)
+                ssfatal("Runtime Error: can't find state \"%s\" in object \"%s\"", program_name + 6, object_name);
+            else
+                ssfatal("Runtime Error: can't find function \"%s\" in object \"%s\"", program_name, object_name);
+
             return NULL;
         }
     }

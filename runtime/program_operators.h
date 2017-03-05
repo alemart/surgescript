@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/program_operators.h
  * SurgeScript program operators table
@@ -13,7 +13,7 @@
 /*
     conventions:
         let 'a' and 'b' be the arguments of each operation
-        and t[0 .. 3] be the temps (aka "registers")
+        and t[0 .. 3] be temporary values (aka "registers")
 
     now,
         a, b are constants

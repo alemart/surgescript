@@ -25,6 +25,7 @@
 struct surgescript_parser_t
 {
     surgescript_token_t* lookahead;
+    surgescript_token_t* previous;
     surgescript_lexer_t* lexer;
     char* filename;
     surgescript_programpool_t* program_pool;
@@ -32,11 +33,15 @@ struct surgescript_parser_t
 
 /* helpers */
 static void parse(surgescript_parser_t* parser);
-static inline bool gottype(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
+static inline bool got_type(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
+static inline bool has_token(surgescript_parser_t* parser);
 static void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
 static bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
+static void match_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
+static void unmatch(surgescript_parser_t* parser);
 static void expect(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
 static void expect_something(surgescript_parser_t* parser);
+static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
 static const char* ssbasename(const char* path);
 
 /* non-terminals */
@@ -96,7 +101,7 @@ static void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t con
 surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* program_pool)
 {
     surgescript_parser_t* parser = ssmalloc(sizeof *parser);
-    parser->lookahead = NULL;
+    parser->lookahead = parser->previous = NULL;
     parser->lexer = surgescript_lexer_create();
     parser->filename = ssstrdup("<unspecified>");
     parser->program_pool = program_pool;
@@ -113,6 +118,8 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser)
     surgescript_lexer_destroy(parser->lexer);
     if(parser->lookahead)
         surgescript_token_destroy(parser->lookahead);
+    if(parser->previous)
+        surgescript_token_destroy(parser->previous);
     return ssfree(parser);
 }
 
@@ -186,12 +193,13 @@ const char* surgescript_parser_filename(surgescript_parser_t* parser)
 /* parses a script */
 void parse(surgescript_parser_t* parser)
 {
+    sslog("Parsing \"%s\"...", parser->filename);
     parser->lookahead = surgescript_lexer_scan(parser->lexer); /* grab first symbol */
     return objectlist(parser);
 }
 
 /* does the lookahead symbol have the given type? */
-bool gottype(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
+bool got_type(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
     return parser->lookahead && surgescript_token_type(parser->lookahead) == symbol;
 }
@@ -199,8 +207,10 @@ bool gottype(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 /* match a symbol; throw a fatal error if the symbol is not matched */
 void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
-    if(gottype(parser, symbol)) {
-        surgescript_token_destroy(parser->lookahead);
+    if(got_type(parser, symbol)) {
+        if(parser->previous)
+            surgescript_token_destroy(parser->previous);
+        parser->previous = parser->lookahead;
         parser->lookahead = surgescript_lexer_scan(parser->lexer); /* grab next symbol */
     }
     else
@@ -210,7 +220,7 @@ void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 /* match the given symbol or the empty symbol */
 bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
-    if(gottype(parser, symbol)) {
+    if(got_type(parser, symbol)) {
         match(parser, symbol);
         return true;
     }
@@ -218,12 +228,34 @@ bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
         return false;
 }
 
+/* match exactly the given symbol with the given lexeme */
+void match_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme)
+{
+    if(got_type(parser, symbol) && strcmp(surgescript_token_lexeme(parser->lookahead), lexeme) == 0)
+        match(parser, symbol);
+    else
+        expect_exactly(parser, symbol, lexeme); /* error */
+}
+
+/* puts the last token back into the lexer */
+void unmatch(surgescript_parser_t* parser)
+{
+    if(parser->previous && surgescript_lexer_unscan(parser->lexer, parser->previous)) {
+        surgescript_token_destroy(parser->lookahead);
+        parser->lookahead = surgescript_lexer_scan(parser->lexer);
+    }
+    else if(parser->previous)
+        ssfatal("Can\'t unmatch symbol \"%s\" on %s:%d.", surgescript_tokentype_name(surgescript_token_type(parser->previous)), parser->filename, surgescript_token_linenumber(parser->previous));
+    else
+        ssfatal("Can\'t unmatch symbol on %s.", parser->filename);
+}
+
 /* throw an error if the lookahead is not of the expected type */
 void expect(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
     if(parser->lookahead && surgescript_token_type(parser->lookahead) != symbol) {
         ssfatal(
-            "Parse Error: expected \"%s\" on %s near line %d.",
+            "Parse Error: expected \"%s\" on %s:%d.",
             surgescript_tokentype_name(symbol),
             parser->filename,
             surgescript_token_linenumber(parser->lookahead)
@@ -249,6 +281,32 @@ void expect_something(surgescript_parser_t* parser)
     }   
 }
 
+/* expect exactly the given token, with the given lexeme */
+void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme)
+{
+    if(parser->lookahead && (surgescript_token_type(parser->lookahead) != symbol || strcmp(surgescript_token_lexeme(parser->lookahead), lexeme) != 0)) {
+        ssfatal(
+            "Parse Error: expected \"%s\" on %s:%d.",
+            lexeme,
+            parser->filename,
+            surgescript_token_linenumber(parser->lookahead)
+        );
+    }
+    else if(NULL == parser->lookahead) {
+         ssfatal(
+            "Parse Error: unexpected end of the file on %s (did you forget a \"%s\"?)",
+            parser->filename,
+            lexeme
+        );
+    }
+}
+
+/* is there a token to be analyzed? */
+bool has_token(surgescript_parser_t* parser)
+{
+    return parser->lookahead != NULL;
+}
+
 /* similar to basename(), but without the odd semantics. No strings are allocated. */
 const char* ssbasename(const char* path)
 {
@@ -271,7 +329,7 @@ const char* ssbasename(const char* path)
 
 void objectlist(surgescript_parser_t* parser)
 {
-    if(parser->lookahead) {
+    if(has_token(parser)) {
         object(parser);
         objectlist(parser);
     }
@@ -297,7 +355,7 @@ void object(surgescript_parser_t* parser)
     match(parser, SSTOK_RCURLY);
 
     surgescript_programpool_put(parser->program_pool,  object_name, "__ssconstructor", context.program);
-    surgescript_symtable_destroy(context.symbol_table);
+    surgescript_symtable_destroy(context.symtable);
     ssfree(object_name);
 }
 
@@ -310,14 +368,109 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     emit_object_header(context, start, end);
 
     /* read non-terminals */
-    signedconst(parser, context);
+    vardecllist(parser, context);
 
     /* tell the program how many variables should be allocated */
     emit_object_footer(context, start, end);
 }
 
+void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    while(has_token(parser) && got_type(parser, SSTOK_IDENTIFIER))
+        vardecl(parser, context);
+}
+
+void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+
+    match(parser, SSTOK_IDENTIFIER);
+    match_exactly(parser, SSTOK_ASSIGNOP, "=");
+    expr(parser, context);
+    match(parser, SSTOK_SEMICOLON);
+
+    emit_vardecl(context, id);
+    ssfree(id);
+}
 
 
+
+/* expressions (their return value is stored in t[0]) */
+void expr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    do {
+        assignexpr(parser, context);
+    } while(optmatch(parser, SSTOK_COMMA));
+}
+
+void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    if(got_type(parser, SSTOK_IDENTIFIER)) {
+        char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_IDENTIFIER);
+
+        if(got_type(parser, SSTOK_ASSIGNOP)) {
+            char* assignop = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+            match(parser, SSTOK_ASSIGNOP);
+            assignexpr(parser, context);
+            emit_assignexpr(context, identifier, assignop);
+            ssfree(assignop);
+        }
+        else {
+            unmatch(parser);
+            conditionalexpr(parser, context);
+        }
+
+        ssfree(identifier);
+    }
+    else
+        conditionalexpr(parser, context);
+}
+
+void conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    logicalorexpr(parser, context);
+    if(optmatch(parser, SSTOK_CONDITIONALOP)) {
+        surgescript_program_label_t nope = surgescript_program_new_label(context.program);
+        surgescript_program_label_t done = surgescript_program_new_label(context.program);
+        
+        emit_conditionalexpr1(context, nope, done);
+        expr(parser, context);
+        match(parser, SSTOK_COLON);
+        emit_conditionalexpr2(context, nope, done);
+        conditionalexpr(parser, context);
+        emit_conditionalexpr3(context, nope, done);
+    }
+}
+
+void logicalorexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_program_label_t done = surgescript_program_new_label(context.program);
+
+    logicalandexpr(parser, context);
+    while(optmatch(parser, SSTOK_LOGICALOROP)) {
+        emit_logicalorexpr1(context, done);
+        logicalandexpr(parser, context);
+        emit_logicalorexpr2(context, done);
+    }
+}
+
+void logicalandexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_program_label_t done = surgescript_program_new_label(context.program);
+
+    equalityexpr(parser, context);
+    while(optmatch(parser, SSTOK_LOGICALANDOP)) {
+        emit_logicalandexpr1(context, done);
+        equalityexpr(parser, context);
+        emit_logicalandexpr2(context, done);
+    }
+}
+
+void equalityexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    signedconst(parser, context);
+}
 
 /* notes */
 
@@ -367,18 +520,19 @@ void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     expect_something(parser);
     token = parser->lookahead;
 
-    if(gottype(parser, SSTOK_ADDITIVEOP)) {
+    if(got_type(parser, SSTOK_ADDITIVEOP)) {
         float value = 0.0;
         bool plus = (strcmp(surgescript_token_lexeme(token), "+") == 0);
         
         match(parser, SSTOK_ADDITIVEOP);
-        if(gottype(parser, SSTOK_NUMBER)) {
+        if(got_type(parser, SSTOK_NUMBER)) {
+            token = parser->lookahead;
             value = atof(surgescript_token_lexeme(token));
             emit_number(context, plus ? value : -value);
         }
         match(parser, SSTOK_NUMBER);
     }
-    else if(gottype(parser, SSTOK_NUMBER)) {
+    else if(got_type(parser, SSTOK_NUMBER)) {
         emit_number(context, atof(surgescript_token_lexeme(token)));
         match(parser, SSTOK_NUMBER);
     }

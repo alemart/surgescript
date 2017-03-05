@@ -30,7 +30,7 @@
  * <endnote> := emoticon | e
  *
  * <vardecllist> := <vardecl> <vardecllist> | e
- * <vardecl> := identifier = <expr> ;
+ * <vardecl> := identifier = <conditionalexpr> ;
  *
  * <statedecllist> := <statedecl> <statedecllist> | e
  * <statedecl> := state string { <stmtlist> }
@@ -43,7 +43,7 @@
  *
  *
  *
- * <expr> := <assignexpr> , | <assignexpr>
+ * <expr> := <assignexpr> , <expr> | <assignexpr>
  * <assignexpr> := <conditionalexpr> | identifier assignop <assignexpr>
  * <conditionalexpr> := <logicalorexpr> | <logicalorexpr> ? <expr> : <conditionalexpr>
  * <logicalorexpr> := <logicalandexpr> <logicalorexpr1>

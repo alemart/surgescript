@@ -56,15 +56,129 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
 
     SSASM(SSOP_RET);
     LABEL(end);
-        SSASM(SSOP_MOVF, T2, F(surgescript_symtable_count(context.symbol_table)));
-        SSASM(SSOP_JE, U(start));
+        SSASM(SSOP_MOVF, T2, F(surgescript_symtable_count(context.symtable)));
         LABEL(aloc);
+            SSASM(SSOP_JE, U(start));
             SSASM(SSOP_ALOC);
             SSASM(SSOP_DEC, T2);
-            SSASM(SSOP_JNE, U(aloc));
-        SSASM(SSOP_JMP, U(start));
+            SSASM(SSOP_JMP, U(aloc));
 }
 
+/* declarations */
+void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
+{
+    surgescript_symtable_put_heap_symbol(context.symtable, identifier, (surgescript_heapptr_t)surgescript_symtable_count(context.symtable));
+    surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
+    SSASM(SSOP_OUT, T0);
+}
+
+/* expressions */
+void emit_assignexpr(surgescript_nodecontext_t context, const char* identifier, const char* assignop)
+{
+    /* put the identifier on the symbol table, and assign the symbol an address */
+    if(!surgescript_symtable_has_parent(context.symtable))
+        surgescript_symtable_put_heap_symbol(context.symtable, identifier, (surgescript_heapptr_t)surgescript_symtable_count(context.symtable));
+    else
+        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(-2 - surgescript_symtable_count(context.symtable)));
+
+    /* perform the assignment operation */
+    switch(*assignop) {
+        case '=':
+            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
+            break;
+
+        case '+': {
+            surgescript_program_label_t dif = NEWLABEL();
+            surgescript_program_label_t cat = NEWLABEL();
+            surgescript_program_label_t add = NEWLABEL();
+            surgescript_program_label_t end = NEWLABEL();
+
+            surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
+            SSASM(SSOP_TCHK, T1, T0);
+            SSASM(SSOP_JNE, U(dif));
+            SSASM(SSOP_TCHKN, T1);
+            SSASM(SSOP_JE, U(add));
+            LABEL(dif);
+            SSASM(SSOP_TCHKS, T1);
+            SSASM(SSOP_JE, U(cat));
+            SSASM(SSOP_TCHKO, T1);
+            SSASM(SSOP_JNE, U(add));
+            LABEL(cat);
+            SSASM(SSOP_CAT, T1, T0);
+            SSASM(SSOP_JMP, U(end));
+            LABEL(add);
+            SSASM(SSOP_ADD, T1, T0);
+            LABEL(end);
+            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
+            SSASM(SSOP_MOVT, T0, T1);
+
+            break;
+        }
+
+        case '-':
+            surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
+            SSASM(SSOP_SUB, T1, T0);
+            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
+            SSASM(SSOP_MOVT, T0, T1);
+            break;
+
+        case '*':
+            surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
+            SSASM(SSOP_MUL, T1, T0);
+            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
+            SSASM(SSOP_MOVT, T0, T1);
+            break;
+
+        case '/':
+            surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
+            SSASM(SSOP_DIV, T1, T0);
+            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
+            SSASM(SSOP_MOVT, T0, T1);
+            break;
+    }
+}
+
+void emit_conditionalexpr1(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done)
+{
+    /*SSASM(SSOP_MOVT, T2, T0);*/
+    SSASM(SSOP_TEST, T0, T0);
+    SSASM(SSOP_JE, U(nope));
+}
+
+void emit_conditionalexpr2(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done)
+{
+    SSASM(SSOP_JMP, U(done));
+    LABEL(nope);
+}
+
+void emit_conditionalexpr3(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done)
+{
+    LABEL(done);
+}
+
+void emit_logicalorexpr1(surgescript_nodecontext_t context, surgescript_program_label_t done)
+{
+    /* short-circuit evaluation */
+    SSASM(SSOP_TEST, T0, T0);
+    SSASM(SSOP_JNE, U(done));
+}
+
+void emit_logicalorexpr2(surgescript_nodecontext_t context, surgescript_program_label_t done)
+{
+    LABEL(done);
+}
+
+void emit_logicalandexpr1(surgescript_nodecontext_t context, surgescript_program_label_t done)
+{
+    /* short-circuit evaluation */
+    SSASM(SSOP_TEST, T0, T0);
+    SSASM(SSOP_JE, U(done));
+}
+
+void emit_logicalandexpr2(surgescript_nodecontext_t context, surgescript_program_label_t done)
+{
+    LABEL(done);
+}
 
 /* constants */
 void emit_null(surgescript_nodecontext_t context)

@@ -7,6 +7,7 @@
  * SurgeScript program
  */
 
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -62,14 +63,14 @@ static surgescript_program_t* init_program(surgescript_program_t* program, int a
 static void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
 static void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
 static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b);
-static void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned object_handle, const char* program_name, int number_of_given_params, surgescript_var_t* return_value);
-static char* hexdump32(unsigned data, char* buf); /* writes 9 bytes to buf */
-static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
+static inline void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned object_handle, const char* program_name, int number_of_given_params, surgescript_var_t* return_value);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
-static bool remove_labels(surgescript_program_t* program);
+static inline bool remove_labels(surgescript_program_t* program);
+static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
+static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
 static inline int fast_float_sign(float f);
 static inline int fast_float_sign1(float f);
-
+static inline int fast_float_notzero(float f);
 
 /* -------------------------------
  * public methods
@@ -219,7 +220,7 @@ void surgescript_program_run(surgescript_program_t* program, surgescript_renv_t*
 void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 {
     int i;
-    char hex[2][16];
+    char hex[2][1 + 2 * sizeof(unsigned)];
     surgescript_program_operation_t* op;
 
     remove_labels(program);
@@ -237,8 +238,8 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
         fprintf(fp,
             "        \"%s\t  %s    %s\"%s\n",
             instruction_name[op->instruction],
-            hexdump32(op->a.u, hex[0]),
-            hexdump32(op->b.u, hex[1]),
+            hexdump(op->a.u, hex[0]),
+            hexdump(op->b.u, hex[1]),
             (i < ssarray_length(program->line) - 1) ? "," : ""
         );
     }
@@ -331,7 +332,12 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 {
     /* temporary variables */
     surgescript_var_t** _t = surgescript_renv_tmp(runtime_environment);
-    #define t(k)             _t[(k.u) & 3]
+
+    /* helper macro */
+    #ifdef t
+    #undef t
+    #endif
+    #define t(k)             _t[(k).u & 3]
 
     /* run the instruction */
     switch(instruction) {
@@ -419,7 +425,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_SPOKE:
-            surgescript_var_copy(surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i),  t(a));
+            surgescript_var_copy(surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i), t(a));
             break;
 
         /* basic arithmetic */
@@ -444,7 +450,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_DIV:
-            if(fast_float_sign(surgescript_var_get_number(t(b))) != 0)
+            if(fast_float_notzero(surgescript_var_get_number(t(b))))
                 surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) / surgescript_var_get_number(t(b)));
             else if(fast_float_sign(surgescript_var_get_number(t(a))) >= 0)
                 surgescript_var_set_number(t(a), INFINITY * fast_float_sign1(surgescript_var_get_number(t(b))));
@@ -553,7 +559,8 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_TEST:
-            surgescript_var_set_number(_t[2], surgescript_var_get_rawbits(t(a)) & surgescript_var_get_rawbits(t(b)));
+            a.u = surgescript_var_get_rawbits(t(a)) & surgescript_var_get_rawbits(t(b)); /* a is passed by value */
+            surgescript_var_set_number(_t[2], a.f);
             break;
 
         case SSOP_TCHK:
@@ -586,7 +593,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             return;
 
         case SSOP_JE:
-            if(fast_float_sign(surgescript_var_get_number(_t[2])) == 0) {
+            if(!fast_float_notzero(surgescript_var_get_number(_t[2]))) {
                 program->ip = a.u;
                 return;
             }
@@ -594,7 +601,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JNE:
-            if(fast_float_sign(surgescript_var_get_number(_t[2])) != 0) {
+            if(fast_float_notzero(surgescript_var_get_number(_t[2]))) {
                 program->ip = a.u;
                 return;
             }
@@ -684,10 +691,22 @@ void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned
         ssfatal("Runtime Error: function \"%s.%s\" (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), expected_params, number_of_given_params);
 }
 
-/* writes data to buf, in hex/little-endian format (writes 9 bytes) */
-char* hexdump32(unsigned data, char* buf)
+/* writes data to buf, in hex/big-endian format (writes (1 + 2 * sizeof(unsigned)) bytes to buf) */
+char* hexdump(unsigned data, char* buf)
 {
-    snprintf(buf, 9, "%08ux", data);
+    const char* bytes = (const char*)(&data);
+    char n1, n2, *p = buf;
+    int i;
+
+    data = surgescript_util_htob(data);
+    for(i = 0; i < sizeof(data); i++) {
+        n1 = (bytes[i] >> 4) & 0xF;
+        n2 = bytes[i] & 0xF;
+        *(p++) = n1 + (n1 <= 9 ? '0' : 'a' - 10);
+        *(p++) = n2 + (n2 <= 9 ? '0' : 'a' - 10);
+    }
+
+    *p = 0;
     return buf;
 }
 
@@ -751,14 +770,22 @@ bool remove_labels(surgescript_program_t* program)
         return false;
 }
 
+
+
+/* --------------- float utilities --------------- */
+#define FAST_FLOAT_FUNCTIONS
+#ifdef FAST_FLOAT_FUNCTIONS
+
+static_assert(
+    sizeof(float) == 4 && sizeof(float) == sizeof(int),
+    "Code relies on float taking 4 bytes under the IEEE-754 floating-point representation. "
+    "Undefine FAST_FLOAT_FUNCTIONS in " __FILE__ " to fix this."
+);
+
 /* returns -1 if f < 0, 0 if if == 0, 1 if f > 0 */
 int fast_float_sign(float f)
 {
-    /* IEEE-754 floating-point representation */
-    if((*((int*)&f) & 0x7FFFFFFF) == 0)
-        return 0;
-    else
-        return 1 - ((*((int*)&f) & 0x80000000) >> 30);
+    return ((*((int*)&f) & 0x7FFFFFFF) != 0) * (1 - ((*((int*)&f) & 0x80000000) >> 30));
 }
 
 /* returns -1 if f <= -0, 1 if f >= +0 */
@@ -766,3 +793,31 @@ int fast_float_sign1(float f)
 {
     return 1 - ((*((int*)&f) & 0x80000000) >> 30);
 }
+
+/* returns "true" iff f != +0 and f != -0 */
+int fast_float_notzero(float f)
+{
+    return (*((int*)&f) & 0x7FFFFFFF);
+}
+
+#else
+
+/* returns -1 if f < 0, 0 if if == 0, 1 if f > 0 */
+int fast_float_sign(float f)
+{
+    return fast_float_notzero(f) ? fast_float_sign1(f) : 0;
+}
+
+/* returns -1 if f <= -0, 1 if f >= +0 */
+int fast_float_sign1(float f)
+{
+    return signbit(f) == 0 ? 1 : -1;
+}
+
+/* returns "true" iff f != +0 and f != -0 */
+int fast_float_notzero(float f)
+{
+    return fpclassify(f) != FP_ZERO;
+}
+
+#endif

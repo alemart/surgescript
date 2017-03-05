@@ -3,7 +3,7 @@ default: all
 
 TARGET = surgescript
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -std=c11
 RM = rm -rf
 
 variable: runtime/variable.c runtime/variable.h utils

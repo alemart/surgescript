@@ -18,7 +18,7 @@ struct surgescript_programpool_t;
 typedef struct surgescript_nodecontext_t
 {
     const char* object_name;
-    struct surgescript_symtable_t* symbol_table;
+    struct surgescript_symtable_t* symtable;
     struct surgescript_program_t* program;
 } surgescript_nodecontext_t;
 

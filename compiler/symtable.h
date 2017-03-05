@@ -39,4 +39,7 @@ int surgescript_symtable_count(surgescript_symtable_t* symtable);
 /* count the number of symbols, including the parent */
 int surgescript_symtable_deepcount(surgescript_symtable_t* symtable);
 
+/* does this table have a parent? */
+bool surgescipt_symtable_has_parent(surgescript_symtable_t* symtable);
+
 #endif

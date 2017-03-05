@@ -32,13 +32,13 @@ enum surgescript_vartype_t {
 /* the variable struct */
 struct surgescript_var_t
 {
-    enum surgescript_vartype_t type;
     union {
-        float number;
-        bool boolean;
         char* string;
-        unsigned handle;
+        float number;
+        unsigned handle:32;
+        bool boolean;
     };
+    enum surgescript_vartype_t type;
 };
 
 /* helpers */
@@ -102,7 +102,7 @@ surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, bool boolean
 {
     RELEASE_DATA(var);
     var->type = SSVAR_BOOL;
-    var->boolean = boolean ? true : false;
+    var->boolean = boolean;
     return var;
 }
 
@@ -139,14 +139,6 @@ surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsi
     RELEASE_DATA(var);
     var->type = SSVAR_OBJECTHANDLE;
     var->handle = handle;
-    /*surgescript_object_increment_reference_count(
-        surgescript_objectmanager_get(
-            surgescript_vm_objectmanager(
-                surgescript_vm()
-            ),
-            var->handle
-        )
-    );*/
     return var;
 }
 
@@ -170,16 +162,16 @@ bool surgescript_var_is_null(const surgescript_var_t* var)
 bool surgescript_var_get_bool(const surgescript_var_t* var)
 {
     switch(var->type) {
-    case SSVAR_BOOL:
-        return var->boolean;
-    case SSVAR_NUMBER:
-        return var->number != 0 ? true : false;
-    case SSVAR_STRING:
-        return *(var->string) != 0 ? true : false;
-    case SSVAR_NULL:
-        return false;
-    case SSVAR_OBJECTHANDLE:
-        return true;
+        case SSVAR_BOOL:
+            return var->boolean;
+        case SSVAR_NUMBER:
+            return var->number != 0 ? true : false;
+        case SSVAR_STRING:
+            return *(var->string) != 0 ? true : false;
+        case SSVAR_NULL:
+            return false;
+        case SSVAR_OBJECTHANDLE:
+            return true;
     }
 
     return false;
@@ -192,16 +184,16 @@ bool surgescript_var_get_bool(const surgescript_var_t* var)
 float surgescript_var_get_number(const surgescript_var_t* var)
 {
     switch(var->type) {
-    case SSVAR_NUMBER:
-        return var->number;
-    case SSVAR_BOOL:
-        return var->boolean ? 1.0f : 0.0f;
-    case SSVAR_STRING:
-        return atof(var->string);
-    case SSVAR_NULL:
-        return 0.0f;
-    case SSVAR_OBJECTHANDLE:
-        return 0.0f;
+        case SSVAR_NUMBER:
+            return var->number;
+        case SSVAR_BOOL:
+            return var->boolean ? 1.0f : 0.0f;
+        case SSVAR_STRING:
+            return atof(var->string);
+        case SSVAR_NULL:
+            return 0.0f;
+        case SSVAR_OBJECTHANDLE:
+            return 1.0f;
     }
 
     return 0.0f;
@@ -214,17 +206,17 @@ float surgescript_var_get_number(const surgescript_var_t* var)
 char* surgescript_var_get_string(const surgescript_var_t* var)
 {
     switch(var->type) {
-    case SSVAR_STRING:
-        return ssstrdup(var->string);
-    case SSVAR_BOOL:
-        return ssstrdup(var->boolean ? "true" : "false");
-    case SSVAR_NULL:
-        return ssstrdup("null");
-    default: {
-        char buf[128];
-        surgescript_var_to_string(var, buf, sizeof(buf) / sizeof(char));
-        return ssstrdup(buf);
-    }
+        case SSVAR_STRING:
+            return ssstrdup(var->string);
+        case SSVAR_BOOL:
+            return ssstrdup(var->boolean ? "true" : "false");
+        case SSVAR_NULL:
+            return ssstrdup("null");
+        default: {
+            char buf[128];
+            surgescript_var_to_string(var, buf, sizeof(buf) / sizeof(char));
+            return ssstrdup(buf);
+        }
     }
 }
 
@@ -251,20 +243,20 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
     dst->type = src->type;
 
     switch(src->type) {
-    case SSVAR_BOOL:
-        dst->boolean = src->boolean;
-        break;
-    case SSVAR_NUMBER:
-        dst->number = src->number;
-        break;
-    case SSVAR_STRING:
-        dst->string = ssstrdup(src->string);
-        break;
-    case SSVAR_OBJECTHANDLE:
-        dst->handle = src->handle;
-        break;
-    default:
-        break;
+        case SSVAR_BOOL:
+            dst->boolean = src->boolean;
+            break;
+        case SSVAR_NUMBER:
+            dst->number = src->number;
+            break;
+        case SSVAR_STRING:
+            dst->string = ssstrdup(src->string);
+            break;
+        case SSVAR_OBJECTHANDLE:
+            dst->handle = src->handle;
+            break;
+        default:
+            break;
     }
 
     return dst;
@@ -287,12 +279,14 @@ surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var)
  */
 int surgescript_var_typecode(const surgescript_var_t* var)
 {
-    return (int)(*(typeof_var(var)));
+    static const int code[] = { 0, 'b', 'n', 's', 'o' };
+    return code[(int)(var->type)];
 }
 
 /*
  * surgescript_var_type2code()
  * Given a type_name (that may be NULL), return its corresponding type code
+ * PS: typename must be lowercase
  */
 int surgescript_var_type2code(const char* type_name)
 {
@@ -317,9 +311,9 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
         case SSVAR_NUMBER: {
             char tmp[32];
             if(var->number <= LONG_MIN || var->number >= LONG_MAX || var->number == (long)(var->number))
-                sprintf(tmp, "%ld", (long)(var->number)); /* it is an integer */
+                snprintf(tmp, sizeof(tmp), "%ld", (long)(var->number)); /* it is an integer */
             else
-                sprintf(tmp, "%f", var->number);
+                snprintf(tmp, sizeof(tmp), "%f", var->number);
             return surgescript_util_strncpy(buf, tmp, bufsize);
         }
     }
@@ -339,9 +333,14 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
     if(a->type == b->type) {
         switch(a->type) {
         case SSVAR_BOOL:
-            return a->boolean != b->boolean ? (a->boolean ? 1 : -1) : 0;
+            return (int)(a->boolean) - (int)(b->boolean);
         case SSVAR_NUMBER:
-            return fabsf(a->number - b->number) >= FLT_EPSILON ? (a->number > b->number ? 1 : -1) : 0;
+            if(a->number > b->number)
+                return a->number - b->number < FLT_EPSILON * fabsf(a->number) ? 0 : 1;
+            else if(a->number < b->number)
+                return b->number - a->number < FLT_EPSILON * fabsf(b->number) ? 0 : -1;
+            else
+                return 0;
         case SSVAR_OBJECTHANDLE:
             return a->handle != b->handle ? (a->handle > b->handle ? 1 : -1) : 0;
         case SSVAR_STRING:
@@ -368,12 +367,17 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
         else if(a->type == SSVAR_NUMBER || b->type == SSVAR_NUMBER) {
             float x = surgescript_var_get_number(a);
             float y = surgescript_var_get_number(b);
-            return fabsf(x - y) >= FLT_EPSILON ? (x > y ? 1 : -1) : 0;
+            if(x > y)
+                return x - y < FLT_EPSILON * fabsf(x) ? 0 : 1;
+            else if(x < y)
+                return y - x < FLT_EPSILON * fabsf(y) ? 0 : -1;
+            else
+                return 0;
         }
         else if(a->type == SSVAR_BOOL || b->type == SSVAR_BOOL) {
             bool x = surgescript_var_get_bool(a);
             bool y = surgescript_var_get_bool(b);
-            return x != y ? (x ? 1 : -1) : 0;
+            return (int)x - (int)y;
         }
         else if(a->type == SSVAR_OBJECTHANDLE || b->type == SSVAR_OBJECTHANDLE) {
             unsigned x = surgescript_var_get_objecthandle(a);
@@ -398,12 +402,11 @@ void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b)
 
 /*
  * surgescript_var_get_rawbits()
- * Returns the binary value stored in the variable
+ * Returns the 32-bit binary value stored in the variable
  */
 unsigned surgescript_var_get_rawbits(const surgescript_var_t* var)
 {
-    const unsigned* rawbits = &(var->handle);
-    return *rawbits;
+    return var->handle;
 }
 
 

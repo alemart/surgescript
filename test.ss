@@ -2,10 +2,11 @@
 // by alemart
 // TODO: temps should share one place (for cache opt)
 
-object "test" {
-	//3.14159
-	//2.3
-	"hey, Surge!"
+object "Application" {
+//	flag = true, false, null, x = true, -5;
+x = -1;
+//	number = 0 ? x=1 : 3.31459;
+//	y=2;
 }
 
 /*
