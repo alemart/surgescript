@@ -4,7 +4,9 @@
 
 object "Application" {
 //	flag = true, false, null, x = true, -5;
-x = -1;
+x = 3.14 && null || 2 && -0.1;
+y = 2 < 3 || 2;
+z = 1-1+2 && -5 / -2 + 1 - 1 * 2 / -2;
 //	number = 0 ? x=1 : 3.31459;
 //	y=2;
 }

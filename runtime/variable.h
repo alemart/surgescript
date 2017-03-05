@@ -46,6 +46,7 @@ surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var); /* simil
 char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t bufsize); /* copies var to buf and returns buf, converting var to string if necessary (similar to itoa / strncpy) */
 int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t* b); /* similar to strcmp */
 void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b); /* swaps a <-> b */
-unsigned surgescript_var_get_rawbits(const surgescript_var_t* var); /* the binary value stored in var */
+unsigned long surgescript_var_get_rawbits(const surgescript_var_t* var); /* the binary value stored in var */
+void surgescript_var_set_rawbits(surgescript_var_t* var, unsigned long raw); /* sets its binary value */
 
 #endif

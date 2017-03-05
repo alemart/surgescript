@@ -9,6 +9,8 @@
 
 /* test file */
 #include <stdio.h>
+#include <float.h>
+#include <math.h>
 #include "util/util.h"
 #include "runtime/vm.h"
 #include "compiler/token.h"
@@ -182,6 +184,35 @@ static surgescript_var_t* my_cfun(surgescript_object_t* caller, const surgescrip
     return NULL;
 }
 
+
+static inline int ffs(float f) // 2.370, 4.7 [-1, 1]
+{
+    return ((*((int*)&f) & 0x7FFFFFFF)) ? (1 - ((*((int*)&f) & 0x80000000) >> 30)) : 0;
+}
+
+
+/*
+static inline int ffs(float f) // 2.380, 4.7 [-1, 1]
+{
+    return ((*((int*)&f) & 0x7FFFFFFF) != 0) * (1 - ((*((int*)&f) & 0x80000000) >> 30));
+}
+*/
+
+/*
+static inline int fast_float_notzero(float f)
+{
+    return fpclassify(f) != FP_ZERO;
+}
+static inline int fast_float_sign1(float f)
+{
+    return signbit(f) == 0 ? 1 : -1;
+}
+static inline int ffs(float f) // 2.420 [-.5, .5], 4.8 [-1, 1]
+{
+    return fast_float_notzero(f) ? fast_float_sign1(f) : 0;
+}
+*/
+
 /* testing the parser */
 int main()
 {
@@ -203,10 +234,15 @@ int main()
         ;
     }
     surgescript_vm_destroy(vm);
+    return 0;
 
     union { float f; long l; unsigned u; } x;
     x.u = 0x1;
     printf("== test %f, %x, %u\n", x.f, x.l, x.u);
+    printf("%.5f\t\t|ffs\n------------------------------------\n", -0.0f);
+    for(float f = -1.0f; f <= 1.0f; f += FLT_EPSILON)
+        printf("%.5f\t\t|%d\n", f, ffs(f));
+    printf("zero: ffs(0) = %d, ffs(-0) = %d; %d %d %d\n", ffs(0.0f), ffs(-0.0f), ffs(0), ffs(3-3), ffs((int)(8 * 30 - 240)));
     return 0;
 }
 #endif

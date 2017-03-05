@@ -17,15 +17,16 @@ struct surgescript_programpool_t;
 /* node context */
 typedef struct surgescript_nodecontext_t
 {
+    const char* source_file;
     const char* object_name;
     struct surgescript_symtable_t* symtable;
     struct surgescript_program_t* program;
 } surgescript_nodecontext_t;
 
 /* node context constructor */
-static inline surgescript_nodecontext_t nodecontext(const char* object_name, struct surgescript_symtable_t* symbol_table, struct surgescript_program_t* program)
+static inline surgescript_nodecontext_t nodecontext(const char* source_file, const char* object_name, struct surgescript_symtable_t* symbol_table, struct surgescript_program_t* program)
 {
-    surgescript_nodecontext_t ctx = { object_name, symbol_table, program };
+    surgescript_nodecontext_t ctx = { source_file, object_name, symbol_table, program };
     return ctx;
 }
 

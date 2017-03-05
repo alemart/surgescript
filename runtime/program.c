@@ -389,6 +389,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_copy(t(a), t(b));
             break;
 
+        case SSOP_XCHG: /* fast exchange */
+            surgescript_var_swap(t(a), t(b));
+            break;
+
         /* heap operations */
         case SSOP_ALOC:
             surgescript_var_set_number(t(a), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
@@ -459,25 +463,27 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_NEG:
-            surgescript_var_set_number(t(a), -surgescript_var_get_number(t(a)));
+            surgescript_var_set_number(t(a), -surgescript_var_get_number(t(b)));
+            break;
+
+        case SSOP_LNOT:
+            surgescript_var_set_bool(t(a), !surgescript_var_get_bool(t(b)));
             break;
 
         case SSOP_NOT:
-            surgescript_var_set_bool(t(a), !surgescript_var_get_bool(t(a)));
+            surgescript_var_set_rawbits(t(a), ~surgescript_var_get_rawbits(t(b)));
             break;
 
         case SSOP_AND:
-            if(surgescript_var_get_bool(t(a)))
-                surgescript_var_set_bool(t(a), surgescript_var_get_bool(t(b)));
-            else
-                surgescript_var_set_bool(t(a), false);
+            surgescript_var_set_rawbits(t(a), surgescript_var_get_rawbits(t(a)) & surgescript_var_get_rawbits(t(b)));
             break;
 
         case SSOP_OR:
-            if(surgescript_var_get_bool(t(a)))
-                surgescript_var_set_bool(t(a), true);
-            else
-                surgescript_var_set_bool(t(a), surgescript_var_get_bool(t(b)));
+            surgescript_var_set_rawbits(t(a), surgescript_var_get_rawbits(t(a)) | surgescript_var_get_rawbits(t(b)));
+            break;
+
+        case SSOP_XOR:
+            surgescript_var_set_rawbits(t(a), surgescript_var_get_rawbits(t(a)) ^ surgescript_var_get_rawbits(t(b)));
             break;
 
         case SSOP_CAT: {
@@ -559,8 +565,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_TEST:
-            a.u = surgescript_var_get_rawbits(t(a)) & surgescript_var_get_rawbits(t(b)); /* a is passed by value */
-            surgescript_var_set_number(_t[2], a.f);
+            surgescript_var_set_rawbits(_t[2], surgescript_var_get_rawbits(t(a)) & surgescript_var_get_rawbits(t(b)));
             break;
 
         case SSOP_TCHK:
@@ -785,7 +790,7 @@ static_assert(
 /* returns -1 if f < 0, 0 if if == 0, 1 if f > 0 */
 int fast_float_sign(float f)
 {
-    return ((*((int*)&f) & 0x7FFFFFFF) != 0) * (1 - ((*((int*)&f) & 0x80000000) >> 30));
+    return (*((int*)&f) & 0x7FFFFFFF) ? (1 - ((*((int*)&f) & 0x80000000) >> 30)) : 0;
 }
 
 /* returns -1 if f <= -0, 1 if f >= +0 */

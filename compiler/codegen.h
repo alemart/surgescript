@@ -30,6 +30,14 @@ void emit_logicalorexpr1(surgescript_nodecontext_t context, surgescript_program_
 void emit_logicalorexpr2(surgescript_nodecontext_t context, surgescript_program_label_t done);
 void emit_logicalandexpr1(surgescript_nodecontext_t context, surgescript_program_label_t done);
 void emit_logicalandexpr2(surgescript_nodecontext_t context, surgescript_program_label_t done);
+void emit_equalityexpr1(surgescript_nodecontext_t context);
+void emit_equalityexpr2(surgescript_nodecontext_t context, const char* equalityop);
+void emit_relationalexpr1(surgescript_nodecontext_t context);
+void emit_relationalexpr2(surgescript_nodecontext_t context, const char* relationalop);
+void emit_additiveexpr1(surgescript_nodecontext_t context);
+void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveop);
+void emit_multiplicativeexpr1(surgescript_nodecontext_t context);
+void emit_multiplicativeexpr2(surgescript_nodecontext_t context, const char* multiplicativeop);
 
 /* constants */
 void emit_null(surgescript_nodecontext_t context);

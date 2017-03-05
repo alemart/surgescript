@@ -35,15 +35,16 @@ struct surgescript_var_t
     union {
         char* string;
         float number;
-        unsigned handle:32;
+        unsigned handle;
         bool boolean;
+        unsigned long raw;
     };
     enum surgescript_vartype_t type;
 };
 
 /* helpers */
-#define RELEASE_DATA(var)       if(var->type == SSVAR_STRING) \
-                                    ssfree(var->string);
+#define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
+                                    ssfree((var)->string);
 
 /* privates */
 static inline const char* typeof_var(const surgescript_var_t* var);
@@ -51,8 +52,6 @@ static inline const char* typeof_var(const surgescript_var_t* var);
 /* -------------------------------
  * public methods
  * ------------------------------- */
-
-
 
 /* create & destroy variables */
 
@@ -64,6 +63,7 @@ surgescript_var_t* surgescript_var_create()
 {
     surgescript_var_t* var = ssmalloc(sizeof *var);
     var->type = SSVAR_NULL;
+    var->raw = 0;
     return var;
 }
 
@@ -91,6 +91,7 @@ surgescript_var_t* surgescript_var_set_null(surgescript_var_t* var)
 {
     RELEASE_DATA(var);
     var->type = SSVAR_NULL;
+    var->raw = 0; /* clear up all bits */
     return var;
 }
 
@@ -102,7 +103,7 @@ surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, bool boolean
 {
     RELEASE_DATA(var);
     var->type = SSVAR_BOOL;
-    var->boolean = boolean;
+    var->raw = (unsigned long)boolean; /* must clear up all bits; see get_rawbits() below */
     return var;
 }
 
@@ -120,13 +121,20 @@ surgescript_var_t* surgescript_var_set_number(surgescript_var_t* var, float numb
 
 /*
  * surgescript_var_set_string()
- * Sets the variable to a text variable
+ * Sets the variable to a (valid, not-NULL) text variable
  */
 surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char* string)
 {
+    static const int MAXLEN = 0xFFFE;
+    
     RELEASE_DATA(var);
-    var->type = SSVAR_STRING;
-    var->string = ssstrdup(string);
+    if(strlen(string) <= MAXLEN) {
+        var->type = SSVAR_STRING;
+        var->string = ssstrdup(string);
+    }
+    else
+        ssfatal("Runtime Error: string too large!");
+
     return var;
 }
 
@@ -272,6 +280,31 @@ surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var)
     return surgescript_var_copy(copy, var);
 }
 
+#if 0
+/*
+ * surgescript_var_typename()
+ * What's the name of the type of the variable?
+ */
+const char* surgescript_var_typename(const surgescript_var_t* var)
+{
+    /* all first letters should be different; see typecode() below */
+    switch(var->type) {
+        case SSVAR_NUMBER:
+            return "number";
+        case SSVAR_BOOL:
+            return "boolean";
+        case SSVAR_STRING:
+            return "string";
+        case SSVAR_OBJECTHANDLE:
+            return "object";
+        case SSVAR_NULL:
+            return ""; /* '\0' is the first character */
+    }
+    
+    return "unknown";
+}
+#endif
+
 /*
  * surgescript_var_typecode()
  * Returns an integer representing the type of the variable
@@ -332,26 +365,26 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
 {
     if(a->type == b->type) {
         switch(a->type) {
-        case SSVAR_BOOL:
-            return (int)(a->boolean) - (int)(b->boolean);
-        case SSVAR_NUMBER:
-            if(a->number > b->number)
-                return a->number - b->number < FLT_EPSILON * fabsf(a->number) ? 0 : 1;
-            else if(a->number < b->number)
-                return b->number - a->number < FLT_EPSILON * fabsf(b->number) ? 0 : -1;
-            else
+            case SSVAR_BOOL:
+                return (int)(a->boolean) - (int)(b->boolean);
+            case SSVAR_NUMBER:
+                if(a->number > b->number)
+                    return a->number - b->number < FLT_EPSILON * fabsf(a->number) ? 0 : 1;
+                else if(a->number < b->number)
+                    return b->number - a->number < FLT_EPSILON * fabsf(b->number) ? 0 : -1;
+                else
+                    return 0;
+            case SSVAR_OBJECTHANDLE:
+                return a->handle != b->handle ? (a->handle > b->handle ? 1 : -1) : 0;
+            case SSVAR_STRING:
+                return strcmp(a->string, b->string);
+            default:
                 return 0;
-        case SSVAR_OBJECTHANDLE:
-            return a->handle != b->handle ? (a->handle > b->handle ? 1 : -1) : 0;
-        case SSVAR_STRING:
-            return strcmp(a->string, b->string);
-        default:
-            return 0;
         }
     }
     else {
         if(a->type == SSVAR_NULL || b->type == SSVAR_NULL) {
-            return a->type != SSVAR_NULL ? 1 : -1; /* null is less than everything else */
+            return (a->raw > 0) - (b->raw > 0);
         }
         else if(a->type == SSVAR_STRING || b->type == SSVAR_STRING) {
             char buf[128];
@@ -380,8 +413,8 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             return (int)x - (int)y;
         }
         else if(a->type == SSVAR_OBJECTHANDLE || b->type == SSVAR_OBJECTHANDLE) {
-            unsigned x = surgescript_var_get_objecthandle(a);
-            unsigned y = surgescript_var_get_objecthandle(b);
+            unsigned long x = surgescript_var_get_objecthandle(a);
+            unsigned long y = surgescript_var_get_objecthandle(b);
             return x != y ? (x > y ? 1 : -1) : 0;
         }
         else
@@ -402,33 +435,20 @@ void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b)
 
 /*
  * surgescript_var_get_rawbits()
- * Returns the 32-bit binary value stored in the variable
+ * Returns the binary value stored in the variable
  */
-unsigned surgescript_var_get_rawbits(const surgescript_var_t* var)
+unsigned long surgescript_var_get_rawbits(const surgescript_var_t* var)
 {
-    return var->handle;
+    return var->raw;
 }
 
-
-
-/* privates */
-
-/* what's the name of the type of the variable? */
-const char* typeof_var(const surgescript_var_t* var)
+/*
+ * surgescript_var_set_rawbits()
+ * Sets the binary value of the variable
+ */
+void surgescript_var_set_rawbits(surgescript_var_t* var, unsigned long raw)
 {
-    /* all first letters should be different; see typecode() above */
-    switch(var->type) {
-        case SSVAR_NUMBER:
-            return "number";
-        case SSVAR_BOOL:
-            return "boolean";
-        case SSVAR_STRING:
-            return "string";
-        case SSVAR_OBJECTHANDLE:
-            return "object";
-        case SSVAR_NULL:
-            return ""; /* first character is '\0' */
-    }
-    
-    return "unknown";
+    RELEASE_DATA(var);
+    var->type = SSVAR_NUMBER;
+    var->raw = raw;
 }

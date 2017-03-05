@@ -329,10 +329,8 @@ const char* ssbasename(const char* path)
 
 void objectlist(surgescript_parser_t* parser)
 {
-    if(has_token(parser)) {
+    while(has_token(parser))
         object(parser);
-        objectlist(parser);
-    }
 }
 
 void object(surgescript_parser_t* parser)
@@ -343,6 +341,7 @@ void object(surgescript_parser_t* parser)
     match(parser, SSTOK_OBJECT);
     expect(parser, SSTOK_STRING);
     context = nodecontext(
+        parser->filename,
         (object_name = ssstrdup(
             surgescript_token_lexeme(parser->lookahead)
         )),
@@ -386,7 +385,7 @@ void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     match(parser, SSTOK_IDENTIFIER);
     match_exactly(parser, SSTOK_ASSIGNOP, "=");
-    expr(parser, context);
+    expr(parser, context); // so casar com constantes e funcoes; ++i deve dar undefined symbol!
     match(parser, SSTOK_SEMICOLON);
 
     emit_vardecl(context, id);
@@ -468,6 +467,63 @@ void logicalandexpr(surgescript_parser_t* parser, surgescript_nodecontext_t cont
 }
 
 void equalityexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    relationalexpr(parser, context);
+    while(got_type(parser, SSTOK_EQUALITYOP)) {
+        char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_EQUALITYOP);
+        emit_equalityexpr1(context);
+        relationalexpr(parser, context);
+        emit_equalityexpr2(context, op);
+        ssfree(op);
+    }
+}
+
+void relationalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    additiveexpr(parser, context);
+    while(got_type(parser, SSTOK_RELATIONALOP)) {
+        char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_RELATIONALOP);
+        emit_relationalexpr1(context);
+        additiveexpr(parser, context);
+        emit_relationalexpr2(context, op);
+        ssfree(op);
+    }
+}
+
+void additiveexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    multiplicativeexpr(parser, context);
+    while(got_type(parser, SSTOK_ADDITIVEOP)) {
+        char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_ADDITIVEOP);
+        emit_additiveexpr1(context);
+        multiplicativeexpr(parser, context);
+        emit_additiveexpr2(context, op);
+        ssfree(op);
+    }
+}
+
+void multiplicativeexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    unaryexpr(parser, context);
+    while(got_type(parser, SSTOK_MULTIPLICATIVEOP)) {
+        char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_MULTIPLICATIVEOP);
+        emit_multiplicativeexpr1(context);
+        unaryexpr(parser, context);
+        emit_multiplicativeexpr2(context, op);
+        ssfree(op);
+    }
+}
+
+void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    postfixexpr(parser, context);
+}
+
+void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     signedconst(parser, context);
 }

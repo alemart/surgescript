@@ -33,6 +33,7 @@
     F( SSOP_MOVO, "movo" )                           /* t[a] = (object)b */ \
     F( SSOP_MOVC, "movc" )    /* t[a] = handle to caller object ("this") */ \
     F( SSOP_MOVT, "movt" )                                /* t[a] = t[b] */ \
+    F( SSOP_XCHG, "xchg" )                           /* swap(t[a], t[b]) */ \
                                                                             \
     F( SSOP_ALOC, "aloc" )                /* t[a] = allocate memory cell */ \
     F( SSOP_LOAD, "load" )                             /* t[a] = *(t[b]) */ \
@@ -51,10 +52,12 @@
     F( SSOP_SUB, "sub" )                                 /* t[a] -= t[b] */ \
     F( SSOP_MUL, "mul" )                                 /* t[a] *= t[b] */ \
     F( SSOP_DIV, "div" )                                 /* t[a] /= t[b] */ \
-    F( SSOP_NEG, "neg" )                                 /* t[a] = -t[a] */ \
-    F( SSOP_NOT, "not" )                              /* t[a] = not t[a] */ \
-    F( SSOP_AND, "and" )                         /* t[a] = t[a] and t[b] */ \
-    F( SSOP_OR, "or" )                            /* t[a] = t[a] or t[b] */ \
+    F( SSOP_NEG, "neg" )                                 /* t[a] = -t[b] */ \
+    F( SSOP_LNOT, "lnot" )                               /* t[a] = !t[b] */ \
+    F( SSOP_NOT, "not" )                                 /* t[a] = ~t[b] */ \
+    F( SSOP_AND, "and" )                           /* t[a] = t[a] & t[b] */ \
+    F( SSOP_OR, "or" )                             /* t[a] = t[a] | t[b] */ \
+    F( SSOP_XOR, "xor" )                           /* t[a] = t[a] ^ t[b] */ \
     F( SSOP_CAT, "cat" )                    /* t[a] = strcat(t[a], t[b]) */ \
                                                                             \
     F( SSOP_BOOL, "bool" )                          /* t[a] = bool(t[a]) */ \

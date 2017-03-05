@@ -53,7 +53,7 @@ parser: compiler/parser.h compiler/parser.c lexer token utils codegen
 symtable: compiler/symtable.h compiler/symtable.c utils heap stack program
 	$(CC) $(CFLAGS) -c compiler/symtable.c
 
-codegen: compiler/codegen.h compiler/codegen.c utils symtable object_manager program_pool program
+codegen: compiler/codegen.h compiler/codegen.c utils symtable program_pool program
 	$(CC) $(CFLAGS) -c compiler/codegen.c
 
 main: main.c utils variable
