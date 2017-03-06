@@ -8,6 +8,9 @@ object "Application" {
 	n = (1 + 2) * 3;
 	x = ++n;
 	n = n;
+	t = this;
+	t = typeof (t == "object");
+	t = typeof (t);
 /*
 	sep = "\n\n\n";
 	x = 3.14 && null || 2 && -0.1;

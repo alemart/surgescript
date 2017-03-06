@@ -60,7 +60,9 @@
  * <multiplicativeexpr1> := multiplicativeop <unaryexpr> <multiplicativeexpr1> | e
  * <unaryexpr> := + <unaryexpr> | - <unaryexpr>
  *             |  ! <unaryexpr>
- *             |  typeof <unaryexpr> | typeof ( <unaryexpr> )
+ *             |  typeof <unaryexpr> | typeof ( <expr> )
+ *             |  len ( <expr> )
+ *             |  changeState ( <expr> )
  *             |  ++ identifier | -- identifier
  *             |  <postfixexpr>
  * <postfixexpr> := identifier . <postfixexpr>

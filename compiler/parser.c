@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 #include <errno.h>
 #include "parser.h"
 #include "lexer.h"
@@ -105,6 +106,7 @@ surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* progr
     parser->lexer = surgescript_lexer_create();
     parser->filename = ssstrdup("<unspecified>");
     parser->program_pool = program_pool;
+    setlocale(LC_NUMERIC, "C"); /* use '.' as the decimal separator on atof() */
     return parser;
 }
 
@@ -546,7 +548,7 @@ void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
     else if(optmatch(parser, SSTOK_TYPEOF)) {
         if(optmatch(parser, SSTOK_LPAREN)) {
-            unaryexpr(parser, context);
+            expr(parser, context);
             emit_unarytype(context);
             match(parser, SSTOK_RPAREN);
         }
