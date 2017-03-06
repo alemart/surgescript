@@ -7,6 +7,7 @@
  * SurgeScript Compiler: Code Generator
  */
 
+#include <string.h>
 #include "codegen.h"
 #include "symtable.h"
 #include "../runtime/program.h"
@@ -74,11 +75,11 @@ void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
 }
 
 /* expressions */
-void emit_assignexpr(surgescript_nodecontext_t context, const char* identifier, const char* assignop)
+void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line)
 {
     /* put the identifier on the symbol table, and assign the symbol an address */
     if(!surgescript_symtable_has_parent(context.symtable))
-        ssfatal("Invalid declaration (\"%s %s ...\") for object \"%s\" in %s: only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file);
+        ssfatal("Invalid declaration (\"%s %s ...\") in object \"%s\" (%s:%d): only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
     else
         surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(-2 - surgescript_symtable_count(context.symtable)));
 
@@ -89,31 +90,20 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* identifier, 
             break;
 
         case '+': {
-            surgescript_program_label_t dif = NEWLABEL();
             surgescript_program_label_t cat = NEWLABEL();
-            surgescript_program_label_t add = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
-
             surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
-            SSASM(SSOP_TCHK, T1, T0);
-            SSASM(SSOP_JNE, U(dif));
-            SSASM(SSOP_TCHKN, T1);
-            SSASM(SSOP_JE, U(add));
-            LABEL(dif);
             SSASM(SSOP_TCHKS, T1);
             SSASM(SSOP_JE, U(cat));
-            SSASM(SSOP_TCHKO, T1);
-            SSASM(SSOP_JNE, U(add));
+            SSASM(SSOP_TCHKS, T0);
+            SSASM(SSOP_JE, U(cat));
+            SSASM(SSOP_ADD, T1, T0);
+            SSASM(SSOP_JMP, U(end));
             LABEL(cat);
             SSASM(SSOP_CAT, T1, T0);
-            SSASM(SSOP_JMP, U(end));
-            LABEL(add);
-            SSASM(SSOP_ADD, T1, T0);
             LABEL(end);
             surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
             SSASM(SSOP_XCHG, T0, T1);
-
-            break;
         }
 
         case '-':
@@ -244,28 +234,18 @@ void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveo
     SSASM(SSOP_POP, T1);
     switch(*additiveop) {
         case '+': {
-            surgescript_program_label_t dif = NEWLABEL();
             surgescript_program_label_t cat = NEWLABEL();
-            surgescript_program_label_t add = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
-
-            SSASM(SSOP_TCHK, T1, T0);
-            SSASM(SSOP_JNE, U(dif));
-            SSASM(SSOP_TCHKN, T1);
-            SSASM(SSOP_JE, U(add));
-            LABEL(dif);
             SSASM(SSOP_TCHKS, T1);
             SSASM(SSOP_JE, U(cat));
-            SSASM(SSOP_TCHKO, T1);
-            SSASM(SSOP_JNE, U(add));
+            SSASM(SSOP_TCHKS, T0);
+            SSASM(SSOP_JE, U(cat));
+            SSASM(SSOP_ADD, T0, T1);
+            SSASM(SSOP_JMP, U(end));
             LABEL(cat);
             SSASM(SSOP_CAT, T1, T0);
-            SSASM(SSOP_XCHG, T0, T1);
-            SSASM(SSOP_JMP, U(end));
-            LABEL(add);
-            SSASM(SSOP_ADD, T0, T1);
+            SSASM(SSOP_XCHG, T1, T0);
             LABEL(end);
-
             break;
         }
 
@@ -296,6 +276,98 @@ void emit_multiplicativeexpr2(surgescript_nodecontext_t context, const char* mul
     }
 }
 
+void emit_unarysign(surgescript_nodecontext_t context, const char* op)
+{
+    if(*op == '-')
+        SSASM(SSOP_NEG, T0, T0);
+}
+
+void emit_unaryincdec(surgescript_nodecontext_t context, const char* op, const char* identifier, int line)
+{
+    if(surgescript_symtable_has_symbol(context.symtable, identifier)) {
+        surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);
+        if(strcmp(op, "++") == 0)
+            SSASM(SSOP_INC, T0);
+        else if(strcmp(op, "--") == 0)
+            SSASM(SSOP_DEC, T0);
+        surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
+    }
+    else
+        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
+}
+
+void emit_unarynot(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_LNOT, T0, T0);
+}
+
+void emit_unarytype(surgescript_nodecontext_t context)
+{
+    surgescript_program_label_t str = NEWLABEL();
+    surgescript_program_label_t obj = NEWLABEL();
+    surgescript_program_label_t bol = NEWLABEL();
+    surgescript_program_label_t nul = NEWLABEL();
+    surgescript_program_label_t end = NEWLABEL();
+
+    SSASM(SSOP_TCHKN, T0);
+    SSASM(SSOP_JNE, U(str));
+    SSASM(SSOP_MOVS, T0, TEXT("number"));
+    SSASM(SSOP_JMP, U(end));
+
+    LABEL(str);
+    SSASM(SSOP_TCHKS, T0);
+    SSASM(SSOP_JNE, U(obj));
+    SSASM(SSOP_MOVS, T0, TEXT("string"));
+    SSASM(SSOP_JMP, U(end));
+
+    LABEL(obj);
+    SSASM(SSOP_TCHKO, T0);
+    SSASM(SSOP_JNE, U(bol));
+    SSASM(SSOP_MOVS, T0, TEXT("object"));
+    SSASM(SSOP_JMP, U(end));
+
+    LABEL(bol);
+    SSASM(SSOP_TCHKB, T0);
+    SSASM(SSOP_JNE, U(nul));
+    SSASM(SSOP_MOVS, T0, TEXT("boolean"));
+    SSASM(SSOP_JMP, U(end));
+
+    LABEL(nul);
+    SSASM(SSOP_MOVS, T0, TEXT("null"));
+
+    LABEL(end);
+}
+
+void emit_postincdec(surgescript_nodecontext_t context, const char* op, const char* identifier, int line)
+{
+    if(surgescript_symtable_has_symbol(context.symtable, identifier)) {
+        surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);
+        SSASM(SSOP_MOVT, T1, T0);
+        if(strcmp(op, "++") == 0)
+            SSASM(SSOP_INC, T1);
+        else if(strcmp(op, "--") == 0)
+            SSASM(SSOP_DEC, T1);
+        surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
+    }
+    else
+        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
+}
+
+
+
+void emit_this(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_MOVC, T0);
+}
+
+void emit_identifier(surgescript_nodecontext_t context, const char* identifier, int line)
+{
+    if(surgescript_symtable_has_symbol(context.symtable, identifier))
+        surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);
+    else
+        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
+}
+
 /* constants */
 void emit_null(surgescript_nodecontext_t context)
 {
@@ -315,4 +387,9 @@ void emit_number(surgescript_nodecontext_t context, float value)
 void emit_string(surgescript_nodecontext_t context, const char* value)
 {
     SSASM(SSOP_MOVS, T0, TEXT(value));
+}
+
+void emit_zero(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_XOR, T0, T0);
 }

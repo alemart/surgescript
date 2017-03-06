@@ -84,12 +84,12 @@ surgescript_symtable_t* surgescript_symtable_destroy(surgescript_symtable_t* sym
  */
 bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const char* symbol)
 {
-    if(indexof_symbol(symtable, symbol) >= 0)
-        return true;
-    else if(!symtable->parent)
-        return false;
-    else
-        return surgescript_symtable_has_symbol(symtable->parent, symbol); /* tail recursion */
+    while(symtable) {
+        if(indexof_symbol(symtable, symbol) >= 0)
+            return true;
+        symtable = symtable->parent;
+    }
+    return false;
 }
 
 /*

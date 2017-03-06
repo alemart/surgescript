@@ -28,20 +28,21 @@ typedef struct surgescript_renv_t
     struct surgescript_programpool_t* program_pool; /* pointer to the program pool */
     struct surgescript_objectmanager_t* object_manager; /* pointer to the object manager */
     struct surgescript_var_t** tmp; /* temporary variables */
+    struct surgescript_renv_t* (*_destructor)(struct surgescript_renv_t*); /* internal destructor */
 } surgescript_renv_t ;
 
-/* creates a new renv */
-surgescript_renv_t* surgescript_renv_create(struct surgescript_object_t* owner, struct surgescript_stack_t* stack, struct surgescript_heap_t* heap, struct surgescript_programpool_t* program_pool, struct surgescript_objectmanager_t* object_manager);
+/* creates a new renv (the tmp parameter may be NULL) */
+surgescript_renv_t* surgescript_renv_create(struct surgescript_object_t* owner, struct surgescript_stack_t* stack, struct surgescript_heap_t* heap, struct surgescript_programpool_t* program_pool, struct surgescript_objectmanager_t* object_manager, struct surgescript_var_t** tmp);
 
 /* destroys a renv */
 surgescript_renv_t* surgescript_renv_destroy(surgescript_renv_t* runtime_environment);
 
 /* getters */
-inline struct surgescript_object_t* surgescript_renv_owner(surgescript_renv_t* renv) { return renv->owner; }
-inline struct surgescript_stack_t* surgescript_renv_stack(surgescript_renv_t* renv) { return renv->stack; }
-inline struct surgescript_heap_t* surgescript_renv_heap(surgescript_renv_t* renv) { return renv->heap; }
-inline struct surgescript_programpool_t* surgescript_renv_programpool(surgescript_renv_t* renv) { return renv->program_pool; }
-inline struct surgescript_objectmanager_t* surgescript_renv_objectmanager(surgescript_renv_t* renv) { return renv->object_manager; }
-inline struct surgescript_var_t** surgescript_renv_tmp(surgescript_renv_t* renv) { return renv->tmp; }
+static inline struct surgescript_object_t* surgescript_renv_owner(surgescript_renv_t* renv) { return renv->owner; }
+static inline struct surgescript_stack_t* surgescript_renv_stack(surgescript_renv_t* renv) { return renv->stack; }
+static inline struct surgescript_heap_t* surgescript_renv_heap(surgescript_renv_t* renv) { return renv->heap; }
+static inline struct surgescript_programpool_t* surgescript_renv_programpool(surgescript_renv_t* renv) { return renv->program_pool; }
+static inline struct surgescript_objectmanager_t* surgescript_renv_objectmanager(surgescript_renv_t* renv) { return renv->object_manager; }
+static inline struct surgescript_var_t** surgescript_renv_tmp(surgescript_renv_t* renv) { return renv->tmp; }
 
 #endif

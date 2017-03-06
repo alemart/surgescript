@@ -22,7 +22,7 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
 void emit_vardecl(surgescript_nodecontext_t context, const char* identifier);
 
 /* expressions */
-void emit_assignexpr(surgescript_nodecontext_t context, const char* identifier, const char* assignop);
+void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line);
 void emit_conditionalexpr1(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done);
 void emit_conditionalexpr2(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done);
 void emit_conditionalexpr3(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done);
@@ -38,11 +38,20 @@ void emit_additiveexpr1(surgescript_nodecontext_t context);
 void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveop);
 void emit_multiplicativeexpr1(surgescript_nodecontext_t context);
 void emit_multiplicativeexpr2(surgescript_nodecontext_t context, const char* multiplicativeop);
+void emit_unarysign(surgescript_nodecontext_t context, const char* op);
+void emit_unaryincdec(surgescript_nodecontext_t context, const char* op, const char* identifier, int line);
+void emit_unarynot(surgescript_nodecontext_t context);
+void emit_unarytype(surgescript_nodecontext_t context);
+void emit_postincdec(surgescript_nodecontext_t context, const char* op, const char* identifier, int line);
+
+void emit_this(surgescript_nodecontext_t context);
+void emit_identifier(surgescript_nodecontext_t context, const char* identifier, int line);
 
 /* constants */
 void emit_null(surgescript_nodecontext_t context);
 void emit_bool(surgescript_nodecontext_t context, bool value);
 void emit_number(surgescript_nodecontext_t context, float value);
 void emit_string(surgescript_nodecontext_t context, const char* value);
+void emit_zero(surgescript_nodecontext_t context);
 
 #endif

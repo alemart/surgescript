@@ -70,7 +70,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
 
     obj->name = ssstrdup(name);
     obj->heap = surgescript_heap_create();
-    obj->renv = surgescript_renv_create(obj, stack, obj->heap, program_pool, object_manager);
+    obj->renv = surgescript_renv_create(obj, stack, obj->heap, program_pool, object_manager, NULL);
 
     obj->handle = handle; /* handle == parent implies I am a root */
     obj->parent = handle;

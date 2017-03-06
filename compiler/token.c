@@ -80,7 +80,7 @@ int surgescript_token_linenumber(const surgescript_token_t* token)
  * surgescript_token_data()
  * User-defined token data
  */
-void* surgescript_token_data(const surgescript_token_t* token)
+const void* surgescript_token_data(const surgescript_token_t* token)
 {
     return token->data;
 }

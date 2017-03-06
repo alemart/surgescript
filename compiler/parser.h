@@ -59,16 +59,17 @@
  * <multiplicativeexpr> := <unaryexpr> <multiplicativeexpr1>
  * <multiplicativeexpr1> := multiplicativeop <unaryexpr> <multiplicativeexpr1> | e
  * <unaryexpr> := + <unaryexpr> | - <unaryexpr>
- *             |  ++ <unaryexpr> | -- <unaryexpr>
  *             |  ! <unaryexpr>
  *             |  typeof <unaryexpr> | typeof ( <unaryexpr> )
+ *             |  ++ identifier | -- identifier
  *             |  <postfixexpr>
  * <postfixexpr> := identifier . <postfixexpr>
  *               |  identifier ( ) <postfixexpr>
  *               |  identifier ( <funargsexprlist> ) <postfixexpr>
  *               |  identifier [ <expr> ] <postfixexpr>
+ *               |  identifier ++ | identifier --
  *               |  <primaryexpr>
- * <primaryexpr> := identifier | <constant> | ( <expr> )
+ * <primaryexpr> := identifier | this | <constant> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e

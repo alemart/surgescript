@@ -409,10 +409,11 @@ void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         match(parser, SSTOK_IDENTIFIER);
 
         if(got_type(parser, SSTOK_ASSIGNOP)) {
+            int line = surgescript_token_linenumber(parser->lookahead);
             char* assignop = ssstrdup(surgescript_token_lexeme(parser->lookahead));
             match(parser, SSTOK_ASSIGNOP);
             assignexpr(parser, context);
-            emit_assignexpr(context, identifier, assignop);
+            emit_assignexpr(context, assignop, identifier, line);
             ssfree(assignop);
         }
         else {
@@ -520,12 +521,102 @@ void multiplicativeexpr(surgescript_parser_t* parser, surgescript_nodecontext_t 
 
 void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    postfixexpr(parser, context);
+    if(got_type(parser, SSTOK_ADDITIVEOP)) {
+        char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_ADDITIVEOP);
+        unaryexpr(parser, context);
+        emit_unarysign(context, op);
+        ssfree(op);
+    }
+    else if(got_type(parser, SSTOK_INCDECOP)) {
+        char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_INCDECOP);
+        if(got_type(parser, SSTOK_IDENTIFIER)) {
+            const char* identifier = surgescript_token_lexeme(parser->lookahead);
+            emit_unaryincdec(context, op, identifier, surgescript_token_linenumber(parser->lookahead));
+            match(parser, SSTOK_IDENTIFIER);
+        }
+        else
+            expect(parser, SSTOK_IDENTIFIER);
+        ssfree(op);
+    }
+    else if(optmatch(parser, SSTOK_LOGICALNOTOP)) {
+        unaryexpr(parser, context);
+        emit_unarynot(context);
+    }
+    else if(optmatch(parser, SSTOK_TYPEOF)) {
+        if(optmatch(parser, SSTOK_LPAREN)) {
+            unaryexpr(parser, context);
+            emit_unarytype(context);
+            match(parser, SSTOK_RPAREN);
+        }
+        else {
+            unaryexpr(parser, context);
+            emit_unarytype(context);
+        }
+    }
+    else
+        postfixexpr(parser, context);
 }
 
 void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    signedconst(parser, context);
+    primaryexpr(parser, context);
+}
+
+void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    if(optmatch(parser, SSTOK_LPAREN)) {
+        expr(parser, context);
+        match(parser, SSTOK_RPAREN);
+    }
+    else if(optmatch(parser, SSTOK_THIS)) {
+        emit_this(context);
+    }
+    else if(got_type(parser, SSTOK_IDENTIFIER)) {
+        const char* identifier = surgescript_token_lexeme(parser->lookahead);
+        emit_identifier(context, identifier, surgescript_token_linenumber(parser->lookahead));
+        match(parser, SSTOK_IDENTIFIER);
+    }
+    else
+        constant(parser, context);
+}
+
+void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_token_t* token = parser->lookahead;
+    
+    expect_something(parser);
+    switch(surgescript_token_type(token)) {
+        case SSTOK_NULL:
+            emit_null(context);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_TRUE:
+            emit_bool(context, true);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_FALSE:
+            emit_bool(context, false);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_STRING:
+            emit_string(context, surgescript_token_lexeme(token));
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_NUMBER:
+            emit_number(context, atof(surgescript_token_lexeme(token)));
+            match(parser, surgescript_token_type(token));
+            break;
+
+        default:
+            ssfatal("Parse Error: expected a constant on %s:%d.", context.source_file, surgescript_token_linenumber(token));
+            break;
+    }
 }
 
 /* notes */
@@ -564,7 +655,7 @@ void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context
             break;
 
         default:
-            ssfatal("Parse Error: expected a constant value on %s near line %d.", parser->filename, surgescript_token_linenumber(token));
+            ssfatal("Parse Error: expected a constant on %s:%d.", context.source_file, surgescript_token_linenumber(token));
             break;
     }
 }

@@ -84,7 +84,7 @@
     F( SSOP_CALL, "call" )                 /* call program named text[a] */ \
                                       /* of the object at the top of the */ \
                                  /* stack with n = b parameters, storing */ \
-                              /* in t[2] the return value of the program */ \
+                              /* in t[0] the return value of the program */ \
     F( SSOP_RET, "ret" )                 /* returns, halting the program */
 
 #endif

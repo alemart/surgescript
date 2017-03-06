@@ -43,8 +43,8 @@ typedef enum surgescript_program_operator_t { // let t[a .. c] be the registers 
 /* operands */
 typedef union surgescript_program_operand_t {
     float f;
-    unsigned u: 32;
-    int i: 32;
+    unsigned u:32;
+    int i:32;
     bool b;
 } surgescript_program_operand_t;
 

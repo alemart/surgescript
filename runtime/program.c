@@ -650,7 +650,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             const char* program_name = (a.u < ssarray_length(program->text)) ? program->text[a.u] : "";
             unsigned object_handle = surgescript_var_get_objecthandle(surgescript_stack_top(surgescript_renv_stack(runtime_environment)));
             unsigned number_of_given_params = b.u;
-            surgescript_var_t* return_value = _t[2];
+            surgescript_var_t* return_value = _t[0];
             call_object_method(runtime_environment, object_handle, program_name, number_of_given_params, return_value);
             break;
         }
@@ -680,7 +680,8 @@ void call_object_method(surgescript_renv_t* caller_runtime_environment, unsigned
             stack,
             surgescript_object_heap(object),
             surgescript_renv_programpool(caller_runtime_environment),
-            surgescript_renv_objectmanager(caller_runtime_environment)
+            surgescript_renv_objectmanager(caller_runtime_environment),
+            surgescript_renv_tmp(caller_runtime_environment)
         );
 
         /* push an environment and call the program */

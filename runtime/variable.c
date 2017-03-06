@@ -13,6 +13,7 @@
 #include <math.h>
 #include <limits.h>
 #include <float.h>
+#include <ctype.h>
 #include "variable.h"
 #include "object.h"
 #include "../util/util.h"
@@ -37,14 +38,15 @@ struct surgescript_var_t
         float number;
         unsigned handle;
         bool boolean;
-        unsigned long raw;
+        unsigned long raw:32;
     };
     enum surgescript_vartype_t type;
 };
 
 /* helpers */
 #define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
-                                    ssfree((var)->string);
+                                    (var)->string = ssfree((var)->string);
+static inline bool isvalidnum(const char* str);
 
 /* privates */
 static inline const char* typeof_var(const surgescript_var_t* var);
@@ -126,7 +128,7 @@ surgescript_var_t* surgescript_var_set_number(surgescript_var_t* var, float numb
 surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char* string)
 {
     static const int MAXLEN = 0xFFFE;
-    
+
     RELEASE_DATA(var);
     if(strlen(string) <= MAXLEN) {
         var->type = SSVAR_STRING;
@@ -197,11 +199,11 @@ float surgescript_var_get_number(const surgescript_var_t* var)
         case SSVAR_BOOL:
             return var->boolean ? 1.0f : 0.0f;
         case SSVAR_STRING:
-            return atof(var->string);
+            return isvalidnum(var->string) ? atof(var->string) : NAN;
         case SSVAR_NULL:
             return 0.0f;
         case SSVAR_OBJECTHANDLE:
-            return 1.0f;
+            return NAN;
     }
 
     return 0.0f;
@@ -451,4 +453,22 @@ void surgescript_var_set_rawbits(surgescript_var_t* var, unsigned long raw)
     RELEASE_DATA(var);
     var->type = SSVAR_NUMBER;
     var->raw = raw;
+}
+
+
+
+
+/* private section */
+
+/* Does str hold a valid number? */
+bool isvalidnum(const char* str)
+{
+    while(str && *str) {
+        if(isdigit(*str) || *str == '.' || *str == '-' || *str == '+')
+            str++;
+        else
+            return false;
+    }
+
+    return true; /* the empty string is valid and translates to 0. */
 }
