@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/stack.c
  * SurgeScript stack
@@ -140,6 +140,25 @@ void surgescript_stack_popenv(surgescript_stack_t* stack)
         ssfatal("Runtime Error: surgescript_stack_popenv() has found an empty stack");
 }
 
+/*
+ * surgescript_stack_pushn()
+ * pushes n empty variables to the stack
+ */
+void surgescript_stack_pushn(surgescript_stack_t* stack, size_t n)
+{
+    while(n--)
+        surgescript_stack_push(stack, surgescript_var_create());
+}
+
+/*
+ * surgescript_stack_popn()
+ * pops n variables from the stack
+ */
+void surgescript_stack_popn(surgescript_stack_t* stack, size_t n)
+{
+    while(n--)
+        surgescript_stack_pop(stack);
+}
 
 /*
  * surgescript_stack_top()

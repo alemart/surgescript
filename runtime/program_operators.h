@@ -45,6 +45,8 @@
     F( SSOP_POP, "pop" )                                     /* pop t[a] */ \
     F( SSOP_SPEEK, "speek" )                   /* t[a] = stack[base + b] */ \
     F( SSOP_SPOKE, "spoke" )                   /* stack[base + b] = t[a] */ \
+    F( SSOP_PUSHN, "pushn" )                             /* push a cells */ \
+    F( SSOP_POPN, "popn" )                                /* pop a cells */ \
                                                                             \
     F( SSOP_INC, "inc" )                                       /* t[a]++ */ \
     F( SSOP_DEC, "dec" )                                       /* t[a]-- */ \
@@ -81,10 +83,10 @@
     F( SSOP_JL, "jl" )                     /* jump to line a if t[2] < 0 */ \
     F( SSOP_JLE, "jle" )                  /* jump to line a if t[2] <= 0 */ \
                                                                             \
-    F( SSOP_CALL, "call" )                 /* call program named text[a] */ \
-                                      /* of the object at the top of the */ \
-                                 /* stack with n = b parameters, storing */ \
-                              /* in t[0] the return value of the program */ \
+    F( SSOP_CALL, "call" )                /* call program named text[a], */ \
+                                         /* with b parameters, of object */ \
+                                       /* stack[top-b] and store in t[0] */ \
+                                      /* the return value of the program */ \
     F( SSOP_RET, "ret" )                 /* returns, halting the program */
 
 #endif

@@ -65,19 +65,17 @@ static void setup(surgescript_program_t* program)
     surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOP()); // pop fib(x)
 
     // call other program
-    surgescript_program_add_line(program, SSOP_MOVF, SSOPu(2), SSOPf(3.14159)); // t[2] = anything
-    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(1), SSOPu(1)); // t[1] = anything
-    surgescript_program_add_line(program, SSOP_MOVO, SSOPu(0), SSOPu(1)); // t[0] = (object)1
-    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(1), SSOPu(0)); // push anything
-    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(2), SSOPu(0)); // push anything
-    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0)); // push (object)1
-    surgescript_program_add_line(program, SSOP_CALL, SSOPu(1), SSOPu(2)); // call fun text[a = 1] with n = 1 params
-    surgescript_program_add_line(program, SSOP_CALL, SSOPu(1), SSOPu(2)); // call fun text[a = 1] with n = 1 params
-    surgescript_program_add_line(program, SSOP_CALL, SSOPu(1), SSOPu(2)); // call fun text[a = 1] with n = 1 params
-    surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOPu(0)); // pop (object)1
-    surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOPu(0)); // pop anything
-    surgescript_program_add_line(program, SSOP_POP, SSOPu(0), SSOPu(0)); // pop anything
-    surgescript_program_add_line(program, SSOP_OUT, SSOPu(2), SSOP()); // print the return value
+    surgescript_program_add_line(program, SSOP_MOVO, SSOPu(3), SSOPu(1)); // t[3] = (object)1
+    surgescript_program_add_line(program, SSOP_MOVF, SSOPu(2), SSOPf(3.14159)); // t[2] = anything1
+    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(1), SSOPu(1)); // t[1] = anything2
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(3), SSOPu(0)); // push (object)1
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(2), SSOPu(0)); // push anything1
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(1), SSOPu(0)); // push anything2
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(1), SSOPu(2)); // call fun text[a = 1] with n = 2 params
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(1), SSOPu(2)); // call fun text[a = 1] with n = 2 params
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(1), SSOPu(2)); // call fun text[a = 1] with n = 2 params
+    surgescript_program_add_line(program, SSOP_OUT, SSOPu(0), SSOP()); // print the return value
+    surgescript_program_add_line(program, SSOP_POPN, SSOPu(3), SSOPu(0)); // pop params
 }
 
 static void setup2(surgescript_program_t* program)

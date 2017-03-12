@@ -43,6 +43,7 @@ static void unmatch(surgescript_parser_t* parser);
 static void expect(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
 static void expect_something(surgescript_parser_t* parser);
 static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
+static void unexpected_symbol(surgescript_parser_t* parser);
 static const char* ssbasename(const char* path);
 
 /* non-terminals */
@@ -80,6 +81,8 @@ static void additiveexpr1(surgescript_parser_t* parser, surgescript_nodecontext_
 static void multiplicativeexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void multiplicativeexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
@@ -301,6 +304,21 @@ void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol
             lexeme
         );
     }
+}
+
+/* throw an error: unexpected symbol */
+void unexpected_symbol(surgescript_parser_t* parser)
+{
+     if(parser->lookahead) {
+        ssfatal(
+            "Parse Error: unexpected \"%s\" on %s:%d.",
+            surgescript_token_lexeme(parser->lookahead),
+            parser->filename,
+            surgescript_token_linenumber(parser->lookahead)
+        );
+    }
+    else
+        expect_something(parser);
 }
 
 /* is there a token to be analyzed? */
@@ -563,7 +581,61 @@ void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    primaryexpr(parser, context);
+    if(got_type(parser, SSTOK_IDENTIFIER)) {
+        char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_IDENTIFIER);
+        if(got_type(parser, SSTOK_INCDECOP)) {
+            const char* op = surgescript_token_lexeme(parser->lookahead);
+            emit_postincdec(context, op, id, surgescript_token_linenumber(parser->lookahead));
+            match(parser, SSTOK_INCDECOP);
+        }
+        else if(optmatch(parser, SSTOK_LBRACKET)) {
+            unexpected_symbol(parser); /* TODO */
+        }
+        else if(got_type(parser, SSTOK_LPAREN)) { /* next is a funcallexpr */
+            unmatch(parser); /* put the identifier back */
+            emit_this(context);
+            do {
+                funcallexpr(parser, context);
+            } while(optmatch(parser, SSTOK_DOT));
+        }
+        else {
+            unmatch(parser);
+            primaryexpr(parser, context);
+            while(optmatch(parser, SSTOK_DOT)) {
+                funcallexpr(parser, context);
+            }
+        }
+        ssfree(id);
+    }
+    else {
+        primaryexpr(parser, context);
+        while(optmatch(parser, SSTOK_DOT)) {
+            funcallexpr(parser, context);
+        }
+    }
+}
+
+void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    int i = 0;
+    char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+    match(parser, SSTOK_IDENTIFIER);
+    match(parser, SSTOK_LPAREN);
+
+    emit_pushparam(context); /* push the object handle */
+    if(!got_type(parser, SSTOK_RPAREN)) { /* read the parameters */
+        do {
+            i++;
+            assignexpr(parser, context);
+            emit_pushparam(context); /* push the i-th param */
+        } while(optmatch(parser, SSTOK_COMMA));
+    }
+    emit_funcall(context, id, i);
+    emit_popparams(context, 1 + i); /* pop the parameters and the object handle */
+
+    match(parser, SSTOK_RPAREN);
+    ssfree(id);
 }
 
 void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)

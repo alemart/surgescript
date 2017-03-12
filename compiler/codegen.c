@@ -43,6 +43,7 @@
 #define T0                              U(0)
 #define T1                              U(1)
 #define T2                              U(2)
+#define T3                              U(3)
 
 
 /* objects */
@@ -353,8 +354,22 @@ void emit_postincdec(surgescript_nodecontext_t context, const char* op, const ch
         ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
 }
 
+void emit_pushparam(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_PUSH, T0);
+}
 
+void emit_popparams(surgescript_nodecontext_t context, int n)
+{
+    SSASM(SSOP_POPN, U(n));
+}
 
+void emit_funcall(surgescript_nodecontext_t context, const char* funname, int nparams)
+{
+    SSASM(SSOP_CALL, TEXT(funname), U(nparams));
+}
+
+/* constants & variables */
 void emit_this(surgescript_nodecontext_t context)
 {
     SSASM(SSOP_MOVC, T0);
@@ -368,7 +383,6 @@ void emit_identifier(surgescript_nodecontext_t context, const char* identifier, 
         ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
 }
 
-/* constants */
 void emit_null(surgescript_nodecontext_t context)
 {
     SSASM(SSOP_MOVN, T0);

@@ -65,12 +65,13 @@
  *             |  changeState ( <expr> )
  *             |  ++ identifier | -- identifier
  *             |  <postfixexpr>
- * <postfixexpr> := identifier . <postfixexpr>
- *               |  identifier ( ) <postfixexpr>
- *               |  identifier ( <funargsexprlist> ) <postfixexpr>
- *               |  identifier [ <expr> ] <postfixexpr>
- *               |  identifier ++ | identifier --
- *               |  <primaryexpr>
+ * <postfixexpr> := identifier ++ | identifier --
+ *               |  identifier [ <expr> ]
+ *               |  <funcallexpr> <postfixexpr1>
+ *               |  <primaryexpr> <postfixexpr1>
+ * <postfixexpr1> := . <funcallexpr> <postfixexpr1> | e
+ * <funcallexpr> := identifier ( )
+ *               |  identifier ( <funargsexprlist> )
  * <primaryexpr> := identifier | this | <constant> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>

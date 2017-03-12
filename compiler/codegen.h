@@ -43,11 +43,13 @@ void emit_unaryincdec(surgescript_nodecontext_t context, const char* op, const c
 void emit_unarynot(surgescript_nodecontext_t context);
 void emit_unarytype(surgescript_nodecontext_t context);
 void emit_postincdec(surgescript_nodecontext_t context, const char* op, const char* identifier, int line);
+void emit_pushparam(surgescript_nodecontext_t context);
+void emit_popparams(surgescript_nodecontext_t context, int n);
+void emit_funcall(surgescript_nodecontext_t context, const char* funname, int nparams);
 
+/* constants & variables */
 void emit_this(surgescript_nodecontext_t context);
 void emit_identifier(surgescript_nodecontext_t context, const char* identifier, int line);
-
-/* constants */
 void emit_null(surgescript_nodecontext_t context);
 void emit_bool(surgescript_nodecontext_t context, bool value);
 void emit_number(surgescript_nodecontext_t context, float value);

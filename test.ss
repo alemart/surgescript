@@ -11,6 +11,7 @@ object "Application" {
 	t = this;
 	t = typeof (t == "object");
 	t = typeof (t);
+	sep = surge(1,2);
 /*
 	sep = "\n\n\n";
 	x = 3.14 && null || 2 && -0.1;
