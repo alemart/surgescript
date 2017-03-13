@@ -44,6 +44,7 @@
 #define T1                              U(1)
 #define T2                              U(2)
 #define T3                              U(3)
+#define BREAKPOINT(str)                 emit_breakpoint(context, (str))
 
 
 /* objects */
@@ -85,7 +86,7 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
     if(!surgescript_symtable_has_parent(context.symtable))
         ssfatal("Invalid declaration (\"%s %s ...\") in object \"%s\" (%s:%d): only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
     else if(!surgescript_symtable_has_symbol(context.symtable, identifier))
-        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_count(context.symtable)));
+        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_count(context.symtable) - surgescript_program_arity(context.program)));
 
     /* perform the assignment operation */
     switch(*assignop) {
@@ -369,6 +370,8 @@ void emit_popparams(surgescript_nodecontext_t context, int n)
 
 void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int num_params)
 {
+    SSASM(SSOP_MOVF, T3, F(num_params));
+    BREAKPOINT(fun_name);
     SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
 }
 
@@ -437,4 +440,25 @@ void emit_string(surgescript_nodecontext_t context, const char* value)
 void emit_zero(surgescript_nodecontext_t context)
 {
     SSASM(SSOP_XOR, T0, T0);
+}
+
+/* misc */
+void emit_nop(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_NOP);
+}
+
+void emit_push(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_PUSH, T0);
+}
+
+void emit_pop(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_POP, T0);
+}
+
+void emit_breakpoint(surgescript_nodecontext_t context, const char* text)
+{
+    SSASM(SSOP_NOP, I(-1), TEXT(text));
 }

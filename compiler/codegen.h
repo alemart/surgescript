@@ -62,4 +62,10 @@ void emit_number(surgescript_nodecontext_t context, float value);
 void emit_string(surgescript_nodecontext_t context, const char* value);
 void emit_zero(surgescript_nodecontext_t context);
 
+/* misc */
+void emit_nop(surgescript_nodecontext_t context);
+void emit_push(surgescript_nodecontext_t context);
+void emit_pop(surgescript_nodecontext_t context);
+void emit_breakpoint(surgescript_nodecontext_t context, const char* text);
+
 #endif

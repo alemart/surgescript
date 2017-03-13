@@ -4,31 +4,38 @@
 object "Application" {
 	x = 7;
 	sep = "teste 1, 2, 3 !!";
-	n = (1 + 2) * 3;
+	//n = (1 + 2) * 3;
+	n = 0;
 	x = ++n;
 	n = n;
 	t = this;
 	t = typeof (t == "object");
 	t = typeof (t);
-	x = print("oi");
+	//x = print("oi");
 	//sep = surge(1,2);
 
 	state "main" {
+		/*
 		b=5; c = 77;
 		x=7;
 		print("hoho!" + b + "," + b + ">" + (2*b+1));
 		print("b=" + b + ", c=" + c);
 		print(d = 8); print(d > 0);
 		print("x=" + x);
-		x = x + 1;
-		print(x);
+		*/
+		//x = x + 1;
+		//print(x);
+		print("oi");
 		print(surge(2,3));
 		destroy();
 	}
 
 	fun surge(a, b) {
-		print("hoho!");
-		return a+b;
+		//print("a=" + (u = a));
+		print("u = " + (u = 1 + a*a + b*b));
+		//print("b="+(v=b*b));
+		return 1 + u;
+		return a*a + b*b;
 	}
 /*
 	sep = "\n\n\n";
