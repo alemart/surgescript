@@ -175,41 +175,13 @@ int main()
     return 0;
 }
 #else
-static surgescript_var_t* my_cfun(surgescript_object_t* caller, const surgescript_var_t** param, int num_params)
+static surgescript_var_t* simple_print(surgescript_object_t* caller, const surgescript_var_t** param, int num_params)
 {
-    printf("Hello, Application!\n");
-    surgescript_object_kill(caller);
+    char* str = surgescript_var_get_string(param[0]);
+    puts(str);
+    ssfree(str);
     return NULL;
 }
-
-
-static inline int ffs(float f) // 2.370, 4.7 [-1, 1]
-{
-    return ((*((int*)&f) & 0x7FFFFFFF)) ? (1 - ((*((int*)&f) & 0x80000000) >> 30)) : 0;
-}
-
-
-/*
-static inline int ffs(float f) // 2.380, 4.7 [-1, 1]
-{
-    return ((*((int*)&f) & 0x7FFFFFFF) != 0) * (1 - ((*((int*)&f) & 0x80000000) >> 30));
-}
-*/
-
-/*
-static inline int fast_float_notzero(float f)
-{
-    return fpclassify(f) != FP_ZERO;
-}
-static inline int fast_float_sign1(float f)
-{
-    return signbit(f) == 0 ? 1 : -1;
-}
-static inline int ffs(float f) // 2.420 [-.5, .5], 4.8 [-1, 1]
-{
-    return fast_float_notzero(f) ? fast_float_sign1(f) : 0;
-}
-*/
 
 /* testing the parser */
 int main()
@@ -223,8 +195,10 @@ int main()
     if(!success)
         puts("Error when parsing file.");
 
-    surgescript_vm_bind(vm, "Application", "state:main", my_cfun, 0);
+    surgescript_vm_bind(vm, "Application", "print", simple_print, 1);
     surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "__ssconstructor"), stdout);
+    surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "surge"), stdout);
+    surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "state:main"), stdout);
     surgescript_parser_destroy(parser);
 
     surgescript_vm_launch(vm);

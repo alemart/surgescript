@@ -103,8 +103,8 @@ void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, cons
         surgescript_symtable_entry_t entry = { .symbol = symname, .heapaddr = address, .vtable = &heapvt };
         ssarray_push(symtable->entry, entry);
     }
-    /*else
-        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);*/
+    else
+        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
 }
 
 /*
@@ -118,8 +118,8 @@ void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, con
         surgescript_symtable_entry_t entry = { .symbol = symname, .stackaddr = address, .vtable = &stackvt };
         ssarray_push(symtable->entry, entry);
     }
-    /*else
-        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);*/
+    else
+        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
 }
 
 /*
@@ -153,7 +153,7 @@ void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char
         entry->vtable->read(entry, program, k);
     }
     else if(symtable->parent)
-        surgescript_symtable_emit_write(symtable->parent, symbol, program, k);
+        surgescript_symtable_emit_read(symtable->parent, symbol, program, k);
     else
         ssfatal("Compile Error: undefined symbol \"%s\".", symbol);
 }

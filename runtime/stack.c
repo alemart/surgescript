@@ -116,7 +116,7 @@ void surgescript_stack_pushenv(surgescript_stack_t* stack)
     /* push prev BP & set new BP */
     surgescript_var_t* prev_bp = surgescript_stack_push(stack, surgescript_var_create());
     surgescript_var_set_number(prev_bp, stack->bp);
-    stack->bp = stack->sp;
+    stack->bp = stack->sp; /* the base of the stack points to the previous bp */
 }
 
 /*

@@ -85,15 +85,16 @@
  *        |  <condstmt>
  *        |  <loopstmt>
  *        |  <jumpstmt>
+ *        |  <retstmt>
  * <blockstmt> := { <stmtlist> }
  * <exprstmt> := ;
  *            |  <expr> ;
  * <condstmt> := if ( <expr> ) <stmt>
  *            |  if ( <expr> ) <stmt> else <stmt>
  * <loopstmt> := while ( <expr> ) <stmt>
- * <jumpstmt> := return <expr> ;
- *            |  return ;
- *            |  break ;
+ * <retstmt> := return <expr> ;
+ *           |  return ;
+ * <jumpstmt> := break ;
  *            |  continue ;
  *
  */

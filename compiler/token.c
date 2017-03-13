@@ -55,7 +55,7 @@ surgescript_token_t* surgescript_token_destroy(surgescript_token_t* token)
  */
 surgescript_tokentype_t surgescript_token_type(const surgescript_token_t* token)
 {
-    return token->type;
+    return token ? token->type : SSTOK_UNKNOWN;
 }
 
 /*
@@ -64,7 +64,7 @@ surgescript_tokentype_t surgescript_token_type(const surgescript_token_t* token)
  */
 const char* surgescript_token_lexeme(const surgescript_token_t* token)
 {
-    return token->lexeme;
+    return token ? token->lexeme : "";
 }
 
 /*
@@ -73,7 +73,7 @@ const char* surgescript_token_lexeme(const surgescript_token_t* token)
  */
 int surgescript_token_linenumber(const surgescript_token_t* token)
 {
-    return token->linenumber;
+    return token ? token->linenumber : 0;
 }
 
 /*
@@ -82,7 +82,7 @@ int surgescript_token_linenumber(const surgescript_token_t* token)
  */
 const void* surgescript_token_data(const surgescript_token_t* token)
 {
-    return token->data;
+    return token ? token->data : NULL;
 }
 
 

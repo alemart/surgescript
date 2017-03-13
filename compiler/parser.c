@@ -21,6 +21,7 @@
 #include "../runtime/program_pool.h"
 #include "../runtime/program.h"
 #include "../util/util.h"
+#include "../util/ssarray.h"
 
 /* the parser */
 struct surgescript_parser_t
@@ -87,12 +88,13 @@ static void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t 
 static void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 static void stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void blockstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void exprstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 
 /* public api */
@@ -360,6 +362,8 @@ void object(surgescript_parser_t* parser)
 
     match(parser, SSTOK_OBJECT);
     expect(parser, SSTOK_STRING);
+
+    /* create the parsing context */
     context = nodecontext(
         parser->filename,
         (object_name = ssstrdup(
@@ -368,12 +372,17 @@ void object(surgescript_parser_t* parser)
         surgescript_symtable_create(NULL), /* symbol table */
         surgescript_program_create(0) /* object constructor */
     );
+    if(surgescript_programpool_exists(parser->program_pool, object_name, "__ssconstructor"))
+        ssfatal("Duplicate definition of object \"%s\" in %s:%d.", object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+
+    /* read the object */
     match(parser, SSTOK_STRING);
     match(parser, SSTOK_LCURLY);
     objectdecl(parser, context);
     match(parser, SSTOK_RCURLY);
 
-    surgescript_programpool_put(parser->program_pool,  object_name, "__ssconstructor", context.program);
+    /* register the ssconstructor and cleanup */
+    surgescript_programpool_put(parser->program_pool, object_name, "__ssconstructor", context.program);
     surgescript_symtable_destroy(context.symtable);
     ssfree(object_name);
 }
@@ -388,6 +397,8 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* read non-terminals */
     vardecllist(parser, context);
+    statedecllist(parser, context);
+    fundecllist(parser, context);
 
     /* tell the program how many variables should be allocated */
     emit_object_footer(context, start, end);
@@ -395,7 +406,7 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    while(has_token(parser) && got_type(parser, SSTOK_IDENTIFIER))
+    while(got_type(parser, SSTOK_IDENTIFIER))
         vardecl(parser, context);
 }
 
@@ -405,13 +416,109 @@ void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     match(parser, SSTOK_IDENTIFIER);
     match_exactly(parser, SSTOK_ASSIGNOP, "=");
-    expr(parser, context); // so casar com constantes e funcoes; ++i deve dar undefined symbol!
+    expr(parser, context);
     match(parser, SSTOK_SEMICOLON);
 
     emit_vardecl(context, id);
     ssfree(id);
 }
 
+void statedecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    while(optmatch(parser, SSTOK_STATE)) {
+        expect(parser, SSTOK_STRING);
+        statedecl(parser, context);
+    }
+}
+
+void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    int fun_header = 0;
+    static const char prefix[] = "state:";
+    const char* state_name = surgescript_token_lexeme(parser->lookahead);
+    char* program_name = ssmalloc((1 + strlen(prefix) + strlen(state_name)) * sizeof(*program_name));
+
+    /* create context */
+    context = nodecontext(
+        context.source_file,
+        context.object_name,
+        surgescript_symtable_create(context.symtable), /* new symbol table for local variables */
+        surgescript_program_create(0)
+    );
+
+    /* read state name & generate function name */
+    strcat(strcpy(program_name, prefix), state_name);
+    match(parser, SSTOK_STRING);
+
+    /* function body */
+    match(parser, SSTOK_LCURLY);
+    fun_header = emit_function_header(context);
+    stmtlist(parser, context);
+    emit_function_footer(context, surgescript_symtable_count(context.symtable), fun_header);
+    match(parser, SSTOK_RCURLY);
+
+    /* register the function and cleanup */
+    surgescript_programpool_put(parser->program_pool, context.object_name, program_name, context.program);
+    surgescript_symtable_destroy(context.symtable);
+    ssfree(program_name);
+}
+
+void fundecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    while(optmatch(parser, SSTOK_FUN)) {
+        expect(parser, SSTOK_IDENTIFIER);
+        fundecl(parser, context);
+    }
+}
+
+void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    int i, fun_header = 0;
+    int num_arguments = 0;
+    char* program_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+    SSARRAY(surgescript_token_t*, arg);
+    ssarray_init(arg);
+
+    /* read list of arguments */
+    match(parser, SSTOK_IDENTIFIER);
+    match(parser, SSTOK_LPAREN);
+    if(!got_type(parser, SSTOK_RPAREN)) {
+        do {
+            expect(parser, SSTOK_IDENTIFIER);
+            ssarray_push(arg, surgescript_token_clone(parser->lookahead));
+            match(parser, SSTOK_IDENTIFIER);
+        } while(optmatch(parser, SSTOK_COMMA));
+    }
+    match(parser, SSTOK_RPAREN);
+
+    /* create context */
+    num_arguments = ssarray_length(arg);
+    context = nodecontext(
+        context.source_file,
+        context.object_name,
+        surgescript_symtable_create(context.symtable), /* new symbol table for local variables */
+        surgescript_program_create(num_arguments)
+    );
+
+    /* write list of arguments to the symbol table */
+    for(i = 0; i < num_arguments; i++) {
+        emit_function_argument(context, surgescript_token_lexeme(arg[i]), surgescript_token_linenumber(arg[i]), i, num_arguments);
+        surgescript_token_destroy(arg[i]);
+    }
+
+    /* function body */
+    match(parser, SSTOK_LCURLY);
+    fun_header = emit_function_header(context);
+    stmtlist(parser, context);
+    emit_function_footer(context, surgescript_symtable_count(context.symtable) - num_arguments, fun_header);
+    match(parser, SSTOK_RCURLY);
+
+    /* register the function and cleanup */
+    surgescript_programpool_put(parser->program_pool, context.object_name, program_name, context.program);
+    surgescript_symtable_destroy(context.symtable);
+    ssarray_release(arg);
+    ssfree(program_name);
+}
 
 
 /* expressions (their return value is stored in t[0]) */
@@ -471,8 +578,8 @@ void logicalorexpr(surgescript_parser_t* parser, surgescript_nodecontext_t conte
     while(optmatch(parser, SSTOK_LOGICALOROP)) {
         emit_logicalorexpr1(context, done);
         logicalandexpr(parser, context);
-        emit_logicalorexpr2(context, done);
     }
+    emit_logicalorexpr2(context, done);
 }
 
 void logicalandexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -483,8 +590,8 @@ void logicalandexpr(surgescript_parser_t* parser, surgescript_nodecontext_t cont
     while(optmatch(parser, SSTOK_LOGICALANDOP)) {
         emit_logicalandexpr1(context, done);
         equalityexpr(parser, context);
-        emit_logicalandexpr2(context, done);
     }
+    emit_logicalandexpr2(context, done);
 }
 
 void equalityexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -592,7 +699,7 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         else if(optmatch(parser, SSTOK_LBRACKET)) {
             unexpected_symbol(parser); /* TODO */
         }
-        else if(got_type(parser, SSTOK_LPAREN)) { /* next is a funcallexpr */
+        else if(got_type(parser, SSTOK_LPAREN)) { /* we have a function call here */
             unmatch(parser); /* put the identifier back */
             emit_this(context);
             do {
@@ -761,39 +868,85 @@ void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         expect(parser, SSTOK_NUMBER); /* will throw an error */
 }
 
+/* programming constructs */
+void stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    while(stmt(parser, context)) {
+        ;
+    }
+}
 
-void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void statedecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void fundecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    if(got_type(parser, SSTOK_LCURLY)) {
+        stmtlist(parser, context);
+        return true;
+    }
+    else if(got_type(parser, SSTOK_IF)) {
+        condstmt(parser, context);
+        return true;
+    }
+    else if(got_type(parser, SSTOK_WHILE)) {
+        loopstmt(parser, context);
+        return true;
+    }
+    else if(got_type(parser, SSTOK_RETURN)) {
+        retstmt(parser, context);
+        return true;
+    }
+    else if(got_type(parser, SSTOK_BREAK) || got_type(parser, SSTOK_CONTINUE)) {
+        jumpstmt(parser, context);
+        return true;
+    }
+    else if(has_token(parser) && !got_type(parser, SSTOK_RCURLY)) {
+        exprstmt(parser, context);
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
-void expr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void logicalorexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void logicalorexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void logicalandexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void logicalandexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void equalityexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void equalityexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void relationalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void relationalexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void additiveexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void additiveexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void multiplicativeexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void multiplicativeexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+void blockstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    match(parser, SSTOK_LCURLY);
+    stmtlist(parser, context);
+    match(parser, SSTOK_RCURLY);
+}
 
-void stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void blockstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void exprstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+void exprstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    if(!optmatch(parser, SSTOK_SEMICOLON)) {
+        expr(parser, context);
+        match(parser, SSTOK_SEMICOLON);
+    }
+}
 
+void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
 
+}
+
+void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+
+}
+
+void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+
+}
+
+void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    match(parser, SSTOK_RETURN);
+    if(!optmatch(parser, SSTOK_SEMICOLON)) {
+        expr(parser, context);
+        match(parser, SSTOK_SEMICOLON);
+        emit_ret(context);
+    }
+    else {
+        emit_null(context);
+        emit_ret(context);
+    }
+}

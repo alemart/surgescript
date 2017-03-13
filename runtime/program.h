@@ -56,7 +56,7 @@ typedef union surgescript_program_operand_t {
 
 static inline surgescript_program_operand_t surgescript_program_operand_u(unsigned u) { surgescript_program_operand_t o = { .u = u }; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_f(float f) { surgescript_program_operand_t o = { .f = f }; return o; }
-static inline surgescript_program_operand_t surgescript_program_operand_b(bool b) { surgescript_program_operand_t o = { .b = b }; return o; }
+static inline surgescript_program_operand_t surgescript_program_operand_b(bool b) { surgescript_program_operand_t o = { .u = 0 }; o.b = b; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_i(int i) { surgescript_program_operand_t o = { .i = i }; return o; }
 
 
@@ -75,8 +75,9 @@ void surgescript_program_run(surgescript_program_t* program, struct surgescript_
 /* write the program */
 surgescript_program_label_t surgescript_program_new_label(surgescript_program_t* program); /* creates and returns a new label */
 void surgescript_program_add_label(surgescript_program_t* program, surgescript_program_label_t label); /* adds a label to the current line of code in the program */
-void surgescript_program_add_line(surgescript_program_t* program, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b); /* adds a line of code to the program */
 int surgescript_program_add_text(surgescript_program_t* program, const char* text); /* adds a read-only string to the program, returning its index */
+int surgescript_program_add_line(surgescript_program_t* program, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b); /* adds a line of code to the program */
+int surgescript_program_chg_line(surgescript_program_t* program, int line, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b); /* changes an existing line of code of the program */
 
 /* program data */
 int surgescript_program_arity(const surgescript_program_t* program); /* what's the arity of this program? (i.e., how many parameters does it take) */

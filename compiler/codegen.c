@@ -70,9 +70,12 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
 /* declarations */
 void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
 {
-    surgescript_symtable_put_heap_symbol(context.symtable, identifier, (surgescript_heapptr_t)surgescript_symtable_count(context.symtable));
+    if(!surgescript_symtable_has_symbol(context.symtable, identifier))
+        surgescript_symtable_put_heap_symbol(context.symtable, identifier, (surgescript_heapptr_t)surgescript_symtable_count(context.symtable));
+/*
     surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
     SSASM(SSOP_OUT, T0);
+*/
 }
 
 /* expressions */
@@ -81,8 +84,8 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
     /* put the identifier on the symbol table, and assign the symbol an address */
     if(!surgescript_symtable_has_parent(context.symtable))
         ssfatal("Invalid declaration (\"%s %s ...\") in object \"%s\" (%s:%d): only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
-    else
-        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(-2 - surgescript_symtable_count(context.symtable)));
+    else if(!surgescript_symtable_has_symbol(context.symtable, identifier))
+        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_count(context.symtable)));
 
     /* perform the assignment operation */
     switch(*assignop) {
@@ -364,9 +367,37 @@ void emit_popparams(surgescript_nodecontext_t context, int n)
     SSASM(SSOP_POPN, U(n));
 }
 
-void emit_funcall(surgescript_nodecontext_t context, const char* funname, int nparams)
+void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int num_params)
 {
-    SSASM(SSOP_CALL, TEXT(funname), U(nparams));
+    SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
+}
+
+/* functions */
+int emit_function_header(surgescript_nodecontext_t context)
+{
+    return SSASM(SSOP_NOP); /* to be filled later */
+}
+
+void emit_function_footer(surgescript_nodecontext_t context, int num_locals, int fun_header)
+{
+    surgescript_program_chg_line(context.program, fun_header, SSOP_PUSHN, U(num_locals), U(0));
+    SSASM(SSOP_MOVN, T0);
+    /*SSASM(SSOP_POPN, U(num_locals));*/ /* not needed, since popenv() clears the stack frame for us */
+    SSASM(SSOP_RET);
+}
+
+void emit_function_argument(surgescript_nodecontext_t context, const char* identifier, int line, int idx, int argc)
+{
+    /* idx is the index of the argument; it is such that 0 <= idx < argc (left-to-right) */
+    if(!surgescript_symtable_has_symbol(context.symtable, identifier))
+        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(idx-argc));
+    else
+        ssfatal("Duplicate function parameter name \"%s\" in %s:%d.", identifier, context.source_file, line);
+}
+
+void emit_ret(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_RET);
 }
 
 /* constants & variables */

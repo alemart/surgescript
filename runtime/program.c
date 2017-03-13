@@ -121,10 +121,26 @@ surgescript_program_t* surgescript_program_destroy(surgescript_program_t* progra
  * surgescript_program_add_line()
  * Adds a line of code to a program
  */
-void surgescript_program_add_line(surgescript_program_t* program, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b)
+int surgescript_program_add_line(surgescript_program_t* program, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b)
 {
     surgescript_program_operation_t line = { op, a, b };
     ssarray_push(program->line, line);
+    return ssarray_length(program->line) - 1;
+}
+
+/*
+ * surgescript_program_chg_line()
+ * changes an existing line of code of the program
+ */
+int surgescript_program_chg_line(surgescript_program_t* program, int line, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b)
+{
+    surgescript_program_operation_t newline = { op, a, b };
+    if(line >= 0 && line < ssarray_length(program->line)) {
+        program->line[line] = newline;
+        return line;
+    }
+    else
+        return -1;
 }
 
 /*
@@ -311,7 +327,7 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
 
     /* grab parameters from the stack (stacked in left-to-right order) */
     for(int i = 1; i <= program->arity; i++)
-        param[program->arity-i] = surgescript_stack_at(stack, -i-1);
+        param[program->arity-i] = surgescript_stack_at(stack, -i);
 
     /* call C-function */
     return_value = (surgescript_var_t*)(cprogram->cfunction(caller, (const surgescript_var_t**)param, program->arity));
@@ -675,28 +691,32 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
         surgescript_object_t* object = surgescript_objectmanager_get(surgescript_renv_objectmanager(caller_runtime_environment), object_handle);
         const char* object_name = surgescript_object_name(object);
         surgescript_program_t* program = surgescript_programpool_get(surgescript_renv_programpool(caller_runtime_environment), object_name, program_name);
+        
+        if(program) {
+            if(number_of_given_params == program->arity) {
+                /* the parameters are pushed onto the stack (left-to-right) */
+                surgescript_renv_t* callee_runtime_environment = surgescript_renv_create(
+                    object,
+                    stack,
+                    surgescript_object_heap(object),
+                    surgescript_renv_programpool(caller_runtime_environment),
+                    surgescript_renv_objectmanager(caller_runtime_environment),
+                    surgescript_renv_tmp(caller_runtime_environment)
+                );
 
-        if(number_of_given_params == program->arity) {
-            /* the parameters are pushed onto the stack (left-to-right) */
-            surgescript_renv_t* callee_runtime_environment = surgescript_renv_create(
-                object,
-                stack,
-                surgescript_object_heap(object),
-                surgescript_renv_programpool(caller_runtime_environment),
-                surgescript_renv_objectmanager(caller_runtime_environment),
-                surgescript_renv_tmp(caller_runtime_environment)
-            );
+                /* call the program */
+                surgescript_program_run(program, callee_runtime_environment);
 
-            /* call the program */
-            surgescript_program_run(program, callee_runtime_environment);
-
-            /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
-            surgescript_renv_destroy(callee_runtime_environment);
+                /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
+                surgescript_renv_destroy(callee_runtime_environment);
+            }
+            else
+                ssfatal("Runtime Error: function \"%s.%s\" (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
         }
         else
-            ssfatal("Runtime Error: function \"%s.%s\" (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
+            ssfatal("Runtime Error: can't find function \"%s.%s\" (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
     }
-    surgescript_stack_popenv(stack);
+    surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */
 }
 
 /* writes data to buf, in hex/big-endian format (writes (1 + 2 * sizeof(unsigned)) bytes to buf) */

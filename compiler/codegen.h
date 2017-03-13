@@ -45,7 +45,13 @@ void emit_unarytype(surgescript_nodecontext_t context);
 void emit_postincdec(surgescript_nodecontext_t context, const char* op, const char* identifier, int line);
 void emit_pushparam(surgescript_nodecontext_t context);
 void emit_popparams(surgescript_nodecontext_t context, int n);
-void emit_funcall(surgescript_nodecontext_t context, const char* funname, int nparams);
+void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int num_params);
+
+/* functions */
+int emit_function_header(surgescript_nodecontext_t context);
+void emit_function_footer(surgescript_nodecontext_t context, int num_locals, int fun_header);
+void emit_function_argument(surgescript_nodecontext_t context, const char* identifier, int line, int idx, int argc);
+void emit_ret(surgescript_nodecontext_t context);
 
 /* constants & variables */
 void emit_this(surgescript_nodecontext_t context);

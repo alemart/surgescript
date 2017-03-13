@@ -66,11 +66,7 @@ surgescript_programpool_t* surgescript_programpool_destroy(surgescript_programpo
  */
 bool surgescript_programpool_exists(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
-    surgescript_programpool_hashpair_t* pair = NULL;
-    char* signature = generate_signature(object_name, program_name);
-    HASH_FIND_STR(pool->hash, signature, pair);
-    ssfree(signature);
-    return pair != NULL;
+    return surgescript_programpool_get(pool, object_name, program_name) != NULL;
 }
 
 /*
@@ -99,10 +95,9 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
 surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
     surgescript_programpool_hashpair_t* pair = NULL;
-    char* signature = NULL;
+    char* signature = generate_signature(object_name, program_name);
     
     /* find the program */
-    signature = generate_signature(object_name, program_name);
     HASH_FIND_STR(pool->hash, signature, pair);
     ssfree(signature);
 
@@ -114,14 +109,8 @@ surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* po
         ssfree(signature);
 
         /* really, the program doesn't exist */
-        if(!pair) {
-            if(strncmp(program_name, "state:", 6) == 0)
-                ssfatal("Runtime Error: can't find state \"%s\" in object \"%s\"", program_name + 6, object_name);
-            else
-                ssfatal("Runtime Error: can't find function \"%s\" in object \"%s\"", program_name, object_name);
-
+        if(!pair)
             return NULL;
-        }
     }
 
     /* found it! */

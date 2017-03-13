@@ -466,7 +466,8 @@ void run_state(surgescript_object_t* object, const char* state_name)
     char *fun_name = state2fun(state_name);
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
     surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
-    surgescript_program_run(program, object->renv);
+    if(program)
+        surgescript_program_run(program, object->renv);
     ssfree(fun_name);
 }
 
