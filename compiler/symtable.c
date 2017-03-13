@@ -93,6 +93,16 @@ bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const cha
 }
 
 /*
+ * surgescript_symtable_has_local_symbol()
+ * Does the symbol table have the informed symbol locally?
+ * Perform a shallow search, i.e., don't search on the parent of this table
+ */
+bool surgescript_symtable_has_local_symbol(surgescript_symtable_t* symtable, const char* symbol)
+{
+    return indexof_symbol(symtable, symbol) >= 0;
+}
+
+/*
  * surgescript_symtable_put_heap_symbol()
  * Puts a symbol on the table that is stored on the heap
  */

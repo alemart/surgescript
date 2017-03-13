@@ -25,17 +25,23 @@ object "Application" {
 		*/
 		//x = x + 1;
 		//print(x);
-		print("oi");
-		print(surge(2,3));
+		//print("oi");
+		print(surge(2, surge(3, 4)));
+		print("fib(8) = " + fib(8));
 		destroy();
 	}
 
 	fun surge(a, b) {
 		//print("a=" + (u = a));
-		print("u = " + (u = 1 + a*a + b*b));
+		//print("u = " + (u = 1 + a*a + b*b));
 		//print("b="+(v=b*b));
-		return 1 + u;
+		//return u + u;
 		return a*a + b*b;
+		//return 3.14;
+	}
+
+	fun fib(x) {
+		return x > 2 ? (u = fib(x-1)) + (v = fib(x-2)) : 1;
 	}
 /*
 	sep = "\n\n\n";

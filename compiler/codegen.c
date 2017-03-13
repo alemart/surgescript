@@ -392,7 +392,7 @@ void emit_function_footer(surgescript_nodecontext_t context, int num_locals, int
 void emit_function_argument(surgescript_nodecontext_t context, const char* identifier, int line, int idx, int argc)
 {
     /* idx is the index of the argument; it is such that 0 <= idx < argc (left-to-right) */
-    if(!surgescript_symtable_has_symbol(context.symtable, identifier))
+    if(!surgescript_symtable_has_local_symbol(context.symtable, identifier))
         surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(idx-argc));
     else
         ssfatal("Duplicate function parameter name \"%s\" in %s:%d.", identifier, context.source_file, line);
@@ -400,6 +400,7 @@ void emit_function_argument(surgescript_nodecontext_t context, const char* ident
 
 void emit_ret(surgescript_nodecontext_t context)
 {
+    BREAKPOINT("return value");
     SSASM(SSOP_RET);
 }
 

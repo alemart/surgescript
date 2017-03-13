@@ -36,7 +36,6 @@ struct surgescript_program_operation_t
 struct surgescript_program_t
 {
     int arity; /* config */
-    int ip; /* instruction pointer */
     void (*run)(surgescript_program_t*, surgescript_renv_t*); /* run function; strategy pattern */
 
     SSARRAY(surgescript_program_operation_t, line); /* a set of operations (or lines of code) */
@@ -62,7 +61,7 @@ static const char* instruction_name[] = {
 static surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, surgescript_renv_t*));
 static void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
 static void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
-static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b);
+static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, int* ip);
 static inline void call_program(surgescript_renv_t* caller_runtime_environment, const char* program_name, int number_of_given_params);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
@@ -296,7 +295,6 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, surgescript_renv_t*))
 {
     program->arity = arity;
-    program->ip = 0;
     program->run = run_function;
 
     ssarray_init(program->line);
@@ -309,11 +307,11 @@ surgescript_program_t* init_program(surgescript_program_t* program, int arity, v
 /* runs a program */
 void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
 {
+    int ip = 0; /* instruction pointer */
     remove_labels(program);
 
-    program->ip = 0;
-    while(program->ip < ssarray_length(program->line))
-        run_instruction(program, runtime_environment, program->line[program->ip].instruction, program->line[program->ip].a, program->line[program->ip].b);
+    while(ip < ssarray_length(program->line))
+        run_instruction(program, runtime_environment, program->line[ip].instruction, program->line[ip].a, program->line[ip].b, &ip);
 }
 
 /* runs a C-program */
@@ -344,7 +342,7 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
 }
 
 /* runs an instruction */
-void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b)
+void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, int* ip)
 {
     /* temporary variables */
     surgescript_var_t** _t = surgescript_renv_tmp(runtime_environment);
@@ -656,12 +654,12 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         /* jumping */
         case SSOP_JMP:
-            program->ip = a.u;
+            *ip = a.u;
             return;
 
         case SSOP_JE:
             if(!fast_float_notzero(surgescript_var_get_number(_t[2]))) {
-                program->ip = a.u;
+                *ip = a.u;
                 return;
             }
             else
@@ -669,7 +667,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JNE:
             if(fast_float_notzero(surgescript_var_get_number(_t[2]))) {
-                program->ip = a.u;
+                *ip = a.u;
                 return;
             }
             else
@@ -677,7 +675,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JL:
             if(fast_float_sign(surgescript_var_get_number(_t[2])) < 0) {
-                program->ip = a.u;
+                *ip = a.u;
                 return;
             }
             else
@@ -685,7 +683,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JG:
             if(fast_float_sign(surgescript_var_get_number(_t[2])) > 0) {
-                program->ip = a.u;
+                *ip = a.u;
                 return;
             }
             else
@@ -693,7 +691,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JLE:
             if(fast_float_sign(surgescript_var_get_number(_t[2])) <= 0) {
-                program->ip = a.u;
+                *ip = a.u;
                 return;
             }
             else
@@ -701,7 +699,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_JGE:
             if(fast_float_sign(surgescript_var_get_number(_t[2])) >= 0) {
-                program->ip = a.u;
+                *ip = a.u;
                 return;
             }
             else
@@ -716,12 +714,12 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         }
 
         case SSOP_RET:
-            program->ip = ssarray_length(program->line);
+            *ip = ssarray_length(program->line);
             return;
     }
 
     /* next line */
-    program->ip++;
+    ++(*ip);
 }
 
 /* calls a program */
@@ -751,6 +749,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
                 surgescript_program_run(program, callee_runtime_environment);
 
                 /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
+                /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(callee_runtime_environment));*/
                 surgescript_renv_destroy(callee_runtime_environment);
             }
             else

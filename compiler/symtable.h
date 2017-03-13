@@ -32,6 +32,7 @@ void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char
 
 /* does the table have a certain symbol? */
 bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const char* symbol);
+bool surgescript_symtable_has_local_symbol(surgescript_symtable_t* symtable, const char* symbol);
 
 /* count the number of symbols */
 int surgescript_symtable_count(surgescript_symtable_t* symtable);
