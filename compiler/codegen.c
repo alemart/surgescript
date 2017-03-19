@@ -347,7 +347,7 @@ void emit_postincdec(surgescript_nodecontext_t context, const char* op, const ch
 {
     if(surgescript_symtable_has_symbol(context.symtable, identifier)) {
         surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);
-        SSASM(SSOP_MOVT, T1, T0);
+        SSASM(SSOP_MOV, T1, T0);
         if(strcmp(op, "++") == 0)
             SSASM(SSOP_INC, T1);
         else if(strcmp(op, "--") == 0)
