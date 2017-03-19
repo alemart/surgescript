@@ -11,12 +11,10 @@
 #include "../../util/util.h"
 
 /* private stuff */
-static surgescript_var_t* fun_app(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_name(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_parent(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_changestate(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_name(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -27,12 +25,10 @@ static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgesc
  */
 void surgescript_sslib_register_object(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Object", "app", fun_app, 0);
+    surgescript_vm_bind(vm, "Object", "name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "parent", fun_parent, 0);
     surgescript_vm_bind(vm, "Object", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Object", "destroy", fun_destroy, 0);
-    surgescript_vm_bind(vm, "Object", "changeState", fun_changestate, 1);
-    surgescript_vm_bind(vm, "Object", "name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Object", "hasMemberFunction", fun_hasfun, 1);
     //surgescript_vm_bind(vm, "Object", "note", fun_note, 1); // TODO
@@ -41,14 +37,6 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
 
 
 /* my functions */
-
-/* returns a handle to the root object */
-surgescript_var_t* fun_app(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-    surgescript_objectmanager_handle_t root = surgescript_objectmanager_root(manager);
-    return surgescript_var_set_objecthandle(surgescript_var_create(), root);
-}
 
 /* returns a handle to the parent object */
 surgescript_var_t* fun_parent(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
@@ -87,18 +75,13 @@ surgescript_var_t* fun_name(surgescript_object_t* object, const surgescript_var_
     return surgescript_var_set_string(surgescript_var_create(), surgescript_object_name(object));
 }
 
-/* changes the state of this object */
-surgescript_var_t* fun_changestate(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    char* state = surgescript_var_get_string(param[0]);
-    surgescript_object_set_state(object, state);
-    ssfree(state);
-    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
-}
-
 /* does this object have a member function called param[0] ? */
 surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    /* TODO */
-    return NULL;
+    const surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
+    const char* object_name = surgescript_object_name(object);
+    char* program_name = surgescript_var_get_string(param[0]);
+    bool exists = surgescript_programpool_exists(surgescript_objectmanager_programpool(object_manager), object_name, program_name);
+    ssfree(fun_name);
+    return surgescript_var_set_bool(surgescript_var_create(), exists);
 }
