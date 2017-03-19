@@ -15,7 +15,7 @@ struct surgescript_vm_t;
 
 /* Register common methods to all objects */
 void surgescript_sslib_register_object(struct surgescript_vm_t* vm);
-void surgescript_sslib_register_array(surgescript_vm_t* vm);
-void surgescript_sslib_register_application(surgescript_vm_t* vm);
+void surgescript_sslib_register_array(struct surgescript_vm_t* vm);
+void surgescript_sslib_register_application(struct surgescript_vm_t* vm);
 
 #endif

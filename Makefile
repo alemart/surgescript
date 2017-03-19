@@ -36,10 +36,11 @@ object: runtime/object.c runtime/object.h program utils
 utils: util/util.c util/util.h
 	$(CC) $(CFLAGS) -c util/util.c
 
-sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c heap utils
+sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c heap utils
 	$(CC) $(CFLAGS) -c runtime/sslib/object.c -o sslib_object.o
 	$(CC) $(CFLAGS) -c runtime/sslib/array.c -o sslib_array.o
-	ar -cvq sslib.a sslib_object.o sslib_array.o
+	$(CC) $(CFLAGS) -c runtime/sslib/application.c -o sslib_application.o
+	ar -cvq sslib.a sslib_object.o sslib_array.o sslib_application.o
 
 token: compiler/token.h compiler/token.c utils
 	$(CC) $(CFLAGS) -c compiler/token.c

@@ -175,14 +175,6 @@ int main()
     return 0;
 }
 #else
-static surgescript_var_t* simple_print(surgescript_object_t* caller, const surgescript_var_t** param, int num_params)
-{
-    char* str = surgescript_var_get_string(param[0]);
-    puts(str);
-    ssfree(str);
-    return NULL;
-}
-
 /* testing the parser */
 int main()
 {
@@ -195,7 +187,6 @@ int main()
     if(!success)
         puts("Error when parsing file.");
 
-    surgescript_vm_bind(vm, "Application", "print", simple_print, 1);
     surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "__ssconstructor"), stdout);
     surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "state:main"), stdout);
     surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "surge"), stdout);

@@ -82,6 +82,6 @@ surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_va
     const char* object_name = surgescript_object_name(object);
     char* program_name = surgescript_var_get_string(param[0]);
     bool exists = surgescript_programpool_exists(surgescript_objectmanager_programpool(object_manager), object_name, program_name);
-    ssfree(fun_name);
+    ssfree(program_name);
     return surgescript_var_set_bool(surgescript_var_create(), exists);
 }
