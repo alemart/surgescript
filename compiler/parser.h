@@ -44,7 +44,7 @@
  *
  *
  * <expr> := <assignexpr> , <expr> | <assignexpr>
- * <assignexpr> := <conditionalexpr> | identifier assignop <assignexpr>
+ * <assignexpr> := <conditionalexpr> | identifier assignop <assignexpr> | state = <assignexpr>
  * <conditionalexpr> := <logicalorexpr> | <logicalorexpr> ? <expr> : <conditionalexpr>
  * <logicalorexpr> := <logicalandexpr> <logicalorexpr1>
  * <logicalorexpr1> := || <logicalandexpr> <logicalorexpr1> | e
@@ -72,7 +72,7 @@
  * <postfixexpr1> := . <funcallexpr> <postfixexpr1> | e
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
- * <primaryexpr> := identifier | this | <constant> | ( <expr> )
+ * <primaryexpr> := identifier | this | state | <constant> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e

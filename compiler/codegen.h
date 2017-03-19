@@ -55,6 +55,7 @@ void emit_ret(surgescript_nodecontext_t context);
 
 /* constants & variables */
 void emit_this(surgescript_nodecontext_t context);
+void emit_state(surgescript_nodecontext_t context);
 void emit_identifier(surgescript_nodecontext_t context, const char* identifier, int line);
 void emit_null(surgescript_nodecontext_t context);
 void emit_bool(surgescript_nodecontext_t context, bool value);
@@ -63,6 +64,7 @@ void emit_string(surgescript_nodecontext_t context, const char* value);
 void emit_zero(surgescript_nodecontext_t context);
 
 /* misc */
+void emit_setstate(surgescript_nodecontext_t context);
 void emit_nop(surgescript_nodecontext_t context);
 void emit_push(surgescript_nodecontext_t context);
 void emit_pop(surgescript_nodecontext_t context);

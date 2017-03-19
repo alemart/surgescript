@@ -550,6 +550,11 @@ void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
         ssfree(identifier);
     }
+    else if(optmatch(parser, SSTOK_STATE)) {
+        match_exactly(parser, SSTOK_ASSIGNOP, "=");
+        assignexpr(parser, context);
+        emit_setstate(context);
+    }
     else
         conditionalexpr(parser, context);
 }
@@ -757,6 +762,9 @@ void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     }
     else if(optmatch(parser, SSTOK_THIS)) {
         emit_this(context);
+    }
+    else if(optmatch(parser, SSTOK_STATE)) {
+        emit_state(context);
     }
     else if(got_type(parser, SSTOK_IDENTIFIER)) {
         const char* identifier = surgescript_token_lexeme(parser->lookahead);

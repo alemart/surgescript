@@ -410,6 +410,11 @@ void emit_this(surgescript_nodecontext_t context)
     SSASM(SSOP_MOVC, T0);
 }
 
+void emit_state(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_MOVT, T0);
+}
+
 void emit_identifier(surgescript_nodecontext_t context, const char* identifier, int line)
 {
     if(surgescript_symtable_has_symbol(context.symtable, identifier))
@@ -444,6 +449,11 @@ void emit_zero(surgescript_nodecontext_t context)
 }
 
 /* misc */
+void emit_setstate(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_MOVT, T0, I(-1)); /* return value is in t[0] */
+}
+
 void emit_nop(surgescript_nodecontext_t context)
 {
     SSASM(SSOP_NOP);

@@ -442,10 +442,14 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_objecthandle(t(a), surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
             break;
 
-        case SSOP_MOVT: /* t[a] receives the current state. If b == -1, then the current state is set to text[a] as well */
-            if(b.i == -1 && a.u < ssarray_length(program->text))
-                surgescript_object_set_state(surgescript_renv_owner(runtime_environment), program->text[a.u]);
-            surgescript_var_set_string(t(a), surgescript_object_state(surgescript_renv_owner(runtime_environment)));
+        case SSOP_MOVT: /* t[a] receives the current state. If b == -1, then the current state is set to t[a] instead. */
+            if(b.i == -1) {
+                char state[256];
+                surgescript_var_to_string(t(a), state, sizeof(state) / sizeof(char));
+                surgescript_object_set_state(surgescript_renv_owner(runtime_environment), state);
+            }
+            else
+                surgescript_var_set_string(t(a), surgescript_object_state(surgescript_renv_owner(runtime_environment)));
             break;
 
         case SSOP_MOV: /* move temp */
