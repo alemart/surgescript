@@ -22,7 +22,7 @@
  * ssarray_init()
  * initializes the array
  */
-#define ssarray_init(arr)                     (arr##_len = 0, arr##_cap = 4, arr = ssmalloc(arr##_cap * sizeof(*arr)))
+#define ssarray_init(arr)                     (arr##_len = 0, arr##_cap = 4, arr = ssmalloc(arr##_cap * sizeof(*(arr))))
 
 /*
  * ssarray_release()

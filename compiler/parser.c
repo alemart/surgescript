@@ -702,25 +702,17 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         else if(got_type(parser, SSTOK_LPAREN)) { /* we have a function call here */
             unmatch(parser); /* put the identifier back */
             emit_this(context);
-            //emit_push(context);
             do {
-                //emit_pop(context);
                 funcallexpr(parser, context);
-                //emit_push(context);
             } while(optmatch(parser, SSTOK_DOT));
-            //emit_pop(context);
         }
         else {
             unmatch(parser);
             primaryexpr(parser, context);
             if(optmatch(parser, SSTOK_DOT)) {
-                //emit_push(context);
                 do {
-                    //emit_pop(context);
                     funcallexpr(parser, context);
-                    //emit_push(context);
                 } while(optmatch(parser, SSTOK_DOT));
-                //emit_pop(context);
             }
         }
         ssfree(id);
@@ -728,13 +720,9 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     else {
         primaryexpr(parser, context);
         if(optmatch(parser, SSTOK_DOT)) {
-            //emit_push(context);
             do {
-                //emit_pop(context);
                 funcallexpr(parser, context);
-                //emit_push(context);
             } while(optmatch(parser, SSTOK_DOT));
-            //emit_pop(context);
         }
     }
 }

@@ -1,20 +1,35 @@
 // test
 // by alemart
+// =========> o lexer ta contando mta linha
+// todo: keyword app, MOVR (root object)
 
 object "Application" {
 	x = 7;
 	sep = "teste 1, 2, 3 !!";
-	//n = (1 + 2) * 3;
 	n = 0;
 	x = ++n;
 	n = n;
 	t = this;
 	t = typeof (t == "object");
 	t = typeof (t);
-	//x = print("oi");
-	//sep = surge(1,2);
 
 	state "main" {
+		(this.self().self()).self().destroy();
+		this.destroy();
+		obj = this;
+		obj.destroy();
+		destroy(); obj.self(); k=obj; k=2+4; k=obj;
+
+		//w3=2-a;
+		//q;
+	}
+
+	fun self() {
+		u=2;
+		return this;
+	}
+
+//	fun surge(a,b) {}
 		/*
 		b=5; c = 77;
 		x=7;
@@ -23,13 +38,27 @@ object "Application" {
 		print(d = 8); print(d > 0);
 		print("x=" + x);
 		*/
+		
 		//x = x + 1;
 		//print(x);
 		//print("oi");
-		print(surge(2, surge(3, 4)));
-		print("fib(8) = " + fib(8));
-		destroy();
-	}
+		//print(surge(2, surge(3, 4)));
+		//
+		// a, b
+		/*
+		a
+
+		bbbbbb // ae
+		a
+		*/
+
+
+
+		//print("fib(8) = " + fib(8));
+		//this.this.destroy();
+
+
+
 
 	fun surge(a, b) {
 		//print("a=" + (u = a));
@@ -37,6 +66,7 @@ object "Application" {
 		//print("b="+(v=b*b));
 		//return u + u;
 		return a*a + b*b;
+		//return =;
 		//return 3.14;
 	}
 
@@ -56,6 +86,10 @@ object "Application" {
   	number = 0 ? 1 : 3.31459;
 	  */
 }
+
+
+
+
 
 /*
 object "test" {
@@ -80,9 +114,16 @@ object "test" {
 }
 */
 
+
 object "Application2" {
 	x = 2;
+
+	state "main" {
+		//u;
+		destroy();
+	}
 }
+
 
 //object "MyObject" {
 	/*
