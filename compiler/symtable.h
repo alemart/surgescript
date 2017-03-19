@@ -41,6 +41,6 @@ int surgescript_symtable_count(surgescript_symtable_t* symtable);
 int surgescript_symtable_deepcount(surgescript_symtable_t* symtable);
 
 /* does this table have a parent? */
-bool surgescipt_symtable_has_parent(surgescript_symtable_t* symtable);
+bool surgescript_symtable_has_parent(surgescript_symtable_t* symtable);
 
 #endif

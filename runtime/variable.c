@@ -48,9 +48,6 @@ struct surgescript_var_t
                                     (var)->string = ssfree((var)->string);
 static inline bool isvalidnum(const char* str);
 
-/* privates */
-static inline const char* typeof_var(const surgescript_var_t* var);
-
 /* -------------------------------
  * public methods
  * ------------------------------- */

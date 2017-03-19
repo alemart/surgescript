@@ -442,6 +442,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_objecthandle(t(a), surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
             break;
 
+        case SSOP_MOVR: /* move root object */
+            surgescript_var_set_objecthandle(t(a), surgescript_objectmanager_root(surgescript_renv_objectmanager(runtime_environment)));
+            break;
+
         case SSOP_MOVT: /* t[a] receives the current state. If b == -1, then the current state is set to t[a] instead. */
             if(b.i == -1) {
                 char state[256];

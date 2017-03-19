@@ -72,7 +72,7 @@
  * <postfixexpr1> := . <funcallexpr> <postfixexpr1> | e
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
- * <primaryexpr> := identifier | this | state | <constant> | ( <expr> )
+ * <primaryexpr> := identifier | this | state | app | <constant> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e

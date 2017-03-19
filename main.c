@@ -207,14 +207,5 @@ int main()
     }
     surgescript_vm_destroy(vm);
     return 0;
-
-    union { float f; long l; unsigned u; } x;
-    x.u = 0x1;
-    printf("== test %f, %x, %u\n", x.f, x.l, x.u);
-    printf("%.5f\t\t|ffs\n------------------------------------\n", -0.0f);
-    for(float f = -1.0f; f <= 1.0f; f += FLT_EPSILON)
-        printf("%.5f\t\t|%d\n", f, ffs(f));
-    printf("zero: ffs(0) = %d, ffs(-0) = %d; %d %d %d\n", ffs(0.0f), ffs(-0.0f), ffs(0), ffs(3-3), ffs((int)(8 * 30 - 240)));
-    return 0;
 }
 #endif

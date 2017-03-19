@@ -54,6 +54,7 @@ void emit_function_argument(surgescript_nodecontext_t context, const char* ident
 void emit_ret(surgescript_nodecontext_t context);
 
 /* constants & variables */
+void emit_app(surgescript_nodecontext_t context);
 void emit_this(surgescript_nodecontext_t context);
 void emit_state(surgescript_nodecontext_t context);
 void emit_identifier(surgescript_nodecontext_t context, const char* identifier, int line);

@@ -555,6 +555,9 @@ void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         assignexpr(parser, context);
         emit_setstate(context);
     }
+    else if(optmatch(parser, SSTOK_APP)) {
+        emit_app(context);
+    }
     else
         conditionalexpr(parser, context);
 }
