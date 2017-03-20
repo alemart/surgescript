@@ -58,6 +58,8 @@ void surgescript_vm_launch(surgescript_vm_t* vm)
 {
     /* Load the surgescript library */
     surgescript_sslib_register_object(vm);
+    surgescript_sslib_register_application(vm);
+    surgescript_sslib_register_array(vm);
 
     /* Creates the root object */
     surgescript_objectmanager_spawn(vm->object_manager, surgescript_objectmanager_root(vm->object_manager), ROOT_OBJECT_NAME, NULL);

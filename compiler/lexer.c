@@ -37,7 +37,7 @@ struct surgescript_lexer_t
 };
 
 /* keywords */
-static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE, SSTOK_TYPEOF, SSTOK_EMOTICON };
+static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_APP, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE, SSTOK_TYPEOF, SSTOK_EMOTICON };
 static int indexof_keyword(const char* identifier);
 static inline void bufadd(surgescript_lexer_t* lexer, char c);
 static inline void bufclear(surgescript_lexer_t* lexer);

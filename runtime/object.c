@@ -37,6 +37,11 @@ struct surgescript_object_t
     bool is_killed; /* am i scheduled to be destroyed? */
     bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
 
+    /* inner transform */
+    struct {
+        float x, y, scale_x, scale_y, angle;
+    } transform;
+
     /* user-data */
     void* user_data; /* custom user-data */
 };
@@ -81,6 +86,12 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->is_killed = false;
     obj->is_reachable = false;
 
+    obj->transform.x = 0.0f;
+    obj->transform.y = 0.0f;
+    obj->transform.scale_x = 1.0f;
+    obj->transform.scale_y = 1.0f;
+    obj->transform.angle = 0.0f;
+
     obj->user_data = user_data;
 
     /* validation procedure */
@@ -103,16 +114,17 @@ surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
         surgescript_object_t* parent = surgescript_objectmanager_get(manager, obj->parent);
         surgescript_object_remove_child(parent, obj->handle); /* no? well, I am a root now! */
     }
-    else
-        sslog("Destroying the root object...");
 
     /* clear up the children */
     for(int i = 0; i < ssarray_length(obj->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, obj->child[i]);
-        child->parent = child->handle; /* the child is a root now */
+        //child->parent = child->handle; /* the child is a root now */
         surgescript_objectmanager_delete(manager, child->handle); /* clear up everyone! */
     }
     ssarray_release(obj->child);
+
+    /* call destructor */
+    surgescript_object_release(obj);
 
     /* clear up some data */
     ssfree(obj->name);
@@ -232,8 +244,7 @@ unsigned surgescript_object_find_child(const surgescript_object_t* object, const
             return child->handle;
     }
 
-    ssfatal("Runtime Error: object 0x%X (\"%s\") has no child named \"%s\"", object->handle, object->name, name);
-    return 0;
+    return surgescript_objectmanager_null(manager);
 }
 
 /*
@@ -251,10 +262,18 @@ void surgescript_object_add_child(surgescript_object_t* object, unsigned child_h
             return;
     }
 
+    /* check if the child isn't myself */
+    if(object->handle == child_handle) {
+        ssfatal("Runtime Error: object 0x%X (\"%s\") can't be a child of itself.", object->handle, object->name);
+        return;
+    }
+
     /* check if the child belongs to someone else */
     child = surgescript_objectmanager_get(manager, child_handle);
-    if(child->parent != child->handle)
-        ssfatal("Runtime Error: can't add child 0x%X (\"%s\") to object 0x%X (\"%s\"): child already registered", child->handle, child->name, object->handle, object->name);
+    if(child->parent != child->handle) {
+        ssfatal("Runtime Error: can't add child 0x%X (\"%s\") to object 0x%X (\"%s\") - child already registered", child->handle, child->name, object->handle, object->name);
+        return;
+    }
 
     /* add it */
     ssarray_push(object->child, child->handle);
@@ -263,7 +282,7 @@ void surgescript_object_add_child(surgescript_object_t* object, unsigned child_h
 
 /*
  * surgescript_object_remove_child()
- * Removes a child having this handle from this object (removes the link)
+ * Removes a child having this handle from this object (removes the link only)
  */
 bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle)
 {

@@ -73,10 +73,7 @@ void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
 {
     if(!surgescript_symtable_has_symbol(context.symtable, identifier))
         surgescript_symtable_put_heap_symbol(context.symtable, identifier, (surgescript_heapptr_t)surgescript_symtable_count(context.symtable));
-/*
     surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
-    SSASM(SSOP_OUT, T0);
-*/
 }
 
 /* expressions */

@@ -1,93 +1,68 @@
 // test
 // by alemart
-// =========> o lexer ta contando mta linha
-// todo: keyword app, MOVR (root object)
 
 object "Application" {
-	x = 7;
-	sep = "teste 1, 2, 3 !!";
-	n = 0;
-	x = ++n;
-	n = n;
-	t = this;
-	t = typeof (t == "object");
-	t = typeof (t);
+	x = 0;
+	math = spawn("Math").init("first");
 
 	state "main" {
-		(this.self().self()).self().destroy();
-		this.destroy();
-		obj = this;
-		obj.destroy();
-		destroy(); obj.self(); k=obj; k=2+4; k=obj;
-
-		//w3=2-a;
-		//q;
+		y=2;
+		print("main: " + x + "," + y + " > pi=" + math);
+		x++;
+		math = x >= 30 ? null : math;
+		x >= 50 ? exit() : 1;
+		//state = "test";
+		//app.exit();
+		//destroy();
 	}
 
-	fun self() {
-		u=2;
-		return this;
+	fun __constructor() {
+		spawn("Math").init("segundo math");
 	}
 
-//	fun surge(a,b) {}
-		/*
-		b=5; c = 77;
-		x=7;
-		print("hoho!" + b + "," + b + ">" + (2*b+1));
-		print("b=" + b + ", c=" + c);
-		print(d = 8); print(d > 0);
-		print("x=" + x);
-		*/
-		
-		//x = x + 1;
-		//print(x);
-		//print("oi");
-		//print(surge(2, surge(3, 4)));
-		//
-		// a, b
-		/*
-		a
-
-		bbbbbb // ae
-		a
-		*/
-
-
-
-		//print("fib(8) = " + fib(8));
-		//this.this.destroy();
-
-
-
-
-	fun surge(a, b) {
-		//print("a=" + (u = a));
-		//print("u = " + (u = 1 + a*a + b*b));
-		//print("b="+(v=b*b));
-		//return u + u;
-		return a*a + b*b;
-		//return =;
-		//return 3.14;
+	fun __destructor() {
+		print("no more app!");
 	}
-
-	fun fib(x) {
-		return x > 2 ? (u = fib(x-1)) + (v = fib(x-2)) : 1;
-	}
-/*
-	sep = "\n\n\n";
-	x = 3.14 && null || 2 && -0.1;
-	y = 2 < 3 || 2;
-	z = 1-1+2 && -5 / -2 + 1 - 1 * 2 / -2;
-	w = "oi," + " mundo!" * 5;
-
-	flag = true;
-	x = "surge" +1;
-	x = flag + (1+flag) * 2 + " heeey";
-  	number = 0 ? 1 : 3.31459;
-	  */
 }
 
+object "Math"
+{
+	msg = "";
+	foo = spawn("Foo");
 
+	state "main"
+	{
+		app.print("foo " + msg);
+	}
+
+	fun init(m) { msg = m; return this; }
+
+	fun __constructor()
+	{
+		app.print("Starting up the math...");
+	}
+
+	fun __destructor()
+	{
+		app.print("Terminating the math. " + msg);
+	}
+
+	fun fib(x)
+	{
+		return x > 2 ? fib(x-1) + fib(x-2) : 1;
+	}
+
+	fun pi()
+	{
+		return 3.1415926535;
+	}
+}
+
+object "Foo" {
+	state "main" {
+		;
+	}
+}
 
 
 
@@ -147,3 +122,4 @@ object "Application2" {
 	}
 	*/
 //}
+

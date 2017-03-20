@@ -243,7 +243,7 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
     /* print header */
     fprintf(fp,
         "{\n"
-        "    \"arity\": %d\n"
+        "    \"arity\": %d,\n"
         "    \"code\": [\n",
     program->arity);
 
@@ -330,11 +330,11 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
     /* call C-function */
     return_value = (surgescript_var_t*)(cprogram->cfunction(caller, (const surgescript_var_t**)param, program->arity));
     if(return_value != NULL) {
-        surgescript_var_copy(*(surgescript_renv_tmp(runtime_environment) + 3), return_value);
+        surgescript_var_copy(*(surgescript_renv_tmp(runtime_environment) + 0), return_value);
         surgescript_var_destroy(return_value);
     }
     else
-        surgescript_var_set_null(*(surgescript_renv_tmp(runtime_environment) + 3));
+        surgescript_var_set_null(*(surgescript_renv_tmp(runtime_environment) + 0));
 
     /* release parameters */
     if(param)
@@ -354,7 +354,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
     #define t(k)             _t[(k).u & 3]
 
     /* debug mode */
-    #define SSDEBUG
+    /*#define SSDEBUG*/
     #ifdef SSDEBUG
     do {
         char hex[2][1 + 2 * sizeof(unsigned)];
@@ -847,7 +847,7 @@ bool remove_labels(surgescript_program_t* program)
         }
 
         /* no more labels */
-        ssarray_length(program->label) = 0;
+        ssarray_reset(program->label);
         return true;
     }
     else

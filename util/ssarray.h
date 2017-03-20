@@ -50,4 +50,10 @@
  */
 #define ssarray_length(arr)                   (arr##_len)
 
+/*
+ * ssarray_reset()
+ * sets the length of the array to zero, without freeing anything
+ */
+#define ssarray_reset(arr)                    (arr##_len = 0)
+
 #endif

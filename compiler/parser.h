@@ -44,7 +44,10 @@
  *
  *
  * <expr> := <assignexpr> , <expr> | <assignexpr>
- * <assignexpr> := <conditionalexpr> | identifier assignop <assignexpr> | state = <assignexpr>
+ * <assignexpr> := <conditionalexpr>
+ *              |  identifier assignop <assignexpr>
+ *              |  identifier [ <expr> ] assignop <assignexpr>
+ *              |  state = <assignexpr>
  * <conditionalexpr> := <logicalorexpr> | <logicalorexpr> ? <expr> : <conditionalexpr>
  * <logicalorexpr> := <logicalandexpr> <logicalorexpr1>
  * <logicalorexpr1> := || <logicalandexpr> <logicalorexpr1> | e
@@ -61,8 +64,7 @@
  * <unaryexpr> := + <unaryexpr> | - <unaryexpr>
  *             |  ! <unaryexpr>
  *             |  typeof <unaryexpr> | typeof ( <expr> )
- *             |  len ( <expr> )
- *             |  changeState ( <expr> )
+ *             |  len <unaryexpr> | len ( <expr> )
  *             |  ++ identifier | -- identifier
  *             |  <postfixexpr>
  * <postfixexpr> := identifier ++ | identifier --
