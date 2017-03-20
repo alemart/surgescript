@@ -6,14 +6,17 @@ object "Application" {
 	math = spawn("Math").init("first");
 
 	state "main" {
-		y=2;
-		print("main: " + x + "," + y + " > pi=" + math);
-		x++;
-		math = x >= 30 ? null : math;
-		x >= 50 ? exit() : 1;
-		//state = "test";
-		//app.exit();
-		//destroy();
+		print("x = " + x + ", math = " + math);
+		print(math ? "math vale algo: " + typeof(math) : "math vale nulo");
+		if(++x >= 30) {
+			if(math) {
+				print("pi = " + math.pi());
+				math = math.destroy();
+			}
+		}
+
+        if(x >= 100)
+			exit();
 	}
 
 	fun __constructor() {
@@ -22,6 +25,7 @@ object "Application" {
 
 	fun __destructor() {
 		print("no more app!");
+		if(1 == 1) if(2 == 2) print("ambos"); else print("soh o primeiro"); else print("nenhum");
 	}
 }
 

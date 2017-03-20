@@ -894,7 +894,7 @@ void stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     if(got_type(parser, SSTOK_LCURLY)) {
-        stmtlist(parser, context);
+        blockstmt(parser, context);
         return true;
     }
     else if(got_type(parser, SSTOK_IF)) {
@@ -939,7 +939,28 @@ void exprstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    surgescript_program_label_t nope = surgescript_program_new_label(context.program);
 
+    match(parser, SSTOK_IF);
+    match(parser, SSTOK_LPAREN);
+    expr(parser, context);
+    match(parser, SSTOK_RPAREN);
+
+    /* evaluate the if-condition */
+    emit_if(context, nope);
+    if(!stmt(parser, context))
+        unexpected_symbol(parser);
+
+    /* is there an else block? match the inner-most if */
+    if(optmatch(parser, SSTOK_ELSE)) {
+        surgescript_program_label_t done = surgescript_program_new_label(context.program);
+        emit_else(context, nope, done);
+        if(!stmt(parser, context))
+            unexpected_symbol(parser);
+        emit_endif(context, done);
+    }
+    else
+        emit_endif(context, nope);
 }
 
 void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)

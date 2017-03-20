@@ -205,7 +205,7 @@ void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manag
                 /* clear the unreachable objects */
                 if(unreachables >= MIN_OBJECTS_FOR_DISPOSAL) {
                     surgescript_object_t* root = surgescript_objectmanager_get(manager, ROOT_HANDLE);
-                    sslog("Garbage collector: disposing %d object%s (out of %d).", unreachables, unreachables > 1 ? "s" : "", manager->count);
+                    sslog("Garbage collector: disposing %d of %d object%s.", unreachables, manager->count, unreachables > 1 ? "s" : "");
                     surgescript_object_traverse_tree(root, sweep_unreachables);
                 }
                 else { /* or, at least, unmark everyone (could be more efficient?) */

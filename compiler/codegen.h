@@ -47,6 +47,11 @@ void emit_pushparam(surgescript_nodecontext_t context);
 void emit_popparams(surgescript_nodecontext_t context, int n);
 void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int num_params);
 
+/* statements */
+void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope);
+void emit_else(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done);
+void emit_endif(surgescript_nodecontext_t context, surgescript_program_label_t done);
+
 /* functions */
 int emit_function_header(surgescript_nodecontext_t context);
 void emit_function_footer(surgescript_nodecontext_t context, int num_locals, int fun_header);

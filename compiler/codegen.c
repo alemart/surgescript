@@ -372,6 +372,24 @@ void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int n
     SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
 }
 
+/* statements */
+void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope)
+{
+    SSASM(SSOP_TEST, T0, T0);
+    SSASM(SSOP_JE, U(nope));
+}
+
+void emit_else(surgescript_nodecontext_t context, surgescript_program_label_t nope, surgescript_program_label_t done)
+{
+    SSASM(SSOP_JMP, U(done));
+    LABEL(nope);
+}
+
+void emit_endif(surgescript_nodecontext_t context, surgescript_program_label_t done)
+{
+    LABEL(done);
+}
+
 /* functions */
 int emit_function_header(surgescript_nodecontext_t context)
 {

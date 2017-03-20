@@ -178,7 +178,7 @@ bool surgescript_var_get_bool(const surgescript_var_t* var)
         case SSVAR_NULL:
             return false;
         case SSVAR_OBJECTHANDLE:
-            return true;
+            return var->handle > 0;
     }
 
     return false;
@@ -220,8 +220,8 @@ char* surgescript_var_get_string(const surgescript_var_t* var)
         case SSVAR_NULL:
             return ssstrdup("null");
         default: {
-            char buf[128];
-            surgescript_var_to_string(var, buf, sizeof(buf) / sizeof(char));
+            char buf[32];
+            surgescript_var_to_string(var, buf, sizeof(buf));
             return ssstrdup(buf);
         }
     }
@@ -247,6 +247,7 @@ unsigned surgescript_var_get_objecthandle(const surgescript_var_t* var)
  */
 surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescript_var_t* src)
 {
+    RELEASE_DATA(dst);
     dst->type = src->type;
 
     switch(src->type) {
@@ -263,6 +264,7 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
             dst->handle = src->handle;
             break;
         default:
+            dst->raw = src->raw;
             break;
     }
 
@@ -275,7 +277,7 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
  */
 surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var)
 {
-    surgescript_var_t* copy = ssmalloc(sizeof *copy);
+    surgescript_var_t* copy = surgescript_var_create();
     return surgescript_var_copy(copy, var);
 }
 
@@ -342,10 +344,10 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
             return surgescript_util_strncpy(buf, "[object]", bufsize);
         case SSVAR_NUMBER: {
             char tmp[32];
-            if(var->number <= LONG_MIN || var->number >= LONG_MAX || var->number == (long)(var->number))
-                snprintf(tmp, sizeof(tmp), "%ld", (long)(var->number)); /* it is an integer */
-            else
+            if(var->number < LONG_MIN || var->number > LONG_MAX || var->number != (long)(var->number))
                 snprintf(tmp, sizeof(tmp), "%f", var->number);
+            else
+                snprintf(tmp, sizeof(tmp), "%ld", (long)(var->number)); /* it is an integer */
             return surgescript_util_strncpy(buf, tmp, bufsize);
         }
     }
@@ -388,11 +390,11 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
         else if(a->type == SSVAR_STRING || b->type == SSVAR_STRING) {
             char buf[128];
             if(a->type == SSVAR_STRING) {
-                surgescript_var_to_string(b, buf, sizeof(buf) / sizeof(char));
+                surgescript_var_to_string(b, buf, sizeof(buf));
                 return strcmp(a->string, buf);
             }
             else {
-                surgescript_var_to_string(a, buf, sizeof(buf) / sizeof(char));
+                surgescript_var_to_string(a, buf, sizeof(buf));
                 return strcmp(buf, b->string);
             }
         }

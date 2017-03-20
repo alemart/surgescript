@@ -46,6 +46,8 @@ struct surgescript_object_t
     void* user_data; /* custom user-data */
 };
 
+/* functions */
+void surgescript_object_release(surgescript_object_t* object);
 
 /* private stuff */
 static const char* INITIAL_STATE = "main";
@@ -118,7 +120,7 @@ surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
     /* clear up the children */
     for(int i = 0; i < ssarray_length(obj->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, obj->child[i]);
-        //child->parent = child->handle; /* the child is a root now */
+        child->parent = child->handle; /* the child is a root now */
         surgescript_objectmanager_delete(manager, child->handle); /* clear up everyone! */
     }
     ssarray_release(obj->child);
