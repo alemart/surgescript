@@ -18,8 +18,8 @@
     now,
         a, b are constants
         t[0], t[1] are temps holding different values throughout the program
-        t[2] holds utilities, such as the results of comparisons
-        t[3] holds the return value of the program
+        t[2] holds the results of comparisons
+        t[3] holds other calculations
 */
 #define SURGESCRIPT_PROGRAM_OPERATORS(F) \
     F( SSOP_NOP, "nop" )                                 /* no-operation */ \
@@ -70,9 +70,9 @@
                                                                             \
     F( SSOP_TEST, "test" )                         /* t[2] = t[a] & t[b] */ \
     F( SSOP_TCHK, "tchk" )               /* t[2] = typecheck(t[a], t[b]) */ \
-    F( SSOP_TCHK0, "tchk0" )             /* t[2] = typecheck(t[a], null) */ \
+    F( SSOP_TCHKN, "tchkn" )             /* t[2] = typecheck(t[a], null) */ \
     F( SSOP_TCHKB, "tchkb" )             /* t[2] = typecheck(t[a], bool) */ \
-    F( SSOP_TCHKN, "tchkn" )           /* t[2] = typecheck(t[a], number) */ \
+    F( SSOP_TCHKF, "tchkf" )           /* t[2] = typecheck(t[a], number) */ \
     F( SSOP_TCHKS, "tchks" )           /* t[2] = typecheck(t[a], string) */ \
     F( SSOP_TCHKO, "tchko" )           /* t[2] = typecheck(t[a], object) */ \
     F( SSOP_CMP, "cmp" )                   /* t[2] = compare(t[a], t[b]) */ \

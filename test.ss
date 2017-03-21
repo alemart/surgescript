@@ -4,8 +4,15 @@
 object "Application" {
 	x = 0;
 	math = spawn("Math").init("first");
+	//arr = spawn("Array"); // todo: test me
 
 	state "main" {
+		x = math;
+		print(math[5] += 2);
+		destroy();
+	}
+
+	state "main2" {
 		print("x = " + x + ", math = " + math);
 		print(math ? "math vale algo: " + typeof(math) : "math vale nulo");
 		if(++x >= 30) {
@@ -54,6 +61,16 @@ object "Math"
 	fun fib(x)
 	{
 		return x > 2 ? fib(x-1) + fib(x-2) : 1;
+	}
+
+	fun get(x)
+	{
+		return x*x;
+	}
+
+	fun set(key, value)
+	{
+		app.print('key=' + key + ', value=' + value);
 	}
 
 	fun pi()

@@ -533,15 +533,35 @@ void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     if(got_type(parser, SSTOK_IDENTIFIER)) {
         char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        int line = surgescript_token_linenumber(parser->lookahead);
         match(parser, SSTOK_IDENTIFIER);
 
         if(got_type(parser, SSTOK_ASSIGNOP)) {
-            int line = surgescript_token_linenumber(parser->lookahead);
             char* assignop = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+
             match(parser, SSTOK_ASSIGNOP);
             assignexpr(parser, context);
             emit_assignexpr(context, assignop, identifier, line);
+
             ssfree(assignop);
+        }
+        else if(got_type(parser, SSTOK_LBRACKET)) {
+            match(parser, SSTOK_LBRACKET);
+            expr(parser, context);
+            match(parser, SSTOK_RBRACKET);
+
+            if(got_type(parser, SSTOK_ASSIGNOP)) {
+                char* assignop = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+                
+                match(parser, SSTOK_ASSIGNOP);
+                emit_dictset1(context, assignop, identifier, line);
+                assignexpr(parser, context);
+                emit_dictset2(context, assignop, identifier, line);
+
+                ssfree(assignop);
+            }
+            else
+                emit_dictget(context, identifier, line);
         }
         else {
             unmatch(parser);
@@ -694,15 +714,20 @@ void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     if(got_type(parser, SSTOK_IDENTIFIER)) {
-        char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        int line = surgescript_token_linenumber(parser->lookahead);
         match(parser, SSTOK_IDENTIFIER);
+
         if(got_type(parser, SSTOK_INCDECOP)) {
             const char* op = surgescript_token_lexeme(parser->lookahead);
-            emit_postincdec(context, op, id, surgescript_token_linenumber(parser->lookahead));
+            emit_postincdec(context, op, identifier, line);
             match(parser, SSTOK_INCDECOP);
         }
-        else if(optmatch(parser, SSTOK_LBRACKET)) {
-            unexpected_symbol(parser); /* TODO */
+        else if(got_type(parser, SSTOK_LBRACKET)) {
+            match(parser, SSTOK_LBRACKET);
+            expr(parser, context);
+            match(parser, SSTOK_RBRACKET);
+            emit_dictget(context, identifier, line);
         }
         else if(got_type(parser, SSTOK_LPAREN)) { /* we have a function call here */
             unmatch(parser); /* put the identifier back */
@@ -720,7 +745,8 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
                 } while(optmatch(parser, SSTOK_DOT));
             }
         }
-        ssfree(id);
+
+        ssfree(identifier);
     }
     else {
         primaryexpr(parser, context);

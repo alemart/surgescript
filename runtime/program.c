@@ -646,7 +646,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_typecode(t(b)));
             break;
 
-        case SSOP_TCHK0:
+        case SSOP_TCHKN:
             surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code(NULL));
             break;
 
@@ -654,7 +654,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("boolean"));
             break;
 
-        case SSOP_TCHKN:
+        case SSOP_TCHKF:
             surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("number"));
             break;
 
@@ -774,7 +774,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
                 ssfatal("Runtime Error: can't find function \"%s.%s\" (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
         }
         else
-            ssfatal("Runtime Error: null pointer exception - can't call \"%s\" (check \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
+            ssfatal("Runtime Error: null pointer exception - can't call \"%s\" (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
     }
     surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */
 }

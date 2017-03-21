@@ -81,7 +81,7 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
 {
     /* put the identifier on the symbol table, and assign the symbol an address */
     if(!surgescript_symtable_has_parent(context.symtable))
-        ssfatal("Invalid declaration (\"%s %s ...\") in object \"%s\" (%s:%d): only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
+        ssfatal("Compile Error: invalid attribution (\"%s %s ...\") in object \"%s\" (%s:%d) - only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
     else if(!surgescript_symtable_has_symbol(context.symtable, identifier))
         surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_count(context.symtable) - surgescript_program_arity(context.program)));
 
@@ -311,7 +311,7 @@ void emit_unarytype(surgescript_nodecontext_t context)
     surgescript_program_label_t nul = NEWLABEL();
     surgescript_program_label_t end = NEWLABEL();
 
-    SSASM(SSOP_TCHKN, T0);
+    SSASM(SSOP_TCHKF, T0);
     SSASM(SSOP_JNE, U(str));
     SSASM(SSOP_MOVS, T0, TEXT("number"));
     SSASM(SSOP_JMP, U(end));
@@ -370,6 +370,87 @@ void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int n
     SSASM(SSOP_MOVF, T3, F(num_params));
     BREAKPOINT(fun_name);
     SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
+}
+
+void emit_dictset1(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line)
+{
+    if(!surgescript_symtable_has_parent(context.symtable))
+        ssfatal("Compile Error: invalid attribution (\"%s %s ...\") in object \"%s\" (%s:%d) - only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
+
+    /* save <expr> */
+    SSASM(SSOP_PUSH, T0);
+}
+
+void emit_dictset2(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line)
+{
+    /* where's our object? */
+    if(!surgescript_symtable_has_symbol(context.symtable, identifier))
+        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
+
+    /* prepare the stack */
+    SSASM(SSOP_POP, T3);  /* <expr> */
+    SSASM(SSOP_PUSH, T0); /*<assignexpr> */
+    surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
+    SSASM(SSOP_PUSH, T1); /* t1 is the object */
+    SSASM(SSOP_PUSH, T3); /* t3 is <expr> */
+
+    /* perform the assignment operation */
+    switch(*assignop) {
+        case '=':
+            SSASM(SSOP_PUSH, T0); /* t0 is <assignexpr> */
+            SSASM(SSOP_CALL, TEXT("set"), U(2));
+            SSASM(SSOP_POP, T0); /* return <assignexpr> */
+            SSASM(SSOP_POPN, U(3));
+            break;
+
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+            SSASM(SSOP_CALL, TEXT("get"), U(1));
+            SSASM(SSOP_POP, T3); /* <expr> */
+            SSASM(SSOP_POP, T1); /* the object */
+            SSASM(SSOP_POP, T1); /* <assignexpr> */
+            if(*assignop == '+') {
+                surgescript_program_label_t cat = NEWLABEL();
+                surgescript_program_label_t end = NEWLABEL();
+                SSASM(SSOP_TCHKS, T1);
+                SSASM(SSOP_JE, U(cat));
+                SSASM(SSOP_TCHKS, T0);
+                SSASM(SSOP_JE, U(cat));
+                SSASM(SSOP_ADD, T0, T1); /* t0 = dict.get(<expr>) + <assignexpr> */
+                SSASM(SSOP_JMP, U(end));
+                LABEL(cat);
+                SSASM(SSOP_CAT, T0, T1);
+                LABEL(end);
+            }
+            else if(*assignop == '-')
+                SSASM(SSOP_SUB, T0, T1); /* t0 = dict.get(<expr>) - <assignexpr> */
+            else if(*assignop == '*')
+                SSASM(SSOP_MUL, T0, T1); /* t0 = dict.get(<expr>) * <assignexpr> */
+            else
+                SSASM(SSOP_DIV, T0, T1); /* t0 = dict.get(<expr>) / <assignexpr> */
+            surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
+            SSASM(SSOP_PUSH, T1); /* the object */
+            SSASM(SSOP_PUSH, T3); /* <expr> */
+            SSASM(SSOP_PUSH, T0); /* the result that is desired */
+            SSASM(SSOP_CALL, TEXT("set"), U(2));
+            SSASM(SSOP_POP, T0); /* return <assignexpr> */
+            SSASM(SSOP_POPN, U(2));
+            break;
+    }
+}
+
+void emit_dictget(surgescript_nodecontext_t context, const char* identifier, int line)
+{
+    if(!surgescript_symtable_has_symbol(context.symtable, identifier))
+        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
+
+    surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
+    SSASM(SSOP_PUSH, T1);
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("get"), U(1));
+    SSASM(SSOP_POPN, U(2));
 }
 
 /* statements */
