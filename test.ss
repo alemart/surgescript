@@ -7,8 +7,7 @@ object "Application" {
 	//arr = spawn("Array"); // todo: test me
 
 	state "main" {
-		x = math;
-		print(math[5] += 2);
+		"hello".hi();
 		destroy();
 	}
 
@@ -27,12 +26,11 @@ object "Application" {
 	}
 
 	fun __constructor() {
-		spawn("Math").init("segundo math");
+		//spawn("Math").init("segundo math");
 	}
 
 	fun __destructor() {
 		print("no more app!");
-		if(1 == 1) if(2 == 2) print("ambos"); else print("soh o primeiro"); else print("nenhum");
 	}
 }
 

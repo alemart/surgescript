@@ -9,12 +9,16 @@
 
 #include <stdio.h>
 #include "../vm.h"
+#include "../heap.h"
+#include "../object.h"
+#include "../object_manager.h"
 #include "../../util/util.h"
 
 /* private stuff */
 static surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_register(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -26,6 +30,7 @@ void surgescript_sslib_register_application(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Application", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "Application", "print", fun_print, 1);
     surgescript_vm_bind(vm, "Application", "crash", fun_crash, 1);
+    surgescript_vm_bind(vm, "Application", "__register-builtins", fun_register, 0);
 }
 
 
@@ -55,5 +60,25 @@ surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var
     ssfatal("Script Error: %s", text); /* change ssfatal to something else? */
     ssfree(text);
     surgescript_object_kill(object);
+    return NULL;
+}
+
+/* register some built-in objects */
+surgescript_var_t* fun_register(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objectmanager_handle_t me = surgescript_object_handle(object);
+
+    if(surgescript_object_find_child(object, "String") == surgescript_objectmanager_null(manager)) {
+        static const char* builtin[] = { "String", "Number", "Boolean" };
+        static size_t length = sizeof(builtin) / sizeof(const char*);
+        surgescript_heap_t* heap = surgescript_object_heap(object);
+
+        for(int i = 0; i < length; i++) {
+            surgescript_var_t* mem = surgescript_heap_at(heap, surgescript_heap_malloc(heap));
+            surgescript_var_set_objecthandle(mem, surgescript_objectmanager_spawn(manager, me, builtin[i], NULL));
+        }
+    }
+
     return NULL;
 }

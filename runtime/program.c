@@ -742,7 +742,31 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
     surgescript_stack_t* stack = surgescript_renv_stack(caller_runtime_environment);
     surgescript_stack_pushenv(stack);
     if(*program_name) {
-        unsigned object_handle = surgescript_var_get_objecthandle(surgescript_stack_at(stack, -1 - number_of_given_params)); /* 1st param, left-to-right */
+        surgescript_var_t* callee = surgescript_stack_at(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
+        const int callee_type = surgescript_var_typecode(callee);
+        unsigned object_handle;
+
+        switch(callee_type) {
+            case 's': /* for the sake of efficiency... we replaced surgescript_var_type2code() for constants */
+                object_handle = surgescript_objectmanager_string(surgescript_renv_objectmanager(caller_runtime_environment));
+                number_of_given_params++;
+                break;
+
+            case 'n':
+                object_handle = surgescript_objectmanager_number(surgescript_renv_objectmanager(caller_runtime_environment));
+                number_of_given_params++;
+                break;
+
+            case 'b':
+                object_handle = surgescript_objectmanager_boolean(surgescript_renv_objectmanager(caller_runtime_environment));
+                number_of_given_params++;
+                break;
+
+            default:
+                object_handle = surgescript_var_get_objecthandle(callee);
+                break;
+        }
+
         if(surgescript_objectmanager_exists(surgescript_renv_objectmanager(caller_runtime_environment), object_handle)) {
             surgescript_object_t* object = surgescript_objectmanager_get(surgescript_renv_objectmanager(caller_runtime_environment), object_handle);
             const char* object_name = surgescript_object_name(object);
@@ -768,13 +792,13 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
                     surgescript_renv_destroy(callee_runtime_environment);
                 }
                 else
-                    ssfatal("Runtime Error: function \"%s.%s\" (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
+                    ssfatal("Runtime Error: function %s.%s (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
             }
             else
-                ssfatal("Runtime Error: can't find function \"%s.%s\" (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
+                ssfatal("Runtime Error: can't find function %s.%s (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
         }
         else
-            ssfatal("Runtime Error: null pointer exception - can't call \"%s\" (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
+            ssfatal("Runtime Error: null pointer exception - can't call function %s (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
     }
     surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */
 }

@@ -37,9 +37,14 @@ bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surg
 
 /* utilities */
 int surgescript_objectmanager_count(surgescript_objectmanager_t* manager); /* how many objects there are? */
-surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
-surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */
 void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manager); /* runs the garbage collector */
 struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */
+
+/* root & built-in objects */
+surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */
+surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
+surgescript_objectmanager_handle_t surgescript_objectmanager_string(surgescript_objectmanager_t* manager); /* string utilities */
+surgescript_objectmanager_handle_t surgescript_objectmanager_number(surgescript_objectmanager_t* manager); /* number utilities */
+surgescript_objectmanager_handle_t surgescript_objectmanager_boolean(surgescript_objectmanager_t* manager); /* boolean utilities */
 
 #endif

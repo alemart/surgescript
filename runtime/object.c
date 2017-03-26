@@ -396,7 +396,7 @@ void surgescript_object_set_reachable(surgescript_object_t* object, bool reachab
 void surgescript_object_init(surgescript_object_t* object)
 {
     static const char* CONSTRUCTOR_FUN = "__constructor"; /* regular constructor */
-    static const char* PRE_CONSTRUCTOR_FUN = "__ssconstructor"; /* a constructor reserved for the VM */
+    static const char* PRE_CONSTRUCTOR_FUN = "__ss-constructor"; /* a constructor reserved for the VM */
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
 
     if(surgescript_programpool_exists(program_pool, object->name, PRE_CONSTRUCTOR_FUN)) {
