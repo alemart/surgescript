@@ -287,6 +287,19 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
     /*fprintf(fp, "]\n}\n");*/
 }
 
+
+/*
+ * surgescript_program_lowcall()
+ * Low-level SurgeScript function call.
+ * you'll need to manage the stack yourself (prefer using surgescript_object_call_program() instead)
+*/
+void surgescript_program_lowcall(surgescript_renv_t* runtime_environment, const char* program_name, int num_params)
+{
+    call_program(runtime_environment, program_name, num_params);
+}
+
+
+
 /* -------------------------------
  * private stuff
  * ------------------------------- */

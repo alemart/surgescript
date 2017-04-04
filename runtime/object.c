@@ -471,6 +471,45 @@ bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callb
 }
 
 
+/*
+ * surgescript_object_call_function()
+ * Call SurgeScript functions from C (you may pass NULL to return_value;
+ * you may also pass NULL to param iff num_params is 0)
+ */
+void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const surgescript_var_t* param[], int num_params, surgescript_var_t* return_value)
+{
+    int i;
+    surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
+    surgescript_renv_t* runtime_environment;
+
+    /* parameters are stacked left-to-right */
+    surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
+    for(i = 0; i < num_params; i++)
+        surgescript_stack_push(stack, surgescript_var_clone(param[i]));
+
+    /* call the program */
+    /*runtime_environment = surgescript_renv_create(object, stack, object->heap, surgescript_renv_programpool(obj->renv), surgescript_renv_objectmanager(obj->renv), NULL);*/ /* a clone of object->renv (so the original tmp's won't be messed up) -- do we need this? */
+    runtime_environment = object->renv;
+    surgescript_program_lowcall(runtime_environment, fun_name, num_params);
+    if(return_value != NULL)
+        surgescript_var_copy(*(surgescript_renv_tmp(runtime_environment) + 0), return_value); /* the return value of the function (if any) */
+    /*surgescript_renv_destroy(runtime_environment);*/
+
+    /* pop stuff from the stack */
+    surgescript_stack_popn(stack, 1 + ssmax(0, num_params));
+}
+
+/*
+ * surgescript_object_call_state()
+ * Runs the code of a state of the given object from C
+ */
+void surgescript_object_call_state(surgescript_object_t* object, const char* state_name)
+{
+    char* fun_name = state2fun(state_name);
+    surgescript_object_call_function(object, fun_name, NULL, 0, NULL);
+    ssfree(fun_name);
+}
+
 
 
 /* private stuff */

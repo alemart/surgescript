@@ -22,6 +22,7 @@ struct surgescript_objectmanager_t;
 struct surgescript_program_t;
 struct surgescript_stack_t;
 struct surgescript_heap_t;
+struct surgescript_var_t;
 
 
 
@@ -58,5 +59,9 @@ bool surgescript_object_is_active(const surgescript_object_t* object); /* am i a
 void surgescript_object_set_active(surgescript_object_t* object, bool active); /* sets whether i am active or not; default is true */
 bool surgescript_object_is_killed(const surgescript_object_t* object); /* has this object been killed? */
 void surgescript_object_kill(surgescript_object_t* object); /* will destroy the object as soon as the opportunity arises */
+
+/* call SurgeScript functions from C (you may pass NULL to return_value; you may also pass NULL to param iff num_params is 0) */
+void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value);
+void surgescript_object_call_state(surgescript_object_t* object, const char* state_name);
 
 #endif

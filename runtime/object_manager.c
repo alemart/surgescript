@@ -25,6 +25,7 @@ struct surgescript_objectmanager_t
     SSARRAY(surgescript_objectmanager_handle_t, objects_to_be_scanned); /* garbage collection */
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
+    surgescript_objectmanager_handle_t handle_ptr; /* memory allocation */
 };
 
 /* fixed objects */
@@ -48,6 +49,10 @@ static void mark_as_reachable(unsigned handle, void* mgr);
 static bool sweep_unreachables(surgescript_object_t* object);
 static const int MIN_OBJECTS_FOR_DISPOSAL = 1; /* we need at least this amount to delete unreachable objects from memory */
 
+/* other */
+#define is_power_of_two(x)                !((x) & ((x) - 1)) /* this assumes x > 0 */
+static surgescript_objectmanager_handle_t new_handle(surgescript_objectmanager_t* mgr);
+
 /* -------------------------------
  * public methods
  * ------------------------------- */
@@ -66,6 +71,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     manager->count = 0;
     manager->program_pool = program_pool;
     manager->stack = stack;
+    manager->handle_ptr = 1;
 
     ssarray_init(manager->objects_to_be_scanned);
     manager->first_object_to_be_scanned = 0;
@@ -97,11 +103,20 @@ surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objec
  */
 surgescript_objectmanager_handle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t parent, const char* object_name, void* user_data)
 {
-    surgescript_objectmanager_handle_t handle = ssarray_length(manager->data); /* can't grab unused spaces due to damaged pointers */
+    surgescript_objectmanager_handle_t handle = new_handle(manager);
     surgescript_object_t *object = surgescript_object_create(object_name, handle, manager, manager->program_pool, manager->stack, user_data, NULL, NULL); /* FIXME callbacks */
 
-    ssarray_push(manager->data, object);
     manager->count++;
+    if(handle >= ssarray_length(manager->data)) {
+        /* new slot */
+        ssarray_push(manager->data, object);
+        if(is_power_of_two(handle))
+            manager->handle_ptr = ssmax(2, manager->handle_ptr / 2);
+    }
+    else {
+        /* reuse unused slot */
+        manager->data[handle] = object;
+    }
 
     if(handle != ROOT_HANDLE) {
         surgescript_object_t *parent_object = surgescript_objectmanager_get(manager, parent);
@@ -301,4 +316,12 @@ bool sweep_unreachables(surgescript_object_t* object)
 
     /* done! */
     return true;
+}
+
+/* gets a handle at a unused space */
+surgescript_objectmanager_handle_t new_handle(surgescript_objectmanager_t* mgr)
+{
+    while(mgr->handle_ptr < ssarray_length(mgr->data) && mgr->data[mgr->handle_ptr] != NULL)
+        mgr->handle_ptr++;
+    return mgr->handle_ptr;
 }

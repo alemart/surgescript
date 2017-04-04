@@ -86,4 +86,7 @@ int surgescript_program_find_text(const surgescript_program_t* program, const ch
 int surgescript_program_text_count(const surgescript_program_t* program); /* how many string literals exist in the program? */
 void surgescript_program_dump(surgescript_program_t* program, FILE* fp); /* dump the program to a file */
 
+/* call a program from C */
+void surgescript_program_lowcall(surgescript_renv_t* runtime_environment, const char* program_name, int num_params); /* you'll need to manage the stack yourself */
+
 #endif

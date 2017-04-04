@@ -31,6 +31,7 @@ void surgescript_sslib_register_application(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Application", "print", fun_print, 1);
     surgescript_vm_bind(vm, "Application", "crash", fun_crash, 1);
     surgescript_vm_bind(vm, "Application", "__register-builtins", fun_register, 0);
+    puts("registrei bulginta"); fflush(stdout);
 }
 
 
@@ -75,6 +76,7 @@ surgescript_var_t* fun_register(surgescript_object_t* object, const surgescript_
         surgescript_heap_t* heap = surgescript_object_heap(object);
 
         for(int i = 0; i < length; i++) {
+            /* spawn and store the children, so they won't be garbage-collected */
             surgescript_var_t* mem = surgescript_heap_at(heap, surgescript_heap_malloc(heap));
             surgescript_var_set_objecthandle(mem, surgescript_objectmanager_spawn(manager, me, builtin[i], NULL));
         }
