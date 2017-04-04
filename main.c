@@ -187,7 +187,7 @@ int main()
     if(!success)
         puts("Error when parsing file.");
 
-    surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "__ss-constructor"), stdout);
+    surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "__ssconstructor"), stdout);
     surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "state:main"), stdout);
     //surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "surge"), stdout);
     surgescript_parser_destroy(parser);

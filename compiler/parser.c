@@ -372,7 +372,7 @@ void object(surgescript_parser_t* parser)
         surgescript_symtable_create(NULL), /* symbol table */
         surgescript_program_create(0) /* object constructor */
     );
-    if(surgescript_programpool_exists(parser->program_pool, object_name, "__ss-constructor"))
+    if(surgescript_programpool_exists(parser->program_pool, object_name, "__ssconstructor"))
         ssfatal("Duplicate definition of object \"%s\" in %s:%d.", object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* read the object */
@@ -382,7 +382,7 @@ void object(surgescript_parser_t* parser)
     match(parser, SSTOK_RCURLY);
 
     /* register the ssconstructor and cleanup */
-    surgescript_programpool_put(parser->program_pool, object_name, "__ss-constructor", context.program);
+    surgescript_programpool_put(parser->program_pool, object_name, "__ssconstructor", context.program);
     surgescript_symtable_destroy(context.symtable);
     ssfree(object_name);
 }

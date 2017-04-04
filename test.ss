@@ -7,7 +7,8 @@ object "Application" {
 	//arr = spawn("Array"); // todo: test me
 
 	state "main" {
-		"hello".hi();
+		//"hello".hi();
+		print(("01.2".toNumber()));
 		destroy();
 	}
 
@@ -25,9 +26,9 @@ object "Application" {
 			exit();
 	}
 
-	fun __constructor() {
+	//fun __constructor() {
 		//spawn("Math").init("segundo math");
-	}
+	//}
 
 	fun __destructor() {
 		print("no more app!");

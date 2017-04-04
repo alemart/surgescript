@@ -242,7 +242,7 @@ unsigned surgescript_object_find_child(const surgescript_object_t* object, const
 
     for(int i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        if(strcmp(object->name, child->name) == 0)
+        if(strcmp(name, child->name) == 0)
             return child->handle;
     }
 
@@ -396,8 +396,14 @@ void surgescript_object_set_reachable(surgescript_object_t* object, bool reachab
 void surgescript_object_init(surgescript_object_t* object)
 {
     static const char* CONSTRUCTOR_FUN = "__constructor"; /* regular constructor */
-    static const char* PRE_CONSTRUCTOR_FUN = "__ss-constructor"; /* a constructor reserved for the VM */
+    static const char* PRE_CONSTRUCTOR_FUN = "__ssconstructor"; /* a constructor reserved for the VM */
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+
+    if(object->handle == surgescript_objectmanager_root(surgescript_renv_objectmanager(object->renv))) {
+        static const char* APP_CONSTRUCTOR_FUN = "__appconstructor"; /* system-constructor */
+        surgescript_program_t* app_constructor = surgescript_programpool_get(program_pool, object->name, APP_CONSTRUCTOR_FUN);
+        surgescript_program_run(app_constructor, object->renv);
+    }
 
     if(surgescript_programpool_exists(program_pool, object->name, PRE_CONSTRUCTOR_FUN)) {
         surgescript_program_t* pre_constructor = surgescript_programpool_get(program_pool, object->name, PRE_CONSTRUCTOR_FUN);
@@ -407,7 +413,7 @@ void surgescript_object_init(surgescript_object_t* object)
     if(surgescript_programpool_exists(program_pool, object->name, CONSTRUCTOR_FUN)) {
         surgescript_program_t* constructor = surgescript_programpool_get(program_pool, object->name, CONSTRUCTOR_FUN);
         if(surgescript_program_arity(constructor) != 0)
-            ssfatal("Runtime Error: Object \"%s\" %s() cannot receive parameters", object->name, CONSTRUCTOR_FUN);
+            ssfatal("Runtime Error: Object \"%s\"'s %s() cannot receive parameters", object->name, CONSTRUCTOR_FUN);
         surgescript_program_run(constructor, object->renv);
     }
 }

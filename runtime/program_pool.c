@@ -70,12 +70,32 @@ bool surgescript_programpool_exists(surgescript_programpool_t* pool, const char*
 }
 
 /*
+ * surgescript_programpool_shallowcheck()
+ * Does the specified program, of EXACTLY the specified object (not a parent class), exist in the pool?
+ */
+bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
+{
+    surgescript_programpool_hashpair_t* pair = NULL;
+    char* signature = generate_signature(object_name, program_name);
+    
+    HASH_FIND_STR(pool->hash, signature, pair);
+    ssfree(signature);
+
+    if(pair != NULL) {
+        //ssfree(pair);
+        return true;
+    }
+    else
+        return false;
+}
+
+/*
  * surgescript_programpool_put()
  * Puts a program in the pool
  */
 bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* object_name, const char* program_name, surgescript_program_t* program)
 {
-    if(!surgescript_programpool_exists(pool, object_name, program_name)) {
+    if(!surgescript_programpool_shallowcheck(pool, object_name, program_name)) {
         surgescript_programpool_hashpair_t* pair = ssmalloc(sizeof *pair);
         pair->signature = generate_signature(object_name, program_name);
         pair->program = program;
@@ -94,6 +114,7 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
  */
 surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
+    surgescript_program_t* program;
     surgescript_programpool_hashpair_t* pair = NULL;
     char* signature = generate_signature(object_name, program_name);
     
@@ -114,7 +135,9 @@ surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* po
     }
 
     /* found it! */
-    return pair->program;
+    program = pair->program;
+    //ssfree(pair);
+    return program;
 }
 
 

@@ -64,10 +64,6 @@
     F( SSOP_XOR, "xor" )                           /* t[a] = t[a] ^ t[b] */ \
     F( SSOP_CAT, "cat" )                    /* t[a] = strcat(t[a], t[b]) */ \
                                                                             \
-    F( SSOP_BOOL, "bool" )                          /* t[a] = bool(t[a]) */ \
-    F( SSOP_VAL, "val" )                          /* t[a] = number(t[a]) */ \
-    F( SSOP_STR, "str" )                          /* t[a] = string(t[a]) */ \
-                                                                            \
     F( SSOP_TEST, "test" )                         /* t[2] = t[a] & t[b] */ \
     F( SSOP_TCHK, "tchk" )               /* t[2] = typecheck(t[a], t[b]) */ \
     F( SSOP_TCHKN, "tchkn" )             /* t[2] = typecheck(t[a], null) */ \

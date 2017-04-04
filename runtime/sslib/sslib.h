@@ -17,5 +17,8 @@ struct surgescript_vm_t;
 void surgescript_sslib_register_object(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_array(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_application(struct surgescript_vm_t* vm);
+void surgescript_sslib_register_boolean(struct surgescript_vm_t* vm);
+void surgescript_sslib_register_number(struct surgescript_vm_t* vm);
+void surgescript_sslib_register_string(struct surgescript_vm_t* vm);
 
 #endif

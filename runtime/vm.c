@@ -61,13 +61,15 @@ void surgescript_vm_launch(surgescript_vm_t* vm)
 
     /* Load the surgescript library */
     surgescript_sslib_register_object(vm);
-    surgescript_sslib_register_application(vm);
+    surgescript_sslib_register_string(vm);
+    surgescript_sslib_register_number(vm);
+    surgescript_sslib_register_boolean(vm);
     surgescript_sslib_register_array(vm);
+    surgescript_sslib_register_application(vm);
 
     /* Create the root object */
     root_handle = surgescript_objectmanager_spawn(vm->object_manager, surgescript_objectmanager_root(vm->object_manager), ROOT_OBJECT_NAME, NULL);
     root = surgescript_objectmanager_get(vm->object_manager, root_handle);
-    surgescript_object_call_function(root, "__register-builtins", NULL, 0, NULL);
 }
 
 /*

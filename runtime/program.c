@@ -630,22 +630,6 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         }
 */
 
-        /* casting */
-        case SSOP_BOOL:
-            surgescript_var_set_bool(t(a), surgescript_var_get_bool(t(a)));
-            break;
-
-        case SSOP_VAL:
-            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)));
-            break;
-
-        case SSOP_STR: {
-            char* buf = surgescript_var_get_string(t(a));
-            surgescript_var_set_string(t(a), buf);
-            ssfree(buf);
-            break;
-        }
-
         /* comparing */
         case SSOP_CMP:
             surgescript_var_set_number(_t[2], surgescript_var_compare(t(a), t(b)));
@@ -767,6 +751,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
 
             case 'n':
                 object_handle = surgescript_objectmanager_number(surgescript_renv_objectmanager(caller_runtime_environment));
+                printf("object_handle of n = %u\n", object_handle);
                 number_of_given_params++;
                 break;
 
