@@ -64,4 +64,4 @@ all: main utils variable heap stack program program_pool object renv vm sslib to
 	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o variable.o heap.o stack.o program.o program_pool.o object_manager.o renv.o object.o vm.o sslib.a token.o lexer.o parser.o symtable.o codegen.o -lm
 
 clean:
-	$(RM) $(TARGET) *.o
+	$(RM) $(TARGET) *.o *.a
