@@ -8,7 +8,7 @@ object "Application" {
 
 	state "main" {
 		//"hello".hi();
-		print(("01.2".toNumber()));
+		print(2.toString());
 		destroy();
 	}
 

@@ -137,6 +137,8 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
             if(*(lexer->p) == '.') {
                 if(dot) /* only one dot is allowed */
                     ssfatal("Lexical Error: Unexpected '%c' around \"%s\" on line %d", *(lexer->p), lexer->buf, lexer->line);
+                else if(!isdigit(*(lexer->p + 1))) /* there must be a digit after the dot */
+                    break;
                 dot = true;
             }
             bufadd(lexer, *(lexer->p++)); /* add to buffer */
