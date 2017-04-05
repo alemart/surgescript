@@ -65,6 +65,7 @@ static inline void run_instruction(surgescript_program_t* program, surgescript_r
 static inline void call_program(surgescript_renv_t* caller_runtime_environment, const char* program_name, int number_of_given_params);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
+static inline unsigned get_root_child(surgescript_objectmanager_t* manager, const char* child_name);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
 static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
 static inline int fast_float_sign(float f);
@@ -736,35 +737,39 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 /* calls a program */
 void call_program(surgescript_renv_t* caller_runtime_environment, const char* program_name, int number_of_given_params)
 {
+    /* preparing the stack */
     surgescript_stack_t* stack = surgescript_renv_stack(caller_runtime_environment);
     surgescript_stack_pushenv(stack);
+
+    /* there is a program to be called */
     if(*program_name) {
         surgescript_var_t* callee = surgescript_stack_at(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
         const int callee_type = surgescript_var_typecode(callee);
         unsigned object_handle;
 
+        /* surgescript can also call programs on primitive types */
         switch(callee_type) {
             case 's': /* for the sake of efficiency... we replaced surgescript_var_type2code() for constants */
-                object_handle = surgescript_objectmanager_string(surgescript_renv_objectmanager(caller_runtime_environment));
+                object_handle = get_root_child(surgescript_renv_objectmanager(caller_runtime_environment), "String");
                 number_of_given_params++;
                 break;
 
             case 'n':
-                object_handle = surgescript_objectmanager_number(surgescript_renv_objectmanager(caller_runtime_environment));
-                printf("object_handle of n = %u\n", object_handle);
+                object_handle = get_root_child(surgescript_renv_objectmanager(caller_runtime_environment), "Number");
                 number_of_given_params++;
                 break;
 
             case 'b':
-                object_handle = surgescript_objectmanager_boolean(surgescript_renv_objectmanager(caller_runtime_environment));
+                object_handle = get_root_child(surgescript_renv_objectmanager(caller_runtime_environment), "Boolean");
                 number_of_given_params++;
                 break;
 
-            default:
+            default: /* this is not a primitive type */
                 object_handle = surgescript_var_get_objecthandle(callee);
                 break;
         }
 
+        /* finds the program */
         if(surgescript_objectmanager_exists(surgescript_renv_objectmanager(caller_runtime_environment), object_handle)) {
             surgescript_object_t* object = surgescript_objectmanager_get(surgescript_renv_objectmanager(caller_runtime_environment), object_handle);
             const char* object_name = surgescript_object_name(object);
@@ -798,6 +803,8 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
         else
             ssfatal("Runtime Error: null pointer exception - can't call function %s (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
     }
+
+    /* clean up */
     surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */
 }
 
@@ -880,6 +887,12 @@ bool remove_labels(surgescript_program_t* program)
         return false;
 }
 
+/* gets the handle of an object named child_name that is a direct child of the root object */
+unsigned get_root_child(surgescript_objectmanager_t* manager, const char* child_name)
+{
+    surgescript_object_t* root = surgescript_objectmanager_get(manager, surgescript_objectmanager_root(manager));
+    return root ? surgescript_object_find_child(root, child_name) : surgescript_objectmanager_null(manager);
+}
 
 
 /* --------------- float utilities --------------- */

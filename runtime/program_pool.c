@@ -80,13 +80,7 @@ bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const
     
     HASH_FIND_STR(pool->hash, signature, pair);
     ssfree(signature);
-
-    if(pair != NULL) {
-        //ssfree(pair);
-        return true;
-    }
-    else
-        return false;
+    return pair != NULL;
 }
 
 /*
@@ -114,7 +108,6 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
  */
 surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
-    surgescript_program_t* program;
     surgescript_programpool_hashpair_t* pair = NULL;
     char* signature = generate_signature(object_name, program_name);
     
@@ -135,9 +128,7 @@ surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* po
     }
 
     /* found it! */
-    program = pair->program;
-    //ssfree(pair);
-    return program;
+    return pair->program;
 }
 
 

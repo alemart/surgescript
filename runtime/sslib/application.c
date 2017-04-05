@@ -27,7 +27,7 @@ static surgescript_var_t* fun_constructor(surgescript_object_t* object, const su
  */
 void surgescript_sslib_register_application(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Application", "__appconstructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "Application", "__rootconstructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Application", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "Application", "print", fun_print, 1);
     surgescript_vm_bind(vm, "Application", "crash", fun_crash, 1);

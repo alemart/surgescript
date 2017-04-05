@@ -56,9 +56,6 @@ surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
  */
 void surgescript_vm_launch(surgescript_vm_t* vm)
 {
-    surgescript_objectmanager_handle_t root_handle;
-    surgescript_object_t* root;
-
     /* Load the surgescript library */
     surgescript_sslib_register_object(vm);
     surgescript_sslib_register_string(vm);
@@ -68,8 +65,7 @@ void surgescript_vm_launch(surgescript_vm_t* vm)
     surgescript_sslib_register_application(vm);
 
     /* Create the root object */
-    root_handle = surgescript_objectmanager_spawn(vm->object_manager, surgescript_objectmanager_root(vm->object_manager), ROOT_OBJECT_NAME, NULL);
-    root = surgescript_objectmanager_get(vm->object_manager, root_handle);
+    surgescript_objectmanager_spawn(vm->object_manager, surgescript_objectmanager_root(vm->object_manager), ROOT_OBJECT_NAME, NULL);
 }
 
 /*

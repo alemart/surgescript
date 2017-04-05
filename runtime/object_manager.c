@@ -187,36 +187,6 @@ surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_ob
 }
 
 /*
- * surgescript_objectmanager_string()
- * Returns a handle to the string utilities object
- */
-surgescript_objectmanager_handle_t surgescript_objectmanager_string(surgescript_objectmanager_t* manager)
-{
-    surgescript_object_t* root = surgescript_objectmanager_get(manager, ROOT_HANDLE);
-    return surgescript_object_find_child(root, "String");
-}
-
-/*
- * surgescript_objectmanager_number()
- * Returns a handle to the number utilities object
- */
-surgescript_objectmanager_handle_t surgescript_objectmanager_number(surgescript_objectmanager_t* manager)
-{
-    surgescript_object_t* root = surgescript_objectmanager_get(manager, ROOT_HANDLE);
-    return surgescript_object_find_child(root, "Number");
-}
-
-/*
- * surgescript_objectmanager_boolean()
- * Returns a handle to the boolean utilities object
- */
-surgescript_objectmanager_handle_t surgescript_objectmanager_boolean(surgescript_objectmanager_t* manager)
-{
-    surgescript_object_t* root = surgescript_objectmanager_get(manager, ROOT_HANDLE);
-    return surgescript_object_find_child(root, "Boolean");
-}
-
-/*
  * surgescript_objectmanager_count()
  * How many allocated objects there are?
  */

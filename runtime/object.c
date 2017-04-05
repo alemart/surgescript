@@ -400,9 +400,9 @@ void surgescript_object_init(surgescript_object_t* object)
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
 
     if(object->handle == surgescript_objectmanager_root(surgescript_renv_objectmanager(object->renv))) {
-        static const char* APP_CONSTRUCTOR_FUN = "__appconstructor"; /* system-constructor */
-        surgescript_program_t* app_constructor = surgescript_programpool_get(program_pool, object->name, APP_CONSTRUCTOR_FUN);
-        surgescript_program_run(app_constructor, object->renv);
+        static const char* ROOT_CONSTRUCTOR_FUN = "__rootconstructor"; /* system-constructor */
+        surgescript_program_t* root_constructor = surgescript_programpool_get(program_pool, object->name, ROOT_CONSTRUCTOR_FUN);
+        surgescript_program_run(root_constructor, object->renv);
     }
 
     if(surgescript_programpool_exists(program_pool, object->name, PRE_CONSTRUCTOR_FUN)) {
