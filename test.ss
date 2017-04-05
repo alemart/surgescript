@@ -3,32 +3,14 @@
 
 object "Application" {
 	x = 0;
-	math = spawn("Math").init("first");
+	math = spawn("Math");
 	//arr = spawn("Array"); // todo: test me
 
 	state "main" {
 		//"hello".hi();
 		print(2.toString());
-		destroy();
+		//destroy();
 	}
-
-	state "main2" {
-		print("x = " + x + ", math = " + math);
-		print(math ? "math vale algo: " + typeof(math) : "math vale nulo");
-		if(++x >= 30) {
-			if(math) {
-				print("pi = " + math.pi());
-				math = math.destroy();
-			}
-		}
-
-        if(x >= 100)
-			exit();
-	}
-
-	//fun __constructor() {
-		//spawn("Math").init("segundo math");
-	//}
 
 	fun __destructor() {
 		print("no more app!");
@@ -37,54 +19,14 @@ object "Application" {
 
 object "Math"
 {
-	msg = "";
-	foo = spawn("Foo");
+	msg = "Simple thing!";
 
 	state "main"
 	{
-		app.print("foo " + msg);
-	}
-
-	fun init(m) { msg = m; return this; }
-
-	fun __constructor()
-	{
-		app.print("Starting up the math...");
-	}
-
-	fun __destructor()
-	{
-		app.print("Terminating the math. " + msg);
-	}
-
-	fun fib(x)
-	{
-		return x > 2 ? fib(x-1) + fib(x-2) : 1;
-	}
-
-	fun get(x)
-	{
-		return x*x;
-	}
-
-	fun set(key, value)
-	{
-		app.print('key=' + key + ', value=' + value);
-	}
-
-	fun pi()
-	{
-		return 3.1415926535;
+		print(msg);
+		//exit();
 	}
 }
-
-object "Foo" {
-	state "main" {
-		;
-	}
-}
-
-
 
 /*
 object "test" {

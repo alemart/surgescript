@@ -743,24 +743,25 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
 
     /* there is a program to be called */
     if(*program_name) {
+        surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
         surgescript_var_t* callee = surgescript_stack_at(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
         const int callee_type = surgescript_var_typecode(callee);
-        unsigned object_handle;
+        unsigned object_handle = 0;
 
         /* surgescript can also call programs on primitive types */
         switch(callee_type) {
             case 's': /* for the sake of efficiency... we replaced surgescript_var_type2code() for constants */
-                object_handle = get_root_child(surgescript_renv_objectmanager(caller_runtime_environment), "String");
+                object_handle = get_root_child(manager, "String");
                 number_of_given_params++;
                 break;
 
             case 'n':
-                object_handle = get_root_child(surgescript_renv_objectmanager(caller_runtime_environment), "Number");
+                object_handle = get_root_child(manager, "Number");
                 number_of_given_params++;
                 break;
 
             case 'b':
-                object_handle = get_root_child(surgescript_renv_objectmanager(caller_runtime_environment), "Boolean");
+                object_handle = get_root_child(manager, "Boolean");
                 number_of_given_params++;
                 break;
 
@@ -770,11 +771,28 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
         }
 
         /* finds the program */
-        if(surgescript_objectmanager_exists(surgescript_renv_objectmanager(caller_runtime_environment), object_handle)) {
-            surgescript_object_t* object = surgescript_objectmanager_get(surgescript_renv_objectmanager(caller_runtime_environment), object_handle);
+        if(surgescript_objectmanager_exists(manager, object_handle)) {
+            surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
             const char* object_name = surgescript_object_name(object);
             surgescript_program_t* program = surgescript_programpool_get(surgescript_renv_programpool(caller_runtime_environment), object_name, program_name);
+
+            /* global scope */
+            if(!program) {
+                surgescript_object_t* root = surgescript_objectmanager_get(manager, surgescript_objectmanager_root(manager));
+                surgescript_program_t* root_program = surgescript_programpool_get(
+                    surgescript_renv_programpool(caller_runtime_environment),
+                    surgescript_object_name(root),
+                    program_name
+                );
+
+                /* program doesn't exist, but root_program does */
+                if(root_program) {
+                    program = root_program;
+                    object = root;
+                }
+            }
             
+            /* does the selected program exist? */
             if(program) {
                 if(number_of_given_params == program->arity) {
                     /* the parameters are pushed onto the stack (left-to-right) */
@@ -783,7 +801,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
                         stack,
                         surgescript_object_heap(object),
                         surgescript_renv_programpool(caller_runtime_environment),
-                        surgescript_renv_objectmanager(caller_runtime_environment),
+                        manager,
                         surgescript_renv_tmp(caller_runtime_environment)
                     );
 
