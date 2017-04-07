@@ -33,7 +33,7 @@ static const surgescript_objectmanager_handle_t NULL_HANDLE = 0;
 static const surgescript_objectmanager_handle_t ROOT_HANDLE = 1;
 
 /* object methods acessible by me */
-extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data, bool (*on_init)(surgescript_object_t*), bool (*on_release)(surgescript_object_t*)); /* creates a new blank object */
+extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data); /* creates a new blank object */
 extern surgescript_object_t* surgescript_object_destroy(surgescript_object_t* object); /* destroys an object */
 
 /* the life-cycle of the objects is handled by me */
@@ -104,7 +104,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objec
 surgescript_objectmanager_handle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t parent, const char* object_name, void* user_data)
 {
     surgescript_objectmanager_handle_t handle = new_handle(manager);
-    surgescript_object_t *object = surgescript_object_create(object_name, handle, manager, manager->program_pool, manager->stack, user_data, NULL, NULL); /* FIXME callbacks */
+    surgescript_object_t *object = surgescript_object_create(object_name, handle, manager, manager->program_pool, manager->stack, user_data);
 
     manager->count++;
     if(handle >= ssarray_length(manager->data)) {
