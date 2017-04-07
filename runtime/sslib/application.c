@@ -18,7 +18,6 @@
 static surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*

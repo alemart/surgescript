@@ -36,7 +36,10 @@ object: runtime/object.c runtime/object.h program utils
 utils: util/util.c util/util.h
 	$(CC) $(CFLAGS) -c util/util.c
 
-sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c runtime/sslib/system.c runtime/sslib/string.c runtime/sslib/number.c runtime/sslib/boolean.c heap utils
+utf8: util/utf8.c util/utf8.h
+	$(CC) $(CFLAGS) -c util/utf8.c
+
+sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c runtime/sslib/system.c runtime/sslib/string.c runtime/sslib/number.c runtime/sslib/boolean.c heap utils utf8
 	$(CC) $(CFLAGS) -c runtime/sslib/object.c -o sslib_object.o
 	$(CC) $(CFLAGS) -c runtime/sslib/array.c -o sslib_array.o
 	$(CC) $(CFLAGS) -c runtime/sslib/application.c -o sslib_application.o
@@ -64,8 +67,8 @@ codegen: compiler/codegen.h compiler/codegen.c utils symtable program_pool progr
 main: main.c utils variable
 	$(CC) $(CFLAGS) -c main.c
 
-all: main utils variable heap stack program program_pool object renv vm sslib token lexer parser symtable codegen
-	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o variable.o heap.o stack.o program.o program_pool.o object_manager.o renv.o object.o vm.o sslib.a token.o lexer.o parser.o symtable.o codegen.o -lm
+all: main utils variable heap stack program program_pool object renv vm sslib token lexer parser symtable codegen utf8
+	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o utf8.o variable.o heap.o stack.o program.o program_pool.o object_manager.o renv.o object.o vm.o sslib.a token.o lexer.o parser.o symtable.o codegen.o -lm
 
 clean:
 	$(RM) $(TARGET) *.o *.a

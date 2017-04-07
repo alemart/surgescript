@@ -7,6 +7,7 @@
  * SurgeScript Virtual Machine for the Runtime Engine
  */
 
+#include <locale.h>
 #include "vm.h"
 #include "stack.h"
 #include "sslib/sslib.h"
@@ -53,6 +54,9 @@ surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
  */
 void surgescript_vm_launch(surgescript_vm_t* vm)
 {
+    /* SurgeScript uses UTF-8 */
+    setlocale(LC_ALL, "en_US.UTF-8");
+
     /* Load the surgescript library */
     surgescript_sslib_register_object(vm);
     surgescript_sslib_register_string(vm);
