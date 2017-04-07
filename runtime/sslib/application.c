@@ -27,7 +27,6 @@ static surgescript_var_t* fun_constructor(surgescript_object_t* object, const su
  */
 void surgescript_sslib_register_application(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Application", "__rootconstructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Application", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "Application", "print", fun_print, 1);
     surgescript_vm_bind(vm, "Application", "crash", fun_crash, 1);
@@ -53,7 +52,7 @@ surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var
     return NULL;
 }
 
-/* crashes the engine with a message */
+/* crashes the app with a message */
 surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     char* text = surgescript_var_get_string(param[0]);

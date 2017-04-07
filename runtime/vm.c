@@ -20,9 +20,6 @@ struct surgescript_vm_t
     surgescript_objectmanager_t* object_manager;
 };
 
-/* private stuff */
-static const char* ROOT_OBJECT_NAME = "Application";
-
 /*
  * surgescript_vm_create()
  * Creates a vm
@@ -62,10 +59,11 @@ void surgescript_vm_launch(surgescript_vm_t* vm)
     surgescript_sslib_register_number(vm);
     surgescript_sslib_register_boolean(vm);
     surgescript_sslib_register_array(vm);
+    surgescript_sslib_register_system(vm);
     surgescript_sslib_register_application(vm);
 
     /* Create the root object */
-    surgescript_objectmanager_spawn(vm->object_manager, surgescript_objectmanager_root(vm->object_manager), ROOT_OBJECT_NAME, NULL);
+    surgescript_objectmanager_spawn_root(vm->object_manager, NULL);
 }
 
 /*

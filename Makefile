@@ -36,14 +36,15 @@ object: runtime/object.c runtime/object.h program utils
 utils: util/util.c util/util.h
 	$(CC) $(CFLAGS) -c util/util.c
 
-sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c runtime/sslib/string.c runtime/sslib/number.c runtime/sslib/boolean.c heap utils
+sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c runtime/sslib/system.c runtime/sslib/string.c runtime/sslib/number.c runtime/sslib/boolean.c heap utils
 	$(CC) $(CFLAGS) -c runtime/sslib/object.c -o sslib_object.o
 	$(CC) $(CFLAGS) -c runtime/sslib/array.c -o sslib_array.o
 	$(CC) $(CFLAGS) -c runtime/sslib/application.c -o sslib_application.o
+	$(CC) $(CFLAGS) -c runtime/sslib/system.c -o sslib_system.o
 	$(CC) $(CFLAGS) -c runtime/sslib/string.c -o sslib_string.o
 	$(CC) $(CFLAGS) -c runtime/sslib/number.c -o sslib_number.o
 	$(CC) $(CFLAGS) -c runtime/sslib/boolean.c -o sslib_boolean.o
-	ar -cvq sslib.a sslib_object.o sslib_array.o sslib_application.o sslib_string.o sslib_number.o sslib_boolean.o
+	ar -cvq sslib.a sslib_object.o sslib_array.o sslib_application.o sslib_system.o sslib_string.o sslib_number.o sslib_boolean.o
 
 token: compiler/token.h compiler/token.c utils
 	$(CC) $(CFLAGS) -c compiler/token.c

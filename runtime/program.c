@@ -65,7 +65,6 @@ static inline void run_instruction(surgescript_program_t* program, surgescript_r
 static inline void call_program(surgescript_renv_t* caller_runtime_environment, const char* program_name, int number_of_given_params);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
-static inline unsigned get_root_child(surgescript_objectmanager_t* manager, const char* child_name);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
 static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
 static inline int fast_float_sign(float f);
@@ -751,17 +750,17 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
         /* surgescript can also call programs on primitive types */
         switch(callee_type) {
             case 's': /* for the sake of efficiency... we replaced surgescript_var_type2code() for constants */
-                object_handle = get_root_child(manager, "String");
+                object_handle = surgescript_objectmanager_system_child(manager, "String");
                 number_of_given_params++;
                 break;
 
             case 'n':
-                object_handle = get_root_child(manager, "Number");
+                object_handle = surgescript_objectmanager_system_child(manager, "Number");
                 number_of_given_params++;
                 break;
 
             case 'b':
-                object_handle = get_root_child(manager, "Boolean");
+                object_handle = surgescript_objectmanager_system_child(manager, "Boolean");
                 number_of_given_params++;
                 break;
 
@@ -903,13 +902,6 @@ bool remove_labels(surgescript_program_t* program)
     }
     else
         return false;
-}
-
-/* gets the handle of an object named child_name that is a direct child of the root object */
-unsigned get_root_child(surgescript_objectmanager_t* manager, const char* child_name)
-{
-    surgescript_object_t* root = surgescript_objectmanager_get(manager, surgescript_objectmanager_root(manager));
-    return root ? surgescript_object_find_child(root, child_name) : surgescript_objectmanager_null(manager);
 }
 
 
