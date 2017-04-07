@@ -45,9 +45,10 @@ void* surgescript_object_userdata(const surgescript_object_t* object); /* custom
 /* object tree */
 unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer (in the object manager) */
 unsigned surgescript_object_parent(const surgescript_object_t* object); /* parent object (in the object manager) */
-unsigned surgescript_object_child(const surgescript_object_t* object, int index); /* n-th child */
+unsigned surgescript_object_nth_child(const surgescript_object_t* object, int index); /* n-th child */
 int surgescript_object_child_count(const surgescript_object_t* object); /* how many children there are? */
-unsigned surgescript_object_find_child(const surgescript_object_t* object, const char* name); /* find 1st child whose name equals name */
+unsigned surgescript_object_child(const surgescript_object_t* object, const char* name); /* gets a handle to the 1st child named name */
+unsigned surgescript_object_find_child(const surgescript_object_t* object, const char* name); /* find 1st child (or grand-child...) whose name equals name */
 void surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle); /* adds a child to this object */
 bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle); /* removes a child having this handle from this object */
 bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */

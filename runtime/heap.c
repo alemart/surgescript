@@ -12,7 +12,7 @@
 #include "../util/util.h"
 
 /* constants */
-static const size_t SSHEAP_INITIAL_SIZE = 16;
+static const size_t SSHEAP_INITIAL_SIZE = 8;
 static const size_t SSHEAP_MAX_SIZE = 10 * 1024 * 1024; /* 10M cells max */
 
 /* heap structure */
