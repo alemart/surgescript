@@ -59,7 +59,7 @@ surgescript_stack_t* surgescript_stack_create()
     while(size)
         stack->data[--size] = NULL;
 
-    stack->data[0] = surgescript_var_set_number(surgescript_var_create(), stack->bp);
+    stack->data[0] = surgescript_var_set_rawbits(surgescript_var_create(), stack->bp);
     return stack;
 }
 
@@ -115,7 +115,7 @@ void surgescript_stack_pushenv(surgescript_stack_t* stack)
 {
     /* push prev BP & set new BP */
     surgescript_var_t* prev_bp = surgescript_stack_push(stack, surgescript_var_create());
-    surgescript_var_set_number(prev_bp, stack->bp);
+    surgescript_var_set_rawbits(prev_bp, stack->bp);
     stack->bp = stack->sp; /* the base of the stack points to the previous bp */
 }
 
@@ -127,7 +127,7 @@ void surgescript_stack_popenv(surgescript_stack_t* stack)
 {
     if(stack->sp > 0) {
         /* get previous bp & deallocate everything in between */
-        surgescript_stackptr_t i, prev_bp = surgescript_var_get_number(stack->data[stack->bp]);
+        surgescript_stackptr_t i, prev_bp = surgescript_var_get_rawbits(stack->data[stack->bp]);
         for(i = stack->sp; i >= stack->bp; i--) {
             if(stack->data[i] != NULL)
                 stack->data[i] = surgescript_var_destroy(stack->data[i]);

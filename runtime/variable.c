@@ -37,7 +37,7 @@ struct surgescript_var_t
     union {
         char* string;
         float number;
-        unsigned handle;
+        unsigned handle:32;
         bool boolean;
         unsigned long raw:32;
     };
@@ -46,7 +46,7 @@ struct surgescript_var_t
 
 /* helpers */
 #define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
-                                    (var)->string = ssfree((var)->string);
+                                    (var)->string = ssfree((var)->string); /* this will clear all bits */
 static inline bool isvalidnum(const char* str);
 
 /* -------------------------------
@@ -103,7 +103,8 @@ surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, bool boolean
 {
     RELEASE_DATA(var);
     var->type = SSVAR_BOOL;
-    var->raw = (unsigned long)boolean; /* must clear up all bits; see get_rawbits() below */
+    var->raw = 0; /* must clear up all bits; see get_rawbits() below */
+    var->boolean = boolean;
     return var;
 }
 
@@ -253,6 +254,7 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
 
     switch(src->type) {
         case SSVAR_BOOL:
+            dst->raw = 0; /* must clear up all bits */
             dst->boolean = src->boolean;
             break;
         case SSVAR_NUMBER:
@@ -281,31 +283,6 @@ surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var)
     surgescript_var_t* copy = surgescript_var_create();
     return surgescript_var_copy(copy, var);
 }
-
-#if 0
-/*
- * surgescript_var_typename()
- * What's the name of the type of the variable?
- */
-const char* surgescript_var_typename(const surgescript_var_t* var)
-{
-    /* all first letters should be different; see typecode() below */
-    switch(var->type) {
-        case SSVAR_NUMBER:
-            return "number";
-        case SSVAR_BOOL:
-            return "boolean";
-        case SSVAR_STRING:
-            return "string";
-        case SSVAR_OBJECTHANDLE:
-            return "object";
-        case SSVAR_NULL:
-            return ""; /* '\0' is the first character */
-    }
-    
-    return "unknown";
-}
-#endif
 
 /*
  * surgescript_var_typecode()
@@ -455,13 +432,14 @@ unsigned long surgescript_var_get_rawbits(const surgescript_var_t* var)
 
 /*
  * surgescript_var_set_rawbits()
- * Sets the binary value of the variable
+ * Sets the binary value of the variable (for internal use only)
  */
-void surgescript_var_set_rawbits(surgescript_var_t* var, unsigned long raw)
+surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, unsigned long raw)
 {
     RELEASE_DATA(var);
     var->type = SSVAR_NUMBER;
     var->raw = raw;
+    return var;
 }
 
 
@@ -472,11 +450,13 @@ void surgescript_var_set_rawbits(surgescript_var_t* var, unsigned long raw)
 /* Does str hold a valid number? */
 bool isvalidnum(const char* str)
 {
-    while(str && *str) {
-        if(isdigit(*str) || *str == '.' || *str == '-' || *str == '+')
-            str++;
-        else
-            return false;
+    if(str) {
+        while(*str) {
+            if(isdigit(*str) || *str == '.' || *str == '-' || *str == '+')
+                str++; /* a state machine would be better suited */
+            else
+                return false;
+        }
     }
 
     return true; /* the empty string is valid and translates to 0. */

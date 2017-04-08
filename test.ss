@@ -44,9 +44,8 @@ object "SurgeScriptTest"
         //test((y = "ale", y += "xandre").length() == 9) || fail(12);
         //test("alê\n"[2] == "ê") || fail(13);
         //test("abc"[0] = "b") || fail(14);
-        test((y = "abc", y[0] = "b", y == "bbc")) || fail(15);
-        test(false) || fail(16);
-        test(0 == false) || fail("nuss");
+        test((y = "abc", y[0] = "b", y == "abc")) || fail(15);
+        test(y.substr(0, 1) == "a") || fail(16);
         end();
     }
 

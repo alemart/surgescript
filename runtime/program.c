@@ -367,7 +367,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
     #define t(k)             _t[(k).u & 3]
 
     /* debug mode */
-    /*#define SSDEBUG*/
+    //#define SSDEBUG
     #ifdef SSDEBUG
     do {
         char hex[2][1 + 2 * sizeof(unsigned)];
@@ -384,20 +384,24 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             };
 
             /* print temps */
-            printf(".. BREAKPOINT: %s\n", title);
+            printf(".. BREAKPOINT %s\n", title);
             for(i = 0; i < 4; i++) {
-                printf("..\t%d: %s\n", i, contents_of_t[i]);
+                printf("..\t%d\t%08X\t%s\n", i, surgescript_var_get_rawbits(_t[i]), contents_of_t[i]);
                 ssfree(contents_of_t[i]);
             }
 
             /* print stack */
-            printf("..\tstack:");
-            for(i = 1; ptr != top; i++) {
-                char* contents = surgescript_var_get_string(
-                    ptr = surgescript_stack_at(surgescript_renv_stack(runtime_environment), i)
-                );
-                printf(" %s", contents);
-                ssfree(contents);
+            printf("..\tstack\t");
+            for(i = -program->arity; ptr != top; i++) {
+                if(i != 0) {
+                    char* contents = surgescript_var_get_string(
+                        ptr = surgescript_stack_at(surgescript_renv_stack(runtime_environment), i)
+                    );
+                    printf("%s ", contents);
+                    ssfree(contents);
+                }
+                else
+                    printf("| ");
             }
             printf("\n..");
 

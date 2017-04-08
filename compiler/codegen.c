@@ -367,7 +367,6 @@ void emit_popparams(surgescript_nodecontext_t context, int n)
 
 void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int num_params)
 {
-    SSASM(SSOP_MOVF, T3, F(num_params));
     BREAKPOINT(fun_name);
     SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
 }
@@ -479,7 +478,8 @@ int emit_function_header(surgescript_nodecontext_t context)
 
 void emit_function_footer(surgescript_nodecontext_t context, int num_locals, int fun_header)
 {
-    surgescript_program_chg_line(context.program, fun_header, SSOP_PUSHN, U(num_locals), U(0));
+    if(num_locals > 0)
+        surgescript_program_chg_line(context.program, fun_header, SSOP_PUSHN, U(num_locals), U(0));
     SSASM(SSOP_MOVN, T0);
     /*SSASM(SSOP_POPN, U(num_locals));*/ /* not needed, since popenv() clears the stack frame for us */
     SSASM(SSOP_RET);
@@ -496,7 +496,6 @@ void emit_function_argument(surgescript_nodecontext_t context, const char* ident
 
 void emit_ret(surgescript_nodecontext_t context)
 {
-    BREAKPOINT("return value");
     SSASM(SSOP_RET);
 }
 
