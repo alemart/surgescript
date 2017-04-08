@@ -49,7 +49,7 @@ extern bool surgescript_object_is_reachable(const surgescript_object_t* object);
 extern void surgescript_object_set_reachable(surgescript_object_t* object, bool reachable); /* sets whether this object is reachable or not */
 
 /* garbage collector: private stuff */
-static void mark_as_reachable(unsigned handle, void* mgr);
+static bool mark_as_reachable(unsigned handle, void* mgr);
 static bool sweep_unreachables(surgescript_object_t* object);
 static const int MIN_OBJECTS_FOR_DISPOSAL = 1; /* we need at least this amount to delete unreachable objects from memory */
 
@@ -316,7 +316,7 @@ void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manag
 /* private stuff */
 
 /* garbage collector */
-void mark_as_reachable(unsigned handle, void* mgr)
+bool mark_as_reachable(unsigned handle, void* mgr)
 {
     surgescript_objectmanager_t* manager = (surgescript_objectmanager_t*)mgr;
     if(surgescript_objectmanager_exists(manager, handle)) {
@@ -326,7 +326,10 @@ void mark_as_reachable(unsigned handle, void* mgr)
             ssarray_push(manager->objects_to_be_scanned, handle);
             manager->reachables_count++;
         }
+        return true;
     }
+    else
+        return false; /* returns false if the handle is broken */
 }
 
 bool sweep_unreachables(surgescript_object_t* object)

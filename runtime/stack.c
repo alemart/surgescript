@@ -198,13 +198,15 @@ int surgescript_stack_empty(surgescript_stack_t* stack)
  * surgescript_stack_scan_objects()
  * For each object in the stack, call callback with its handle
  */
-void surgescript_stack_scan_objects(surgescript_stack_t* stack, void* userdata, void (*callback)(unsigned,void*))
+void surgescript_stack_scan_objects(surgescript_stack_t* stack, void* userdata, bool (*callback)(unsigned,void*))
 {
     for(surgescript_stackptr_t i = stack->sp - 1; i >= 0; i--) { /* check all environments */
         if(stack->data[i] != NULL) {
             unsigned handle = surgescript_var_get_objecthandle(stack->data[i]);
-            if(handle != 0) /* if it is an object and not null */
-                callback(handle, userdata);
+            if(handle != 0) { /* if it is an object and not null */
+                if(!callback(handle, userdata)) /* if the handle is broken */
+                    surgescript_var_set_null(stack->data[i]); /* fix it */
+            }
         }
     }
 }

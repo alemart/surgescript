@@ -11,6 +11,7 @@
 #define _SURGESCRIPT_RUNTIME_STACK_H
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 /* types */
 typedef struct surgescript_stack_t surgescript_stack_t;
@@ -32,6 +33,6 @@ void surgescript_stack_popn(surgescript_stack_t* stack, size_t n); /* pops n var
 struct surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack); /* gets the topmost element */
 struct surgescript_var_t* surgescript_stack_at(surgescript_stack_t* stack, surgescript_stackptr_t offset); /* gets stack[base + offset] */
 int surgescript_stack_empty(surgescript_stack_t* stack); /* is the stack empty? */
-void surgescript_stack_scan_objects(surgescript_stack_t* stack, void* userdata, void (*callback)(unsigned,void*));
+void surgescript_stack_scan_objects(surgescript_stack_t* stack, void* userdata, bool (*callback)(unsigned,void*));
 
 #endif

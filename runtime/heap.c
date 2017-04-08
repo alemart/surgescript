@@ -116,13 +116,15 @@ surgescript_var_t* surgescript_heap_at(surgescript_heap_t* heap, surgescript_hea
  * surgescript_heap_scan_objects()
  * Scans all the objects in the heap, calling callback for each one of them
  */
-void surgescript_heap_scan_objects(surgescript_heap_t* heap, void* userdata, void (*callback)(unsigned,void*))
+void surgescript_heap_scan_objects(surgescript_heap_t* heap, void* userdata, bool (*callback)(unsigned,void*))
 {
     for(surgescript_heapptr_t ptr = 0; ptr < heap->size; ptr++) {
         if(heap->mem[ptr] != NULL) {
             unsigned handle = surgescript_var_get_objecthandle(heap->mem[ptr]);
-            if(handle != 0) /* if heap->mem[ptr] is an object and not null */
-                callback(handle, userdata);
+            if(handle != 0) { /* if heap->mem[ptr] is an object and not null */
+                if(!callback(handle, userdata)) /* if the handle is broken */
+                    surgescript_var_set_null(heap->mem[ptr]); /* fix it */
+            }
         }
     }
 }
