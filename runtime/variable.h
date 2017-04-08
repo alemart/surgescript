@@ -44,6 +44,7 @@ int surgescript_var_type2code(const char* type_name); /* typename -> typecode co
 surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescript_var_t* src); /* similar to strcpy */
 surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var); /* similar to strdup */
 char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t bufsize); /* copies var to buf and returns buf, converting var to string if necessary (similar to itoa / strncpy) */
+const char* surgescript_var_fast_get_string(const surgescript_var_t* var); /* gets the string contents of var without performing any type conversion */
 int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t* b); /* similar to strcmp */
 void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b); /* swaps a <-> b */
 unsigned long surgescript_var_get_rawbits(const surgescript_var_t* var); /* the binary value stored in var */

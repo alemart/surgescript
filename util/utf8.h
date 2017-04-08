@@ -3,6 +3,7 @@
  */
 #include <stdint.h>
 #include <stdarg.h>
+#include "util.h"
 
 
 
@@ -82,7 +83,6 @@ static inline uint32_t codePointAt(uint8_t* s, uint32_t index)
 }
 
 
-
 /*
  * Basic UTF-8 manipulation routines
  * by Jeff Bezanson (Public Domain)
@@ -157,3 +157,18 @@ int u8_is_locale_utf8(char *locale);
    locale is UTF-8. */
 int u8_vprintf(char *fmt, va_list ap);
 int u8_printf(char *fmt, ...);
+
+/* the routine below is based on Jeff Bezanson's; you'll need to ssfree() the return value */
+static inline char* str2utf8(const char* str)
+{
+    ssfatal("Can't convert string to UTF-8: %s", str); /* FIXME */
+    /* is this correct? */
+    char* u8s; /* a new string is malloc'd() every time */
+    int len = mbstowcs(NULL, str, 0) + 1; /* FIXME: race condition? */
+    wchar_t* wcs = ssmalloc(len * sizeof(uint32_t));
+    mbstowcs(wcs, str, len);
+    u8s = ssmalloc(len * sizeof(uint32_t));
+    u8_toutf8(u8s, len * sizeof(uint32_t), (uint32_t*)wcs, len);
+    ssfree(wcs);
+    return u8s;
+}

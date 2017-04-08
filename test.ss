@@ -1,30 +1,100 @@
-// test
-// by alemart
+// SurgeScript - Unit Testing
+// A Unit Testing Script
+// by Alexandre
 
-object "Application" {
-    x = 1;
-    math = spawn("Math");
-    //arr = spawn("Array"); // todo: test me
-
-    state "main" {
-        //"hello".hi();
-        print(2.toString());
-        destroy();
-    }
-
-    fun __destructor() {
-        print("no more app!");
-    }
-}
-
-object "Math"
+object "Application"
 {
-    msg = "Simple thing!";
+    test = spawn("SurgeScriptTest");
 
     state "main"
     {
-        print(msg);
-        //exit();
+        test.string();
+        destroy();
+    }
+}
+
+object "SurgeScriptTest"
+{
+    failed = 0;
+    tested = 0;
+    totalFailed = 0;
+    totalTested = 0;
+
+    state "main"
+    {
+    }
+
+
+
+
+    fun string()
+    {
+        begin("String");
+        test("alexandre".length() == 9) || fail(1);
+        test("alexandre".substr(0, 3) == "ale") || fail(2);
+        test("alexandre".indexOf("ale") == 0) || fail(3);
+        test("alexandre".indexOf("e") == 2) || fail(4);
+        test("alexandre".indexOf("z") < 0) || fail(5);
+        test("ale" + "xandre" == "ale".concat("xandre")) || fail(6);
+        test("alê".length() == 3) || fail(7);
+        test("37".toNumber() == 37) || fail(8);
+        test("çáàê€".length() == 5) || fail(9);
+        test(!"") || fail(10);
+        test(("\n" + "\n").length() == 2) || fail(11);
+        //test((y = "ale", y += "xandre").length() == 9) || fail(12);
+        //test("alê\n"[2] == "ê") || fail(13);
+        //test("abc"[0] = "b") || fail(14);
+        test((y = "abc", y[0] = "b", y == "bbc")) || fail(15);
+        test(false) || fail(16);
+        test(0 == false) || fail("nuss");
+        end();
+    }
+
+
+
+
+
+    fun __constructor()
+    {
+        print("------------------------------");
+        print("   SurgeScript Unit Testing   ");
+        print("------------------------------");
+    }
+
+    fun __destructor()
+    {
+        str = "\n";
+        str = str + "SUCCEEDED  " + (totalTested - totalFailed) + "\t\t";
+        str = str + "FAILED  " + totalFailed;
+        //str += "FAILED  " + totalFailed;
+        print(str);
+    }
+
+    fun test(expr)
+    {
+        tested++;
+        return expr;
+    }
+
+    fun fail(x)
+    {
+        print("# Test " + x + " has failed.");
+        failed++;
+    }
+
+    fun begin(suite)
+    {
+        print("\nTesting " + suite + "...");
+        tested = 0;
+        failed = 0;
+    }
+
+    fun end()
+    {
+        if(!failed)
+            print("All tests have passed.");
+        totalTested += tested;
+        totalFailed += failed;
     }
 }
 

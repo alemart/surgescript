@@ -10,9 +10,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "../vm.h"
-#include "../heap.h"
 #include "../object.h"
-#include "../object_manager.h"
 #include "../../util/util.h"
 
 /* private stuff */

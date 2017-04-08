@@ -17,6 +17,7 @@
 #include "variable.h"
 #include "object.h"
 #include "../util/util.h"
+#include "../util/utf8.h"
 
 
 /* private stuff */
@@ -129,7 +130,7 @@ surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char
     RELEASE_DATA(var);
     if(strlen(string) <= MAXLEN) {
         var->type = SSVAR_STRING;
-        var->string = ssstrdup(string);
+        var->string = IsUTF8((uint8_t*)string) ? ssstrdup(string) : str2utf8(string); /* ensures all strings are UTF-8 encoded */
     }
     else
         ssfatal("Runtime Error: string too large!");
@@ -353,6 +354,15 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
     }
 
     return buf;
+}
+
+/*
+ * surgescript_var_fast_get_string()
+ * gets the string contents of var without performing any type conversion
+ */
+const char* surgescript_var_fast_get_string(const surgescript_var_t* var)
+{
+    return var->type == SSVAR_STRING ? var->string : "";
 }
 
 /*

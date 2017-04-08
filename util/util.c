@@ -114,7 +114,7 @@ void surgescript_util_set_error_functions(void (*log)(const char*), void (*fatal
 
 /*
  * surgescript_util_strncpy()
- * Copies src to dst, limited to n > 0 bytes
+ * Copies src to dst, limited to n > 0 bytes (this puts the ending '\0' on dst)
  */
 char* surgescript_util_strncpy(char* dst, const char* src, size_t n)
 {

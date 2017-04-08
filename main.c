@@ -189,7 +189,7 @@ int main()
 
     surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "__ssconstructor"), stdout);
     surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "state:main"), stdout);
-    //surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "surge"), stdout);
+    surgescript_program_dump(surgescript_programpool_get(program_pool, "SurgeScriptTest", "test"), stdout);
     surgescript_parser_destroy(parser);
 
     surgescript_vm_launch(vm);
