@@ -41,11 +41,11 @@ object "SurgeScriptTest"
         test("çáàê€".length() == 5) || fail(9);
         test(!"") || fail(10);
         test(("\n" + "\n").length() == 2) || fail(11);
-        //test((y = "ale", y += "xandre").length() == 9) || fail(12);
+        test((y = "ale", y += "xandre").length() == 9) || fail(12);
         //test("alê\n"[2] == "ê") || fail(13);
         //test("abc"[0] = "b") || fail(14);
         test((y = "abc", y[0] = "b", y == "abc")) || fail(15);
-        test(y.substr(0, 1) == "a") || fail(16);
+        test((y = "alê", y.substr(0, 1) == "a" && y.substr(2, 1) == "ê")) || fail(16);
         end();
     }
 

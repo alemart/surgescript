@@ -106,6 +106,7 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
             LABEL(end);
             surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
             SSASM(SSOP_XCHG, T0, T1);
+            break;
         }
 
         case '-':
@@ -367,7 +368,7 @@ void emit_popparams(surgescript_nodecontext_t context, int n)
 
 void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int num_params)
 {
-    BREAKPOINT(fun_name);
+    /*BREAKPOINT(fun_name);*/
     SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
 }
 
