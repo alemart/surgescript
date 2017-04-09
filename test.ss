@@ -68,6 +68,11 @@ object "SurgeScriptTest"
         test(-.5 == 1/-2) || fail(10);
         test(1 * 2 + 3 == 5) || fail(11);
         test(1+1*2 != (1+1)*2) || fail(12);
+        test(0 < 1) || fail(13);
+        test(0 <= 0) || fail(14);
+        test(0 >= 0) || fail(15);
+        test(1 > 0) || fail(16);
+        test(5*7 >= 7*5) || fail(17);
         end();
     }
 
