@@ -73,6 +73,7 @@ object "SurgeScriptTest"
         test(0 >= 0) || fail(15);
         test(1 > 0) || fail(16);
         test(5*7 >= 7*5) || fail(17);
+        test(5*7 <= 7*5) || fail(18);
         end();
     }
 
