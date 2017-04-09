@@ -61,7 +61,6 @@
     F( SSOP_AND, "and" )                           /* t[a] = t[a] & t[b] */ \
     F( SSOP_OR, "or" )                             /* t[a] = t[a] | t[b] */ \
     F( SSOP_XOR, "xor" )                           /* t[a] = t[a] ^ t[b] */ \
-    F( SSOP_CAT, "cat" )                    /* t[a] = strcat(t[a], t[b]) */ \
                                                                             \
     F( SSOP_TEST, "test" )                         /* t[2] = t[a] & t[b] */ \
     F( SSOP_TCHK, "tchk" )               /* t[2] = typecheck(t[a], t[b]) */ \

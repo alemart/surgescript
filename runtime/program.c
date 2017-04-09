@@ -578,58 +578,6 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_rawbits(t(a), surgescript_var_get_rawbits(t(a)) ^ surgescript_var_get_rawbits(t(b)));
             break;
 
-        case SSOP_CAT: {
-            char* str1 = surgescript_var_get_string(t(a));
-            char* str2 = surgescript_var_get_string(t(b));
-            char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
-            surgescript_var_set_string(t(a), strcat(strcpy(str, str1), str2));
-            ssfree(str);
-            ssfree(str2);
-            ssfree(str1);
-            break;
-        }
-
-        /*case SSOP_STRLEN: {
-            char* buf = surgescript_var_get_string(t(a));
-            int len = strlen(buf); // TODO: utf-8 compat
-            surgescript_var_set_number(t(a), len);
-            ssfree(buf);
-            break;
-        }
-
-        case SSOP_STRMID: {
-            char* substr;
-            char* str = surgescript_var_get_string(t(a));
-            int st(a)rt = surgescript_var_get_number(t(b));
-            int length = surgescript_var_get_number(t[c.u]);
-            int n = strlen(str); // TODO: utf-8 compat
-
-            st(a)rt = ssclamp(st(a)rt, 0, n);
-            length = ssclamp(length, 0, n - st(a)rt);
-            substr = ssmalloc((1 + length) * sizeof(*substr));
-            surgescript_util_strncpy(substr, str + st(a)rt, length);
-            surgescript_var_set_string(t(a), substr);
-
-            ssfree(substr);
-            ssfree(str);
-            break;
-        }
-
-        case SSOP_STRAT: {
-            char* str = surgescript_var_get_string(t(a));
-            int index = surgescript_var_get_number(t(b));
-            int n = strlen(str); // TODO: utf-8 compat
-
-            char buf[2] = { ' ', '\0' };
-            if(index >= 0 && index < n)
-                buf[0] = str[index];
-            surgescript_var_set_string(t(a), buf);
-
-            ssfree(str);
-            break;
-        }
-*/
-
         /* comparing */
         case SSOP_CMP:
             surgescript_var_set_number(_t[2], surgescript_var_compare(t(a), t(b)));
