@@ -141,8 +141,8 @@ surgescript_var_t* fun_substr(surgescript_object_t* object, const surgescript_va
 
     /* sanity check */
     countCodePoints((uint8_t*)str, &utf8len);
-    start = ssclamp(start, 0, utf8len);
-    length = ssclamp(length, 0, utf8len - start);
+    start = ssclamp(start, 0, (int)utf8len);
+    length = ssclamp(length, 0, (int)utf8len - start);
 
     /* extract the substring */
     begin = str + u8_offset((char*)str, start);

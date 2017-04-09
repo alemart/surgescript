@@ -54,6 +54,9 @@ object "SurgeScriptTest"
         test(typeof "string" == "string") || fail(18);
         test(2 + "3" == "23") || fail(19);
         test("2" + 3 == "23") || fail(20);
+        test("test".substr(2, 0) == "") || fail(21);
+        test("test".substr(-1, 9999) == "test") || fail(22);
+        test("test".substr(-1, 1) == "t") || fail(23);
         end();
     }
 
