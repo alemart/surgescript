@@ -105,12 +105,12 @@ object "SurgeScriptTest"
         test(false || true == true) || fail(15);
         test(false || false == false) || fail(16);
         test(false && true || true == true) || fail(17);
-        test(false && (true || true) == false) || fail(18);
-        test(!true && !false || !false == false) || fail(19);
-        test(!true && (!false || !false) == false) || fail(20);
-        test(!true && !(false && false) == false) || fail(21);
-        test(!true && !false == !(true || false)) || fail(22);
-        test(!true && !!false == !(true || !false)) || fail(23);
+        test((false && (true || true)) == false) || fail(18);
+        test((!true && !false || !false) == true) || fail(19);
+        test((!true && (!false || !false)) == false) || fail(20);
+        test((!true && !(false && false)) == false) || fail(21);
+        test((!true && !false) == !(true || false)) || fail(22);
+        test((!true && !!false) == !(true || !false)) || fail(23);
         test(!true == false) || fail(24);
         test(true == !false) || fail(25);
         test(!(true != false) == (true == false)) || fail(26);
