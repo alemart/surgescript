@@ -8,6 +8,7 @@
  */
 
 #include <stdio.h>
+#include <string.h>
 #include "../vm.h"
 #include "../object.h"
 #include "../../util/util.h"

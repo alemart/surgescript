@@ -34,7 +34,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "child", fun_child, 1);
     surgescript_vm_bind(vm, "Object", "findChild", fun_findchild, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
-    surgescript_vm_bind(vm, "Object", "hasMemberFunction", fun_hasfun, 1);
+    surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     //surgescript_vm_bind(vm, "Object", "note", fun_note, 1); // TODO
 }
 

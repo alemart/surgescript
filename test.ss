@@ -110,8 +110,8 @@ object "SurgeScriptTest"
         test(app != null && app.name() == "Application") || fail(3);
         test(this != app) || fail(4);
         test(this.toString() == "[object]") || fail(5);
-        test(this.hasMemberFunction("objects")) || fail(6);
-        test(!this.hasMemberFunction("nope")) || fail(7);
+        test(this.hasFunction("objects")) || fail(6);
+        test(!this.hasFunction("nope")) || fail(7);
         test(findChild("nope") == null) || fail(8);
         test((c = spawn("Boolean"), c != null && child("Boolean") == c)) || fail(9);
         test((d = spawn("Number"), d != null && d == findChild("Number"))) || fail(10);
