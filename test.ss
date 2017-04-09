@@ -133,6 +133,7 @@ object "SurgeScriptTest"
         test(findChild("nope") == null) || fail(8);
         test((c = spawn("Boolean"), c != null && child("Boolean") == c)) || fail(9);
         test((d = spawn("Number"), d != null && d == findChild("Number"))) || fail(10);
+        test(typeof null == "null") || fail(11);
         end();
     }
 

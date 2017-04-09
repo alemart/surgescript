@@ -415,23 +415,23 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
     /* run the instruction */
     switch(instruction) {
-        /* NOP */
-        case SSOP_NOP:
+        /* basics */
+        case SSOP_NOP: /* no-operation */
             break;
 
-        case SSOP_OUT: {
-            char* str = surgescript_var_get_string(t(a));
-            printf("%s\n", str);
-            ssfree(str);
+        case SSOP_SELF: /* move caller object ("this" pointer) */
+            surgescript_var_set_objecthandle(t(a), surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
             break;
-        }
 
-        case SSOP_IN: {
-            char buf[81];
-            scanf("%80s", buf);
-            surgescript_var_set_string(t(a), buf);
+        case SSOP_STATE: /* t[a] receives the current state. If b == -1, then the current state is set to t[a] instead. */
+            if(b.i == -1) {
+                char state[256];
+                surgescript_var_to_string(t(a), state, sizeof(state));
+                surgescript_object_set_state(surgescript_renv_owner(runtime_environment), state);
+            }
+            else
+                surgescript_var_set_string(t(a), surgescript_object_state(surgescript_renv_owner(runtime_environment)));
             break;
-        }
 
         /* assignment operations */
         case SSOP_MOVN: /* move null */
@@ -455,20 +455,6 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_objecthandle(t(a), b.u);
             break;
 
-        case SSOP_MOVC: /* move caller object ("this" pointer) */
-            surgescript_var_set_objecthandle(t(a), surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
-            break;
-
-        case SSOP_MOVT: /* t[a] receives the current state. If b == -1, then the current state is set to t[a] instead. */
-            if(b.i == -1) {
-                char state[256];
-                surgescript_var_to_string(t(a), state, sizeof(state));
-                surgescript_object_set_state(surgescript_renv_owner(runtime_environment), state);
-            }
-            else
-                surgescript_var_set_string(t(a), surgescript_object_state(surgescript_renv_owner(runtime_environment)));
-            break;
-
         case SSOP_MOV: /* move temp */
             surgescript_var_copy(t(a), t(b));
             break;
@@ -478,7 +464,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         /* heap operations */
-        case SSOP_ALOC:
+        case SSOP_ALLOC:
             surgescript_var_set_number(t(a), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
             break;
 
@@ -578,7 +564,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_rawbits(t(a), surgescript_var_get_rawbits(t(a)) ^ surgescript_var_get_rawbits(t(b)));
             break;
 
-        /* comparing */
+        /* comparing & testing */
         case SSOP_CMP:
             surgescript_var_set_number(_t[2], surgescript_var_compare(t(a), t(b)));
             break;
@@ -588,27 +574,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_TCHK:
-            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_typecode(t(b)));
-            break;
-
-        case SSOP_TCHKN:
-            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code(NULL));
-            break;
-
-        case SSOP_TCHKB:
-            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("boolean"));
-            break;
-
-        case SSOP_TCHKF:
-            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("number"));
-            break;
-
-        case SSOP_TCHKS:
-            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("string"));
-            break;
-
-        case SSOP_TCHKO:
-            surgescript_var_set_number(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_type2code("object"));
+            surgescript_var_set_number(_t[2], surgescript_var_typecheck(t(a), b.i));
             break;
 
         /* jumping */

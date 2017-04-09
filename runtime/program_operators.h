@@ -23,20 +23,18 @@
 */
 #define SURGESCRIPT_PROGRAM_OPERATORS(F) \
     F( SSOP_NOP, "nop" )                                 /* no-operation */ \
-    F( SSOP_OUT, "print" )                                 /* print t[a] */ \
-    F( SSOP_IN, "read" )                                    /* read t[a] */ \
+    F( SSOP_SELF, "self" )             /* t[a] = handle to caller object */ \
+    F( SSOP_STATE, "state" )   /* t[a] = get/set the state of the object */ \
                                                                             \
+    F( SSOP_MOV, "mov" )                                  /* t[a] = t[b] */ \
     F( SSOP_MOVN, "movn" )                                /* t[a] = null */ \
     F( SSOP_MOVB, "movb" )                             /* t[a] = (bool)b */ \
     F( SSOP_MOVF, "movf" )                           /* t[a] = (number)b */ \
     F( SSOP_MOVS, "movs" )                             /* t[a] = text[b] */ \
     F( SSOP_MOVO, "movo" )                           /* t[a] = (object)b */ \
-    F( SSOP_MOVC, "movc" )             /* t[a] = handle to caller object */ \
-    F( SSOP_MOVT, "movt" )               /* t[a] = get/set current state */ \
-    F( SSOP_MOV, "mov" )                                  /* t[a] = t[b] */ \
     F( SSOP_XCHG, "xchg" )                           /* swap(t[a], t[b]) */ \
                                                                             \
-    F( SSOP_ALOC, "aloc" )                /* t[a] = allocate memory cell */ \
+    F( SSOP_ALLOC, "alloc" )              /* t[a] = allocate memory cell */ \
     F( SSOP_LOAD, "load" )                             /* t[a] = *(t[b]) */ \
     F( SSOP_STORE, "store" )                           /* *(t[b]) = t[a] */ \
     F( SSOP_PEEK, "peek" )                                /* t[a] = (*b) */ \
@@ -63,15 +61,10 @@
     F( SSOP_XOR, "xor" )                           /* t[a] = t[a] ^ t[b] */ \
                                                                             \
     F( SSOP_TEST, "test" )                         /* t[2] = t[a] & t[b] */ \
-    F( SSOP_TCHK, "tchk" )               /* t[2] = typecheck(t[a], t[b]) */ \
-    F( SSOP_TCHKN, "tchkn" )             /* t[2] = typecheck(t[a], null) */ \
-    F( SSOP_TCHKB, "tchkb" )             /* t[2] = typecheck(t[a], bool) */ \
-    F( SSOP_TCHKF, "tchkf" )           /* t[2] = typecheck(t[a], number) */ \
-    F( SSOP_TCHKS, "tchks" )           /* t[2] = typecheck(t[a], string) */ \
-    F( SSOP_TCHKO, "tchko" )           /* t[2] = typecheck(t[a], object) */ \
+    F( SSOP_TCHK, "tchk" )                  /* t[2] = typecheck(t[a], b) */ \
     F( SSOP_CMP, "cmp" )                   /* t[2] = compare(t[a], t[b]) */ \
                                                                             \
-    F( SSOP_JMP, "jmp" )                                    /* jump to a */ \
+    F( SSOP_JMP, "jmp" )                               /* jump to line a */ \
     F( SSOP_JE, "je" )                    /* jump to line a if t[2] == 0 */ \
     F( SSOP_JNE, "jne" )                  /* jump to line a if t[2] != 0 */ \
     F( SSOP_JG, "jg" )                     /* jump to line a if t[2] > 0 */ \

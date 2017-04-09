@@ -310,6 +310,15 @@ int surgescript_var_type2code(const char* type_name)
 }
 
 /*
+ * surgescript_var_typecheck()
+ * Returns zero if, and only if, var has the given type code
+ */
+int surgescript_var_typecheck(const surgescript_var_t* var, int code)
+{
+    return surgescript_var_typecode(var) - code;
+}
+
+/*
  * surgescript_var_to_string()
  * Converts a variable of any type to a string to be stored in a buffer of bufsize bytes
  */

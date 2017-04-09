@@ -34,6 +34,7 @@
 /* utility macros */
 #define SSASM(...)                      _SSASMX(__VA_ARGS__, _SSASM2, _SSASM1, _SSASM0)(__VA_ARGS__)
 #define TEXT(text)                      U(surgescript_program_add_text(context.program, (text)))
+#define TYPE(name)                      I(surgescript_var_type2code(name))
 #define LABEL(label)                    surgescript_program_add_label(context.program, (label))
 #define NEWLABEL()                      surgescript_program_new_label(context.program)
 #define F(x)                            surgescript_program_operand_f(x)
@@ -63,7 +64,7 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
         SSASM(SSOP_MOVF, T2, F(surgescript_symtable_count(context.symtable)));
         LABEL(aloc);
             SSASM(SSOP_JE, U(start));
-            SSASM(SSOP_ALOC);
+            SSASM(SSOP_ALLOC);
             SSASM(SSOP_DEC, T2);
             SSASM(SSOP_JMP, U(aloc));
 }
@@ -95,9 +96,9 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
             surgescript_program_label_t cat = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
             surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
-            SSASM(SSOP_TCHKS, T1);
+            SSASM(SSOP_TCHK, T1, TYPE("string"));
             SSASM(SSOP_JE, U(cat));
-            SSASM(SSOP_TCHKS, T0);
+            SSASM(SSOP_TCHK, T0, TYPE("string"));
             SSASM(SSOP_JE, U(cat));
             SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
@@ -241,9 +242,9 @@ void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveo
         case '+': {
             surgescript_program_label_t cat = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
-            SSASM(SSOP_TCHKS, T1);
+            SSASM(SSOP_TCHK, T1, TYPE("string"));
             SSASM(SSOP_JE, U(cat));
-            SSASM(SSOP_TCHKS, T0);
+            SSASM(SSOP_TCHK, T0, TYPE("string"));
             SSASM(SSOP_JE, U(cat));
             SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
@@ -316,25 +317,25 @@ void emit_unarytype(surgescript_nodecontext_t context)
     surgescript_program_label_t nul = NEWLABEL();
     surgescript_program_label_t end = NEWLABEL();
 
-    SSASM(SSOP_TCHKF, T0);
+    SSASM(SSOP_TCHK, T0, TYPE("number"));
     SSASM(SSOP_JNE, U(str));
     SSASM(SSOP_MOVS, T0, TEXT("number"));
     SSASM(SSOP_JMP, U(end));
 
     LABEL(str);
-    SSASM(SSOP_TCHKS, T0);
+    SSASM(SSOP_TCHK, T0, TYPE("string"));
     SSASM(SSOP_JNE, U(obj));
     SSASM(SSOP_MOVS, T0, TEXT("string"));
     SSASM(SSOP_JMP, U(end));
 
     LABEL(obj);
-    SSASM(SSOP_TCHKO, T0);
+    SSASM(SSOP_TCHK, T0, TYPE("object"));
     SSASM(SSOP_JNE, U(bol));
     SSASM(SSOP_MOVS, T0, TEXT("object"));
     SSASM(SSOP_JMP, U(end));
 
     LABEL(bol);
-    SSASM(SSOP_TCHKB, T0);
+    SSASM(SSOP_TCHK, T0, TYPE("boolean"));
     SSASM(SSOP_JNE, U(nul));
     SSASM(SSOP_MOVS, T0, TEXT("boolean"));
     SSASM(SSOP_JMP, U(end));
@@ -418,9 +419,9 @@ void emit_dictset2(surgescript_nodecontext_t context, const char* assignop, cons
             if(*assignop == '+') {
                 surgescript_program_label_t cat = NEWLABEL();
                 surgescript_program_label_t end = NEWLABEL();
-                SSASM(SSOP_TCHKS, T1);
+                SSASM(SSOP_TCHK, T1, TYPE("string"));
                 SSASM(SSOP_JE, U(cat));
-                SSASM(SSOP_TCHKS, T0);
+                SSASM(SSOP_TCHK, T0, TYPE("string"));
                 SSASM(SSOP_JE, U(cat));
                 SSASM(SSOP_ADD, T0, T1); /* t0 = dict.get(<expr>) + <assignexpr> */
                 SSASM(SSOP_JMP, U(end));
@@ -510,12 +511,12 @@ void emit_ret(surgescript_nodecontext_t context)
 /* constants & variables */
 void emit_this(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_MOVC, T0);
+    SSASM(SSOP_SELF, T0);
 }
 
 void emit_state(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_MOVT, T0);
+    SSASM(SSOP_STATE, T0);
 }
 
 void emit_identifier(surgescript_nodecontext_t context, const char* identifier, int line)
@@ -554,7 +555,7 @@ void emit_zero(surgescript_nodecontext_t context)
 /* misc */
 void emit_setstate(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_MOVT, T0, I(-1)); /* return value is in t[0] */
+    SSASM(SSOP_STATE, T0, I(-1)); /* return value is in t[0] */
 }
 
 void emit_nop(surgescript_nodecontext_t context)
