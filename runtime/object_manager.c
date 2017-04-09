@@ -36,9 +36,9 @@ static const surgescript_objectmanager_handle_t NULL_HANDLE = 0;
 static const surgescript_objectmanager_handle_t ROOT_HANDLE = 1;
 
 /* names of important objects */
+#define APPLICATION_OBJECT "Application"
 static const char* ROOT_OBJECT = "System";
-static const char* APPLICATION_OBJECT = "Application";
-static const char* SYSTEM_OBJECTS[] = { "String", "Number", "Boolean", NULL }; /* this must be a NULL-terminated array */
+static const char* SYSTEM_OBJECTS[] = { "String", "Number", "Boolean", APPLICATION_OBJECT, NULL }; /* this must be a NULL-terminated array, and APPLICATION_OBJECT should be the last element (spawning order) */
 
 /* object methods acessible by me */
 extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data); /* creates a new blank object */
@@ -155,12 +155,6 @@ surgescript_objectmanager_handle_t surgescript_objectmanager_spawn_root(surgescr
 
         /* initializes the root and call its constructor */
         surgescript_object_init(object);
-
-        /* spawn the user's application */
-        surgescript_heap_t* heap = surgescript_object_heap(object);
-        manager->app_handle = new_handle(manager); /* we need this handle as soon as possible */
-        manager->app_handle = surgescript_objectmanager_spawn(manager, ROOT_HANDLE, APPLICATION_OBJECT, NULL);
-        surgescript_var_set_objecthandle(surgescript_heap_at(heap, surgescript_heap_malloc(heap)), manager->app_handle);
     }
     else
         ssfatal("The root object should be the first one to be spawned.");
@@ -233,7 +227,10 @@ surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_ob
  */
 surgescript_objectmanager_handle_t surgescript_objectmanager_application(surgescript_objectmanager_t* manager)
 {
-    return manager->app_handle;
+    if(manager->app_handle != NULL_HANDLE)
+        return manager->app_handle;
+    else
+        return manager->app_handle = surgescript_objectmanager_system_object(manager, APPLICATION_OBJECT); /* cache the app handle */
 }
 
 /*
