@@ -96,6 +96,7 @@ object "SurgeScriptTest"
         test(!!"hi" == true) || fail(9);
         test(true + true == 2) || fail(10);
         test(typeof true == "boolean") || fail(11);
+        test(typeof true == typeof false) || fail(12);
         end();
     }
 
