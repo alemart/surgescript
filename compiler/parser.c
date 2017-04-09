@@ -792,9 +792,6 @@ void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     else if(optmatch(parser, SSTOK_STATE)) {
         emit_state(context);
     }
-    else if(optmatch(parser, SSTOK_APP)) {
-        emit_app(context);
-    }
     else if(got_type(parser, SSTOK_IDENTIFIER)) {
         const char* identifier = surgescript_token_lexeme(parser->lookahead);
         emit_identifier(context, identifier, surgescript_token_linenumber(parser->lookahead));

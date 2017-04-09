@@ -508,11 +508,6 @@ void emit_ret(surgescript_nodecontext_t context)
 }
 
 /* constants & variables */
-void emit_app(surgescript_nodecontext_t context)
-{
-    SSASM(SSOP_MOVR, T0);
-}
-
 void emit_this(surgescript_nodecontext_t context)
 {
     SSASM(SSOP_MOVC, T0);

@@ -122,8 +122,8 @@ object "SurgeScriptTest"
         begin("Object");
         test(typeof this == "object") || fail(1);
         test(this.name() == "SurgeScriptTest") || fail(2);
-        test(app != null && app.name() == "Application") || fail(3);
-        test(this != app) || fail(4);
+        test(Application != null && Application.name() == "Application") || fail(3);
+        test(this != Application) || fail(4);
         test(this.toString() == "[object]") || fail(5);
         test(this.hasFunction("objects")) || fail(6);
         test(!this.hasFunction("nope")) || fail(7);

@@ -32,7 +32,6 @@
     F( SSOP_MOVS, "movs" )                             /* t[a] = text[b] */ \
     F( SSOP_MOVO, "movo" )                           /* t[a] = (object)b */ \
     F( SSOP_MOVC, "movc" )             /* t[a] = handle to caller object */ \
-    F( SSOP_MOVR, "movr" )           /* t[a] = handle to the root object */ \
     F( SSOP_MOVT, "movt" )               /* t[a] = get/set current state */ \
     F( SSOP_MOV, "mov" )                                  /* t[a] = t[b] */ \
     F( SSOP_XCHG, "xchg" )                           /* swap(t[a], t[b]) */ \
