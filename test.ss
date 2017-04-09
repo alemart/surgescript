@@ -50,6 +50,7 @@ object "SurgeScriptTest"
         test((y = "abc", y[0] = "b", y == "abc")) || fail(15);
         test((y = "alê", y.substr(0, 1) == "a" && y.substr(2, 1) == "ê")) || fail(16);
         test("hello!") || fail(17);
+        test(typeof "string" == "string") || fail(18);
         end();
     }
 
@@ -76,6 +77,8 @@ object "SurgeScriptTest"
         test(5*7 <= 7*5) || fail(18);
         test((8 - 7) * (8 - 7) == 8*8 - 2*8*7 + 7*7) || fail(19);
         test((5 + 25) * (5 + 25) == 5*5 + 2*5*25 + 25*25) || fail(20);
+        test(typeof 5 == "number") || fail(21);
+        test(typeof(5 + 5) == "number") || fail(22);
         end();
     }
 
@@ -92,6 +95,7 @@ object "SurgeScriptTest"
         test(false != true) || fail(8);
         test(!!"hi" == true) || fail(9);
         test(true + true == 2) || fail(10);
+        test(typeof true == "boolean") || fail(11);
         end();
     }
 
