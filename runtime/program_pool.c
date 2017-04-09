@@ -27,6 +27,7 @@ struct surgescript_programpool_t
     surgescript_programpool_hashpair_t* hash;
 };
 
+/* TODO: this could be optimized and we could use a uint64_t hash for the function signature instead */
 static char* generate_signature(const char* object_name, const char* program_name);
 
 /* -------------------------------

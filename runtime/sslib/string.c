@@ -17,8 +17,9 @@
 /* private stuff */
 static surgescript_var_t* fun_valueof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_tonumber(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_tonumber(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -33,10 +34,11 @@ static surgescript_var_t* fun_concat(surgescript_object_t* object, const surgesc
  */
 void surgescript_sslib_register_string(surgescript_vm_t* vm)
 {
+    surgescript_vm_bind(vm, "String", "state:main", fun_main, 0);
+    surgescript_vm_bind(vm, "String", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "String", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "String", "toString", fun_tostring, 1);
     surgescript_vm_bind(vm, "String", "toNumber", fun_tonumber, 1);
-    surgescript_vm_bind(vm, "String", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "String", "length", fun_length, 1);
     surgescript_vm_bind(vm, "String", "get", fun_get, 2);
     surgescript_vm_bind(vm, "String", "set", fun_set, 3);
@@ -53,6 +55,13 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* do nothing */
+    return NULL;
+}
+
+/* destroy */
+surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* do nothing, as system objects cannot be destroyed */
     return NULL;
 }
 
