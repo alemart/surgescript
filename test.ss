@@ -51,6 +51,8 @@ object "SurgeScriptTest"
         test((y = "alê", y.substr(0, 1) == "a" && y.substr(2, 1) == "ê")) || fail(16);
         test("hello!") || fail(17);
         test(typeof "string" == "string") || fail(18);
+        test(2 + "3" == "23") || fail(19);
+        test("2" + 3 == "23") || fail(20);
         end();
     }
 
