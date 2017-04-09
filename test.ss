@@ -100,6 +100,20 @@ object "SurgeScriptTest"
         test(true + true == 2) || fail(10);
         test(typeof true == "boolean") || fail(11);
         test(typeof true == typeof false) || fail(12);
+        test(true && true == true) || fail(13);
+        test(true && false == false) || fail(14);
+        test(false || true == true) || fail(15);
+        test(false || false == false) || fail(16);
+        test(false && true || true == true) || fail(17);
+        test(false && (true || true) == false) || fail(18);
+        test(!true && !false || !false == false) || fail(19);
+        test(!true && (!false || !false) == false) || fail(20);
+        test(!true && !(false && false) == false) || fail(21);
+        test(!true && !false == !(true || false)) || fail(22);
+        test(!true && !!false == !(true || !false)) || fail(23);
+        test(!true == false) || fail(24);
+        test(true == !false) || fail(25);
+        test(!(true != false) == (true == false)) || fail(26);
         end();
     }
 
@@ -125,8 +139,12 @@ object "SurgeScriptTest"
         test(Application) || fail(1);
         test(Application.name() == "Application") || fail(2);
         test(Application.name() != String.name()) || fail(3);
-        test((Application = "foo", Application != "foo")) || fail(4);
+        test((Application = "foo", Application != "foo")) || fail(4); // read-only
         test("foo" != String) || fail(5);
+        test(String.name() == "String") || fail(6);
+        test(Number.name() == "Number") || fail(7);
+        test(Boolean.name() == "Boolean") || fail(8);
+        test(String = null || String) || fail(9);
         end();
     }
 
