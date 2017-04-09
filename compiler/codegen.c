@@ -99,35 +99,37 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
             SSASM(SSOP_JE, U(cat));
             SSASM(SSOP_TCHKS, T0);
             SSASM(SSOP_JE, U(cat));
-            SSASM(SSOP_ADD, T1, T0);
+            SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
             LABEL(cat);
-            SSASM(SSOP_CAT, T1, T0);
+            SSASM(SSOP_PUSH, T1);
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_CALL, TEXT("concat"), U(1));
+            SSASM(SSOP_POPN, U(2));
             LABEL(end);
-            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
-            SSASM(SSOP_XCHG, T0, T1);
+            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
             break;
         }
 
         case '-':
             surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
             SSASM(SSOP_SUB, T1, T0);
-            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
             SSASM(SSOP_XCHG, T0, T1);
+            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
             break;
 
         case '*':
             surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
             SSASM(SSOP_MUL, T1, T0);
-            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
             SSASM(SSOP_XCHG, T0, T1);
+            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
             break;
 
         case '/':
             surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
             SSASM(SSOP_DIV, T1, T0);
-            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
             SSASM(SSOP_XCHG, T0, T1);
+            surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
             break;
     }
 }
@@ -246,8 +248,10 @@ void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveo
             SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
             LABEL(cat);
-            SSASM(SSOP_CAT, T1, T0);
-            SSASM(SSOP_XCHG, T1, T0);
+            SSASM(SSOP_PUSH, T1);
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_CALL, TEXT("concat"), U(1));
+            SSASM(SSOP_POPN, U(2));
             LABEL(end);
             break;
         }
@@ -368,7 +372,7 @@ void emit_popparams(surgescript_nodecontext_t context, int n)
 
 void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int num_params)
 {
-    /*BREAKPOINT(fun_name);*/
+    BREAKPOINT(fun_name);
     SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
 }
 
@@ -421,7 +425,10 @@ void emit_dictset2(surgescript_nodecontext_t context, const char* assignop, cons
                 SSASM(SSOP_ADD, T0, T1); /* t0 = dict.get(<expr>) + <assignexpr> */
                 SSASM(SSOP_JMP, U(end));
                 LABEL(cat);
-                SSASM(SSOP_CAT, T0, T1);
+                SSASM(SSOP_PUSH, T0);
+                SSASM(SSOP_PUSH, T1);
+                SSASM(SSOP_CALL, TEXT("concat"), U(1));
+                SSASM(SSOP_POPN, U(2));
                 LABEL(end);
             }
             else if(*assignop == '-')

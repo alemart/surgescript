@@ -126,12 +126,16 @@ surgescript_var_t* surgescript_var_set_number(surgescript_var_t* var, float numb
  */
 surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char* string)
 {
-    static const int MAXLEN = 0xFFFE;
+    static const int MAXLEN = 1048576 - 1; /* 1 MB */
 
     RELEASE_DATA(var);
-    if(strlen(string) <= MAXLEN) {
+    if(string && strlen(string) <= MAXLEN) {
         var->type = SSVAR_STRING;
         var->string = IsUTF8((uint8_t*)string) ? ssstrdup(string) : str2utf8(string); /* ensures all strings are UTF-8 encoded */
+    }
+    else if(!string) {
+        var->type = SSVAR_STRING;
+        var->string = ssstrdup("");
     }
     else
         ssfatal("Runtime Error: string too large!");

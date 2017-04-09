@@ -18,6 +18,7 @@
 static surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -29,6 +30,7 @@ void surgescript_sslib_register_application(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Application", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "Application", "print", fun_print, 1);
     surgescript_vm_bind(vm, "Application", "crash", fun_crash, 1);
+    surgescript_vm_bind(vm, "Application", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
 }
 
 
@@ -38,8 +40,20 @@ void surgescript_sslib_register_application(surgescript_vm_t* vm)
 /* exits the app */
 surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
+    /* this will destroy the root object and stop the VM */
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objectmanager_handle_t root_handle = surgescript_objectmanager_root(manager);
+    surgescript_object_t* root = surgescript_objectmanager_get(manager, root_handle);
+    surgescript_object_call_function(root, "exit", NULL, 0, NULL);
     surgescript_object_kill(object);
     return NULL;
+}
+
+/* destroys the app */
+surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* this is the same as exiting the app */
+    return fun_exit(object, param, num_params);
 }
 
 /* prints param[0] to stdout */

@@ -386,7 +386,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             /* print temps */
             printf(".. BREAKPOINT %s\n", title);
             for(i = 0; i < 4; i++) {
-                printf("..\t%d\t%08X\t%s\n", i, surgescript_var_get_rawbits(_t[i]), contents_of_t[i]);
+                printf("..\t%d\t%08X\t%s\n", i, (unsigned)surgescript_var_get_rawbits(_t[i]), contents_of_t[i]);
                 ssfree(contents_of_t[i]);
             }
 
@@ -401,7 +401,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                     ssfree(contents);
                 }
                 else
-                    printf("| ");
+                    printf("prev_bp ");
             }
             printf("\n..");
 
@@ -459,8 +459,8 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_objecthandle(t(a), surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
             break;
 
-        case SSOP_MOVR: /* move root object */
-            surgescript_var_set_objecthandle(t(a), surgescript_objectmanager_root(surgescript_renv_objectmanager(runtime_environment)));
+        case SSOP_MOVR: /* move app object */
+            surgescript_var_set_objecthandle(t(a), surgescript_objectmanager_application(surgescript_renv_objectmanager(runtime_environment)));
             break;
 
         case SSOP_MOVT: /* t[a] receives the current state. If b == -1, then the current state is set to t[a] instead. */
@@ -754,17 +754,17 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
         /* surgescript can also call programs on primitive types */
         switch(callee_type) {
             case 's': /* for the sake of efficiency... we replaced surgescript_var_type2code() for constants */
-                object_handle = surgescript_objectmanager_system_child(manager, "String");
+                object_handle = surgescript_objectmanager_system_object(manager, "String");
                 number_of_given_params++;
                 break;
 
             case 'n':
-                object_handle = surgescript_objectmanager_system_child(manager, "Number");
+                object_handle = surgescript_objectmanager_system_object(manager, "Number");
                 number_of_given_params++;
                 break;
 
             case 'b':
-                object_handle = surgescript_objectmanager_system_child(manager, "Boolean");
+                object_handle = surgescript_objectmanager_system_object(manager, "Boolean");
                 number_of_given_params++;
                 break;
 
@@ -781,17 +781,17 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
 
             /* global scope */
             if(!program) {
-                surgescript_object_t* root = surgescript_objectmanager_get(manager, surgescript_objectmanager_root(manager));
-                surgescript_program_t* root_program = surgescript_programpool_get(
+                surgescript_object_t* app = surgescript_objectmanager_get(manager, surgescript_objectmanager_application(manager));
+                surgescript_program_t* app_program = surgescript_programpool_get(
                     surgescript_renv_programpool(caller_runtime_environment),
-                    surgescript_object_name(root),
+                    surgescript_object_name(app),
                     program_name
                 );
 
-                /* program doesn't exist, but root_program does */
-                if(root_program) {
-                    program = root_program;
-                    object = root;
+                /* program doesn't exist, but app_program does */
+                if(app_program) {
+                    program = app_program;
+                    object = app;
                 }
             }
             

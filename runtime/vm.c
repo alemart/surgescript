@@ -67,7 +67,7 @@ void surgescript_vm_launch(surgescript_vm_t* vm)
     surgescript_sslib_register_application(vm);
 
     /* Create the root object */
-    surgescript_objectmanager_spawn_root(vm->object_manager, NULL);
+    surgescript_objectmanager_spawn_root(vm->object_manager);
 }
 
 /*
@@ -143,6 +143,17 @@ surgescript_object_t* surgescript_vm_spawn_object(surgescript_vm_t* vm, surgescr
     surgescript_objectmanager_handle_t parent_handle = surgescript_object_handle(parent);
     surgescript_objectmanager_handle_t child_handle = surgescript_objectmanager_spawn(vm->object_manager, parent_handle, object_name, user_data);
     return surgescript_objectmanager_get(vm->object_manager, child_handle);
+}
+
+/*
+ * surgescript_vm_find_object()
+ * Finds an object named object_name (this may be slow; use with care)
+ */
+surgescript_object_t* surgescript_vm_find_object(surgescript_vm_t* vm, const char* object_name)
+{
+    const surgescript_object_t* root = surgescript_vm_root_object(vm);
+    surgescript_objectmanager_handle_t handle = surgescript_object_find_child(root, object_name);
+    return surgescript_objectmanager_get(vm->object_manager, handle);
 }
 
 /*

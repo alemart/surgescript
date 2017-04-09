@@ -9,6 +9,9 @@ object "Application"
     state "main"
     {
         test.string();
+        test.number();
+        test.boolean();
+        test.objects();
         destroy();
     }
 }
@@ -46,6 +49,55 @@ object "SurgeScriptTest"
         //test("abc"[0] = "b") || fail(14);
         test((y = "abc", y[0] = "b", y == "abc")) || fail(15);
         test((y = "alê", y.substr(0, 1) == "a" && y.substr(2, 1) == "ê")) || fail(16);
+        test("hello!") || fail(17);
+        end();
+    }
+
+    fun number()
+    {
+        begin("Number");
+        test(1 == 1) || fail(1);
+        test(2 + 2 == 4) || fail(2);
+        test((3 * 3).toString() == "9") || fail(3);
+        test(4.toString().toNumber() == 4.valueOf()) || fail(4);
+        test(5 * "25".toNumber() == 625 / 5) || fail(5);
+        test(0 == -0) || fail(6);
+        test(-(-(-1)) * -1 == +1) || fail(7);
+        test(.5 == 0.5) || fail(8);
+        test(.5 == 1/2) || fail(9);
+        test(-.5 == 1/-2) || fail(10);
+        end();
+    }
+
+    fun boolean()
+    {
+        begin("Boolean");
+        test(true) || fail(1);
+        test(!false) || fail(2);
+        test(false == null) || fail(3);
+        test((1 == 1).toString() == "true") || fail(4);
+        test(!!!!!true == !!false) || fail(5);
+        test(false == 0) || fail(6);
+        test(1 == true) || fail(7);
+        test(false != true) || fail(8);
+        test(!!"hi" == true) || fail(9);
+        test(true + true == 2) || fail(10);
+        end();
+    }
+
+    fun objects()
+    {
+        begin("Object");
+        test(typeof this == "object") || fail(1);
+        test(this.name() == "SurgeScriptTest") || fail(2);
+        test(app != null && app.name() == "Application") || fail(3);
+        test(this != app) || fail(4);
+        test(this.toString() == "[object]") || fail(5);
+        test(this.hasMemberFunction("objects")) || fail(6);
+        test(!this.hasMemberFunction("nope")) || fail(7);
+        test(findChild("nope") == null) || fail(8);
+        test((c = spawn("Boolean"), c != null && child("Boolean") == c)) || fail(9);
+        test((d = spawn("Number"), d != null && d == findChild("Number"))) || fail(10);
         end();
     }
 
@@ -63,9 +115,8 @@ object "SurgeScriptTest"
     fun __destructor()
     {
         str = "\n";
-        str = str + "SUCCEEDED  " + (totalTested - totalFailed) + "\t\t";
-        str = str + "FAILED  " + totalFailed;
-        //str += "FAILED  " + totalFailed;
+        str += "SUCCEEDED  " + (totalTested - totalFailed) + "\t\t";
+        str += "FAILED  " + totalFailed;
         print(str);
     }
 
