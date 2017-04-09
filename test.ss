@@ -12,6 +12,7 @@ object "Application"
         test.number();
         test.boolean();
         test.objects();
+        test.system();
         destroy();
     }
 }
@@ -115,6 +116,17 @@ object "SurgeScriptTest"
         test(findChild("nope") == null) || fail(8);
         test((c = spawn("Boolean"), c != null && child("Boolean") == c)) || fail(9);
         test((d = spawn("Number"), d != null && d == findChild("Number"))) || fail(10);
+        end();
+    }
+
+    fun system()
+    {
+        begin("System objects");
+        test(Application) || fail(1);
+        test(Application.name() == "Application") || fail(2);
+        test(Application.name() != String.name()) || fail(3);
+        test((Application = "foo", Application != "foo")) || fail(4);
+        test("foo" != String) || fail(5);
         end();
     }
 

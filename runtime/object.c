@@ -255,15 +255,15 @@ unsigned surgescript_object_child(const surgescript_object_t* object, const char
 unsigned surgescript_object_find_child(const surgescript_object_t* object, const char* name)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-    unsigned null_handle = surgescript_objectmanager_null(manager), i;
+    surgescript_objectmanager_handle_t null_handle = surgescript_objectmanager_null(manager);
 
-    for(i = 0; i < ssarray_length(object->child); i++) {
+    for(int i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
         if(strcmp(name, child->name) == 0)
             return child->handle;
     }
 
-    for(i = 0; i < ssarray_length(object->child); i++) {
+    for(int i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
         unsigned handle = surgescript_object_find_child(child, name);
         if(handle != null_handle)

@@ -11,17 +11,20 @@
 #include <string.h>
 #include "symtable.h"
 #include "../runtime/program.h"
+#include "../runtime/object_manager.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
 
 /* utilities */
 typedef struct surgescript_symtable_entry_t surgescript_symtable_entry_t;
 typedef struct surgescript_symtable_entry_vtable_t surgescript_symtable_entry_vtable_t;
+static int indexof_symbol(surgescript_symtable_t* symtable, const char* symbol);
 static void read_from_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void read_from_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void write_to_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
-static int indexof_symbol(surgescript_symtable_t* symtable, const char* symbol);
+static void read_system_object(const char* symbol, surgescript_program_t* program, unsigned k);
+static void write_system_object(const char* symbol, surgescript_program_t* program, unsigned k);
 
 /* vtable for the entries of the symbol table */
 struct surgescript_symtable_entry_vtable_t
@@ -89,7 +92,7 @@ bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const cha
             return true;
         symtable = symtable->parent;
     }
-    return false;
+    return (surgescript_objectmanager_system_object(NULL, symbol) != surgescript_objectmanager_null(NULL));
 }
 
 /*
@@ -146,6 +149,8 @@ void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const cha
     }
     else if(symtable->parent)
         surgescript_symtable_emit_write(symtable->parent, symbol, program, k);
+    else if(surgescript_objectmanager_system_object(NULL, symbol))
+        write_system_object(symbol, program, k);
     else
         ssfatal("Compile Error: undefined symbol \"%s\".", symbol);
 }
@@ -164,6 +169,8 @@ void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char
     }
     else if(symtable->parent)
         surgescript_symtable_emit_read(symtable->parent, symbol, program, k);
+    else if(surgescript_objectmanager_system_object(NULL, symbol))
+        read_system_object(symbol, program, k);
     else
         ssfatal("Compile Error: undefined symbol \"%s\".", symbol);
 }
@@ -231,4 +238,15 @@ void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* 
 {
     surgescript_stackptr_t address = entry->stackaddr;
     surgescript_program_add_line(program, SSOP_SPOKE, SSOPu(k), SSOPi(address));
+}
+
+void read_system_object(const char* symbol, surgescript_program_t* program, unsigned k)
+{
+    surgescript_objectmanager_handle_t addr = surgescript_objectmanager_system_object(NULL, symbol);
+    surgescript_program_add_line(program, SSOP_MOVO, SSOPu(k), SSOPu(addr));
+}
+
+void write_system_object(const char* symbol, surgescript_program_t* program, unsigned k)
+{
+    ; /* do nothing; system objects are read-only */
 }

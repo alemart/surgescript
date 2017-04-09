@@ -209,6 +209,7 @@ bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surg
  */
 surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager)
 {
+    /* this must *always* be zero */
     return NULL_HANDLE;
 }
 
@@ -236,6 +237,7 @@ surgescript_objectmanager_handle_t surgescript_objectmanager_application(surgesc
 /*
  * surgescript_objectmanager_system_object()
  * Returns a handle to a child of the system object
+ * The manager parameter may be set to NULL (useful when evaluating at compile-time)
  */
 surgescript_objectmanager_handle_t surgescript_objectmanager_system_object(surgescript_objectmanager_t* manager, const char* object_name)
 {
