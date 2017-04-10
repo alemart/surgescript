@@ -178,13 +178,13 @@ bool surgescript_var_get_bool(const surgescript_var_t* var)
         case SSVAR_BOOL:
             return var->boolean;
         case SSVAR_NUMBER:
-            return var->number != 0 ? true : false;
+            return var->raw && var->number != 0.0f;
         case SSVAR_STRING:
-            return *(var->string) != 0 ? true : false;
+            return *(var->string) != 0;
         case SSVAR_NULL:
             return false;
         case SSVAR_OBJECTHANDLE:
-            return var->handle > 0;
+            return var->handle != 0;
     }
 
     return false;

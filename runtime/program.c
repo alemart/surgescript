@@ -565,16 +565,20 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         /* comparing & testing */
-        case SSOP_CMP:
-            surgescript_var_set_number(_t[2], surgescript_var_compare(t(a), t(b)));
-            break;
-
         case SSOP_TEST:
             surgescript_var_set_rawbits(_t[2], surgescript_var_get_rawbits(t(a)) & surgescript_var_get_rawbits(t(b)));
             break;
 
         case SSOP_TCHK:
-            surgescript_var_set_number(_t[2], surgescript_var_typecheck(t(a), b.i));
+            surgescript_var_set_rawbits(_t[2], surgescript_var_typecheck(t(a), b.i));
+            break;
+
+        case SSOP_TCMP:
+            surgescript_var_set_rawbits(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_typecode(t(b)));
+            break;
+
+        case SSOP_CMP:
+            surgescript_var_set_rawbits(_t[2], surgescript_var_compare(t(a), t(b)));
             break;
 
         /* jumping */

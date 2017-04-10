@@ -64,6 +64,8 @@ object "SurgeScriptTest"
         test(typeof "number"[2] == typeof("number"[2])) || fail(28);
         test((1 == 2 ? "yes" : "no")[1] == "o") || fail(29);
         test((1 != 2 ? "yes" : "no")[1] != "o") || fail(30);
+        test("oi" === "oi") || fail(31);
+        test("sim" !== "nao") || fail(32);
         end();
     }
 
@@ -92,6 +94,11 @@ object "SurgeScriptTest"
         test((5 + 25) * (5 + 25) == 5*5 + 2*5*25 + 25*25) || fail(20);
         test(typeof 5 == "number") || fail(21);
         test(typeof(5 + 5) == "number") || fail(22);
+        test("2" != 3) || fail(23);
+        test("2" == 2) || fail(24);
+        test("2" !== 2) || fail(25);
+        test(2 !== 3) || fail(26);
+        test(1 === 1) || fail(27);
         end();
     }
 

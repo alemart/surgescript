@@ -186,15 +186,42 @@ void emit_equalityexpr2(surgescript_nodecontext_t context, const char* equalityo
     surgescript_program_label_t done = NEWLABEL();
 
     SSASM(SSOP_POP, T1);
-    SSASM(SSOP_CMP, T1, T0);
-    SSASM(SSOP_MOVB, T0, B(true));
     if(strcmp(equalityop, "==") == 0) {
+        SSASM(SSOP_CMP, T1, T0);
+        /*SSASM(SSOP_MOVB, T0, B(true));
         SSASM(SSOP_JE, U(done));
-        SSASM(SSOP_MOVB, T0, B(false));
+        SSASM(SSOP_MOVB, T0, B(false));*/
+        SSASM(SSOP_XCHG, T2, T0);
+        SSASM(SSOP_LNOT, T0);
     }
     else if(strcmp(equalityop, "!=") == 0) {
+        SSASM(SSOP_CMP, T1, T0);
+        /*SSASM(SSOP_MOVB, T0, B(true));
         SSASM(SSOP_JNE, U(done));
+        SSASM(SSOP_MOVB, T0, B(false));*/
+        SSASM(SSOP_XCHG, T2, T0);
+    }
+    else if(strcmp(equalityop, "===") == 0) {
+        surgescript_program_label_t nope = NEWLABEL();
+        SSASM(SSOP_TCMP, T1, T0);
+        SSASM(SSOP_JNE, U(nope));
+        SSASM(SSOP_CMP, T1, T0);
+        SSASM(SSOP_JNE, U(nope));
+        SSASM(SSOP_MOVB, T0, B(true));
+        SSASM(SSOP_JMP, U(done));
+        LABEL(nope);
         SSASM(SSOP_MOVB, T0, B(false));
+    }
+    else if(strcmp(equalityop, "!==") == 0) {
+        surgescript_program_label_t yep = NEWLABEL();
+        SSASM(SSOP_TCMP, T1, T0);
+        SSASM(SSOP_JNE, U(yep));
+        SSASM(SSOP_CMP, T1, T0);
+        SSASM(SSOP_JNE, U(yep));
+        SSASM(SSOP_MOVB, T0, B(false));
+        SSASM(SSOP_JMP, U(done));
+        LABEL(yep);
+        SSASM(SSOP_MOVB, T0, B(true));
     }
     LABEL(done);
 }

@@ -302,11 +302,15 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     if(*(lexer->p) == '=' && *(lexer->p + 1) == '=') {
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
+        if(*(lexer->p) == '=')
+            bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_EQUALITYOP, lexer->buf, lexer->line, prev);
     }
     else if(*(lexer->p) == '!' && *(lexer->p + 1) == '=') {
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
+        if(*(lexer->p) == '=')
+            bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_EQUALITYOP, lexer->buf, lexer->line, prev);
     }
 
