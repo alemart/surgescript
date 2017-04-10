@@ -19,6 +19,8 @@ static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surge
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_concat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -32,6 +34,8 @@ void surgescript_sslib_register_number(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Number", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "Number", "toString", fun_tostring, 1);
     surgescript_vm_bind(vm, "Number", "concat", fun_concat, 2);
+    surgescript_vm_bind(vm, "Number", "get", fun_get, 2);
+    surgescript_vm_bind(vm, "Number", "set", fun_set, 3);
 }
 
 
@@ -79,4 +83,18 @@ surgescript_var_t* fun_concat(surgescript_object_t* object, const surgescript_va
     ssfree(str2);
     ssfree(str1);
     return ret;
+}
+
+/* get */
+surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return NULL;
+}
+
+/* set */
+surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* numbers are primitive values in SurgeScript */
+    /* this is an invalid operation; do nothing */
+    return surgescript_var_clone(param[2]);
 }

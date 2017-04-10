@@ -377,6 +377,7 @@ void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int n
     SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
 }
 
+#if 0
 void emit_dictset1(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line)
 {
     if(!surgescript_symtable_has_parent(context.symtable))
@@ -459,6 +460,89 @@ void emit_dictget(surgescript_nodecontext_t context, const char* identifier, int
     SSASM(SSOP_PUSH, T0);
     SSASM(SSOP_CALL, TEXT("get"), U(1));
     SSASM(SSOP_POPN, U(2));
+}
+#endif
+
+void emit_dictptr(surgescript_nodecontext_t context)
+{
+    /* save the pointer */
+    SSASM(SSOP_PUSH, T0);
+}
+
+void emit_dictkey(surgescript_nodecontext_t context)
+{
+    /* save the key <expr> */
+    SSASM(SSOP_PUSH, T0);
+}
+
+void emit_dictget(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_CALL, TEXT("get"), U(1));
+    SSASM(SSOP_POPN, U(2));
+}
+
+void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
+{
+    switch(*assignop) {
+        case '=':
+            SSASM(SSOP_PUSH, T0); /* value <assignexpr> */
+            SSASM(SSOP_CALL, TEXT("set"), U(2));
+            SSASM(SSOP_POP, T0); /* return <assignexpr> */
+            SSASM(SSOP_POPN, U(2));
+            break;
+
+        case '+':
+        case '-':
+        case '*':
+        case '/':
+            SSASM(SSOP_XCHG, T0, T3); /* t3 = value <assignexpr> */
+            SSASM(SSOP_POP, T1); /* t1 = key <expr> */
+            SSASM(SSOP_POP, T0); /* t0 = pointer */
+
+            /* prepare the stack to call set() */
+            SSASM(SSOP_NOP); /* we have a pop t0 above and a push t0 below */
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_PUSH, T1);
+            SSASM(SSOP_PUSH, T3); /* save the value <assignexpr> */
+
+            /* call get() */
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_PUSH, T1);
+            SSASM(SSOP_CALL, TEXT("get"), U(1));
+            SSASM(SSOP_POPN, U(2));
+
+            /* compute terms */
+            SSASM(SSOP_POP, T1); /* t1 = value <assignexpr> and t0 = dict.get(key <expr>) */
+            if(*assignop == '+') {
+                surgescript_program_label_t cat = NEWLABEL();
+                surgescript_program_label_t end = NEWLABEL();
+                SSASM(SSOP_TCHK, T1, TYPE("string"));
+                SSASM(SSOP_JE, U(cat));
+                SSASM(SSOP_TCHK, T0, TYPE("string"));
+                SSASM(SSOP_JE, U(cat));
+                SSASM(SSOP_ADD, T0, T1); /* t0 = dict.get(<expr>) + <assignexpr> */
+                SSASM(SSOP_JMP, U(end));
+                LABEL(cat);
+                SSASM(SSOP_PUSH, T0);
+                SSASM(SSOP_PUSH, T1);
+                SSASM(SSOP_CALL, TEXT("concat"), U(1)); /* t0 = dict.get(<expr>).concat(<assignexpr>) */
+                SSASM(SSOP_POPN, U(2));
+                LABEL(end);
+            }
+            else if(*assignop == '-')
+                SSASM(SSOP_SUB, T0, T1); /* t0 = dict.get(<expr>) - <assignexpr> */
+            else if(*assignop == '*')
+                SSASM(SSOP_MUL, T0, T1); /* t0 = dict.get(<expr>) * <assignexpr> */
+            else
+                SSASM(SSOP_DIV, T0, T1); /* t0 = dict.get(<expr>) / <assignexpr> */
+
+            /* call set() */
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_CALL, TEXT("set"), U(2));
+            SSASM(SSOP_POP, T0); /* return dict.get(<expr>) <assignop> <assignexpr> */
+            SSASM(SSOP_POPN, U(2));
+            break;
+    }
 }
 
 /* statements */

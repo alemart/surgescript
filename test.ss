@@ -46,8 +46,8 @@ object "SurgeScriptTest"
         test(!"") || fail(10);
         test(("\n" + "\n").length() == 2) || fail(11);
         test((y = "ale", y += "xandre").length() == 9) || fail(12);
-        //test("alê\n"[2] == "ê") || fail(13);
-        //test("abc"[0] = "b") || fail(14);
+        test("alê\n"[2] == "ê") || fail(13);
+        test("abc"[0] = "b") || fail(14);
         test((y = "abc", y[0] = "b", y == "abc")) || fail(15);
         test((y = "alê", y.substr(0, 1) == "a" && y.substr(2, 1) == "ê")) || fail(16);
         test("hello!") || fail(17);
@@ -57,6 +57,13 @@ object "SurgeScriptTest"
         test("test".substr(2, 0) == "") || fail(21);
         test("test".substr(-1, 9999) == "test") || fail(22);
         test("test".substr(-1, 1) == "t") || fail(23);
+        test("rgba"[-1] == "") || fail(24);
+        test("rgba"[4] == "") || fail(25);
+        test((typeof "string"[2])[2] == (typeof "string")[2]) || fail(26);
+        test(typeof "number"[2] != (typeof "number")[2]) || fail(27);
+        test(typeof "number"[2] == typeof("number"[2])) || fail(28);
+        test((1 == 2 ? "yes" : "no")[1] == "o") || fail(29);
+        test((1 != 2 ? "yes" : "no")[1] != "o") || fail(30);
         end();
     }
 

@@ -46,9 +46,13 @@ void emit_postincdec(surgescript_nodecontext_t context, const char* op, const ch
 void emit_pushparam(surgescript_nodecontext_t context);
 void emit_popparams(surgescript_nodecontext_t context, int n);
 void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int num_params);
-void emit_dictset1(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line);
+/*void emit_dictset1(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line);
 void emit_dictset2(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line);
-void emit_dictget(surgescript_nodecontext_t context, const char* identifier, int line);
+void emit_dictget(surgescript_nodecontext_t context, const char* identifier, int line);*/
+void emit_dictptr(surgescript_nodecontext_t context);
+void emit_dictkey(surgescript_nodecontext_t context);
+void emit_dictget(surgescript_nodecontext_t context);
+void emit_dictset(surgescript_nodecontext_t context, const char* assignop);
 
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope);

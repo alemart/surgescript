@@ -46,7 +46,6 @@
  * <expr> := <assignexpr> , <expr> | <assignexpr>
  * <assignexpr> := <conditionalexpr>
  *              |  identifier assignop <assignexpr>
- *              |  <getsetelement> [ <expr> ] assignop <assignexpr>
  *              |  state = <assignexpr>
  * <conditionalexpr> := <logicalorexpr> | <logicalorexpr> ? <expr> : <conditionalexpr>
  * <logicalorexpr> := <logicalandexpr> <logicalorexpr1>
@@ -64,13 +63,13 @@
  * <unaryexpr> := + <unaryexpr> | - <unaryexpr>
  *             |  ! <unaryexpr>
  *             |  typeof <unaryexpr> | typeof ( <expr> )
- *             |  len <unaryexpr> | len ( <expr> )
  *             |  ++ identifier | -- identifier
  *             |  <postfixexpr>
  * <postfixexpr> := identifier ++ | identifier --
- *               |  <getsetelement> [ <expr> ]
  *               |  <funcallexpr> <postfixexpr1>
  *               |  <primaryexpr> <postfixexpr1>
+ *               |  <primaryexpr> <postfixexpr1> [ <expr> ]
+ *               |  <primaryexpr> <postfixexpr1> [ <expr> ] assignop <assignexpr>
  * <postfixexpr1> := . <funcallexpr> <postfixexpr1> | e
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
@@ -78,7 +77,6 @@
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e
- * <getsetelement> := identifier | this | string
  *
  *
  *

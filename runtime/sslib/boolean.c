@@ -18,6 +18,8 @@ static surgescript_var_t* fun_valueof(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -30,6 +32,8 @@ void surgescript_sslib_register_boolean(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Boolean", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Boolean", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "Boolean", "toString", fun_tostring, 1);
+    surgescript_vm_bind(vm, "Boolean", "get", fun_get, 2);
+    surgescript_vm_bind(vm, "Boolean", "set", fun_set, 3);
 }
 
 
@@ -60,4 +64,18 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 {
     /* do nothing, as system objects cannot be destroyed */
     return NULL;
+}
+
+/* get */
+surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return NULL;
+}
+
+/* set */
+surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* booleans are primitive values in SurgeScript */
+    /* this is an invalid operation; do nothing */
+    return surgescript_var_clone(param[2]);
 }

@@ -545,7 +545,7 @@ void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
             ssfree(assignop);
         }
-        else if(got_type(parser, SSTOK_LBRACKET)) {
+        /*else if(got_type(parser, SSTOK_LBRACKET)) {
             match(parser, SSTOK_LBRACKET);
             expr(parser, context);
             match(parser, SSTOK_RBRACKET);
@@ -562,7 +562,7 @@ void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             }
             else
                 emit_dictget(context, identifier, line);
-        }
+        }*/
         else {
             unmatch(parser);
             conditionalexpr(parser, context);
@@ -722,13 +722,14 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
             const char* op = surgescript_token_lexeme(parser->lookahead);
             emit_postincdec(context, op, identifier, line);
             match(parser, SSTOK_INCDECOP);
+            return;
         }
-        else if(got_type(parser, SSTOK_LBRACKET)) {
+        /*else if(got_type(parser, SSTOK_LBRACKET)) {
             match(parser, SSTOK_LBRACKET);
             expr(parser, context);
             match(parser, SSTOK_RBRACKET);
             emit_dictget(context, identifier, line);
-        }
+        }*/
         else if(got_type(parser, SSTOK_LPAREN)) { /* we have a function call here */
             unmatch(parser); /* put the identifier back */
             emit_this(context);
@@ -755,6 +756,22 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
                 funcallexpr(parser, context);
             } while(optmatch(parser, SSTOK_DOT));
         }
+    }
+
+    if(optmatch(parser, SSTOK_LBRACKET)) {
+        emit_dictptr(context);
+        expr(parser, context);
+        match(parser, SSTOK_RBRACKET);
+        emit_dictkey(context);
+        if(got_type(parser, SSTOK_ASSIGNOP)) {
+            char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+            match(parser, SSTOK_ASSIGNOP);
+            assignexpr(parser, context);
+            emit_dictset(context, op);
+            ssfree(op);
+        }
+        else
+            emit_dictget(context);
     }
 }
 
