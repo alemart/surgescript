@@ -179,25 +179,29 @@ object "SurgeScriptTest"
     fun lambda()
     {
         begin("Lambdas");
-        test(this(5) == 5);
-        test(this(this) == this);
-        test(this(this)(5) == 5);
-        test(this(7) == 7);
-        test((I = this, I)(1) == 1);
-        test(I("ale") == "ale");
-        test(this["this"]("ale") == "ale");
+        test(this(5) == 5) || fail(1);
+        test(this(this) == this) || fail(2);
+        test(this(this)(5) == 5) || fail(3);
+        test(this(7) == 7) || fail(4);
+        test((I = this, I)(1) == 1) || fail(5);
+        test(I("ale") == "ale") || fail(6);
+        test(this["this"]("ale") == "ale") || fail(7);
+        test(this(this)["this"](7) == 7) || fail(8);
+        test(this(this)["this"] == this) || fail(9);
+        //test(this(this)["this"](this)["value"] == value) || fail(10);
+        //test(this["this"]["value"] == value) || fail(11);
         end();
     }
 
     fun getset()
     {
         begin("Getters and setters");
-        test(this["this"] == this);
-        test(this[this] != this);
-        test(this[value] == value);
-        test((this[value] = 5, this[value]) == 5);
-        test((this[value] += 1, this[value]) == 6);
-        //test((this[value]++, this[value]) == 7);
+        test(this["this"] == this) || fail(1);
+        test(this[this] != this) || fail(2);
+        test(this["value"] == value) || fail(3);
+        test((this["value"] = 5, this["value"]) == 5) || fail(4);
+        test((this["value"] += 1, this["value"]) == 6) || fail(5);
+        //test((this["value"]++, this["value"]) == 7) || fail(6);
         end();
     }
 
