@@ -540,9 +540,9 @@ void surgescript_object_call_state(surgescript_object_t* object, const char* sta
 char* state2fun(const char* state)
 {
     /* fun = STATE2FUN + state */
-    static const char* STATE2FUN = "state:";
-    char *fun = ssmalloc((strlen(state) + strlen(STATE2FUN) + 1) * sizeof(char));
-    return strcat(strcpy(fun, STATE2FUN), state);
+    static const char prefix[] = "state:";
+    char *fun_name = ssmalloc((strlen(state) + strlen(prefix) + 1) * sizeof(char));
+    return strcat(strcpy(fun_name, prefix), state);
 }
 
 void run_state(surgescript_object_t* object, const char* state_name)

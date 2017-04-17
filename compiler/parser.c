@@ -45,6 +45,7 @@ static void expect(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 static void expect_something(surgescript_parser_t* parser);
 static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
 static void unexpected_symbol(surgescript_parser_t* parser);
+static void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static const char* ssbasename(const char* path);
 
 /* non-terminals */
@@ -329,6 +330,15 @@ bool has_token(surgescript_parser_t* parser)
     return parser->lookahead != NULL;
 }
 
+/* is the given object (in the given context) all right? */
+void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_programpool_t* pool = parser->program_pool;
+    if(!surgescript_programpool_exists(pool, context.object_name, "state:main")) {
+        ssfatal("Object \"%s\" in \"%s\" needs a \"main\" state.", context.object_name, context.source_file);
+    }
+}
+
 /* similar to basename(), but without the odd semantics. No strings are allocated. */
 const char* ssbasename(const char* path)
 {
@@ -399,6 +409,9 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     vardecllist(parser, context);
     statedecllist(parser, context);
     fundecllist(parser, context);
+
+    /* check if the object is all right */
+    validate_object(parser, context);
 
     /* tell the program how many variables should be allocated */
     emit_object_footer(context, start, end);
