@@ -32,7 +32,7 @@ struct surgescript_objectmanager_t
 };
 
 /* fixed objects */
-static const surgescript_objectmanager_handle_t NULL_HANDLE = 0;
+static const surgescript_objectmanager_handle_t NULL_HANDLE = 0; /* must always be zero */
 static const surgescript_objectmanager_handle_t ROOT_HANDLE = 1;
 
 /* names of important objects */

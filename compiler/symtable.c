@@ -176,21 +176,21 @@ void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char
 }
 
 /*
- * surgescript_symtable_count()
+ * surgescript_symtable_local_count()
  * How many symbols does this table have?
  */
-int surgescript_symtable_count(surgescript_symtable_t* symtable)
+int surgescript_symtable_local_count(surgescript_symtable_t* symtable)
 {
     return ssarray_length(symtable->entry);
 }
 
 /*
- * surgescript_symtable_deepcount()
+ * surgescript_symtable_count()
  * How many symbols does this table have, including the parent (and its parent, and so on) ?
  */
-int surgescript_symtable_deepcount(surgescript_symtable_t* symtable)
+int surgescript_symtable_count(surgescript_symtable_t* symtable)
 {
-    return symtable ? ssarray_length(symtable->entry) + surgescript_symtable_deepcount(symtable->parent) : 0;
+    return symtable ? ssarray_length(symtable->entry) + surgescript_symtable_count(symtable->parent) : 0;
 }
 
 

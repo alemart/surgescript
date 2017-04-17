@@ -13,6 +13,8 @@ object "Application"
         test.boolean();
         test.objects();
         test.system();
+        test.lambda();
+        test.getset();
         exit();
     }
 }
@@ -23,11 +25,11 @@ object "SurgeScriptTest"
     tested = 0;
     totalFailed = 0;
     totalTested = 0;
+    value = null;
 
     state "main"
     {
     }
-
 
 
 
@@ -67,6 +69,7 @@ object "SurgeScriptTest"
         test("oi" === "oi") || fail(31);
         test("sim" !== "nao") || fail(32);
         end();
+        return this;
     }
 
     fun number()
@@ -173,6 +176,31 @@ object "SurgeScriptTest"
         end();
     }
 
+    fun lambda()
+    {
+        begin("Lambdas");
+        test(this(5) == 5);
+        test(this(this) == this);
+        test(this(this)(5) == 5);
+        test(this(7) == 7);
+        test((I = this, I)(1) == 1);
+        test(I("ale") == "ale");
+        test(this["this"]("ale") == "ale");
+        end();
+    }
+
+    fun getset()
+    {
+        begin("Getters and setters");
+        test(this["this"] == this);
+        test(this[this] != this);
+        test(this[value] == value);
+        test((this[value] = 5, this[value]) == 5);
+        test((this[value] += 1, this[value]) == 6);
+        //test((this[value]++, this[value]) == 7);
+        end();
+    }
+
 
 
 
@@ -217,6 +245,29 @@ object "SurgeScriptTest"
             print("All tests have passed.");
         totalTested += tested;
         totalFailed += failed;
+    }
+
+    fun call(expr)
+    {
+        return expr;
+    }
+
+    fun get(key)
+    {
+        if(key == "this")
+            return this;
+        else if(key == "value")
+            return value;
+        else        
+            return null;
+    
+
+    fun set(key, newValue)
+    {
+        if(key == "value") // aka "public property"
+            value = newValue;
+
+        return this;    
     }
 }
 

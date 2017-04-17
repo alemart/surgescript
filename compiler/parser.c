@@ -84,7 +84,9 @@ static void multiplicativeexpr(surgescript_parser_t* parser, surgescript_nodecon
 static void multiplicativeexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name);
+static void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
@@ -467,7 +469,7 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     match(parser, SSTOK_LCURLY);
     fun_header = emit_function_header(context);
     stmtlist(parser, context);
-    emit_function_footer(context, surgescript_symtable_count(context.symtable), fun_header);
+    emit_function_footer(context, surgescript_symtable_local_count(context.symtable), fun_header);
     match(parser, SSTOK_RCURLY);
 
     /* register the function and cleanup */
@@ -523,7 +525,7 @@ void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     match(parser, SSTOK_LCURLY);
     fun_header = emit_function_header(context);
     stmtlist(parser, context);
-    emit_function_footer(context, surgescript_symtable_count(context.symtable) - num_arguments, fun_header);
+    emit_function_footer(context, surgescript_symtable_local_count(context.symtable) - num_arguments, fun_header);
     match(parser, SSTOK_RCURLY);
 
     /* register the function and cleanup */
@@ -737,38 +739,42 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
             match(parser, SSTOK_INCDECOP);
             return;
         }
-        /*else if(got_type(parser, SSTOK_LBRACKET)) {
-            match(parser, SSTOK_LBRACKET);
-            expr(parser, context);
-            match(parser, SSTOK_RBRACKET);
-            emit_dictget(context, identifier, line);
-        }*/
         else if(got_type(parser, SSTOK_LPAREN)) { /* we have a function call here */
+            unsigned sys = surgescript_objectmanager_system_object(NULL, identifier);
             unmatch(parser); /* put the identifier back */
-            emit_this(context);
-            do {
-                funcallexpr(parser, context);
-            } while(optmatch(parser, SSTOK_DOT));
+            if(sys == surgescript_objectmanager_null(NULL) && !surgescript_symtable_has_symbol(context.symtable, identifier)) {
+                /* regular function call */
+                emit_this(context);
+                match(parser, SSTOK_IDENTIFIER);
+                funcallexpr(parser, context, identifier);
+                postfixexpr1(parser, context);
+            }
+            else if(surgescript_symtable_has_symbol(context.symtable, identifier)) {
+                /* lambda call */
+                surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);
+                match(parser, SSTOK_IDENTIFIER);
+                funcallexpr(parser, context, "call");
+                postfixexpr1(parser, context);
+            }
+            else {
+                /* lambda call (system object) */
+                emit_object(context, sys);
+                match(parser, SSTOK_IDENTIFIER);
+                funcallexpr(parser, context, "call");
+                postfixexpr1(parser, context);
+            }
         }
         else {
             unmatch(parser);
             primaryexpr(parser, context);
-            if(optmatch(parser, SSTOK_DOT)) {
-                do {
-                    funcallexpr(parser, context);
-                } while(optmatch(parser, SSTOK_DOT));
-            }
+            postfixexpr1(parser, context);
         }
 
         ssfree(identifier);
     }
     else {
         primaryexpr(parser, context);
-        if(optmatch(parser, SSTOK_DOT)) {
-            do {
-                funcallexpr(parser, context);
-            } while(optmatch(parser, SSTOK_DOT));
-        }
+        postfixexpr1(parser, context);
     }
 
     if(optmatch(parser, SSTOK_LBRACKET)) {
@@ -785,14 +791,30 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         }
         else
             emit_dictget(context);
+        postfixexpr1(parser, context);
     }
 }
 
-void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    while(optmatch(parser, SSTOK_DOT)) {
+        char* fun_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_IDENTIFIER);
+        funcallexpr(parser, context, fun_name);
+        ssfree(fun_name);
+    }
+    lambdacall(parser, context);
+}
+
+void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    while(got_type(parser, SSTOK_LPAREN))
+        funcallexpr(parser, context, "call");
+}
+
+void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name)
 {
     int i = 0;
-    char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
-    match(parser, SSTOK_IDENTIFIER);
     match(parser, SSTOK_LPAREN);
 
     emit_pushparam(context); /* push the object handle */
@@ -803,11 +825,10 @@ void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
             emit_pushparam(context); /* push the i-th param */
         } while(optmatch(parser, SSTOK_COMMA));
     }
-    emit_funcall(context, id, i);
+    emit_funcall(context, fun_name, i);
     emit_popparams(context, 1 + i); /* pop the parameters and the object handle */
 
     match(parser, SSTOK_RPAREN);
-    ssfree(id);
 }
 
 void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)

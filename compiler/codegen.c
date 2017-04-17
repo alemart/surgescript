@@ -61,7 +61,7 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
 
     SSASM(SSOP_RET);
     LABEL(end);
-        SSASM(SSOP_MOVF, T2, F(surgescript_symtable_count(context.symtable)));
+        SSASM(SSOP_MOVF, T2, F(surgescript_symtable_local_count(context.symtable)));
         LABEL(aloc);
             SSASM(SSOP_JE, U(start));
             SSASM(SSOP_ALLOC);
@@ -73,7 +73,7 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
 void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
 {
     if(!surgescript_symtable_has_symbol(context.symtable, identifier))
-        surgescript_symtable_put_heap_symbol(context.symtable, identifier, (surgescript_heapptr_t)surgescript_symtable_count(context.symtable));
+        surgescript_symtable_put_heap_symbol(context.symtable, identifier, (surgescript_heapptr_t)surgescript_symtable_local_count(context.symtable));
     surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
 }
 
@@ -84,7 +84,7 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
     if(!surgescript_symtable_has_parent(context.symtable))
         ssfatal("Compile Error: invalid attribution (\"%s %s ...\") in object \"%s\" (%s:%d) - only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
     else if(!surgescript_symtable_has_symbol(context.symtable, identifier))
-        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_count(context.symtable) - surgescript_program_arity(context.program)));
+        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_local_count(context.symtable) - surgescript_program_arity(context.program)));
 
     /* perform the assignment operation */
     switch(*assignop) {
@@ -656,6 +656,11 @@ void emit_number(surgescript_nodecontext_t context, float value)
 void emit_string(surgescript_nodecontext_t context, const char* value)
 {
     SSASM(SSOP_MOVS, T0, TEXT(value));
+}
+
+void emit_object(surgescript_nodecontext_t context, unsigned handle)
+{
+    SSASM(SSOP_MOVO, T0, U(handle));
 }
 
 void emit_zero(surgescript_nodecontext_t context)

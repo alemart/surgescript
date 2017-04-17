@@ -73,6 +73,7 @@ void emit_null(surgescript_nodecontext_t context);
 void emit_bool(surgescript_nodecontext_t context, bool value);
 void emit_number(surgescript_nodecontext_t context, float value);
 void emit_string(surgescript_nodecontext_t context, const char* value);
+void emit_object(surgescript_nodecontext_t context, unsigned handle);
 void emit_zero(surgescript_nodecontext_t context);
 
 /* misc */
