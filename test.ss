@@ -260,7 +260,7 @@ object "SurgeScriptTest"
             return value;
         else        
             return null;
-    
+    }
 
     fun set(key, newValue)
     {
