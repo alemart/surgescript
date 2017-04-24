@@ -692,22 +692,6 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
             surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
             const char* object_name = surgescript_object_name(object);
             surgescript_program_t* program = surgescript_programpool_get(surgescript_renv_programpool(caller_runtime_environment), object_name, program_name);
-
-            /* global scope */
-            if(!program) {
-                surgescript_object_t* app = surgescript_objectmanager_get(manager, surgescript_objectmanager_application(manager));
-                surgescript_program_t* app_program = surgescript_programpool_get(
-                    surgescript_renv_programpool(caller_runtime_environment),
-                    surgescript_object_name(app),
-                    program_name
-                );
-
-                /* program doesn't exist, but app_program does */
-                if(app_program) {
-                    program = app_program;
-                    object = app;
-                }
-            }
             
             /* does the selected program exist? */
             if(program) {

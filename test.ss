@@ -190,6 +190,7 @@ object "SurgeScriptTest"
         test(this(this)["this"] == this) || fail(9);
         //test(this(this)["this"](this)["value"] == value) || fail(10);
         //test(this["this"]["value"] == value) || fail(11);
+        test(this(this)(7) == this.call(this).call(7)) || fail(12);
         end();
     }
 
