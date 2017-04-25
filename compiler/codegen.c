@@ -572,6 +572,17 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
     }
 }
 
+void emit_dictincdec(surgescript_nodecontext_t context, const char* op)
+{
+    SSASM(SSOP_CALL, TEXT("get"), U(1));
+    SSASM(*op == '+' ? SSOP_INC : SSOP_DEC, T0);
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("set"), U(2));
+    SSASM(SSOP_POP, T0);
+    SSASM(*op != '+' ? SSOP_INC : SSOP_DEC, T0); /* return value before modification */
+    SSASM(SSOP_POPN, U(2));
+}
+
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope)
 {

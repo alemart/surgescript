@@ -202,9 +202,10 @@ object "SurgeScriptTest"
         test(this["value"] == value) || fail(3);
         test((this["value"] = 5, this["value"]) == 5) || fail(4);
         test((this["value"] += 1, this["value"]) == 6) || fail(5);
-        //test((this["value"]++, this["value"]) == 7) || fail(6);
-        test(this(this)["this"](this)["this"]["this"]["value"] == value) || fail(7);
-        //test(this.value == value) || fail(8);
+        test((this["value"]++, this["value"]) == 7) || fail(6);
+        test(this["value"]++ == 7) || fail(7);
+        test(this(this)["this"](this)["this"]["this"]["value"] == value) || fail(8);
+        //test(this.value == value) || fail(9);
         end();
     }
 

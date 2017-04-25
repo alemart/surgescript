@@ -53,6 +53,7 @@ void emit_dictptr(surgescript_nodecontext_t context);
 void emit_dictkey(surgescript_nodecontext_t context);
 void emit_dictget(surgescript_nodecontext_t context);
 void emit_dictset(surgescript_nodecontext_t context, const char* assignop);
+void emit_dictincdec(surgescript_nodecontext_t context, const char* op);
 
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope);

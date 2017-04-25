@@ -814,6 +814,12 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             ssfree(op);
             break;
         }
+        else if(got_type(parser, SSTOK_INCDECOP)) {
+            const char* op = surgescript_token_lexeme(parser->lookahead);
+            emit_dictincdec(context, op);
+            match(parser, SSTOK_INCDECOP);
+            break;           
+        }
         else {
             emit_dictget(context);
             if(got_type(parser, SSTOK_LBRACKET))
