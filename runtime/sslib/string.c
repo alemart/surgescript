@@ -19,6 +19,7 @@ static surgescript_var_t* fun_valueof(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tonumber(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -38,6 +39,7 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "String", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "String", "toString", fun_tostring, 1);
+    surgescript_vm_bind(vm, "String", "call", fun_call, 1);
     surgescript_vm_bind(vm, "String", "toNumber", fun_tonumber, 1);
     surgescript_vm_bind(vm, "String", "length", fun_length, 1);
     surgescript_vm_bind(vm, "String", "get", fun_get, 2);
@@ -78,6 +80,15 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 {
     const char* str = surgescript_var_fast_get_string(param[0]);
     surgescript_var_t* ret = surgescript_var_set_string(surgescript_var_create(), str);
+    return ret;
+}
+
+/* call: type conversion */
+surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    char* str = surgescript_var_get_string(param[0]);
+    surgescript_var_t* ret = surgescript_var_set_string(surgescript_var_create(), str);
+    ssfree(str);
     return ret;
 }
 

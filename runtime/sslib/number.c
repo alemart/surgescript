@@ -18,6 +18,7 @@ static surgescript_var_t* fun_valueof(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_concat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -33,6 +34,7 @@ void surgescript_sslib_register_number(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Number", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Number", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "Number", "toString", fun_tostring, 1);
+    surgescript_vm_bind(vm, "Number", "call", fun_call, 1);
     surgescript_vm_bind(vm, "Number", "concat", fun_concat, 2);
     surgescript_vm_bind(vm, "Number", "get", fun_get, 2);
     surgescript_vm_bind(vm, "Number", "set", fun_set, 3);
@@ -69,6 +71,12 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 {
     /* do nothing, as system objects cannot be destroyed */
     return NULL;
+}
+
+/* call: type conversion */
+surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return fun_valueof(object, param, num_params);
 }
 
 /* converts to and concatenates two strings */

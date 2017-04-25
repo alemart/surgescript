@@ -167,11 +167,11 @@ object "SurgeScriptTest"
         test(Boolean.name() == "Boolean") || fail(8);
         test(String = null || String) || fail(9);
         test(String.length("test") == 4) || fail(10);
-        //test(String("test") == "test") || fail(11);
-        //test(Number(4) == 4) || fail(12);
-        //test(Number("4.3") == 4.3) || fail(13);
-        //test(String(4.5) == "4.5") || fail(14);
-        //test(Boolean(true && false) == false) || fail(15);
+        test(String("test") == "test") || fail(11);
+        test(Number(4) == 4) || fail(12);
+        test(Number("4.3") == 4.3) || fail(13);
+        test(String(5) == "5") || fail(14);
+        test(Boolean(true && false) == false) || fail(15);
         test(String.destroy() == null && String.name()) || fail(16);
         end();
     }
