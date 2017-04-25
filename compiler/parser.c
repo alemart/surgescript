@@ -88,6 +88,8 @@ static void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t
 static void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name);
 static void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void propertyread(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name);
+static void propertywrite(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name);
 static void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
@@ -152,8 +154,7 @@ bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* abso
             data = ssrealloc(data, data_size + 1);
             read_chars += fread(data + read_chars, sizeof(char), BUFSIZE, fp);
             data[read_chars] = '\0';
-        }
-        while(read_chars == data_size);
+        } while(read_chars == data_size);
         fclose(fp);
 
         /* parse it */
@@ -783,14 +784,33 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
 
 void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    while(optmatch(parser, SSTOK_DOT)) {
-        char* fun_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
-        match(parser, SSTOK_IDENTIFIER);
-        funcallexpr(parser, context, fun_name);
-        ssfree(fun_name);
+    if(optmatch(parser, SSTOK_DOT)) {
+        do {
+            char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+            match(parser, SSTOK_IDENTIFIER);
+            if(got_type(parser, SSTOK_LPAREN)) {
+                funcallexpr(parser, context, identifier);
+                lambdacall(parser, context);
+                dictexpr(parser, context);
+                ssfree(identifier);
+            }
+            else if(!(got_type(parser, SSTOK_INCDECOP) || got_type(parser, SSTOK_ASSIGNOP))) {
+                propertyread(parser, context, identifier);
+                lambdacall(parser, context);
+                dictexpr(parser, context);
+                ssfree(identifier);
+            }
+            else {
+                propertywrite(parser, context, identifier);
+                ssfree(identifier);
+                break;
+            }
+        } while(optmatch(parser, SSTOK_DOT));
     }
-    lambdacall(parser, context);
-    dictexpr(parser, context);
+    else {
+        lambdacall(parser, context);
+        dictexpr(parser, context);
+    }
 }
 
 void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -827,6 +847,33 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         }
         postfixexpr1(parser, context);
         break;
+    }
+}
+
+void propertyread(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name)
+{
+    emit_dictptr(context);
+    emit_string(context, property_name);
+    emit_dictkey(context);
+    emit_dictget(context);
+}
+
+void propertywrite(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name)
+{
+    emit_dictptr(context);
+    emit_string(context, property_name);
+    emit_dictkey(context);
+    if(got_type(parser, SSTOK_ASSIGNOP)) {
+        char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_ASSIGNOP);
+        assignexpr(parser, context);
+        emit_dictset(context, op);
+        ssfree(op);
+    }
+    else if(got_type(parser, SSTOK_INCDECOP)) {
+        const char* op = surgescript_token_lexeme(parser->lookahead);
+        emit_dictincdec(context, op);
+        match(parser, SSTOK_INCDECOP);
     }
 }
 

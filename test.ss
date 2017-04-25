@@ -204,8 +204,16 @@ object "SurgeScriptTest"
         test((this["value"] += 1, this["value"]) == 6) || fail(5);
         test((this["value"]++, this["value"]) == 7) || fail(6);
         test(this["value"]++ == 7) || fail(7);
-        test(this(this)["this"](this)["this"]["this"]["value"] == value) || fail(8);
-        //test(this.value == value) || fail(9);
+        test(this["value"]-- == 8) || fail(8);
+        test(this(this)["this"](this)["this"]["this"]["value"] == value) || fail(9);
+        test(this.value == value) || fail(10);
+        test(this.property == "Amazing!") || fail(11);
+        test(this.property == this["property"] && this.property == this.get("property")) || fail(12);
+        test((this.value = 13, this.value++) == 13) || fail(13);
+        test(this.value++ == 14) || fail(14);
+        test(this.value == this["value"]) || fail(15);
+        test((this.property = null, this.property) == "Amazing!") || fail(16); // read-only
+        test(this.self.property == this["this"].self.self["self"].property) || fail(17);
         end();
     }
 
@@ -262,11 +270,13 @@ object "SurgeScriptTest"
 
     fun get(key)
     {
-        if(key == "this")
+        if(key == "this" || key == "self")
             return this;
         else if(key == "value")
             return value;
-        else        
+        else if(key == "property")
+            return "Amazing!";
+        else
             return null;
     }
 
