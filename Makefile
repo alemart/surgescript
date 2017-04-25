@@ -39,7 +39,7 @@ utils: util/util.c util/util.h
 utf8: util/utf8.c util/utf8.h
 	$(CC) $(CFLAGS) -c util/utf8.c
 
-sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c runtime/sslib/system.c runtime/sslib/string.c runtime/sslib/number.c runtime/sslib/boolean.c heap utils utf8
+sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c runtime/sslib/system.c runtime/sslib/string.c runtime/sslib/number.c runtime/sslib/boolean.c runtime/sslib/console.c heap utils utf8
 	$(CC) $(CFLAGS) -c runtime/sslib/object.c -o sslib_object.o
 	$(CC) $(CFLAGS) -c runtime/sslib/array.c -o sslib_array.o
 	$(CC) $(CFLAGS) -c runtime/sslib/application.c -o sslib_application.o
@@ -47,7 +47,8 @@ sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtim
 	$(CC) $(CFLAGS) -c runtime/sslib/string.c -o sslib_string.o
 	$(CC) $(CFLAGS) -c runtime/sslib/number.c -o sslib_number.o
 	$(CC) $(CFLAGS) -c runtime/sslib/boolean.c -o sslib_boolean.o
-	ar -cvq sslib.a sslib_object.o sslib_array.o sslib_application.o sslib_system.o sslib_string.o sslib_number.o sslib_boolean.o
+	$(CC) $(CFLAGS) -c runtime/sslib/console.c -o sslib_console.o
+	ar -cvq sslib.a sslib_object.o sslib_array.o sslib_application.o sslib_system.o sslib_string.o sslib_number.o sslib_boolean.o sslib_console.o
 
 token: compiler/token.h compiler/token.c utils
 	$(CC) $(CFLAGS) -c compiler/token.c

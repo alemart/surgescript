@@ -212,9 +212,9 @@ object "SurgeScriptTest"
 
     fun __constructor()
     {
-        print("------------------------------");
-        print("   SurgeScript Unit Testing   ");
-        print("------------------------------");
+        Console.print("------------------------------");
+        Console.print("   SurgeScript Unit Testing   ");
+        Console.print("------------------------------");
     }
 
     fun __destructor()
@@ -222,7 +222,7 @@ object "SurgeScriptTest"
         str = "\n";
         str += "SUCCEEDED  " + (totalTested - totalFailed) + "\t\t";
         str += "FAILED  " + totalFailed;
-        print(str);
+        Console.print(str);
     }
 
     fun test(expr)
@@ -233,13 +233,13 @@ object "SurgeScriptTest"
 
     fun fail(x)
     {
-        print("# Test " + x + " has failed.");
+        Console.print("# Test " + x + " has failed.");
         failed++;
     }
 
     fun begin(suite)
     {
-        print("\nTesting " + suite + "...");
+        Console.print("\nTesting " + suite + "...");
         tested = 0;
         failed = 0;
     }
@@ -247,7 +247,7 @@ object "SurgeScriptTest"
     fun end()
     {
         if(!failed)
-            print("All tests have passed.");
+            Console.print("All tests have passed.");
         totalTested += tested;
         totalFailed += failed;
     }

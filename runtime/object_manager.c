@@ -38,7 +38,10 @@ static const surgescript_objectmanager_handle_t ROOT_HANDLE = 1;
 /* names of important objects */
 #define APPLICATION_OBJECT "Application"
 static const char* ROOT_OBJECT = "System";
-static const char* SYSTEM_OBJECTS[] = { "String", "Number", "Boolean", APPLICATION_OBJECT, NULL }; /* this must be a NULL-terminated array, and APPLICATION_OBJECT should be the last element (spawning order) */
+static const char* SYSTEM_OBJECTS[] = {
+    "String", "Number", "Boolean", "Console",
+    APPLICATION_OBJECT, NULL
+}; /* this must be a NULL-terminated array, and APPLICATION_OBJECT should be the last element (spawning order) */
 
 /* object methods acessible by me */
 extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data); /* creates a new blank object */
