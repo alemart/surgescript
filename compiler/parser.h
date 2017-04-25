@@ -68,9 +68,12 @@
  * <postfixexpr> := identifier ++ | identifier --
  *               |  <funcallexpr> <postfixexpr1>
  *               |  <primaryexpr> <postfixexpr1>
- *               |  <primaryexpr> <postfixexpr1> [ <expr> ] <postfixexpr1>
- *               |  <primaryexpr> <postfixexpr1> [ <expr> ] <postfixexpr1> assignop <assignexpr>
- * <postfixexpr1> := . <funcallexpr> <lambdacall> <postfixexpr1> | <lambdacall>
+ *               |  <primaryexpr> <postfixexpr1> <dictexpr> <postfixexpr1>
+ *               |  <primaryexpr> <postfixexpr1> <dictexpr> <postfixexpr1> assignop <assignexpr>
+ *               |  <primaryexpr> <postfixexpr1> <dictexpr> ++ | <primaryexpr> <postfixexpr1> <dictexpr> --
+ * <postfixexpr1> := . <funcallexpr> <lambdacall> <dictexpr1> <postfixexpr1> | <lambdacall>
+ * <dictexpr> := [ <expr> ] <dictexpr1>
+ * <dictexpr1> := [ <expr> ] <dictexpr1> | e
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
  * <lambdacall> := ( ) <lambdacall> | ( <funargsexprlist> ) <lambdacall> | e

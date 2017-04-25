@@ -188,8 +188,8 @@ object "SurgeScriptTest"
         test(this["this"]("ale") == "ale") || fail(7);
         test(this(this)["this"](7) == 7) || fail(8);
         test(this(this)["this"] == this) || fail(9);
-        //test(this(this)["this"](this)["value"] == value) || fail(10);
-        //test(this["this"]["value"] == value) || fail(11);
+        test(this(this)["this"](this)["value"] == value) || fail(10);
+        test(this["this"]["value"] == value) || fail(11);
         test(this(this)(7) == this.call(this).call(7)) || fail(12);
         end();
     }
@@ -203,6 +203,8 @@ object "SurgeScriptTest"
         test((this["value"] = 5, this["value"]) == 5) || fail(4);
         test((this["value"] += 1, this["value"]) == 6) || fail(5);
         //test((this["value"]++, this["value"]) == 7) || fail(6);
+        test(this(this)["this"](this)["this"]["this"]["value"] == value) || fail(7);
+        //test(this.value == value) || fail(8);
         end();
     }
 

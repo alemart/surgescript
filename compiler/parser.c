@@ -86,6 +86,7 @@ static void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t co
 static void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name);
+static void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -777,22 +778,7 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         postfixexpr1(parser, context);
     }
 
-    if(optmatch(parser, SSTOK_LBRACKET)) {
-        emit_dictptr(context);
-        expr(parser, context);
-        match(parser, SSTOK_RBRACKET);
-        emit_dictkey(context);
-        if(got_type(parser, SSTOK_ASSIGNOP)) {
-            char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
-            match(parser, SSTOK_ASSIGNOP);
-            assignexpr(parser, context);
-            emit_dictset(context, op);
-            ssfree(op);
-        }
-        else
-            emit_dictget(context);
-        postfixexpr1(parser, context);
-    }
+    //dictexpr(parser, context);
 }
 
 void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -804,12 +790,38 @@ void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t contex
         ssfree(fun_name);
     }
     lambdacall(parser, context);
+    dictexpr(parser, context);
 }
 
 void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     while(got_type(parser, SSTOK_LPAREN))
         funcallexpr(parser, context, "call");
+}
+
+void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    while(optmatch(parser, SSTOK_LBRACKET)) {
+        emit_dictptr(context);
+        expr(parser, context);
+        match(parser, SSTOK_RBRACKET);
+        emit_dictkey(context);
+        if(got_type(parser, SSTOK_ASSIGNOP)) {
+            char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+            match(parser, SSTOK_ASSIGNOP);
+            assignexpr(parser, context);
+            emit_dictset(context, op);
+            ssfree(op);
+            break;
+        }
+        else {
+            emit_dictget(context);
+            if(got_type(parser, SSTOK_LBRACKET))
+                continue;
+        }
+        postfixexpr1(parser, context);
+        break;
+    }
 }
 
 void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name)
