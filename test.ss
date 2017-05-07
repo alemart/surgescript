@@ -69,7 +69,6 @@ object "SurgeScriptTest"
         test("oi" === "oi") || fail(31);
         test("sim" !== "nao") || fail(32);
         end();
-        return this;
     }
 
     fun number()

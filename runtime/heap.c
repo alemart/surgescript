@@ -108,7 +108,7 @@ surgescript_var_t* surgescript_heap_at(surgescript_heap_t* heap, surgescript_hea
     if(ptr >= 0 && ptr < heap->size && heap->mem[ptr] != NULL)
         return heap->mem[ptr];
 
-    ssfatal("surgescript_heap_at(0x%x): null pointer exception.", ptr);
+    ssfatal("surgescript_heap_at(0x%X): null pointer exception.", ptr);
     return NULL;
 }
 

@@ -18,6 +18,8 @@
 #include "../util/ssarray.h"
 #include "../util/util.h"
 
+typedef struct surgescript_object_exportedvar_t surgescript_object_exportedvar_t;
+
 /* object structure */
 struct surgescript_object_t
 {
@@ -40,10 +42,20 @@ struct surgescript_object_t
     /* inner transform */
     struct {
         float x, y, scale_x, scale_y, angle;
-    } transform;
+    } transform, localTransform;
+
+    /* exported variables */
+    SSARRAY(surgescript_object_exportedvar_t, exported_var);
 
     /* user-data */
     void* user_data; /* custom user-data */
+};
+
+/* exported variable: pair<string,heapptr> */
+struct surgescript_object_exportedvar_t
+{
+    char* var_name;
+    surgescript_heapptr_t var_addr;
 };
 
 /* functions */
@@ -94,6 +106,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->transform.scale_y = 1.0f;
     obj->transform.angle = 0.0f;
 
+    ssarray_init(obj->exported_var);
     obj->user_data = user_data;
 
     /* validation procedure */
@@ -110,6 +123,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
 surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(obj->renv);
+    int i;
 
     /* am I root? */
     if(obj->parent != obj->handle) {
@@ -118,12 +132,17 @@ surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
     }
 
     /* clear up the children */
-    for(int i = 0; i < ssarray_length(obj->child); i++) {
+    for(i = 0; i < ssarray_length(obj->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, obj->child[i]);
         child->parent = child->handle; /* the child is a root now */
         surgescript_objectmanager_delete(manager, child->handle); /* clear up everyone! */
     }
     ssarray_release(obj->child);
+
+    /* clear up any exported variables */
+    for(i = 0; i < ssarray_length(obj->exported_var); i++)
+        ssfree(obj->exported_var[i].var_name);
+    ssarray_release(obj->exported_var);
 
     /* call destructor */
     surgescript_object_release(obj);
@@ -535,6 +554,59 @@ void surgescript_object_call_state(surgescript_object_t* object, const char* sta
 }
 
 
+/*
+ * surgescript_object_export_variable()
+ * Associate a heap address to a (exported) variable name
+ */
+void surgescript_object_export_variable(surgescript_object_t* object, const char* var_name, surgescript_heapptr_t var_addr)
+{
+    if(!surgescript_object_exported_variable_exists(object, var_name)) {
+        surgescript_object_exportedvar_t exported_var = { ssstrdup(var_name), var_addr };
+        ssarray_push(object->exported_var, exported_var);
+    }
+}
+
+/*
+ * surgescript_object_exported_variable()
+ * Returns the heap address of a given (exported) variable
+ */
+surgescript_heapptr_t surgescript_object_exported_variable(const surgescript_object_t* object, const char* var_name)
+{
+    for(int i = 0; i < ssarray_length(object->exported_var); i++) {
+        if(0 == strcmp(object->exported_var[i].var_name, var_name))
+            return object->exported_var[i].var_addr;
+    }
+
+    ssfatal("Can't find exported variable \"%s\" in object 0x%X (\"%s\").", var_name, object->handle, object->name);
+    return 0;
+}
+
+
+/*
+ * surgescript_object_exported_variable_name()
+ * Returns the name of the i-th exported variable (i = 0, 1, 2 ...) or NULL if the index is invalid
+ */
+const char* surgescript_object_exported_variable_name(const surgescript_object_t* object, int index)
+{
+    if(index >= 0 && index < ssarray_length(object->exported_var))
+        return object->exported_var[index].var_name;
+    else
+        return NULL;
+}
+
+/*
+ * surgescript_object_exported_variable_exists()
+ * Does a given var_name exists as a exported variable?
+ */
+bool surgescript_object_exported_variable_exists(const surgescript_object_t* object, const char* var_name)
+{
+    for(int i = 0; i < ssarray_length(object->exported_var); i++) {
+        if(0 == strcmp(object->exported_var[i].var_name, var_name))
+            return true;
+    }
+    
+    return false;
+}
 
 /* private stuff */
 char* state2fun(const char* state)

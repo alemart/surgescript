@@ -11,6 +11,7 @@
 #define _SURGESCRIPT_RUNTIME_OBJECT_H
 
 #include <stdbool.h>
+#include "heap.h"
 
 /* types */
 typedef struct surgescript_object_t surgescript_object_t;
@@ -36,11 +37,7 @@ bool surgescript_object_update(surgescript_object_t* object); /* runs my program
 const char* surgescript_object_name(const surgescript_object_t* object); /* what's my name? */
 struct surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object); /* each object has its own heap */
 struct surgescript_objectmanager_t* surgescript_object_manager(const surgescript_object_t* object); /* pointer to the object manager */
-
-/* user data and annotations */
 void* surgescript_object_userdata(const surgescript_object_t* object); /* custom user-data (if any) */
-// todo: set user data
-// todo: on_annotation()
 
 /* object tree */
 unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer (in the object manager) */
@@ -60,6 +57,12 @@ bool surgescript_object_is_active(const surgescript_object_t* object); /* am i a
 void surgescript_object_set_active(surgescript_object_t* object, bool active); /* sets whether i am active or not; default is true */
 bool surgescript_object_is_killed(const surgescript_object_t* object); /* has this object been killed? */
 void surgescript_object_kill(surgescript_object_t* object); /* will destroy the object as soon as the opportunity arises */
+
+/* exported variables */
+void surgescript_object_export_variable(surgescript_object_t* object, const char* var_name, surgescript_heapptr_t var_addr);
+surgescript_heapptr_t surgescript_object_exported_variable(const surgescript_object_t* object, const char* var_name);
+const char* surgescript_object_exported_variable_name(const surgescript_object_t* object, int index);
+bool surgescript_object_exported_variable_exists(const surgescript_object_t* object, const char* var_name);
 
 /* call SurgeScript functions from C (you may pass NULL to return_value; you may also pass NULL to param iff num_params is 0) */
 void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value);
