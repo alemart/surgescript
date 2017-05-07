@@ -120,14 +120,11 @@ surgescript_var_t* fun_var(surgescript_object_t* object, const surgescript_var_t
     return surgescript_var_clone(surgescript_heap_at(heap, var_addr));
 }
 
-/* export a variable */
+/* export a variable, given a name and a heap_addr */
 surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* var_name = surgescript_var_fast_get_string(param[0]);
-    const surgescript_var_t* var_data = param[1];
-    surgescript_heapptr_t var_addr = surgescript_object_exported_variable(object, var_name);
-    surgescript_heap_t* heap = surgescript_object_heap(object);
-    surgescript_var_t* var = surgescript_heap_at(heap, var_addr);
-    surgescript_var_copy(var, var_data);
-    return surgescript_var_clone(var);
+    surgescript_heapptr_t var_addr = surgescript_var_get_rawbits(param[1]);
+    surgescript_object_export_variable(object, var_name, var_addr);
+    return NULL;
 }
