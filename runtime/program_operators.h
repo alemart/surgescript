@@ -32,6 +32,7 @@
     F( SSOP_MOVF, "movf" )                           /* t[a] = (number)b */ \
     F( SSOP_MOVS, "movs" )                             /* t[a] = text[b] */ \
     F( SSOP_MOVO, "movo" )                           /* t[a] = (object)b */ \
+    F( SSOP_MOVU, "movu" )                              /* t[a] = (u32)b */ \
     F( SSOP_XCHG, "xchg" )                           /* swap(t[a], t[b]) */ \
                                                                             \
     F( SSOP_ALLOC, "alloc" )              /* t[a] = allocate memory cell */ \

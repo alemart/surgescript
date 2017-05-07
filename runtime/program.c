@@ -455,6 +455,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_objecthandle(t(a), b.u);
             break;
 
+        case SSOP_MOVU: /* move u32 */
+            surgescript_var_set_rawbits(t(a), b.u);
+            break;
+
         case SSOP_MOV: /* move temp */
             surgescript_var_copy(t(a), t(b));
             break;

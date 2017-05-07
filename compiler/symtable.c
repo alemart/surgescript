@@ -139,7 +139,7 @@ void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, con
  * surgescript_symtable_emit_write()
  * Emits SurgeScript program code so that the contents of t[k] are written to the memory location pointed by the symbol
  */
-void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, unsigned k)
+void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const char* symbol, surgescript_program_t* program, unsigned k)
 {
     int j;
 
@@ -159,7 +159,7 @@ void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const cha
  * surgescript_symtable_emit_read()
  * Emits SurgeScript program code so that the contents of the memory location pointed by the symbol are read to t[k]
  */
-void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, unsigned k)
+void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char* symbol, surgescript_program_t* program, unsigned k)
 {
     int j;
 
@@ -203,7 +203,29 @@ bool surgescript_symtable_has_parent(surgescript_symtable_t* symtable)
     return symtable->parent != NULL;
 }
 
-/* privates */
+/*
+ * surgescript_symtable_push_addr()
+ * pushes an address (equivalent to symbol) to the stack
+ */
+void surgescript_symtable_push_addr(surgescript_symtable_t* symtable, const char* symbol, surgescript_program_t* program)
+{
+    int j;
+
+    if((j = indexof_symbol(symtable, symbol)) >= 0) {
+        surgescript_symtable_entry_t* entry = &(symtable->entry[j]);
+        surgescript_heapptr_t address = entry->heapaddr;
+        surgescript_program_add_line(program, SSOP_MOVU, SSOPu(0), SSOPu(address));
+        surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
+    }
+    else if(symtable->parent)
+        surgescript_symtable_push_addr(symtable->parent, symbol, program);
+    else
+        ssfatal("Compile Error: can't push address - undefined symbol \"%s\".", symbol);
+}
+
+
+
+/* private stuff */
 
 /* returns i such that symtable->entry[i].symbol == symbol, or -1 if not found */
 int indexof_symbol(surgescript_symtable_t* symtable, const char* symbol)
