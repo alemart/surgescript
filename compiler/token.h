@@ -51,6 +51,7 @@
     F( SSTOK_BREAK, "break" )                                                   \
     F( SSTOK_CONTINUE, "continue" )                                             \
     F( SSTOK_TYPEOF, "typeof" )                                                 \
+    F( SSTOK_EXPORT, "export" )                                                 \
     F( SSTOK_EMOTICON, "emoticon" )                                             \
     F( SSTOK_UNKNOWN, "<unknown>" )
 
