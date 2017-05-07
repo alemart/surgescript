@@ -19,6 +19,8 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_var(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -35,7 +37,8 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "findChild", fun_findchild, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
-    //surgescript_vm_bind(vm, "Object", "note", fun_note, 1); // TODO
+    surgescript_vm_bind(vm, "Object", "__var", fun_var, 1);
+    surgescript_vm_bind(vm, "Object", "__export", fun_export, 2);
 }
 
 
@@ -106,4 +109,25 @@ surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_va
     bool exists = surgescript_programpool_exists(surgescript_objectmanager_programpool(object_manager), object_name, program_name);
     ssfree(program_name);
     return surgescript_var_set_bool(surgescript_var_create(), exists);
+}
+
+/* read exported variable */
+surgescript_var_t* fun_var(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const char* var_name = surgescript_var_fast_get_string(param[0]);
+    surgescript_heapptr_t var_addr = surgescript_object_exported_variable(object, var_name);
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    return surgescript_var_clone(surgescript_heap_at(heap, var_addr));
+}
+
+/* export a variable */
+surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const char* var_name = surgescript_var_fast_get_string(param[0]);
+    const surgescript_var_t* var_data = param[1];
+    surgescript_heapptr_t var_addr = surgescript_object_exported_variable(object, var_name);
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_var_t* var = surgescript_heap_at(heap, var_addr);
+    surgescript_var_copy(var, var_data);
+    return surgescript_var_clone(var);
 }
