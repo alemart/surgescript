@@ -32,6 +32,8 @@ int main(int argc, char* argv[])
     if(!*file) {
         printf("SurgeScript\n");
         printf("Usage: %s input-script.ss\n", argv[0]);
+        surgescript_parser_destroy(parser);
+        surgescript_vm_destroy(vm);
         return 1;
     }
 
@@ -39,9 +41,12 @@ int main(int argc, char* argv[])
     success = surgescript_parser_parsefile(parser, file);
     if(!success) {
         printf("Error when parsing \"%s\".", file);
+        surgescript_parser_destroy(parser);
+        surgescript_vm_destroy(vm);
         return 1;
     }
-    surgescript_parser_destroy(parser);
+    else
+        surgescript_parser_destroy(parser);
 
     /* debug */
     /*surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "__ssconstructor"), stdout);
