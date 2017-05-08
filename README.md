@@ -16,12 +16,12 @@ Hello, world!
 
 **© 2016-2017  Alexandre Martins &lt;alemartf(at)gmail(dot)com&gt;**
 
-
-
 ### Introduction
 Computer games usually have tons of objects running around the screen. Some of them enable users (aka "modders") to modify the content and the behavior of the games (creating MODs). However, adding modding capabilities to a game engine usually imply a lot of work to developers.
 
-SurgeScript enables developers to easily add modding capabilities to their programs, so that users can customize the behavior of the game objects. SurgeScript is lightweight and simple to use. Having a C-like syntax, it's suitable to experts and novices alike. **Main features**:
+SurgeScript enables developers to easily add modding capabilities to their programs, so that users can customize the behavior of the game objects. SurgeScript is lightweight and simple to use. Having a C-like syntax, it's suitable to experts and novices alike.
+
+**Main features**:
 
 - **Object oriented programming language**: SurgeScript allows users to write code for discrete entities called "objects". Unlike other languages on the market, SurgeScript embeds a state machine within the objects. This is very helpful for game development, making things really easy for developers.
 - **Component-based approach**: users can create complex objects and behaviors by means of composition. While one object may describe a physical entity on your game, another may describe a behavior that can be attached to game objects. Users may compose those. Unlike other languages on the market, there is no inheritance. SurgeScript favors composition over inheritance.
@@ -49,7 +49,7 @@ object "Application"
 
 It first prints a message to the console. Then, it exits the app.
 
-For more examples, please check the [examples/](./examples) folder.
+For more examples, please check the [examples](./examples) folder.
 
 ### Mini-FAQ
 
