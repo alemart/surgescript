@@ -69,6 +69,10 @@ TODO (Wiki tutorials)
 
 Unlike other languages in the market, SurgeScript has been designed with the specific needs of computer games and interactive apps in mind. This includes: the state-machine pattern (all objects are state machines), the composition-approach (you may design complex objects and behaviors by means of composition), as well as the hierarchy system (objects have a parent and may have children, in a tree-like structure). This comes from years of experience of the author dealing with game engines, applications related to computer graphics, and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
+##### How do I embed SurgeScript into my game?
+
+TODO
+
 ### App Structure
 
 SurgeScript comes with a VM, used to run scripts. Scripts encode objects. Objects have an hierarchy between them. For example:
