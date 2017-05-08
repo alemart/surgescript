@@ -6,7 +6,7 @@ Quick start:
 $ git clone https://github.com/alemart/surgescript.git
 $ cd surgescript
 $ make
-$ surgescript examples/hello.ss
+$ ./surgescript examples/hello.ss
 ```
 
 You should see:
