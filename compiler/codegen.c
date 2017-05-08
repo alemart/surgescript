@@ -79,7 +79,6 @@ void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
 
 void emit_exportvar(surgescript_nodecontext_t context, const char* identifier)
 {
-    printf("%u\n", TEXT("__export"));
     SSASM(SSOP_SELF, U(0));
     SSASM(SSOP_PUSH, U(0));
     SSASM(SSOP_MOVS, U(0), TEXT(identifier));
