@@ -16,6 +16,8 @@ Hello, world!
 
 **© 2016-2017  Alexandre Martins &lt;alemartf(at)gmail(dot)com&gt;**
 
+
+
 ### Introduction
 Computer games usually have tons of objects running around the screen. Some of them enable users (aka "modders") to modify the content and the behavior of the games (creating MODs). However, adding modding capabilities to a game engine usually imply a lot of work to developers.
 
@@ -29,6 +31,25 @@ SurgeScript enables developers to easily add modding capabilities to their progr
 - **Type system**: SurgeScript is a dynamically typed language. Five basic types are available: string, number, boolean, object and null.
 - **C-like syntax**: constructions like if, while, variable assignments, function calls and so on are all available.
 - **Automatic garbage collection**: unneeded (unreachable) objects are automatically discarded from memory.
+
+### Examples
+
+This is an example script:
+
+```
+object "Application"
+{
+    state "main"
+    {
+        Console.print("Hello, world!");
+        Application.exit();
+    }
+}
+```
+
+It first prints a message to the console. Then, it exits the app.
+
+For more examples, please check the [examples/](./examples) folder.
 
 ### Mini-FAQ
 
@@ -61,23 +82,6 @@ Imagine you have a game or an interactive app with 3 objects on the screen: a ba
 In SurgeScript, objects are defined in scripts. Scripts are text files that encode how objects are going to behave.
 
 Objects hide their inner workings from the outer world, so that nobody needs to know exactly *how* they work. Everybody else just need to know *what* they do. They expose *public functions* that enables the world to interact with each of them. In order words, objects talk to each other using *API calls*.
-
-### Example
-
-The following is an example script:
-
-```
-object "Application"
-{
-    state "main"
-    {
-        Console.print("Hello, world!");
-        Application.exit();
-    }
-}
-```
-
-It first prints a message to the console. Then, it exits the app.
 
 ### Using it in C
 
