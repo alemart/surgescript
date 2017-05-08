@@ -205,7 +205,7 @@ const char* surgescript_parser_filename(surgescript_parser_t* parser)
 /* parses a script */
 void parse(surgescript_parser_t* parser)
 {
-    sslog("Parsing \"%s\"...", parser->filename);
+    /*sslog("Parsing \"%s\"...", parser->filename);*/
     parser->lookahead = surgescript_lexer_scan(parser->lexer); /* grab first symbol */
     return objectlist(parser);
 }

@@ -9,5 +9,6 @@ object "Application"
     state "main"
     {
         Console.print("Hello, world!");
+        Application.exit();
     }
 }
