@@ -53,7 +53,21 @@ For more examples, please check the [examples](./examples) folder.
 
 ### Mini-FAQ
 
-TODO
+##### What is SurgeScript?
+
+SurgeScript is a programming language designed for games and interactive apps.
+
+##### Who created it?
+
+SurgeScript has been originally created by Alexandre Martins, a developer from Brazil. The author has also created the Open Surge game engine, thus the name *SurgeScript*.
+
+##### How do I learn SurgeScript?
+
+TODO (Wiki tutorials)
+
+##### Why not use some other languages such as Lua?
+
+Unlike other languages in the market, SurgeScript has been designed with the specific needs of computer games and interactive apps in mind. This includes: the state-machine pattern (all objects are state machines), the composition-approach (you may design complex objects and behaviors by means of composition), as well as the hierarchy system (objects have a parent and may have children, in a tree-like structure). This comes from years of experience of the author dealing with game engines, applications related to computer graphics, and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
 ### App Structure
 
