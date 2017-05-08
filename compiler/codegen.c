@@ -79,6 +79,7 @@ void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
 
 void emit_exportvar(surgescript_nodecontext_t context, const char* identifier)
 {
+    printf("%u\n", TEXT("__export"));
     SSASM(SSOP_SELF, U(0));
     SSASM(SSOP_PUSH, U(0));
     SSASM(SSOP_MOVS, U(0), TEXT(identifier));
@@ -414,92 +415,6 @@ void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int n
     BREAKPOINT(fun_name);
     SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
 }
-
-#if 0
-void emit_dictset1(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line)
-{
-    if(!surgescript_symtable_has_parent(context.symtable))
-        ssfatal("Compile Error: invalid attribution (\"%s %s ...\") in object \"%s\" (%s:%d) - only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
-
-    /* save <expr> */
-    SSASM(SSOP_PUSH, T0);
-}
-
-void emit_dictset2(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line)
-{
-    /* where's our object? */
-    if(!surgescript_symtable_has_symbol(context.symtable, identifier))
-        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
-
-    /* prepare the stack */
-    SSASM(SSOP_POP, T3);  /* <expr> */
-    SSASM(SSOP_PUSH, T0); /*<assignexpr> */
-    surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
-    SSASM(SSOP_PUSH, T1); /* t1 is the object */
-    SSASM(SSOP_PUSH, T3); /* t3 is <expr> */
-
-    /* perform the assignment operation */
-    switch(*assignop) {
-        case '=':
-            SSASM(SSOP_PUSH, T0); /* t0 is <assignexpr> */
-            SSASM(SSOP_CALL, TEXT("set"), U(2));
-            SSASM(SSOP_POP, T0); /* return <assignexpr> */
-            SSASM(SSOP_POPN, U(3));
-            break;
-
-        case '+':
-        case '-':
-        case '*':
-        case '/':
-            SSASM(SSOP_CALL, TEXT("get"), U(1));
-            SSASM(SSOP_POP, T3); /* <expr> */
-            SSASM(SSOP_POP, T1); /* the object */
-            SSASM(SSOP_POP, T1); /* <assignexpr> */
-            if(*assignop == '+') {
-                surgescript_program_label_t cat = NEWLABEL();
-                surgescript_program_label_t end = NEWLABEL();
-                SSASM(SSOP_TCHK, T1, TYPE("string"));
-                SSASM(SSOP_JE, U(cat));
-                SSASM(SSOP_TCHK, T0, TYPE("string"));
-                SSASM(SSOP_JE, U(cat));
-                SSASM(SSOP_ADD, T0, T1); /* t0 = dict.get(<expr>) + <assignexpr> */
-                SSASM(SSOP_JMP, U(end));
-                LABEL(cat);
-                SSASM(SSOP_PUSH, T0);
-                SSASM(SSOP_PUSH, T1);
-                SSASM(SSOP_CALL, TEXT("concat"), U(1));
-                SSASM(SSOP_POPN, U(2));
-                LABEL(end);
-            }
-            else if(*assignop == '-')
-                SSASM(SSOP_SUB, T0, T1); /* t0 = dict.get(<expr>) - <assignexpr> */
-            else if(*assignop == '*')
-                SSASM(SSOP_MUL, T0, T1); /* t0 = dict.get(<expr>) * <assignexpr> */
-            else
-                SSASM(SSOP_DIV, T0, T1); /* t0 = dict.get(<expr>) / <assignexpr> */
-            surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
-            SSASM(SSOP_PUSH, T1); /* the object */
-            SSASM(SSOP_PUSH, T3); /* <expr> */
-            SSASM(SSOP_PUSH, T0); /* the result that is desired */
-            SSASM(SSOP_CALL, TEXT("set"), U(2));
-            SSASM(SSOP_POP, T0); /* return <assignexpr> */
-            SSASM(SSOP_POPN, U(2));
-            break;
-    }
-}
-
-void emit_dictget(surgescript_nodecontext_t context, const char* identifier, int line)
-{
-    if(!surgescript_symtable_has_symbol(context.symtable, identifier))
-        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
-
-    surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
-    SSASM(SSOP_PUSH, T1);
-    SSASM(SSOP_PUSH, T0);
-    SSASM(SSOP_CALL, TEXT("get"), U(1));
-    SSASM(SSOP_POPN, U(2));
-}
-#endif
 
 void emit_dictptr(surgescript_nodecontext_t context)
 {

@@ -1,6 +1,8 @@
-// SurgeScript - Unit Testing
-// A Unit Testing Script
-// by Alexandre
+//
+// unit_testing.ss
+// A Unit Testing Script for SurgeScript
+// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+//
 
 object "Application"
 {
@@ -21,11 +23,13 @@ object "Application"
 
 object "SurgeScriptTest"
 {
+    export message = "Amazing!";
+    value = null;
+
     failed = 0;
     tested = 0;
     totalFailed = 0;
     totalTested = 0;
-    value = null;
 
     state "main"
     {
@@ -150,6 +154,7 @@ object "SurgeScriptTest"
         test((c = spawn("Boolean"), c != null && child("Boolean") == c)) || fail(9);
         test((d = spawn("Number"), d != null && d == findChild("Number"))) || fail(10);
         test(typeof null == "null") || fail(11);
+        test(this.message == message) || fail(12);
         end();
     }
 
@@ -205,14 +210,9 @@ object "SurgeScriptTest"
         test(this["value"]++ == 7) || fail(7);
         test(this["value"]-- == 8) || fail(8);
         test(this(this)["this"](this)["this"]["this"]["value"] == value) || fail(9);
-        test(this.value == value) || fail(10);
-        test(this.property == "Amazing!") || fail(11);
-        test(this.property == this["property"] && this.property == this.get("property")) || fail(12);
-        test((this.value = 13, this.value++) == 13) || fail(13);
-        test(this.value++ == 14) || fail(14);
-        test(this.value == this["value"]) || fail(15);
-        test((this.property = null, this.property) == "Amazing!") || fail(16); // read-only
-        test(this.self.property == this["this"].self.self["self"].property) || fail(17);
+        test(this["property"] && this.get("property")) || fail(10);
+        test(value == this["value"]) || fail(11);
+        test(this["self"]["property"] == this["property"]) || fail(12);
         end();
     }
 
@@ -290,6 +290,12 @@ object "SurgeScriptTest"
 
 /*
 object "test" {
+    tag "entity";
+    tag "boss";
+    tag "player";
+    tag "#SD_SURGE";
+    tag "@Alexandre Martins";
+
     "requires": "0.2.0",
     "author": "Alexandre",
     "date": "2017-02-25,

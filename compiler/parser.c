@@ -429,8 +429,8 @@ void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context
 
 void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
     bool export_var = optmatch(parser, SSTOK_EXPORT);
+    char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
 
     match(parser, SSTOK_IDENTIFIER);
     match_exactly(parser, SSTOK_ASSIGNOP, "=");
