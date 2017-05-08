@@ -387,7 +387,7 @@ void object(surgescript_parser_t* parser)
         surgescript_program_create(0) /* object constructor */
     );
     if(surgescript_programpool_exists(parser->program_pool, object_name, "__ssconstructor"))
-        ssfatal("Duplicate definition of object \"%s\" in %s:%d.", object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        ssfatal("Compile Error: duplicate definition of object \"%s\" in %s:%d.", object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* read the object */
     match(parser, SSTOK_STRING);
@@ -423,13 +423,14 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    while(got_type(parser, SSTOK_IDENTIFIER))
+    while(got_type(parser, SSTOK_IDENTIFIER) || got_type(parser, SSTOK_EXPORT))
         vardecl(parser, context);
 }
 
 void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+    bool export_var = optmatch(parser, SSTOK_EXPORT);
 
     match(parser, SSTOK_IDENTIFIER);
     match_exactly(parser, SSTOK_ASSIGNOP, "=");
@@ -437,6 +438,9 @@ void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     match(parser, SSTOK_SEMICOLON);
 
     emit_vardecl(context, id);
+    if(export_var)
+        emit_exportvar(context, id);
+
     ssfree(id);
 }
 
@@ -852,29 +856,12 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void propertyread(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name)
 {
-    emit_dictptr(context);
-    emit_string(context, property_name);
-    emit_dictkey(context);
-    emit_dictget(context);
+    emit_exportedvar(context, property_name);
 }
 
 void propertywrite(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name)
 {
-    emit_dictptr(context);
-    emit_string(context, property_name);
-    emit_dictkey(context);
-    if(got_type(parser, SSTOK_ASSIGNOP)) {
-        char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
-        match(parser, SSTOK_ASSIGNOP);
-        assignexpr(parser, context);
-        emit_dictset(context, op);
-        ssfree(op);
-    }
-    else if(got_type(parser, SSTOK_INCDECOP)) {
-        const char* op = surgescript_token_lexeme(parser->lookahead);
-        emit_dictincdec(context, op);
-        match(parser, SSTOK_INCDECOP);
-    }
+    ssfatal("Compile Error: exported variable \"%s\" of object \"%s\" is read-only (in %s:%d).", property_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 }
 
 void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name)

@@ -77,6 +77,17 @@ void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
     surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
 }
 
+void emit_exportvar(surgescript_nodecontext_t context, const char* identifier)
+{
+    SSASM(SSOP_SELF, U(0));
+    SSASM(SSOP_PUSH, U(0));
+    SSASM(SSOP_MOVS, U(0), TEXT(identifier));
+    SSASM(SSOP_PUSH, U(0));
+    surgescript_symtable_push_addr(context.symtable, identifier, context.program);
+    SSASM(SSOP_CALL, TEXT("__export"), U(2));
+    SSASM(SSOP_POPN, U(3));
+}
+
 /* expressions */
 void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line)
 {
@@ -580,6 +591,15 @@ void emit_dictincdec(surgescript_nodecontext_t context, const char* op)
     SSASM(SSOP_CALL, TEXT("set"), U(2));
     SSASM(SSOP_POP, T0);
     SSASM(*op != '+' ? SSOP_INC : SSOP_DEC, T0); /* return value before modification */
+    SSASM(SSOP_POPN, U(2));
+}
+
+void emit_exportedvar(surgescript_nodecontext_t context, const char* identifier)
+{
+    SSASM(SSOP_PUSH, U(0)); /* object pointer */
+    SSASM(SSOP_MOVS, U(0), TEXT(identifier));
+    SSASM(SSOP_PUSH, U(0));
+    SSASM(SSOP_CALL, TEXT("__var"), U(1)); /* read exported var named <identifier> */
     SSASM(SSOP_POPN, U(2));
 }
 

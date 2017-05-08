@@ -213,7 +213,7 @@ void surgescript_symtable_push_addr(surgescript_symtable_t* symtable, const char
 
     if((j = indexof_symbol(symtable, symbol)) >= 0) {
         surgescript_symtable_entry_t* entry = &(symtable->entry[j]);
-        surgescript_heapptr_t address = entry->heapaddr;
+        surgescript_heapptr_t address = entry->heapaddr; /* a heap address is pushed */
         surgescript_program_add_line(program, SSOP_MOVU, SSOPu(0), SSOPu(address));
         surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
     }
