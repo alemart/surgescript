@@ -1,18 +1,38 @@
 ## SurgeScript
-SurgeScript is a lightweight programming language for computer games and interactive apps, built originally for the Open Surge Engine.
+SurgeScript is a lightweight programming language for computer games and interactive apps, built originally for the Open Surge Engine. It is easy and fun to use, yet powerful enough for experts. It may be embedded into any C project.
+
+Quick start:
+```
+$ git clone https://github.com/alemart/surgescript.git
+$ cd surgescript
+$ make
+$ surgescript examples/hello.ss
+```
+
+You should see:
+```
+Hello, world!
+```
+
+**© 2016-2017  Alexandre Martins &lt;alemartf(at)gmail(dot)com&gt;**
 
 ### Introduction
 Computer games usually have tons of objects running around the screen. Some of them enable users (aka "modders") to modify the content and the behavior of the games (creating MODs). However, adding modding capabilities to a game engine usually imply a lot of work to developers.
 
-SurgeScript enables developers to easily add modding capabilities to their programs, so that users can customize the behavior of the game objects. SurgeScript is lightweight and simple to use. Having a C-like syntax, it's suitable to experts and novices alike.
+SurgeScript enables developers to easily add modding capabilities to their programs, so that users can customize the behavior of the game objects. SurgeScript is lightweight and simple to use. Having a C-like syntax, it's suitable to experts and novices alike. **Main features**:
 
-### Scenario
+- **Object oriented programming language**: SurgeScript allows users to write code for discrete entities called "objects". Unlike other languages on the market, SurgeScript embeds a state machine within the objects. This is very helpful for game development, making things really easy for developers.
+- **Component-based approach**: users can create complex objects and behaviors by means of composition. While one object may describe a physical entity on your game, another may describe a behavior that can be attached to game objects. Users may compose those. Unlike other languages on the market, there is no inheritance. SurgeScript favors composition over inheritance.
+- **Object design**: objects define a set of variables, states and functions. Variables may be modified from within the objects themselves. Only one state may be active at any given time. Functions are exposed to the outer world, and any object may call exposed functions.
+- **Objects do not mess with each others' internals**: this is a golden rule. In order to promote low coupling and high cohesion, SurgeScript asks users to define an API for each object. The internals of an object may only be modified through API calls, or from the objects themselves.
+- **Built-in hierarchy**: unlike other languages on the market, SurgeScript features a built-in parent-child hierarchy for the objects. Objects may be created at anytime (during runtime) and are subject to this hierarchy. This is a know pattern on the computer graphics world and it is very useful for developing games and creating interactive apps.
+- **Type system**: SurgeScript is a dynamically typed language. Five basic types are available: string, number, boolean, object and null.
+- **C-like syntax**: constructions like if, while, variable assignments, function calls and so on are all available.
+- **Automatic garbage collection**: unneeded (unreachable) objects are automatically discarded from memory.
 
-So, you have a game or an interactive app with 3 objects on the screen: a ball and two rackets. You'd like to let users customize their behavior, so that you don't end up with boring pong. Users can come up with unlimited creativity: the ball can move in any way they like, maybe there should be more rackets, or, who knows, a change of scenario would be interesting! Well, users can easily make those changes to the original game/app.
+### Mini-FAQ
 
-In SurgeScript, objects are defined in scripts. Scripts are text files that encode how objects are going to behave.
-
-Objects hide their inner workings from the outer world, so that nobody needs to know exactly *how* they work. Everybody else just need to know *what* they do. They expose *public functions* that enables the world to interact with each of them. In order words, objects talk to each other using *API calls*.
+TODO
 
 ### App Structure
 
@@ -34,30 +54,30 @@ Below the Application, there are objects created by the Application itself (via 
 
 This hiearchy comes with a curious feature: whenever an object is destroyed, so are its children. So, if you delete the Level, all of its memory is automatically released. Similarly, if you delete the Application, the SurgeScript VM quits.
 
-### Examples
+### Scenario
+
+Imagine you have a game or an interactive app with 3 objects on the screen: a ball and two rackets. You'd like to let users customize their behavior, so that you don't end up with boring pong. Users can come up with unlimited creativity: the ball can move in any way they like, maybe there should be more rackets, or, who knows, a change of scenario would be interesting! Well, users can easily make those changes to the original game/app.
+
+In SurgeScript, objects are defined in scripts. Scripts are text files that encode how objects are going to behave.
+
+Objects hide their inner workings from the outer world, so that nobody needs to know exactly *how* they work. Everybody else just need to know *what* they do. They expose *public functions* that enables the world to interact with each of them. In order words, objects talk to each other using *API calls*.
+
+### Example
 
 The following is an example script:
 
-TODO
-
-*pong.ss*
 ```
-// This object represents our game/app
-object Application
+object "Application"
 {
-    // TODO
-}
-
-object Racket 
-{
-    // ...
-}
-
-object Ball
-{
-    // ...
+    state "main"
+    {
+        Console.print("Hello, world!");
+        Application.exit();
+    }
 }
 ```
+
+It first prints a message to the console. Then, it exits the app.
 
 ### Using it in C
 
@@ -68,5 +88,4 @@ In a terminal, type:
 ```
 $ make
 ```
-
-© 2016  Alexandre Martins &lt;alemartf(at)gmail(dot)com&gt;
+You'll need a C compiler such as gcc, as well as make.
