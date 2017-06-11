@@ -41,6 +41,11 @@ int surgescript_objectmanager_count(surgescript_objectmanager_t* manager); /* ho
 void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manager); /* runs the garbage collector */
 struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */
 
+/* tags */
+void surgescript_objectmanager_add_tag(surgescript_objectmanager_t* manager, const char* object_name, const char* tag_name); /* add tag_name to a certain class of objects */
+bool surgescript_objectmanager_has_tag(surgescript_objectmanager_t* manager, const char* object_name, const char* tag_name); /* is object_name tagged tag_name? */
+const char* surgescript_objectmanager_tagged_object(surgescript_objectmanager_t* manager, const char* tag_name, int index, void **tmp); /* index >= 0; returns NULL if no object */
+
 /* root & built-in objects */
 surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */
 surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */

@@ -64,6 +64,9 @@ struct surgescript_inversetagtable_t
     SSARRAY(char*, object_name); /* values */
     UT_hash_handle hh;
 };
+static void init_tags(surgescript_objectmanager_t* manager);
+static void release_tags(surgescript_objectmanager_t* manager);
+#define generate_tag(tag_name) surgescript_util_str2hash(tag_name)
 
 /* object methods acessible by me */
 extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data); /* creates a new blank object */
@@ -111,6 +114,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     manager->first_object_to_be_scanned = 0;
     manager->reachables_count = 0;
 
+    init_tags(manager);
     return manager;
 }
 
@@ -121,10 +125,11 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
 surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objectmanager_t* manager)
 {
     surgescript_objectmanager_handle_t handle = ssarray_length(manager->data);
-
+    
     while(handle != 0)
         surgescript_objectmanager_delete(manager, --handle);
 
+    release_tags(manager);
     ssarray_release(manager->data);
     ssarray_release(manager->objects_to_be_scanned);
     return ssfree(manager);
@@ -293,6 +298,84 @@ surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescri
 }
 
 /*
+ * surgescript_objectmanager_add_tag()
+ * Add tag_name to a certain class of objects
+ */
+void surgescript_objectmanager_add_tag(surgescript_objectmanager_t* manager, const char* object_name, const char* tag_name)
+{
+    surgescript_tagtable_t* entry;
+    surgescript_inversetagtable_t* ientry;
+    surgescript_tag_t tag = generate_tag(tag_name);
+
+    HASH_FIND_STR(manager->tag_table, object_name, entry);
+    if(entry == NULL) {
+        entry = ssmalloc(sizeof *entry);
+        entry->object_name = ssstrdup(object_name);
+        ssarray_init(entry->tag);
+        HASH_ADD_KEYPTR(hh, manager->tag_table, object_name, strlen(object_name), entry);
+    }
+
+    HASH_FIND_INT(manager->inverse_tag_table, &tag, ientry);
+    if(ientry == NULL) {
+        ientry = ssmalloc(sizeof *ientry);
+        ientry->tag = tag;
+        ssarray_init(ientry->object_name);
+        HASH_ADD_INT(manager->inverse_tag_table, tag, ientry);
+    }
+
+    ssarray_push(entry->tag, tag);
+    ssarray_push(ientry->object_name, ssstrdup(object_name));
+}
+
+/*
+ * surgescript_objectmanager_has_tag()
+ * Is object_name tagged tag_name?
+ */
+bool surgescript_objectmanager_has_tag(surgescript_objectmanager_t* manager, const char* object_name, const char* tag_name)
+{
+    surgescript_tagtable_t* entry;
+
+    HASH_FIND_STR(manager->tag_table, object_name, entry);
+    if(entry != NULL) {
+        surgescript_tag_t tag = generate_tag(tag_name);
+        for(int i = 0; i < ssarray_length(entry->tag); i++) {
+            if(entry->tag[i] == tag)
+                return true;
+        }
+    }
+
+    return false;
+}
+
+/*
+ * surgescript_objectmanager_tagged_object()
+ * Grabs the list of objects tagged tag_name
+ * Set index >= 0; returns NULL if no such an object
+ * tmp [optional]: pass the address of a NULL-initialized void pointer for optimization, or just pass NULL if you don't care
+ */
+const char* surgescript_objectmanager_tagged_object(surgescript_objectmanager_t* manager, const char* tag_name, int index, void **tmp)
+{
+    surgescript_inversetagtable_t* ientry = tmp ? (surgescript_inversetagtable_t*)(*tmp) : NULL;
+
+    /* optimization: just call HASH_FIND once */
+    if(ientry == NULL) { /* either (tmp == NULL) or (tmp != NULL && *tmp == NULL) */
+        surgescript_tag_t tag = generate_tag(tag_name);
+        HASH_FIND_INT(manager->inverse_tag_table, &tag, ientry);
+        if(tmp != NULL)
+            *tmp = (void*)ientry;
+    }
+
+    /* get the i-th object associated with the tag */
+    if(ientry != NULL) {
+        if(index >= 0 && index < ssarray_length(ientry->object_name))
+            return ientry->object_name[index];
+    }
+
+    /* not found: no such an object */
+    return NULL;
+}
+
+/*
  * surgescript_objectmanager_collectgarbage()
  * Run a cycle of the garbage collector (incremental mark-and-sweep algorithm)
  */
@@ -385,4 +468,31 @@ surgescript_objectmanager_handle_t new_handle(surgescript_objectmanager_t* mgr)
     while(mgr->handle_ptr < ssarray_length(mgr->data) && mgr->data[mgr->handle_ptr] != NULL)
         mgr->handle_ptr++;
     return mgr->handle_ptr;
+}
+
+/* initialize the tags tables */
+void init_tags(surgescript_objectmanager_t* manager)
+{
+    manager->tag_table = NULL;
+    manager->inverse_tag_table = NULL;
+}
+
+/* release the tags tables */
+void release_tags(surgescript_objectmanager_t* manager)
+{
+    surgescript_tagtable_t *it, *tmp;
+    surgescript_inversetagtable_t *iit, *itmp;
+
+    HASH_ITER(hh, manager->tag_table, it, tmp) {
+        HASH_DEL(manager->tag_table, it);
+        ssfree(it->object_name);
+        ssfree(it);
+    }
+
+    HASH_ITER(hh, manager->inverse_tag_table, iit, itmp) {
+        HASH_DEL(manager->inverse_tag_table, iit);
+        for(int i = 0; i < ssarray_length(iit->object_name); i++)
+            ssfree(iit->object_name[i]);
+        ssfree(iit);
+    }
 }
