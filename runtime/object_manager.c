@@ -8,6 +8,7 @@
  */
 
 #include <string.h>
+#include <stdint.h>
 #include "object_manager.h"
 #include "object.h"
 #include "program_pool.h"
@@ -15,7 +16,11 @@
 #include "heap.h"
 #include "variable.h"
 #include "../util/ssarray.h"
+#include "../util/uthash.h"
 #include "../util/util.h"
+
+typedef struct surgescript_tagtable_t surgescript_tagtable_t;
+typedef struct surgescript_inversetagtable_t surgescript_inversetagtable_t;
 
 /* types */
 struct surgescript_objectmanager_t
@@ -26,6 +31,8 @@ struct surgescript_objectmanager_t
     surgescript_objectmanager_handle_t app_handle; /* user's application */
     surgescript_programpool_t* program_pool; /* reference to the program pool */
     surgescript_stack_t* stack; /* reference to the stack */
+    surgescript_tagtable_t* tag_table; /* tag table: object -> tags */
+    surgescript_inversetagtable_t* inverse_tag_table; /* inverse tag table: tag -> objects */
     SSARRAY(surgescript_objectmanager_handle_t, objects_to_be_scanned); /* garbage collection */
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
@@ -42,6 +49,21 @@ static const char* SYSTEM_OBJECTS[] = {
     "String", "Number", "Boolean", "Console",
     APPLICATION_OBJECT, NULL
 }; /* this must be a NULL-terminated array, and APPLICATION_OBJECT should be the last element (spawning order) */
+
+/* tag table: an object may hold an arbitrary number of tags */
+typedef uint32_t surgescript_tag_t;
+struct surgescript_tagtable_t
+{
+    char* object_name; /* key */
+    SSARRAY(surgescript_tag_t, tag); /* values */
+    UT_hash_handle hh;
+};
+struct surgescript_inversetagtable_t
+{
+    surgescript_tag_t tag; /* key */
+    SSARRAY(char*, object_name); /* values */
+    UT_hash_handle hh;
+};
 
 /* object methods acessible by me */
 extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data); /* creates a new blank object */
