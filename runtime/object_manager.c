@@ -331,7 +331,7 @@ void surgescript_objectmanager_add_tag(surgescript_objectmanager_t* manager, con
  * surgescript_objectmanager_has_tag()
  * Is object_name tagged tag_name?
  */
-bool surgescript_objectmanager_has_tag(surgescript_objectmanager_t* manager, const char* object_name, const char* tag_name)
+bool surgescript_objectmanager_has_tag(const surgescript_objectmanager_t* manager, const char* object_name, const char* tag_name)
 {
     surgescript_tagtable_t* entry;
 
@@ -353,7 +353,7 @@ bool surgescript_objectmanager_has_tag(surgescript_objectmanager_t* manager, con
  * Set index >= 0; returns NULL if no such an object
  * tmp [optional]: pass the address of a NULL-initialized void pointer for optimization, or just pass NULL if you don't care
  */
-const char* surgescript_objectmanager_tagged_object(surgescript_objectmanager_t* manager, const char* tag_name, int index, void **tmp)
+const char* surgescript_objectmanager_tagged_object(const surgescript_objectmanager_t* manager, const char* tag_name, int index, void **tmp)
 {
     surgescript_inversetagtable_t* ientry = tmp ? (surgescript_inversetagtable_t*)(*tmp) : NULL;
 

@@ -43,8 +43,8 @@ struct surgescript_programpool_t* surgescript_objectmanager_programpool(const su
 
 /* tags */
 void surgescript_objectmanager_add_tag(surgescript_objectmanager_t* manager, const char* object_name, const char* tag_name); /* add tag_name to a certain class of objects */
-bool surgescript_objectmanager_has_tag(surgescript_objectmanager_t* manager, const char* object_name, const char* tag_name); /* is object_name tagged tag_name? */
-const char* surgescript_objectmanager_tagged_object(surgescript_objectmanager_t* manager, const char* tag_name, int index, void **tmp); /* index >= 0; returns NULL if no object */
+bool surgescript_objectmanager_has_tag(const surgescript_objectmanager_t* manager, const char* object_name, const char* tag_name); /* is object_name tagged tag_name? */
+const char* surgescript_objectmanager_tagged_object(const surgescript_objectmanager_t* manager, const char* tag_name, int index, void **tmp); /* index >= 0; returns NULL if no object */
 
 /* root & built-in objects */
 surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */

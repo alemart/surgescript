@@ -21,6 +21,7 @@ static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgesc
 static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_var(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -37,6 +38,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "findChild", fun_findchild, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
+    surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "__var", fun_var, 1);
     surgescript_vm_bind(vm, "Object", "__export", fun_export, 2);
 }
@@ -105,10 +107,19 @@ surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_va
 {
     const surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
     const char* object_name = surgescript_object_name(object);
-    char* program_name = surgescript_var_get_string(param[0]);
+    const char* program_name = surgescript_var_fast_get_string(param[0]);
     bool exists = surgescript_programpool_exists(surgescript_objectmanager_programpool(object_manager), object_name, program_name);
-    ssfree(program_name);
     return surgescript_var_set_bool(surgescript_var_create(), exists);
+}
+
+/* is this object tagged param[0] ? */
+surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
+    const char* object_name = surgescript_object_name(object);
+    const char* tag_name = surgescript_var_fast_get_string(param[0]);
+    bool tagged = surgescript_objectmanager_has_tag(object_manager, object_name, tag_name);
+    return surgescript_var_set_bool(surgescript_var_create(), tagged);
 }
 
 /* read exported variable */

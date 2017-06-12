@@ -407,7 +407,7 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     emit_object_header(context, start, end);
 
     /* read non-terminals */
-    taglist(parser, context);
+    //taglist(parser, context);
     vardecllist(parser, context);
     statedecllist(parser, context);
     fundecllist(parser, context);
