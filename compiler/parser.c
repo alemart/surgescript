@@ -335,9 +335,14 @@ bool has_token(surgescript_parser_t* parser)
 void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     surgescript_programpool_t* pool = parser->program_pool;
-    if(!surgescript_programpool_exists(pool, context.object_name, "state:main")) {
+
+    /* found an invalid symbol? */
+    if(!got_type(parser, SSTOK_RCURLY))
+        unexpected_symbol(parser);
+
+    /* do we have a "main" state? */
+    if(!surgescript_programpool_exists(pool, context.object_name, "state:main"))
         ssfatal("Object \"%s\" in \"%s\" needs a \"main\" state.", context.object_name, context.source_file);
-    }
 }
 
 /* similar to basename(), but without the odd semantics. No strings are allocated. */
@@ -407,7 +412,7 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     emit_object_header(context, start, end);
 
     /* read non-terminals */
-    //taglist(parser, context);
+    taglist(parser, context);
     vardecllist(parser, context);
     statedecllist(parser, context);
     fundecllist(parser, context);

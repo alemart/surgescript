@@ -6,12 +6,12 @@
 
 object "Application"
 {
-    object = spawn("Banana"); // change to "Alfred" or "Coin"
+    obj = spawn("Banana"); // change to "Alfred" or "Coin"
 
     state "main"
     {
         // check if the object is tagged "Pickup"
-        if(object.hasTag("Pickup"))
+        if(obj.hasTag("Pickup"))
             Console.print("The object is a pickup.");
         else
             Console.print("The object is not a pickup.");
