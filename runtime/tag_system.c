@@ -19,12 +19,14 @@
 typedef uint32_t surgescript_tag_t;
 typedef struct surgescript_tagtable_t surgescript_tagtable_t;
 typedef struct surgescript_inversetagtable_t surgescript_inversetagtable_t;
+typedef struct surgescript_tagtree_t surgescript_tagtree_t;
 
 /* tag system */
 struct surgescript_tagsystem_t
 {
     surgescript_tagtable_t* tag_table; /* tag table: object -> tags */
     surgescript_inversetagtable_t* inverse_tag_table; /* inverse tag table: tag -> objects */
+    surgescript_tagtree_t* tag_tree; /* the set of all tags */
 };
 
 /* tag table: an object may hold an arbitrary number of tags */
@@ -42,6 +44,18 @@ struct surgescript_inversetagtable_t
     UT_hash_handle hh;
 };
 
+/* tag tree: the set of all tags */
+struct surgescript_tagtree_t
+{
+    char* tag_name;
+    surgescript_tagtree_t* left;
+    surgescript_tagtree_t* right;
+};
+
+static surgescript_tagtree_t* add_to_tree(surgescript_tagtree_t* tree, const char* tag_name);
+static void remove_tree(surgescript_tagtree_t* tree);
+static void traverse_tree(const surgescript_tagtree_t* tree, void* data, void (*callback)(const char*, void*));
+
 
 /*
  * surgescript_tagsystem_create()
@@ -52,6 +66,7 @@ surgescript_tagsystem_t* surgescript_tagsystem_create()
     surgescript_tagsystem_t* tag_system = ssmalloc(sizeof *tag_system);
     tag_system->tag_table = NULL;
     tag_system->inverse_tag_table = NULL;
+    tag_system->tag_tree = NULL;
     return tag_system;
 }
 
@@ -63,6 +78,8 @@ surgescript_tagsystem_t* surgescript_tagsystem_destroy(surgescript_tagsystem_t* 
 {
     surgescript_tagtable_t *it, *tmp;
     surgescript_inversetagtable_t *iit, *itmp;
+
+    remove_tree(tag_system->tag_tree);
 
     HASH_ITER(hh, tag_system->inverse_tag_table, iit, itmp) {
         HASH_DEL(tag_system->inverse_tag_table, iit);
@@ -107,8 +124,8 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
     }
 
     ssarray_push(entry->tag, tag);
-    /*ssarray_push(ientry->object_name, ssstrdup(object_name));*/
-    ssarray_push(ientry->object_name, entry->object_name);
+    ssarray_push(ientry->object_name, entry->object_name); /*ssarray_push(ientry->object_name, ssstrdup(object_name));*/
+    tag_system->tag_tree = add_to_tree(tag_system->tag_tree, tag_name);
 }
 
 /*
@@ -137,7 +154,7 @@ bool surgescript_tagsystem_has_tag(const surgescript_tagsystem_t* tag_system, co
  */
 void surgescript_tagsystem_foreach_tag(const surgescript_tagsystem_t* tag_system, void* data, void (*callback)(const char*,void*))
 {
-    /* TODO */
+    traverse_tree(tag_system->tag_tree, data, callback);
 }
 
 /*
@@ -153,5 +170,49 @@ void surgescript_tagsystem_foreach_tagged_object(const surgescript_tagsystem_t* 
     if(ientry != NULL) {
         for(int i = 0; i < ssarray_length(ientry->object_name); i++)
             callback(ientry->object_name[i], data);
+    }
+}
+
+
+
+/* private stuff */
+
+/* adds a tag to the tag tree */
+surgescript_tagtree_t* add_to_tree(surgescript_tagtree_t* tree, const char* tag_name)
+{
+    if(tree == NULL) {
+        surgescript_tagtree_t* node = ssmalloc(sizeof *node);
+        node->tag_name = ssstrdup(tag_name);
+        node->left = node->right = NULL;
+        return node;
+    }
+    else {
+        int cmp = strcmp(tag_name, tree->tag_name);
+        if(cmp < 0)
+            tree->left = add_to_tree(tree->left, tag_name);
+        else if(cmp > 0)
+            tree->right = add_to_tree(tree->right, tag_name);
+        return tree;
+    }
+}
+
+/* removes the whole tag tree */
+void remove_tree(surgescript_tagtree_t* tree)
+{
+    if(tree != NULL) {
+        remove_tree(tree->left);
+        remove_tree(tree->right);
+        ssfree(tree->tag_name);
+        ssfree(tree);
+    }
+}
+
+/* traverses the tag tree, in alphabetical order */
+void traverse_tree(const surgescript_tagtree_t* tree, void* data, void (*callback)(const char*, void*))
+{
+    if(tree != NULL) {
+        traverse_tree(tree->left, data, callback);
+        callback(tree->tag_name, data);
+        traverse_tree(tree->right, data, callback);
     }
 }
