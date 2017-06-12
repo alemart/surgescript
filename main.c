@@ -24,7 +24,8 @@ int main(int argc, char* argv[])
 {
     surgescript_vm_t* vm = surgescript_vm_create();
     surgescript_programpool_t* program_pool = surgescript_vm_programpool(vm);
-    surgescript_parser_t* parser = surgescript_parser_create(program_pool);
+    surgescript_tagsystem_t* tag_system = surgescript_vm_tagsystem(vm);
+    surgescript_parser_t* parser = surgescript_parser_create(program_pool, tag_system);
     const char* file = argc > 1 ? argv[1] : "";
     bool success;
 

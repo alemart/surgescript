@@ -27,10 +27,13 @@ object_manager: runtime/object_manager.c runtime/object_manager.h object utils
 renv: runtime/renv.c runtime/renv.h heap stack variable program_pool object_manager utils
 	$(CC) $(CFLAGS) -c runtime/renv.c
 
+tag_system: runtime/tag_system.c runtime/tag_system.h utils
+	$(CC) $(CFLAGS) -c runtime/tag_system.c
+
 vm: runtime/vm.c runtime/vm.h sslib stack program_pool object_manager program object variable
 	$(CC) $(CFLAGS) -c runtime/vm.c
 
-object: runtime/object.c runtime/object.h program utils
+object: runtime/object.c runtime/object.h program tag_system utils
 	$(CC) $(CFLAGS) -c runtime/object.c
 
 utils: util/util.c util/util.h
@@ -68,8 +71,8 @@ codegen: compiler/codegen.h compiler/codegen.c utils symtable program_pool progr
 main: main.c utils variable
 	$(CC) $(CFLAGS) -c main.c
 
-all: main utils variable heap stack program program_pool object renv vm sslib token lexer parser symtable codegen utf8
-	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o utf8.o variable.o heap.o stack.o program.o program_pool.o object_manager.o renv.o object.o vm.o sslib.a token.o lexer.o parser.o symtable.o codegen.o -lm
+all: main utils variable heap stack program program_pool object renv tag_system vm sslib token lexer parser symtable codegen utf8
+	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o utf8.o variable.o heap.o stack.o program.o program_pool.o object_manager.o tag_system.o renv.o object.o vm.o sslib.a token.o lexer.o parser.o symtable.o codegen.o -lm
 
 clean:
 	$(RM) $(TARGET) *.o *.a

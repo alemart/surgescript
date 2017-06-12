@@ -14,6 +14,7 @@
 #include "program.h"
 #include "object.h"
 #include "program_pool.h"
+#include "tag_system.h"
 #include "object_manager.h"
 #include "variable.h"
 
@@ -32,6 +33,7 @@ void surgescript_vm_kill(surgescript_vm_t* vm); /* terminates the vm */
 bool surgescript_vm_is_active(surgescript_vm_t* vm); /* is the vm active? */
 
 surgescript_programpool_t* surgescript_vm_programpool(const surgescript_vm_t* vm); /* gets the program pool */
+surgescript_tagsystem_t* surgescript_vm_tagsystem(const surgescript_vm_t* vm); /* gets the tag system */
 surgescript_objectmanager_t* surgescript_vm_objectmanager(const surgescript_vm_t* vm); /* gets the object manager */
 
 surgescript_object_t* surgescript_vm_root_object(surgescript_vm_t* vm); /* root object */

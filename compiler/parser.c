@@ -18,6 +18,8 @@
 #include "nodecontext.h"
 #include "symtable.h"
 #include "codegen.h"
+#include "../runtime/object_manager.h"
+#include "../runtime/tag_system.h"
 #include "../runtime/program_pool.h"
 #include "../runtime/program.h"
 #include "../util/util.h"
@@ -31,6 +33,7 @@ struct surgescript_parser_t
     surgescript_lexer_t* lexer;
     char* filename;
     surgescript_programpool_t* program_pool;
+    surgescript_tagsystem_t* tag_system;
 };
 
 /* helpers */
@@ -107,13 +110,14 @@ static void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t co
  * surgescript_parser_create()
  * Creates a new parser
  */
-surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* program_pool)
+surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* program_pool, surgescript_tagsystem_t* tag_system)
 {
     surgescript_parser_t* parser = ssmalloc(sizeof *parser);
     parser->lookahead = parser->previous = NULL;
     parser->lexer = surgescript_lexer_create();
     parser->filename = ssstrdup("<unspecified>");
     parser->program_pool = program_pool;
+    parser->tag_system = tag_system;
     setlocale(LC_NUMERIC, "C"); /* use '.' as the decimal separator on atof() */
     return parser;
 }
@@ -429,7 +433,7 @@ void taglist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     while(optmatch(parser, SSTOK_TAG)) {
         const char* tag_name = surgescript_token_lexeme(parser->lookahead);
         expect(parser, SSTOK_STRING);
-        printf("Object \"%s\" tagged \"%s\".\n", context.object_name, tag_name);
+        surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, tag_name);
         match(parser, SSTOK_STRING);
         match(parser, SSTOK_SEMICOLON);
     }

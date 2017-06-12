@@ -18,6 +18,7 @@ struct surgescript_vm_t
 {
     surgescript_stack_t* stack;
     surgescript_programpool_t* program_pool;
+    surgescript_tagsystem_t* tag_system;
     surgescript_objectmanager_t* object_manager;
 };
 
@@ -31,7 +32,8 @@ surgescript_vm_t* surgescript_vm_create()
 
     vm->stack = surgescript_stack_create();
     vm->program_pool = surgescript_programpool_create();
-    vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->stack);
+    vm->tag_system = surgescript_tagsystem_create();
+    vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->tag_system, vm->stack);
 
     return vm;
 }
@@ -43,6 +45,7 @@ surgescript_vm_t* surgescript_vm_create()
 surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
 {
     surgescript_objectmanager_destroy(vm->object_manager);
+    surgescript_tagsystem_destroy(vm->tag_system);
     surgescript_programpool_destroy(vm->program_pool);
     surgescript_stack_destroy(vm->stack);
     return ssfree(vm);
@@ -114,6 +117,15 @@ void surgescript_vm_kill(surgescript_vm_t* vm)
 surgescript_programpool_t* surgescript_vm_programpool(const surgescript_vm_t* vm)
 {
     return vm->program_pool;
+}
+
+/*
+ * surgescript_vm_tagsystem()
+ * Gets the tag system
+ */
+surgescript_tagsystem_t* surgescript_vm_tagsystem(const surgescript_vm_t* vm)
+{
+    return vm->tag_system;
 }
 
 /*

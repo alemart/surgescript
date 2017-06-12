@@ -10,6 +10,7 @@
 #include <string.h>
 #include "object.h"
 #include "program_pool.h"
+#include "tag_system.h"
 #include "object_manager.h"
 #include "program.h"
 #include "heap.h"
@@ -209,7 +210,7 @@ void* surgescript_object_userdata(const surgescript_object_t* object)
 bool surgescript_object_has_tag(const surgescript_object_t* object, const char* tag_name)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-    return surgescript_objectmanager_has_tag(manager, object->name, tag_name);
+    return surgescript_tagsystem_has_tag(surgescript_objectmanager_tagsystem(manager), object->name, tag_name);
 }
 
 

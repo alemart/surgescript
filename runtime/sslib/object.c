@@ -118,7 +118,7 @@ surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_va
     const surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
     const char* object_name = surgescript_object_name(object);
     const char* tag_name = surgescript_var_fast_get_string(param[0]);
-    bool tagged = surgescript_objectmanager_has_tag(object_manager, object_name, tag_name);
+    bool tagged = surgescript_tagsystem_has_tag(surgescript_objectmanager_tagsystem(object_manager), object_name, tag_name);
     return surgescript_var_set_bool(surgescript_var_create(), tagged);
 }
 

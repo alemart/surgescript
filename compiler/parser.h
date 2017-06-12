@@ -109,9 +109,10 @@
 
 typedef struct surgescript_parser_t surgescript_parser_t;
 struct surgescript_programpool_t;
+struct surgescript_tagsystem_t;
 
 /* create & destroy */
-surgescript_parser_t* surgescript_parser_create(struct surgescript_programpool_t* program_pool);
+surgescript_parser_t* surgescript_parser_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system);
 surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser);
 
 /* parse a script */
