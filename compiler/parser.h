@@ -20,17 +20,13 @@
  *
  * <objectlist> := <object> <objectlist> | e
  * <object> := object string { <objectdecl> }
- * <objectdecl> := <notelist> <vardecllist> <statedecllist> <fundecllist>
+ * <objectdecl> := <tags> <vardecllist> <statedecllist> <fundecllist>
  *
- * <notelist> := <note> <notelist1> | e
- * <notelist1> := , <note> <notelist1> | <endnote>
- * <note> := string : <signedconst>
- * <signedconst> := <signednum> | string | true | false | null
- * <signednum> := + number | - number | number
- * <endnote> := emoticon | e
+ * <tags> := tag string ; <tags> | e
  *
  * <vardecllist> := <vardecl> <vardecllist> | e
  * <vardecl> := identifier = <conditionalexpr> ;
+ *            | export identifier = <conditionalexpr> ;
  *
  * <statedecllist> := <statedecl> <statedecllist> | e
  * <statedecl> := state string { <stmtlist> }

@@ -53,13 +53,7 @@ static void objectlist(surgescript_parser_t* parser);
 static void object(surgescript_parser_t* parser);
 static void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
-static void notelist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void notelist1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void note(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void endnote(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-
+static void taglist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void statedecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -101,6 +95,9 @@ static void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t con
 static void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+
+static void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 
 /* public api */
@@ -410,6 +407,7 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     emit_object_header(context, start, end);
 
     /* read non-terminals */
+    taglist(parser, context);
     vardecllist(parser, context);
     statedecllist(parser, context);
     fundecllist(parser, context);
@@ -419,6 +417,17 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* tell the program how many variables should be allocated */
     emit_object_footer(context, start, end);
+}
+
+void taglist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    while(optmatch(parser, SSTOK_TAG)) {
+        const char* tag_name = surgescript_token_lexeme(parser->lookahead);
+        expect(parser, SSTOK_STRING);
+        printf("Object \"%s\" tagged \"%s\".\n", context.object_name, tag_name);
+        match(parser, SSTOK_STRING);
+        match(parser, SSTOK_SEMICOLON);
+    }
 }
 
 void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -941,74 +950,6 @@ void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
 }
 
-/* notes */
-
-void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context)
-{
-    surgescript_token_t* token;
-    
-    expect_something(parser);
-    token = parser->lookahead;
-
-    switch(surgescript_token_type(token)) {
-        case SSTOK_NULL:
-            emit_null(context);
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_TRUE:
-            emit_bool(context, true);
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_FALSE:
-            emit_bool(context, false);
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_STRING:
-            emit_string(context, surgescript_token_lexeme(token));
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_NUMBER:
-        case SSTOK_ADDITIVEOP:
-            signednum(parser, context);
-            break;
-
-        default:
-            ssfatal("Parse Error: expected a constant on %s:%d.", context.source_file, surgescript_token_linenumber(token));
-            break;
-    }
-}
-
-void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
-{
-    surgescript_token_t* token;
-    
-    expect_something(parser);
-    token = parser->lookahead;
-
-    if(got_type(parser, SSTOK_ADDITIVEOP)) {
-        float value = 0.0;
-        bool plus = (strcmp(surgescript_token_lexeme(token), "+") == 0);
-        
-        match(parser, SSTOK_ADDITIVEOP);
-        if(got_type(parser, SSTOK_NUMBER)) {
-            token = parser->lookahead;
-            value = atof(surgescript_token_lexeme(token));
-            emit_number(context, plus ? value : -value);
-        }
-        match(parser, SSTOK_NUMBER);
-    }
-    else if(got_type(parser, SSTOK_NUMBER)) {
-        emit_number(context, atof(surgescript_token_lexeme(token)));
-        match(parser, SSTOK_NUMBER);
-    }
-    else
-        expect(parser, SSTOK_NUMBER); /* will throw an error */
-}
-
 /* programming constructs */
 void stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
@@ -1111,4 +1052,72 @@ void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         emit_null(context);
         emit_ret(context);
     }
+}
+
+/* misc */
+
+void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_token_t* token;
+    
+    expect_something(parser);
+    token = parser->lookahead;
+
+    switch(surgescript_token_type(token)) {
+        case SSTOK_NULL:
+            emit_null(context);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_TRUE:
+            emit_bool(context, true);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_FALSE:
+            emit_bool(context, false);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_STRING:
+            emit_string(context, surgescript_token_lexeme(token));
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_NUMBER:
+        case SSTOK_ADDITIVEOP:
+            signednum(parser, context);
+            break;
+
+        default:
+            ssfatal("Parse Error: expected a constant on %s:%d.", context.source_file, surgescript_token_linenumber(token));
+            break;
+    }
+}
+
+void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_token_t* token;
+    
+    expect_something(parser);
+    token = parser->lookahead;
+
+    if(got_type(parser, SSTOK_ADDITIVEOP)) {
+        float value = 0.0;
+        bool plus = (strcmp(surgescript_token_lexeme(token), "+") == 0);
+        
+        match(parser, SSTOK_ADDITIVEOP);
+        if(got_type(parser, SSTOK_NUMBER)) {
+            token = parser->lookahead;
+            value = atof(surgescript_token_lexeme(token));
+            emit_number(context, plus ? value : -value);
+        }
+        match(parser, SSTOK_NUMBER);
+    }
+    else if(got_type(parser, SSTOK_NUMBER)) {
+        emit_number(context, atof(surgescript_token_lexeme(token)));
+        match(parser, SSTOK_NUMBER);
+    }
+    else
+        expect(parser, SSTOK_NUMBER); /* will throw an error */
 }

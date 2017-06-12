@@ -195,11 +195,21 @@ surgescript_objectmanager_t* surgescript_object_manager(const surgescript_object
 
 /*
  * surgescript_object_userdata()
- * custom user-data (if any)
+ * Custom user-data (if any)
  */
 void* surgescript_object_userdata(const surgescript_object_t* object)
 {
     return object->user_data;
+}
+
+/*
+ * surgescript_object_has_tag()
+ * Is this object tagged tag_name?
+ */
+bool surgescript_object_has_tag(const surgescript_object_t* object, const char* tag_name)
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    return surgescript_objectmanager_has_tag(manager, object->name, tag_name);
 }
 
 
