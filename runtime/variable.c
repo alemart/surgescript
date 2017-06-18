@@ -48,6 +48,7 @@ struct surgescript_var_t
 #define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
                                     (var)->string = ssfree((var)->string); /* this will clear all bits */
 static inline bool isvalidnum(const char* str);
+static const int typecode[] = { 0, 'b', 'n', 's', 'o' };
 
 /* -------------------------------
  * public methods
@@ -295,8 +296,7 @@ surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var)
  */
 int surgescript_var_typecode(const surgescript_var_t* var)
 {
-    static const int code[] = { 0, 'b', 'n', 's', 'o' };
-    return code[(int)(var->type)];
+    return typecode[(int)(var->type)];
 }
 
 /*
@@ -315,7 +315,7 @@ int surgescript_var_type2code(const char* type_name)
  */
 int surgescript_var_typecheck(const surgescript_var_t* var, int code)
 {
-    return surgescript_var_typecode(var) - code;
+    return typecode[(int)(var->type)] - code;
 }
 
 /*

@@ -100,6 +100,7 @@
  * <condstmt> := if ( <expr> ) <stmt>
  *            |  if ( <expr> ) <stmt> else <stmt>
  * <loopstmt> := while ( <expr> ) <stmt>
+ *            |  for ( <expr> ; <expr> ; <expr> ) <stmt>
  * <retstmt> := return <expr> ;
  *           |  return ;
  * <jumpstmt> := break ;

@@ -1055,7 +1055,6 @@ void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-
 }
 
 void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)

@@ -425,7 +425,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         case SSOP_STATE: /* t[a] receives the current state. If b == -1, then the current state is set to t[a] instead. */
             if(b.i == -1) {
-                char state[256];
+                char state[256] = "";
                 surgescript_var_to_string(t(a), state, sizeof(state));
                 surgescript_object_set_state(surgescript_renv_owner(runtime_environment), state);
             }
