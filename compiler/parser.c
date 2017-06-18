@@ -995,6 +995,10 @@ bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         loopstmt(parser, context);
         return true;
     }
+    else if(got_type(parser, SSTOK_FOR)) {
+        loopstmt(parser, context);
+        return true;
+    }
     else if(got_type(parser, SSTOK_RETURN)) {
         retstmt(parser, context);
         return true;
@@ -1055,6 +1059,18 @@ void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    surgescript_program_label_t begin = surgescript_program_new_label(context.program);
+    surgescript_program_label_t end = surgescript_program_new_label(context.program);
+
+    if(optmatch(parser, SSTOK_WHILE)) {
+        /* while loops */
+        emit_while1(context, begin);
+        expr(parser, context);
+        emit_whilecheck(context, end);
+        if(!stmt(parser, context))
+            unexpected_symbol(parser);
+        emit_while2(context, begin, end);
+    }
 }
 
 void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)

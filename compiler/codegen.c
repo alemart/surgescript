@@ -558,6 +558,23 @@ void emit_endif(surgescript_nodecontext_t context, surgescript_program_label_t d
     LABEL(done);
 }
 
+void emit_while1(surgescript_nodecontext_t context, surgescript_program_label_t begin)
+{
+    LABEL(begin);
+}
+
+void emit_whilecheck(surgescript_nodecontext_t context, surgescript_program_label_t end)
+{
+    SSASM(SSOP_TEST, T0, T0);
+    SSASM(SSOP_JE, U(end));
+}
+
+void emit_while2(surgescript_nodecontext_t context, surgescript_program_label_t begin, surgescript_program_label_t end)
+{
+    SSASM(SSOP_JMP, U(begin));
+    LABEL(end);
+}
+
 /* functions */
 int emit_function_header(surgescript_nodecontext_t context)
 {
