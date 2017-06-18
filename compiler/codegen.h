@@ -53,6 +53,9 @@ void emit_dictget(surgescript_nodecontext_t context);
 void emit_dictset(surgescript_nodecontext_t context, const char* assignop);
 void emit_dictincdec(surgescript_nodecontext_t context, const char* op);
 void emit_exportedvar(surgescript_nodecontext_t context, const char* identifier);
+void emit_arrayexpr1(surgescript_nodecontext_t context);
+void emit_arrayexpr2(surgescript_nodecontext_t context);
+void emit_arrayelement(surgescript_nodecontext_t context);
 
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope);

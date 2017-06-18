@@ -79,10 +79,10 @@ void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
 
 void emit_exportvar(surgescript_nodecontext_t context, const char* identifier)
 {
-    SSASM(SSOP_SELF, U(0));
-    SSASM(SSOP_PUSH, U(0));
-    SSASM(SSOP_MOVS, U(0), TEXT(identifier));
-    SSASM(SSOP_PUSH, U(0));
+    SSASM(SSOP_SELF, T0);
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_MOVS, T0, TEXT(identifier));
+    SSASM(SSOP_PUSH, T0);
     surgescript_symtable_push_addr(context.symtable, identifier, context.program);
     SSASM(SSOP_CALL, TEXT("__export"), U(2));
     SSASM(SSOP_POPN, U(3));
@@ -510,11 +510,34 @@ void emit_dictincdec(surgescript_nodecontext_t context, const char* op)
 
 void emit_exportedvar(surgescript_nodecontext_t context, const char* identifier)
 {
-    SSASM(SSOP_PUSH, U(0)); /* object pointer */
-    SSASM(SSOP_MOVS, U(0), TEXT(identifier));
-    SSASM(SSOP_PUSH, U(0));
+    SSASM(SSOP_PUSH, T0); /* object pointer */
+    SSASM(SSOP_MOVS, T0, TEXT(identifier));
+    SSASM(SSOP_PUSH, T0);
     SSASM(SSOP_CALL, TEXT("__var"), U(1)); /* read exported var named <identifier> */
     SSASM(SSOP_POPN, U(2));
+}
+
+void emit_arrayexpr1(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_SELF, T0);
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_MOVS, T0, TEXT("Array"));
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("spawn"), U(1)); /* t0 = this.spawn("Array") */
+    SSASM(SSOP_POPN, U(2));
+    SSASM(SSOP_PUSH, T0);
+}
+
+void emit_arrayexpr2(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_POP, T0); /* (t0 = array) is the return value of the expression */
+}
+
+void emit_arrayelement(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("push"), U(1)); /* array.push(<assignexpr>) */
+    SSASM(SSOP_POPN, U(1));
 }
 
 /* statements */

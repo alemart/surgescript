@@ -26,6 +26,7 @@ static surgescript_var_t* fun_unshift(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_reverse(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
 #define ORDINAL(j)              (((j) == 1) ? "st" : (((j) == 2) ? "nd" : (((j) == 3) ? "rd" : "th")))
@@ -56,6 +57,7 @@ void surgescript_sslib_register_array(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Array", "sort", fun_sort, 0);
     surgescript_vm_bind(vm, "Array", "reverse", fun_reverse, 0);
     surgescript_vm_bind(vm, "Array", "indexOf", fun_indexof, 1);
+    surgescript_vm_bind(vm, "Array", "toString", fun_tostring, 0);
 }
 
 
@@ -91,7 +93,7 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
-    return surgescript_heap_at(heap, LENGTH_ADDR);
+    return surgescript_var_clone(surgescript_heap_at(heap, LENGTH_ADDR));
 }
 
 /* gets i-th element of the array (indexes are 0-based) */
@@ -101,7 +103,7 @@ surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t
     int index = surgescript_var_get_number(param[0]);
 
     if(index >= 0 && index < ARRAY_LENGTH(heap))
-        return surgescript_heap_at(heap, BASE_ADDR + index);
+        return surgescript_var_clone(surgescript_heap_at(heap, BASE_ADDR + index));
 
     ssfatal("Can't get %d-%s element of the array: the index is out of bounds.", index, ORDINAL(index));
     return NULL;
@@ -241,6 +243,13 @@ surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_v
     }
 
     return surgescript_var_set_number(surgescript_var_create(), -1);
+}
+
+/* converts to string */
+surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* TODO */
+    return surgescript_var_set_string(surgescript_var_create(), "[Array]");
 }
 
 

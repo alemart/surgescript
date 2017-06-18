@@ -89,6 +89,7 @@ static void propertyread(surgescript_parser_t* parser, surgescript_nodecontext_t
 static void propertywrite(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name);
 static void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void arrayexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 static void stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -761,7 +762,6 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
             const char* op = surgescript_token_lexeme(parser->lookahead);
             emit_postincdec(context, op, identifier, line);
             match(parser, SSTOK_INCDECOP);
-            return;
         }
         else if(got_type(parser, SSTOK_LPAREN)) { /* we have a function call here */
             unsigned sys = surgescript_objectmanager_system_object(NULL, identifier);
@@ -800,8 +800,6 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         primaryexpr(parser, context);
         postfixexpr1(parser, context);
     }
-
-    //dictexpr(parser, context);
 }
 
 void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -907,6 +905,10 @@ void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         expr(parser, context);
         match(parser, SSTOK_RPAREN);
     }
+    else if(optmatch(parser, SSTOK_LBRACKET)) {
+        arrayexpr(parser, context);
+        match(parser, SSTOK_RBRACKET);
+    }
     else if(optmatch(parser, SSTOK_THIS)) {
         emit_this(context);
     }
@@ -957,6 +959,18 @@ void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             ssfatal("Parse Error: expected a constant on %s:%d.", context.source_file, surgescript_token_linenumber(token));
             break;
     }
+}
+
+void arrayexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    emit_arrayexpr1(context);
+    if(!got_type(parser, SSTOK_RBRACKET)) {
+        do {
+            assignexpr(parser, context);
+            emit_arrayelement(context);
+        } while(optmatch(parser, SSTOK_COMMA));
+    }
+    emit_arrayexpr2(context);
 }
 
 /* programming constructs */

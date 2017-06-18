@@ -78,10 +78,12 @@
  * <lambdacall> := ( ) <lambdacall> | ( <funargsexprlist> ) <lambdacall> | e
  * <propertywrite> := identifier ++ | identifier -- | identifiert assignop <assignexpr>
  * <propertyread> := identifier
- * <primaryexpr> := identifier | this | state | <constant> | ( <expr> )
+ * <primaryexpr> := identifier | this | state | <constant> | <arrayexpr> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e
+ * <arrayexpr> := [ <arrayexpr1> ]
+ * <arrayexpr1> := <assignexpr> | <assignexpr> , <arrayexpr1>
  *
  *
  *
