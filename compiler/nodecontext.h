@@ -10,9 +10,9 @@
 #ifndef _SURGESCRIPT_COMPILER_NODECONTEXT_H
 #define _SURGESCRIPT_COMPILER_NODECONTEXT_H
 
+#include "../runtime/program.h"
+
 struct surgescript_symtable_t;
-struct surgescript_program_t;
-struct surgescript_programpool_t;
 
 /* node context */
 typedef struct surgescript_nodecontext_t
@@ -20,13 +20,15 @@ typedef struct surgescript_nodecontext_t
     const char* source_file;
     const char* object_name;
     struct surgescript_symtable_t* symtable;
-    struct surgescript_program_t* program;
+    surgescript_program_t* program;
+    surgescript_program_label_t loop_begin;
+    surgescript_program_label_t loop_end;
 } surgescript_nodecontext_t;
 
 /* node context constructor */
-static inline surgescript_nodecontext_t nodecontext(const char* source_file, const char* object_name, struct surgescript_symtable_t* symbol_table, struct surgescript_program_t* program)
+static inline surgescript_nodecontext_t nodecontext(const char* source_file, const char* object_name, struct surgescript_symtable_t* symbol_table, surgescript_program_t* program)
 {
-    surgescript_nodecontext_t ctx = { source_file, object_name, symbol_table, program };
+    surgescript_nodecontext_t ctx = { source_file, object_name, symbol_table, program, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL };
     return ctx;
 }
 

@@ -1067,15 +1067,28 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         emit_while1(context, begin);
         expr(parser, context);
         emit_whilecheck(context, end);
+
+        context.loop_begin = begin;
+        context.loop_end = end;
         if(!stmt(parser, context))
             unexpected_symbol(parser);
+
         emit_while2(context, begin, end);
+    }
+    else if(optmatch(parser, SSTOK_FOR)) {
+        /* for loops */
+        /* TODO */
     }
 }
 
 void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    int line = surgescript_token_linenumber(parser->lookahead);
 
+    if(optmatch(parser, SSTOK_BREAK))
+        emit_break(context, line);
+    else if(optmatch(parser, SSTOK_CONTINUE))
+        emit_continue(context, line);
 }
 
 void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)

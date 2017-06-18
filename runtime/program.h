@@ -33,6 +33,7 @@ typedef surgescript_var_t* (*surgescript_program_cfunction_t)(surgescript_object
 
 /* labels */
 typedef unsigned surgescript_program_label_t;
+#define SURGESCRIPT_PROGRAM_UNDEFINED_LABEL (~0)
 
 /* operators */
 typedef enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) that belong to the object. then,

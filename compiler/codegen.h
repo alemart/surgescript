@@ -64,6 +64,8 @@ void emit_endif(surgescript_nodecontext_t context, surgescript_program_label_t d
 void emit_while1(surgescript_nodecontext_t context, surgescript_program_label_t begin);
 void emit_whilecheck(surgescript_nodecontext_t context, surgescript_program_label_t end);
 void emit_while2(surgescript_nodecontext_t context, surgescript_program_label_t begin, surgescript_program_label_t end);
+void emit_break(surgescript_nodecontext_t context, int line);
+void emit_continue(surgescript_nodecontext_t context, int line);
 
 /* functions */
 int emit_function_header(surgescript_nodecontext_t context);

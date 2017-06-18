@@ -575,6 +575,22 @@ void emit_while2(surgescript_nodecontext_t context, surgescript_program_label_t 
     LABEL(end);
 }
 
+void emit_break(surgescript_nodecontext_t context, int line)
+{
+    if(context.loop_end != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
+        SSASM(SSOP_JMP, U(context.loop_end));
+    else
+        ssfatal("Compile Error: invalid usage of the \"break\" command in %s:%d - break/continue may only be used inside loops.", context.source_file, line);
+}
+
+void emit_continue(surgescript_nodecontext_t context, int line)
+{
+    if(context.loop_begin != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
+        SSASM(SSOP_JMP, U(context.loop_begin));
+    else
+        ssfatal("Compile Error: invalid usage of the \"continue\" command in %s:%d - break/continue may only be used inside loops.", context.source_file, line);
+}
+
 /* functions */
 int emit_function_header(surgescript_nodecontext_t context)
 {
