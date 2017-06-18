@@ -67,11 +67,9 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
     /* since we don't ever free() anything from the heap (except the last cell),
        memory cells are allocated contiguously */
     surgescript_heap_t* heap = surgescript_object_heap(object);
-
     surgescript_heapptr_t length_addr = surgescript_heap_malloc(heap);
     surgescript_var_set_number(surgescript_heap_at(heap, length_addr), 0);
     ssassert(length_addr == LENGTH_ADDR);
-
     return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
 }
 
@@ -93,7 +91,7 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
-    return surgescript_var_clone(surgescript_heap_at(heap, LENGTH_ADDR));
+    return surgescript_heap_at(heap, LENGTH_ADDR);
 }
 
 /* gets i-th element of the array (indexes are 0-based) */
@@ -103,7 +101,7 @@ surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t
     int index = surgescript_var_get_number(param[0]);
 
     if(index >= 0 && index < ARRAY_LENGTH(heap))
-        return surgescript_var_clone(surgescript_heap_at(heap, BASE_ADDR + index));
+        return surgescript_heap_at(heap, BASE_ADDR + index);
 
     ssfatal("Can't get %d-%s element of the array: the index is out of bounds.", index, ORDINAL(index));
     return NULL;
@@ -120,7 +118,7 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
     /* sanity check & leak prevention */
     if(index < 0 || index >= length + 1024) {
         ssfatal("Can't set %d-%s element of the array: the index is out of bounds.", index, ORDINAL(index));
-        return surgescript_var_clone(value);
+        return NULL;
     }
 
     /* create memory addresses as needed */
@@ -134,7 +132,7 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
     surgescript_var_copy(surgescript_heap_at(heap, BASE_ADDR + index), value);
 
     /* done! */
-    return surgescript_var_clone(value); /* the C expression (arr[i] = value) returns value */
+    return NULL; /*surgescript_var_clone(value);*/ /* the C expression (arr[i] = value) returns value */
 }
 
 /* pushes a new element into the last position of the array */

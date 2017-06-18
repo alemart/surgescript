@@ -40,7 +40,7 @@ struct surgescript_tagtable_t
 struct surgescript_inversetagtable_t
 {
     surgescript_tag_t tag; /* key */
-    surgescript_tagtree_t* objects;
+    surgescript_tagtree_t* objects; /* value */
     UT_hash_handle hh;
 };
 

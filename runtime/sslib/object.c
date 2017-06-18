@@ -14,6 +14,7 @@
 static surgescript_var_t* fun_name(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_parent(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_child(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_sibling(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -36,6 +37,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "parent", fun_parent, 0);
     surgescript_vm_bind(vm, "Object", "child", fun_child, 1);
     surgescript_vm_bind(vm, "Object", "findChild", fun_findchild, 1);
+    surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
@@ -57,29 +59,37 @@ surgescript_var_t* fun_parent(surgescript_object_t* object, const surgescript_va
 /* returns a handle to a child named param[0] (or a handle to null if not found) */
 surgescript_var_t* fun_child(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* name = surgescript_var_get_string(param[0]);
+    const char* name = surgescript_var_fast_get_string(param[0]);
     surgescript_objectmanager_handle_t child = surgescript_object_child(object, name);
-    ssfree(name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
+}
+
+/* returns a handle to a sibling named param[0] (or null) */
+surgescript_var_t* fun_sibling(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const char* name = surgescript_var_fast_get_string(param[0]);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objectmanager_handle_t parent_handle = surgescript_object_parent(object);
+    surgescript_object_t* parent = surgescript_objectmanager_get(manager, parent_handle);
+    surgescript_objectmanager_handle_t sibling = surgescript_object_child(parent, name);
+    return surgescript_var_set_objecthandle(surgescript_var_create(), sibling);
 }
 
 /* finds a child (or grand-child, or grand-grand-child, and so on) named param[0] */
 surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* name = surgescript_var_get_string(param[0]);
+    const char* name = surgescript_var_fast_get_string(param[0]);
     surgescript_objectmanager_handle_t child = surgescript_object_find_child(object, name);
-    ssfree(name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 
 /* spawns a child */
 surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* name = surgescript_var_get_string(param[0]);
+    const char* name = surgescript_var_fast_get_string(param[0]);
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_objectmanager_handle_t me = surgescript_object_handle(object);
     surgescript_objectmanager_handle_t child = surgescript_objectmanager_spawn(manager, me, name, NULL);
-    ssfree(name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 
