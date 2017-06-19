@@ -95,7 +95,7 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
     if(!surgescript_symtable_has_parent(context.symtable))
         ssfatal("Compile Error: invalid attribution (\"%s %s ...\") in object \"%s\" (%s:%d) - only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
     else if(!surgescript_symtable_has_symbol(context.symtable, identifier))
-        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_local_count(context.symtable) - surgescript_program_arity(context.program)));
+        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_local_count(context.symtable) - surgescript_program_arity(context.program))); /* fact: local_count >= arity */
 
     /* perform the assignment operation */
     switch(*assignop) {
@@ -575,6 +575,42 @@ void emit_while2(surgescript_nodecontext_t context, surgescript_program_label_t 
     LABEL(end);
 }
 
+void emit_forin1(surgescript_nodecontext_t context, const char* it, surgescript_program_label_t begin, surgescript_program_label_t end)
+{
+    SSASM(SSOP_PUSH, T0); /* push the array <expr> */
+    SSASM(SSOP_CALL, TEXT("length"), U(0));
+    SSASM(SSOP_POPN, U(1));
+    SSASM(SSOP_PUSH, T0); /* the length of the array is saved on the stack */
+
+    if(!surgescript_symtable_has_symbol(context.symtable, it)) {
+        /* reserve an address on the stack to the iterator */
+        surgescript_symtable_put_stack_symbol(context.symtable, it, (surgescript_stackptr_t)(1 + surgescript_symtable_local_count(context.symtable) - surgescript_program_arity(context.program)));
+    }
+    SSASM(SSOP_XOR, T1, T1); /* initialize the loop counter */
+    surgescript_symtable_emit_write(context.symtable, it, context.program, 1);
+
+    LABEL(begin);
+
+    SSASM(SSOP_POP, T0); /* t0 = array length */
+    /*surgescript_symtable_emit_read(context.symtable, it, context.program, 1);*/ /* loop counter */
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CMP, T1, T0);
+    SSASM(SSOP_JGE, U(end));
+}
+
+void emit_forin2(surgescript_nodecontext_t context, const char* it, surgescript_program_label_t begin, surgescript_program_label_t end)
+{
+    /* increment the loop counter */
+    surgescript_symtable_emit_read(context.symtable, it, context.program, 1);
+    SSASM(SSOP_INC, T1);
+    surgescript_symtable_emit_write(context.symtable, it, context.program, 1);
+
+    /* jump to the beginning */
+    SSASM(SSOP_JMP, U(begin));
+    LABEL(end);
+    SSASM(SSOP_POP, T0); /* release the length */
+}
+
 void emit_break(surgescript_nodecontext_t context, int line)
 {
     if(context.loop_end != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
@@ -612,7 +648,7 @@ void emit_function_argument(surgescript_nodecontext_t context, const char* ident
     if(!surgescript_symtable_has_local_symbol(context.symtable, identifier))
         surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(idx-argc));
     else
-        ssfatal("Duplicate function parameter name \"%s\" in %s:%d.", identifier, context.source_file, line);
+        ssfatal("Duplicate function parameter \"%s\" in %s:%d.", identifier, context.source_file, line);
 }
 
 void emit_ret(surgescript_nodecontext_t context)

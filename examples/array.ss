@@ -6,15 +6,16 @@
 
 object "Application"
 {
-    arr = [1, 1, 2, 3, 5, 8, 13, 21, 34];
+    arr = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
     
     state "main"
     {
-        i = 0;
-        while(i < arr.length()) {
+        Console.print("The array has " + arr.length() + " elements.");
+
+        for(i in arr) {
             Console.print(arr[i]);
-            i++;
         }
+
         Application.exit();
     }
 }

@@ -1062,22 +1062,54 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     surgescript_program_label_t begin = surgescript_program_new_label(context.program);
     surgescript_program_label_t end = surgescript_program_new_label(context.program);
 
+    /* save the loop context */
+    context.loop_begin = begin;
+    context.loop_end = end;
+
+    /* what kind of loop do we have? */
     if(optmatch(parser, SSTOK_WHILE)) {
         /* while loops */
         emit_while1(context, begin);
+        match(parser, SSTOK_LPAREN);
         expr(parser, context);
+        match(parser, SSTOK_RPAREN);
         emit_whilecheck(context, end);
-
-        context.loop_begin = begin;
-        context.loop_end = end;
         if(!stmt(parser, context))
             unexpected_symbol(parser);
-
         emit_while2(context, begin, end);
     }
     else if(optmatch(parser, SSTOK_FOR)) {
         /* for loops */
-        /* TODO */
+        enum { FOR, FOR_IN } for_type = FOR;
+        match(parser, SSTOK_LPAREN);
+        if(optmatch(parser, SSTOK_IDENTIFIER)) {
+            for_type = got_type(parser, SSTOK_IN) ? FOR_IN : FOR;
+            unmatch(parser);
+        }
+
+        /* emit code */
+        if(for_type == FOR) {
+            /* regular for(;;) loop */
+            match(parser, SSTOK_RPAREN);
+
+        }
+        else if(for_type == FOR_IN) {
+            /* for .. in loop */
+            char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+            match(parser, SSTOK_IDENTIFIER);
+            match(parser, SSTOK_IN);
+            expr(parser, context);
+            match(parser, SSTOK_RPAREN);
+
+            /* emit code */
+            emit_forin1(context, identifier, begin, end);
+            if(!stmt(parser, context))
+                unexpected_symbol(parser);
+            emit_forin2(context, identifier, begin, end);
+
+            /* cleanup */
+            ssfree(identifier);
+        }
     }
 }
 

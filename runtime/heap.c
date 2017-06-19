@@ -79,7 +79,9 @@ surgescript_heapptr_t surgescript_heap_malloc(surgescript_heap_t* heap)
         return heap->size - 1;
     }
 
-    sslog("surgescript_heap_malloc(): resizing heap to %d cells.", heap->size * 2);
+
+    if(heap->size * 2 >= 256)
+        sslog("surgescript_heap_malloc(): resizing heap to %d cells.", heap->size * 2);
     heap->mem = ssrealloc(heap->mem, (heap->size * 2) * sizeof(*(heap->mem)));
     while(heap->ptr)
         heap->mem[heap->size + --(heap->ptr)] = NULL;
