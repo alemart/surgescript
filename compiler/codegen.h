@@ -66,6 +66,10 @@ void emit_whilecheck(surgescript_nodecontext_t context, surgescript_program_labe
 void emit_while2(surgescript_nodecontext_t context, surgescript_program_label_t begin, surgescript_program_label_t end);
 void emit_forin1(surgescript_nodecontext_t context, const char* it, surgescript_program_label_t begin, surgescript_program_label_t end);
 void emit_forin2(surgescript_nodecontext_t context, const char* it, surgescript_program_label_t begin, surgescript_program_label_t end);
+void emit_for1(surgescript_nodecontext_t context, surgescript_program_label_t begin);
+void emit_forcheck(surgescript_nodecontext_t context, surgescript_program_label_t begin, surgescript_program_label_t body, surgescript_program_label_t increment, surgescript_program_label_t end);
+void emit_for2(surgescript_nodecontext_t context, surgescript_program_label_t begin, surgescript_program_label_t body);
+void emit_for3(surgescript_nodecontext_t context, surgescript_program_label_t increment, surgescript_program_label_t end);
 void emit_break(surgescript_nodecontext_t context, int line);
 void emit_continue(surgescript_nodecontext_t context, int line);
 

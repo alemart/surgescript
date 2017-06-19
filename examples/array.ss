@@ -12,6 +12,7 @@ object "Application"
     {
         Console.print("The array has " + arr.length() + " elements.");
 
+        /* i is an index */
         for(i in arr) {
             Console.print(arr[i]);
         }

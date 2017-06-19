@@ -1071,10 +1071,10 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         /* while loops */
         emit_while1(context, begin);
         match(parser, SSTOK_LPAREN);
-        expr(parser, context);
+        expr(parser, context); /* loop condition */
         match(parser, SSTOK_RPAREN);
         emit_whilecheck(context, end);
-        if(!stmt(parser, context))
+        if(!stmt(parser, context)) /* loop body */
             unexpected_symbol(parser);
         emit_while2(context, begin, end);
     }
@@ -1090,8 +1090,22 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         /* emit code */
         if(for_type == FOR) {
             /* regular for(;;) loop */
-            match(parser, SSTOK_RPAREN);
+            surgescript_program_label_t body = surgescript_program_new_label(context.program);
+            surgescript_program_label_t increment = surgescript_program_new_label(context.program);
 
+            /* emit code */
+            expr(parser, context); /* initialization */
+            emit_for1(context, begin);
+            match(parser, SSTOK_SEMICOLON);
+            expr(parser, context); /* loop condition */
+            match(parser, SSTOK_SEMICOLON);
+            emit_forcheck(context, begin, body, increment, end);
+            expr(parser, context); /* increment */
+            match(parser, SSTOK_RPAREN);
+            emit_for2(context, begin, body);
+            if(!stmt(parser, context)) /* loop body */
+                unexpected_symbol(parser);
+            emit_for3(context, increment, end);
         }
         else if(for_type == FOR_IN) {
             /* for .. in loop */

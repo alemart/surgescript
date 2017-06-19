@@ -611,6 +611,31 @@ void emit_forin2(surgescript_nodecontext_t context, const char* it, surgescript_
     SSASM(SSOP_POP, T0); /* release the length */
 }
 
+void emit_for1(surgescript_nodecontext_t context, surgescript_program_label_t begin)
+{
+    LABEL(begin);
+}
+
+void emit_forcheck(surgescript_nodecontext_t context, surgescript_program_label_t begin, surgescript_program_label_t body, surgescript_program_label_t increment, surgescript_program_label_t end)
+{
+    SSASM(SSOP_TEST, T0, T0);
+    SSASM(SSOP_JE, U(end));
+    SSASM(SSOP_JMP, U(body));
+    LABEL(increment);
+}
+
+void emit_for2(surgescript_nodecontext_t context, surgescript_program_label_t begin, surgescript_program_label_t body)
+{
+    SSASM(SSOP_JMP, U(begin));
+    LABEL(body);
+}
+
+void emit_for3(surgescript_nodecontext_t context, surgescript_program_label_t increment, surgescript_program_label_t end)
+{
+    SSASM(SSOP_JMP, U(increment));
+    LABEL(end);
+}
+
 void emit_break(surgescript_nodecontext_t context, int line)
 {
     if(context.loop_end != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
