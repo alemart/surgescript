@@ -7,7 +7,6 @@
  * SurgeScript Transform Utility
  */
 
-#include <float.h>
 #include <math.h>
 #include "util.h"
 #include "transform.h"
