@@ -23,6 +23,7 @@ static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surg
 static surgescript_var_t* fun_var(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -41,6 +42,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
+    surgescript_vm_bind(vm, "Object", "requireComponent", fun_requirecomponent, 1);
     surgescript_vm_bind(vm, "Object", "__var", fun_var, 1);
     surgescript_vm_bind(vm, "Object", "__export", fun_export, 2);
 }
@@ -117,8 +119,9 @@ surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_va
 {
     const surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
     const char* object_name = surgescript_object_name(object);
-    const char* program_name = surgescript_var_fast_get_string(param[0]);
+    char* program_name = surgescript_var_get_string(param[0]);
     bool exists = surgescript_programpool_exists(surgescript_objectmanager_programpool(object_manager), object_name, program_name);
+    ssfree(program_name);
     return surgescript_var_set_bool(surgescript_var_create(), exists);
 }
 
@@ -148,4 +151,22 @@ surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_va
     surgescript_heapptr_t var_addr = surgescript_var_get_rawbits(param[1]);
     surgescript_object_export_variable(object, var_name, var_addr);
     return NULL;
+}
+
+/* gets an immediate child object called component_name in the parent, or quits the app if there isn't one */
+surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const char* component_name = surgescript_var_fast_get_string(param[0]);
+    surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
+    surgescript_objectmanager_handle_t parent_handle = surgescript_object_parent(object);
+    surgescript_object_t* parent = surgescript_objectmanager_get(object_manager, parent_handle);
+    surgescript_objectmanager_handle_t component_handle = surgescript_object_child(parent, component_name);
+
+    if(!component_handle) {
+        const char* object_name = surgescript_object_name(object);
+        ssfatal("Runtime Error: component \"%s\" requires another component called \"%s\".", object_name, component_name);
+        return NULL;
+    }
+
+    return surgescript_var_set_objecthandle(surgescript_var_create(), component_handle);
 }
