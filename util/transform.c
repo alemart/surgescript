@@ -68,8 +68,39 @@ void surgescript_transform_copy(surgescript_transform_t* dst, const surgescript_
 }
 
 /*
+ * surgescript_transform_setposition2d()
+ * Set (local) position
+ */
+void surgescript_transform_setposition2d(surgescript_transform_t* t, float x, float y)
+{
+    t->position.x = x;
+    t->position.y = y;
+}
+
+/*
+ * surgescript_transform_setrotation2d()
+ * Set (local) rotation angle
+ */
+void surgescript_transform_setrotation2d(surgescript_transform_t* t, float degrees)
+{
+    float a = degrees * DEG2RAD;
+    t->rotation.sz = sinf(a);
+    t->rotation.cz = cosf(a);
+}
+
+/*
+ * surgescript_transform_setscale2d()
+ * Set (local) scale
+ */
+void surgescript_transform_setscale2d(surgescript_transform_t* t, float sx, float sy)
+{
+    t->scale.x = sx;
+    t->scale.y = sy;
+}
+
+/*
  * surgescript_transform_translate2d()
- * Translation
+ * Translate by (x, y)
  */
 void surgescript_transform_translate2d(surgescript_transform_t* t, float x, float y)
 {
@@ -79,7 +110,7 @@ void surgescript_transform_translate2d(surgescript_transform_t* t, float x, floa
 
 /*
  * surgescript_transform_rotate2d()
- * Rotation
+ * Rotate by degrees
  */
 void surgescript_transform_rotate2d(surgescript_transform_t* t, float degrees)
 {
@@ -91,7 +122,7 @@ void surgescript_transform_rotate2d(surgescript_transform_t* t, float degrees)
 
 /*
  * surgescript_transform_scale2d()
- * Scale
+ * Scale by (sx, sy)
  */
 void surgescript_transform_scale2d(surgescript_transform_t* t, float sx, float sy)
 {
