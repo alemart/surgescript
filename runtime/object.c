@@ -447,7 +447,7 @@ void surgescript_object_set_reachable(surgescript_object_t* object, bool reachab
 void surgescript_object_transform(const surgescript_object_t* object, surgescript_transform_t* transform)
 {
     if(object->transform == NULL)
-        surgescript_transform_set_to_identity(transform);
+        surgescript_transform_reset(transform);
     else
         surgescript_transform_copy(transform, object->transform);
 }

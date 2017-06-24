@@ -11,6 +11,11 @@
 #include "util.h"
 #include "transform.h"
 
+/* utilities */
+static const float DEG2RAD = 0.0174532925f;
+
+
+
 /*
  * surgescript_transform_create()
  * Creates a new identity transform
@@ -18,7 +23,7 @@
 surgescript_transform_t* surgescript_transform_create()
 {
     surgescript_transform_t* t = ssmalloc(sizeof *t);
-    surgescript_transform_set_to_identity(t);
+    surgescript_transform_reset(t);
     return t;
 }
 
@@ -32,10 +37,10 @@ surgescript_transform_t* surgescript_transform_destroy(surgescript_transform_t* 
 }
 
 /*
- * surgescript_transform_set_to_identity()
+ * surgescript_transform_reset()
  * Turns t into an identity transform
  */
-void surgescript_transform_set_to_identity(surgescript_transform_t* t)
+void surgescript_transform_reset(surgescript_transform_t* t)
 {
     t->position.x = 0.0f;
     t->position.y = 0.0f;
@@ -60,6 +65,38 @@ void surgescript_transform_set_to_identity(surgescript_transform_t* t)
 void surgescript_transform_copy(surgescript_transform_t* dst, const surgescript_transform_t* src)
 {
     *dst = *src;
+}
+
+/*
+ * surgescript_transform_translate2d()
+ * Translation
+ */
+void surgescript_transform_translate2d(surgescript_transform_t* t, float x, float y)
+{
+    t->position.x += x;
+    t->position.y += y;
+}
+
+/*
+ * surgescript_transform_rotate2d()
+ * Rotation
+ */
+void surgescript_transform_rotate2d(surgescript_transform_t* t, float degrees)
+{
+    float a = degrees * DEG2RAD;
+    float s = sin(a), c = cos(a);
+    t->rotation.sz = t->rotation.sz * c + t->rotation.cz * s;
+    t->rotation.cz = t->rotation.cz * c - t->rotation.sz * s;
+}
+
+/*
+ * surgescript_transform_scale2d()
+ * Scale
+ */
+void surgescript_transform_scale2d(surgescript_transform_t* t, float sx, float sy)
+{
+    t->scale.x *= sx;
+    t->scale.y *= sy;
 }
 
 /*
