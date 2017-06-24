@@ -153,7 +153,7 @@ surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_va
     return NULL;
 }
 
-/* gets an immediate child object called component_name in the parent, or quits the app if there isn't one */
+/* gets an immediate child object called component_name in the parent (and spawns the component if there isn't one) */
 surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* component_name = surgescript_var_fast_get_string(param[0]);
@@ -164,8 +164,7 @@ surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surg
 
     if(!component_handle) {
         const char* object_name = surgescript_object_name(object);
-        ssfatal("Runtime Error: component \"%s\" requires another component called \"%s\".", object_name, component_name);
-        return NULL;
+        component_handle = surgescript_objectmanager_spawn(object_manager, parent_handle, object_name, NULL);
     }
 
     return surgescript_var_set_objecthandle(surgescript_var_create(), component_handle);
