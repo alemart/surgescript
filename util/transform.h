@@ -16,6 +16,7 @@ typedef struct surgescript_transform_t surgescript_transform_t;
 /* we'll make this struct public */
 struct surgescript_transform_t
 {
+    /* A Transform holds position, rotation and scale */
     struct {
         float x, y, z;
     } position;
