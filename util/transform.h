@@ -31,7 +31,7 @@ struct surgescript_transform_t
 
 /* public API */
 surgescript_transform_t* surgescript_transform_create(); /* creates a new identity transform */
-surgescript_transform_t* surgescript_transform_destroy(surgescript_transform_t* t); /* destroys a transform */
+surgescript_transform_t* surgescript_transform_destroy(surgescript_transform_t* transform); /* destroys a transform */
 void surgescript_transform_set_to_identity(surgescript_transform_t* t); /* turns t into an identity transform */
 void surgescript_transform_copy(surgescript_transform_t* dst, const surgescript_transform_t* src); /* copies src to dst */
 void surgescript_transform_apply2d(const surgescript_transform_t* t, float* x, float* y); /* applies the transform to a 2D point */

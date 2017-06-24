@@ -26,9 +26,9 @@ surgescript_transform_t* surgescript_transform_create()
  * surgescript_transform_destroy()
  * Destroys an existing transform
  */
-surgescript_transform_t* surgescript_transform_destroy(surgescript_transform_t* t)
+surgescript_transform_t* surgescript_transform_destroy(surgescript_transform_t* transform)
 {
-    return ssfree(t);
+    return ssfree(transform);
 }
 
 /*
