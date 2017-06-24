@@ -17,9 +17,9 @@
  */
 surgescript_transform_t* surgescript_transform_create()
 {
-    surgescript_transform_t* transform = ssmalloc(sizeof *transform);
-    surgescript_transform_set_to_identity(transform);
-    return transform;
+    surgescript_transform_t* t = ssmalloc(sizeof *t);
+    surgescript_transform_set_to_identity(t);
+    return t;
 }
 
 /*
