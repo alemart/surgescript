@@ -80,6 +80,7 @@ void surgescript_transform_apply2dinverse(const surgescript_transform_t* t, floa
 {
     float sx = (fpclassify(t->scale.x) != FP_ZERO) ? 1.0f / t->scale.x : INFINITY;
     float sy = (fpclassify(t->scale.y) != FP_ZERO) ? 1.0f / t->scale.y : INFINITY;
-    *x = sx * t->rotation.cz * (*x) + sy * t->rotation.sz * (*y) - t->position.x;
-    *y = -sx * t->rotation.sz * (*x) + sy * t->rotation.cz * (*y) - t->position.y;
+    float tx = t->position.x, ty = t->position.y, cz = t->rotation.cz, sz = t->rotation.sz;
+    *x = sx * cz * (*x) + sx * sz * (*y) - sx * cz * tx - sx * sz * ty;
+    *y = -sy * sz * (*x) + sy * cz * (*y) + sy * sz * tx - sy * cz * ty;
 }
