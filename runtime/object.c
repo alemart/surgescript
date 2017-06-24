@@ -442,16 +442,26 @@ void surgescript_object_set_reachable(surgescript_object_t* object, bool reachab
 
 /*
  * surgescript_object_transform()
- * Returns the local transform of this object (creates one if none exists)
+ * Gets the local transform of this object
  */
-surgescript_transform_t* surgescript_object_transform(surgescript_object_t* object)
+void surgescript_object_transform(const surgescript_object_t* object, surgescript_transform_t* transform)
 {
-    /* if there's no local transform, create an identity transform */
+    if(object->transform == NULL)
+        surgescript_transform_set_to_identity(transform);
+    else
+        surgescript_transform_copy(transform, object->transform);
+}
+
+/*
+ * surgescript_object_set_transform()
+ * Sets the local transform of this object
+ */
+void surgescript_object_set_transform(surgescript_object_t* object, const surgescript_transform_t* transform)
+{
     if(object->transform == NULL)
         object->transform = surgescript_transform_create();
 
-    /* done! */
-    return object->transform;
+    surgescript_transform_copy(object->transform, transform);
 }
 
 

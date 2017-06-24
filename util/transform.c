@@ -13,27 +13,12 @@
 
 /*
  * surgescript_transform_create()
- * Creates an identity transform
+ * Creates a new identity transform
  */
 surgescript_transform_t* surgescript_transform_create()
 {
     surgescript_transform_t* transform = ssmalloc(sizeof *transform);
-
-    transform->position.x = 0.0f;
-    transform->position.y = 0.0f;
-    transform->position.z = 0.0f;
-
-    transform->rotation.sx = 0.0f;
-    transform->rotation.cx = 1.0f;
-    transform->rotation.sy = 0.0f;
-    transform->rotation.cy = 1.0f;
-    transform->rotation.sz = 0.0f;
-    transform->rotation.cz = 1.0f;
-
-    transform->scale.x = 1.0f;
-    transform->scale.y = 1.0f;
-    transform->scale.z = 1.0f;
-
+    surgescript_transform_set_to_identity(transform);
     return transform;
 }
 
@@ -44,6 +29,37 @@ surgescript_transform_t* surgescript_transform_create()
 surgescript_transform_t* surgescript_transform_destroy(surgescript_transform_t* transform)
 {
     return ssfree(transform);
+}
+
+/*
+ * surgescript_transform_set_to_identity()
+ * Turns t into an identity transform
+ */
+void surgescript_transform_set_to_identity(surgescript_transform_t* t)
+{
+    t->position.x = 0.0f;
+    t->position.y = 0.0f;
+    t->position.z = 0.0f;
+
+    t->rotation.sx = 0.0f;
+    t->rotation.cx = 1.0f;
+    t->rotation.sy = 0.0f;
+    t->rotation.cy = 1.0f;
+    t->rotation.sz = 0.0f;
+    t->rotation.cz = 1.0f;
+
+    t->scale.x = 1.0f;
+    t->scale.y = 1.0f;
+    t->scale.z = 1.0f;
+}
+
+/*
+ * surgescript_transform_copy()
+ * Copies src to dst
+ */
+void surgescript_transform_copy(surgescript_transform_t* dst, const surgescript_transform_t* src)
+{
+    *dst = *src;
 }
 
 /*

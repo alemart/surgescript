@@ -67,7 +67,8 @@ const char* surgescript_object_exported_variable_name(const surgescript_object_t
 bool surgescript_object_exported_variable_exists(const surgescript_object_t* object, const char* var_name);
 
 /* misc */
-struct surgescript_transform_t* surgescript_object_transform(surgescript_object_t* object); /* local transform */
+void surgescript_object_transform(const surgescript_object_t* object, struct surgescript_transform_t* transform); /* gets the local transform */
+void surgescript_object_set_transform(surgescript_object_t* object, const struct surgescript_transform_t* transform); /* sets the local transform */
 
 /* call SurgeScript functions from C (you may pass NULL to return_value; you may also pass NULL to param iff num_params is 0) */
 void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value);
