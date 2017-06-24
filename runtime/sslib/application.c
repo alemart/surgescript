@@ -42,7 +42,7 @@ surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_
 {
     /* this will destroy the root object and stop the VM */
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-    surgescript_objectmanager_handle_t root_handle = surgescript_objectmanager_root(manager);
+    surgescript_objecthandle_t root_handle = surgescript_objectmanager_root(manager);
     surgescript_object_t* root = surgescript_objectmanager_get(manager, root_handle);
     surgescript_object_call_function(root, "exit", NULL, 0, NULL);
     surgescript_object_kill(object);

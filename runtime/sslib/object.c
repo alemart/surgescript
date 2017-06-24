@@ -54,7 +54,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
 /* returns a handle to the parent object */
 surgescript_var_t* fun_parent(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    surgescript_objectmanager_handle_t parent = surgescript_object_parent(object);
+    surgescript_objecthandle_t parent = surgescript_object_parent(object);
     return surgescript_var_set_objecthandle(surgescript_var_create(), parent);
 }
 
@@ -62,7 +62,7 @@ surgescript_var_t* fun_parent(surgescript_object_t* object, const surgescript_va
 surgescript_var_t* fun_child(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* name = surgescript_var_fast_get_string(param[0]);
-    surgescript_objectmanager_handle_t child = surgescript_object_child(object, name);
+    surgescript_objecthandle_t child = surgescript_object_child(object, name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 
@@ -71,9 +71,9 @@ surgescript_var_t* fun_sibling(surgescript_object_t* object, const surgescript_v
 {
     const char* name = surgescript_var_fast_get_string(param[0]);
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-    surgescript_objectmanager_handle_t parent_handle = surgescript_object_parent(object);
+    surgescript_objecthandle_t parent_handle = surgescript_object_parent(object);
     surgescript_object_t* parent = surgescript_objectmanager_get(manager, parent_handle);
-    surgescript_objectmanager_handle_t sibling = surgescript_object_child(parent, name);
+    surgescript_objecthandle_t sibling = surgescript_object_child(parent, name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), sibling);
 }
 
@@ -81,7 +81,7 @@ surgescript_var_t* fun_sibling(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* name = surgescript_var_fast_get_string(param[0]);
-    surgescript_objectmanager_handle_t child = surgescript_object_find_child(object, name);
+    surgescript_objecthandle_t child = surgescript_object_find_child(object, name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 
@@ -90,12 +90,12 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
 {
     const char* name = surgescript_var_fast_get_string(param[0]);
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-    surgescript_objectmanager_handle_t me = surgescript_object_handle(object);
-    surgescript_objectmanager_handle_t child = surgescript_objectmanager_spawn(manager, me, name, NULL);
+    surgescript_objecthandle_t me = surgescript_object_handle(object);
+    surgescript_objecthandle_t child = surgescript_objectmanager_spawn(manager, me, name, NULL);
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 
-/* destroys the object that calls this */
+/* destroys the object */
 surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_object_kill(object);
@@ -158,9 +158,9 @@ surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surg
 {
     const char* component_name = surgescript_var_fast_get_string(param[0]);
     surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
-    surgescript_objectmanager_handle_t parent_handle = surgescript_object_parent(object);
+    surgescript_objecthandle_t parent_handle = surgescript_object_parent(object);
     surgescript_object_t* parent = surgescript_objectmanager_get(object_manager, parent_handle);
-    surgescript_objectmanager_handle_t component_handle = surgescript_object_child(parent, component_name);
+    surgescript_objecthandle_t component_handle = surgescript_object_child(parent, component_name);
 
     if(!component_handle) {
         const char* object_name = surgescript_object_name(object);

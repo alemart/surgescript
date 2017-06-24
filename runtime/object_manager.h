@@ -14,7 +14,7 @@
 
 /* opaque types */
 typedef struct surgescript_objectmanager_t surgescript_objectmanager_t;
-typedef unsigned surgescript_objectmanager_handle_t;
+typedef unsigned surgescript_objecthandle_t;
 
 /* forward declarations */
 struct surgescript_object_t;
@@ -30,11 +30,11 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(struct surgescript
 surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objectmanager_t* manager);
 
 /* operations */
-surgescript_objectmanager_handle_t surgescript_objectmanager_spawn_root(surgescript_objectmanager_t* manager); /* spawns the root object */
-surgescript_objectmanager_handle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t parent, const char* object_name, void* user_data); /* spawns a new object; user_data may be NULL */
-bool surgescript_objectmanager_exists(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t handle); /* does the specified handle points to a valid object? */
-struct surgescript_object_t* surgescript_objectmanager_get(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t handle); /* returns NULL if the object is not found */
-bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t handle); /* deletes an existing object; returns true on success */
+surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_objectmanager_t* manager); /* spawns the root object */
+surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, surgescript_objecthandle_t parent, const char* object_name, void* user_data); /* spawns a new object; user_data may be NULL */
+bool surgescript_objectmanager_exists(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* does the specified handle points to a valid object? */
+struct surgescript_object_t* surgescript_objectmanager_get(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* returns NULL if the object is not found */
+bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* deletes an existing object; returns true on success */
 
 /* utilities */
 int surgescript_objectmanager_count(surgescript_objectmanager_t* manager); /* how many objects there are? */
@@ -43,9 +43,9 @@ struct surgescript_programpool_t* surgescript_objectmanager_programpool(const su
 struct surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_objectmanager_t* manager); /* pointer to the tag manager */
 
 /* root & built-in objects */
-surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */
-surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
-surgescript_objectmanager_handle_t surgescript_objectmanager_application(surgescript_objectmanager_t* manager); /* handle to the user's application */
-surgescript_objectmanager_handle_t surgescript_objectmanager_system_object(surgescript_objectmanager_t* manager, const char* object_name); /* handle to the specified system object */
+surgescript_objecthandle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */
+surgescript_objecthandle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
+surgescript_objecthandle_t surgescript_objectmanager_application(surgescript_objectmanager_t* manager); /* handle to the user's application */
+surgescript_objecthandle_t surgescript_objectmanager_system_object(surgescript_objectmanager_t* manager, const char* object_name); /* handle to the specified system object */
 
 #endif

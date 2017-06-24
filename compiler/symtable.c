@@ -264,7 +264,7 @@ void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* 
 
 void read_system_object(const char* symbol, surgescript_program_t* program, unsigned k)
 {
-    surgescript_objectmanager_handle_t addr = surgescript_objectmanager_system_object(NULL, symbol);
+    surgescript_objecthandle_t addr = surgescript_objectmanager_system_object(NULL, symbol);
     surgescript_program_add_line(program, SSOP_MOVO, SSOPu(k), SSOPu(addr));
 }
 

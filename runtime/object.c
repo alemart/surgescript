@@ -285,7 +285,7 @@ unsigned surgescript_object_child(const surgescript_object_t* object, const char
 unsigned surgescript_object_find_child(const surgescript_object_t* object, const char* name)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-    surgescript_objectmanager_handle_t null_handle = surgescript_objectmanager_null(manager);
+    surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
 
     for(int i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);

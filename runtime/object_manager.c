@@ -23,19 +23,19 @@ struct surgescript_objectmanager_t
 {
     SSARRAY(surgescript_object_t*, data); /* object table */
     int count; /* how many objects are allocated at the moment */
-    surgescript_objectmanager_handle_t handle_ptr; /* memory allocation */
-    surgescript_objectmanager_handle_t app_handle; /* user's application */
+    surgescript_objecthandle_t handle_ptr; /* memory allocation */
+    surgescript_objecthandle_t app_handle; /* user's application */
     surgescript_programpool_t* program_pool; /* reference to the program pool */
     surgescript_stack_t* stack; /* reference to the stack */
-    SSARRAY(surgescript_objectmanager_handle_t, objects_to_be_scanned); /* garbage collection */
+    SSARRAY(surgescript_objecthandle_t, objects_to_be_scanned); /* garbage collection */
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
     surgescript_tagsystem_t* tag_system; /* tag system */
 };
 
 /* fixed objects */
-static const surgescript_objectmanager_handle_t NULL_HANDLE = 0; /* must always be zero */
-static const surgescript_objectmanager_handle_t ROOT_HANDLE = 1;
+static const surgescript_objecthandle_t NULL_HANDLE = 0; /* must always be zero */
+static const surgescript_objecthandle_t ROOT_HANDLE = 1;
 
 /* names of important objects */
 #define APPLICATION_OBJECT "Application"
@@ -64,7 +64,7 @@ static const int MIN_OBJECTS_FOR_DISPOSAL = 1; /* we need at least this amount t
 
 /* other */
 #define is_power_of_two(x)                !((x) & ((x) - 1)) /* this assumes x > 0 */
-static surgescript_objectmanager_handle_t new_handle(surgescript_objectmanager_t* mgr);
+static surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr);
 
 /* -------------------------------
  * public methods
@@ -101,7 +101,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
  */
 surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objectmanager_t* manager)
 {
-    surgescript_objectmanager_handle_t handle = ssarray_length(manager->data);
+    surgescript_objecthandle_t handle = ssarray_length(manager->data);
     
     while(handle != 0)
         surgescript_objectmanager_delete(manager, --handle);
@@ -116,9 +116,9 @@ surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objec
  * surgescript_objectmanager_spawn()
  * Spawns a new object and puts it in the internal pool (you can't spawn the root using this)
  */
-surgescript_objectmanager_handle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t parent, const char* object_name, void* user_data)
+surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, surgescript_objecthandle_t parent, const char* object_name, void* user_data)
 {
-    surgescript_objectmanager_handle_t handle = new_handle(manager);
+    surgescript_objecthandle_t handle = new_handle(manager);
     surgescript_object_t *parent_object = surgescript_objectmanager_get(manager, parent);
     surgescript_object_t *object = surgescript_object_create(object_name, handle, manager, manager->program_pool, manager->stack, user_data);
 
@@ -151,7 +151,7 @@ surgescript_objectmanager_handle_t surgescript_objectmanager_spawn(surgescript_o
  * surgescript_objectmanager_spawn_root()
  * Spawns the root object
  */
-surgescript_objectmanager_handle_t surgescript_objectmanager_spawn_root(surgescript_objectmanager_t* manager)
+surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_objectmanager_t* manager)
 {
     if(manager->handle_ptr == ROOT_HANDLE) {
         /* spawn the root object */
@@ -172,7 +172,7 @@ surgescript_objectmanager_handle_t surgescript_objectmanager_spawn_root(surgescr
  * surgescript_objectmanager_exists()
  * Does the specified handle points to a valid object?
  */
-bool surgescript_objectmanager_exists(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t handle)
+bool surgescript_objectmanager_exists(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle)
 {
     return handle < ssarray_length(manager->data) && manager->data[handle] != NULL;
 }
@@ -181,7 +181,7 @@ bool surgescript_objectmanager_exists(surgescript_objectmanager_t* manager, surg
  * surgescript_objectmanager_get()
  * Gets an object from the pool (returns NULL if not found)
  */
-surgescript_object_t* surgescript_objectmanager_get(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t handle)
+surgescript_object_t* surgescript_objectmanager_get(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle)
 {
     if(handle < ssarray_length(manager->data)) { /* handle is unsigned; therefore, not lower than zero */
         if(manager->data[handle] != NULL)
@@ -196,7 +196,7 @@ surgescript_object_t* surgescript_objectmanager_get(surgescript_objectmanager_t*
  * surgescript_objectmanager_delete()
  * Deletes an object from the pool
  */
-bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surgescript_objectmanager_handle_t handle)
+bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle)
 {
     if(handle < ssarray_length(manager->data)) {
         if(manager->data[handle] != NULL) {
@@ -213,7 +213,7 @@ bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surg
  * surgescript_objectmanager_null()
  * Returns a handle to a NULL pointer in the object manager
  */
-surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager)
+surgescript_objecthandle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager)
 {
     /* this must *always* be zero */
     return NULL_HANDLE;
@@ -223,7 +223,7 @@ surgescript_objectmanager_handle_t surgescript_objectmanager_null(surgescript_ob
  * surgescript_objectmanager_root()
  * Returns a handle to the root object in the pool
  */
-surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager)
+surgescript_objecthandle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager)
 {
     return ROOT_HANDLE;
 }
@@ -232,7 +232,7 @@ surgescript_objectmanager_handle_t surgescript_objectmanager_root(surgescript_ob
  * surgescript_objectmanager_application()
  * Returns a handle to the user's application
  */
-surgescript_objectmanager_handle_t surgescript_objectmanager_application(surgescript_objectmanager_t* manager)
+surgescript_objecthandle_t surgescript_objectmanager_application(surgescript_objectmanager_t* manager)
 {
     if(manager->app_handle != NULL_HANDLE)
         return manager->app_handle;
@@ -245,13 +245,14 @@ surgescript_objectmanager_handle_t surgescript_objectmanager_application(surgesc
  * Returns a handle to a child of the system object
  * The manager parameter may be set to NULL (useful when evaluating at compile-time)
  */
-surgescript_objectmanager_handle_t surgescript_objectmanager_system_object(surgescript_objectmanager_t* manager, const char* object_name)
+surgescript_objecthandle_t surgescript_objectmanager_system_object(surgescript_objectmanager_t* manager, const char* object_name)
 {
     /* this must be determined at compile-time (for SurgeScript), hence the SYSTEM_OBJECTS array */
     for(const char** p = SYSTEM_OBJECTS; *p != NULL; p++) {
         if(strcmp(*p, object_name) == 0)
             return ROOT_HANDLE + (p - SYSTEM_OBJECTS + 1);
     }
+    
     return NULL_HANDLE;
 }
 
@@ -303,7 +304,7 @@ void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manag
                 }
                 else { /* or, at least, unmark everyone (could be more efficient?) */
                     for(int i = 0; i < ssarray_length(manager->objects_to_be_scanned); i++) {
-                        surgescript_objectmanager_handle_t handle = manager->objects_to_be_scanned[i];
+                        surgescript_objecthandle_t handle = manager->objects_to_be_scanned[i];
                         if(manager->data[handle])
                             surgescript_object_set_reachable(manager->data[handle], false);
                     }
@@ -322,7 +323,7 @@ void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manag
     /* for each object o to be scanned, check the ones that are reachable from o */
     int old_length = ssarray_length(manager->objects_to_be_scanned);
     for(int i = manager->first_object_to_be_scanned; i < old_length; i++) {
-        surgescript_objectmanager_handle_t handle = manager->objects_to_be_scanned[i];
+        surgescript_objecthandle_t handle = manager->objects_to_be_scanned[i];
         if(manager->data[handle] != NULL) {
             surgescript_heap_t* heap = surgescript_object_heap(manager->data[handle]);
             surgescript_heap_scan_objects(heap, manager, mark_as_reachable);
@@ -370,7 +371,7 @@ bool sweep_unreachables(surgescript_object_t* object)
 }
 
 /* gets a handle at a unused space */
-surgescript_objectmanager_handle_t new_handle(surgescript_objectmanager_t* mgr)
+surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr)
 {
     while(mgr->handle_ptr < ssarray_length(mgr->data) && mgr->data[mgr->handle_ptr] != NULL)
         mgr->handle_ptr++;
