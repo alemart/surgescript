@@ -42,6 +42,9 @@ utils: util/util.c util/util.h
 utf8: util/utf8.c util/utf8.h
 	$(CC) $(CFLAGS) -c util/utf8.c
 
+transform: util/transform.c util/transform.h utils
+	$(CC) $(CFLAGS) -c util/transform.c
+
 sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c runtime/sslib/system.c runtime/sslib/string.c runtime/sslib/number.c runtime/sslib/boolean.c runtime/sslib/console.c heap utils utf8
 	$(CC) $(CFLAGS) -c runtime/sslib/object.c -o sslib_object.o
 	$(CC) $(CFLAGS) -c runtime/sslib/array.c -o sslib_array.o
@@ -71,8 +74,8 @@ codegen: compiler/codegen.h compiler/codegen.c utils symtable program_pool progr
 main: main.c utils variable
 	$(CC) $(CFLAGS) -c main.c
 
-all: main utils variable heap stack program program_pool object renv tag_system vm sslib token lexer parser symtable codegen utf8
-	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o utf8.o variable.o heap.o stack.o program.o program_pool.o object_manager.o tag_system.o renv.o object.o vm.o sslib.a token.o lexer.o parser.o symtable.o codegen.o -lm
+all: main utils variable heap stack program program_pool object renv tag_system vm sslib token lexer parser symtable codegen utf8 transform
+	$(CC) $(CFLAGS) -o $(TARGET) main.o util.o utf8.o variable.o heap.o stack.o program.o program_pool.o object_manager.o tag_system.o transform.o renv.o object.o vm.o sslib.a token.o lexer.o parser.o symtable.o codegen.o -lm
 
 clean:
 	$(RM) $(TARGET) *.o *.a

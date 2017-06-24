@@ -1,6 +1,9 @@
 /*
  * UTF-8 Utilities
  */
+#ifndef _SURGESCRIPT_UTF8_H
+#define _SURGESCRIPT_UTF8_H
+
 #include <stdint.h>
 #include <stdarg.h>
 #include "util.h"
@@ -172,3 +175,5 @@ static inline char* str2utf8(const char* str)
     ssfree(wcs);
     return u8s;
 }
+
+#endif

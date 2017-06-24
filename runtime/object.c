@@ -16,6 +16,7 @@
 #include "heap.h"
 #include "stack.h"
 #include "renv.h"
+#include "../util/transform.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
 
@@ -40,13 +41,11 @@ struct surgescript_object_t
     bool is_killed; /* am i scheduled to be destroyed? */
     bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
 
-    /* inner transform */
-    struct {
-        float x, y, scale_x, scale_y, angle;
-    } transform, localTransform;
-
     /* exported variables */
     SSARRAY(surgescript_object_exportedvar_t, exported_var);
+
+    /* local transform */
+    surgescript_transform_t* transform;
 
     /* user-data */
     void* user_data; /* custom user-data */
@@ -101,13 +100,8 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->is_killed = false;
     obj->is_reachable = false;
 
-    obj->transform.x = 0.0f;
-    obj->transform.y = 0.0f;
-    obj->transform.scale_x = 1.0f;
-    obj->transform.scale_y = 1.0f;
-    obj->transform.angle = 0.0f;
-
     ssarray_init(obj->exported_var);
+    obj->transform = NULL;
     obj->user_data = user_data;
 
     /* validation procedure */
@@ -144,6 +138,10 @@ surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
     for(i = 0; i < ssarray_length(obj->exported_var); i++)
         ssfree(obj->exported_var[i].var_name);
     ssarray_release(obj->exported_var);
+
+    /* clear up the local transform, if any */
+    if(obj->transform != NULL)
+        surgescript_transform_destroy(obj->transform);
 
     /* call destructor */
     surgescript_object_release(obj);
@@ -439,6 +437,22 @@ void surgescript_object_set_reachable(surgescript_object_t* object, bool reachab
     object->is_reachable = reachable;
 }
 
+
+/* misc */
+
+/*
+ * surgescript_object_transform()
+ * Returns the local transform of this object (creates one if none exists)
+ */
+surgescript_transform_t* surgescript_object_transform(surgescript_object_t* object)
+{
+    /* if there's no local transform, create an identity transform */
+    if(object->transform == NULL)
+        object->transform = surgescript_transform_create();
+
+    /* done! */
+    return object->transform;
+}
 
 
 /* life-cycle */
