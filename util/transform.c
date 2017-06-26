@@ -14,8 +14,6 @@
 /* utilities */
 static const float DEG2RAD = 0.0174532925f;
 
-
-
 /*
  * surgescript_transform_create()
  * Creates a new identity transform
@@ -149,6 +147,6 @@ void surgescript_transform_apply2dinverse(const surgescript_transform_t* t, floa
     float sx = (fpclassify(t->scale.x) != FP_ZERO) ? 1.0f / t->scale.x : INFINITY;
     float sy = (fpclassify(t->scale.y) != FP_ZERO) ? 1.0f / t->scale.y : INFINITY;
     float tx = t->position.x, ty = t->position.y, cz = t->rotation.cz, sz = t->rotation.sz;
-    *x = sx * cz * (*x) + sx * sz * (*y) - sx * cz * tx - sx * sz * ty;
-    *y = -sy * sz * (*x) + sy * cz * (*y) + sy * sz * tx - sy * cz * ty;
+    *x = isfinite(sx) ? sx * cz * (*x) + sx * sz * (*y) - sx * cz * tx - sx * sz * ty : 0.0f;
+    *y = isfinite(sy) ? -sy * sz * (*x) + sy * cz * (*y) + sy * sz * tx - sy * cz * ty : 0.0f;
 }

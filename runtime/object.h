@@ -60,15 +60,16 @@ void surgescript_object_set_active(surgescript_object_t* object, bool active); /
 bool surgescript_object_is_killed(const surgescript_object_t* object); /* has this object been killed? */
 void surgescript_object_kill(surgescript_object_t* object); /* will destroy the object as soon as the opportunity arises */
 
+/* transform */
+void surgescript_object_peek_transform(const surgescript_object_t* object, struct surgescript_transform_t* transform); /* reads the local transform */
+void surgescript_object_poke_transform(surgescript_object_t* object, const struct surgescript_transform_t* transform); /* sets the local transform */
+struct surgescript_transform_t* surgescript_object_transform(surgescript_object_t* object); /* inner pointer to the local transform */
+
 /* exported variables */
 void surgescript_object_export_variable(surgescript_object_t* object, const char* var_name, surgescript_heapptr_t var_addr);
 surgescript_heapptr_t surgescript_object_exported_variable(const surgescript_object_t* object, const char* var_name);
 const char* surgescript_object_exported_variable_name(const surgescript_object_t* object, int index);
 bool surgescript_object_exported_variable_exists(const surgescript_object_t* object, const char* var_name);
-
-/* misc */
-void surgescript_object_transform(const surgescript_object_t* object, struct surgescript_transform_t* transform); /* gets the local transform */
-void surgescript_object_set_transform(surgescript_object_t* object, const struct surgescript_transform_t* transform); /* sets the local transform */
 
 /* call SurgeScript functions from C (you may pass NULL to return_value; you may also pass NULL to param iff num_params is 0) */
 void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value);

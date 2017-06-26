@@ -441,10 +441,10 @@ void surgescript_object_set_reachable(surgescript_object_t* object, bool reachab
 /* misc */
 
 /*
- * surgescript_object_transform()
- * Gets the local transform of this object
+ * surgescript_object_peek_transform()
+ * Reads the local transform of this object, storing the result in *transform
  */
-void surgescript_object_transform(const surgescript_object_t* object, surgescript_transform_t* transform)
+void surgescript_object_peek_transform(const surgescript_object_t* object, surgescript_transform_t* transform)
 {
     if(object->transform == NULL)
         surgescript_transform_reset(transform);
@@ -453,15 +453,31 @@ void surgescript_object_transform(const surgescript_object_t* object, surgescrip
 }
 
 /*
- * surgescript_object_set_transform()
+ * surgescript_object_poke_transform()
  * Sets the local transform of this object
  */
-void surgescript_object_set_transform(surgescript_object_t* object, const surgescript_transform_t* transform)
+void surgescript_object_poke_transform(surgescript_object_t* object, const surgescript_transform_t* transform)
 {
     if(object->transform == NULL)
         object->transform = surgescript_transform_create();
 
     surgescript_transform_copy(object->transform, transform);
+}
+
+/*
+ * surgescript_object_transform()
+ * Returns the inner pointer to the local transform. If there is no local
+ * transform allocated, this function will allocate one.
+ * Usage of surgescript_object_peek_transform() is preferred over this, as
+ * it saves space. Only use this function if you are going to modify the
+ * transform and want to optimize for speed.
+ */
+surgescript_transform_t* surgescript_object_transform(surgescript_object_t* object)
+{
+    if(object->transform == NULL)
+        object->transform = surgescript_transform_create();
+
+    return object->transform;
 }
 
 
@@ -517,13 +533,15 @@ bool surgescript_object_update(surgescript_object_t* object)
 
     /* check if I am destroyed */
     if(object->is_killed) {
-        surgescript_objectmanager_delete(manager, object->handle);
+        surgescript_objectmanager_delete(manager, object->handle); /* children gets deleted too */
         return false;
     }
 
     /* update myself */
     if(object->is_active)
         run_state(object, object->state_name);
+    else
+        return false; /* optimize; don't update my children */
 
     /* success! */
     return true;
@@ -612,7 +630,7 @@ surgescript_heapptr_t surgescript_object_exported_variable(const surgescript_obj
             return object->exported_var[i].var_addr;
     }
 
-    ssfatal("Can't find exported variable \"%s\" in object 0x%X (\"%s\").", var_name, object->handle, object->name);
+    ssfatal("Can't find variable \"%s\" in object 0x%X (\"%s\").", var_name, object->handle, object->name);
     return 0;
 }
 
