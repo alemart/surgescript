@@ -44,6 +44,9 @@ void surgescript_transform_reset(surgescript_transform_t* t)
     t->position.y = 0.0f;
     t->position.z = 0.0f;
 
+    t->rotation.x = 0.0f;
+    t->rotation.y = 0.0f;
+    t->rotation.z = 0.0f;
     t->rotation.sx = 0.0f;
     t->rotation.cx = 1.0f;
     t->rotation.sy = 0.0f;
@@ -81,9 +84,11 @@ void surgescript_transform_setposition2d(surgescript_transform_t* t, float x, fl
  */
 void surgescript_transform_setrotation2d(surgescript_transform_t* t, float degrees)
 {
-    float a = degrees * DEG2RAD;
-    t->rotation.sz = sinf(a);
-    t->rotation.cz = cosf(a);
+    float radians = degrees * DEG2RAD;
+
+    t->rotation.z = fmodf(degrees, 360.0f);
+    t->rotation.sz = sinf(radians);
+    t->rotation.cz = cosf(radians);
 }
 
 /*
@@ -114,6 +119,8 @@ void surgescript_transform_rotate2d(surgescript_transform_t* t, float degrees)
 {
     float a = degrees * DEG2RAD;
     float s = sinf(a), c = cosf(a);
+
+    t->rotation.z = fmodf(t->rotation.z + degrees, 360.0f);
     t->rotation.sz = t->rotation.sz * c + t->rotation.cz * s;
     t->rotation.cz = t->rotation.cz * c - t->rotation.sz * s;
 }

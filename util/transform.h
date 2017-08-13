@@ -13,20 +13,21 @@
 /* transform type */
 typedef struct surgescript_transform_t surgescript_transform_t;
 
-/* we'll make this struct public */
+/* A Transform holds position, rotation and scale */
 struct surgescript_transform_t
 {
-    /* A Transform holds position, rotation and scale */
+    /* we'll make this transform struct public */
     struct {
-        float x, y, z;
+        float x, y, z; /* local position in world units */
     } position;
     
     struct {
-        float sx, cx, sy, cy, sz, cz; /* sin & cos of each component */
-    } rotation;
+        float x, y, z; /* euler angles in degrees */
+        float sx, cx, sy, cy, sz, cz; /* cached sin & cos of each component */
+    } rotation; /* note: use the API to rotate */
     
     struct {
-        float x, y, z;
+        float x, y, z; /* scale multipliers */
     } scale;
 };
 

@@ -9,6 +9,7 @@
 
 #include <string.h>
 #include <math.h>
+#include <errno.h>
 #include "../vm.h"
 #include "../object.h"
 #include "../object_manager.h"
@@ -16,52 +17,41 @@
 #include "../../util/transform.h"
 
 /* private stuff */
-static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
-/* helper macros & local variables of the Transform */
-#define T2VAR(varaddr)                  ssassert((varaddr) == surgescript_heap_malloc(heap))
-#define T2SET(vartype, varaddr, value)  surgescript_var_set_##vartype(surgescript_heap_at(heap, (varaddr)), (value))
-#define T2GET(vartype, varaddr)         surgescript_var_get_##vartype(surgescript_heap_at(heap, (varaddr)))
-#define ADDR_ANGLE                      0  /* number - local rotation angle (in degrees) */
-#define ADDR_WORLDX                     1  /* number - cached world x position */
-#define ADDR_WORLDY                     2  /* number - cached world y position */
-#define ADDR_WORLDANGLE                 3  /* number - cached world rotation angle */
-#define ADDR_UPDATEDWORLDPOS            4  /* bool - control flag (need to update world position?) */
-#define ADDR_UPDATEDWORLDANGLE          5  /* bool - control flag (need to update world angle?) */
-#define UPDATE_WORLDPOS                 do { \
-                                            if(!T2GET(bool, ADDR_UPDATEDWORLDPOS)) { \
-                                                float world_x, world_y; \
-                                                worldposition2d(object, &world_x, &world_y); \
-                                                T2SET(number, ADDR_WORLDX, world_x); \
-                                                T2SET(number, ADDR_WORLDY, world_y); \
-                                                T2SET(bool, ADDR_UPDATEDWORLDPOS, true); \
-                                            } \
-                                        } while(0)
-#define UPDATE_WORLDANGLE               do { \
-                                            if(!T2GET(bool, ADDR_UPDATEDWORLDANGLE)) { \
-                                                float world_angle; \
-                                                worldangle2d(object, &world_angle); \
-                                                T2SET(number, ADDR_WORLDANGLE, world_angle); \
-                                                T2SET(bool, ADDR_UPDATEDWORLDANGLE, true); \
-                                            } \
-                                        } while(0)
-/* TODOs: */
-#define ADDR_POSITION                   9  /* object (Vector2) - stored local position */
-#define ADDR_SCALE                      10 /* object (Vector2) - stored local scale */
-#define ADDR_WORLDPOSITION              11 /* object (Vector2) - stored world position */
+static surgescript_var_t* fun_translate(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_rotate(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_scale(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+
+static surgescript_var_t* fun_getxpos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getypos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getwidth(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getheight(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setxpos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setypos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setwidth(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setheight(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+
+static surgescript_var_t* fun_getworldx(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getworldy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getworldangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setworldx(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setworldy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setworldangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+
+static surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* misc */
-static void world2local(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *xpos, float *ypos);
+static void world2localposition(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *xpos, float *ypos);
 static void worldposition2d(surgescript_object_t* object, float* world_x, float* world_y);
 static void setworldposition2d(surgescript_object_t* object, float world_x, float world_y, int flags);
-static void world2localangle(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *s, float *c);
-static void worldangle2d(surgescript_object_t* object, float* world_angle);
-static void setworldangle2d(surgescript_object_t* object, float world_angle);
-#define T2SET_WORLDX                      1
-#define T2SET_WORLDY                      2
+static void world2localangle(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *angle);
+static float worldangle2d(surgescript_object_t* object);
+static void setworldangle2d(surgescript_object_t* object, float angle);
+static const int T2SET_WORLDX = 0x1;
+static const int T2SET_WORLDY = 0x2;
 static const float DEG2RAD = 0.0174532925f;
 
 
@@ -72,40 +62,37 @@ static const float DEG2RAD = 0.0174532925f;
  */
 void surgescript_sslib_register_transform2d(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Transform2D", "__constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Transform2D", "state:main", fun_main, 0);
-    surgescript_vm_bind(vm, "Transform2D", "set", fun_set, 2);
-    surgescript_vm_bind(vm, "Transform2D", "get", fun_get, 1);
+
+    surgescript_vm_bind(vm, "Transform2D", "translate", fun_translate, 2);
+    surgescript_vm_bind(vm, "Transform2D", "rotate", fun_rotate, 1);
+    surgescript_vm_bind(vm, "Transform2D", "scale", fun_scale, 2);
+
+    surgescript_vm_bind(vm, "Transform2D", "getXpos", fun_getxpos, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setXpos", fun_setxpos, 1);
+    surgescript_vm_bind(vm, "Transform2D", "getYpos", fun_getypos, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setYpos", fun_setypos, 1);
+    surgescript_vm_bind(vm, "Transform2D", "getAngle", fun_getangle, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setAngle", fun_setangle, 1);
+    surgescript_vm_bind(vm, "Transform2D", "getWidth", fun_getwidth, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setWidth", fun_setwidth, 1);
+    surgescript_vm_bind(vm, "Transform2D", "getHeight", fun_getheight, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setHeight", fun_setheight, 1);
+
+    surgescript_vm_bind(vm, "Transform2D", "getWorldX", fun_getworldx, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setWorldX", fun_setworldx, 1);
+    surgescript_vm_bind(vm, "Transform2D", "getWorldY", fun_getworldy, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setWorldY", fun_setworldy, 1);
+    surgescript_vm_bind(vm, "Transform2D", "getWorldAngle", fun_getworldangle, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setWorldAngle", fun_setworldangle, 1);
+
+    surgescript_vm_bind(vm, "Transform2D", "lookAt", fun_lookat, 2);
 }
 
 
 
 /* my functions */
 
-/* constructor */
-surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_heap_t* heap = surgescript_object_heap(object);
-
-    /* declare variables */
-    T2VAR(ADDR_ANGLE);
-    T2VAR(ADDR_WORLDX);
-    T2VAR(ADDR_WORLDY);
-    T2VAR(ADDR_WORLDANGLE);
-    T2VAR(ADDR_UPDATEDWORLDPOS);
-    T2VAR(ADDR_UPDATEDWORLDANGLE);
-
-    /* initialize variables */
-    T2SET(number, ADDR_ANGLE, 0.0f);
-    T2SET(number, ADDR_WORLDX, 0.0f);
-    T2SET(number, ADDR_WORLDY, 0.0f);
-    T2SET(number, ADDR_WORLDANGLE, 0.0f);
-    T2SET(bool, ADDR_UPDATEDWORLDPOS, false);
-    T2SET(bool, ADDR_UPDATEDWORLDANGLE, false);
-
-    /* done! */
-    return NULL;
-}
 
 
 /* main state */
@@ -115,129 +102,169 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
     return NULL;
 }
 
-/* getter */
-surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+
+
+/* rigid operations */
+surgescript_var_t* fun_translate(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    const char* key = surgescript_var_fast_get_string(param[0]);
     surgescript_transform_t* transform = surgescript_object_transform(object);
+    float tx = surgescript_var_get_number(param[0]);
+    float ty = surgescript_var_get_number(param[1]);
 
-    /* use a jump table */
-    switch(key[0]) {
-        /* position */
-        case 'x':
-            if(!key[1])
-                return surgescript_var_set_number(surgescript_var_create(), transform->position.x);
-            break;
+    surgescript_transform_translate2d(transform, tx, ty);
 
-        case 'y':
-            if(!key[1])
-                return surgescript_var_set_number(surgescript_var_create(), transform->position.y);
-            break;
+    return NULL;
 
-        /* rotation */
-        case 'a':
-            if(strcmp(key, "angle") == 0) {
-                surgescript_heap_t* heap = surgescript_object_heap(object);
-                return surgescript_var_clone(surgescript_heap_at(heap, ADDR_ANGLE));
-            }
-            break;
+}
+surgescript_var_t* fun_rotate(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    float degrees = surgescript_var_get_number(param[0]);
 
-        /* scale */
-        case 's':
-            if(strcmp(key, "scaleX") == 0)
-                return surgescript_var_set_number(surgescript_var_create(), transform->scale.x);
-            else if(strcmp(key, "scaleY") == 0)
-                return surgescript_var_set_number(surgescript_var_create(), transform->scale.y);
-            break;
+    surgescript_transform_rotate2d(transform, degrees);
 
-        /* world values */
-        case 'w': {
-            surgescript_heap_t* heap = surgescript_object_heap(object);
-            if(strcmp(key, "worldX") == 0) {
-                UPDATE_WORLDPOS;
-                return surgescript_var_clone(surgescript_heap_at(heap, ADDR_WORLDX));
-            }
-            else if(strcmp(key, "worldY") == 0) {
-                UPDATE_WORLDPOS;
-                return surgescript_var_clone(surgescript_heap_at(heap, ADDR_WORLDY));
-            }
-            else if(strcmp(key, "worldAngle") == 0) {
-                UPDATE_WORLDANGLE;
-                return surgescript_var_clone(surgescript_heap_at(heap, ADDR_WORLDANGLE));
-            }
-            break;
-        }
-    }
-
-    /* done! */
     return NULL;
 }
 
-/* setter */
-surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_scale(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    const char* key = surgescript_var_fast_get_string(param[0]);
-    const surgescript_var_t* value = param[1];
     surgescript_transform_t* transform = surgescript_object_transform(object);
-    surgescript_heap_t* heap = surgescript_object_heap(object);
+    float sx = surgescript_var_get_number(param[0]);
+    float sy = surgescript_var_get_number(param[1]);
 
-    /* use a jump table */
-    switch(key[0]) {
-        /* position */
-        case 'x':
-            if(!key[1]) {
-                transform->position.x = surgescript_var_get_number(value);
-                T2SET(bool, ADDR_UPDATEDWORLDPOS, false); /* will only compute world position if needed */
-            }
-            break;
+    surgescript_transform_scale2d(transform, sx, sy);
 
-        case 'y':
-            if(!key[1]) {
-                transform->position.y = surgescript_var_get_number(value);
-                T2SET(bool, ADDR_UPDATEDWORLDPOS, false);
-            }
-            break;
+    return NULL;
+}
 
-        /* rotation */
-        case 'a':
-            if(strcmp(key, "angle") == 0) {
-                float degrees = fmodf(surgescript_var_get_number(value), 360.0f);
-                surgescript_transform_setrotation2d(transform, degrees);
-                T2SET(number, ADDR_ANGLE, degrees);
-                T2SET(bool, ADDR_UPDATEDWORLDANGLE, false);
-            }
-            break;
 
-        /* scale */
-        case 's':
-            if(strcmp(key, "scaleX") == 0)
-                transform->scale.x = surgescript_var_get_number(value);
-            else if(strcmp(key, "scaleY") == 0)
-                transform->scale.y = surgescript_var_get_number(value);
-            break;
 
-        /* world values */
-        case 'w':
-            if(strcmp(key, "worldX") == 0) {
-                float world_x = surgescript_var_get_number(value);
-                setworldposition2d(object, world_x, 0.0f, T2SET_WORLDX);
-                T2SET(number, ADDR_WORLDX, world_x);
-            }
-            else if(strcmp(key, "worldY") == 0) {
-                float world_y = surgescript_var_get_number(value);
-                setworldposition2d(object, 0.0f, world_y, T2SET_WORLDY);
-                T2SET(number, ADDR_WORLDY, world_y);
-            }
-            else if(strcmp(key, "worldAngle") == 0) {
-                float world_angle = fmodf(surgescript_var_get_number(value), 360.0f);
-                setworldangle2d(object, world_angle);
-                T2SET(number, ADDR_WORLDANGLE, world_angle);
-                T2SET(number, ADDR_ANGLE, fmodf(atan2f(transform->rotation.sz, transform->rotation.cz) / DEG2RAD, 360.0f));
-            }
-            break;
-    }
+/* getters & setters: local transform values */
+surgescript_var_t* fun_getxpos(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    return surgescript_var_set_number(surgescript_var_create(), transform->position.x);
+}
 
-    /* done! */
+surgescript_var_t* fun_getypos(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    return surgescript_var_set_number(surgescript_var_create(), transform->position.y);
+}
+
+surgescript_var_t* fun_getangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    return surgescript_var_set_number(surgescript_var_create(), transform->rotation.z);
+}
+
+surgescript_var_t* fun_getwidth(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    return surgescript_var_set_number(surgescript_var_create(), transform->scale.x);
+}
+
+surgescript_var_t* fun_getheight(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    return surgescript_var_set_number(surgescript_var_create(), transform->scale.y);
+}
+
+surgescript_var_t* fun_setxpos(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    transform->position.x = surgescript_var_get_number(param[0]);
+    return NULL;
+}
+
+surgescript_var_t* fun_setypos(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    transform->position.y = surgescript_var_get_number(param[0]);
+    return NULL;
+}
+
+surgescript_var_t* fun_setangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    surgescript_transform_setrotation2d(transform, surgescript_var_get_number(param[0])); /* in degrees */
+    return NULL;
+}
+
+surgescript_var_t* fun_setwidth(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    transform->scale.x = surgescript_var_get_number(param[0]);
+    return NULL;
+}
+
+surgescript_var_t* fun_setheight(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_transform_t* transform = surgescript_object_transform(object);
+    transform->scale.y = surgescript_var_get_number(param[0]);
+    return NULL;
+}
+
+
+
+/* getters & setters: world transform values */
+/* modifying world values may be a bit expensive; prefer modifying local transform values instead. */
+surgescript_var_t* fun_getworldx(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    float world_x = 0.0f, world_y = 0.0f;
+    worldposition2d(object, &world_x, &world_y);
+    return surgescript_var_set_number(surgescript_var_create(), world_x);
+}
+
+surgescript_var_t* fun_getworldy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    float world_x = 0.0f, world_y = 0.0f;
+    worldposition2d(object, &world_x, &world_y);
+    return surgescript_var_set_number(surgescript_var_create(), world_y);
+}
+
+surgescript_var_t* fun_getworldangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    float world_angle = worldangle2d(object); /* in degrees */
+    return surgescript_var_set_number(surgescript_var_create(), world_angle);
+}
+
+surgescript_var_t* fun_setworldx(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    setworldposition2d(object, surgescript_var_get_number(param[0]), 0.0f, T2SET_WORLDX);
+    return NULL;
+}
+
+surgescript_var_t* fun_setworldy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    setworldposition2d(object, 0.0f, surgescript_var_get_number(param[0]), T2SET_WORLDY);
+    return NULL;
+}
+
+surgescript_var_t* fun_setworldangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    setworldangle2d(object, surgescript_var_get_number(param[0])); /* in degrees */
+    return NULL;
+}
+
+
+
+/* utilities */
+
+/* will look at a given (world_x, world_y) position */
+surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    float angle = 0.0f, eye_world_x = 0.0f, eye_world_y = 0.0f;
+    float target_world_x = surgescript_var_get_number(param[0]);
+    float target_world_y = surgescript_var_get_number(param[1]);
+
+    worldposition2d(object, &eye_world_x, &eye_world_y);
+
+    errno = 0;
+    angle = atan2f(target_world_y - eye_world_y, target_world_x - eye_world_x);
+    if(errno == 0)
+        setworldangle2d(object, angle / DEG2RAD);
+
     return NULL;
 }
 
@@ -245,16 +272,18 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
 /* misc */
 
 /* this will help compute the local position, recursively, of an object given its world position */
-void world2local(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *xpos, float *ypos)
+void world2localposition(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *xpos, float *ypos)
 {
     surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
     surgescript_transform_t transform;
 
     if(handle != root)
-        world2local(manager, surgescript_object_parent(object), root, xpos, ypos);
+        world2localposition(manager, surgescript_object_parent(object), root, xpos, ypos);
 
     surgescript_object_peek_transform(object, &transform);
     surgescript_transform_apply2dinverse(&transform, xpos, ypos);
+
+    /* alternatively, one could compute the world position of the parent and return the difference */
 }
 
 /* Computes the 2D world position of the object */
@@ -289,7 +318,7 @@ void setworldposition2d(surgescript_object_t* object, float world_x, float world
 
     /* compute local transform */
     if(handle != root)
-        world2local(manager, surgescript_object_parent(object), root, &world_x, &world_y);
+        world2localposition(manager, surgescript_object_parent(object), root, &world_x, &world_y);
 
     /* set local transform */
     if(flags & T2SET_WORLDX)
@@ -299,62 +328,55 @@ void setworldposition2d(surgescript_object_t* object, float world_x, float world
 }
 
 /* helper function */
-void world2localangle(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *s, float *c)
+void world2localangle(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *angle)
 {
     surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
     surgescript_transform_t transform;
-    float sa, sb, ca, cb;
 
     if(handle != root)
-        world2localangle(manager, surgescript_object_parent(object), root, s, c);
+        world2localangle(manager, surgescript_object_parent(object), root, angle);
 
     surgescript_object_peek_transform(object, &transform);
-    sa = *s, ca = *c, sb = transform.rotation.sz, cb = transform.rotation.cz; /* swap? */
-    *s = sa * cb - sb * ca;
-    *c = ca * cb + sa * sb;
+    *angle -= transform.rotation.z; /* in degrees */
 }
 
 /* computes the world angle of the object, given its local angle */
-void worldangle2d(surgescript_object_t* object, float* world_angle)
+float worldangle2d(surgescript_object_t* object)
 {
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_objecthandle_t root = surgescript_objectmanager_root(manager);
     surgescript_objecthandle_t handle = surgescript_object_handle(object);
     surgescript_transform_t transform;
-    float s, c, sa, ca, sb, cb;
+    float world_angle;
 
     /* get local angle */
     surgescript_object_peek_transform(object, &transform);
-    s = transform.rotation.sz;
-    c = transform.rotation.cz;
+    world_angle = transform.rotation.z;
 
     /* compute world angle */
     while(handle != root) {
         handle = surgescript_object_parent(object);
         object = surgescript_objectmanager_get(manager, handle); /* object receives its parent */
         surgescript_object_peek_transform(object, &transform);
-        sa = s, ca = c, sb = transform.rotation.sz, cb = transform.rotation.cz;
-        s = sa * cb + sb * ca, c = ca * cb - sa * sb;
+        world_angle += transform.rotation.z;
     }
 
     /* done! */
-    *world_angle = fmodf(atan2f(s, c) / DEG2RAD, 360.0f);
+    return fmodf(world_angle, 360.0f);
 }
 
 /* sets the world angle of the object by computing its corresponding local angle */
-void setworldangle2d(surgescript_object_t* object, float world_angle)
+void setworldangle2d(surgescript_object_t* object, float angle)
 {
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_objecthandle_t root = surgescript_objectmanager_root(manager);
     surgescript_objecthandle_t handle = surgescript_object_handle(object);
     surgescript_transform_t* transform = surgescript_object_transform(object);
-    float s = sinf(world_angle * DEG2RAD), c = cosf(world_angle * DEG2RAD);
 
     /* compute corresponding local angle */
     if(handle != root)
-        world2localangle(manager, handle, root, &s, &c);
+        world2localangle(manager, handle, root, &angle);
 
     /* update local angle */
-    transform->rotation.sz = s;
-    transform->rotation.cz = c;
+    surgescript_transform_setrotation2d(transform, angle);
 }
