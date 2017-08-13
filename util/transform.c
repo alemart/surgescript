@@ -117,12 +117,9 @@ void surgescript_transform_translate2d(surgescript_transform_t* t, float x, floa
  */
 void surgescript_transform_rotate2d(surgescript_transform_t* t, float degrees)
 {
-    float a = degrees * DEG2RAD;
-    float s = sinf(a), c = cosf(a);
-
     t->rotation.z = fmodf(t->rotation.z + degrees, 360.0f);
-    t->rotation.sz = t->rotation.sz * c + t->rotation.cz * s;
-    t->rotation.cz = t->rotation.cz * c - t->rotation.sz * s;
+    t->rotation.sz = sinf(t->rotation.z * DEG2RAD);
+    t->rotation.cz = cosf(t->rotation.z * DEG2RAD);
 }
 
 /*
