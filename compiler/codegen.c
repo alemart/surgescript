@@ -84,7 +84,7 @@ void emit_exportvar(surgescript_nodecontext_t context, const char* identifier)
     SSASM(SSOP_MOVS, T0, TEXT(identifier));
     SSASM(SSOP_PUSH, T0);
     surgescript_symtable_push_addr(context.symtable, identifier, context.program);
-    SSASM(SSOP_CALL, TEXT("__export"), U(2));
+    SSASM(SSOP_CALL, TEXT("__exportProperty"), U(2));
     SSASM(SSOP_POPN, U(3));
 }
 
@@ -508,13 +508,25 @@ void emit_dictincdec(surgescript_nodecontext_t context, const char* op)
     SSASM(SSOP_POPN, U(2));
 }
 
-void emit_exportedvar(surgescript_nodecontext_t context, const char* identifier)
+void emit_readexportedvar(surgescript_nodecontext_t context, const char* identifier)
 {
+    char* getter_name = surgescript_util_camelcaseprefix("get", identifier);
+
+    //SSASM(SSOP_PUSH, T0); /* object pointer */
+    //SSASM(SSOP_MOVS, T0, TEXT(identifier));
+    //SSASM(SSOP_PUSH, T0);
+    //SSASM(SSOP_CALL, TEXT("__getProperty"), U(1)); /* read exported var named <identifier> */
+    //SSASM(SSOP_POPN, U(2));
     SSASM(SSOP_PUSH, T0); /* object pointer */
-    SSASM(SSOP_MOVS, T0, TEXT(identifier));
-    SSASM(SSOP_PUSH, T0);
-    SSASM(SSOP_CALL, TEXT("__var"), U(1)); /* read exported var named <identifier> */
-    SSASM(SSOP_POPN, U(2));
+    SSASM(SSOP_CALL, TEXT(getter_name), U(0));
+    SSASM(SSOP_POPN, U(1));
+
+    ssfree(getter_name);
+}
+
+void emit_writeexportedvar(surgescript_nodecontext_t context, const char* identifier)
+{
+    ;
 }
 
 void emit_arrayexpr1(surgescript_nodecontext_t context)

@@ -46,4 +46,7 @@ uint32_t surgescript_util_str2hash(const char* str); /* converts a string to a 3
 unsigned long surgescript_util_htob(unsigned long x); /* host to big-endian */
 unsigned long surgescript_util_btoh(unsigned long x); /* big to host-endian */
 
+const char* surgescript_util_basename(const char* path); /* basename */
+char* surgescript_util_camelcaseprefix(const char* prefix, const char* text); /* camelCase prefixing function */
+
 #endif

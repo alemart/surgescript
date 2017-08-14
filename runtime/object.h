@@ -15,7 +15,6 @@
 
 /* types */
 typedef struct surgescript_object_t surgescript_object_t;
-typedef const char* surgescript_object_annotation_param_t;
 
 /* forward declarations */
 struct surgescript_programpool_t;

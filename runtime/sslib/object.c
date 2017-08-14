@@ -7,6 +7,7 @@
  * SurgeScript standard library: common routines for all objects
  */
 
+#include <ctype.h>
 #include "../vm.h"
 #include "../../util/util.h"
 
@@ -20,10 +21,13 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_var(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_exportproperty(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getproperty(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setproperty(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+
+/* utilities */
 
 
 /*
@@ -43,8 +47,9 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "requireComponent", fun_requirecomponent, 1);
-    surgescript_vm_bind(vm, "Object", "__var", fun_var, 1);
-    surgescript_vm_bind(vm, "Object", "__export", fun_export, 2);
+    surgescript_vm_bind(vm, "Object", "__exportProperty", fun_exportproperty, 2);
+    surgescript_vm_bind(vm, "Object", "__getProperty", fun_getproperty, 1);
+    surgescript_vm_bind(vm, "Object", "__setProperty", fun_setproperty, 2);
 }
 
 
@@ -135,17 +140,37 @@ surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_va
     return surgescript_var_set_bool(surgescript_var_create(), tagged);
 }
 
-/* read exported variable */
-surgescript_var_t* fun_var(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+/* property getter */
+surgescript_var_t* fun_getproperty(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    const char* var_name = surgescript_var_fast_get_string(param[0]);
-    surgescript_heapptr_t var_addr = surgescript_object_exported_variable(object, var_name);
-    surgescript_heap_t* heap = surgescript_object_heap(object);
-    return surgescript_var_clone(surgescript_heap_at(heap, var_addr));
+    const surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
+    const surgescript_programpool_t* program_pool = surgescript_objectmanager_programpool(object_manager);
+    const char* object_name = surgescript_object_name(object);
+    const char* property_name = surgescript_var_fast_get_string(param[0]);
+    char* getter_name = surgescript_util_camelcaseprefix("get", property_name);
+    surgescript_var_t* value = NULL;
+
+    if(0 && surgescript_programpool_exists(program_pool, object_name, getter_name)) {
+        surgescript_program_t* program = surgescript_programpool_get(program_pool, object_name, getter_name);
+    }
+    else {
+        surgescript_heapptr_t addr = surgescript_object_exported_variable(object, property_name);
+        surgescript_heap_t* heap = surgescript_object_heap(object);
+        value = surgescript_var_clone(surgescript_heap_at(heap, addr));
+    }
+
+    ssfree(getter_name);
+    return value;
+}
+
+/* property setter */
+surgescript_var_t* fun_setproperty(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return NULL;
 }
 
 /* export a variable, given a name and a heap_addr */
-surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_exportproperty(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* var_name = surgescript_var_fast_get_string(param[0]);
     surgescript_heapptr_t var_addr = surgescript_var_get_rawbits(param[1]);
@@ -153,7 +178,7 @@ surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_va
     return NULL;
 }
 
-/* gets an immediate child object called component_name in the parent (and spawns the component if there isn't one) */
+/* gets an immediate child object called component_name in the parent (and spawns the component there if there isn't one) */
 surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* component_name = surgescript_var_fast_get_string(param[0]);

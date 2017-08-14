@@ -49,7 +49,6 @@ static void expect_something(surgescript_parser_t* parser);
 static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
 static void unexpected_symbol(surgescript_parser_t* parser);
 static void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static const char* ssbasename(const char* path);
 
 /* non-terminals */
 static void objectlist(surgescript_parser_t* parser);
@@ -161,7 +160,7 @@ bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* abso
 
         /* parse it */
         ssfree(parser->filename);
-        parser->filename = ssstrdup(ssbasename(absolute_path));
+        parser->filename = ssstrdup(surgescript_util_basename(absolute_path));
         surgescript_lexer_set(parser->lexer, data);
         parse(parser);
 
@@ -349,20 +348,6 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
     if(!surgescript_programpool_exists(pool, context.object_name, "state:main"))
         ssfatal("Object \"%s\" in \"%s\" needs a \"main\" state.", context.object_name, context.source_file);
 }
-
-/* similar to basename(), but without the odd semantics. No strings are allocated. */
-const char* ssbasename(const char* path)
-{
-    const char* p;
-
-    if(!(p = strrchr(path, '/'))) {
-        if(!(p = strrchr(path, '\\')))
-            return path;
-    }
-
-    return p + 1;
-}
-
 
 
 
@@ -774,14 +759,14 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
                 postfixexpr1(parser, context);
             }
             else if(surgescript_symtable_has_symbol(context.symtable, identifier)) {
-                /* lambda call */
+                /* call "call" method */
                 surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);
                 match(parser, SSTOK_IDENTIFIER);
                 funcallexpr(parser, context, "call");
                 postfixexpr1(parser, context);
             }
             else {
-                /* lambda call (system object) */
+                /* call "call" method (system object) */
                 emit_object(context, sys);
                 match(parser, SSTOK_IDENTIFIER);
                 funcallexpr(parser, context, "call");
@@ -872,7 +857,7 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void propertyread(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name)
 {
-    emit_exportedvar(context, property_name);
+    emit_readexportedvar(context, property_name);
 }
 
 void propertywrite(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name)

@@ -177,11 +177,43 @@ unsigned long surgescript_util_htob(unsigned long x)
  * surgescript_util_btoh()
  * Convert a 32-bit number from big to host-endian notation
  */
-
 unsigned long surgescript_util_btoh(unsigned long x)
 {
     return surgescript_util_htob(x);
 }
+
+/*
+ * surgescript_util_basename()
+ * similar to basename(), but without the odd semantics. No strings are allocated.
+ */
+const char* surgescript_util_basename(const char* path)
+{
+    const char* p;
+
+    if(!(p = strrchr(path, '/'))) {
+        if(!(p = strrchr(path, '\\')))
+            return path;
+    }
+
+    return p + 1;
+}
+
+/*
+ * surgescript_util_camelcaseprefix()
+ * camelCase prefixing function: returns "prefixText"
+ */
+char* surgescript_util_camelcaseprefix(const char* prefix, const char* text)
+{
+    char* str = ssmalloc((strlen(prefix) + strlen(text) + 1) * sizeof(char));
+    char first[2] = { toupper(text[0]), '\0' };
+
+    strcpy(str, prefix);
+    strcat(str, first);
+    strcat(str, text + 1);
+
+    return str;
+}
+
 
 
 /* -------------------------------
