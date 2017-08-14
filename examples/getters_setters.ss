@@ -10,12 +10,18 @@ object "Application"
 
     state "main"
     {
-        Console.print("Hello, " + obj.name);
+        hello();
         showStatus();
-        //obj.eyes = 4;
+        //obj.eyes = 4; // the same as obj.setEyes(4)
         //obj.name = "master"; // will crash; no setter defined.
         showStatus();
         Application.exit();
+    }
+
+    fun hello()
+    {
+        // typing obj.name is the same as obj.getName()
+        Console.print("Hello, " + obj.name);
     }
 
     fun showStatus()
