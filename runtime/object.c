@@ -620,10 +620,10 @@ void surgescript_object_export_variable(surgescript_object_t* object, const char
 }
 
 /*
- * surgescript_object_exported_variable()
+ * surgescript_object_exported_variable_address()
  * Returns the heap address of a given (exported) variable
  */
-surgescript_heapptr_t surgescript_object_exported_variable(const surgescript_object_t* object, const char* var_name)
+surgescript_heapptr_t surgescript_object_exported_variable_address(const surgescript_object_t* object, const char* var_name)
 {
     for(int i = 0; i < ssarray_length(object->exported_var); i++) {
         if(0 == strcmp(object->exported_var[i].var_name, var_name))
@@ -645,6 +645,15 @@ const char* surgescript_object_exported_variable_name(const surgescript_object_t
         return object->exported_var[index].var_name;
     else
         return NULL;
+}
+
+/*
+ * surgescript_object_exported_variable_count()
+ * How many exported variables does this object have?
+ */
+int surgescript_object_exported_variable_count(const surgescript_object_t* object)
+{
+    return ssarray_length(object->exported_var);
 }
 
 /*

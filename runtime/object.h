@@ -66,8 +66,9 @@ struct surgescript_transform_t* surgescript_object_transform(surgescript_object_
 
 /* exported variables */
 void surgescript_object_export_variable(surgescript_object_t* object, const char* var_name, surgescript_heapptr_t var_addr);
-surgescript_heapptr_t surgescript_object_exported_variable(const surgescript_object_t* object, const char* var_name);
+surgescript_heapptr_t surgescript_object_exported_variable_address(const surgescript_object_t* object, const char* var_name);
 const char* surgescript_object_exported_variable_name(const surgescript_object_t* object, int index);
+int surgescript_object_exported_variable_count(const surgescript_object_t* object);
 bool surgescript_object_exported_variable_exists(const surgescript_object_t* object, const char* var_name);
 
 /* call SurgeScript functions from C (you may pass NULL to return_value; you may also pass NULL to param iff num_params is 0) */
