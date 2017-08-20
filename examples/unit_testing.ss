@@ -212,9 +212,17 @@ object "SurgeScriptTest"
         test(this["value"] && this.get("value")) || fail(10);
         test(value == this["value"]) || fail(11);
         test(this["self"]["property"] == this["property"]) || fail(12);
-        test(this.message == message && this.value == value) || fail(13);
+        test(this.value == value) || fail(13);
         test((this.value = 5, value == 5)) || fail(14);
         test((this.value = 'b') && value == 'b') || fail(15);
+        test(this.self == this && this.self == getSelf()) || fail(16);
+        test(this.self["property"] == this["property"]) || fail(17);
+        test((this.self["value"] = 7, value == 7)) || fail(18);
+        test(this.self.value++ == 7 && value == 8) || fail(19);
+        test((this.self.self.self["this"].self.value--, this.value == 7)) || fail(20);
+        test((this.self["value"]++) && this.getValue() == 8) || fail(21);
+        test((this.setValue(this.getValue() + 1), this.value == 9) && (this.value *= 2, this.value == 18)) || fail(22);
+        test((this.value += 5) == 23) || fail(23);
         end();
     }
 
@@ -319,10 +327,10 @@ object "SurgeScriptTest"
         value = newValue;
     }
 
-    // getMessage()
-    // enables one to type object.message to return the [private] variable message (declared above)
-    fun getMessage()
+    // getSelf()
+    // We declare this function so that the expression "this.self" returns this (thus enabling some interesting test cases)
+    fun getSelf()
     {
-        return message;
+        return this;
     }
 }
