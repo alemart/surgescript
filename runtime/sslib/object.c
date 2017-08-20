@@ -8,6 +8,7 @@
  */
 
 #include <ctype.h>
+#include <string.h>
 #include "../vm.h"
 #include "../../util/util.h"
 
@@ -19,6 +20,7 @@ static surgescript_var_t* fun_sibling(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -42,6 +44,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "findChild", fun_findchild, 1);
     surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
+    surgescript_vm_bind(vm, "Object", "plus", fun_plus, 1);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "requireComponent", fun_requirecomponent, 1);
@@ -107,6 +110,23 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     return surgescript_var_set_string(surgescript_var_create(), "[object]");
+}
+
+/* plus: overloads the '+' operator */
+surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_var_t* ret = surgescript_var_create();
+    surgescript_var_t* me = fun_tostring(object, NULL, 0);
+    const char* str1 = surgescript_var_fast_get_string(me);
+
+    char* str2 = surgescript_var_get_string(param[0]);
+    char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
+    surgescript_var_set_string(ret, strcat(strcpy(str, str1), str2));
+    ssfree(str);
+    ssfree(str2);
+
+    surgescript_var_destroy(me);
+    return ret;
 }
 
 /* what's the name of this object? */

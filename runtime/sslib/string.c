@@ -20,6 +20,7 @@ static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surge
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tonumber(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -40,6 +41,7 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "String", "toString", fun_tostring, 1);
     surgescript_vm_bind(vm, "String", "call", fun_call, 1);
+    surgescript_vm_bind(vm, "String", "plus", fun_plus, 2);
     surgescript_vm_bind(vm, "String", "toNumber", fun_tonumber, 1);
     surgescript_vm_bind(vm, "String", "length", fun_length, 1);
     surgescript_vm_bind(vm, "String", "get", fun_get, 2);
@@ -90,6 +92,13 @@ surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_
     surgescript_var_t* ret = surgescript_var_set_string(surgescript_var_create(), str);
     ssfree(str);
     return ret;
+}
+
+/* plus: overloads the '+' operator */
+surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* concatenates two strings */
+    return fun_concat(object, param, num_params);
 }
 
 /* converts to number */
@@ -172,11 +181,12 @@ surgescript_var_t* fun_substr(surgescript_object_t* object, const surgescript_va
 surgescript_var_t* fun_concat(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_var_t* ret = surgescript_var_create();
-    const char* str1 = surgescript_var_fast_get_string(param[0]); /* param[0] can be assumed to be a string */
+    char* str1 = surgescript_var_get_string(param[0]);
     char* str2 = surgescript_var_get_string(param[1]);
     char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
     surgescript_var_set_string(ret, strcat(strcpy(str, str1), str2));
     ssfree(str);
     ssfree(str2);
+    ssfree(str1);
     return ret;
 }
