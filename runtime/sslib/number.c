@@ -85,7 +85,7 @@ surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_
     int code[] = {
         surgescript_var_type2code("number"),
         surgescript_var_type2code("boolean"),
-        surgescript_var_type2code("null")
+        surgescript_var_type2code(NULL)
     };
 
     if(( /* if the second operand is either a number, a boolean or a null ... */
