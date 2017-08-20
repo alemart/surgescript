@@ -630,7 +630,7 @@ surgescript_heapptr_t surgescript_object_exported_variable(const surgescript_obj
             return object->exported_var[i].var_addr;
     }
 
-    ssfatal("Runtime Error: can't find property \"%s\" in object 0x%X (\"%s\").", var_name, object->handle, object->name);
+    ssfatal("Runtime Error: can't find exported variable \"%s\" in object 0x%X (\"%s\").", var_name, object->handle, object->name);
     return 0;
 }
 

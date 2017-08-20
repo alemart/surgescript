@@ -84,7 +84,7 @@ void emit_exportvar(surgescript_nodecontext_t context, const char* identifier)
     SSASM(SSOP_MOVS, T0, TEXT(identifier));
     SSASM(SSOP_PUSH, T0);
     surgescript_symtable_push_addr(context.symtable, identifier, context.program);
-    SSASM(SSOP_CALL, TEXT("__exportProperty"), U(2));
+    SSASM(SSOP_CALL, TEXT("__export"), U(2));
     SSASM(SSOP_POPN, U(3));
 }
 
@@ -142,6 +142,10 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
             SSASM(SSOP_DIV, T1, T0);
             SSASM(SSOP_XCHG, T0, T1);
             surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
+            break;
+
+        default:
+            ssfatal("Compile Error: invalid assignment expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
             break;
     }
 }
@@ -299,6 +303,10 @@ void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveo
             SSASM(SSOP_SUB, T1, T0);
             SSASM(SSOP_XCHG, T1, T0);
             break;
+
+        default:
+            ssfatal("Compile Error: invalid additive expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
+            break;
     }
 }
 
@@ -318,6 +326,10 @@ void emit_multiplicativeexpr2(surgescript_nodecontext_t context, const char* mul
         case '/':
             SSASM(SSOP_DIV, T1, T0);
             SSASM(SSOP_XCHG, T1, T0);
+            break;
+
+        default:
+            ssfatal("Compile Error: invalid multiplicative expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
             break;
     }
 }
@@ -494,6 +506,10 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
             SSASM(SSOP_POP, T0); /* return dict.get(<expr>) <assignop> <assignexpr> */
             SSASM(SSOP_POPN, U(2));
             break;
+
+        default:
+            ssfatal("Compile Error: invalid dictset expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
+            break;
     }
 }
 
@@ -508,15 +524,10 @@ void emit_dictincdec(surgescript_nodecontext_t context, const char* op)
     SSASM(SSOP_POPN, U(2));
 }
 
-void emit_readexportedvar(surgescript_nodecontext_t context, const char* identifier)
+void emit_getter(surgescript_nodecontext_t context, const char* property_name)
 {
-    char* getter_name = surgescript_util_camelcaseprefix("get", identifier);
+    char* getter_name = surgescript_util_camelcaseprefix("get", property_name);
 
-    //SSASM(SSOP_PUSH, T0); /* object pointer */
-    //SSASM(SSOP_MOVS, T0, TEXT(identifier));
-    //SSASM(SSOP_PUSH, T0);
-    //SSASM(SSOP_CALL, TEXT("__getProperty"), U(1)); /* read exported var named <identifier> */
-    //SSASM(SSOP_POPN, U(2));
     SSASM(SSOP_PUSH, T0); /* object pointer */
     SSASM(SSOP_CALL, TEXT(getter_name), U(0));
     SSASM(SSOP_POPN, U(1));
@@ -524,9 +535,105 @@ void emit_readexportedvar(surgescript_nodecontext_t context, const char* identif
     ssfree(getter_name);
 }
 
-void emit_writeexportedvar(surgescript_nodecontext_t context, const char* identifier)
+void emit_setter1(surgescript_nodecontext_t context, const char* property_name)
 {
-    ;
+    char* getter_name = surgescript_util_camelcaseprefix("get", property_name);
+
+    SSASM(SSOP_PUSH, T0); /* object pointer */
+    SSASM(SSOP_CALL, TEXT(getter_name), U(0));
+    SSASM(SSOP_PUSH, T0); /* push object.property_name */
+
+    ssfree(getter_name);
+}
+
+void emit_setter2(surgescript_nodecontext_t context, const char* property_name, const char* assignop)
+{
+    char* setter_name = surgescript_util_camelcaseprefix("set", property_name);
+
+    SSASM(SSOP_POP, T1);
+    SSASM(SSOP_XCHG, T0, T1);
+
+    /* now, t1 = <assignexpr> and t0 = object.property_name */
+    switch(*assignop) {
+        case '=': /* object.property_name = <assignexpr> */
+            SSASM(SSOP_PUSH, T1); /* push <assignexpr> */
+            SSASM(SSOP_CALL, TEXT(setter_name), U(1));
+            SSASM(SSOP_POP, T0); /* return <assignexpr> */
+            SSASM(SSOP_POPN, U(1)); /* pop object pointer */
+            break;
+
+        case '+': { /* object.property_name += <assignexpr> */
+            surgescript_program_label_t cat = NEWLABEL();
+            surgescript_program_label_t end = NEWLABEL();
+
+            SSASM(SSOP_TCHK, T1, TYPE("string"));
+            SSASM(SSOP_JE, U(cat));
+            SSASM(SSOP_TCHK, T0, TYPE("string"));
+            SSASM(SSOP_JE, U(cat));
+            SSASM(SSOP_ADD, T0, T1); /* t0 = object.property_name + <assignexpr> */
+            SSASM(SSOP_JMP, U(end));
+            LABEL(cat);
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_PUSH, T1);
+            SSASM(SSOP_CALL, TEXT("concat"), U(1)); /* t0 = object.property_name.concat(<assignexpr>) */
+            SSASM(SSOP_POPN, U(2));
+            LABEL(end);
+
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_CALL, TEXT(setter_name), U(1));
+            SSASM(SSOP_POP, T0);
+            SSASM(SSOP_POPN, U(1));
+            break;
+        }
+
+        case '-': /* object.property_name -= <assignexpr> */
+            SSASM(SSOP_SUB, T0, T1); /* t0 now stores the result of the expression */
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_CALL, TEXT(setter_name), U(1));
+            SSASM(SSOP_POP, T0);
+            SSASM(SSOP_POPN, U(1));
+            break;
+
+        case '*': /* object.property_name *= <assignexpr> */
+            SSASM(SSOP_MUL, T0, T1);
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_CALL, TEXT(setter_name), U(1));
+            SSASM(SSOP_POP, T0);
+            SSASM(SSOP_POPN, U(1));
+            break;
+
+        case '/': /* object.property_name /= <assignexpr> */
+            SSASM(SSOP_DIV, T0, T1);
+            SSASM(SSOP_PUSH, T0);
+            SSASM(SSOP_CALL, TEXT(setter_name), U(1));
+            SSASM(SSOP_POP, T0);
+            SSASM(SSOP_POPN, U(1));
+            break;
+
+        default:
+            ssfatal("Compile Error: invalid setter call in \"%s\" (object \"%s\")", context.source_file, context.object_name);
+            break;
+    }
+
+    ssfree(setter_name);
+}
+
+void emit_setterincdec(surgescript_nodecontext_t context, const char* property_name, const char* op)
+{
+    char* getter_name = surgescript_util_camelcaseprefix("get", property_name);
+    char* setter_name = surgescript_util_camelcaseprefix("set", property_name);
+
+    SSASM(SSOP_PUSH, T0); /* object pointer */
+    SSASM(SSOP_CALL, TEXT(getter_name), U(0)); /* t0 = old value */
+    SSASM(*op == '+' ? SSOP_INC : SSOP_DEC, T0); /* update t0 */
+    SSASM(SSOP_PUSH, T0); /* push new value */
+    SSASM(SSOP_CALL, TEXT(setter_name), U(1)); /* call setter */
+    SSASM(SSOP_POP, T0); /* restore pushed value */
+    SSASM(*op != '+' ? SSOP_INC : SSOP_DEC, T0); /* return old value */
+    SSASM(SSOP_POPN, U(1)); /* clear up the stack */
+
+    ssfree(setter_name);
+    ssfree(getter_name);
 }
 
 void emit_arrayexpr1(surgescript_nodecontext_t context)

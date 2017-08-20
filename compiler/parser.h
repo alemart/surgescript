@@ -68,16 +68,15 @@
  *               |  <primaryexpr> <postfixexpr1> <dictexpr> <postfixexpr1> assignop <assignexpr>
  *               |  <primaryexpr> <postfixexpr1> <dictexpr> ++ | <primaryexpr> <postfixexpr1> <dictexpr> --
  * <postfixexpr1> := . <funcallexpr> <lambdacall> <dictexpr1> <postfixexpr1>
- *                |  . <propertyread> <lambdacall> <dictexpr1> <postfixexpr1>
- *                |  . <propertywrite>
+ *                |  . identifier <lambdacall> <dictexpr1> <postfixexpr1>
+ *                |  . identifier ++ | identifier --
+ *                |  . identifier assignop <assignexpr>
  *                |  <lambdacall> <dictexpr1>
  * <dictexpr> := [ <expr> ] <dictexpr1>
  * <dictexpr1> := [ <expr> ] <dictexpr1> | e
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
  * <lambdacall> := ( ) <lambdacall> | ( <funargsexprlist> ) <lambdacall> | e
- * <propertywrite> := identifier ++ | identifier -- | identifiert assignop <assignexpr>
- * <propertyread> := identifier
  * <primaryexpr> := identifier | this | state | <constant> | <arrayexpr> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>

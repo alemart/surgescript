@@ -84,8 +84,6 @@ static void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t
 static void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name);
 static void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void propertyread(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name);
-static void propertywrite(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name);
 static void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void arrayexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -799,16 +797,31 @@ void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t contex
                 dictexpr(parser, context);
                 ssfree(identifier);
             }
-            else if(!(got_type(parser, SSTOK_INCDECOP) || got_type(parser, SSTOK_ASSIGNOP))) {
-                propertyread(parser, context, identifier);
+            else if(got_type(parser, SSTOK_INCDECOP)) {
+                /* obj.property++ <=> obj.setProperty(obj.getProperty() + 1) */
+                const char* op = surgescript_token_lexeme(parser->lookahead);
+                emit_setterincdec(context, identifier, op);
+                match(parser, SSTOK_INCDECOP);
+                ssfree(identifier);
+                break;
+            }
+            else if(got_type(parser, SSTOK_ASSIGNOP)) {
+                /* obj.property = value <=> obj.setProperty(value) */
+                char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+                match(parser, SSTOK_ASSIGNOP);
+                emit_setter1(context, identifier);
+                assignexpr(parser, context);
+                emit_setter2(context, identifier, op);
+                ssfree(op);
+                ssfree(identifier);
+                break;
+            }
+            else {
+                /* obj.property <=> obj.getProperty() */
+                emit_getter(context, identifier);
                 lambdacall(parser, context);
                 dictexpr(parser, context);
                 ssfree(identifier);
-            }
-            else {
-                propertywrite(parser, context, identifier);
-                ssfree(identifier);
-                break;
             }
         } while(optmatch(parser, SSTOK_DOT));
     }
@@ -853,16 +866,6 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         postfixexpr1(parser, context);
         break;
     }
-}
-
-void propertyread(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name)
-{
-    emit_readexportedvar(context, property_name);
-}
-
-void propertywrite(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* property_name)
-{
-    ssfatal("Compile Error: exported variable \"%s\" of object \"%s\" is read-only (in %s:%d).", property_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 }
 
 void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name)

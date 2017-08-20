@@ -154,7 +154,6 @@ object "SurgeScriptTest"
         test((c = spawn("Boolean"), c != null && child("Boolean") == c)) || fail(9);
         test((d = spawn("Number"), d != null && d == findChild("Number"))) || fail(10);
         test(typeof null == "null") || fail(11);
-        test(this.message == message) || fail(12);
         end();
     }
 
@@ -210,9 +209,12 @@ object "SurgeScriptTest"
         test(this["value"]++ == 7) || fail(7);
         test(this["value"]-- == 8) || fail(8);
         test(this(this)["this"](this)["this"]["this"]["value"] == value) || fail(9);
-        test(this["property"] && this.get("property")) || fail(10);
+        test(this["value"] && this.get("value")) || fail(10);
         test(value == this["value"]) || fail(11);
         test(this["self"]["property"] == this["property"]) || fail(12);
+        test(this.message == message && this.value == value) || fail(13);
+        test((this.value = 5, value == 5)) || fail(14);
+        test((this.value = 'b') && value == 'b') || fail(15);
         end();
     }
 
@@ -220,6 +222,8 @@ object "SurgeScriptTest"
 
 
 
+    // __constructor()
+    // called automatically by SurgeScript when the object is created
     fun __constructor()
     {
         Console.print("------------------------------");
@@ -227,6 +231,8 @@ object "SurgeScriptTest"
         Console.print("------------------------------");
     }
 
+    // __destructor()
+    // called automatically by SurgeScript when the object is destroyed
     fun __destructor()
     {
         str = "\n";
@@ -235,18 +241,24 @@ object "SurgeScriptTest"
         Console.print(str);
     }
 
+    // test(expr)
+    // tests an expression; returns the value of the expression
     fun test(expr)
     {
         tested++;
         return expr;
     }
 
+    // fail(x)
+    // fails a test
     fun fail(x)
     {
         Console.print("# Test " + x + " has failed.");
         failed++;
     }
 
+    // begin(suite)
+    // begins a test suite
     fun begin(suite)
     {
         Console.print("\nTesting " + suite + "...");
@@ -254,6 +266,8 @@ object "SurgeScriptTest"
         failed = 0;
     }
 
+    // end()
+    // ends a test suite
     fun end()
     {
         if(!failed)
@@ -262,23 +276,27 @@ object "SurgeScriptTest"
         totalFailed += failed;
     }
 
+    // call()
+    // calling object(expr) is the same as calling object.call(expr)
     fun call(expr)
     {
         return expr;
     }
 
+    // get(key)
+    // calling object["key"] is the same as calling object.get("key")
     fun get(key)
     {
         if(key == "this" || key == "self")
             return this;
         else if(key == "value")
             return value;
-        else if(key == "property")
-            return "Amazing!";
         else
             return null;
     }
 
+    // set(key, newValue)
+    // object[key] = newValue is the same as object.set(key, newValue) [also known as syntax sugar]
     fun set(key, newValue)
     {
         if(key == "value") // aka "public property"
@@ -286,68 +304,25 @@ object "SurgeScriptTest"
 
         return this;    
     }
-}
 
-/*
-object "test" {
-    tag "entity";
-    tag "boss";
-    tag "player";
-    tag "#SD_SURGE";
-    tag "@Alexandre Martins";
-
-    "requires": "0.2.0",
-    "author": "Alexandre",
-    "date": "2017-02-25,
-    "icon": "SD_SURGE",
-    "description": "This is a test object" :-)
-    
-    child = spawn("child");
-    test = 3;
-    may = 5.2;
-
-    state "main" {
-    }
-
-    fun main() {
-    }
-
-    fun app() {
-    }
-}
-*/
-
-
-object "Application2" {
-    x = 2;
-
-    state "main" {
-        //u;
-        destroy();
-    }
-}
-
-
-//object "MyObject" {
-    /*
-    . :-) :-P :-o :-( <3 $_$
-
-    "requires": "0.2.0",
-    "author": "Alexandre",
-    "editor": "SD_SURGE 0",
-    "label": "Hello!"
-    "category": "Enemies",
-    "hidden": true,
-    "awake": true
-
-    length = 0;
-    N = spawn("Notes").get("editor")
-
-    fun test()
+    // getValue()
+    // object.value returns the same as object.getValue() [synax sugar]
+    fun getValue()
     {
-        // hey!
-        app().exit();
+        return value;
     }
-    */
-//}
 
+    // setValue(newValue)
+    // object.value = newValue calls object.setValue(newValue) behind the scenes
+    fun setValue(newValue)
+    {
+        value = newValue;
+    }
+
+    // getMessage()
+    // enables one to type object.message to return the [private] variable message (declared above)
+    fun getMessage()
+    {
+        return message;
+    }
+}

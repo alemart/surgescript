@@ -12,8 +12,8 @@ object "Application"
     {
         hello();
         showStatus();
-        //obj.eyes = 4; // the same as obj.setEyes(4)
-        //obj.name = "master"; // will crash; no setter defined.
+        obj.eyes = 4; // the same as obj.setEyes(4)
+        //obj.name = "master"; // will crash; no setter defined. Try uncommenting this.
         showStatus();
         Application.exit();
     }
