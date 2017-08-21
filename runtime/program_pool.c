@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * util/program_pool.c
  * SurgeScript program pool
@@ -14,21 +14,29 @@
 #include "../util/uthash.h"
 #include "../util/util.h"
 
-/* use fast 64-bit integers for function signatures */
-#define SURGESCRIPT_USE_FAST_SIGNATURES
+/*
+ * Each function in SurgeScript defines a function signature
+ * that depends on the containing object and on the function name
+ */
 
-/* types */
-typedef struct surgescript_programpool_hashpair_t surgescript_programpool_hashpair_t;
+#define SURGESCRIPT_USE_FAST_SIGNATURES /* let it be fast! */
 
-#ifdef SURGESCRIPT_USE_FAST_SIGNATURES
+#ifdef SURGESCRIPT_USE_FAST_SIGNATURES /* use fast 64-bit integers for function signatures */
 typedef uint64_t surgescript_programpool_signature_t;
 #define HASH_FIND_ITEM_BY_SIGNATURE(head, signature, item_ptr)     HASH_FIND(hh, (head), &(signature), sizeof(signature), (item_ptr))
 #define HASH_ADD_ITEM_WITH_SIGNATURE(head, signature, item_ptr)    HASH_ADD_KEYPTR(hh, (head), &(signature), sizeof(signature), (item_ptr))
-#else
+#else /* use strings for function signatures */
 typedef char* surgescript_programpool_signature_t;
 #define HASH_FIND_ITEM_BY_SIGNATURE(head, signature, item_ptr)     HASH_FIND(hh, (head), (signature), strlen(signature), (item_ptr))
 #define HASH_ADD_ITEM_WITH_SIGNATURE(head, signature, item_ptr)    HASH_ADD_KEYPTR(hh, (head), (signature), strlen(signature), (item_ptr))
 #endif
+
+static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name); /* generates a function signature, given an object name and a program name */
+static inline void delete_signature(surgescript_programpool_signature_t signature); /* deletes a signature */
+
+
+/* program pool types */
+typedef struct surgescript_programpool_hashpair_t surgescript_programpool_hashpair_t;
 
 struct surgescript_programpool_hashpair_t
 {
@@ -42,9 +50,7 @@ struct surgescript_programpool_t
     surgescript_programpool_hashpair_t* hash;
 };
 
-/* generates a hash signature, given an object name and a program name */
-static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name);
-static inline void delete_signature(surgescript_programpool_signature_t signature);
+
 
 /* -------------------------------
  * public methods
