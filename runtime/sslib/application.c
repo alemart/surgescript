@@ -16,7 +16,6 @@
 
 /* private stuff */
 static surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -28,7 +27,6 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 void surgescript_sslib_register_application(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Application", "exit", fun_exit, 0);
-    surgescript_vm_bind(vm, "Application", "print", fun_print, 1);
     surgescript_vm_bind(vm, "Application", "crash", fun_crash, 1);
     surgescript_vm_bind(vm, "Application", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
 }
@@ -56,21 +54,11 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
     return fun_exit(object, param, num_params);
 }
 
-/* prints param[0] to stdout */
-surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    char* text = surgescript_var_get_string(param[0]);
-    puts(text);
-    ssfree(text);
-    return NULL;
-}
-
 /* crashes the app with a message */
 surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     char* text = surgescript_var_get_string(param[0]);
     ssfatal("Script Error: %s", text); /* change ssfatal to something else? */
     ssfree(text);
-    surgescript_object_kill(object);
-    return NULL;
+    return fun_exit(object, NULL, 0);
 }
