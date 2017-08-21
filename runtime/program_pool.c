@@ -7,17 +7,32 @@
  * SurgeScript program pool
  */
 
+#include <stdint.h>
 #include <string.h>
 #include "program_pool.h"
 #include "program.h"
 #include "../util/uthash.h"
 #include "../util/util.h"
 
+/* use fast 64-bit integers for function signatures */
+#define SURGESCRIPT_USE_FAST_SIGNATURES
+
 /* types */
 typedef struct surgescript_programpool_hashpair_t surgescript_programpool_hashpair_t;
+
+#ifdef SURGESCRIPT_USE_FAST_SIGNATURES
+typedef uint64_t surgescript_programpool_signature_t;
+#define HASH_FIND_ITEM_BY_SIGNATURE(head, signature, item_ptr)     HASH_FIND(hh, (head), &(signature), sizeof(signature), (item_ptr))
+#define HASH_ADD_ITEM_WITH_SIGNATURE(head, signature, item_ptr)    HASH_ADD_KEYPTR(hh, (head), &(signature), sizeof(signature), (item_ptr))
+#else
+typedef char* surgescript_programpool_signature_t;
+#define HASH_FIND_ITEM_BY_SIGNATURE(head, signature, item_ptr)     HASH_FIND(hh, (head), (signature), strlen(signature), (item_ptr))
+#define HASH_ADD_ITEM_WITH_SIGNATURE(head, signature, item_ptr)    HASH_ADD_KEYPTR(hh, (head), (signature), strlen(signature), (item_ptr))
+#endif
+
 struct surgescript_programpool_hashpair_t
 {
-    char* signature; /* key */
+    surgescript_programpool_signature_t signature; /* key */
     surgescript_program_t* program; /* value */
     UT_hash_handle hh;
 };
@@ -27,8 +42,9 @@ struct surgescript_programpool_t
     surgescript_programpool_hashpair_t* hash;
 };
 
-/* TODO: this could be optimized and we could use a uint64_t hash for the function signature instead */
-static char* generate_signature(const char* object_name, const char* program_name);
+/* generates a hash signature, given an object name and a program name */
+static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name);
+static inline void delete_signature(surgescript_programpool_signature_t signature);
 
 /* -------------------------------
  * public methods
@@ -54,7 +70,7 @@ surgescript_programpool_t* surgescript_programpool_destroy(surgescript_programpo
     surgescript_programpool_hashpair_t *it, *tmp;
     HASH_ITER(hh, pool->hash, it, tmp) {
         HASH_DEL(pool->hash, it);
-        ssfree(it->signature);
+        delete_signature(it->signature);
         surgescript_program_destroy(it->program);
         ssfree(it);
     }
@@ -77,10 +93,10 @@ bool surgescript_programpool_exists(surgescript_programpool_t* pool, const char*
 bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
     surgescript_programpool_hashpair_t* pair = NULL;
-    char* signature = generate_signature(object_name, program_name);
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
     
-    HASH_FIND_STR(pool->hash, signature, pair);
-    ssfree(signature);
+    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
+    delete_signature(signature);
     return pair != NULL;
 }
 
@@ -94,7 +110,7 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
         surgescript_programpool_hashpair_t* pair = ssmalloc(sizeof *pair);
         pair->signature = generate_signature(object_name, program_name);
         pair->program = program;
-        HASH_ADD_KEYPTR(hh, pool->hash, pair->signature, strlen(pair->signature), pair);
+        HASH_ADD_ITEM_WITH_SIGNATURE(pool->hash, pair->signature, pair);
         return true;
     }
     else {
@@ -110,18 +126,18 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
 surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
     surgescript_programpool_hashpair_t* pair = NULL;
-    char* signature = generate_signature(object_name, program_name);
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
     
     /* find the program */
-    HASH_FIND_STR(pool->hash, signature, pair);
-    ssfree(signature);
+    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
+    delete_signature(signature);
 
     /* if there is no such program */
     if(!pair) {
         /* try locating it in a common base for all objects */
         signature = generate_signature("Object", program_name);
-        HASH_FIND_STR(pool->hash, signature, pair);
-        ssfree(signature);
+        HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
+        delete_signature(signature);
 
         /* really, the program doesn't exist */
         if(!pair)
@@ -137,8 +153,26 @@ surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* po
  * private methods
  * ------------------------------- */
 
-/* generates a hash signature, given an object name and a program name */
-char* generate_signature(const char* object_name, const char* program_name)
+/* function signature methods */
+
+#ifdef SURGESCRIPT_USE_FAST_SIGNATURES
+
+surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
+{
+    /* uthash will compute a hash of this hash. Our app must enforce key uniqueness. */
+    surgescript_programpool_signature_t a = surgescript_util_str2hash(object_name); /* will it collide? */
+    surgescript_programpool_signature_t b = surgescript_util_strpair2hash(object_name, program_name); /* 32-bits per hash */
+    return (surgescript_programpool_signature_t)(a << 32) | b; /* combined 64-bit hash */
+}
+
+void delete_signature(surgescript_programpool_signature_t signature)
+{
+    ;
+}
+
+#else
+
+surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
 {
     char* signature = ssmalloc((strlen(object_name) + strlen(program_name) + 2) * sizeof(*signature));
     strcpy(signature, object_name);
@@ -146,3 +180,10 @@ char* generate_signature(const char* object_name, const char* program_name)
     strcat(signature, program_name);
     return signature;
 }
+
+void delete_signature(surgescript_programpool_signature_t signature)
+{
+    ssfree(signature);
+}
+
+#endif
