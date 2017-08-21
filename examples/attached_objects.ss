@@ -1,28 +1,27 @@
 //
-// attached_object.ss
+// attached_objects.ss
 // This script demonstrates how attached objects work
 // Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"
 {
-    // the App will show 2 bees: a parent and its child.
+    // this demo shows 2 bees: a parent and its child.
     // The child bee is always attached to its parent.
     // This means that, wherever the parent moves, the child follows.
-    // However, the child may move by itself without affecting the parent.
+    // However, the child may move by itself without affecting its parent.
     parent = spawn("Bee");
     child = parent.spawn("Bee");
 
     state "main"
     {
         // introduction
-        say("ATTACHED OBJECTS:")
-        say("Wherever the parent goes, the child follows.");
-        say("");
+        say("# ATTACHED OBJECTS");
+        say("# Wherever the parent goes, the child follows.\n");
 
         // demo
         say("step 1: both bees start at the origin (0,0)");
-        showBees()
+        showBees();
 
         say("step 2: move the parent bee by (2,0) relative to its parent (the Application)");
         parent.transform.xpos += 2;
@@ -38,27 +37,36 @@ object "Application"
         showBees();
 
         say("step 5: move the parent bee by (-2,-1)");
-        parent.translate(-2, -1);
+        parent.transform.translate(-2, -1);
         showBees();
 
         say("step 6: rotate the parent bee by 90 degrees");
-        parent.rotate(90);
+        parent.transform.rotate(90);
         showBees();
 
         say("step 7: scale the transform of the parent bee by 10");
-        parent.scale(10, 10);
+        parent.transform.scale(10, 10);
         showBees();
 
-        say("step 8: move the child bee by (1,0)");
-        child.translate(1,0);
+        say("step 8: move the child bee by (2,0)");
+        child.transform.translate(2,0);
         showBees();
 
         say("step 9: scale the transform of the parent bee by 0.1 (thus reverting the previous scale)");
-        parent.scale(0.1, 0.1);
+        parent.transform.scale(0.1, 0.1);
         showBees();
 
-        say("step 10: move the child bee by (1,0)");
-        child.translate(1,0);
+        say("step 10: move the child bee by (-2,0)");
+        child.transform.translate(-2,0);
+        showBees();
+
+        say("step 11: reset the rotation of the parent bee");
+        parent.transform.angle = 0;
+        showBees();
+
+        say("step 12: set the child bee to be at position (50,50) in the world");
+        child.transform.worldX = 50;
+        child.transform.worldY = 50;
         showBees();
 
         // done!
@@ -103,6 +111,6 @@ object "Bee"
     // returns a nice "(x,y)" string displaying where the bee is in the world
     fun getLocation()
     {
-        world = "(" + transform.worldX + "," + transform.worldY + ")";
+        return "(" + transform.worldX + "," + transform.worldY + ")";
     }
 }
