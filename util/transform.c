@@ -84,11 +84,9 @@ void surgescript_transform_setposition2d(surgescript_transform_t* t, float x, fl
  */
 void surgescript_transform_setrotation2d(surgescript_transform_t* t, float degrees)
 {
-    float radians = degrees * DEG2RAD;
-
     t->rotation.z = fmodf(degrees, 360.0f);
-    t->rotation.sz = sinf(radians);
-    t->rotation.cz = cosf(radians);
+    t->rotation.sz = sinf(t->rotation.z * DEG2RAD);
+    t->rotation.cz = cosf(t->rotation.z * DEG2RAD);
 }
 
 /*
@@ -138,8 +136,9 @@ void surgescript_transform_scale2d(surgescript_transform_t* t, float sx, float s
  */
 void surgescript_transform_apply2d(const surgescript_transform_t* t, float* x, float* y)
 {
-    *x = t->scale.x * t->rotation.cz * (*x) - t->scale.y * t->rotation.sz * (*y) + t->position.x;
-    *y = t->scale.x * t->rotation.sz * (*x) + t->scale.y * t->rotation.cz * (*y) + t->position.y;
+    float ox = *x, oy = *y; /* original values of (x,y) */
+    *x = t->scale.x * t->rotation.cz * ox - t->scale.y * t->rotation.sz * oy + t->position.x;
+    *y = t->scale.x * t->rotation.sz * ox + t->scale.y * t->rotation.cz * oy + t->position.y;
 }
 
 /*
@@ -151,6 +150,7 @@ void surgescript_transform_apply2dinverse(const surgescript_transform_t* t, floa
     float sx = (fpclassify(t->scale.x) != FP_ZERO) ? 1.0f / t->scale.x : INFINITY;
     float sy = (fpclassify(t->scale.y) != FP_ZERO) ? 1.0f / t->scale.y : INFINITY;
     float tx = t->position.x, ty = t->position.y, cz = t->rotation.cz, sz = t->rotation.sz;
-    *x = isfinite(sx) ? sx * cz * (*x) + sx * sz * (*y) - sx * cz * tx - sx * sz * ty : 0.0f;
-    *y = isfinite(sy) ? -sy * sz * (*x) + sy * cz * (*y) + sy * sz * tx - sy * cz * ty : 0.0f;
+    float ox = *x, oy = *y; /* original values of (x,y) */
+    *x = isfinite(sx) ? sx * cz * ox + sx * sz * oy - sx * cz * tx - sx * sz * ty : 0.0f;
+    *y = isfinite(sy) ? -sy * sz * ox + sy * cz * oy + sy * sz * tx - sy * cz * ty : 0.0f;
 }

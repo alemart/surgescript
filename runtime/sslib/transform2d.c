@@ -255,16 +255,17 @@ surgescript_var_t* fun_setworldangle(surgescript_object_t* object, const surgesc
 /* will look at a given (world_x, world_y) position */
 surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float angle = 0.0f, eye_world_x = 0.0f, eye_world_y = 0.0f;
+    surgescript_object_t* target_object = target(object);
     float target_world_x = surgescript_var_get_number(param[0]);
     float target_world_y = surgescript_var_get_number(param[1]);
+    float angle = 0.0f, eye_world_x = 0.0f, eye_world_y = 0.0f;
 
-    worldposition2d(target(object), &eye_world_x, &eye_world_y);
+    worldposition2d(target_object, &eye_world_x, &eye_world_y);
 
     errno = 0;
     angle = atan2f(target_world_y - eye_world_y, target_world_x - eye_world_x);
     if(errno == 0)
-        setworldangle2d(target(object), angle / DEG2RAD);
+        setworldangle2d(target_object, angle / DEG2RAD);
 
     return NULL;
 }
@@ -325,7 +326,7 @@ void setworldposition2d(surgescript_object_t* object, float world_x, float world
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_objecthandle_t root = surgescript_objectmanager_root(manager);
     surgescript_objecthandle_t handle = surgescript_object_handle(object);
-    surgescript_transform_t* transform = surgescript_object_transform(target(object));
+    surgescript_transform_t* transform = surgescript_object_transform(object);
 
     /* compute local transform */
     if(handle != root)
@@ -382,7 +383,7 @@ void setworldangle2d(surgescript_object_t* object, float angle)
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_objecthandle_t root = surgescript_objectmanager_root(manager);
     surgescript_objecthandle_t handle = surgescript_object_handle(object);
-    surgescript_transform_t* transform = surgescript_object_transform(target(object));
+    surgescript_transform_t* transform = surgescript_object_transform(object);
 
     /* compute corresponding local angle */
     if(handle != root)
