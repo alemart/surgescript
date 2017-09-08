@@ -22,7 +22,7 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tonumber(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -43,7 +43,7 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "call", fun_call, 1);
     surgescript_vm_bind(vm, "String", "plus", fun_plus, 2);
     surgescript_vm_bind(vm, "String", "toNumber", fun_tonumber, 1);
-    surgescript_vm_bind(vm, "String", "length", fun_length, 1);
+    surgescript_vm_bind(vm, "String", "getLength", fun_getlength, 1);
     surgescript_vm_bind(vm, "String", "get", fun_get, 2);
     surgescript_vm_bind(vm, "String", "set", fun_set, 3);
     surgescript_vm_bind(vm, "String", "indexOf", fun_indexof, 2);
@@ -108,7 +108,7 @@ surgescript_var_t* fun_tonumber(surgescript_object_t* object, const surgescript_
 }
 
 /* length of the string */
-surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* str = surgescript_var_fast_get_string(param[0]);
     size_t count = 0;

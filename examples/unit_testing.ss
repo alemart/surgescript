@@ -40,18 +40,18 @@ object "SurgeScriptTest"
     fun string()
     {
         begin("String");
-        test("alexandre".length() == 9) || fail(1);
+        test("alexandre".length == 9) || fail(1);
         test("alexandre".substr(0, 3) == "ale") || fail(2);
         test("alexandre".indexOf("ale") == 0) || fail(3);
         test("alexandre".indexOf("e") == 2) || fail(4);
         test("alexandre".indexOf("z") < 0) || fail(5);
         test("ale" + "xandre" == "ale".concat("xandre")) || fail(6);
-        test("alê".length() == 3) || fail(7);
+        test("alê".length == 3) || fail(7);
         test("37".toNumber() == 37) || fail(8);
-        test("çáàê€".length() == 5) || fail(9);
+        test("çáàê€".length == 5) || fail(9);
         test(!"") || fail(10);
-        test(("\n" + "\n").length() == 2) || fail(11);
-        test((y = "ale", y += "xandre").length() == 9) || fail(12);
+        test(("\n" + "\n").length == 2) || fail(11);
+        test((y = "ale", y += "xandre").length == 9) || fail(12);
         test("alê\n"[2] == "ê") || fail(13);
         test("abc"[0] = "b") || fail(14);
         test((y = "abc", y[0] = "b", y == "abc")) || fail(15);
@@ -175,7 +175,7 @@ object "SurgeScriptTest"
         test(Number.name() == "Number") || fail(7);
         test(Boolean.name() == "Boolean") || fail(8);
         test(String = null || String) || fail(9);
-        test(String.length("test") == 4) || fail(10);
+        test(String.getLength("test") == 4) || fail(10);
         test(String("test") == "test") || fail(11);
         test(Number(4) == 4) || fail(12);
         test(Number("4.3") == 4.3) || fail(13);
