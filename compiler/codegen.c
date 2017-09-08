@@ -528,7 +528,7 @@ void emit_getter(surgescript_nodecontext_t context, const char* property_name)
 {
     char* getter_name = surgescript_util_camelcaseprefix("get", property_name);
 
-    if(!islower(property_name[0]))
+    if(isupper(property_name[0]))
         sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
 
     SSASM(SSOP_PUSH, T0); /* object pointer */
@@ -542,7 +542,7 @@ void emit_setter1(surgescript_nodecontext_t context, const char* property_name)
 {
     char* getter_name = surgescript_util_camelcaseprefix("get", property_name); /* get the value first */
 
-    if(!islower(property_name[0]))
+    if(isupper(property_name[0]))
         sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
 
     SSASM(SSOP_PUSH, T0); /* object pointer */
@@ -556,7 +556,7 @@ void emit_setter2(surgescript_nodecontext_t context, const char* property_name, 
 {
     char* setter_name = surgescript_util_camelcaseprefix("set", property_name);
 
-    if(!islower(property_name[0]))
+    if(isupper(property_name[0]))
         sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
 
     SSASM(SSOP_POP, T1);
@@ -632,7 +632,7 @@ void emit_setterincdec(surgescript_nodecontext_t context, const char* property_n
     char* getter_name = surgescript_util_camelcaseprefix("get", property_name);
     char* setter_name = surgescript_util_camelcaseprefix("set", property_name);
 
-    if(!islower(property_name[0]))
+    if(isupper(property_name[0]))
         sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
 
     SSASM(SSOP_PUSH, T0); /* object pointer */
