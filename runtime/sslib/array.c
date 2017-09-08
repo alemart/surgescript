@@ -16,9 +16,9 @@
 static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_push(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_pop(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_shift(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -47,9 +47,9 @@ void surgescript_sslib_register_array(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Array", "__constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Array", "__destructor", fun_destructor, 0);
     surgescript_vm_bind(vm, "Array", "state:main", fun_main, 0);
+    surgescript_vm_bind(vm, "Array", "getLength", fun_getlength, 0);
     surgescript_vm_bind(vm, "Array", "get", fun_get, 1);
     surgescript_vm_bind(vm, "Array", "set", fun_set, 2);
-    surgescript_vm_bind(vm, "Array", "length", fun_length, 0);
     surgescript_vm_bind(vm, "Array", "push", fun_push, 1);
     surgescript_vm_bind(vm, "Array", "pop", fun_pop, 0);
     surgescript_vm_bind(vm, "Array", "shift", fun_shift, 0);
@@ -90,7 +90,7 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 }
 
 /* returns the length of the array */
-surgescript_var_t* fun_length(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
     return surgescript_var_clone(surgescript_heap_at(heap, LENGTH_ADDR));

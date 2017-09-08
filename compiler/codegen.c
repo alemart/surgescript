@@ -697,7 +697,7 @@ void emit_while2(surgescript_nodecontext_t context, surgescript_program_label_t 
 void emit_forin1(surgescript_nodecontext_t context, const char* it, surgescript_program_label_t begin, surgescript_program_label_t end)
 {
     SSASM(SSOP_PUSH, T0); /* push the array <expr> */
-    SSASM(SSOP_CALL, TEXT("length"), U(0));
+    SSASM(SSOP_CALL, TEXT("getLength"), U(0));
     SSASM(SSOP_POPN, U(1));
     SSASM(SSOP_PUSH, T0); /* the length of the array is saved on the stack */
 

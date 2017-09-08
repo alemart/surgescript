@@ -11,7 +11,7 @@ object "Application"
     
     state "main"
     {
-        Console.print("The array has " + arr.length() + " elements.");
+        Console.print("The array has " + arr.length + " elements.");
 
         // i is an index ranging from 0 to 9
         for(i in arr) {
