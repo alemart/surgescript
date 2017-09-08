@@ -41,7 +41,8 @@ static const surgescript_objecthandle_t ROOT_HANDLE = 1;
 #define APPLICATION_OBJECT "Application"
 static const char* ROOT_OBJECT = "System";
 static const char* SYSTEM_OBJECTS[] = {
-    "String", "Number", "Boolean", "Console",
+    "String", "Number", "Boolean",
+    "Math", "Console",
     APPLICATION_OBJECT, NULL
 }; /* this must be a NULL-terminated array, and APPLICATION_OBJECT should be the last element (spawning order) */
 

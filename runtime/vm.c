@@ -68,6 +68,7 @@ void surgescript_vm_launch(surgescript_vm_t* vm)
     surgescript_sslib_register_console(vm);
     surgescript_sslib_register_array(vm);
     surgescript_sslib_register_transform2d(vm);
+    surgescript_sslib_register_math(vm);
     surgescript_sslib_register_system(vm);
     surgescript_sslib_register_application(vm);
 

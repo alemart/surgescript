@@ -23,5 +23,6 @@ void surgescript_sslib_register_number(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_string(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_console(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_transform2d(struct surgescript_vm_t* vm);
+void surgescript_sslib_register_math(struct surgescript_vm_t* vm);
 
 #endif
