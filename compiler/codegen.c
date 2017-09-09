@@ -7,6 +7,7 @@
  * SurgeScript Compiler: Code Generator
  */
 
+#include <ctype.h>
 #include <string.h>
 #include "codegen.h"
 #include "symtable.h"

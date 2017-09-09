@@ -173,7 +173,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_obje
  * surgescript_objectmanager_exists()
  * Does the specified handle points to a valid object?
  */
-bool surgescript_objectmanager_exists(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle)
+bool surgescript_objectmanager_exists(const surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle)
 {
     return handle < ssarray_length(manager->data) && manager->data[handle] != NULL;
 }
@@ -182,7 +182,7 @@ bool surgescript_objectmanager_exists(surgescript_objectmanager_t* manager, surg
  * surgescript_objectmanager_get()
  * Gets an object from the pool (returns NULL if not found)
  */
-surgescript_object_t* surgescript_objectmanager_get(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle)
+surgescript_object_t* surgescript_objectmanager_get(const surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle)
 {
     if(handle < ssarray_length(manager->data)) { /* handle is unsigned; therefore, not lower than zero */
         if(manager->data[handle] != NULL)
@@ -261,7 +261,7 @@ surgescript_objecthandle_t surgescript_objectmanager_system_object(surgescript_o
  * surgescript_objectmanager_count()
  * How many allocated objects there are?
  */
-int surgescript_objectmanager_count(surgescript_objectmanager_t* manager)
+int surgescript_objectmanager_count(const surgescript_objectmanager_t* manager)
 {
     return manager->count;
 }
