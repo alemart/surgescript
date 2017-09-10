@@ -139,3 +139,12 @@ size_t surgescript_heap_size(const surgescript_heap_t* heap)
 {
     return heap->size;
 }
+
+/*
+ * surgescript_heap_validaddress()
+ * Is the given address valid within the given heap?
+ */
+bool surgescript_heap_validaddress(const surgescript_heap_t* heap, surgescript_heapptr_t ptr)
+{
+    return (ptr >= 0 && ptr < heap->size && heap->mem[ptr] != NULL);
+}
