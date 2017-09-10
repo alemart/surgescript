@@ -26,7 +26,7 @@ surgescript_heap_t* surgescript_heap_create();
 surgescript_heap_t* surgescript_heap_destroy(surgescript_heap_t* heap);
 surgescript_heapptr_t surgescript_heap_malloc(surgescript_heap_t* heap);
 surgescript_heapptr_t surgescript_heap_free(surgescript_heap_t* heap, surgescript_heapptr_t ptr);
-struct surgescript_var_t* surgescript_heap_at(surgescript_heap_t* heap, surgescript_heapptr_t ptr);
+struct surgescript_var_t* surgescript_heap_at(const surgescript_heap_t* heap, surgescript_heapptr_t ptr);
 void surgescript_heap_scan_objects(surgescript_heap_t* heap, void* userdata, bool (*callback)(unsigned,void*));
 size_t surgescript_heap_size(const surgescript_heap_t* heap);
 
