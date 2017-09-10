@@ -105,7 +105,7 @@ surgescript_heapptr_t surgescript_heap_free(surgescript_heap_t* heap, surgescrip
  * surgescript_heap_at()
  * Returns the memory cell pointed by ptr
  */
-surgescript_var_t* surgescript_heap_at(surgescript_heap_t* heap, surgescript_heapptr_t ptr)
+surgescript_var_t* surgescript_heap_at(const surgescript_heap_t* heap, surgescript_heapptr_t ptr)
 {
     if(ptr >= 0 && ptr < heap->size && heap->mem[ptr] != NULL)
         return heap->mem[ptr];
@@ -129,4 +129,13 @@ void surgescript_heap_scan_objects(surgescript_heap_t* heap, void* userdata, boo
             }
         }
     }
+}
+
+/*
+ * surgescript_heap_size()
+ * The size of the heap
+ */
+size_t surgescript_heap_size(const surgescript_heap_t* heap)
+{
+    return heap->size;
 }
