@@ -17,6 +17,7 @@
 /* private stuff */
 
 /* Dictionary */
+static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getsize(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -46,15 +47,16 @@ static surgescript_var_t* fun_bst_find(surgescript_object_t* object, const surge
 static surgescript_var_t* fun_bst_insert(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_bst_remove(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
-/* utilities */
+/* addresses */
 static const surgescript_heapptr_t BST_KEY = 0; /* address of the 'key' field in the BST */
 static const surgescript_heapptr_t BST_VALUE = 1; /* and so on */
 static const surgescript_heapptr_t BST_LEFT = 2;
 static const surgescript_heapptr_t BST_RIGHT = 3;
-
 static const surgescript_heapptr_t IT_STACKSIZE = 0;
 static const surgescript_heapptr_t IT_STACKBASE = 1;
+static const surgescript_heapptr_t DICT_BSTROOT = 0;
 
+/* utilities */
 static surgescript_var_t* sanitize_key(surgescript_var_t* ssvar);
 static surgescript_objecthandle_t new_bst_node(const surgescript_object_t* parent, const surgescript_var_t* key, const surgescript_var_t* value);
 static int bst_count(const surgescript_objectmanager_t* manager, const surgescript_object_t* object);
@@ -67,6 +69,16 @@ static surgescript_var_t* bst_removeroot(surgescript_object_t* object);
  */
 void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
 {
+    surgescript_vm_bind(vm, "Dictionary", "__constructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "Dictionary", "state:main", fun_main, 0);
+    surgescript_vm_bind(vm, "Dictionary", "getSize", fun_getsize, 0);
+    surgescript_vm_bind(vm, "Dictionary", "get", fun_get, 1);
+    surgescript_vm_bind(vm, "Dictionary", "set", fun_set, 2);
+    surgescript_vm_bind(vm, "Dictionary", "clear", fun_clear, 0);
+    surgescript_vm_bind(vm, "Dictionary", "delete", fun_delete, 1);
+    surgescript_vm_bind(vm, "Dictionary", "has", fun_has, 1);
+    surgescript_vm_bind(vm, "Dictionary", "iterator", fun_iterator, 0);
+
     surgescript_vm_bind(vm, "DictionaryIterator", "__constructor", fun_it_constructor, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "state:main", fun_it_main, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "next", fun_it_next, 0);
@@ -84,6 +96,273 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "BSTNode", "find", fun_bst_find, 1);
     surgescript_vm_bind(vm, "BSTNode", "insert", fun_bst_insert, 2);
     surgescript_vm_bind(vm, "BSTNode", "remove", fun_bst_remove, 1);
+}
+
+
+
+/* --- Dictionary --- */
+
+/* A Dictionary is just a facade that implements a Binary Search Tree (BSTNodes) */
+
+/* __constructor(): initialize the Dictionary */
+surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
+
+    ssassert(DICT_BSTROOT == surgescript_heap_malloc(heap));
+    surgescript_var_set_objecthandle(surgescript_heap_at(heap, DICT_BSTROOT), null_handle);
+
+    return NULL;
+}
+
+/* main state: do nothing */
+surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_object_set_active(object, false); /* optimization; we don't need to spend time updating this object */
+    return NULL;
+}
+
+/* getSize(): how many entries does this Dictionary have? */
+surgescript_var_t* fun_getsize(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t bst = surgescript_var_get_objecthandle(surgescript_heap_at(heap, DICT_BSTROOT));
+
+    if(surgescript_objectmanager_exists(manager, bst)) {
+        surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
+        return fun_bst_count(node, NULL, 0);
+    }
+    else
+        return surgescript_var_set_number(surgescript_var_create(), 0);
+}
+
+/* get(key): gets an entry from the Dictionary */
+surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_var_t* get = NULL;
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t bst = surgescript_var_get_objecthandle(surgescript_heap_at(heap, DICT_BSTROOT));
+
+    if(surgescript_objectmanager_exists(manager, bst)) {
+        surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
+        surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]));
+        const surgescript_var_t* p[] = { key };
+        surgescript_var_t* result = fun_bst_find(node, p, 1);
+        surgescript_objecthandle_t result_handle = surgescript_var_get_objecthandle(result);
+
+        if(surgescript_objectmanager_exists(manager, result_handle)) {
+            surgescript_object_t* result_object = surgescript_objectmanager_get(manager, result_handle);
+            get = fun_bst_getvalue(result_object, NULL, 0);
+        }
+
+        surgescript_var_destroy(result);
+        surgescript_var_destroy(key);
+    }
+
+    return get;
+}
+
+/* set(key, value): sets a new entry */
+surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_var_t* root = surgescript_heap_at(heap, DICT_BSTROOT);
+    surgescript_objecthandle_t bst = surgescript_var_get_objecthandle(root);
+    surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0])); /* keys must be sanitized */
+    const surgescript_var_t* value = param[1];
+
+    if(surgescript_objectmanager_exists(manager, bst)) { /* if there is a root... */
+        surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
+        const surgescript_var_t* p[] = { key, value };
+        surgescript_var_t* result = fun_bst_insert(node, p, 2);
+        surgescript_var_destroy(result);
+    }
+    else /* if not, create one */
+        surgescript_var_set_objecthandle(root, new_bst_node(object, key, value));
+
+    surgescript_var_destroy(key);
+    return NULL;
+}
+
+/* clear(): clears the whole Dictionary, so that it has no entries */
+surgescript_var_t* fun_clear(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
+    surgescript_var_t* root = surgescript_heap_at(heap, DICT_BSTROOT);
+    surgescript_objecthandle_t bst = surgescript_var_get_objecthandle(root);
+
+    surgescript_var_set_objecthandle(root, null_handle);
+    if(surgescript_objectmanager_exists(manager, bst)) {
+        surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
+        surgescript_object_kill(node);
+    }
+
+    return NULL;
+}
+
+/* delete(key): deletes a key from the Dictionary */
+surgescript_var_t* fun_delete(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_var_t* root = surgescript_heap_at(heap, DICT_BSTROOT);
+    surgescript_objecthandle_t bst = surgescript_var_get_objecthandle(root);
+
+    if(surgescript_objectmanager_exists(manager, bst)) {
+        surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
+        surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]));
+        const surgescript_var_t* p[] = { key };
+        surgescript_var_t* new_root = fun_bst_remove(node, p, 1);
+
+        surgescript_var_copy(root, new_root);
+
+        surgescript_var_destroy(new_root);
+        surgescript_var_destroy(key);
+    }
+
+    return NULL;
+}
+
+/* has(key): does this dictionary have an entry with the given key? */
+surgescript_var_t* fun_has(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    bool has = false;
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t bst = surgescript_var_get_objecthandle(surgescript_heap_at(heap, DICT_BSTROOT));
+
+    if(surgescript_objectmanager_exists(manager, bst)) {
+        surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
+        surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]));
+        const surgescript_var_t* p[] = { key };
+        surgescript_var_t* result = fun_bst_find(node, p, 1);
+        surgescript_objecthandle_t result_handle = surgescript_var_get_objecthandle(result);
+
+        has = surgescript_objectmanager_exists(manager, result_handle);
+
+        surgescript_var_destroy(result);
+        surgescript_var_destroy(key);
+    }
+
+    return surgescript_var_set_bool(surgescript_var_create(), has);
+}
+
+/* iterator(): spawns an iterator of this Dictionary */
+surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* The DictionaryIterator will set up itself */
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t it_handle = surgescript_objectmanager_spawn(manager, surgescript_object_handle(object), "DictionaryIterator", NULL);
+    return surgescript_var_set_objecthandle(surgescript_var_create(), it_handle);
+}
+
+
+
+/* --- DictionaryIterator --- */
+
+/* __constructor(): DictionaryIterator must be spawned by Dictionary */
+surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t parent_handle = surgescript_object_parent(object);
+    surgescript_object_t* parent = surgescript_objectmanager_get(manager, parent_handle);
+    surgescript_objecthandle_t bst = surgescript_object_child(parent, "BSTNode");
+    const char* parent_name = surgescript_object_name(parent);
+
+    ssassert(IT_STACKSIZE == surgescript_heap_malloc(heap)); /* this can't represent 2^24+1 ~ 16.77 M */
+    ssassert(IT_STACKBASE == surgescript_heap_malloc(heap));
+
+    if(surgescript_objectmanager_exists(manager, bst) && 0 == strcmp(parent_name, "Dictionary")) {
+        surgescript_var_set_number(surgescript_heap_at(heap, IT_STACKSIZE), 1.0f);
+        surgescript_var_set_objecthandle(surgescript_heap_at(heap, IT_STACKBASE), bst);
+    }
+    else {
+        surgescript_var_set_number(surgescript_heap_at(heap, IT_STACKSIZE), 0.0f);
+        surgescript_var_set_objecthandle(surgescript_heap_at(heap, IT_STACKBASE), surgescript_objectmanager_null(manager));
+    }
+
+    return NULL;
+}
+
+/* "main" state: do nothing */
+surgescript_var_t* fun_it_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_object_set_active(object, false); /* optimization; we don't need to spend time updating this object */
+    return NULL;
+}
+
+/* next(): advances the iterator */
+surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_var_t* stacksize = surgescript_heap_at(heap, IT_STACKSIZE);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+
+    if(surgescript_var_get_number(stacksize) > 0) {
+        surgescript_var_t* stacktop = surgescript_heap_at(heap, IT_STACKBASE + (surgescript_var_get_number(stacksize) - 1));
+        surgescript_object_t* node = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(stacktop));
+        surgescript_heap_t* node_heap = surgescript_object_heap(node);
+        surgescript_objecthandle_t left_handle, right_handle;
+        surgescript_var_t* new_top;
+        surgescript_heapptr_t top_ptr;
+
+        /* pop stacktop */
+        surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) - 1);
+
+        /* push right child */
+        right_handle = surgescript_var_get_objecthandle(surgescript_heap_at(node_heap, BST_RIGHT));
+        if(surgescript_objectmanager_exists(manager, right_handle)) {
+            top_ptr = IT_STACKBASE + surgescript_var_get_number(stacksize);
+            new_top = surgescript_heap_at(heap, top_ptr);
+            surgescript_var_set_objecthandle(new_top, right_handle);
+            surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) + 1);
+        }
+
+        /* push left child */
+        left_handle = surgescript_var_get_objecthandle(surgescript_heap_at(node_heap, BST_LEFT));
+        if(surgescript_objectmanager_exists(manager, left_handle)) {
+            top_ptr = IT_STACKBASE + surgescript_var_get_number(stacksize);
+            if(!surgescript_heap_validaddress(heap, top_ptr))
+                ssassert(top_ptr == surgescript_heap_malloc(heap));
+            new_top = surgescript_heap_at(heap, top_ptr);
+            surgescript_var_set_objecthandle(new_top, left_handle);
+            surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) + 1);
+        }
+    }
+
+    return NULL;
+}
+
+/* hasNext(): returns true if the iterator has NOT reached the end of the collection */
+surgescript_var_t* fun_it_hasnext(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_var_t* stacksize = surgescript_heap_at(heap, IT_STACKSIZE);
+    return surgescript_var_set_bool(surgescript_var_create(), surgescript_var_get_number(stacksize) > 0);
+}
+
+/* getItem(): the current item of the collection, according to the iterator. Items have no particular order. User-tip: items should NOT be deleted while iterating */
+surgescript_var_t* fun_it_getitem(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_var_t* stacksize = surgescript_heap_at(heap, IT_STACKSIZE);
+
+    if(surgescript_var_get_number(stacksize) > 0) {
+        surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+        surgescript_var_t* bst_node = surgescript_heap_at(heap, IT_STACKBASE + (surgescript_var_get_number(stacksize) - 1));
+        surgescript_object_t* node = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(bst_node));
+        return fun_bst_getkey(node, NULL, 0);
+    }
+
+    return NULL;
 }
 
 
@@ -226,109 +505,6 @@ surgescript_var_t* fun_bst_remove(surgescript_object_t* object, const surgescrip
     const char* key = surgescript_var_fast_get_string(surgescript_heap_at(heap, BST_KEY));
     return bst_remove(object, key, 0);
 }
-
-
-
-/* --- DictionaryIterator --- */
-
-/* __constructor(): DictionaryIterator must be spawned by Dictionary */
-surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_heap_t* heap = surgescript_object_heap(object);
-    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-    surgescript_objecthandle_t parent_handle = surgescript_object_parent(object);
-    surgescript_object_t* parent = surgescript_objectmanager_get(manager, parent_handle);
-    surgescript_objecthandle_t bst = surgescript_object_child(parent, "BSTNode");
-    const char* parent_name = surgescript_object_name(parent);
-
-    ssassert(IT_STACKSIZE == surgescript_heap_malloc(heap)); /* this can't represent 2^24+1 ~ 16.77 M */
-    ssassert(IT_STACKBASE == surgescript_heap_malloc(heap));
-
-    if(surgescript_objectmanager_exists(manager, bst) && 0 == strcmp(parent_name, "Dictionary")) {
-        surgescript_var_set_number(surgescript_heap_at(heap, IT_STACKSIZE), 1.0f);
-        surgescript_var_set_objecthandle(surgescript_heap_at(heap, IT_STACKBASE), bst);
-    }
-    else {
-        surgescript_var_set_number(surgescript_heap_at(heap, IT_STACKSIZE), 0.0f);
-        surgescript_var_set_objecthandle(surgescript_heap_at(heap, IT_STACKBASE), surgescript_objectmanager_null(manager));
-    }
-
-    return NULL;
-}
-
-/* "main" state: do nothing */
-surgescript_var_t* fun_it_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_object_set_active(object, false); /* optimization; we don't need to spend time updating this object */
-    return NULL;
-}
-
-/* next(): advances the iterator */
-surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_heap_t* heap = surgescript_object_heap(object);
-    surgescript_var_t* stacksize = surgescript_heap_at(heap, IT_STACKSIZE);
-    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-
-    if(surgescript_var_get_number(stacksize) > 0) {
-        surgescript_var_t* stacktop = surgescript_heap_at(heap, IT_STACKBASE + (surgescript_var_get_number(stacksize) - 1));
-        surgescript_object_t* node = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(stacktop));
-        surgescript_heap_t* node_heap = surgescript_object_heap(node);
-        surgescript_objecthandle_t left_handle, right_handle;
-        surgescript_var_t* new_top;
-        surgescript_heapptr_t top_ptr;
-
-        /* pop stacktop */
-        surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) - 1);
-
-        /* push right child */
-        right_handle = surgescript_var_get_objecthandle(surgescript_heap_at(node_heap, BST_RIGHT));
-        if(surgescript_objectmanager_exists(manager, right_handle)) {
-            top_ptr = IT_STACKBASE + surgescript_var_get_number(stacksize);
-            new_top = surgescript_heap_at(heap, top_ptr);
-            surgescript_var_set_objecthandle(new_top, right_handle);
-            surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) + 1);
-        }
-
-        /* push left child */
-        left_handle = surgescript_var_get_objecthandle(surgescript_heap_at(node_heap, BST_LEFT));
-        if(surgescript_objectmanager_exists(manager, left_handle)) {
-            top_ptr = IT_STACKBASE + surgescript_var_get_number(stacksize);
-            if(!surgescript_heap_validaddress(heap, top_ptr))
-                ssassert(top_ptr == surgescript_heap_malloc(heap));
-            new_top = surgescript_heap_at(heap, top_ptr);
-            surgescript_var_set_objecthandle(new_top, left_handle);
-            surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) + 1);
-        }
-    }
-
-    return NULL;
-}
-
-/* hasNext(): returns true if the iterator has NOT reached the end of the collection */
-surgescript_var_t* fun_it_hasnext(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_heap_t* heap = surgescript_object_heap(object);
-    surgescript_var_t* stacksize = surgescript_heap_at(heap, IT_STACKSIZE);
-    return surgescript_var_set_bool(surgescript_var_create(), surgescript_var_get_number(stacksize) > 0);
-}
-
-/* getItem(): the current item of the collection, according to the iterator. Items have no particular order. User-tip: items should NOT be deleted while iterating */
-surgescript_var_t* fun_it_getitem(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_heap_t* heap = surgescript_object_heap(object);
-    surgescript_var_t* stacksize = surgescript_heap_at(heap, IT_STACKSIZE);
-
-    if(surgescript_var_get_number(stacksize) > 0) {
-        surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-        surgescript_var_t* bst_node = surgescript_heap_at(heap, IT_STACKBASE + (surgescript_var_get_number(stacksize) - 1));
-        surgescript_object_t* node = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(bst_node));
-        return fun_bst_getkey(node, NULL, 0);
-    }
-
-    return NULL;
-}
-
 
 
 
