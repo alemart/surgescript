@@ -248,37 +248,49 @@ object "SurgeScriptTest"
         weight["Neon"] = 25.0;
         weight["Charge"] = 37.5;
 
-        test(weight["Surge"] == 35.0);
-        test(weight["Neon"] == 25.0);
-        test(weight["Charge"] > 37 && weight["Charge"] < 38);
-        test(weight.has("Surge"));
-        test(!weight.has("Gimacian"));
+        test(weight["Surge"] == 35.0) || fail(1);
+        test(weight["Neon"] == 25.0) || fail(2);
+        test(weight["Charge"] > 37 && weight["Charge"] < 38) || fail(3);
+        test(weight.has("Surge")) || fail(4);
+        test(!weight.has("Gimacian")) || fail(5);
 
         it = weight.iterator();
-        test(it != null);
-        test(it.hasNext());
+        test(it != null) || fail(6);
+        test(it.hasNext()) || fail(7);
 
         sum = 0.0;
         while(it.hasNext()) {
             sum += weight[it.item];
             it.next();
         }
-        test(sum > 97 && sum < 98);
+        test(sum > 97 && sum < 98) || fail(8);
 
         weight["Neon"] = 26;
-        test(weight["Neon"] == 26);
-        test(weight.has("Neon"));
+        test(weight["Neon"] == 26) || fail(9);
+        test(weight.has("Neon")) || fail(10);
 
-        test(weight.size == 3);
+        // --- FIXME ---
+        test(weight.size == 3) || fail(11);
         weight.delete("Neon");
-        test(weight.has("Surge"));
-        test(!weight.has("Neon"));
-        test(weight.has("Charge"));
-        test(weight.size == 2);
+        test(weight.has("Surge")) || fail(12);
+        test(!weight.has("Neon")) || fail(13);
+        test(weight.has("Charge")) || fail(14);
+        test(weight.size == 2) || fail(15);
+        // --- FIXME ---
 
         weight.clear();
-        test(weight.size == 0);
-        test(!weight.iterator().hasNext());
+        test(weight.size == 0) || fail(16);
+        test(!weight.iterator().hasNext() && null == weight.iterator().item) || fail(17);
+
+        stress = spawn("Dictionary");
+        stressLimit = 1000;
+        for(j = 1; j <= stressLimit; j++) stress["o" + j] = j;
+        test(stress["o500"] == 500) || fail(18);
+        test(stress["o657"] == 657) || fail(19);
+        test(!stress.has("o0") && stress.has("o700")) || fail(20);
+        for(sum = 0, it = stress.iterator(); it.hasNext(); sum += stress[it.next()]);
+        test(stress.size == stressLimit) || fail(21);
+        test(sum == 500500) || fail(22);
 
         end();
     }

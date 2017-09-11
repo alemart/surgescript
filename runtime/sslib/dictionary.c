@@ -274,7 +274,8 @@ surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surges
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_objecthandle_t parent_handle = surgescript_object_parent(object);
     surgescript_object_t* parent = surgescript_objectmanager_get(manager, parent_handle);
-    surgescript_objecthandle_t bst = surgescript_object_child(parent, "BSTNode");
+    surgescript_heap_t* parent_heap = surgescript_object_heap(parent);
+    surgescript_objecthandle_t bst = surgescript_var_get_objecthandle(surgescript_heap_at(parent_heap, DICT_BSTROOT));
     const char* parent_name = surgescript_object_name(parent);
 
     ssassert(IT_STACKSIZE == surgescript_heap_malloc(heap)); /* this can't represent 2^24+1 ~ 16.77 M */
@@ -312,11 +313,9 @@ surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_v
         surgescript_heap_t* node_heap = surgescript_object_heap(node);
         surgescript_objecthandle_t left_handle, right_handle;
         surgescript_var_t* new_top;
-        surgescript_var_t* old_top;
         surgescript_heapptr_t top_ptr;
 
         /* pop stacktop */
-        old_top = surgescript_var_clone(stacktop);
         surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) - 1);
 
         /* push right child */
@@ -340,7 +339,7 @@ surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_v
         }
 
         /* return previously pointed item */
-        return old_top;
+        return fun_bst_getkey(node, NULL, 0);
     }
 
     return NULL;
