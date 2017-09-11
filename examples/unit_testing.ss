@@ -265,6 +265,10 @@ object "SurgeScriptTest"
         }
         test(sum > 97 && sum < 98);
 
+        weight["Neon"] = 26;
+        test(weight["Neon"] == 26);
+        test(weight.has("Neon"));
+
         test(weight.size == 3);
         weight.delete("Neon");
         test(weight.has("Surge"));
