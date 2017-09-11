@@ -299,7 +299,7 @@ surgescript_var_t* fun_it_main(surgescript_object_t* object, const surgescript_v
     return NULL;
 }
 
-/* next(): advances the iterator */
+/* next(): advances the iterator and returns the item previously pointed to by the iterator */
 surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
@@ -312,9 +312,11 @@ surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_v
         surgescript_heap_t* node_heap = surgescript_object_heap(node);
         surgescript_objecthandle_t left_handle, right_handle;
         surgescript_var_t* new_top;
+        surgescript_var_t* old_top;
         surgescript_heapptr_t top_ptr;
 
         /* pop stacktop */
+        old_top = surgescript_var_clone(stacktop);
         surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) - 1);
 
         /* push right child */
@@ -336,6 +338,9 @@ surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_v
             surgescript_var_set_objecthandle(new_top, left_handle);
             surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) + 1);
         }
+
+        /* return previously pointed item */
+        return old_top;
     }
 
     return NULL;
