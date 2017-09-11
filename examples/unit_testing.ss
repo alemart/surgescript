@@ -17,6 +17,8 @@ object "Application"
         test.system();
         test.lambda();
         test.getset();
+        test.array();
+        test.dictionary();
         exit();
     }
 }
@@ -229,6 +231,51 @@ object "SurgeScriptTest"
         test((this.self["value"]++) && this.getValue() == 8) || fail(21);
         test((this.setValue(this.getValue() + 1), this.value == 9) && (this.value *= 2, this.value == 18)) || fail(22);
         test((this.value += 5) == 23) || fail(23);
+        end();
+    }
+
+    fun array()
+    {
+        // TODO
+    }
+
+    fun dictionary()
+    {
+        begin("Dictionary");
+
+        weight = spawn("Dictionary");
+        weight["Surge"] = 35.0;
+        weight["Neon"] = 25.0;
+        weight["Charge"] = 37.5;
+
+        test(weight["Surge"] == 35.0);
+        test(weight["Neon"] == 25.0);
+        test(weight["Charge"] > 37 && weight["Charge"] < 38);
+        test(weight.has("Surge"));
+        test(!weight.has("Gimacian"));
+
+        it = weight.iterator();
+        test(it != null);
+        test(it.hasNext());
+
+        sum = 0.0;
+        while(it.hasNext()) {
+            sum += weight[it.item];
+            it.next();
+        }
+        test(sum > 97 && sum < 98);
+
+        test(weight.size == 3);
+        weight.delete("Neon");
+        test(weight.has("Surge"));
+        test(!weight.has("Neon"));
+        test(weight.has("Charge"));
+        test(weight.size == 2);
+
+        weight.clear();
+        test(weight.size == 0);
+        test(!weight.iterator().hasNext());
+
         end();
     }
 
