@@ -65,7 +65,6 @@ void surgescript_object_release(surgescript_object_t* object);
 #define MAIN_STATE "main"
 static char* state2fun(const char* state);
 static void run_state(surgescript_object_t* object, const char* state_name);
-static bool has_main_state(surgescript_object_t* object);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
 
 /* -------------------------------
@@ -96,7 +95,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->parent = handle;
     ssarray_init(obj->child);
 
-    obj->state_name = has_main_state(obj) ? ssstrdup(MAIN_STATE) : NULL;
+    obj->state_name = ssstrdup(MAIN_STATE);
     obj->is_active = true;
     obj->is_killed = false;
     obj->is_reachable = false;
@@ -692,14 +691,7 @@ void run_state(surgescript_object_t* object, const char* state_name)
     }
 }
 
-bool has_main_state(surgescript_object_t* object)
-{
-    surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
-    return surgescript_programpool_get(program_pool, object->name, "state:" MAIN_STATE) != NULL;
-}
-
 bool object_exists(surgescript_programpool_t* program_pool, const char* object_name)
 {
-    surgescript_program_t* program = surgescript_programpool_get(program_pool, object_name, "state:" MAIN_STATE);
-    return program != NULL;
+    return NULL != surgescript_programpool_get(program_pool, object_name, "state:" MAIN_STATE);
 }
