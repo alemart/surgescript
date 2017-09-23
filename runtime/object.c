@@ -681,14 +681,12 @@ char* state2fun(const char* state)
 
 void run_state(surgescript_object_t* object, const char* state_name)
 {
-    if(state_name != NULL) {
-        char *fun_name = state2fun(state_name);
-        surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
-        surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
-        if(program)
-            surgescript_program_run(program, object->renv);
-        ssfree(fun_name);
-    }
+    char *fun_name = state2fun(state_name);
+    surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+    surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
+    if(program)
+        surgescript_program_run(program, object->renv);
+    ssfree(fun_name);
 }
 
 bool object_exists(surgescript_programpool_t* program_pool, const char* object_name)
