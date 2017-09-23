@@ -45,8 +45,8 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
 
-    ssassert(TIME_ADDR = surgescript_heap_malloc(heap));
-    ssassert(DELTA_ADDR = surgescript_heap_malloc(heap));
+    ssassert(TIME_ADDR == surgescript_heap_malloc(heap));
+    ssassert(DELTA_ADDR == surgescript_heap_malloc(heap));
 
     surgescript_var_set_number(surgescript_heap_at(heap, TIME_ADDR), 0);
     surgescript_var_set_number(surgescript_heap_at(heap, DELTA_ADDR), surgescript_object_elapsed_time(object));
