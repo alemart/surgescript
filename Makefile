@@ -45,7 +45,7 @@ utf8: util/utf8.c util/utf8.h
 transform: util/transform.c util/transform.h utils
 	$(CC) $(CFLAGS) -c util/transform.c
 
-sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c runtime/sslib/system.c runtime/sslib/string.c runtime/sslib/number.c runtime/sslib/boolean.c runtime/sslib/console.c runtime/sslib/transform2d.c runtime/sslib/math.c runtime/sslib/dictionary.c heap utils utf8
+sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtime/sslib/application.c runtime/sslib/system.c runtime/sslib/string.c runtime/sslib/number.c runtime/sslib/boolean.c runtime/sslib/console.c runtime/sslib/transform2d.c runtime/sslib/math.c runtime/sslib/dictionary.c runtime/sslib/time.c heap utils utf8
 	$(CC) $(CFLAGS) -c runtime/sslib/object.c -o sslib_object.o
 	$(CC) $(CFLAGS) -c runtime/sslib/array.c -o sslib_array.o
 	$(CC) $(CFLAGS) -c runtime/sslib/application.c -o sslib_application.o
@@ -57,7 +57,8 @@ sslib: runtime/sslib/sslib.h runtime/sslib/object.c runtime/sslib/array.c runtim
 	$(CC) $(CFLAGS) -c runtime/sslib/transform2d.c -o sslib_transform2d.o
 	$(CC) $(CFLAGS) -c runtime/sslib/math.c -o sslib_math.o
 	$(CC) $(CFLAGS) -c runtime/sslib/dictionary.c -o sslib_dictionary.o
-	ar -cvq sslib.a sslib_object.o sslib_array.o sslib_application.o sslib_system.o sslib_string.o sslib_number.o sslib_boolean.o sslib_console.o sslib_transform2d.o sslib_math.o sslib_dictionary.o
+	$(CC) $(CFLAGS) -c runtime/sslib/time.c -o sslib_time.o
+	ar -cvq sslib.a sslib_object.o sslib_array.o sslib_application.o sslib_system.o sslib_string.o sslib_number.o sslib_boolean.o sslib_console.o sslib_transform2d.o sslib_math.o sslib_dictionary.o sslib_time.o
 
 token: compiler/token.h compiler/token.c utils
 	$(CC) $(CFLAGS) -c compiler/token.c
