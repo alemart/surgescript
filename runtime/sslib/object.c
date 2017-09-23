@@ -26,6 +26,7 @@ static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surg
 static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_timeout(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
 
@@ -48,6 +49,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "requireComponent", fun_requirecomponent, 1);
+    surgescript_vm_bind(vm, "Object", "timeout", fun_timeout, 1);
     surgescript_vm_bind(vm, "Object", "__export", fun_export, 2);
 }
 
@@ -189,4 +191,12 @@ surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surg
     }
 
     return surgescript_var_set_objecthandle(surgescript_var_create(), component_handle);
+}
+
+/* returns true iff the object has been on the same state for param[0] seconds or more */
+surgescript_var_t* fun_timeout(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    float elapsed = surgescript_object_elapsed_time(object);
+    float threshold = surgescript_var_get_number(param[0]);
+    return surgescript_var_set_bool(surgescript_var_create(), elapsed >= threshold);
 }

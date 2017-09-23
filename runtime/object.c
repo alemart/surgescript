@@ -7,6 +7,7 @@
  * SurgeScript object
  */
 
+#include <time.h>
 #include <string.h>
 #include "object.h"
 #include "program_pool.h"
@@ -40,6 +41,7 @@ struct surgescript_object_t
     bool is_active; /* can i run programs? */
     bool is_killed; /* am i scheduled to be destroyed? */
     bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
+    clock_t state_time; /* time since last state change */
 
     /* exported variables */
     SSARRAY(surgescript_object_exportedvar_t, exported_var);
@@ -99,6 +101,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->is_active = true;
     obj->is_killed = false;
     obj->is_reachable = false;
+    obj->state_time = clock();
 
     ssarray_init(obj->exported_var);
     obj->transform = NULL;
@@ -399,6 +402,18 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
 {
     ssfree(object->state_name);
     object->state_name = ssstrdup(state_name ? state_name : MAIN_STATE);
+    object->state_time = clock();
+}
+
+
+/*
+ * surgescript_object_elapsed_time()
+ * elapsed time (in seconds) since last state change
+ */
+float surgescript_object_elapsed_time(const surgescript_object_t* object)
+{
+    clock_t elapsed_time = clock() - object->state_time;
+    return (float)elapsed_time / CLOCKS_PER_SEC;
 }
 
 /*
