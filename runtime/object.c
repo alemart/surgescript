@@ -62,9 +62,10 @@ struct surgescript_object_exportedvar_t
 void surgescript_object_release(surgescript_object_t* object);
 
 /* private stuff */
-static const char* INITIAL_STATE = "main";
+#define MAIN_STATE "main"
 static char* state2fun(const char* state);
 static void run_state(surgescript_object_t* object, const char* state_name);
+static bool has_main_state(surgescript_object_t* object);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
 
 /* -------------------------------
@@ -95,7 +96,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->parent = handle;
     ssarray_init(obj->child);
 
-    obj->state_name = ssstrdup(INITIAL_STATE);
+    obj->state_name = has_main_state(obj) ? ssstrdup(MAIN_STATE) : NULL;
     obj->is_active = true;
     obj->is_killed = false;
     obj->is_reachable = false;
@@ -398,7 +399,7 @@ const char* surgescript_object_state(const surgescript_object_t *object)
 void surgescript_object_set_state(surgescript_object_t* object, const char* state_name)
 {
     ssfree(object->state_name);
-    object->state_name = ssstrdup(state_name ? state_name : INITIAL_STATE);
+    object->state_name = ssstrdup(state_name ? state_name : MAIN_STATE);
 }
 
 /*
@@ -681,18 +682,24 @@ char* state2fun(const char* state)
 
 void run_state(surgescript_object_t* object, const char* state_name)
 {
-    char *fun_name = state2fun(state_name);
+    if(state_name != NULL) {
+        char *fun_name = state2fun(state_name);
+        surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+        surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
+        if(program)
+            surgescript_program_run(program, object->renv);
+        ssfree(fun_name);
+    }
+}
+
+bool has_main_state(surgescript_object_t* object)
+{
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
-    surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
-    if(program)
-        surgescript_program_run(program, object->renv);
-    ssfree(fun_name);
+    return surgescript_programpool_get(program_pool, object->name, "state:" MAIN_STATE) != NULL;
 }
 
 bool object_exists(surgescript_programpool_t* program_pool, const char* object_name)
 {
-    char *fun_name = state2fun(INITIAL_STATE);
-    surgescript_program_t* program = surgescript_programpool_get(program_pool, object_name, fun_name);
-    ssfree(fun_name);
+    surgescript_program_t* program = surgescript_programpool_get(program_pool, object_name, "state:" MAIN_STATE);
     return program != NULL;
 }

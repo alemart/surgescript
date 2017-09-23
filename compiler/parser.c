@@ -18,6 +18,7 @@
 #include "nodecontext.h"
 #include "symtable.h"
 #include "codegen.h"
+#include "../runtime/object.h"
 #include "../runtime/object_manager.h"
 #include "../runtime/tag_system.h"
 #include "../runtime/program_pool.h"
@@ -49,6 +50,8 @@ static void expect_something(surgescript_parser_t* parser);
 static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
 static void unexpected_symbol(surgescript_parser_t* parser);
 static void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void pre_validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static surgescript_var_t* disable_object(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
 
 /* non-terminals */
 static void objectlist(surgescript_parser_t* parser);
@@ -336,15 +339,30 @@ bool has_token(surgescript_parser_t* parser)
 /* is the given object (in the given context) all right? */
 void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    surgescript_programpool_t* pool = parser->program_pool;
-
     /* found an invalid symbol? */
     if(!got_type(parser, SSTOK_RCURLY))
         unexpected_symbol(parser);
 
     /* do we have a "main" state? */
-    if(!surgescript_programpool_exists(pool, context.object_name, "state:main"))
-        ssfatal("Object \"%s\" in \"%s\" needs a \"main\" state.", context.object_name, context.source_file);
+    if(!surgescript_programpool_exists(parser->program_pool, context.object_name, "state:main")) {
+        surgescript_program_t* cprogram = surgescript_cprogram_create(0, disable_object);
+        surgescript_programpool_put(parser->program_pool, context.object_name, "state:main", cprogram);
+        sslog("Object \"%s\" in \"%s\" has omitted its \"main\" state and will be disabled.", context.object_name, context.source_file);
+    }
+}
+
+/* pre-validates the object */
+void pre_validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    if(surgescript_programpool_exists(parser->program_pool, context.object_name, "state:main"))
+        ssfatal("Duplicate declaration of object \"%s\" in \"%s\".", context.object_name, context.source_file);
+}
+
+/* an empty "main" state that disables the object for optimization purposes */
+surgescript_var_t* disable_object(surgescript_object_t* object, const surgescript_var_t* param[], int num_params)
+{
+    surgescript_object_set_active(object, false);
+    return NULL;
 }
 
 
@@ -395,6 +413,9 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     surgescript_program_label_t start = surgescript_program_new_label(context.program);
     surgescript_program_label_t end = surgescript_program_new_label(context.program);
+
+    /* pre-validate */
+    pre_validate_object(parser, context);
 
     /* allocate variables */
     emit_object_header(context, start, end);
