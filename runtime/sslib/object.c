@@ -115,16 +115,25 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 /* plus: overloads the '+' operator */
 surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
+    char *str1, *str2, *str;
     surgescript_var_t* ret = surgescript_var_create();
-    surgescript_var_t* me = fun_tostring(object, NULL, 0);
-    const char* str1 = surgescript_var_fast_get_string(me);
+    surgescript_var_t* me = NULL;
 
-    char* str2 = surgescript_var_get_string(param[0]);
-    char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
+    /* convert object to string */
+    surgescript_object_call_function(object, "toString", NULL, 0, me);
+    if(me == NULL)
+        me = fun_tostring(object, NULL, 0);
+    str1 = surgescript_var_get_string(me);
+
+    /* concatenate */
+    str2 = surgescript_var_get_string(param[0]);
+    str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
     surgescript_var_set_string(ret, strcat(strcpy(str, str1), str2));
     ssfree(str);
     ssfree(str2);
+    ssfree(str1);
 
+    /* done! */
     surgescript_var_destroy(me);
     return ret;
 }
