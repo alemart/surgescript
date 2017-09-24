@@ -50,7 +50,6 @@ static void expect_something(surgescript_parser_t* parser);
 static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
 static void unexpected_symbol(surgescript_parser_t* parser);
 static void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void pre_validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static surgescript_var_t* disable_object(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
 
 /* non-terminals */
@@ -351,13 +350,6 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
     }
 }
 
-/* pre-validates the object */
-void pre_validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context)
-{
-    if(surgescript_programpool_exists(parser->program_pool, context.object_name, "state:main"))
-        ssfatal("Duplicate declaration of object \"%s\" in \"%s\".", context.object_name, context.source_file);
-}
-
 /* an empty "main" state that disables the object for optimization purposes */
 surgescript_var_t* disable_object(surgescript_object_t* object, const surgescript_var_t* param[], int num_params)
 {
@@ -394,8 +386,10 @@ void object(surgescript_parser_t* parser)
         surgescript_symtable_create(NULL), /* symbol table */
         surgescript_program_create(0) /* object constructor */
     );
+
+    /* validate */
     if(surgescript_programpool_exists(parser->program_pool, object_name, "__ssconstructor"))
-        ssfatal("Compile Error: duplicate definition of object \"%s\" in %s:%d.", object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        ssfatal("Compile Error: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
 
     /* read the object */
     match(parser, SSTOK_STRING);
@@ -413,9 +407,6 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     surgescript_program_label_t start = surgescript_program_new_label(context.program);
     surgescript_program_label_t end = surgescript_program_new_label(context.program);
-
-    /* pre-validate */
-    pre_validate_object(parser, context);
 
     /* allocate variables */
     emit_object_header(context, start, end);
