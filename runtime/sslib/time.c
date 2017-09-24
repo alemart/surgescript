@@ -98,5 +98,5 @@ surgescript_var_t* fun_getdelta(surgescript_object_t* object, const surgescript_
 float get_tick_count()
 {
     /* this might crash after 24.8 days of uninterrupt execution */
-    return clock() / CLOCKS_PER_SEC;
+    return (float)clock() / CLOCKS_PER_SEC;
 }
