@@ -603,7 +603,7 @@ void surgescript_object_call_function(surgescript_object_t* object, const char* 
     runtime_environment = object->renv;
     surgescript_program_lowcall(runtime_environment, fun_name, num_params);
     if(return_value != NULL)
-        surgescript_var_copy(*(surgescript_renv_tmp(runtime_environment) + 0), return_value); /* the return value of the function (if any) */
+        surgescript_var_copy(return_value, *(surgescript_renv_tmp(runtime_environment) + 0)); /* the return value of the function (if any) */
     /*surgescript_renv_destroy(runtime_environment);*/
 
     /* pop stuff from the stack */
