@@ -92,7 +92,6 @@ surgescript_var_t* fun_getdelta(surgescript_object_t* object, const surgescript_
     return surgescript_var_clone(surgescript_heap_at(heap, DELTA_ADDR));
 }
 
-
 /* utilities */
 
 /* returns the number of seconds since the app was started */
