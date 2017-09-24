@@ -347,7 +347,7 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
     if(!surgescript_programpool_exists(parser->program_pool, context.object_name, "state:main")) {
         surgescript_program_t* cprogram = surgescript_cprogram_create(0, disable_object);
         surgescript_programpool_put(parser->program_pool, context.object_name, "state:main", cprogram);
-        sslog("Object \"%s\" in \"%s\" has omitted its \"main\" state and will be disabled.", context.object_name, context.source_file);
+        /*sslog("Object \"%s\" in \"%s\" has omitted its \"main\" state and will be disabled.", context.object_name, context.source_file);*/
     }
 }
 

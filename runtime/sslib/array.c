@@ -8,7 +8,9 @@
  */
 
 #include "../vm.h"
+#include "../object_manager.h"
 #include "../heap.h"
+#include "../object.h"
 #include "../../util/util.h"
 
 
@@ -28,11 +30,16 @@ static surgescript_var_t* fun_reverse(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
+/* sorting functions */
+typedef int (*surgescript_sortcmp_t)(surgescript_object_t* object, const surgescript_var_t*, const surgescript_var_t*);
+static int default_sort_function(surgescript_object_t* object, const surgescript_var_t* a, const surgescript_var_t* b);
+static int custom_sort_function(surgescript_object_t* object, const surgescript_var_t* a, const surgescript_var_t* b);
+
 /* utilities */
 #define ORDINAL(j)              (((j) == 1) ? "st" : (((j) == 2) ? "nd" : (((j) == 3) ? "rd" : "th")))
 #define ARRAY_LENGTH(heap)      ((int)surgescript_var_get_number(surgescript_heap_at((heap), LENGTH_ADDR)))
-static void quicksort(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end);
-static inline surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end);
+static void quicksort(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end, surgescript_sortcmp_t compare, surgescript_object_t* compare_object);
+static inline surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end, surgescript_sortcmp_t compare, surgescript_object_t* compare_object);
 static inline surgescript_var_t* med3(surgescript_var_t* a, surgescript_var_t* b, surgescript_var_t* c);
 static const surgescript_heapptr_t LENGTH_ADDR = 0; /* the length of the array is allocated on the first address */
 static const surgescript_heapptr_t BASE_ADDR = 1;   /* array elements come later */
@@ -54,7 +61,7 @@ void surgescript_sslib_register_array(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Array", "pop", fun_pop, 0);
     surgescript_vm_bind(vm, "Array", "shift", fun_shift, 0);
     surgescript_vm_bind(vm, "Array", "unshift", fun_unshift, 1);
-    surgescript_vm_bind(vm, "Array", "sort", fun_sort, 0);
+    surgescript_vm_bind(vm, "Array", "sort", fun_sort, 1);
     surgescript_vm_bind(vm, "Array", "reverse", fun_reverse, 0);
     surgescript_vm_bind(vm, "Array", "indexOf", fun_indexof, 1);
     surgescript_vm_bind(vm, "Array", "toString", fun_tostring, 0);
@@ -221,12 +228,17 @@ surgescript_var_t* fun_reverse(surgescript_object_t* object, const surgescript_v
     return NULL;
 }
 
-/* sorts the array */
+/* sorts the array. Returns the sorted array */
 surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
-    quicksort(heap, BASE_ADDR, BASE_ADDR + ARRAY_LENGTH(heap) - 1);
-    return NULL;
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_sortcmp_t compare = surgescript_var_is_null(param[0]) ? default_sort_function : custom_sort_function;
+    surgescript_object_t* compare_object = (compare == custom_sort_function) ? surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0])) : NULL;
+
+    quicksort(heap, BASE_ADDR, BASE_ADDR + ARRAY_LENGTH(heap) - 1, compare, compare_object);
+
+    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
 }
 
 /* finds the first i such that array[i] == param[0], or -1 if there is no such a match */
@@ -256,24 +268,24 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 /* utilities */
 
 /* quicksort algorithm: sorts heap[begin .. end] */
-void quicksort(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end)
+void quicksort(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end, surgescript_sortcmp_t compare, surgescript_object_t* compare_object)
 {
     if(begin < end) {
-        surgescript_heapptr_t p = partition(heap, begin, end);
-        quicksort(heap, begin, p-1);
-        quicksort(heap, p+1, end);
+        surgescript_heapptr_t p = partition(heap, begin, end, compare, compare_object);
+        quicksort(heap, begin, p-1, compare, compare_object);
+        quicksort(heap, p+1, end, compare, compare_object);
     }
 }
 
 /* returns ptr such that heap[begin .. ptr-1] <= heap[ptr] < heap[ptr+1 .. end], where begin <= end */
-surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end)
+surgescript_heapptr_t partition(surgescript_heap_t* heap, surgescript_heapptr_t begin, surgescript_heapptr_t end, surgescript_sortcmp_t compare, surgescript_object_t* compare_object)
 {
     surgescript_var_t* pivot = surgescript_heap_at(heap, end);
     surgescript_heapptr_t p = begin;
 
     surgescript_var_swap(pivot, med3(surgescript_heap_at(heap, begin), surgescript_heap_at(heap, begin + (end-begin)/2), pivot));
     for(surgescript_heapptr_t i = begin; i <= end - 1; i++) {
-        if(surgescript_var_compare(surgescript_heap_at(heap, i), pivot) <= 0) {
+        if(compare(compare_object, surgescript_heap_at(heap, i), pivot) <= 0) {
             surgescript_var_swap(surgescript_heap_at(heap, i), surgescript_heap_at(heap, p));
             p++;
         }
@@ -296,4 +308,24 @@ surgescript_var_t* med3(surgescript_var_t* a, surgescript_var_t* b, surgescript_
         return ac >= 0 ? a : c;
     else /* c = max(a, b, c) */
         return ab >= 0 ? a : b;
+}
+
+/* default sort function */
+int default_sort_function(surgescript_object_t* object, const surgescript_var_t* a, const surgescript_var_t* b)
+{
+    return surgescript_var_compare(a, b);
+}
+
+/* custom sort function (calls an object) */
+int custom_sort_function(surgescript_object_t* object, const surgescript_var_t* a, const surgescript_var_t* b)
+{
+    const surgescript_var_t* param[] = { a, b };
+    float return_value = 0;
+
+    surgescript_var_t* ret = surgescript_var_create();
+    surgescript_object_call_function(object, "call", param, 2, ret);
+    return_value = surgescript_var_get_number(ret);
+    surgescript_var_destroy(ret);
+
+    return ((return_value < 0) ? -1 : (return_value > 0 ? 1 : 0));
 }
