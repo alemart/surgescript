@@ -213,7 +213,7 @@ surgescript_var_t* fun_unshift(surgescript_object_t* object, const surgescript_v
     return NULL;
 }
 
-/* reverses the array */
+/* reverses the array. Returns the reversed array. */
 surgescript_var_t* fun_reverse(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
@@ -225,7 +225,7 @@ surgescript_var_t* fun_reverse(surgescript_object_t* object, const surgescript_v
         surgescript_var_swap(a, b);
     }
 
-    return NULL;
+    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
 }
 
 /* sorts the array. Returns the sorted array */
