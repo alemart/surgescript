@@ -310,7 +310,13 @@ object "SurgeScriptTest"
         }
         test(test25) || fail(25);
         test(stress.size == newSize) || fail(26);
-        //for(it = stress.iterator(); it.hasNext(); it.next()) Console.print(it.item);
+
+        del = [];
+        for(j = 1; j <= stressLimit; j++)
+            del.push(j);
+        for(x in del)
+            stress.delete("o" + del[x]);
+        test(stress.size == 0) || fail(27);
 
         end();
     }
