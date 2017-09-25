@@ -219,11 +219,13 @@ surgescript_var_t* fun_delete(surgescript_object_t* object, const surgescript_va
         surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
         surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]));
         const surgescript_var_t* p[] = { key };
+
         surgescript_var_t* new_root = fun_bst_remove(node, p, 1);
+        if(new_root != NULL) {
+            surgescript_var_copy(root, new_root);
+            surgescript_var_destroy(new_root);
+        }
 
-        surgescript_var_copy(root, new_root);
-
-        surgescript_var_destroy(new_root);
         surgescript_var_destroy(key);
     }
 
@@ -505,9 +507,10 @@ surgescript_var_t* fun_bst_insert(surgescript_object_t* object, const surgescrip
 /* removes an entry (key = param[0]) from the BST, and returns the root of the modified BST */
 surgescript_var_t* fun_bst_remove(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    surgescript_heap_t* heap = surgescript_object_heap(object);
-    const char* key = surgescript_var_fast_get_string(surgescript_heap_at(heap, BST_KEY));
-    return bst_remove(object, key, 0);
+    char* key = surgescript_var_get_string(param[0]);
+    surgescript_var_t* new_root = bst_remove(object, key, 0);
+    ssfree(key);
+    return new_root;
 }
 
 
@@ -601,7 +604,7 @@ surgescript_var_t* bst_removeroot(surgescript_object_t* object)
 
 
 
-/* removes a node from the BST; returns the root of the modified BST */
+/* removes a node from the BST; returns the root of the modified BST or NULL if the key isn't found */
 surgescript_var_t* bst_remove(surgescript_object_t* object, const char* param_key, int depth)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
@@ -610,6 +613,8 @@ surgescript_var_t* bst_remove(surgescript_object_t* object, const char* param_ke
     surgescript_objecthandle_t right_handle = surgescript_var_get_objecthandle(surgescript_heap_at(heap, BST_RIGHT));
     const char* key = surgescript_var_fast_get_string(surgescript_heap_at(heap, BST_KEY));
     int cmp = strcmp(param_key, key);
+
+    /*printf("bst_remove(%s, %s) d=%d e cmp=%d\n", param_key, key, depth, cmp);*/
 
     if(cmp == 0) {
         surgescript_var_t* new_root = bst_removeroot(object);
@@ -622,16 +627,18 @@ surgescript_var_t* bst_remove(surgescript_object_t* object, const char* param_ke
         const char* child_key = surgescript_var_fast_get_string(surgescript_heap_at(child_heap, BST_KEY));
 
         if(0 == strcmp(param_key, child_key)) {
+            /*surgescript_var_t* new_root = bst_remove(child, param_key, depth + 1);*/
             surgescript_var_t* new_root = bst_removeroot(child);
             surgescript_var_copy(surgescript_heap_at(heap, (cmp < 0) ? BST_LEFT : BST_RIGHT), new_root);
-            return new_root;
+            surgescript_var_destroy(new_root);
         }
         else {
             surgescript_var_t* new_root = bst_remove(child, param_key, depth + 1);
-            if(depth == 0 && new_root == NULL) /* will only create var on 1st call */
-                new_root = surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object)); /* the root hasn't changed */
-            return new_root;
+            if(new_root != NULL)
+                surgescript_var_destroy(new_root);
         }
+
+        return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object)); /* return myself */
     }
     else
         return NULL; /* key not found */

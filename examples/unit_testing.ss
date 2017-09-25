@@ -269,14 +269,14 @@ object "SurgeScriptTest"
         test(weight["Neon"] == 26) || fail(9);
         test(weight.has("Neon")) || fail(10);
 
-        // --- FIXME ---
         test(weight.size == 3) || fail(11);
         weight.delete("Neon");
+        weight.delete("404");
+        weight.delete(404);
         test(weight.has("Surge")) || fail(12);
         test(!weight.has("Neon")) || fail(13);
         test(weight.has("Charge")) || fail(14);
         test(weight.size == 2) || fail(15);
-        // --- FIXME ---
 
         weight.clear();
         test(weight.size == 0) || fail(16);
@@ -291,6 +291,26 @@ object "SurgeScriptTest"
         for(sum = 0, it = stress.iterator(); it.hasNext(); sum += stress[it.next()]);
         test(stress.size == stressLimit) || fail(21);
         test(sum == 500500) || fail(22);
+
+        del = [ 1, 812, 726, 111, 182, 313, 6, 7, 8, 10, 88 ];
+        newSize = stressLimit - del.length;
+        test23 = true;
+        for(x in del) {
+            stress.delete("o" + del[x]);
+            test23 = test23 && !stress.has("o" + del[x]);
+        }
+        test(test23) || fail(23);
+        test(stress.size == newSize) || fail(24);
+
+        del = [ -5, 0, -2, 31415, 12345, "a" ];
+        test25 = true;
+        for(x in del) {
+            stress.delete("o" + del[x]);
+            test25 = test25 && !stress.has("o" + del[x]);
+        }
+        test(test25) || fail(25);
+        test(stress.size == newSize) || fail(26);
+        //for(it = stress.iterator(); it.hasNext(); it.next()) Console.print(it.item);
 
         end();
     }
