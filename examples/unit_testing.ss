@@ -19,6 +19,7 @@ object "Application"
         test.getset();
         test.array();
         test.dictionary();
+        test.session();
         exit();
     }
 }
@@ -323,6 +324,24 @@ object "SurgeScriptTest"
             stress.delete("o" + del[x]);
         test(stress.size == 0) || fail(27);
 
+        end();
+    }
+
+    fun session()
+    {
+        begin("Session variables");
+        test(Application.session != null) || fail(1);
+        
+        Application.session["lives"] = 5;
+        test(Application.session["lives"] == 5) || fail(2);
+
+        Application.session["name"] = "alex";
+        test(Application.session["name"] == "alex") || fail(3);
+
+        test(Application.session.size == 2) || fail(4);
+
+        Application.session.clear();
+        test(Application.session.size == 0) || fail(5);
         end();
     }
 
