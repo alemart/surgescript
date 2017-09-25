@@ -120,7 +120,6 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
 /* main state: do nothing */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    surgescript_object_set_active(object, false); /* optimization; we don't need to spend time updating this object */
     return NULL;
 }
 
