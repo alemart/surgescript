@@ -1,6 +1,6 @@
 //
-// attached_objects.ss
-// This script demonstrates how attached objects work
+// transform2d.ss
+// This script demonstrates how the Transform2D works with attached objects
 // Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
@@ -16,7 +16,7 @@ object "Application"
     state "main"
     {
         // introduction
-        say("# ATTACHED OBJECTS");
+        say("# Transform2D - Attached Objects");
         say("# Wherever the parent goes, the child follows.\n");
 
         // demo
