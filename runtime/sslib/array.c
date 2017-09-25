@@ -27,6 +27,7 @@ static surgescript_var_t* fun_shift(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_unshift(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_reverse(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_shuffle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -63,6 +64,7 @@ void surgescript_sslib_register_array(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Array", "unshift", fun_unshift, 1);
     surgescript_vm_bind(vm, "Array", "sort", fun_sort, 1);
     surgescript_vm_bind(vm, "Array", "reverse", fun_reverse, 0);
+    surgescript_vm_bind(vm, "Array", "shuffle", fun_shuffle, 0);
     surgescript_vm_bind(vm, "Array", "indexOf", fun_indexof, 1);
     surgescript_vm_bind(vm, "Array", "toString", fun_tostring, 0);
 }
@@ -237,6 +239,21 @@ surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescript_var_
     surgescript_object_t* compare_object = (compare == custom_sort_function) ? surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0])) : NULL;
 
     quicksort(heap, BASE_ADDR, BASE_ADDR + ARRAY_LENGTH(heap) - 1, compare, compare_object);
+
+    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
+}
+
+/* shuffles the array. Returns the shuffled array. */
+surgescript_var_t* fun_shuffle(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    int length = ARRAY_LENGTH(heap);
+
+    for(int i = length; i > 0; i--) {
+        surgescript_var_t* a = surgescript_heap_at(heap, BASE_ADDR + (i - 1));
+        surgescript_var_t* b = surgescript_heap_at(heap, BASE_ADDR + (rand() % i));
+        surgescript_var_swap(a, b);
+    }
 
     return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
 }
