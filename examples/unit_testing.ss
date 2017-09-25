@@ -284,7 +284,12 @@ object "SurgeScriptTest"
 
         stress = spawn("Dictionary");
         stressLimit = 1000;
-        for(j = 1; j <= stressLimit; j++) stress["o" + j] = j;
+        items = [];
+        for(j = 1; j <= stressLimit; j++)
+            items.push(j);
+        for(x in items)
+            stress["o" + items[x]] = items[x];
+        items.shuffle();
         test(stress["o500"] == 500) || fail(18);
         test(stress["o657"] == 657) || fail(19);
         test(!stress.has("o0") && stress.has("o700")) || fail(20);
@@ -305,8 +310,8 @@ object "SurgeScriptTest"
         del = [ -5, 0, -2, 31415, 12345, "a" ];
         test25 = true;
         for(x in del) {
-            stress.delete("o" + del[x]);
-            test25 = test25 && !stress.has("o" + del[x]);
+            stress.delete("o" + del[x]), stress.delete(del[x]);
+            test25 = test25 && !stress.has("o" + del[x]) && !stress.has(del[x]);
         }
         test(test25) || fail(25);
         test(stress.size == newSize) || fail(26);
