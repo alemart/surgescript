@@ -45,6 +45,7 @@ static surgescript_var_t* fun_lerp(surgescript_object_t* object, const surgescri
 static surgescript_var_t* fun_smoothstep(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* constants */
+static const float EPSILON = 0.00001f;
 static const float PI = 3.1415926535f;
 static const float RAD2DEG = 57.2957795147f;
 static const float DEG2RAD = 0.01745329251f;
@@ -57,6 +58,7 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Math", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Math", "destroy", fun_destroy, 0);
+    surgescript_vm_bind(vm, "Math", "getEpsilon", fun_getepsilon, 0);
     surgescript_vm_bind(vm, "Math", "getPi", fun_getpi, 0);
     surgescript_vm_bind(vm, "Math", "getDeg2rad", fun_getdeg2rad, 0);
     surgescript_vm_bind(vm, "Math", "getRad2deg", fun_getrad2deg, 0);
@@ -103,6 +105,12 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 {
     /* do nothing, as system objects cannot be destroyed */
     return NULL;
+}
+
+/* constant: value of epsilon */
+surgescript_var_t* fun_getepsilon(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_number(surgescript_var_create(), EPSILON);
 }
 
 /* constant: value of pi */
