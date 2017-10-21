@@ -294,10 +294,10 @@ surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surges
     return NULL;
 }
 
-/* "main" state: do nothing */
+/* "main" state */
 surgescript_var_t* fun_it_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    surgescript_object_set_active(object, false); /* optimization; we don't need to spend time updating this object */
+    /* do nothing */
     return NULL;
 }
 
@@ -397,7 +397,7 @@ surgescript_var_t* fun_bst_constructor(surgescript_object_t* object, const surge
 /* main state */
 surgescript_var_t* fun_bst_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    surgescript_object_set_active(object, false); /* optimization; we don't need to spend time updating this object */
+    surgescript_object_set_active(object, false); /* optimization; we shouldn't spend time updating this object */
     return NULL;
 }
 
