@@ -9,12 +9,15 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <float.h>
 #include "../vm.h"
 #include "../object.h"
+#include "../../util/util.h"
 
 /* private stuff */
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getepsilon(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getpi(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getdeg2rad(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getrad2deg(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -41,11 +44,12 @@ static surgescript_var_t* fun_abs(surgescript_object_t* object, const surgescrip
 static surgescript_var_t* fun_min(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_max(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_clamp(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_approximately(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_lerp(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_smoothstep(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* constants */
-static const float EPSILON = 0.00001f;
+static const float EPSILON = FLT_EPSILON; /*0.00001f;*/
 static const float PI = 3.1415926535f;
 static const float RAD2DEG = 57.2957795147f;
 static const float DEG2RAD = 0.01745329251f;
@@ -85,6 +89,7 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "min", fun_min, 2);
     surgescript_vm_bind(vm, "Math", "max", fun_max, 2);
     surgescript_vm_bind(vm, "Math", "clamp", fun_clamp, 3);
+    surgescript_vm_bind(vm, "Math", "approximately", fun_approximately, 2);
     surgescript_vm_bind(vm, "Math", "lerp", fun_lerp, 3);
     surgescript_vm_bind(vm, "Math", "smoothstep", fun_smoothstep, 3);
 }
@@ -289,6 +294,17 @@ surgescript_var_t* fun_clamp(surgescript_object_t* object, const surgescript_var
     }
 
     return surgescript_var_set_number(surgescript_var_create(), (x >= minval) ? (x <= maxval ? x : maxval) : minval);
+}
+
+/* approximately(a,b): returns true if floating points a and b are approximately equal */
+surgescript_var_t* fun_approximately(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    float a = surgescript_var_get_number(param[0]);
+    float b = surgescript_var_get_number(param[1]);
+    float fa = fabs(a), fb = fabs(b);
+    float eps = EPSILON * ssmax(fa, fb);
+
+    return surgescript_var_set_bool(surgescript_var_create(), (a >= b - eps) && (a <= b + eps));
 }
 
 /* lerp(a,b,t): linear interpolation between a and b by t, where t is clamped to the range [0,1] */
