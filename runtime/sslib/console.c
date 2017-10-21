@@ -16,6 +16,7 @@
 /* private stuff */
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_write(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_readline(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -29,6 +30,7 @@ void surgescript_sslib_register_console(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Console", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Console", "destroy", fun_destroy, 0);
+    surgescript_vm_bind(vm, "Console", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Console", "print", fun_print, 1);
     surgescript_vm_bind(vm, "Console", "write", fun_write, 1);
     surgescript_vm_bind(vm, "Console", "readline", fun_readline, 0);
@@ -41,7 +43,7 @@ void surgescript_sslib_register_console(surgescript_vm_t* vm)
 /* main state */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    /* do nothing */
+    surgescript_object_set_active(object, false); /* we don't need to spend time updating this object */
     return NULL;
 }
 
@@ -49,6 +51,13 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* do nothing, as system objects cannot be destroyed */
+    return NULL;
+}
+
+/* spawn */
+surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* do nothing; you can't spawn children on this object */
     return NULL;
 }
 

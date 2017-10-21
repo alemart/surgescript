@@ -18,6 +18,7 @@ static surgescript_var_t* fun_valueof(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -32,6 +33,7 @@ void surgescript_sslib_register_number(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Number", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Number", "destroy", fun_destroy, 0);
+    surgescript_vm_bind(vm, "Number", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Number", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "Number", "toString", fun_tostring, 1);
     surgescript_vm_bind(vm, "Number", "call", fun_call, 1);
@@ -62,7 +64,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 /* main state */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    /* do nothing */
+    surgescript_object_set_active(object, false); /* we don't need to spend time updating this object */
     return NULL;
 }
 
@@ -70,6 +72,13 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* do nothing, as system objects cannot be destroyed */
+    return NULL;
+}
+
+/* spawn */
+surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* do nothing; you can't spawn children on this object */
     return NULL;
 }
 
