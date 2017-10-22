@@ -12,7 +12,6 @@
 #include <float.h>
 #include "../vm.h"
 #include "../object.h"
-#include "../../util/util.h"
 
 /* private stuff */
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -310,8 +309,8 @@ surgescript_var_t* fun_approximately(surgescript_object_t* object, const surgesc
 {
     float a = surgescript_var_get_number(param[0]);
     float b = surgescript_var_get_number(param[1]);
-    float fa = fabsf(a), fb = fabsf(b);
-    float eps = EPSILON * ssmax(fa, fb);
+    float fa = fabsf(a), fb = fabsf(b), fm = (fa >= fb ? fa : fb);
+    float eps = EPSILON * (fm >= 1.0f ? fm : 1.0f);
 
     return surgescript_var_set_bool(surgescript_var_create(), (a >= b - eps) && (a <= b + eps));
 }
