@@ -666,30 +666,11 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
     if(*program_name) {
         surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
         surgescript_var_t* callee = surgescript_stack_at(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
-        const int callee_type = surgescript_var_typecode(callee);
-        unsigned object_handle = 0;
+        unsigned object_handle = surgescript_var_get_objecthandle(callee);
 
         /* surgescript can also call programs on primitive types */
-        switch(callee_type) {
-            case 's': /* for the sake of efficiency... we replaced surgescript_var_type2code() for constants */
-                object_handle = surgescript_objectmanager_system_object(manager, "String");
-                number_of_given_params++;
-                break;
-
-            case 'n':
-                object_handle = surgescript_objectmanager_system_object(manager, "Number");
-                number_of_given_params++;
-                break;
-
-            case 'b':
-                object_handle = surgescript_objectmanager_system_object(manager, "Boolean");
-                number_of_given_params++;
-                break;
-
-            default: /* this is not a primitive type */
-                object_handle = surgescript_var_get_objecthandle(callee);
-                break;
-        }
+        if(0 != surgescript_var_typecheck(callee, surgescript_var_type2code("Object"))) /* callee is of a primitive type */
+            number_of_given_params++; /* object_handle points to the appropriate wrapper */
 
         /* finds the program */
         if(surgescript_objectmanager_exists(manager, object_handle)) {

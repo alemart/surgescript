@@ -16,6 +16,7 @@
 #include <ctype.h>
 #include "variable.h"
 #include "object.h"
+#include "object_manager.h"
 #include "../util/util.h"
 #include "../util/utf8.h"
 
@@ -240,8 +241,19 @@ char* surgescript_var_get_string(const surgescript_var_t* var)
  */
 unsigned surgescript_var_get_objecthandle(const surgescript_var_t* var)
 {
-    /* return null if var doesn't store a handle */
-    return var->type == SSVAR_OBJECTHANDLE ? var->handle : 0;
+    /* will return the primitive wrapper if var doesn't store a handle */
+    switch(var->type) {
+        case SSVAR_OBJECTHANDLE:
+            return var->handle;
+        case SSVAR_NUMBER:
+            return surgescript_objectmanager_system_object(NULL, "Number");
+        case SSVAR_STRING:
+            return surgescript_objectmanager_system_object(NULL, "String");
+        case SSVAR_BOOL:
+            return surgescript_objectmanager_system_object(NULL, "Boolean");
+        default:
+            return surgescript_objectmanager_null(NULL);
+    }
 }
 
 
@@ -399,12 +411,13 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             }
         }
         else if(a->type == SSVAR_NUMBER || b->type == SSVAR_NUMBER) {
+            /* using absolute tolerance floating-point comparison */
             float x = surgescript_var_get_number(a);
             float y = surgescript_var_get_number(b);
             if(x > y)
-                return x - y < FLT_EPSILON * fabsf(x) ? 0 : 1;
+                return x - y <= FLT_EPSILON ? 0 : 1;
             else if(x < y)
-                return y - x < FLT_EPSILON * fabsf(y) ? 0 : -1;
+                return y - x <= FLT_EPSILON ? 0 : -1;
             else
                 return 0;
         }
@@ -413,7 +426,7 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             bool y = surgescript_var_get_bool(b);
             return (int)x - (int)y;
         }
-        else if(a->type == SSVAR_OBJECTHANDLE || b->type == SSVAR_OBJECTHANDLE) {
+        else if(a->type == SSVAR_OBJECTHANDLE && b->type == SSVAR_OBJECTHANDLE) {
             unsigned long x = surgescript_var_get_objecthandle(a);
             unsigned long y = surgescript_var_get_objecthandle(b);
             return x != y ? (x > y ? 1 : -1) : 0;
