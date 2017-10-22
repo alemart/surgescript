@@ -20,6 +20,7 @@ static surgescript_var_t* fun_sibling(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -45,6 +46,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "findChild", fun_findchild, 1);
     surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
+    surgescript_vm_bind(vm, "Object", "equals", fun_equals, 1);
     surgescript_vm_bind(vm, "Object", "plus", fun_plus, 1);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
@@ -112,6 +114,14 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     return surgescript_var_set_string(surgescript_var_create(), "[object]");
+}
+
+/* equals() method */
+surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_objecthandle_t me = surgescript_object_handle(object);
+    surgescript_objecthandle_t other = surgescript_object_handle(param[0]);
+    return surgescript_var_set_bool(surgescript_var_create(), me == other);
 }
 
 /* plus: overloads the '+' operator */
