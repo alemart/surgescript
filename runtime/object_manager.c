@@ -253,7 +253,12 @@ surgescript_objecthandle_t surgescript_objectmanager_system_object(surgescript_o
         if(strcmp(*p, object_name) == 0)
             return ROOT_HANDLE + (p - SYSTEM_OBJECTS + 1);
     }
+
+    /* the root object is also a system object */
+    if(strcmp(ROOT_OBJECT, object_name) == 0)
+        return ROOT_HANDLE;
     
+    /* not found */
     return NULL_HANDLE;
 }
 

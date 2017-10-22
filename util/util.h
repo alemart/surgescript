@@ -13,6 +13,9 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+/* info */
+#define SSVERSION                   "SurgeScript 0.5.0"
+
 /* macros */
 #define ssmin(a, b)                 ((a) < (b) ? (a) : (b))
 #define ssmax(a, b)                 ((a) >= (b) ? (a) : (b))

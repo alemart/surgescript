@@ -20,6 +20,7 @@ static surgescript_var_t* fun_constructor(surgescript_object_t* object, const su
 static surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_version(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_heapptr_t ISACTIVE_ADDR = 0;
 
@@ -33,6 +34,7 @@ void surgescript_sslib_register_system(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "System", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "System", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
     surgescript_vm_bind(vm, "System", "spawn", fun_spawn, 1);
+    surgescript_vm_bind(vm, "System", "version", fun_version, 0);
     surgescript_vm_bind(vm, "System", "state:main", fun_main, 0);
 }
 
@@ -82,6 +84,12 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
 {
     /* do nothing; you can't spawn children on this object */
     return NULL;
+}
+
+/* SurgeScript version */
+surgescript_var_t* fun_version(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_string(surgescript_var_create(), SSVERSION);
 }
 
 /* main state */
