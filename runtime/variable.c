@@ -40,7 +40,7 @@ struct surgescript_var_t
         float number;
         unsigned handle:32;
         bool boolean;
-        unsigned long raw:32;
+        int raw:32;
     };
     enum surgescript_vartype_t type;
 };
@@ -327,7 +327,7 @@ int surgescript_var_type2code(const char* type_name)
  */
 int surgescript_var_typecheck(const surgescript_var_t* var, int code)
 {
-    return typecode[(int)(var->type)] - code;
+    return typecode[(int)(var->type)] ^ code;
 }
 
 /*
@@ -380,17 +380,17 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
         switch(a->type) {
             case SSVAR_BOOL:
                 return (int)(a->boolean) - (int)(b->boolean);
-            case SSVAR_NUMBER:
-                if(a->number > b->number)
-                    return a->number - b->number < FLT_EPSILON * fabsf(a->number) ? 0 : 1;
-                else if(a->number < b->number)
-                    return b->number - a->number < FLT_EPSILON * fabsf(b->number) ? 0 : -1;
-                else
-                    return 0;
             case SSVAR_OBJECTHANDLE:
                 return a->handle != b->handle ? (a->handle > b->handle ? 1 : -1) : 0;
             case SSVAR_STRING:
                 return strcmp(a->string, b->string);
+            case SSVAR_NUMBER: /* using absolute tolerance floating-point comparison */
+                if(a->number > b->number)
+                    return a->number - b->number <= FLT_EPSILON ? 0 : 1;
+                else if(a->number < b->number)
+                    return b->number - a->number <= FLT_EPSILON ? 0 : -1;
+                else
+                    return 0;
             default:
                 return 0;
         }
@@ -411,7 +411,6 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             }
         }
         else if(a->type == SSVAR_NUMBER || b->type == SSVAR_NUMBER) {
-            /* using absolute tolerance floating-point comparison */
             float x = surgescript_var_get_number(a);
             float y = surgescript_var_get_number(b);
             if(x > y)
@@ -426,7 +425,7 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             bool y = surgescript_var_get_bool(b);
             return (int)x - (int)y;
         }
-        else if(a->type == SSVAR_OBJECTHANDLE && b->type == SSVAR_OBJECTHANDLE) {
+        else if(a->type == SSVAR_OBJECTHANDLE || b->type == SSVAR_OBJECTHANDLE) {
             unsigned long x = surgescript_var_get_objecthandle(a);
             unsigned long y = surgescript_var_get_objecthandle(b);
             return x != y ? (x > y ? 1 : -1) : 0;
@@ -451,7 +450,7 @@ void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b)
  * surgescript_var_get_rawbits()
  * Returns the binary value stored in the variable
  */
-unsigned long surgescript_var_get_rawbits(const surgescript_var_t* var)
+int surgescript_var_get_rawbits(const surgescript_var_t* var)
 {
     return var->raw;
 }
@@ -460,7 +459,7 @@ unsigned long surgescript_var_get_rawbits(const surgescript_var_t* var)
  * surgescript_var_set_rawbits()
  * Sets the binary value of the variable (for internal use only)
  */
-surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, unsigned long raw)
+surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int raw)
 {
     RELEASE_DATA(var);
     var->type = SSVAR_NUMBER;

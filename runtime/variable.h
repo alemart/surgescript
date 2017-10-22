@@ -48,7 +48,7 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
 const char* surgescript_var_fast_get_string(const surgescript_var_t* var); /* gets the string contents of var without performing any type conversion */
 int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t* b); /* similar to strcmp */
 void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b); /* swaps a <-> b */
-unsigned long surgescript_var_get_rawbits(const surgescript_var_t* var); /* the binary value stored in var */
-surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, unsigned long raw); /* sets its binary value */
+int surgescript_var_get_rawbits(const surgescript_var_t* var); /* the binary value stored in var */
+surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int raw); /* sets its binary value */
 
 #endif

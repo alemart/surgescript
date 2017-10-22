@@ -552,6 +552,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_bool(t(a), !surgescript_var_get_bool(t(b)));
             break;
 
+        /* bitwise operations */
         case SSOP_NOT:
             surgescript_var_set_rawbits(t(a), ~surgescript_var_get_rawbits(t(b)));
             break;
@@ -582,7 +583,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_TCMP:
-            surgescript_var_set_rawbits(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_typecode(t(b)));
+            surgescript_var_set_rawbits(_t[2], surgescript_var_typecode(t(a)) ^ surgescript_var_typecode(t(b)));
             break;
 
         case SSOP_CMP:
@@ -595,7 +596,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             return;
 
         case SSOP_JE:
-            if(!fast_float_notzero(surgescript_var_get_number(_t[2]))) {
+            if(!surgescript_var_get_rawbits(_t[2])) {
                 *ip = a.u;
                 return;
             }
@@ -603,7 +604,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JNE:
-            if(fast_float_notzero(surgescript_var_get_number(_t[2]))) {
+            if(surgescript_var_get_rawbits(_t[2])) {
                 *ip = a.u;
                 return;
             }
@@ -611,7 +612,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JL:
-            if(fast_float_sign(surgescript_var_get_number(_t[2])) < 0) {
+            if(surgescript_var_get_rawbits(_t[2]) < 0) {
                 *ip = a.u;
                 return;
             }
@@ -619,7 +620,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JG:
-            if(fast_float_sign(surgescript_var_get_number(_t[2])) > 0) {
+            if(surgescript_var_get_rawbits(_t[2]) > 0) {
                 *ip = a.u;
                 return;
             }
@@ -627,7 +628,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JLE:
-            if(fast_float_sign(surgescript_var_get_number(_t[2])) <= 0) {
+            if(surgescript_var_get_rawbits(_t[2]) <= 0) {
                 *ip = a.u;
                 return;
             }
@@ -635,7 +636,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         case SSOP_JGE:
-            if(fast_float_sign(surgescript_var_get_number(_t[2])) >= 0) {
+            if(surgescript_var_get_rawbits(_t[2]) >= 0) {
                 *ip = a.u;
                 return;
             }
@@ -794,6 +795,7 @@ bool remove_labels(surgescript_program_t* program)
     else
         return false;
 }
+
 
 
 /* --------------- float utilities --------------- */

@@ -120,7 +120,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_objecthandle_t me = surgescript_object_handle(object);
-    surgescript_objecthandle_t other = surgescript_object_handle(param[0]);
+    surgescript_objecthandle_t other = surgescript_var_get_objecthandle(param[0]);
     return surgescript_var_set_bool(surgescript_var_create(), me == other);
 }
 

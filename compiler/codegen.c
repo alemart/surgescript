@@ -108,9 +108,7 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
             surgescript_program_label_t cat = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
             surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
-            SSASM(SSOP_TCHK, T1, TYPE("number"));
-            SSASM(SSOP_JNE, U(cat));
-            SSASM(SSOP_TCHK, T0, TYPE("number"));
+            SSASM(SSOP_TC01, TYPE("number"));
             SSASM(SSOP_JNE, U(cat));
             SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
@@ -285,9 +283,7 @@ void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveo
         case '+': {
             surgescript_program_label_t cat = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
-            SSASM(SSOP_TCHK, T1, TYPE("number"));
-            SSASM(SSOP_JNE, U(cat));
-            SSASM(SSOP_TCHK, T0, TYPE("number"));
+            SSASM(SSOP_TC01, TYPE("number"));
             SSASM(SSOP_JNE, U(cat));
             SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
@@ -481,9 +477,7 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
             if(*assignop == '+') {
                 surgescript_program_label_t cat = NEWLABEL();
                 surgescript_program_label_t end = NEWLABEL();
-                SSASM(SSOP_TCHK, T1, TYPE("number"));
-                SSASM(SSOP_JNE, U(cat));
-                SSASM(SSOP_TCHK, T0, TYPE("number"));
+                SSASM(SSOP_TC01, TYPE("number"));
                 SSASM(SSOP_JNE, U(cat));
                 SSASM(SSOP_ADD, T0, T1); /* t0 = dict.get(<expr>) + <assignexpr> */
                 SSASM(SSOP_JMP, U(end));
@@ -576,9 +570,7 @@ void emit_setter2(surgescript_nodecontext_t context, const char* property_name, 
             surgescript_program_label_t cat = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
 
-            SSASM(SSOP_TCHK, T1, TYPE("number"));
-            SSASM(SSOP_JNE, U(cat));
-            SSASM(SSOP_TCHK, T0, TYPE("number"));
+            SSASM(SSOP_TC01, TYPE("number"));
             SSASM(SSOP_JNE, U(cat));
             SSASM(SSOP_ADD, T0, T1); /* t0 = object.property_name + <assignexpr> */
             SSASM(SSOP_JMP, U(end));

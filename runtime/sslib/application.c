@@ -69,7 +69,7 @@ surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var
 surgescript_var_t* fun_getsession(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     static const char* SESSION_OBJECT = "Dictionary";
-    static const unsigned long SESSION_MAGIC = 0x5E55107;
+    static const int SESSION_MAGIC = 0x5E55107;
     surgescript_heap_t* heap = surgescript_object_heap(object);
     surgescript_heapptr_t ptr = surgescript_heap_size(heap);
     surgescript_objecthandle_t session = 0;
