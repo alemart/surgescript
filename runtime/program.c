@@ -577,6 +577,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_rawbits(_t[2], surgescript_var_typecheck(t(a), b.i));
             break;
 
+        case SSOP_TC01:
+            surgescript_var_set_rawbits(_t[2], surgescript_var_typecheck(_t[0], a.i) | surgescript_var_typecheck(_t[1], a.i));
+            break;
+
         case SSOP_TCMP:
             surgescript_var_set_rawbits(_t[2], surgescript_var_typecode(t(a)) - surgescript_var_typecode(t(b)));
             break;

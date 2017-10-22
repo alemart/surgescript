@@ -63,6 +63,7 @@
                                                                             \
     F( SSOP_TEST, "test" )                         /* t[2] = t[a] & t[b] */ \
     F( SSOP_TCHK, "tchk" )                  /* t[2] = typecheck(t[a], b) */ \
+    F( SSOP_TC01, "tc01" )       /* t[2] = tchk(t[0], a) | tchk(t[1], a) */ \
     F( SSOP_TCMP, "tcmp" )             /* t[2] = typecompare(t[a], t[b]) */ \
     F( SSOP_CMP, "cmp" )                   /* t[2] = compare(t[a], t[b]) */ \
                                                                             \
