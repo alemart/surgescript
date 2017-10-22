@@ -397,7 +397,7 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
     }
     else {
         if(a->type == SSVAR_NULL || b->type == SSVAR_NULL) {
-            return (a->raw > 0) - (b->raw > 0);
+            return (a->raw != 0) - (b->raw != 0);
         }
         else if(a->type == SSVAR_STRING || b->type == SSVAR_STRING) {
             char buf[128];
