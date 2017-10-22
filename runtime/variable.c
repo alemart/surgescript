@@ -106,7 +106,7 @@ surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, bool boolean
     RELEASE_DATA(var);
     var->type = SSVAR_BOOL;
     var->raw = 0; /* must clear up all bits; see get_rawbits() below */
-    var->boolean = boolean;
+    var->boolean = boolean; /* stdbool.h guarantees: expands to 1 or 0 */
     return var;
 }
 
