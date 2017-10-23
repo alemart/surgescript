@@ -106,8 +106,34 @@ surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_
 /* plus: overloads the '+' operator */
 surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    /* concatenates two strings */
-    return fun_concat(object, param, num_params);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_var_t* ret = surgescript_var_create();
+    char* str[] = { NULL, NULL };
+    char* result = NULL;
+
+    ssassert(num_params == 2);
+
+    for(int i = 0; i < 2; i++) {
+        if(!surgescript_var_typecheck(param[i], surgescript_var_type2code("object"))) {
+            surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(param[i]);
+            surgescript_object_t* obj = surgescript_objectmanager_get(manager, handle);
+            surgescript_var_t* tmp = NULL;
+            surgescript_object_call_function(obj, "toString", NULL, 0, tmp);
+            if(tmp != NULL) {
+                str[i] = surgescript_var_get_string(tmp);
+                surgescript_var_destroy(tmp);
+            }
+        }
+        str[i] = str[i] ? str[i] : surgescript_var_get_string(param[i]);
+    }
+
+    result = ssmalloc((1 + strlen(str[0]) + strlen(str[1])) * sizeof(*result));
+    surgescript_var_set_string(ret, strcat(strcpy(result, str[0]), str[1]));
+    ssfree(result);
+    ssfree(str[1]);
+    ssfree(str[0]);
+
+    return ret;
 }
 
 /* converts to number */
@@ -189,13 +215,5 @@ surgescript_var_t* fun_substr(surgescript_object_t* object, const surgescript_va
 /* concatenates two strings */
 surgescript_var_t* fun_concat(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    surgescript_var_t* ret = surgescript_var_create();
-    char* str1 = surgescript_var_get_string(param[0]);
-    char* str2 = surgescript_var_get_string(param[1]);
-    char* str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
-    surgescript_var_set_string(ret, strcat(strcpy(str, str1), str2));
-    ssfree(str);
-    ssfree(str2);
-    ssfree(str1);
-    return ret;
+    return fun_plus(object, param, num_params);
 }

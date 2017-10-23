@@ -21,7 +21,6 @@ static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -47,7 +46,6 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Object", "equals", fun_equals, 1);
-    surgescript_vm_bind(vm, "Object", "plus", fun_plus, 1);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "requireComponent", fun_requirecomponent, 1);
@@ -122,32 +120,6 @@ surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_va
     surgescript_objecthandle_t me = surgescript_object_handle(object);
     surgescript_objecthandle_t other = surgescript_var_get_objecthandle(param[0]);
     return surgescript_var_set_bool(surgescript_var_create(), me == other);
-}
-
-/* plus: overloads the '+' operator */
-surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    char *str1, *str2, *str;
-    surgescript_var_t* ret = surgescript_var_create();
-    surgescript_var_t* me = NULL;
-
-    /* convert object to string */
-    surgescript_object_call_function(object, "toString", NULL, 0, me);
-    if(me == NULL)
-        me = fun_tostring(object, NULL, 0);
-    str1 = surgescript_var_get_string(me);
-
-    /* concatenate */
-    str2 = surgescript_var_get_string(param[0]);
-    str = ssmalloc((1 + strlen(str1) + strlen(str2)) * sizeof(*str));
-    surgescript_var_set_string(ret, strcat(strcpy(str, str1), str2));
-    ssfree(str);
-    ssfree(str2);
-    ssfree(str1);
-
-    /* done! */
-    surgescript_var_destroy(me);
-    return ret;
 }
 
 /* what's the name of this object? */

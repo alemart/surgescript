@@ -13,6 +13,7 @@
 #include "symtable.h"
 #include "../runtime/program.h"
 #include "../runtime/program_pool.h"
+#include "../runtime/object_manager.h"
 #include "../util/util.h"
 
 #ifdef F
@@ -108,15 +109,17 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
             surgescript_program_label_t cat = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
             surgescript_symtable_emit_read(context.symtable, identifier, context.program, 1);
-            SSASM(SSOP_TC01, TYPE("number"));
-            SSASM(SSOP_JNE, U(cat));
+            SSASM(SSOP_TC01, TYPE("string"));
+            SSASM(SSOP_JE, U(cat));
             SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
             LABEL(cat);
+            SSASM(SSOP_MOVO, T2, U(surgescript_objectmanager_system_object(NULL, "String")));
+            SSASM(SSOP_PUSH, T2);
             SSASM(SSOP_PUSH, T1);
             SSASM(SSOP_PUSH, T0);
-            SSASM(SSOP_CALL, TEXT("plus"), U(1));
-            SSASM(SSOP_POPN, U(2));
+            SSASM(SSOP_CALL, TEXT("plus"), U(2));
+            SSASM(SSOP_POPN, U(3));
             LABEL(end);
             surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
             break;
@@ -274,15 +277,17 @@ void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveo
         case '+': {
             surgescript_program_label_t cat = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
-            SSASM(SSOP_TC01, TYPE("number"));
-            SSASM(SSOP_JNE, U(cat));
+            SSASM(SSOP_TC01, TYPE("string")); /* either T0 or T1 is a string */
+            SSASM(SSOP_JE, U(cat));
             SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
             LABEL(cat);
+            SSASM(SSOP_MOVO, T2, U(surgescript_objectmanager_system_object(NULL, "String")));
+            SSASM(SSOP_PUSH, T2);
             SSASM(SSOP_PUSH, T1);
             SSASM(SSOP_PUSH, T0);
-            SSASM(SSOP_CALL, TEXT("plus"), U(1));
-            SSASM(SSOP_POPN, U(2));
+            SSASM(SSOP_CALL, TEXT("plus"), U(2));
+            SSASM(SSOP_POPN, U(3));
             LABEL(end);
             break;
         }
@@ -468,15 +473,17 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
             if(*assignop == '+') {
                 surgescript_program_label_t cat = NEWLABEL();
                 surgescript_program_label_t end = NEWLABEL();
-                SSASM(SSOP_TC01, TYPE("number"));
-                SSASM(SSOP_JNE, U(cat));
+                SSASM(SSOP_TC01, TYPE("string"));
+                SSASM(SSOP_JE, U(cat));
                 SSASM(SSOP_ADD, T0, T1); /* t0 = dict.get(<expr>) + <assignexpr> */
                 SSASM(SSOP_JMP, U(end));
                 LABEL(cat);
+                SSASM(SSOP_MOVO, T2, U(surgescript_objectmanager_system_object(NULL, "String")));
+                SSASM(SSOP_PUSH, T2);
                 SSASM(SSOP_PUSH, T0);
                 SSASM(SSOP_PUSH, T1);
-                SSASM(SSOP_CALL, TEXT("plus"), U(1)); /* t0 = dict.get(<expr>).plus(<assignexpr>) */
-                SSASM(SSOP_POPN, U(2));
+                SSASM(SSOP_CALL, TEXT("plus"), U(2)); /* t0 = dict.get(<expr>).plus(<assignexpr>) */
+                SSASM(SSOP_POPN, U(3));
                 LABEL(end);
             }
             else if(*assignop == '-')
@@ -561,15 +568,17 @@ void emit_setter2(surgescript_nodecontext_t context, const char* property_name, 
             surgescript_program_label_t cat = NEWLABEL();
             surgescript_program_label_t end = NEWLABEL();
 
-            SSASM(SSOP_TC01, TYPE("number"));
-            SSASM(SSOP_JNE, U(cat));
+            SSASM(SSOP_TC01, TYPE("string"));
+            SSASM(SSOP_JE, U(cat));
             SSASM(SSOP_ADD, T0, T1); /* t0 = object.property_name + <assignexpr> */
             SSASM(SSOP_JMP, U(end));
             LABEL(cat);
+            SSASM(SSOP_MOVO, T2, U(surgescript_objectmanager_system_object(NULL, "String")));
+            SSASM(SSOP_PUSH, T2);
             SSASM(SSOP_PUSH, T0);
             SSASM(SSOP_PUSH, T1);
-            SSASM(SSOP_CALL, TEXT("plus"), U(1)); /* t0 = object.property_name.plus(<assignexpr>) */
-            SSASM(SSOP_POPN, U(2));
+            SSASM(SSOP_CALL, TEXT("plus"), U(2)); /* t0 = object.property_name.plus(<assignexpr>) */
+            SSASM(SSOP_POPN, U(3));
             LABEL(end);
 
             SSASM(SSOP_PUSH, T0);

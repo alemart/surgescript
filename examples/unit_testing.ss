@@ -143,7 +143,7 @@ object "SurgeScriptTest"
         test(true + true == 2) || fail(27);
         test(1 + true == true + 1) || fail(28);
         test(true + false == true) || fail(29);
-        test(true.plus(2) == 2.plus(true)) || fail(30);
+        test(true + 2 == !false + 2) || fail(30);
         test(true + true == !false + true) || fail(31);
         test(true + !!!false == !false + true) || fail(32);
         end();
