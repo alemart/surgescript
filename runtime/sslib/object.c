@@ -117,9 +117,13 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 /* equals() method */
 surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    surgescript_objecthandle_t me = surgescript_object_handle(object);
-    surgescript_objecthandle_t other = surgescript_var_get_objecthandle(param[0]);
-    return surgescript_var_set_bool(surgescript_var_create(), me == other);
+    if(surgescript_var_typecode(param[0]) == surgescript_var_type2code("object")) {
+        surgescript_objecthandle_t me = surgescript_object_handle(object);
+        surgescript_objecthandle_t other = surgescript_var_get_objecthandle(param[0]);
+        return surgescript_var_set_bool(surgescript_var_create(), me == other);
+    }
+    else
+        return surgescript_var_set_bool(surgescript_var_create(), false);
 }
 
 /* what's the name of this object? */
