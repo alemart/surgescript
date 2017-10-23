@@ -75,6 +75,8 @@ object "SurgeScriptTest"
         test((1 != 2 ? "yes" : "no")[1] != "o") || fail(30);
         test("oi" === "oi") || fail(31);
         test("sim" !== "nao") || fail(32);
+        test("" + this == this.toString()) || fail(33);
+        test(toString() + 2 === this + "" + 2) || fail(34);
         end();
     }
 
