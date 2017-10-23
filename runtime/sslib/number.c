@@ -7,8 +7,8 @@
  * SurgeScript standard library: routines for the Number object
  */
 
-#include <stdio.h>
-#include <string.h>
+#include <math.h>
+#include <float.h>
 #include "../vm.h"
 #include "../object.h"
 #include "../../util/util.h"
@@ -16,6 +16,7 @@
 /* private stuff */
 static surgescript_var_t* fun_valueof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -35,6 +36,7 @@ void surgescript_sslib_register_number(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Number", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Number", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "Number", "toString", fun_tostring, 1);
+    surgescript_vm_bind(vm, "Number", "equals", fun_equals, 2);
     surgescript_vm_bind(vm, "Number", "call", fun_call, 1);
     surgescript_vm_bind(vm, "Number", "get", fun_get, 2);
     surgescript_vm_bind(vm, "Number", "set", fun_set, 3);
@@ -57,6 +59,19 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
     surgescript_var_t* ret = surgescript_var_set_string(surgescript_var_create(), buf);
     ssfree(buf);
     return ret;
+}
+
+/* equals() method */
+surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* tip for users: use Math.Approximately() instead */
+    if(surgescript_var_typecode(param[0]) == surgescript_var_typecode(param[1])) {
+        float a = surgescript_var_get_number(param[0]);
+        float b = surgescript_var_get_number(param[1]);
+        return surgescript_var_set_bool(surgescript_var_create(), fabsf(a - b) <= FLT_EPSILON);
+    }
+    else
+        return surgescript_var_set_bool(surgescript_var_create(), false);
 }
 
 /* main state */

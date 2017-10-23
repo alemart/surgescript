@@ -17,6 +17,7 @@
 /* private stuff */
 static surgescript_var_t* fun_valueof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -36,6 +37,7 @@ void surgescript_sslib_register_boolean(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Boolean", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Boolean", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "Boolean", "toString", fun_tostring, 1);
+    surgescript_vm_bind(vm, "Boolean", "equals", fun_equals, 2);
     surgescript_vm_bind(vm, "Boolean", "call", fun_call, 1);
     surgescript_vm_bind(vm, "Boolean", "get", fun_get, 2);
     surgescript_vm_bind(vm, "Boolean", "set", fun_set, 3);
@@ -55,6 +57,18 @@ surgescript_var_t* fun_valueof(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     return surgescript_var_set_string(surgescript_var_create(), surgescript_var_get_bool(param[0]) ? "true" : "false");
+}
+
+/* equals() method */
+surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    if(surgescript_var_typecode(param[0]) == surgescript_var_typecode(param[1])) {
+        bool a = surgescript_var_get_bool(param[0]);
+        bool b = surgescript_var_get_bool(param[1]);
+        return surgescript_var_set_bool(surgescript_var_create(), a == b);
+    }
+    else
+        return surgescript_var_set_bool(surgescript_var_create(), false);
 }
 
 /* main state */

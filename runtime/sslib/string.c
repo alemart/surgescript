@@ -17,6 +17,7 @@
 /* private stuff */
 static surgescript_var_t* fun_valueof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -42,6 +43,7 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "String", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "String", "toString", fun_tostring, 1);
+    surgescript_vm_bind(vm, "String", "equals", fun_equals, 2);
     surgescript_vm_bind(vm, "String", "call", fun_call, 1);
     surgescript_vm_bind(vm, "String", "plus", fun_plus, 2);
     surgescript_vm_bind(vm, "String", "toNumber", fun_tonumber, 1);
@@ -92,6 +94,21 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
     const char* str = surgescript_var_fast_get_string(param[0]);
     surgescript_var_t* ret = surgescript_var_set_string(surgescript_var_create(), str);
     return ret;
+}
+
+/* equals() method */
+surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    if(surgescript_var_typecode(param[0]) == surgescript_var_typecode(param[1])) {
+        char* a = surgescript_var_get_string(param[0]);
+        char* b = surgescript_var_get_string(param[1]);
+        int cmp = strcmp(a, b);
+        ssfree(a);
+        ssfree(b);
+        return surgescript_var_set_bool(surgescript_var_create(), cmp == 0);
+    }
+    else
+        return surgescript_var_set_bool(surgescript_var_create(), false);
 }
 
 /* call: type conversion */

@@ -77,6 +77,10 @@ object "SurgeScriptTest"
         test("sim" !== "nao") || fail(32);
         test("" + this == this.toString()) || fail(33);
         test(toString() + 2 === this + "" + 2) || fail(34);
+        test(toString().equals(this.toString())) || fail(35);
+        test("".equals("") && !"a".equals("b")) || fail(36);
+        test("23".equals("2" + "3") && !"23".equals(23)) || fail(37);
+        test((typeof this).equals("object")) || fail(38);
         end();
     }
 
@@ -110,6 +114,7 @@ object "SurgeScriptTest"
         test("2" !== 2) || fail(25);
         test(2 !== 3) || fail(26);
         test(1 === 1) || fail(27);
+        test(1.equals(1) && !2.equals("2")) || fail(28);
         end();
     }
 
@@ -148,6 +153,8 @@ object "SurgeScriptTest"
         test(true + 2 == !false + 2) || fail(30);
         test(true + true == !false + true) || fail(31);
         test(true + !!!false == !false + true) || fail(32);
+        test(true.equals(!false) && (!true).equals(false)) || fail(33);
+        test(!(true.equals(true && !(true.equals(true))))) || fail(34);
         end();
     }
 
@@ -165,6 +172,7 @@ object "SurgeScriptTest"
         test((c = spawn("Boolean"), c != null && child("Boolean") == c)) || fail(9);
         test((d = spawn("Number"), d != null && d == findChild("Number"))) || fail(10);
         test(typeof null == "null") || fail(11);
+        test(!this.equals(Application) && this.equals(this)) || fail(12);
         end();
     }
 
