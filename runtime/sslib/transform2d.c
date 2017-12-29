@@ -18,6 +18,7 @@
 
 /* private stuff */
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 static surgescript_var_t* fun_translate(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_rotate(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -64,6 +65,7 @@ static const float DEG2RAD = 0.0174532925f;
 void surgescript_sslib_register_transform2d(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Transform2D", "state:main", fun_main, 0);
+    surgescript_vm_bind(vm, "Transform2D", "getTransform", fun_gettransform, 0);
 
     surgescript_vm_bind(vm, "Transform2D", "translate", fun_translate, 2);
     surgescript_vm_bind(vm, "Transform2D", "rotate", fun_rotate, 1);
@@ -100,6 +102,13 @@ void surgescript_sslib_register_transform2d(surgescript_vm_t* vm)
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* do nothing */
+    return NULL;
+}
+
+/* transform */
+surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* this object has no transform */
     return NULL;
 }
 

@@ -17,6 +17,7 @@
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_write(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_readline(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -31,6 +32,7 @@ void surgescript_sslib_register_console(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Console", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Console", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Console", "spawn", fun_spawn, 1);
+    surgescript_vm_bind(vm, "Console", "getTransform", fun_gettransform, 0);
     surgescript_vm_bind(vm, "Console", "print", fun_print, 1);
     surgescript_vm_bind(vm, "Console", "write", fun_write, 1);
     surgescript_vm_bind(vm, "Console", "readline", fun_readline, 0);
@@ -58,6 +60,13 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* do nothing; you can't spawn children on this object */
+    return NULL;
+}
+
+/* transform */
+surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* this object has no transform */
     return NULL;
 }
 

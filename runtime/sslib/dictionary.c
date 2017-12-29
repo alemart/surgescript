@@ -19,6 +19,7 @@
 /* Dictionary */
 static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getsize(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -71,6 +72,7 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Dictionary", "__constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Dictionary", "state:main", fun_main, 0);
+    surgescript_vm_bind(vm, "Dictionary", "getTransform", fun_gettransform, 0);
     surgescript_vm_bind(vm, "Dictionary", "getSize", fun_getsize, 0);
     surgescript_vm_bind(vm, "Dictionary", "get", fun_get, 1);
     surgescript_vm_bind(vm, "Dictionary", "set", fun_set, 2);
@@ -298,6 +300,13 @@ surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surges
 surgescript_var_t* fun_it_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* do nothing */
+    return NULL;
+}
+
+/* transform */
+surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* this object has no transform */
     return NULL;
 }
 
