@@ -490,7 +490,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         /* stack operations */
         case SSOP_PUSH:
-            surgescript_var_copy(surgescript_stack_push(surgescript_renv_stack(runtime_environment), surgescript_var_create()), t(a));
+            surgescript_stack_push(surgescript_renv_stack(runtime_environment), surgescript_var_clone(t(a)));
             break;
 
         case SSOP_POP:

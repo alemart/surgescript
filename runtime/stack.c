@@ -83,7 +83,7 @@ surgescript_stack_t* surgescript_stack_destroy(surgescript_stack_t* stack)
  * surgescript_stack_push()
  * Pushes a variable onto the stack
  */
-surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack, surgescript_var_t* var)
+const surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack, surgescript_var_t* var)
 {
     if(++stack->sp >= stack->size) {
         ssfatal("Runtime Error: surgescript_stack_push() - stack overflow");

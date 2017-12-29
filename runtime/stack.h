@@ -24,7 +24,7 @@ struct surgescript_var_t;
 /* public methods */
 surgescript_stack_t* surgescript_stack_create();
 surgescript_stack_t* surgescript_stack_destroy(surgescript_stack_t* stack);
-struct surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack, struct surgescript_var_t* var); /* pushes var on the stack */
+const struct surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack, struct surgescript_var_t* var); /* pushes var on the stack */
 void surgescript_stack_pop(surgescript_stack_t* stack); /* pops and deallocates a var from the stack */
 void surgescript_stack_pushenv(surgescript_stack_t* stack); /* pushes an environment */
 void surgescript_stack_popenv(surgescript_stack_t* stack); /* pops an environment */
