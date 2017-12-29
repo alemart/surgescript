@@ -52,7 +52,7 @@ static surgescript_var_t* fun_smoothstep(surgescript_object_t* object, const sur
 /* constants */
 static const float EPSILON = FLT_EPSILON; /*0.00001f;*/
 static const float PI = 3.1415926535f;
-static const float RAD2DEG = 57.2957795147f;
+static const float RAD2DEG = 57.2957795131f;
 static const float DEG2RAD = 0.01745329251f;
 
 /*

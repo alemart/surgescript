@@ -43,7 +43,6 @@ static surgescript_var_t* fun_setworldy(surgescript_object_t* object, const surg
 static surgescript_var_t* fun_setworldangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 static surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_lookto(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_distanceto(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* misc */
@@ -56,7 +55,7 @@ static float worldangle2d(surgescript_object_t* object);
 static void setworldangle2d(surgescript_object_t* object, float angle);
 static const int T2SET_WORLDX = 0x1;
 static const int T2SET_WORLDY = 0x2;
-static const float DEG2RAD = 0.0174532925f;
+static const float RAD2DEG = 57.2957795131f;
 
 
 
@@ -91,8 +90,7 @@ void surgescript_sslib_register_transform2d(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Transform2D", "getWorldAngle", fun_getworldangle, 0);
     surgescript_vm_bind(vm, "Transform2D", "setWorldAngle", fun_setworldangle, 1);
 
-    surgescript_vm_bind(vm, "Transform2D", "lookAt", fun_lookat, 2);
-    surgescript_vm_bind(vm, "Transform2D", "lookTo", fun_lookto, 1);
+    surgescript_vm_bind(vm, "Transform2D", "lookAt", fun_lookat, 1);
     surgescript_vm_bind(vm, "Transform2D", "distanceTo", fun_distanceto, 1);
 }
 
@@ -265,26 +263,8 @@ surgescript_var_t* fun_setworldangle(surgescript_object_t* object, const surgesc
 
 /* utilities */
 
-/* will look at a given (world_x, world_y) position */
+/* will look at an object */
 surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_object_t* target_object = target(object);
-    float target_world_x = surgescript_var_get_number(param[0]);
-    float target_world_y = surgescript_var_get_number(param[1]);
-    float angle = 0.0f, eye_world_x = 0.0f, eye_world_y = 0.0f;
-
-    worldposition2d(target_object, &eye_world_x, &eye_world_y);
-
-    errno = 0;
-    angle = atan2f(target_world_y - eye_world_y, target_world_x - eye_world_x);
-    if(errno == 0)
-        setworldangle2d(target_object, angle / DEG2RAD);
-
-    return NULL;
-}
-
-/* will look to an object */
-surgescript_var_t* fun_lookto(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_object_t* looker = target(object);
@@ -297,7 +277,7 @@ surgescript_var_t* fun_lookto(surgescript_object_t* object, const surgescript_va
     errno = 0;
     angle = atan2f(looked_y - looker_y, looked_x - looker_x);
     if(errno == 0)
-        setworldangle2d(looker, angle / DEG2RAD);
+        setworldangle2d(looker, angle * RAD2DEG);
 
     return NULL;
 }
