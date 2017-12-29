@@ -25,7 +25,7 @@ static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgesc
 static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_timeout(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
@@ -37,10 +37,10 @@ static surgescript_var_t* fun_timeout(surgescript_object_t* object, const surges
  */
 void surgescript_sslib_register_object(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Object", "name", fun_name, 0);
+    surgescript_vm_bind(vm, "Object", "getName", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Object", "destroy", fun_destroy, 0);
-    surgescript_vm_bind(vm, "Object", "parent", fun_parent, 0);
+    surgescript_vm_bind(vm, "Object", "getParent", fun_parent, 0);
     surgescript_vm_bind(vm, "Object", "child", fun_child, 1);
     surgescript_vm_bind(vm, "Object", "findChild", fun_findchild, 1);
     surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
@@ -48,7 +48,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "equals", fun_equals, 1);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
-    surgescript_vm_bind(vm, "Object", "requireComponent", fun_requirecomponent, 1);
+    surgescript_vm_bind(vm, "Object", "getTransform", fun_gettransform, 0);
     surgescript_vm_bind(vm, "Object", "timeout", fun_timeout, 1);
     surgescript_vm_bind(vm, "Object", "__export", fun_export, 2);
 }
@@ -162,18 +162,16 @@ surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_va
     return NULL;
 }
 
-/* gets an immediate child object called component_name in the parent (and spawns the component there if there isn't one) */
-surgescript_var_t* fun_requirecomponent(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+/* gets the transform of the object (or spawns it if there isn't one) */
+surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    const char* component_name = surgescript_var_fast_get_string(param[0]);
-    surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
-    surgescript_objecthandle_t parent_handle = surgescript_object_parent(object);
-    surgescript_object_t* parent = surgescript_objectmanager_get(object_manager, parent_handle);
-    surgescript_objecthandle_t component_handle = surgescript_object_child(parent, component_name);
+    const char* component_name = "Transform2D";
+    surgescript_objecthandle_t component_handle = surgescript_object_child(object, component_name);
 
     if(!component_handle) {
-        const char* object_name = surgescript_object_name(object);
-        component_handle = surgescript_objectmanager_spawn(object_manager, parent_handle, object_name, NULL);
+        surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
+        surgescript_objecthandle_t parent_handle = surgescript_object_parent(object);
+        component_handle = surgescript_objectmanager_spawn(object_manager, parent_handle, component_name, NULL);
     }
 
     return surgescript_var_set_objecthandle(surgescript_var_create(), component_handle);

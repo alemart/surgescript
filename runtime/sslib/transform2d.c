@@ -276,7 +276,7 @@ surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_va
 /* will return the target object of the given transform object */
 surgescript_object_t* target(const surgescript_object_t* object)
 {
-    /* the target object is the parent */
+    /* the target object is the parent of the transform */
     return surgescript_objectmanager_get(
         surgescript_object_manager(object),
         surgescript_object_parent(object)
