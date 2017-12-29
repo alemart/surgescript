@@ -664,6 +664,34 @@ void emit_arrayelement(surgescript_nodecontext_t context)
     SSASM(SSOP_POPN, U(1));
 }
 
+void emit_dictdecl1(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_SELF, T0);
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_MOVS, T0, TEXT("Dictionary"));
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("spawn"), U(1)); /* t0 = this.spawn("Dictionary") */
+    SSASM(SSOP_POPN, U(2));
+    SSASM(SSOP_PUSH, T0);   
+}
+
+void emit_dictdecl2(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_POP, T0);
+}
+
+void emit_dictdeclkey(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_PUSH, T0);
+}
+
+void emit_dictdeclvalue(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("set"), U(2)); /* dict.set(key, value) */
+    SSASM(SSOP_POPN, U(2));
+}
+
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope)
 {

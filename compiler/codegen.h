@@ -59,6 +59,10 @@ void emit_setterincdec(surgescript_nodecontext_t context, const char* property_n
 void emit_arrayexpr1(surgescript_nodecontext_t context);
 void emit_arrayexpr2(surgescript_nodecontext_t context);
 void emit_arrayelement(surgescript_nodecontext_t context);
+void emit_dictdecl1(surgescript_nodecontext_t context);
+void emit_dictdecl2(surgescript_nodecontext_t context);
+void emit_dictdeclkey(surgescript_nodecontext_t context);
+void emit_dictdeclvalue(surgescript_nodecontext_t context);
 
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope);

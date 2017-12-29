@@ -84,11 +84,12 @@ static void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t co
 static void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name);
-static void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void dictgetexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void arrayexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 static void stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -806,7 +807,7 @@ void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t contex
             if(got_type(parser, SSTOK_LPAREN)) {
                 funcallexpr(parser, context, identifier);
                 lambdacall(parser, context);
-                dictexpr(parser, context);
+                dictgetexpr(parser, context);
                 ssfree(identifier);
             }
             else if(got_type(parser, SSTOK_INCDECOP)) {
@@ -832,14 +833,14 @@ void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t contex
                 /* obj.property <=> obj.getProperty() */
                 emit_getter(context, identifier);
                 lambdacall(parser, context);
-                dictexpr(parser, context);
+                dictgetexpr(parser, context);
                 ssfree(identifier);
             }
         } while(optmatch(parser, SSTOK_DOT));
     }
     else {
         lambdacall(parser, context);
-        dictexpr(parser, context);
+        dictgetexpr(parser, context);
     }
 }
 
@@ -849,7 +850,7 @@ void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         funcallexpr(parser, context, "call");
 }
 
-void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+void dictgetexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     while(optmatch(parser, SSTOK_LBRACKET)) {
         emit_dictptr(context);
@@ -908,6 +909,10 @@ void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     else if(optmatch(parser, SSTOK_LBRACKET)) {
         arrayexpr(parser, context);
         match(parser, SSTOK_RBRACKET);
+    }
+    else if(optmatch(parser, SSTOK_LCURLY)) {
+        dictexpr(parser, context);
+        match(parser, SSTOK_RCURLY);
     }
     else if(optmatch(parser, SSTOK_THIS)) {
         emit_this(context);
@@ -971,6 +976,28 @@ void arrayexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         } while(optmatch(parser, SSTOK_COMMA));
     }
     emit_arrayexpr2(context);
+}
+
+void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    emit_dictdecl1(context);
+    if(!got_type(parser, SSTOK_RCURLY)) {
+        do {
+            /* dict keys must be either strings or numbers (will be converted to strings at runtime) */
+            if(!got_type(parser, SSTOK_STRING) && !got_type(parser, SSTOK_NUMBER))
+                unexpected_symbol(parser);
+
+            /* read key */
+            constant(parser, context);
+            emit_dictdeclkey(context);
+            match(parser, SSTOK_COLON);
+
+            /* read value */
+            assignexpr(parser, context);
+            emit_dictdeclvalue(context);
+        } while(optmatch(parser, SSTOK_COMMA));
+    }
+    emit_dictdecl2(context);
 }
 
 /* programming constructs */

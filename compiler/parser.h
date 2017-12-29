@@ -64,25 +64,28 @@
  * <postfixexpr> := identifier ++ | identifier --
  *               |  <funcallexpr> <postfixexpr1>
  *               |  <primaryexpr> <postfixexpr1>
- *               |  <primaryexpr> <postfixexpr1> <dictexpr> <postfixexpr1>
- *               |  <primaryexpr> <postfixexpr1> <dictexpr> <postfixexpr1> assignop <assignexpr>
- *               |  <primaryexpr> <postfixexpr1> <dictexpr> ++ | <primaryexpr> <postfixexpr1> <dictexpr> --
- * <postfixexpr1> := . <funcallexpr> <lambdacall> <dictexpr1> <postfixexpr1>
- *                |  . identifier <lambdacall> <dictexpr1> <postfixexpr1>
+ *               |  <primaryexpr> <postfixexpr1> <dictgetexpr> <postfixexpr1>
+ *               |  <primaryexpr> <postfixexpr1> <dictgetexpr> <postfixexpr1> assignop <assignexpr>
+ *               |  <primaryexpr> <postfixexpr1> <dictgetexpr> ++ | <primaryexpr> <postfixexpr1> <dictgetexpr> --
+ * <postfixexpr1> := . <funcallexpr> <lambdacall> <dictgetexpr1> <postfixexpr1>
+ *                |  . identifier <lambdacall> <dictgetexpr1> <postfixexpr1>
  *                |  . identifier ++ | identifier --
  *                |  . identifier assignop <assignexpr>
- *                |  <lambdacall> <dictexpr1>
- * <dictexpr> := [ <expr> ] <dictexpr1>
- * <dictexpr1> := [ <expr> ] <dictexpr1> | e
+ *                |  <lambdacall> <dictgetexpr1>
+ * <dictgetexpr> := [ <expr> ] <dictgetexpr1>
+ * <dictgetexpr1> := [ <expr> ] <dictgetexpr1> | e
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
  * <lambdacall> := ( ) <lambdacall> | ( <funargsexprlist> ) <lambdacall> | e
- * <primaryexpr> := identifier | this | state | <constant> | <arrayexpr> | ( <expr> )
+ * <primaryexpr> := identifier | this | state | <constant> | <arrayexpr> | <dictexpr> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e
- * <arrayexpr> := [ <arrayexpr1> ]
+ * <arrayexpr> := [ <arrayexpr1> ] | [ ]
  * <arrayexpr1> := <assignexpr> | <assignexpr> , <arrayexpr1>
+ * <dictexpr> := { <dictexpr1> } | { }
+ * <dictexpr1> := string : <assignexpr> | string : <assignexpr> , <dictexpr1>
+ *             |  number : <assignexpr> | number : <assignexpr> , <dictexpr1>
  *
  *
  *
