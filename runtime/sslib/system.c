@@ -34,7 +34,7 @@ void surgescript_sslib_register_system(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "System", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "System", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
     surgescript_vm_bind(vm, "System", "spawn", fun_spawn, 1);
-    surgescript_vm_bind(vm, "System", "version", fun_version, 0);
+    surgescript_vm_bind(vm, "System", "getVersion", fun_version, 0);
     surgescript_vm_bind(vm, "System", "state:main", fun_main, 0);
 }
 
