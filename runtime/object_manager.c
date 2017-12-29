@@ -42,8 +42,9 @@ static const char* ROOT_OBJECT = "System";
 static const char* SYSTEM_OBJECTS[] = {
     "String", "Number", "Boolean",
     "Time", "Math", "Console",
+    "__Temp",// "__GarbageCollector",
     "Application", NULL
-}; /* this must be a NULL-terminated array, and "Application" should be the last element (objects are spawned in this order) */
+}; /* this must be a NULL-terminated array, and "Application" should be the last element (as objects are spawned in this order) */
 
 /* object methods acessible by me */
 extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data); /* creates a new blank object */
@@ -250,7 +251,7 @@ surgescript_objecthandle_t surgescript_objectmanager_system_object(surgescript_o
 {
     /* this must be determined at compile-time (for SurgeScript), hence the SYSTEM_OBJECTS array */
     for(const char** p = SYSTEM_OBJECTS; *p != NULL; p++) {
-        if(strcmp(*p, object_name) == 0)
+        if(strcmp(*p, object_name) == 0 && **p != '_')
             return ROOT_HANDLE + (p - SYSTEM_OBJECTS + 1);
     }
 

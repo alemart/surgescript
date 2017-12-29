@@ -643,13 +643,15 @@ void emit_setterincdec(surgescript_nodecontext_t context, const char* property_n
 
 void emit_arrayexpr1(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_SELF, T0);
+    SSASM(SSOP_MOVO, T0, U(surgescript_objectmanager_system_object(NULL, "System")));
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("get__Temp"), U(0)); /* t0 = System.__Temp */
     SSASM(SSOP_PUSH, T0);
     SSASM(SSOP_MOVS, T0, TEXT("Array"));
     SSASM(SSOP_PUSH, T0);
-    SSASM(SSOP_CALL, TEXT("spawn"), U(1)); /* t0 = this.spawn("Array") */
-    SSASM(SSOP_POPN, U(2));
-    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("spawn"), U(1)); /* t0 = t0.spawn("Array") */
+    SSASM(SSOP_POPN, U(3));
+    SSASM(SSOP_PUSH, T0); /* save the handle to the dictionary */
 }
 
 void emit_arrayexpr2(surgescript_nodecontext_t context)
@@ -666,18 +668,20 @@ void emit_arrayelement(surgescript_nodecontext_t context)
 
 void emit_dictdecl1(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_SELF, T0);
+    SSASM(SSOP_MOVO, T0, U(surgescript_objectmanager_system_object(NULL, "System")));
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("get__Temp"), U(0)); /* t0 = System.__Temp */
     SSASM(SSOP_PUSH, T0);
     SSASM(SSOP_MOVS, T0, TEXT("Dictionary"));
     SSASM(SSOP_PUSH, T0);
-    SSASM(SSOP_CALL, TEXT("spawn"), U(1)); /* t0 = this.spawn("Dictionary") */
-    SSASM(SSOP_POPN, U(2));
-    SSASM(SSOP_PUSH, T0);   
+    SSASM(SSOP_CALL, TEXT("spawn"), U(1)); /* t0 = t0.spawn("Dictionary") */
+    SSASM(SSOP_POPN, U(3));
+    SSASM(SSOP_PUSH, T0); /* save the handle to the dictionary */
 }
 
 void emit_dictdecl2(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_POP, T0);
+    SSASM(SSOP_POP, T0); /* retrieve the handle to the dictionary */
 }
 
 void emit_dictdeclkey(surgescript_nodecontext_t context)
