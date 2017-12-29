@@ -48,11 +48,11 @@ static surgescript_var_t* fun_distanceto(surgescript_object_t* object, const sur
 /* misc */
 static inline surgescript_object_t* target(const surgescript_object_t* object);
 static void world2localposition(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *xpos, float *ypos);
-static void worldposition2d(surgescript_object_t* object, float* world_x, float* world_y);
-static void setworldposition2d(surgescript_object_t* object, float world_x, float world_y, int flags);
+static inline void worldposition2d(surgescript_object_t* object, float* world_x, float* world_y);
+static inline void setworldposition2d(surgescript_object_t* object, float world_x, float world_y, int flags);
 static void world2localangle(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *angle);
-static float worldangle2d(surgescript_object_t* object);
-static void setworldangle2d(surgescript_object_t* object, float angle);
+static inline float worldangle2d(surgescript_object_t* object);
+static inline void setworldangle2d(surgescript_object_t* object, float angle);
 static const int T2SET_WORLDX = 0x1;
 static const int T2SET_WORLDY = 0x2;
 static const float RAD2DEG = 57.2957795131f;
