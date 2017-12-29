@@ -43,6 +43,8 @@ static surgescript_var_t* fun_setworldy(surgescript_object_t* object, const surg
 static surgescript_var_t* fun_setworldangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 static surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_lookto(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_distanceto(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* misc */
 static inline surgescript_object_t* target(const surgescript_object_t* object);
@@ -90,6 +92,8 @@ void surgescript_sslib_register_transform2d(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Transform2D", "setWorldAngle", fun_setworldangle, 1);
 
     surgescript_vm_bind(vm, "Transform2D", "lookAt", fun_lookat, 2);
+    surgescript_vm_bind(vm, "Transform2D", "lookTo", fun_lookto, 1);
+    surgescript_vm_bind(vm, "Transform2D", "distanceTo", fun_distanceto, 1);
 }
 
 
@@ -277,6 +281,40 @@ surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_va
         setworldangle2d(target_object, angle / DEG2RAD);
 
     return NULL;
+}
+
+/* will look to an object */
+surgescript_var_t* fun_lookto(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_object_t* looker = target(object);
+    surgescript_object_t* looked = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0]));
+    float looked_x, looked_y, looker_x, looker_y, angle;
+
+    worldposition2d(looker, &looker_x, &looker_y);
+    worldposition2d(looked, &looked_x, &looked_y);
+
+    errno = 0;
+    angle = atan2f(looked_y - looker_y, looked_x - looker_x);
+    if(errno == 0)
+        setworldangle2d(looker, angle / DEG2RAD);
+
+    return NULL;
+}
+
+/* computes the distance to an object */
+surgescript_var_t* fun_distanceto(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_object_t* src = target(object);
+    surgescript_object_t* dst = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0]));
+    float dst_x, dst_y, src_x, src_y, distance2;
+
+    worldposition2d(src, &src_x, &src_y);
+    worldposition2d(dst, &dst_x, &dst_y);
+    distance2 = (dst_x - src_x) * (dst_x - src_x) + (dst_y - src_y) * (dst_y - src_y);
+
+    return surgescript_var_set_number(surgescript_var_create(), sqrt(distance2));
 }
 
 
