@@ -268,10 +268,10 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
 {
     RELEASE_DATA(dst);
     dst->type = src->type;
+    dst->raw = 0; /* must clear up all bits */
 
     switch(src->type) {
         case SSVAR_BOOL:
-            dst->raw = 0; /* must clear up all bits */
             dst->boolean = src->boolean;
             break;
         case SSVAR_NUMBER:

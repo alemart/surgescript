@@ -24,14 +24,15 @@ struct surgescript_var_t;
 /* public methods */
 surgescript_stack_t* surgescript_stack_create();
 surgescript_stack_t* surgescript_stack_destroy(surgescript_stack_t* stack);
-const struct surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack, struct surgescript_var_t* var); /* pushes var on the stack */
+void surgescript_stack_push(surgescript_stack_t* stack, struct surgescript_var_t* data); /* pushes data to the stack */
 void surgescript_stack_pop(surgescript_stack_t* stack); /* pops and deallocates a var from the stack */
 void surgescript_stack_pushenv(surgescript_stack_t* stack); /* pushes an environment */
 void surgescript_stack_popenv(surgescript_stack_t* stack); /* pops an environment */
 void surgescript_stack_pushn(surgescript_stack_t* stack, size_t n); /* pushes n empty variables to the stack */
 void surgescript_stack_popn(surgescript_stack_t* stack, size_t n); /* pops n variables from the stack */
-struct surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack); /* gets the topmost element */
-struct surgescript_var_t* surgescript_stack_at(surgescript_stack_t* stack, surgescript_stackptr_t offset); /* gets stack[base + offset] */
+const struct surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack); /* gets the topmost element */
+const struct surgescript_var_t* surgescript_stack_peek(surgescript_stack_t* stack, surgescript_stackptr_t offset); /* reads stack[base + offset] */
+void surgescript_stack_poke(surgescript_stack_t* stack, surgescript_stackptr_t offset, const struct surgescript_var_t* data); /* writes data on stack[base + offset] */
 int surgescript_stack_empty(surgescript_stack_t* stack); /* is the stack empty? */
 void surgescript_stack_scan_objects(surgescript_stack_t* stack, void* userdata, bool (*callback)(unsigned,void*));
 

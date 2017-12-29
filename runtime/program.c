@@ -333,12 +333,12 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
     surgescript_cprogram_t* cprogram = (surgescript_cprogram_t*)program;
     surgescript_object_t* caller = surgescript_renv_owner(runtime_environment);
     surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
-    surgescript_var_t** param = program->arity > 0 ? ssmalloc(program->arity * sizeof(*param)) : NULL;
+    const surgescript_var_t** param = program->arity > 0 ? ssmalloc(program->arity * sizeof(*param)) : NULL;
     surgescript_var_t* return_value = NULL;
 
     /* grab parameters from the stack (stacked in left-to-right order) */
     for(int i = 1; i <= program->arity; i++)
-        param[program->arity-i] = surgescript_stack_at(stack, -i);
+        param[program->arity-i] = surgescript_stack_peek(stack, -i);
 
     /* call C-function */
     return_value = (surgescript_var_t*)(cprogram->cfunction(caller, (const surgescript_var_t**)param, program->arity));
@@ -374,8 +374,8 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         if(instruction == SSOP_NOP && a.i == -1) {
             int i;
             const char* title = surgescript_program_get_text(program, b.u);
-            surgescript_var_t* ptr = surgescript_stack_at(surgescript_renv_stack(runtime_environment), 0);
-            surgescript_var_t* top = surgescript_stack_top(surgescript_renv_stack(runtime_environment));
+            const surgescript_var_t* ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), 0);
+            const surgescript_var_t* top = surgescript_stack_top(surgescript_renv_stack(runtime_environment));
             char* contents_of_t[] = {
                 surgescript_var_get_string(_t[0]),
                 surgescript_var_get_string(_t[1]),
@@ -395,7 +395,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             for(i = -program->arity; ptr != top; i++) {
                 if(i != 0) {
                     char* contents = surgescript_var_get_string(
-                        ptr = surgescript_stack_at(surgescript_renv_stack(runtime_environment), i)
+                        ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), i)
                     );
                     printf("%s ", contents);
                     ssfree(contents);
@@ -499,11 +499,11 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_SPEEK:
-            surgescript_var_copy(t(a), surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i));
+            surgescript_var_copy(t(a), surgescript_stack_peek(surgescript_renv_stack(runtime_environment), b.i));
             break;
 
         case SSOP_SPOKE:
-            surgescript_var_copy(surgescript_stack_at(surgescript_renv_stack(runtime_environment), b.i), t(a));
+            surgescript_stack_poke(surgescript_renv_stack(runtime_environment), b.i, t(a));
             break;
 
         case SSOP_PUSHN:
@@ -670,7 +670,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
     /* there is a program to be called */
     if(*program_name) {
         surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
-        surgescript_var_t* callee = surgescript_stack_at(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
+        const surgescript_var_t* callee = surgescript_stack_peek(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
         unsigned object_handle = surgescript_var_get_objecthandle(callee);
 
         /* surgescript can also call programs on primitive types */

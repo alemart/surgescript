@@ -83,14 +83,12 @@ surgescript_stack_t* surgescript_stack_destroy(surgescript_stack_t* stack)
  * surgescript_stack_push()
  * Pushes a variable onto the stack
  */
-const surgescript_var_t* surgescript_stack_push(surgescript_stack_t* stack, surgescript_var_t* var)
+void surgescript_stack_push(surgescript_stack_t* stack, surgescript_var_t* data)
 {
-    if(++stack->sp >= stack->size) {
+    if(++stack->sp < stack->size)
+        stack->data[stack->sp] = data;
+    else
         ssfatal("Runtime Error: surgescript_stack_push() - stack overflow");
-        return NULL;
-    }
-
-    return stack->data[stack->sp] = var;
 }
 
 /*
@@ -114,8 +112,8 @@ void surgescript_stack_pop(surgescript_stack_t* stack)
 void surgescript_stack_pushenv(surgescript_stack_t* stack)
 {
     /* push prev BP & set new BP */
-    surgescript_var_t* prev_bp = surgescript_stack_push(stack, surgescript_var_create());
-    surgescript_var_set_rawbits(prev_bp, stack->bp);
+    surgescript_var_t* prev_bp = surgescript_var_set_rawbits(surgescript_var_create(), stack->bp);
+    surgescript_stack_push(stack, prev_bp);
     stack->bp = stack->sp; /* the base of the stack points to the previous bp */
 }
 
@@ -162,27 +160,41 @@ void surgescript_stack_popn(surgescript_stack_t* stack, size_t n)
 
 /*
  * surgescript_stack_top()
- * Gets the top element from the stack (minus some positive offset)
+ * Gets the top element from the stack
  */
-surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack)
+const surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack)
 {
     return stack->data[stack->sp];
 }
 
 
 /*
- * surgescript_stack_at()
- * Gets the (base+offset)-th element from the stack
+ * surgescript_stack_peek()
+ * Reads the (base+offset)-th element from the stack
  */
-surgescript_var_t* surgescript_stack_at(surgescript_stack_t* stack, surgescript_stackptr_t offset)
+const surgescript_var_t* surgescript_stack_peek(surgescript_stack_t* stack, surgescript_stackptr_t offset)
 {
     const surgescript_stackptr_t idx = stack->bp + offset;
 
     if(idx >= 0 && idx <= stack->sp)
         return stack->data[idx];
 
-    ssfatal("Runtime Error: surgescript_stack_at() can't get an element (%d) that is out of bounds [%d, %d]", idx, 0, stack->sp);
+    ssfatal("Runtime Error: surgescript_stack_peek() can't read an element (%d) that is out of bounds [%d, %d]", idx, 0, stack->sp);
     return NULL;
+}
+
+/*
+ * surgescript_stack_poke()
+ * Writes data on stack[base+offset]
+ */
+void surgescript_stack_poke(surgescript_stack_t* stack, surgescript_stackptr_t offset, const surgescript_var_t* data)
+{
+    const surgescript_stackptr_t idx = stack->bp + offset;
+
+    if(idx >= 0 && idx <= stack->sp)
+        surgescript_var_copy(stack->data[idx], data);
+    else
+        ssfatal("Runtime Error: surgescript_stack_poke() can't write to an element (%d) that is out of bounds [%d, %d]", idx, 0, stack->sp);
 }
 
 /*
