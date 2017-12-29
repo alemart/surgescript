@@ -66,6 +66,7 @@ void surgescript_vm_launch(surgescript_vm_t* vm)
     surgescript_sslib_register_number(vm);
     surgescript_sslib_register_boolean(vm);
     surgescript_sslib_register_time(vm);
+    surgescript_sslib_register_temp(vm);
     surgescript_sslib_register_math(vm);
     surgescript_sslib_register_array(vm);
     surgescript_sslib_register_dictionary(vm);

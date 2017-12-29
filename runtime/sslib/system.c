@@ -22,7 +22,10 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getgc(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static const char* system_utilities[] = { "__Temp", NULL };
 static surgescript_heapptr_t ISACTIVE_ADDR = 0;
 
 /*
@@ -37,6 +40,8 @@ void surgescript_sslib_register_system(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "System", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "System", "getTransform", fun_gettransform, 0);
     surgescript_vm_bind(vm, "System", "getVersion", fun_getversion, 0);
+    surgescript_vm_bind(vm, "System", "get__Temp", fun_gettemp, 0);
+    surgescript_vm_bind(vm, "System", "getGC", fun_getgc, 0);
     surgescript_vm_bind(vm, "System", "state:main", fun_main, 0);
 }
 
@@ -63,6 +68,13 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
         surgescript_var_set_objecthandle(mem, surgescript_objectmanager_spawn(manager, me, *p, NULL));
     }
 
+    /* spawn system utilities */
+    for(const char** p = system_utilities; *p != NULL; p++) {
+        surgescript_var_t* mem = surgescript_heap_at(heap, surgescript_heap_malloc(heap));
+        surgescript_var_set_objecthandle(mem, surgescript_objectmanager_spawn(manager, me, *p, NULL));
+    }
+
+    /* done! */
     return NULL;
 }
 
@@ -100,6 +112,21 @@ surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescrip
 {
     return surgescript_var_set_string(surgescript_var_create(), SSVERSION);
 }
+
+/* get the temp area */
+surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_child(object, "__Temp"));
+}
+
+/* get a reference to the Garbage Collector */
+surgescript_var_t* fun_getgc(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_child(object, "GarbageCollector"));
+}
+
+
+
 
 /* main state */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
