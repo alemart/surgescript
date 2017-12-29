@@ -29,7 +29,7 @@
  */
 
 /* constants */
-static const size_t SSSTACK_INITIAL_SIZE = 102400; /* 100K */
+static const size_t SSSTACK_INITIAL_SIZE = 65536; /* 64K */
 
 /* the stack structure */
 struct surgescript_stack_t
