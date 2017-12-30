@@ -32,7 +32,7 @@ static surgescript_heapptr_t ISACTIVE_ADDR = 0;
  */
 void surgescript_sslib_register_system(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "System", "__constructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "System", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "System", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "System", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
     surgescript_vm_bind(vm, "System", "spawn", fun_spawn, 1);

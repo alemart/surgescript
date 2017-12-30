@@ -31,7 +31,7 @@ static const surgescript_heapptr_t LASTCOLLECT_ADDR = 1;
  */
 void surgescript_sslib_register_gc(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "__GC", "__constructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "__GC", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "__GC", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "__GC", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "__GC", "destroy", fun_destroy, 0);

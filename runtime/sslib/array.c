@@ -52,8 +52,8 @@ static const surgescript_heapptr_t BASE_ADDR = 1;   /* array elements come later
  */
 void surgescript_sslib_register_array(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Array", "__constructor", fun_constructor, 0);
-    surgescript_vm_bind(vm, "Array", "__destructor", fun_destructor, 0);
+    surgescript_vm_bind(vm, "Array", "constructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "Array", "destructor", fun_destructor, 0);
     surgescript_vm_bind(vm, "Array", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Array", "getLength", fun_getlength, 0);
     surgescript_vm_bind(vm, "Array", "get", fun_get, 1);

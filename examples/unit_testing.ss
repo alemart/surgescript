@@ -359,18 +359,18 @@ object "SurgeScriptTest"
 
 
 
-    // __constructor()
+    // constructor()
     // called automatically by SurgeScript when the object is created
-    fun __constructor()
+    fun constructor()
     {
         Console.print("------------------------------");
         Console.print("   SurgeScript Unit Testing   ");
         Console.print("------------------------------");
     }
 
-    // __destructor()
+    // destructor()
     // called automatically by SurgeScript when the object is destroyed
-    fun __destructor()
+    fun destructor()
     {
         str = "\n";
         str += "SUCCEEDED  " + (totalTested - totalFailed) + "\t\t";

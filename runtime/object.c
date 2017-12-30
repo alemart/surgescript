@@ -513,7 +513,7 @@ bool surgescript_object_transform_changed(const surgescript_object_t* object)
  */
 void surgescript_object_init(surgescript_object_t* object)
 {
-    static const char* CONSTRUCTOR_FUN = "__constructor"; /* regular constructor */
+    static const char* CONSTRUCTOR_FUN = "constructor"; /* regular constructor */
     static const char* PRE_CONSTRUCTOR_FUN = "__ssconstructor"; /* a constructor reserved for the VM */
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
 
@@ -536,7 +536,7 @@ void surgescript_object_init(surgescript_object_t* object)
  */
 void surgescript_object_release(surgescript_object_t* object)
 {
-    static const char* DESTRUCTOR_FUN = "__destructor";
+    static const char* DESTRUCTOR_FUN = "destructor";
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
 
     if(surgescript_programpool_exists(program_pool, object->name, DESTRUCTOR_FUN)) {

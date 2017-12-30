@@ -69,7 +69,7 @@ static surgescript_var_t* bst_removeroot(surgescript_object_t* object);
  */
 void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Dictionary", "__constructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "Dictionary", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Dictionary", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Dictionary", "getSize", fun_getsize, 0);
     surgescript_vm_bind(vm, "Dictionary", "get", fun_get, 1);
@@ -79,13 +79,13 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Dictionary", "has", fun_has, 1);
     surgescript_vm_bind(vm, "Dictionary", "iterator", fun_iterator, 0);
 
-    surgescript_vm_bind(vm, "DictionaryIterator", "__constructor", fun_it_constructor, 0);
+    surgescript_vm_bind(vm, "DictionaryIterator", "constructor", fun_it_constructor, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "state:main", fun_it_main, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "next", fun_it_next, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "hasNext", fun_it_hasnext, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "getItem", fun_it_getitem, 0);
 
-    surgescript_vm_bind(vm, "BSTNode", "__constructor", fun_bst_constructor, 0);
+    surgescript_vm_bind(vm, "BSTNode", "constructor", fun_bst_constructor, 0);
     surgescript_vm_bind(vm, "BSTNode", "state:main", fun_bst_main, 0);
     surgescript_vm_bind(vm, "BSTNode", "getKey", fun_bst_getkey, 0);
     surgescript_vm_bind(vm, "BSTNode", "getValue", fun_bst_getvalue, 0);
@@ -104,7 +104,7 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
 
 /* A Dictionary is just a facade that implements a Binary Search Tree (BSTNodes) */
 
-/* __constructor(): initialize the Dictionary */
+/* constructor(): initialize the Dictionary */
 surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
@@ -268,7 +268,7 @@ surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_
 
 /* --- DictionaryIterator --- */
 
-/* __constructor(): DictionaryIterator must be spawned by Dictionary */
+/* constructor(): DictionaryIterator must be spawned by Dictionary */
 surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
