@@ -440,11 +440,13 @@ void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context
 {
     while(got_type(parser, SSTOK_IDENTIFIER) || got_type(parser, SSTOK_EXPORT))
         vardecl(parser, context);
+
+    emit_accessors(context, "Object", parser->program_pool);
 }
 
 void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    bool export_var = optmatch(parser, SSTOK_EXPORT);
+    bool must_export_var = optmatch(parser, SSTOK_EXPORT);
     char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
 
     match(parser, SSTOK_IDENTIFIER);
@@ -453,7 +455,7 @@ void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     match(parser, SSTOK_SEMICOLON);
 
     emit_vardecl(context, id);
-    if(export_var)
+    if(must_export_var)
         emit_exportvar(context, id);
 
     ssfree(id);

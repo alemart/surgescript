@@ -14,6 +14,8 @@
 #include "nodecontext.h"
 #include "../runtime/program.h"
 
+struct surgescript_programpool_t;
+
 /* objects */
 void emit_object_header(surgescript_nodecontext_t context, surgescript_program_label_t start, surgescript_program_label_t end);
 void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_label_t start, surgescript_program_label_t end);
@@ -21,6 +23,7 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
 /* declarations */
 void emit_vardecl(surgescript_nodecontext_t context, const char* identifier);
 void emit_exportvar(surgescript_nodecontext_t context, const char* identifier);
+void emit_accessors(surgescript_nodecontext_t context, const char* object_name, struct surgescript_programpool_t* program_pool);
 
 /* expressions */
 void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, const char* identifier, int line);

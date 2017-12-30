@@ -36,7 +36,7 @@ static surgescript_var_t* fun_timeout(surgescript_object_t* object, const surges
  */
 void surgescript_sslib_register_object(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Object", "getName", fun_name, 0);
+    surgescript_vm_bind(vm, "Object", "get__name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Object", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Object", "getParent", fun_parent, 0);
