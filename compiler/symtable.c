@@ -23,6 +23,8 @@ static void read_from_heap(surgescript_symtable_entry_t* entry, surgescript_prog
 static void read_from_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void write_to_heap(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+static void read_from_getter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+static void write_to_setter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void read_system_object(const char* symbol, surgescript_program_t* program, unsigned k);
 static void write_system_object(const char* symbol, surgescript_program_t* program, unsigned k);
 
@@ -34,6 +36,7 @@ struct surgescript_symtable_entry_vtable_t
 };
 static const surgescript_symtable_entry_vtable_t heapvt = { read_from_heap, write_to_heap };
 static const surgescript_symtable_entry_vtable_t stackvt = { read_from_stack, write_to_stack };
+static const surgescript_symtable_entry_vtable_t funvt = { read_from_getter, write_to_setter };
 
 /* a symbol table entry */
 struct surgescript_symtable_entry_t
@@ -133,6 +136,21 @@ void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, con
     }
     else
         ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
+}
+
+/*
+ * surgescript_symtable_put_fun_symbol()
+ * Puts a symbol on the table that is a syntax sugar to accessor function calls
+ */
+void surgescript_symtable_put_fun_symbol(surgescript_symtable_t* symtable, const char* symbol)
+{
+    if(indexof_symbol(symtable, symbol) < 0) {
+        char* symname = ssstrdup(symbol);
+        surgescript_symtable_entry_t entry = { .symbol = symname, .vtable = &funvt };
+        ssarray_push(symtable->entry, entry);
+    }
+    else
+        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);   
 }
 
 /*
@@ -271,4 +289,29 @@ void read_system_object(const char* symbol, surgescript_program_t* program, unsi
 void write_system_object(const char* symbol, surgescript_program_t* program, unsigned k)
 {
     ; /* do nothing; system objects are read-only */
+}
+
+void read_from_getter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
+{
+    char* fun_name = surgescript_util_camelcaseprefix("get", entry->symbol);
+    surgescript_program_add_line(program, SSOP_SELF, SSOPu(0), SSOPu(0));
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(surgescript_program_add_text(program, fun_name)), SSOPu(0));
+    surgescript_program_add_line(program, SSOP_POPN, SSOPu(1), SSOPu(0));
+    ssfree(fun_name);
+
+    if(k != 0)
+        surgescript_program_add_line(program, SSOP_MOV, SSOPu(k), SSOPu(0));
+}
+
+void write_to_setter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
+{
+    char* fun_name = surgescript_util_camelcaseprefix("set", entry->symbol);
+    unsigned w = (k + 1) % 2; /* w in {0, 1} is different than k */
+    surgescript_program_add_line(program, SSOP_SELF, SSOPu(w), SSOPu(0));
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(w), SSOPu(0));
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(k), SSOPu(0));
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(surgescript_program_add_text(program, fun_name)), SSOPu(1));
+    surgescript_program_add_line(program, SSOP_POPN, SSOPu(2), SSOPu(0));
+    ssfree(fun_name);
 }

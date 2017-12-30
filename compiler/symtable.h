@@ -20,9 +20,10 @@ struct surgescript_program_t;
 surgescript_symtable_t* surgescript_symtable_create(surgescript_symtable_t* parent); /* parent symbolizes the parent scope and may be NULL */
 surgescript_symtable_t* surgescript_symtable_destroy(surgescript_symtable_t* symtable);
 
-/* put a new symbol located on the heap or on the stack */
+/* put a new symbol on the table */
 void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_heapptr_t address);
 void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_stackptr_t address);
+void surgescript_symtable_put_fun_symbol(surgescript_symtable_t* symtable, const char* symbol);
 
 /* emit surgescript program code so that t[k] is written to the address of the symbol */
 void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, unsigned k);
