@@ -21,6 +21,7 @@ static surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescri
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getinfo(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getgc(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -37,6 +38,7 @@ void surgescript_sslib_register_system(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "System", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
     surgescript_vm_bind(vm, "System", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "System", "getVersion", fun_getversion, 0);
+    surgescript_vm_bind(vm, "System", "getInfo", fun_getinfo, 0);
     surgescript_vm_bind(vm, "System", "get__Temp", fun_gettemp, 0);
     surgescript_vm_bind(vm, "System", "getGC", fun_getgc, 0);
     surgescript_vm_bind(vm, "System", "state:main", fun_main, 0);
@@ -96,6 +98,12 @@ surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescrip
     return surgescript_var_set_string(surgescript_var_create(), SSVERSION);
 }
 
+/* SurgeScript info */
+surgescript_var_t* fun_getinfo(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_string(surgescript_var_create(), SSINFO);
+}
+
 /* get the temp area */
 surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
@@ -105,7 +113,7 @@ surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_v
 /* get a reference to the Garbage Collector */
 surgescript_var_t* fun_getgc(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_child(object, "__GarbageCollector"));
+    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_child(object, "__GC"));
 }
 
 

@@ -13,8 +13,13 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-/* info */
-#define SSVERSION                   "SurgeScript 0.5.0"
+/* SurgeScript info */
+#define SSPROJECT                   "SurgeScript"
+#define SSVERSION                   "0.5.0"
+#ifndef SSBUILD
+#define SSBUILD                     "custom build"
+#endif
+#define SSINFO                      SSPROJECT " " SSVERSION " - " SSBUILD
 
 /* macros */
 #define ssmin(a, b)                 ((a) < (b) ? (a) : (b))
