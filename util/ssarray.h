@@ -38,6 +38,13 @@
     (*(((arr##_len >= arr##_cap) ? (arr = ssrealloc(arr, (arr##_cap *= 2) * sizeof(*(arr)))) : arr) + (arr##_len)) = (x), ++arr##_len)
 
 /*
+ * ssarray_pop()
+ * pops the last element from the array, writing its contents to variable dst
+ */
+#define ssarray_pop(arr, dst)                 \
+    do { if(arr##_len > 0) dst = arr[--arr##_len]; } while(0)
+    
+/*
  * ssarray_remove()
  * removes the index-th element from the array. Must give index >= 0
  */
