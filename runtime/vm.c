@@ -65,8 +65,9 @@ void surgescript_vm_launch(surgescript_vm_t* vm)
     surgescript_sslib_register_string(vm);
     surgescript_sslib_register_number(vm);
     surgescript_sslib_register_boolean(vm);
-    surgescript_sslib_register_time(vm);
     surgescript_sslib_register_temp(vm);
+    surgescript_sslib_register_gc(vm);
+    surgescript_sslib_register_time(vm);
     surgescript_sslib_register_math(vm);
     surgescript_sslib_register_array(vm);
     surgescript_sslib_register_dictionary(vm);
@@ -98,7 +99,6 @@ bool surgescript_vm_update(surgescript_vm_t* vm)
     if(surgescript_vm_is_active(vm)) {
         surgescript_object_t* root = surgescript_vm_root_object(vm);
         surgescript_object_traverse_tree(root, surgescript_object_update);
-        surgescript_objectmanager_collectgarbage(vm->object_manager);
         return surgescript_vm_is_active(vm);
     }
     else

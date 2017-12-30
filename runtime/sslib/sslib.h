@@ -27,5 +27,6 @@ void surgescript_sslib_register_math(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_dictionary(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_time(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_temp(struct surgescript_vm_t* vm);
+void surgescript_sslib_register_gc(struct surgescript_vm_t* vm);
 
 #endif

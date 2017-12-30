@@ -7,11 +7,12 @@
  * SurgeScript utilities
  */
 
-#include <ctype.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdarg.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+#include <ctype.h>
+#include <time.h>
 #include "util.h"
 
 /* private stuff */
@@ -249,6 +250,16 @@ char* surgescript_util_camelcaseprefix(const char* prefix, const char* text)
     return str;
 }
 
+
+/*
+ * surgescript_util_gettickcount()
+ * Returns the number of seconds since the app was started
+ */
+float surgescript_util_gettickcount()
+{
+    /* this might crash after 24.8 days of uninterrupt execution */
+    return (float)clock() / CLOCKS_PER_SEC;
+}
 
 
 /* -------------------------------

@@ -38,9 +38,12 @@ bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surg
 
 /* utilities */
 int surgescript_objectmanager_count(const surgescript_objectmanager_t* manager); /* how many objects there are? */
-void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manager); /* runs the garbage collector */
 struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */
 struct surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_objectmanager_t* manager); /* pointer to the tag manager */
+
+/* garbage collector */
+void surgescript_objectmanager_garbagecheck(surgescript_objectmanager_t* manager); /* checks for garbage (incrementally) */
+bool surgescript_objectmanager_garbagecollect(surgescript_objectmanager_t* manager); /* runs the garbage collector */
 
 /* root & built-in objects */
 surgescript_objecthandle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */

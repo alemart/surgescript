@@ -27,10 +27,10 @@ struct surgescript_objectmanager_t
     surgescript_objecthandle_t app_handle; /* user's application */
     surgescript_programpool_t* program_pool; /* reference to the program pool */
     surgescript_stack_t* stack; /* reference to the stack */
+    surgescript_tagsystem_t* tag_system; /* tag system */
     SSARRAY(surgescript_objecthandle_t, objects_to_be_scanned); /* garbage collection */
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
-    surgescript_tagsystem_t* tag_system; /* tag system */
 };
 
 /* fixed objects */
@@ -42,7 +42,7 @@ static const char* ROOT_OBJECT = "System";
 static const char* SYSTEM_OBJECTS[] = {
     "String", "Number", "Boolean",
     "Time", "Math", "Console",
-    "__Temp",// "__GarbageCollector",
+    "__Temp", "__GC",
     "Application", NULL
 }; /* this must be a NULL-terminated array, and "Application" should be the last element (as objects are spawned in this order) */
 
@@ -140,6 +140,9 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectman
     /* register the object */
     manager->count++;
     surgescript_object_add_child(parent_object, handle);
+
+    /* this is important for garbage collection (will be cleared up later) */
+    surgescript_object_set_reachable(object, true); /* assume the object is reachable at this frame */
 
     /* call constructor and so on */
     surgescript_object_init(object);
@@ -291,11 +294,15 @@ surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_o
 }
 
 /*
- * surgescript_objectmanager_collectgarbage()
- * Run a cycle of the garbage collector (incremental mark-and-sweep algorithm)
+ * surgescript_objectmanager_garbagecollect()
+ * Runs the garbage collector (incremental mark-and-sweep algorithm)
+ * Returns true if something has been disposed, false otherwise
  */
-void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manager)
+bool surgescript_objectmanager_garbagecollect(surgescript_objectmanager_t* manager)
 {
+    bool disposed = false;
+    sslog("Calling the Garbage Collector...");
+
     /* if there are no objects to be scanned, scan the root */
     if(ssarray_length(manager->objects_to_be_scanned) == manager->first_object_to_be_scanned) {
         if(surgescript_objectmanager_exists(manager, ROOT_HANDLE)) {
@@ -306,8 +313,9 @@ void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manag
                 /* clear the unreachable objects */
                 if(unreachables >= MIN_OBJECTS_FOR_DISPOSAL) {
                     surgescript_object_t* root = surgescript_objectmanager_get(manager, ROOT_HANDLE);
-                    sslog("Garbage collector: disposing %d of %d object%s.", unreachables, manager->count, unreachables > 1 ? "s" : "");
+                    sslog("Garbage Collector: disposing %d of %d object%s.", unreachables, manager->count, manager->count > 1 ? "s" : "");
                     surgescript_object_traverse_tree(root, sweep_unreachables);
+                    disposed = true;
                 }
                 else { /* or, at least, unmark everyone (could be more efficient?) */
                     for(int i = 0; i < ssarray_length(manager->objects_to_be_scanned); i++) {
@@ -327,6 +335,16 @@ void surgescript_objectmanager_collectgarbage(surgescript_objectmanager_t* manag
         }
     }
 
+    /* done! */
+    return disposed;
+}
+
+/*
+ * surgescript_objectmanager_garbagechceck()
+ * Incrementally looks for garbage in the system
+ */
+void surgescript_objectmanager_garbagecheck(surgescript_objectmanager_t* manager)
+{
     /* for each object o to be scanned, check the ones that are reachable from o */
     int old_length = ssarray_length(manager->objects_to_be_scanned);
     for(int i = manager->first_object_to_be_scanned; i < old_length; i++) {
@@ -367,8 +385,10 @@ bool mark_as_reachable(unsigned handle, void* mgr)
 bool sweep_unreachables(surgescript_object_t* object)
 {
     /* dispose the object */
-    if(!surgescript_object_is_reachable(object))
+    if(!surgescript_object_is_reachable(object)) {
+        sslog("Garbage Collector: disposing \"%s\"...", surgescript_object_name(object));
         surgescript_object_kill(object);
+    }
 
     /* reset the mark */
     surgescript_object_set_reachable(object, false);

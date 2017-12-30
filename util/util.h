@@ -53,4 +53,6 @@ unsigned long surgescript_util_btoh(unsigned long x); /* big to host-endian */
 const char* surgescript_util_basename(const char* path); /* basename */
 char* surgescript_util_camelcaseprefix(const char* prefix, const char* text); /* camelCase prefixing function */
 
+float surgescript_util_gettickcount(); /* number of seconds since the start of the program */
+
 #endif
