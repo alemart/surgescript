@@ -40,8 +40,8 @@ int main(int argc, char* argv[])
     }
     else {
         /* print usage */
-        printf("SurgeScript\n");
-        printf("Usage: %s input-script.ss\n", argv[0]);
+        printf("%s\n", SSINFO);
+        printf("Usage: %s input-script.ss\n", surgescript_util_basename(argv[0]));
         return 1;
     }
 }
