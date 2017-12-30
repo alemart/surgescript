@@ -51,6 +51,7 @@ unsigned surgescript_object_find_child(const surgescript_object_t* object, const
 void surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle); /* adds a child to this object */
 bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle); /* removes a child having this handle from this object */
 bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
+bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*)); /* tree traversal with an additional data parameter */
 
 /* life operations */
 const char* surgescript_object_state(const surgescript_object_t *object); /* each object is a state machine. in which state am i in? */

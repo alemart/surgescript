@@ -68,6 +68,7 @@ void surgescript_object_release(surgescript_object_t* object);
 static char* state2fun(const char* state);
 static void run_state(surgescript_object_t* object, const char* state_name);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
+static bool simple_traversal(surgescript_object_t* object, void* data);
 
 /* -------------------------------
  * public methods
@@ -578,16 +579,27 @@ bool surgescript_object_update(surgescript_object_t* object)
  */
 bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*))
 {
-    if(!callback(object))
-        return false;
+    return surgescript_object_traverse_tree_ex(object, callback, simple_traversal);
+}
 
-    for(int i = 0; i < ssarray_length(object->child); i++) {
+/*
+ * surgescript_object_traverse_tree_ex()
+ * Traverses the object tree, calling the callback function for each object
+ * If the callback returns false, the traversal doesn't go to the children
+ * Accepts an extra data parameter
+ */
+bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*))
+{
+    if(callback(object, data)) {
         surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        surgescript_object_traverse_tree(child, callback);
+        for(int i = 0; i < ssarray_length(object->child); i++) {
+            surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+            surgescript_object_traverse_tree_ex(child, data, callback);
+        }
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 
@@ -716,4 +728,9 @@ void run_state(surgescript_object_t* object, const char* state_name)
 bool object_exists(surgescript_programpool_t* program_pool, const char* object_name)
 {
     return NULL != surgescript_programpool_get(program_pool, object_name, "state:" MAIN_STATE);
+}
+
+bool simple_traversal(surgescript_object_t* object, void* callback)
+{
+    return ((bool (*)(surgescript_object_t*))callback)(object);
 }
