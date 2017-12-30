@@ -3,7 +3,7 @@
  * A lightweight programming language for computer games and interactive apps
  * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
- * util/program_pool.c
+ * runtime/program_pool.c
  * SurgeScript program pool
  */
 
@@ -13,13 +13,15 @@
 #include "program.h"
 #include "../util/uthash.h"
 #include "../util/util.h"
+#include "../util/ssarray.h"
+
+/* options */
+#define SURGESCRIPT_USE_FAST_SIGNATURES /* let it be fast! */
 
 /*
  * Each function in SurgeScript defines a function signature
  * that depends on the containing object and on the function name
  */
-
-#define SURGESCRIPT_USE_FAST_SIGNATURES /* let it be fast! */
 
 #ifdef SURGESCRIPT_USE_FAST_SIGNATURES /* use fast 64-bit integers for function signatures */
 typedef uint64_t surgescript_programpool_signature_t;
@@ -35,20 +37,38 @@ static inline surgescript_programpool_signature_t generate_signature(const char*
 static inline void delete_signature(surgescript_programpool_signature_t signature); /* deletes a signature */
 
 
-/* program pool types */
-typedef struct surgescript_programpool_hashpair_t surgescript_programpool_hashpair_t;
+/* metadata */
+typedef struct surgescript_programpool_metadata_t surgescript_programpool_metadata_t;
+struct surgescript_programpool_metadata_t /* we'll store the list of program names for each object */
+{
+    char* object_name;
+    SSARRAY(char*, program_name);
+    UT_hash_handle hh;
+};
 
-struct surgescript_programpool_hashpair_t
+static void insert_metadata(surgescript_programpool_t* pool, const char* object_name, const char* program_name);
+static void clear_metadata(surgescript_programpool_t* pool);
+static void traverse_metadata(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*,void*));
+static void traverse_adapter(const char* program_name, void* callback);
+
+
+/* program pool hash type */
+typedef struct surgescript_programpool_hashpair_t surgescript_programpool_hashpair_t;
+struct surgescript_programpool_hashpair_t /* for each function signature, store a reference to its program */
 {
     surgescript_programpool_signature_t signature; /* key */
     surgescript_program_t* program; /* value */
     UT_hash_handle hh;
 };
 
+
+/* program pool */
 struct surgescript_programpool_t
 {
     surgescript_programpool_hashpair_t* hash;
+    surgescript_programpool_metadata_t* meta;
 };
+
 
 
 
@@ -64,6 +84,7 @@ surgescript_programpool_t* surgescript_programpool_create()
 {
     surgescript_programpool_t* pool = ssmalloc(sizeof *pool);
     pool->hash = NULL;
+    pool->meta = NULL;
     return pool;
 }
 
@@ -74,12 +95,15 @@ surgescript_programpool_t* surgescript_programpool_create()
 surgescript_programpool_t* surgescript_programpool_destroy(surgescript_programpool_t* pool)
 {
     surgescript_programpool_hashpair_t *it, *tmp;
+
     HASH_ITER(hh, pool->hash, it, tmp) {
         HASH_DEL(pool->hash, it);
         delete_signature(it->signature);
         surgescript_program_destroy(it->program);
         ssfree(it);
     }
+
+    clear_metadata(pool);
     return ssfree(pool);
 }
 
@@ -100,9 +124,10 @@ bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const
 {
     surgescript_programpool_hashpair_t* pair = NULL;
     surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
-    
+
     HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
     delete_signature(signature);
+
     return pair != NULL;
 }
 
@@ -117,6 +142,7 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
         pair->signature = generate_signature(object_name, program_name);
         pair->program = program;
         HASH_ADD_ITEM_WITH_SIGNATURE(pool->hash, pair->signature, pair);
+        insert_metadata(pool, object_name, program_name);
         return true;
     }
     else {
@@ -154,10 +180,78 @@ surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* po
     return pair->program;
 }
 
+/*
+ * surgescript_programpool_foreach()
+ * For each program of object_name, calls the callback
+ */
+void surgescript_programpool_foreach(surgescript_programpool_t* pool, const char* object_name, void (*callback)(const char*))
+{
+    traverse_metadata(pool, object_name, callback, traverse_adapter);
+}
+
+/*
+ * surgescript_programpool_foreach_ex()
+ * For each program of object_name, calls the callback with an added data parameter
+ */
+void surgescript_programpool_foreach_ex(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*, void*))
+{
+    traverse_metadata(pool, object_name, data, callback);
+}
+
 
 /* -------------------------------
  * private methods
  * ------------------------------- */
+
+
+ /* metadata */
+void insert_metadata(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
+{
+    surgescript_programpool_metadata_t *m = NULL;
+    HASH_FIND_STR(pool->meta, object_name, m);
+
+    /* create the hash entry if it doesn't exist yet */
+    if(m == NULL) {
+        m = ssmalloc(sizeof *m);
+        m->object_name = ssstrdup(object_name);
+        ssarray_init(m->program_name);
+        HASH_ADD_KEYPTR(hh, pool->meta, m->object_name, strlen(m->object_name), m);
+    }
+
+    /* no need to check for key uniqueness (it's checked before) */
+    ssarray_push(m->program_name, ssstrdup(program_name));
+}
+
+void clear_metadata(surgescript_programpool_t* pool)
+{
+    surgescript_programpool_metadata_t *it, *tmp;
+
+    HASH_ITER(hh, pool->meta, it, tmp) {
+        HASH_DEL(pool->meta, it);
+        for(int i = 0; i < ssarray_length(it->program_name); i++)
+            ssfree(it->program_name);
+        ssarray_release(it->program_name);
+        ssfree(it->object_name);
+        ssfree(it);
+    }
+}
+
+void traverse_metadata(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*,void*))
+{
+    surgescript_programpool_metadata_t *m = NULL;
+    HASH_FIND_STR(pool->meta, object_name, m);
+
+    if(m != NULL) {
+        for(int i = 0; i < ssarray_length(m->program_name); i++)
+            callback(m->program_name[i], data);
+    }
+}
+
+void traverse_adapter(const char* program_name, void* callback)
+{
+    ((void (*)(const char*))callback)(program_name);
+}
+
 
 /* function signature methods */
 

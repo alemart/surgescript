@@ -3,7 +3,7 @@
  * A lightweight programming language for computer games and interactive apps
  * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
- * util/program_pool.h
+ * runtime/program_pool.h
  * SurgeScript program pool
  */
 
@@ -25,5 +25,7 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
 struct surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* pool, const char* object_name, const char* program_name); /* may return NULL */
 bool surgescript_programpool_exists(surgescript_programpool_t* pool, const char* object_name, const char* program_name); /* program exists? */
 bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const char* object_name, const char* program_name); /* program exists? (shallow check) */
+void surgescript_programpool_foreach(surgescript_programpool_t* pool, const char* object_name, void (*callback)(const char*)); /* for each program of object_name... */
+void surgescript_programpool_foreach_ex(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*, void*)); /* same as above with an added data parameter */
 
 #endif
