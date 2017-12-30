@@ -495,6 +495,15 @@ surgescript_transform_t* surgescript_object_transform(surgescript_object_t* obje
     return object->transform;
 }
 
+/*
+ * surgescript_object_transform_changed()
+ * true if the transform of this object has ever been changed
+ */
+bool surgescript_object_transform_changed(const surgescript_object_t* object)
+{
+    return object->transform != NULL;
+}
+
 
 /* life-cycle */
 

@@ -63,6 +63,7 @@ void surgescript_object_kill(surgescript_object_t* object); /* will destroy the 
 /* transform */
 void surgescript_object_peek_transform(const surgescript_object_t* object, struct surgescript_transform_t* transform); /* reads the local transform */
 void surgescript_object_poke_transform(surgescript_object_t* object, const struct surgescript_transform_t* transform); /* sets the local transform */
+bool surgescript_object_transform_changed(const surgescript_object_t* object); /* has the local transform ever been changed? */
 struct surgescript_transform_t* surgescript_object_transform(surgescript_object_t* object); /* inner pointer to the local transform */
 
 /* exported variables */
