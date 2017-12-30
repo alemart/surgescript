@@ -20,7 +20,6 @@ static surgescript_var_t* fun_constructor(surgescript_object_t* object, const su
 static surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getgc(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -37,7 +36,6 @@ void surgescript_sslib_register_system(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "System", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "System", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
     surgescript_vm_bind(vm, "System", "spawn", fun_spawn, 1);
-    surgescript_vm_bind(vm, "System", "getTransform", fun_gettransform, 0);
     surgescript_vm_bind(vm, "System", "getVersion", fun_getversion, 0);
     surgescript_vm_bind(vm, "System", "get__Temp", fun_gettemp, 0);
     surgescript_vm_bind(vm, "System", "getGC", fun_getgc, 0);
@@ -92,13 +90,6 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
     return NULL;
 }
  
-/* transform */
-surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    /* this object has no transform */
-    return NULL;
-}
-
 /* SurgeScript version */
 surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {

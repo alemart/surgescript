@@ -21,7 +21,6 @@ static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgesc
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -35,7 +34,6 @@ void surgescript_sslib_register_boolean(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Boolean", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Boolean", "spawn", fun_spawn, 1);
-    surgescript_vm_bind(vm, "Boolean", "getTransform", fun_gettransform, 0);
     surgescript_vm_bind(vm, "Boolean", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Boolean", "valueOf", fun_valueof, 1);
     surgescript_vm_bind(vm, "Boolean", "toString", fun_tostring, 1);
@@ -91,13 +89,6 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* do nothing; you can't spawn children on this object */
-    return NULL;
-}
-
-/* transform */
-surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    /* this object has no transform */
     return NULL;
 }
 

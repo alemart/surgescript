@@ -18,7 +18,6 @@ static surgescript_var_t* fun_constructor(surgescript_object_t* object, const su
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_gettime(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getdelta(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -38,7 +37,6 @@ void surgescript_sslib_register_time(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Time", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Time", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Time", "spawn", fun_spawn, 1);
-    surgescript_vm_bind(vm, "Time", "getTransform", fun_gettransform, 0);
     surgescript_vm_bind(vm, "Time", "getTime", fun_gettime, 0);
     surgescript_vm_bind(vm, "Time", "getDelta", fun_getdelta, 0);
 }
@@ -86,13 +84,6 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* do nothing; you can't spawn children on this object */
-    return NULL;
-}
-
-/* transform */
-surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    /* this object has no transform */
     return NULL;
 }
 

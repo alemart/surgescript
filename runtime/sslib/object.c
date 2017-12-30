@@ -25,7 +25,6 @@ static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgesc
 static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_timeout(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
@@ -48,7 +47,6 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "equals", fun_equals, 1);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
-    surgescript_vm_bind(vm, "Object", "getTransform", fun_gettransform, 0);
     surgescript_vm_bind(vm, "Object", "timeout", fun_timeout, 1);
     surgescript_vm_bind(vm, "Object", "__export", fun_export, 2);
 }
@@ -160,21 +158,6 @@ surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_va
     surgescript_heapptr_t var_addr = surgescript_var_get_rawbits(param[1]);
     surgescript_object_export_variable(object, var_name, var_addr);
     return NULL;
-}
-
-/* gets the transform of the object (or spawns it if there isn't one) */
-surgescript_var_t* fun_gettransform(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    const char* component_name = "Transform2D";
-    surgescript_objecthandle_t component_handle = surgescript_object_child(object, component_name);
-
-    if(!component_handle) {
-        surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
-        surgescript_objecthandle_t parent_handle = surgescript_object_parent(object);
-        component_handle = surgescript_objectmanager_spawn(object_manager, parent_handle, component_name, NULL);
-    }
-
-    return surgescript_var_set_objecthandle(surgescript_var_create(), component_handle);
 }
 
 /* returns true iff the object has been on the same state for param[0] seconds or more */
