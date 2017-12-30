@@ -208,7 +208,7 @@ void surgescript_programpool_foreach_ex(surgescript_programpool_t* pool, const c
 void insert_metadata(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
     surgescript_programpool_metadata_t *m = NULL;
-    HASH_FIND_STR(pool->meta, object_name, m);
+    HASH_FIND(hh, pool->meta, object_name, strlen(object_name), m);
 
     /* create the hash entry if it doesn't exist yet */
     if(m == NULL) {
@@ -229,7 +229,7 @@ void clear_metadata(surgescript_programpool_t* pool)
     HASH_ITER(hh, pool->meta, it, tmp) {
         HASH_DEL(pool->meta, it);
         for(int i = 0; i < ssarray_length(it->program_name); i++)
-            ssfree(it->program_name);
+            ssfree(it->program_name[i]);
         ssarray_release(it->program_name);
         ssfree(it->object_name);
         ssfree(it);
