@@ -3,7 +3,7 @@
  * A lightweight programming language for computer games and interactive apps
  * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
- * util/transform2d.c
+ * runtime/sslib/transform2d.c
  * SurgeScript standard library: Transform2D
  */
 

@@ -3,7 +3,7 @@
  * A lightweight programming language for computer games and interactive apps
  * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
- * util/dictionary.c
+ * runtime/sslib/dictionary.c
  * SurgeScript standard library: Dictionary data structure
  */
 

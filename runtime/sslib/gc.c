@@ -3,7 +3,7 @@
  * A lightweight programming language for computer games and interactive apps
  * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
- * util/gc.c
+ * runtime/sslib/gc.c
  * SurgeScript standard library: Garbage Collector controller
  */
 

@@ -3,7 +3,7 @@
  * A lightweight programming language for computer games and interactive apps
  * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
- * util/number.c
+ * runtime/sslib/number.c
  * SurgeScript standard library: routines for the Number object
  */
 
