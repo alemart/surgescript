@@ -22,44 +22,26 @@
  */
 int main(int argc, char* argv[])
 {
-    surgescript_vm_t* vm = surgescript_vm_create();
-    surgescript_programpool_t* program_pool = surgescript_vm_programpool(vm);
-    surgescript_tagsystem_t* tag_system = surgescript_vm_tagsystem(vm);
-    surgescript_parser_t* parser = surgescript_parser_create(program_pool, tag_system);
-    const char* file = argc > 1 ? argv[1] : "";
-    bool success;
+    const char* file = argc > 1 ? argv[1] : NULL;
+    if(file) {
+        /* spawn the VM and compile the input file */
+        surgescript_vm_t* vm = surgescript_vm_create();
+        surgescript_vm_compile(vm, file);
 
-    /* do we have an input file? */
-    if(!*file) {
+        /* run the VM */
+        surgescript_vm_launch(vm);
+        while(surgescript_vm_update(vm)) {
+            ;
+        }
+        surgescript_vm_destroy(vm);
+
+        /* done! */
+        return 0;
+    }
+    else {
+        /* print usage */
         printf("SurgeScript\n");
         printf("Usage: %s input-script.ss\n", argv[0]);
-        surgescript_parser_destroy(parser);
-        surgescript_vm_destroy(vm);
         return 1;
     }
-
-    /* parse & compile the input file */
-    success = surgescript_parser_parsefile(parser, file);
-    if(!success) {
-        printf("Error when parsing \"%s\".", file);
-        surgescript_parser_destroy(parser);
-        surgescript_vm_destroy(vm);
-        return 1;
-    }
-    else
-        surgescript_parser_destroy(parser);
-
-    /* debug */
-    /*surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "__ssconstructor"), stdout);
-    surgescript_program_dump(surgescript_programpool_get(program_pool, "Application", "state:main"), stdout);*/
-
-    /* run the script */
-    surgescript_vm_launch(vm);
-    while(surgescript_vm_update(vm)) {
-        ;
-    }
-    surgescript_vm_destroy(vm);
-
-    /* done! */
-    return 0;
 }

@@ -176,7 +176,7 @@ bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* abso
 }
 
 /*
- * surgescript_parser_parsefile()
+ * surgescript_parser_parsemem()
  * Parse a script stored in memory
  */
 bool surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_in_memory)
