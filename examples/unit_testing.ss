@@ -85,6 +85,7 @@ object "SurgeScriptTest"
         test("Surge, Neon and Charge".replace("Neon", "Gimacian") == "Surge, Gimacian and Charge") || fail(40);
         test("Surge, Neon and Charge".replace("Charge", "Gimacian") == "Surge, Neon and Gimacian") || fail(41);
         test("Surge, Neon and Charge".replace("", "Gimacian") == "Surge, Neon and Charge") || fail(42);
+        test("Surge, Neon and Charge".replace("Gimacian", "") == "Surge, Neon and Charge") || fail(43);
         end();
     }
 
