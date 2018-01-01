@@ -86,6 +86,8 @@ object "SurgeScriptTest"
         test("Surge, Neon and Charge".replace("Charge", "Gimacian") == "Surge, Neon and Gimacian") || fail(41);
         test("Surge, Neon and Charge".replace("", "Gimacian") == "Surge, Neon and Charge") || fail(42);
         test("Surge, Neon and Charge".replace("Gimacian", "") == "Surge, Neon and Charge") || fail(43);
+        test("SurgeScript".toLowerCase() == "surgescript") || fail(44);
+        test("SurgeScript".toUpperCase() == "SURGESCRIPT") || fail(45);
         end();
     }
 
