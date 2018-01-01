@@ -360,7 +360,6 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 
     /* done! */
     return stringified_dictionary;
-    //return surgescript_var_set_string(surgescript_var_create(), "[Dictionary]");
 }
 
 
