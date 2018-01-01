@@ -34,7 +34,6 @@ static surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const
 static surgescript_var_t* fun_it_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_it_hasnext(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_it_getitem(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* BSTNode: native implementation of a Binary Search Tree in SurgeScript */
 static surgescript_var_t* fun_bst_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -86,7 +85,6 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "DictionaryIterator", "state:main", fun_it_main, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "next", fun_it_next, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "hasNext", fun_it_hasnext, 0);
-    surgescript_vm_bind(vm, "DictionaryIterator", "getItem", fun_it_getitem, 0);
 
     surgescript_vm_bind(vm, "BSTNode", "constructor", fun_bst_constructor, 0);
     surgescript_vm_bind(vm, "BSTNode", "state:main", fun_bst_main, 0);
@@ -453,23 +451,6 @@ surgescript_var_t* fun_it_hasnext(surgescript_object_t* object, const surgescrip
     surgescript_var_t* stacksize = surgescript_heap_at(heap, IT_STACKSIZE);
     return surgescript_var_set_bool(surgescript_var_create(), surgescript_var_get_number(stacksize) > 0);
 }
-
-/* getItem(): the current item of the collection, according to the iterator. Items have no particular order. User-tip: items should NOT be deleted while iterating */
-surgescript_var_t* fun_it_getitem(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_heap_t* heap = surgescript_object_heap(object);
-    surgescript_var_t* stacksize = surgescript_heap_at(heap, IT_STACKSIZE);
-
-    if(surgescript_var_get_number(stacksize) > 0) {
-        surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-        surgescript_var_t* bst_node = surgescript_heap_at(heap, IT_STACKBASE + (surgescript_var_get_number(stacksize) - 1));
-        surgescript_object_t* node = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(bst_node));
-        return fun_bst_getkey(node, NULL, 0);
-    }
-
-    return NULL;
-}
-
 
 
 /* --- BSTNode functions --- */
