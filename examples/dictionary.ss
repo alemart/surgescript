@@ -42,8 +42,8 @@ object "Application"
 
         it = weight.iterator();
         while(it.hasNext()) {
-            sum += weight[it.item];
-            it.next();
+            character = it.next();
+            sum += weight[character];
         }
 
         return sum;
