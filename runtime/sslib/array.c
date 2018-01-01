@@ -7,6 +7,7 @@
  * SurgeScript Arrays
  */
 
+#include <string.h>
 #include "../vm.h"
 #include "../object_manager.h"
 #include "../heap.h"
@@ -284,6 +285,33 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
     surgescript_heap_t* heap = surgescript_object_heap(object);
     int length = ARRAY_LENGTH(heap);
 
+    /* helper macro */
+    #define WRITE_ELEMENT(element, write_as_quoted_string) \
+        do { \
+            char* value = surgescript_var_get_string((element), manager); \
+            if(write_as_quoted_string) { \
+                ssarray_push(sb, '"'); \
+                for(const char* p = value; *p; p++) { \
+                    switch(*p) { \
+                        case '\n': ssarray_push(sb, '\\'); ssarray_push(sb, 'n'); break; \
+                        case '\r': ssarray_push(sb, '\\'); ssarray_push(sb, 'r'); break; \
+                        case '\t': ssarray_push(sb, '\\'); ssarray_push(sb, 't'); break; \
+                        case '\f': ssarray_push(sb, '\\'); ssarray_push(sb, 'f'); break; \
+                        case '\v': ssarray_push(sb, '\\'); ssarray_push(sb, 'v'); break; \
+                        case '\b': ssarray_push(sb, '\\'); ssarray_push(sb, 'b'); break; \
+                        case '\"': ssarray_push(sb, '\\'); ssarray_push(sb, '"'); break; \
+                        default: ssarray_push(sb, *p); break; \
+                    } \
+                } \
+                ssarray_push(sb, '"'); \
+            } \
+            else { \
+                for(const char* p = value; *p; p++) \
+                    ssarray_push(sb, *p); \
+            } \
+            ssfree(value); \
+        } while(0) \
+
     /* start sb */
     ssarray_init(sb);
     ssarray_push(sb, '[');
@@ -296,39 +324,18 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
         ssarray_push(sb, ' ');
 
         /* write element */
-        for(;;) {
-            /* is it a string? */
-            if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("string"))) {
-                char* value = surgescript_var_get_string(element, NULL);
-                ssarray_push(sb, '"');
-                for(const char* p = value; *p; p++) {
-                    if(*p == '"')
-                        ssarray_push(sb, '\\');
-                    ssarray_push(sb, *p);
-                }
-                ssarray_push(sb, '"');
-                ssfree(value);
-                break;
-            }
-
-            /* is it an object? */
-            else if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("object"))) {
-                surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(element);
-                surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
+        if(!surgescript_var_typecheck(element, surgescript_var_type2code("object"))) {
+            surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(element);
+            surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
+            if(strcmp(surgescript_object_name(object), "Array") != 0 && strcmp(surgescript_object_name(object), "Dictionary") != 0) {
                 surgescript_object_call_function(object, "toString", NULL, 0, element);
-                if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("string"))) {
-                    if(strcmp(surgescript_var_fast_get_string(element), "[object]") != 0)
-                        continue;
-                }
+                WRITE_ELEMENT(element, strcmp(surgescript_var_fast_get_string(element), "[object]"));
             }
-
-            /* it's neither. perform simple string conversion */
-            char* value = surgescript_var_get_string(element, NULL);
-            for(const char* p = value; *p; p++)
-                ssarray_push(sb, *p);
-            ssfree(value);
-            break;
+            else
+                WRITE_ELEMENT(element, false);
         }
+        else
+            WRITE_ELEMENT(element, !surgescript_var_typecheck(element, surgescript_var_type2code("string")));
 
         /* add separator */
         ssarray_push(sb, i < length - 1 ? ',' : ' ');
