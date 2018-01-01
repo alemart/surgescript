@@ -37,7 +37,7 @@ struct surgescript_lexer_t
 };
 
 /* keywords */
-static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE, SSTOK_TYPEOF, SSTOK_EXPORT, SSTOK_TAG };
+static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE, SSTOK_TYPEOF, SSTOK_PUBLIC, SSTOK_TAG };
 static int indexof_keyword(const char* identifier);
 static inline void bufadd(surgescript_lexer_t* lexer, char c);
 static inline void bufclear(surgescript_lexer_t* lexer);
@@ -47,7 +47,6 @@ static inline void skipspaces(surgescript_lexer_t* lexer);
 #define isidchar(c)                 (isalnum(c) || (c) == '_' || (c) == '$')  /* is c an identifier-char? */
 #define isnumeric(c)                (isdigit(c) || (c) == '.') /* is c a char belonging to a number? */
 #define iswhitespace(c)             ((c) == ' ' || (c) == '\t' || (c) == '\n' || (c) == '\r' || (c) == '\f' || (c) == '\v')
-#define isemoticonmouth(c)          ((c) == '(' || (c) == 'O' || (c) == 'o' || (c) == 'p' || (c) == 'P' || (c) == ')')
 
 
 
@@ -381,13 +380,18 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     }
 
     /* read emoticon */
-    if((*(lexer->p) == ':' && *(lexer->p + 1) == '-' && isemoticonmouth(*(lexer->p + 2))) || !strncmp(lexer->p, "$_$", 3)) {
+    if(*(lexer->p) == '$' && 0 == strncmp(lexer->p, "$_$", 3)) {
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line, prev);
     }
     else if(*(lexer->p) == '<' && *(lexer->p + 1) == '3') {
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line, prev);
+    }
+    else if(*(lexer->p) == ':' && (*(lexer->p + 1) == ')' || *(lexer->p + 1) == '(' || *(lexer->p + 1) == 'o')) {
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line, prev);

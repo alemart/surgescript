@@ -51,6 +51,7 @@ static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t
 static void unexpected_symbol(surgescript_parser_t* parser);
 static void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static surgescript_var_t* disable_object(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
+static void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier);
 
 /* non-terminals */
 static void objectlist(surgescript_parser_t* parser);
@@ -358,6 +359,39 @@ surgescript_var_t* disable_object(surgescript_object_t* object, const surgescrip
     return NULL;
 }
 
+/* we'll create a getter and a setter for the variable named identifier */
+void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier)
+{
+    char* getter_name = surgescript_util_camelcaseprefix("get", identifier);
+    char* setter_name = surgescript_util_camelcaseprefix("set", identifier);
+    surgescript_program_t* getter = surgescript_program_create(0);
+    surgescript_program_t* setter = surgescript_program_create(1);
+
+    /* create a getter */
+    emit_vargetter(nodecontext(
+        context.source_file,
+        context.object_name,
+        context.symtable, /* reuse the same table; no locals */
+        getter
+    ), identifier);
+
+    /* create a setter */
+    emit_varsetter(nodecontext(
+        context.source_file,
+        context.object_name,
+        context.symtable, /* reuse the same table; no locals */
+        setter
+    ), identifier);
+
+    /* register things */
+    surgescript_programpool_put(parser->program_pool, context.object_name, getter_name, getter);
+    surgescript_programpool_put(parser->program_pool, context.object_name, setter_name, setter);
+
+    /* done */
+    ssfree(setter_name);
+    ssfree(getter_name);
+}
+
 
 
 
@@ -438,7 +472,7 @@ void taglist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    while(got_type(parser, SSTOK_IDENTIFIER) || got_type(parser, SSTOK_EXPORT))
+    while(got_type(parser, SSTOK_IDENTIFIER) || got_type(parser, SSTOK_PUBLIC))
         vardecl(parser, context);
 
     emit_accessors(context, "Object", parser->program_pool);
@@ -446,7 +480,7 @@ void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context
 
 void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    bool must_export_var = optmatch(parser, SSTOK_EXPORT);
+    bool public_var = optmatch(parser, SSTOK_PUBLIC);
     char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
 
     match(parser, SSTOK_IDENTIFIER);
@@ -455,8 +489,8 @@ void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     match(parser, SSTOK_SEMICOLON);
 
     emit_vardecl(context, id);
-    if(must_export_var)
-        emit_exportvar(context, id);
+    if(public_var)
+        create_getter_and_setter(parser, context, id);
 
     ssfree(id);
 }

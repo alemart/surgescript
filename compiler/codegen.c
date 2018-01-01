@@ -90,6 +90,19 @@ void emit_exportvar(surgescript_nodecontext_t context, const char* identifier)
     SSASM(SSOP_POPN, U(3));
 }
 
+void emit_vargetter(surgescript_nodecontext_t context, const char* identifier)
+{
+    surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);
+    SSASM(SSOP_RET);
+}
+
+void emit_varsetter(surgescript_nodecontext_t context, const char* identifier)
+{
+    SSASM(SSOP_SPEEK, T0, I(-1)); /* t0 is now the first parameter of the function call */
+    surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
+    SSASM(SSOP_RET);
+}
+
 static void emit_accessor(const char* fun_name, void* ctx)
 {
     /* run only if fun_name is an accessor (getSomething / setSomething) */
