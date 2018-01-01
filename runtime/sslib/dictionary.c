@@ -26,6 +26,7 @@ static surgescript_var_t* fun_clear(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_delete(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_has(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* DictionaryIterator */
 static surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -78,6 +79,7 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Dictionary", "delete", fun_delete, 1);
     surgescript_vm_bind(vm, "Dictionary", "has", fun_has, 1);
     surgescript_vm_bind(vm, "Dictionary", "iterator", fun_iterator, 0);
+    surgescript_vm_bind(vm, "Dictionary", "toString", fun_tostring, 0);
 
     surgescript_vm_bind(vm, "DictionaryIterator", "constructor", fun_it_constructor, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "state:main", fun_it_main, 0);
@@ -264,6 +266,11 @@ surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_
     return surgescript_var_set_objecthandle(surgescript_var_create(), it_handle);
 }
 
+/* converts to string */
+surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_string(surgescript_var_create(), "[Dictionary]");
+}
 
 
 /* --- DictionaryIterator --- */

@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/sslib/array.c
  * SurgeScript Arrays
@@ -11,6 +11,7 @@
 #include "../object_manager.h"
 #include "../heap.h"
 #include "../object.h"
+#include "../../util/ssarray.h"
 #include "../../util/util.h"
 
 
@@ -277,8 +278,79 @@ surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_v
 /* converts to string */
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    /* TODO */
-    return surgescript_var_set_string(surgescript_var_create(), "[Array]");
+    SSARRAY(char, sb); /* string builder */
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_var_t* stringified_array = surgescript_var_create();
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    int length = ARRAY_LENGTH(heap);
+
+    /* start sb */
+    ssarray_init(sb);
+    ssarray_push(sb, '[');
+
+    /* for each element */
+    for(int i = 0; i < length; i++) {
+        surgescript_var_t* element = surgescript_heap_at(heap, BASE_ADDR + i);
+
+        /* add whitespace */
+        ssarray_push(sb, ' ');
+
+        /* write element */
+        for(;;) {
+            /* check element type */
+            if(
+                0 == surgescript_var_typecheck(element, surgescript_var_type2code("number")) ||
+                0 == surgescript_var_typecheck(element, surgescript_var_type2code("bool")) ||
+                0 == surgescript_var_typecheck(element, surgescript_var_type2code(NULL))
+            ) {
+                char* value = surgescript_var_get_string(element);
+                for(const char* p = value; *p; p++)
+                    ssarray_push(sb, *p);
+                ssfree(value);
+                break;
+            }
+            else if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("string"))) {
+                char* value = surgescript_var_get_string(element);
+                ssarray_push(sb, '"');
+                for(const char* p = value; *p; p++) {
+                    if(*p == '"')
+                        ssarray_push(sb, '\\');
+                    ssarray_push(sb, *p);
+                }
+                ssarray_push(sb, '"');
+                ssfree(value);
+                break;
+            }
+            else if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("object"))) {
+                surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(element);
+                surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
+                surgescript_object_call_function(object, "toString", NULL, 0, element);
+                if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("object"))) {
+                    char* value = surgescript_var_get_string(element);
+                    for(const char* p = value; *p; p++)
+                        ssarray_push(sb, *p);
+                    ssfree(value);
+                    break;
+                }
+            }
+            else {
+                ssarray_push(sb, '?');
+                break;
+            }
+        }
+
+        /* add separator */
+        ssarray_push(sb, i < length - 1 ? ',' : ' ');
+    }
+
+    /* convert sb to string */
+    ssarray_push(sb, ']');
+    ssarray_push(sb, '\0');
+    surgescript_var_set_string(stringified_array, sb);
+    ssarray_release(sb);
+
+    /* done! */
+    return stringified_array;
 }
 
 

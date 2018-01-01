@@ -46,10 +46,10 @@ void surgescript_objectmanager_garbagecheck(surgescript_objectmanager_t* manager
 bool surgescript_objectmanager_garbagecollect(surgescript_objectmanager_t* manager); /* runs the garbage collector */
 
 /* root & built-in objects */
-surgescript_objecthandle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager); /* handle to a null object */
-surgescript_objecthandle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
-surgescript_objecthandle_t surgescript_objectmanager_application(surgescript_objectmanager_t* manager); /* handle to the user's application */
-surgescript_objecthandle_t surgescript_objectmanager_system_object(surgescript_objectmanager_t* manager, const char* object_name); /* handle to the specified system object */
+surgescript_objecthandle_t surgescript_objectmanager_null(const surgescript_objectmanager_t* manager); /* handle to a null object */
+surgescript_objecthandle_t surgescript_objectmanager_root(const surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
+surgescript_objecthandle_t surgescript_objectmanager_application(const surgescript_objectmanager_t* manager); /* handle to the user's application */
+surgescript_objecthandle_t surgescript_objectmanager_system_object(const surgescript_objectmanager_t* manager, const char* object_name); /* handle to the specified system object */
 
 /* utilities */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_array(surgescript_objectmanager_t* manager); /* handle to a new Array */

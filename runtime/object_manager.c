@@ -21,10 +21,9 @@
 /* types */
 struct surgescript_objectmanager_t
 {
-    SSARRAY(surgescript_object_t*, data); /* object table */
     int count; /* how many objects are allocated at the moment */
     surgescript_objecthandle_t handle_ptr; /* memory allocation */
-    surgescript_objecthandle_t app_handle; /* user's application */
+    SSARRAY(surgescript_object_t*, data); /* object table */
     surgescript_programpool_t* program_pool; /* reference to the program pool */
     surgescript_stack_t* stack; /* reference to the stack */
     surgescript_tagsystem_t* tag_system; /* tag system */
@@ -87,7 +86,6 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     manager->tag_system = tag_system;
     manager->stack = stack;
     manager->handle_ptr = ROOT_HANDLE;
-    manager->app_handle = NULL_HANDLE;
 
     ssarray_init(manager->objects_to_be_scanned);
     manager->first_object_to_be_scanned = 0;
@@ -218,7 +216,7 @@ bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surg
  * Returns a handle to a NULL pointer in the object manager
  * Warning: this may be called with a NULL manager parameter
  */
-surgescript_objecthandle_t surgescript_objectmanager_null(surgescript_objectmanager_t* manager)
+surgescript_objecthandle_t surgescript_objectmanager_null(const surgescript_objectmanager_t* manager)
 {
     /* this must *always* be zero */
     return NULL_HANDLE;
@@ -228,7 +226,7 @@ surgescript_objecthandle_t surgescript_objectmanager_null(surgescript_objectmana
  * surgescript_objectmanager_root()
  * Returns a handle to the root object in the pool
  */
-surgescript_objecthandle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager)
+surgescript_objecthandle_t surgescript_objectmanager_root(const surgescript_objectmanager_t* manager)
 {
     return ROOT_HANDLE;
 }
@@ -237,12 +235,9 @@ surgescript_objecthandle_t surgescript_objectmanager_root(surgescript_objectmana
  * surgescript_objectmanager_application()
  * Returns a handle to the user's application
  */
-surgescript_objecthandle_t surgescript_objectmanager_application(surgescript_objectmanager_t* manager)
+surgescript_objecthandle_t surgescript_objectmanager_application(const surgescript_objectmanager_t* manager)
 {
-    if(manager->app_handle != NULL_HANDLE)
-        return manager->app_handle;
-    else
-        return manager->app_handle = surgescript_objectmanager_system_object(manager, "Application"); /* cache the app handle */
+    return surgescript_objectmanager_system_object(manager, "Application");
 }
 
 /*
@@ -250,7 +245,7 @@ surgescript_objecthandle_t surgescript_objectmanager_application(surgescript_obj
  * Returns a handle to a child of the system object
  * The manager parameter may be set to NULL (useful when evaluating at compile-time)
  */
-surgescript_objecthandle_t surgescript_objectmanager_system_object(surgescript_objectmanager_t* manager, const char* object_name)
+surgescript_objecthandle_t surgescript_objectmanager_system_object(const surgescript_objectmanager_t* manager, const char* object_name)
 {
     /* this must be determined at compile-time (for SurgeScript), hence the SYSTEM_OBJECTS array */
     for(const char** p = SYSTEM_OBJECTS; *p != NULL; p++) {
