@@ -243,12 +243,14 @@ surgescript_var_t* fun_replace(surgescript_object_t* object, const surgescript_v
     ssarray_init(sb);
 
     p = subject;
-    while((loc = strstr(p, search)) != NULL) {
-        while(p != loc && *p)
-            ssarray_push(sb, *p++);
-        for(q = replace; *q;)
-            ssarray_push(sb, *q++);
-        p += search_len;
+    if(search_len > 0) {
+        while((loc = strstr(p, search)) != NULL) {
+            while(p != loc && *p)
+                ssarray_push(sb, *p++);
+            for(q = replace; *q;)
+                ssarray_push(sb, *q++);
+            p += search_len;
+        }
     }
     while(*p)
         ssarray_push(sb, *p++);

@@ -392,7 +392,7 @@ const char* surgescript_var_fast_get_string(const surgescript_var_t* var)
  */
 int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t* b)
 {
-    if(a->type == b->type) { /* a and b are of the same type */
+    if(a->type == b->type) {
         switch(a->type) {
             case SSVAR_BOOL:
                 return (int)(a->boolean) - (int)(b->boolean);
@@ -411,7 +411,7 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
                 return 0;
         }
     }
-    else if(a->type != SSVAR_OBJECTHANDLE && b->type != SSVAR_OBJECTHANDLE) { /* a and b are primitives */
+    else {
         if(a->type == SSVAR_NULL || b->type == SSVAR_NULL) {
             return (a->raw != 0) - (b->raw != 0);
         }
@@ -441,13 +441,13 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             bool y = surgescript_var_get_bool(b);
             return (int)x - (int)y;
         }
+        else if(a->type == SSVAR_OBJECTHANDLE || b->type == SSVAR_OBJECTHANDLE) {
+            unsigned long x = surgescript_var_get_objecthandle(a);
+            unsigned long y = surgescript_var_get_objecthandle(b);
+            return x != y ? (x > y ? 1 : -1) : 0;
+        }
         else
             return 0; /* this shouldn't happen */
-    }
-    else { /* either a or b is an object */
-        unsigned long x = surgescript_var_get_objecthandle(a);
-        unsigned long y = surgescript_var_get_objecthandle(b);
-        return x != y ? (x > y ? 1 : -1) : 0;
     }
 }
 
