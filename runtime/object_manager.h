@@ -35,9 +35,9 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectman
 bool surgescript_objectmanager_exists(const surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* does the specified handle points to a valid object? */
 struct surgescript_object_t* surgescript_objectmanager_get(const surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* returns NULL if the object is not found */
 bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* deletes an existing object; returns true on success */
-
-/* utilities */
 int surgescript_objectmanager_count(const surgescript_objectmanager_t* manager); /* how many objects there are? */
+
+/* components */
 struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */
 struct surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_objectmanager_t* manager); /* pointer to the tag manager */
 
@@ -50,5 +50,9 @@ surgescript_objecthandle_t surgescript_objectmanager_null(surgescript_objectmana
 surgescript_objecthandle_t surgescript_objectmanager_root(surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
 surgescript_objecthandle_t surgescript_objectmanager_application(surgescript_objectmanager_t* manager); /* handle to the user's application */
 surgescript_objecthandle_t surgescript_objectmanager_system_object(surgescript_objectmanager_t* manager, const char* object_name); /* handle to the specified system object */
+
+/* utilities */
+surgescript_objecthandle_t surgescript_objectmanager_spawn_array(surgescript_objectmanager_t* manager); /* handle to a new Array */
+surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescript_objectmanager_t* manager); /* handle to a new Dictionary */
 
 #endif

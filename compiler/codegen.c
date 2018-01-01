@@ -670,15 +670,13 @@ void emit_setterincdec(surgescript_nodecontext_t context, const char* property_n
 
 void emit_arrayexpr1(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_MOVO, T0, U(surgescript_objectmanager_system_object(NULL, "System")));
-    SSASM(SSOP_PUSH, T0);
-    SSASM(SSOP_CALL, TEXT("get__Temp"), U(0)); /* t0 = System.__Temp */
+    SSASM(SSOP_MOVO, T0, U(surgescript_objectmanager_system_object(NULL, "__Temp")));
     SSASM(SSOP_PUSH, T0);
     SSASM(SSOP_MOVS, T0, TEXT("Array"));
     SSASM(SSOP_PUSH, T0);
     SSASM(SSOP_CALL, TEXT("spawn"), U(1)); /* t0 = t0.spawn("Array") */
-    SSASM(SSOP_POPN, U(3));
-    SSASM(SSOP_PUSH, T0); /* save the handle to the dictionary */
+    SSASM(SSOP_POPN, U(2));
+    SSASM(SSOP_PUSH, T0); /* save the handle */
 }
 
 void emit_arrayexpr2(surgescript_nodecontext_t context)
@@ -695,15 +693,13 @@ void emit_arrayelement(surgescript_nodecontext_t context)
 
 void emit_dictdecl1(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_MOVO, T0, U(surgescript_objectmanager_system_object(NULL, "System")));
-    SSASM(SSOP_PUSH, T0);
-    SSASM(SSOP_CALL, TEXT("get__Temp"), U(0)); /* t0 = System.__Temp */
+    SSASM(SSOP_MOVO, T0, U(surgescript_objectmanager_system_object(NULL, "__Temp")));
     SSASM(SSOP_PUSH, T0);
     SSASM(SSOP_MOVS, T0, TEXT("Dictionary"));
     SSASM(SSOP_PUSH, T0);
     SSASM(SSOP_CALL, TEXT("spawn"), U(1)); /* t0 = t0.spawn("Dictionary") */
-    SSASM(SSOP_POPN, U(3));
-    SSASM(SSOP_PUSH, T0); /* save the handle to the dictionary */
+    SSASM(SSOP_POPN, U(2));
+    SSASM(SSOP_PUSH, T0); /* save the handle */
 }
 
 void emit_dictdecl2(surgescript_nodecontext_t context)
@@ -769,7 +765,7 @@ void emit_forin1(surgescript_nodecontext_t context, const char* it, surgescript_
         /* reserve an address on the stack to the iterator */
         surgescript_symtable_put_stack_symbol(context.symtable, it, (surgescript_stackptr_t)(1 + surgescript_symtable_local_count(context.symtable) - surgescript_program_arity(context.program)));
     }
-    SSASM(SSOP_XOR, T1, T1); /* initialize the loop counter */
+    SSASM(SSOP_XOR, T1, T1); /* initialize the loop counter to zero */
     surgescript_symtable_emit_write(context.symtable, it, context.program, 1);
 
     LABEL(begin);

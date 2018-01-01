@@ -254,7 +254,7 @@ surgescript_objecthandle_t surgescript_objectmanager_system_object(surgescript_o
 {
     /* this must be determined at compile-time (for SurgeScript), hence the SYSTEM_OBJECTS array */
     for(const char** p = SYSTEM_OBJECTS; *p != NULL; p++) {
-        if(strcmp(*p, object_name) == 0 && **p != '_')
+        if(strcmp(*p, object_name) == 0)
             return ROOT_HANDLE + (p - SYSTEM_OBJECTS + 1);
     }
 
@@ -357,6 +357,22 @@ void surgescript_objectmanager_garbagecheck(surgescript_objectmanager_t* manager
     manager->first_object_to_be_scanned = old_length;
 }
 
+/*
+ * surgescript_objectmanager_spawn_array()
+ * Spawn an Array on System.__Temp and returns its handle
+ */
+surgescript_objecthandle_t surgescript_objectmanager_spawn_array(surgescript_objectmanager_t* manager)
+{
+
+}
+
+/*
+ * surgescript_objectmanager_spawn_dictionary()
+ * Spawn a Dictionary on System.__Temp and returns its handle
+ */
+surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescript_objectmanager_t* manager)
+{
+}
 
 
 

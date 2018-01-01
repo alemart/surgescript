@@ -39,7 +39,7 @@ void surgescript_sslib_register_system(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "System", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "System", "getVersion", fun_getversion, 0);
     surgescript_vm_bind(vm, "System", "getInfo", fun_getinfo, 0);
-    surgescript_vm_bind(vm, "System", "get__temp", fun_gettemp, 0);
+    surgescript_vm_bind(vm, "System", "getTemp", fun_gettemp, 0);
     surgescript_vm_bind(vm, "System", "getGc", fun_getgc, 0);
     surgescript_vm_bind(vm, "System", "state:main", fun_main, 0);
 }
