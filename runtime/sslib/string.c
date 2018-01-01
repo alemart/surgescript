@@ -7,8 +7,8 @@
  * SurgeScript standard library: routines for the String object
  */
 
-#include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include "../vm.h"
 #include "../object.h"
 #include "../../util/ssarray.h"
@@ -32,6 +32,8 @@ static surgescript_var_t* fun_indexof(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_substr(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_concat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_replace(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_tolowercase(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_touppercase(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -56,6 +58,8 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "substr", fun_substr, 3);
     surgescript_vm_bind(vm, "String", "concat", fun_concat, 2);
     surgescript_vm_bind(vm, "String", "replace", fun_replace, 3);
+    surgescript_vm_bind(vm, "String", "toLowerCase", fun_tolowercase, 1);
+    surgescript_vm_bind(vm, "String", "toUpperCase", fun_touppercase, 1);
 }
 
 
@@ -264,3 +268,34 @@ surgescript_var_t* fun_replace(surgescript_object_t* object, const surgescript_v
     return result;
 }
 
+/* convert string to lower case characters */
+surgescript_var_t* fun_tolowercase(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const char* src = surgescript_var_fast_get_string(param[0]), *p;
+    char* dst = ssmalloc((1 + strlen(src)) * sizeof(*dst)), *q;
+    surgescript_var_t* result = surgescript_var_create();
+
+    for(p = src, q = dst; *p;)
+        *q++ = tolower(*p++);
+    *q = '\0';
+
+    surgescript_var_set_string(result, dst);
+    ssfree(dst);
+    return result;
+}
+
+/* convert string to upper case characters */
+surgescript_var_t* fun_touppercase(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const char* src = surgescript_var_fast_get_string(param[0]), *p;
+    char* dst = ssmalloc((1 + strlen(src)) * sizeof(*dst)), *q;
+    surgescript_var_t* result = surgescript_var_create();
+
+    for(p = src, q = dst; *p;)
+        *q++ = toupper(*p++);
+    *q = '\0';
+
+    surgescript_var_set_string(result, dst);
+    ssfree(dst);
+    return result;
+}
