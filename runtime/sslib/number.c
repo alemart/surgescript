@@ -55,7 +55,7 @@ surgescript_var_t* fun_valueof(surgescript_object_t* object, const surgescript_v
 /* converts to string */
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* buf = surgescript_var_get_string(param[0]);
+    char* buf = surgescript_var_get_string(param[0], NULL);
     surgescript_var_t* ret = surgescript_var_set_string(surgescript_var_create(), buf);
     ssfree(buf);
     return ret;

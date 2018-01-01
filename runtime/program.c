@@ -377,10 +377,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             const surgescript_var_t* ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), 0);
             const surgescript_var_t* top = surgescript_stack_top(surgescript_renv_stack(runtime_environment));
             char* contents_of_t[] = {
-                surgescript_var_get_string(_t[0]),
-                surgescript_var_get_string(_t[1]),
-                surgescript_var_get_string(_t[2]),
-                surgescript_var_get_string(_t[3])
+                surgescript_var_get_string(_t[0], NULL),
+                surgescript_var_get_string(_t[1], NULL),
+                surgescript_var_get_string(_t[2], NULL),
+                surgescript_var_get_string(_t[3], NULL)
             };
 
             /* print temps */
@@ -395,7 +395,8 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             for(i = -program->arity; ptr != top; i++) {
                 if(i != 0) {
                     char* contents = surgescript_var_get_string(
-                        ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), i)
+                        ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), i),
+                        NULL
                     );
                     printf("%s ", contents);
                     ssfree(contents);

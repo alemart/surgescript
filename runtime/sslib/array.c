@@ -297,20 +297,9 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 
         /* write element */
         for(;;) {
-            /* check element type */
-            if(
-                0 == surgescript_var_typecheck(element, surgescript_var_type2code("number")) ||
-                0 == surgescript_var_typecheck(element, surgescript_var_type2code("bool")) ||
-                0 == surgescript_var_typecheck(element, surgescript_var_type2code(NULL))
-            ) {
-                char* value = surgescript_var_get_string(element);
-                for(const char* p = value; *p; p++)
-                    ssarray_push(sb, *p);
-                ssfree(value);
-                break;
-            }
-            else if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("string"))) {
-                char* value = surgescript_var_get_string(element);
+            /* is it a string? */
+            if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("string"))) {
+                char* value = surgescript_var_get_string(element, NULL);
                 ssarray_push(sb, '"');
                 for(const char* p = value; *p; p++) {
                     if(*p == '"')
@@ -321,22 +310,22 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
                 ssfree(value);
                 break;
             }
+
+            /* is it an object? */
             else if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("object"))) {
                 surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(element);
                 surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
                 surgescript_object_call_function(object, "toString", NULL, 0, element);
-                if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("object"))) {
-                    char* value = surgescript_var_get_string(element);
-                    for(const char* p = value; *p; p++)
-                        ssarray_push(sb, *p);
-                    ssfree(value);
-                    break;
-                }
+                if(0 != surgescript_var_typecheck(element, surgescript_var_type2code("object")))
+                    continue;
             }
-            else {
-                ssarray_push(sb, '?');
-                break;
-            }
+
+            /* it's neither. perform simple string conversion */
+            char* value = surgescript_var_get_string(element, NULL);
+            for(const char* p = value; *p; p++)
+                ssarray_push(sb, *p);
+            ssfree(value);
+            break;
         }
 
         /* add separator */

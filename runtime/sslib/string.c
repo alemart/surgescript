@@ -100,8 +100,9 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     if(surgescript_var_typecode(param[0]) == surgescript_var_typecode(param[1])) {
-        char* a = surgescript_var_get_string(param[0]);
-        char* b = surgescript_var_get_string(param[1]);
+        const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+        char* a = surgescript_var_get_string(param[0], manager);
+        char* b = surgescript_var_get_string(param[1], manager);
         int cmp = strcmp(a, b);
         ssfree(a);
         ssfree(b);
@@ -114,7 +115,8 @@ surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_va
 /* call: type conversion */
 surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* str = surgescript_var_get_string(param[0]);
+    const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    char* str = surgescript_var_get_string(param[0], manager);
     surgescript_var_t* ret = surgescript_var_set_string(surgescript_var_create(), str);
     ssfree(str);
     return ret;
@@ -126,27 +128,15 @@ surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_var_t* ret = surgescript_var_create();
     char* str[] = { NULL, NULL };
-    char* result = NULL;
+    char* buf = NULL;
 
-    ssassert(num_params == 2);
+    str[0] = surgescript_var_get_string(param[0], manager);
+    str[1] = surgescript_var_get_string(param[1], manager);
 
-    for(int i = 0; i < 2; i++) {
-        if(!surgescript_var_typecheck(param[i], surgescript_var_type2code("object"))) {
-            surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(param[i]);
-            surgescript_object_t* obj = surgescript_objectmanager_get(manager, handle);
-            surgescript_var_t* tmp = NULL;
-            surgescript_object_call_function(obj, "toString", NULL, 0, tmp);
-            if(tmp != NULL) {
-                str[i] = surgescript_var_get_string(tmp);
-                surgescript_var_destroy(tmp);
-            }
-        }
-        str[i] = str[i] ? str[i] : surgescript_var_get_string(param[i]);
-    }
+    buf = ssmalloc((1 + strlen(str[0]) + strlen(str[1])) * sizeof(*buf));
+    surgescript_var_set_string(ret, strcat(strcpy(buf, str[0]), str[1]));
+    ssfree(buf);
 
-    result = ssmalloc((1 + strlen(str[0]) + strlen(str[1])) * sizeof(*result));
-    surgescript_var_set_string(ret, strcat(strcpy(result, str[0]), str[1]));
-    ssfree(result);
     ssfree(str[1]);
     ssfree(str[0]);
 
@@ -193,8 +183,9 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
 /* finds the first occurence of param[1] in the string param[0] */
 surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
+    const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     const char* haystack = surgescript_var_fast_get_string(param[0]);
-    char* needle = surgescript_var_get_string(param[1]);
+    char* needle = surgescript_var_get_string(param[1], manager);
     char* occurrence = strstr(haystack, needle);
     int indexof = occurrence ? u8_charnum((char*)haystack, occurrence - haystack) : -1; /* all SurgeScript strings are UTF-8 encoded */
     ssfree(needle);

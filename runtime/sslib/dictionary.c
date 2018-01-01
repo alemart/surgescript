@@ -58,7 +58,7 @@ static const surgescript_heapptr_t IT_STACKBASE = 1;
 static const surgescript_heapptr_t DICT_BSTROOT = 0;
 
 /* utilities */
-static surgescript_var_t* sanitize_key(surgescript_var_t* ssvar);
+static surgescript_var_t* sanitize_key(surgescript_var_t* ssvar, const surgescript_objectmanager_t* manager);
 static surgescript_objecthandle_t new_bst_node(const surgescript_object_t* parent, const surgescript_var_t* key, const surgescript_var_t* value);
 static int bst_count(const surgescript_objectmanager_t* manager, const surgescript_object_t* object);
 static surgescript_var_t* bst_remove(surgescript_object_t* object, const char* param_key, int depth);
@@ -150,7 +150,7 @@ surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t
 
     if(surgescript_objectmanager_exists(manager, bst)) {
         surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
-        surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]));
+        surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]), manager);
         const surgescript_var_t* p[] = { key };
         surgescript_var_t* result = fun_bst_find(node, p, 1);
         surgescript_objecthandle_t result_handle = surgescript_var_get_objecthandle(result);
@@ -174,7 +174,7 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_var_t* root = surgescript_heap_at(heap, DICT_BSTROOT);
     surgescript_objecthandle_t bst = surgescript_var_get_objecthandle(root);
-    surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0])); /* keys must be sanitized */
+    surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]), manager); /* keys must be sanitized */
     const surgescript_var_t* value = param[1];
 
     if(surgescript_objectmanager_exists(manager, bst)) { /* if there is a root... */
@@ -218,7 +218,7 @@ surgescript_var_t* fun_delete(surgescript_object_t* object, const surgescript_va
 
     if(surgescript_objectmanager_exists(manager, bst)) {
         surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
-        surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]));
+        surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]), manager);
         const surgescript_var_t* p[] = { key };
 
         surgescript_var_t* new_root = fun_bst_remove(node, p, 1);
@@ -243,7 +243,7 @@ surgescript_var_t* fun_has(surgescript_object_t* object, const surgescript_var_t
 
     if(surgescript_objectmanager_exists(manager, bst)) {
         surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
-        surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]));
+        surgescript_var_t* key = sanitize_key(surgescript_var_clone(param[0]), manager);
         const surgescript_var_t* p[] = { key };
         surgescript_var_t* result = fun_bst_find(node, p, 1);
         surgescript_objecthandle_t result_handle = surgescript_var_get_objecthandle(result);
@@ -513,7 +513,8 @@ surgescript_var_t* fun_bst_insert(surgescript_object_t* object, const surgescrip
 /* removes an entry (key = param[0]) from the BST, and returns the root of the modified BST */
 surgescript_var_t* fun_bst_remove(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* key = surgescript_var_get_string(param[0]);
+    const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    char* key = surgescript_var_get_string(param[0], manager);
     surgescript_var_t* new_root = bst_remove(object, key, 0);
     ssfree(key);
     return new_root;
@@ -524,9 +525,9 @@ surgescript_var_t* fun_bst_remove(surgescript_object_t* object, const surgescrip
 /* --- Utilities --- */
 
 /* transforms ssvar into a string; returns ssvar */
-surgescript_var_t* sanitize_key(surgescript_var_t* ssvar)
+surgescript_var_t* sanitize_key(surgescript_var_t* ssvar, const surgescript_objectmanager_t* manager)
 {
-    char* buf = surgescript_var_get_string(ssvar);
+    char* buf = surgescript_var_get_string(ssvar, manager);
     surgescript_var_set_string(ssvar, buf);
     ssfree(buf);
     return ssvar;

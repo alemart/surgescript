@@ -217,21 +217,37 @@ float surgescript_var_get_number(const surgescript_var_t* var)
 /*
  * surgescript_var_get_string()
  * Gets the contents of a string variable. You have to ssfree() this after use.
+ * You may pass NULL as the object manager parameter. However,
+ * If you want to perform an object->string conversion, then you must pass a valid manager.
  */
-char* surgescript_var_get_string(const surgescript_var_t* var)
+char* surgescript_var_get_string(const surgescript_var_t* var, const surgescript_objectmanager_t* manager)
 {
     switch(var->type) {
-        case SSVAR_STRING:
-            return ssstrdup(var->string);
-        case SSVAR_BOOL:
-            return ssstrdup(var->boolean ? "true" : "false");
         case SSVAR_NULL:
             return ssstrdup("null");
-        default: {
+        case SSVAR_BOOL:
+            return ssstrdup(var->boolean ? "true" : "false");
+        case SSVAR_STRING:
+            return ssstrdup(var->string);
+        case SSVAR_NUMBER: {
             char buf[32];
             surgescript_var_to_string(var, buf, sizeof(buf));
             return ssstrdup(buf);
         }
+        case SSVAR_OBJECTHANDLE: {
+            if(manager != NULL) {
+                surgescript_object_t* obj = surgescript_objectmanager_get(manager, var->handle);
+                surgescript_var_t* tmp = surgescript_var_create(); char* str;
+                surgescript_object_call_function(obj, "toString", NULL, 0, tmp);
+                str = surgescript_var_get_string(tmp, NULL); /* discard manager */
+                surgescript_var_destroy(tmp);
+                return str;
+            }
+            else
+                return ssstrdup("[object]");
+        }
+        default:
+            return ssstrdup("");
     }
 }
 
@@ -332,7 +348,7 @@ int surgescript_var_typecheck(const surgescript_var_t* var, int code)
 
 /*
  * surgescript_var_to_string()
- * Converts a variable of any type to a string to be stored in a buffer of bufsize bytes
+ * Converts a variable of any primitive type to a string to be stored in a buffer of bufsize bytes
  */
 char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t bufsize)
 {
@@ -376,7 +392,7 @@ const char* surgescript_var_fast_get_string(const surgescript_var_t* var)
  */
 int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t* b)
 {
-    if(a->type == b->type) {
+    if(a->type == b->type) { /* a and b are of the same type */
         switch(a->type) {
             case SSVAR_BOOL:
                 return (int)(a->boolean) - (int)(b->boolean);
@@ -395,7 +411,7 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
                 return 0;
         }
     }
-    else {
+    else if(a->type != SSVAR_OBJECTHANDLE && b->type != SSVAR_OBJECTHANDLE) { /* a and b are primitives */
         if(a->type == SSVAR_NULL || b->type == SSVAR_NULL) {
             return (a->raw != 0) - (b->raw != 0);
         }
@@ -425,13 +441,13 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             bool y = surgescript_var_get_bool(b);
             return (int)x - (int)y;
         }
-        else if(a->type == SSVAR_OBJECTHANDLE || b->type == SSVAR_OBJECTHANDLE) {
-            unsigned long x = surgescript_var_get_objecthandle(a);
-            unsigned long y = surgescript_var_get_objecthandle(b);
-            return x != y ? (x > y ? 1 : -1) : 0;
-        }
         else
             return 0; /* this shouldn't happen */
+    }
+    else { /* either a or b is an object */
+        unsigned long x = surgescript_var_get_objecthandle(a);
+        unsigned long y = surgescript_var_get_objecthandle(b);
+        return x != y ? (x > y ? 1 : -1) : 0;
     }
 }
 

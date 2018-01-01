@@ -59,7 +59,8 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 /* crashes the app with a message */
 surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* text = surgescript_var_get_string(param[0]);
+    const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    char* text = surgescript_var_get_string(param[0], manager);
     ssfatal("Script Error: %s", text); /* change ssfatal to something else? */
     ssfree(text);
     return fun_exit(object, NULL, 0);

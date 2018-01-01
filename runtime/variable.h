@@ -16,6 +16,9 @@
 /* the variable type */
 typedef struct surgescript_var_t surgescript_var_t;
 
+/* misc */
+struct surgescript_objectmanager_t;
+
 
 
 /* public methods */
@@ -28,7 +31,7 @@ surgescript_var_t* surgescript_var_destroy(surgescript_var_t* var);
 bool surgescript_var_is_null(const surgescript_var_t* var);
 bool surgescript_var_get_bool(const surgescript_var_t* var);
 float surgescript_var_get_number(const surgescript_var_t* var);
-char* surgescript_var_get_string(const surgescript_var_t* var); /* warning: allocates a new buffer; you have to ssfree() this. See also: surgescript_var_to_string() */
+char* surgescript_var_get_string(const surgescript_var_t* var, const struct surgescript_objectmanager_t* manager); /* warning: allocates a new buffer; you have to ssfree() this. See also: surgescript_var_to_string() */
 unsigned surgescript_var_get_objecthandle(const surgescript_var_t* var);
 
 /* sets the value of a variable */

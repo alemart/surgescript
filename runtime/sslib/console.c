@@ -64,7 +64,8 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
 /* print a line to stdout */
 surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* str = surgescript_var_get_string(param[0]);
+    const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    char* str = surgescript_var_get_string(param[0], manager);
     puts(str);
     ssfree(str);
     return NULL;
@@ -73,7 +74,8 @@ surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var
 /* write a string to stdout */
 surgescript_var_t* fun_write(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* str = surgescript_var_get_string(param[0]);
+    const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    char* str = surgescript_var_get_string(param[0], manager);
     fputs(str, stdout);
     ssfree(str);
     return NULL;
