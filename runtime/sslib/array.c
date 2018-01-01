@@ -316,8 +316,10 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
                 surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(element);
                 surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
                 surgescript_object_call_function(object, "toString", NULL, 0, element);
-                if(0 != surgescript_var_typecheck(element, surgescript_var_type2code("object")))
-                    continue;
+                if(0 == surgescript_var_typecheck(element, surgescript_var_type2code("string"))) {
+                    if(strcmp(surgescript_var_fast_get_string(element), "[object]") != 0)
+                        continue;
+                }
             }
 
             /* it's neither. perform simple string conversion */
