@@ -359,19 +359,22 @@ void surgescript_objectmanager_garbagecheck(surgescript_objectmanager_t* manager
 
 /*
  * surgescript_objectmanager_spawn_array()
- * Spawn an Array on System.__Temp and returns its handle
+ * Spawns an Array on __Temp and returns its handle
  */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_array(surgescript_objectmanager_t* manager)
 {
-
+    surgescript_objecthandle_t temp = surgescript_objectmanager_system_object(manager, "__Temp");
+    return surgescript_objectmanager_spawn(manager, temp, "Array", NULL);
 }
 
 /*
  * surgescript_objectmanager_spawn_dictionary()
- * Spawn a Dictionary on System.__Temp and returns its handle
+ * Spawns a Dictionary on __Temp and returns its handle
  */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescript_objectmanager_t* manager)
 {
+    surgescript_objecthandle_t temp = surgescript_objectmanager_system_object(manager, "__Temp");
+    return surgescript_objectmanager_spawn(manager, temp, "Dictionary", NULL);
 }
 
 
