@@ -275,7 +275,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
     surgescript_object_t* iterator = NULL;
     SSARRAY(char, sb); /* string builder */
     static int depth = 0;
-    bool can_descend = (++depth < 16);
+    bool can_descend = (++depth < 16); /* handle circular links */
 
     /* helper macros */
     #define WRITE_ELEMENT(element, write_as_quoted_string) \

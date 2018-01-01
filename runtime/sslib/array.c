@@ -285,7 +285,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
     surgescript_heap_t* heap = surgescript_object_heap(object);
     int length = ARRAY_LENGTH(heap);
     static int depth = 0;
-    bool can_descend = (++depth < 16);
+    bool can_descend = (++depth < 16); /* handle circular links */
 
     /* helper macro */
     #define WRITE_ELEMENT(element, write_as_quoted_string) \
