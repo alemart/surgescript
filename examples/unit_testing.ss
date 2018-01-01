@@ -1,7 +1,7 @@
 //
 // unit_testing.ss
 // A Unit Testing Script for SurgeScript
-// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright (C) 2017-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"
@@ -81,6 +81,10 @@ object "SurgeScriptTest"
         test("".equals("") && !"a".equals("b")) || fail(36);
         test("23".equals("2" + "3") && !"23".equals(23)) || fail(37);
         test((typeof this).equals("object")) || fail(38);
+        test("Surge, Neon and Charge".replace("Surge", "Gimacian") == "Gimacian, Neon and Charge") || fail(39);
+        test("Surge, Neon and Charge".replace("Neon", "Gimacian") == "Surge, Gimacian and Charge") || fail(40);
+        test("Surge, Neon and Charge".replace("Charge", "Gimacian") == "Surge, Neon and Gimacian") || fail(41);
+        test("Surge, Neon and Charge".replace("", "Gimacian") == "Surge, Neon and Charge") || fail(42);
         end();
     }
 
@@ -162,8 +166,8 @@ object "SurgeScriptTest"
     {
         begin("Object");
         test(typeof this == "object") || fail(1);
-        test(this.name() == "SurgeScriptTest") || fail(2);
-        test(Application != null && Application.name() == "Application") || fail(3);
+        test(this.__name == "SurgeScriptTest") || fail(2);
+        test(Application != null && Application.__name == "Application") || fail(3);
         test(this != Application) || fail(4);
         test(this.toString() == "[object]") || fail(5);
         test(this.hasFunction("objects")) || fail(6);
@@ -180,13 +184,13 @@ object "SurgeScriptTest"
     {
         begin("System objects");
         test(Application) || fail(1);
-        test(Application.name() == "Application") || fail(2);
-        test(Application.name() != String.name()) || fail(3);
+        test(Application.__name == "Application") || fail(2);
+        test(Application.__name != String.__name) || fail(3);
         test((Application = "foo", Application != "foo")) || fail(4); // read-only
         test("foo" != String) || fail(5);
-        test(String.name() == "String") || fail(6);
-        test(Number.name() == "Number") || fail(7);
-        test(Boolean.name() == "Boolean") || fail(8);
+        test(String.__name == "String") || fail(6);
+        test(Number.__name == "Number") || fail(7);
+        test(Boolean.__name == "Boolean") || fail(8);
         test(String = null || String) || fail(9);
         test(String.getLength("test") == 4) || fail(10);
         test(String("test") == "test") || fail(11);
@@ -194,7 +198,7 @@ object "SurgeScriptTest"
         test(Number("4.3") == 4.3) || fail(13);
         test(String(5) == "5") || fail(14);
         test(Boolean(true && false) == false) || fail(15);
-        test(String.destroy() == null && String.name()) || fail(16);
+        test(String.destroy() == null && String.__name) || fail(16);
         end();
     }
 
@@ -271,8 +275,8 @@ object "SurgeScriptTest"
 
         sum = 0.0;
         while(it.hasNext()) {
-            sum += weight[it.item];
-            it.next();
+            character = it.next();
+            sum += weight[character];
         }
         test(sum > 97 && sum < 98) || fail(8);
 
@@ -291,7 +295,7 @@ object "SurgeScriptTest"
 
         weight.clear();
         test(weight.size == 0) || fail(16);
-        test(!weight.iterator().hasNext() && null == weight.iterator().item) || fail(17);
+        test(!weight.iterator().hasNext() && null == weight.iterator().next()) || fail(17);
 
         stress = spawn("Dictionary");
         stressLimit = 1000;
