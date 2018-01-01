@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/sslib/string.c
  * SurgeScript standard library: routines for the String object
@@ -11,6 +11,7 @@
 #include <string.h>
 #include "../vm.h"
 #include "../object.h"
+#include "../../util/ssarray.h"
 #include "../../util/util.h"
 #include "../../util/utf8.h"
 
@@ -30,6 +31,7 @@ static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescrip
 static surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_substr(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_concat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_replace(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -53,6 +55,7 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "indexOf", fun_indexof, 2);
     surgescript_vm_bind(vm, "String", "substr", fun_substr, 3);
     surgescript_vm_bind(vm, "String", "concat", fun_concat, 2);
+    surgescript_vm_bind(vm, "String", "replace", fun_replace, 3);
 }
 
 
@@ -225,3 +228,37 @@ surgescript_var_t* fun_concat(surgescript_object_t* object, const surgescript_va
 {
     return fun_plus(object, param, num_params);
 }
+
+/* replaces param[1] by param[2] in param[0] */
+surgescript_var_t* fun_replace(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    const char* subject = surgescript_var_fast_get_string(param[0]);
+    char* search = surgescript_var_get_string(param[1], manager);
+    char* replace = surgescript_var_get_string(param[2], manager);
+    int search_len = strlen(search);
+    const char *loc, *p, *q;
+    surgescript_var_t* result = surgescript_var_create();
+    SSARRAY(char, sb); /* string builder */
+    ssarray_init(sb);
+
+    p = subject;
+    while((loc = strstr(p, search)) != NULL) {
+        while(p != loc && *p)
+            ssarray_push(sb, *p++);
+        for(q = replace; *q;)
+            ssarray_push(sb, *q++);
+        p += search_len;
+    }
+    while(*p)
+        ssarray_push(sb, *p++);
+    ssarray_push(sb, '\0');
+
+    surgescript_var_set_string(result, sb);
+    ssarray_release(sb);
+    ssfree(replace);
+    ssfree(search);
+
+    return result;
+}
+
