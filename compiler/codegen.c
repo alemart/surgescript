@@ -79,17 +79,6 @@ void emit_vardecl(surgescript_nodecontext_t context, const char* identifier)
     surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
 }
 
-void emit_exportvar(surgescript_nodecontext_t context, const char* identifier)
-{
-    SSASM(SSOP_SELF, T0);
-    SSASM(SSOP_PUSH, T0);
-    SSASM(SSOP_MOVS, T0, TEXT(identifier));
-    SSASM(SSOP_PUSH, T0);
-    surgescript_symtable_push_addr(context.symtable, identifier, context.program);
-    SSASM(SSOP_CALL, TEXT("__export"), U(2));
-    SSASM(SSOP_POPN, U(3));
-}
-
 void emit_vargetter(surgescript_nodecontext_t context, const char* identifier)
 {
     surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);

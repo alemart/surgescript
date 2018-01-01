@@ -24,7 +24,6 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
 void emit_vardecl(surgescript_nodecontext_t context, const char* identifier);
 void emit_vargetter(surgescript_nodecontext_t context, const char* identifier);
 void emit_varsetter(surgescript_nodecontext_t context, const char* identifier);
-void emit_exportvar(surgescript_nodecontext_t context, const char* identifier);
 void emit_accessors(surgescript_nodecontext_t context, const char* object_name, struct surgescript_programpool_t* program_pool);
 
 /* expressions */

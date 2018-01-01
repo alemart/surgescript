@@ -23,7 +23,6 @@ static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surge
 static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_timeout(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -48,7 +47,6 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "timeout", fun_timeout, 1);
-    surgescript_vm_bind(vm, "Object", "__export", fun_export, 2);
 }
 
 
@@ -149,15 +147,6 @@ surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_va
     const char* tag_name = surgescript_var_fast_get_string(param[0]);
     bool tagged = surgescript_tagsystem_has_tag(surgescript_objectmanager_tagsystem(object_manager), object_name, tag_name);
     return surgescript_var_set_bool(surgescript_var_create(), tagged);
-}
-
-/* export a variable, given a name and a heap_addr */
-surgescript_var_t* fun_export(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    const char* var_name = surgescript_var_fast_get_string(param[0]);
-    surgescript_heapptr_t var_addr = surgescript_var_get_rawbits(param[1]);
-    surgescript_object_export_variable(object, var_name, var_addr);
-    return NULL;
 }
 
 /* returns true iff the object has been on the same state for param[0] seconds or more */

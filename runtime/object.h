@@ -67,13 +67,6 @@ void surgescript_object_poke_transform(surgescript_object_t* object, const struc
 bool surgescript_object_transform_changed(const surgescript_object_t* object); /* has the local transform ever been changed? */
 struct surgescript_transform_t* surgescript_object_transform(surgescript_object_t* object); /* inner pointer to the local transform */
 
-/* exported variables */
-void surgescript_object_export_variable(surgescript_object_t* object, const char* var_name, surgescript_heapptr_t var_addr);
-surgescript_heapptr_t surgescript_object_exported_variable_address(const surgescript_object_t* object, const char* var_name);
-const char* surgescript_object_exported_variable_name(const surgescript_object_t* object, int index);
-int surgescript_object_exported_variable_count(const surgescript_object_t* object);
-bool surgescript_object_exported_variable_exists(const surgescript_object_t* object, const char* var_name);
-
 /* call SurgeScript functions from C (you may pass NULL to return_value; you may also pass NULL to param iff num_params is 0) */
 void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value);
 void surgescript_object_call_state(surgescript_object_t* object, const char* state_name);

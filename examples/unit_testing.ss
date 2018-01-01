@@ -26,7 +26,7 @@ object "Application"
 
 object "SurgeScriptTest"
 {
-    export message = "Amazing!";
+    public message = "Amazing!";
     value = null;
 
     failed = 0;

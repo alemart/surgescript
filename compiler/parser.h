@@ -26,7 +26,7 @@
  *
  * <vardecllist> := <vardecl> <vardecllist> | e
  * <vardecl> := identifier = <conditionalexpr> ;
- *            | export identifier = <conditionalexpr> ;
+ *            | public identifier = <conditionalexpr> ;
  *
  * <statedecllist> := <statedecl> <statedecllist> | e
  * <statedecl> := state string { <stmtlist> }
