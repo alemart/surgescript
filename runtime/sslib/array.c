@@ -284,11 +284,13 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
     surgescript_var_t* stringified_array = surgescript_var_create();
     surgescript_heap_t* heap = surgescript_object_heap(object);
     int length = ARRAY_LENGTH(heap);
+    static int depth = 0;
+    bool can_descend = (++depth < 16);
 
     /* helper macro */
     #define WRITE_ELEMENT(element, write_as_quoted_string) \
         do { \
-            char* value = surgescript_var_get_string((element), manager); \
+            char* value = surgescript_var_get_string((element), can_descend ? manager : NULL); \
             if(write_as_quoted_string) { \
                 ssarray_push(sb, '"'); \
                 for(const char* p = value; *p; p++) { \
@@ -327,8 +329,9 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
         if(!surgescript_var_typecheck(element, surgescript_var_type2code("object"))) {
             surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(element);
             surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
-            if(strcmp(surgescript_object_name(object), "Array") != 0 && strcmp(surgescript_object_name(object), "Dictionary") != 0) {
-                surgescript_object_call_function(object, "toString", NULL, 0, element);
+            if(strcmp(surgescript_object_name(object), "Array") != 0 && strcmp(surgescript_object_name(object), "Dictionary") != 0 && depth < 16) {
+                if(can_descend)
+                    surgescript_object_call_function(object, "toString", NULL, 0, element);
                 WRITE_ELEMENT(element, strcmp(surgescript_var_fast_get_string(element), "[object]"));
             }
             else
@@ -346,6 +349,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
     ssarray_push(sb, '\0');
     surgescript_var_set_string(stringified_array, sb);
     ssarray_release(sb);
+    --depth;
 
     /* done! */
     return stringified_array;
