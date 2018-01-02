@@ -34,6 +34,15 @@ static surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const
 static surgescript_var_t* fun_it_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_it_hasnext(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_it_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+
+/* DictionaryEntry: useful for iterators */
+static surgescript_var_t* fun_entry_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_entry_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_entry_getkey(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_entry_getvalue(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_entry_setvalue(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_entry_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* BSTNode: native implementation of a Binary Search Tree in SurgeScript */
 static surgescript_var_t* fun_bst_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -53,8 +62,10 @@ static const surgescript_heapptr_t BST_KEY = 0; /* address of the 'key' field in
 static const surgescript_heapptr_t BST_VALUE = 1; /* and so on */
 static const surgescript_heapptr_t BST_LEFT = 2;
 static const surgescript_heapptr_t BST_RIGHT = 3;
-static const surgescript_heapptr_t IT_STACKSIZE = 0;
-static const surgescript_heapptr_t IT_STACKBASE = 1;
+static const surgescript_heapptr_t IT_ENTRYREF = 0;
+static const surgescript_heapptr_t IT_STACKSIZE = 1;
+static const surgescript_heapptr_t IT_STACKBASE = 2;
+static const surgescript_heapptr_t ENTRY_BSTREF = 0;
 static const surgescript_heapptr_t DICT_BSTROOT = 0;
 
 /* utilities */
@@ -63,6 +74,7 @@ static surgescript_objecthandle_t new_bst_node(const surgescript_object_t* paren
 static int bst_count(const surgescript_objectmanager_t* manager, const surgescript_object_t* object);
 static surgescript_var_t* bst_remove(surgescript_object_t* object, const char* param_key, int depth);
 static surgescript_var_t* bst_removeroot(surgescript_object_t* object);
+static surgescript_var_t* dictentry(surgescript_object_t* entry, const surgescript_object_t* bst);
 
 /*
  * surgescript_sslib_register_dictionary()
@@ -85,6 +97,14 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "DictionaryIterator", "state:main", fun_it_main, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "next", fun_it_next, 0);
     surgescript_vm_bind(vm, "DictionaryIterator", "hasNext", fun_it_hasnext, 0);
+    surgescript_vm_bind(vm, "DictionaryIterator", "toString", fun_it_tostring, 0);
+
+    surgescript_vm_bind(vm, "DictionaryEntry", "constructor", fun_entry_constructor, 0);
+    surgescript_vm_bind(vm, "DictionaryEntry", "state:main", fun_entry_main, 0);
+    surgescript_vm_bind(vm, "DictionaryEntry", "getKey", fun_entry_getkey, 0);
+    surgescript_vm_bind(vm, "DictionaryEntry", "getValue", fun_entry_getvalue, 0);
+    surgescript_vm_bind(vm, "DictionaryEntry", "setValue", fun_entry_setvalue, 1);
+    surgescript_vm_bind(vm, "DictionaryEntry", "toString", fun_entry_tostring, 0);
 
     surgescript_vm_bind(vm, "BSTNode", "constructor", fun_bst_constructor, 0);
     surgescript_vm_bind(vm, "BSTNode", "state:main", fun_bst_main, 0);
@@ -374,11 +394,15 @@ surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surges
     surgescript_object_t* parent = surgescript_objectmanager_get(manager, parent_handle);
     surgescript_heap_t* parent_heap = surgescript_object_heap(parent);
     surgescript_objecthandle_t bst = surgescript_var_get_objecthandle(surgescript_heap_at(parent_heap, DICT_BSTROOT));
+    surgescript_objecthandle_t this_handle = surgescript_object_handle(object);
+    surgescript_objecthandle_t entry_handle = surgescript_objectmanager_spawn(manager, this_handle, "DictionaryEntry", NULL);
     const char* parent_name = surgescript_object_name(parent);
 
+    ssassert(IT_ENTRYREF == surgescript_heap_malloc(heap));
     ssassert(IT_STACKSIZE == surgescript_heap_malloc(heap)); /* this can't represent 2^24+1 ~ 16.77 M */
     ssassert(IT_STACKBASE == surgescript_heap_malloc(heap));
 
+    surgescript_var_set_objecthandle(surgescript_heap_at(heap, IT_ENTRYREF), entry_handle);
     if(surgescript_objectmanager_exists(manager, bst) && 0 == strcmp(parent_name, "Dictionary")) {
         surgescript_var_set_number(surgescript_heap_at(heap, IT_STACKSIZE), 1.0f);
         surgescript_var_set_objecthandle(surgescript_heap_at(heap, IT_STACKBASE), bst);
@@ -412,6 +436,8 @@ surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_v
         surgescript_objecthandle_t left_handle, right_handle;
         surgescript_var_t* new_top;
         surgescript_heapptr_t top_ptr;
+        surgescript_objecthandle_t entry_handle = surgescript_var_get_objecthandle(surgescript_heap_at(heap, IT_ENTRYREF));
+        surgescript_object_t* entry = surgescript_objectmanager_get(manager, entry_handle);
 
         /* pop stacktop */
         surgescript_var_set_number(stacksize, surgescript_var_get_number(stacksize) - 1);
@@ -437,7 +463,8 @@ surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_v
         }
 
         /* return previously pointed item */
-        return fun_bst_getkey(node, NULL, 0);
+        /*return fun_bst_getkey(node, NULL, 0);*/
+        return dictentry(entry, node);
     }
 
     return NULL;
@@ -449,6 +476,65 @@ surgescript_var_t* fun_it_hasnext(surgescript_object_t* object, const surgescrip
     surgescript_heap_t* heap = surgescript_object_heap(object);
     surgescript_var_t* stacksize = surgescript_heap_at(heap, IT_STACKSIZE);
     return surgescript_var_set_bool(surgescript_var_create(), surgescript_var_get_number(stacksize) > 0);
+}
+
+/* toString(): converts to string */
+surgescript_var_t* fun_it_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_string(surgescript_var_create(), "[DictionaryIterator]");
+}
+
+
+/* --- DictionaryEntry functions --- */
+surgescript_var_t* fun_entry_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
+    ssassert(ENTRY_BSTREF == surgescript_heap_malloc(heap));
+    surgescript_var_set_objecthandle(surgescript_heap_at(heap, ENTRY_BSTREF), null_handle);
+    return NULL;
+}
+
+surgescript_var_t* fun_entry_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return NULL;
+}
+
+surgescript_var_t* fun_entry_getkey(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t entry_handle = surgescript_var_get_objecthandle(surgescript_heap_at(heap, ENTRY_BSTREF));
+    surgescript_object_t* entry = surgescript_objectmanager_get(manager, entry_handle);
+
+    return fun_bst_getkey(entry, NULL, 0);
+}
+
+surgescript_var_t* fun_entry_getvalue(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t entry_handle = surgescript_var_get_objecthandle(surgescript_heap_at(heap, ENTRY_BSTREF));
+    surgescript_object_t* entry = surgescript_objectmanager_get(manager, entry_handle);
+
+    return fun_bst_getvalue(entry, NULL, 0);
+}
+
+surgescript_var_t* fun_entry_setvalue(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t entry_handle = surgescript_var_get_objecthandle(surgescript_heap_at(heap, ENTRY_BSTREF));
+    surgescript_object_t* entry = surgescript_objectmanager_get(manager, entry_handle);
+    const surgescript_var_t* p[] = { param[0] };
+
+    return fun_bst_setvalue(entry, p, 1);
+}
+
+surgescript_var_t* fun_entry_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_string(surgescript_var_create(), "[DictionaryEntry]");
 }
 
 
@@ -722,4 +808,12 @@ surgescript_var_t* bst_remove(surgescript_object_t* object, const char* param_ke
     }
     else
         return NULL; /* key not found */
+}
+
+/* given a DictionaryEntry, set its BST Node Reference and return a new variable with the handle to the entry */
+surgescript_var_t* dictentry(surgescript_object_t* entry, const surgescript_object_t* bst)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(entry);
+    surgescript_var_set_objecthandle(surgescript_heap_at(heap, ENTRY_BSTREF), surgescript_object_handle(bst));
+    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(entry));
 }
