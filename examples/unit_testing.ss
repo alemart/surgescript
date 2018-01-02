@@ -278,8 +278,8 @@ object "SurgeScriptTest"
 
         sum = 0.0;
         while(it.hasNext()) {
-            character = it.next();
-            sum += weight[character];
+            entry = it.next();
+            sum += entry.value;
         }
         test(sum > 97 && sum < 98) || fail(8);
 
@@ -311,7 +311,7 @@ object "SurgeScriptTest"
         test(stress["o500"] == 500) || fail(18);
         test(stress["o657"] == 657) || fail(19);
         test(!stress.has("o0") && stress.has("o700")) || fail(20);
-        for(sum = 0, it = stress.iterator(); it.hasNext(); sum += stress[it.next()]);
+        for(sum = 0, it = stress.iterator(); it.hasNext(); sum += stress[it.next().key]);
         test(stress.size == stressLimit) || fail(21);
         test(sum == 500500) || fail(22);
 
@@ -340,6 +340,17 @@ object "SurgeScriptTest"
         for(x in del)
             stress.delete("o" + del[x]);
         test(stress.size == 0) || fail(27);
+
+        dict = { "a": 1, "b": 2, "c": 3 };
+        test(dict["a"] + dict["b"] + dict["c"] == 6) || fail(28);
+        it = dict.iterator();
+        while(it.hasNext()) {
+            entry = it.next();
+            entry.value = 1;
+        }
+        test(dict["a"] + dict["b"] + dict["c"] == 3) || fail(29);
+        for(keys = "", it = dict.iterator(); it.hasNext(); keys += it.next().key);
+        test(keys == "abc") || fail(30);
 
         end();
     }
