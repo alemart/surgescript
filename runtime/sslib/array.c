@@ -41,6 +41,7 @@ static surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const
 static surgescript_var_t* fun_it_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_it_next(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_it_hasnext(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_it_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* sorting functions */
 typedef int (*surgescript_sortcmp_t)(surgescript_object_t* object, const surgescript_var_t*, const surgescript_var_t*);
@@ -86,6 +87,7 @@ void surgescript_sslib_register_array(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "ArrayIterator", "state:main", fun_it_main, 0);
     surgescript_vm_bind(vm, "ArrayIterator", "next", fun_it_next, 0);
     surgescript_vm_bind(vm, "ArrayIterator", "hasNext", fun_it_hasnext, 0);
+    surgescript_vm_bind(vm, "ArrayIterator", "toString", fun_it_tostring, 0);
 }
 
 
@@ -435,6 +437,11 @@ surgescript_var_t* fun_it_hasnext(surgescript_object_t* object, const surgescrip
     int cnt = surgescript_var_get_number(surgescript_heap_at(heap, IT_COUNTER_ADDR));
     int len = surgescript_var_get_number(surgescript_heap_at(heap, IT_LENGTH_ADDR));
     return surgescript_var_set_bool(surgescript_var_create(), cnt < len);
+}
+
+surgescript_var_t* fun_it_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_string(surgescript_var_create(), "[ArrayIterator]");
 }
 
 
