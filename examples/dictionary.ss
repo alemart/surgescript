@@ -1,7 +1,7 @@
 //
 // dictionary.ss
 // How to use the Dictionary in SurgeScript
-// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"
@@ -42,8 +42,8 @@ object "Application"
 
         it = weight.iterator();
         while(it.hasNext()) {
-            character = it.next();
-            sum += weight[character];
+            entry = it.next();
+            sum += entry.value;
         }
 
         return sum;
