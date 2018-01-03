@@ -215,7 +215,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     }
 
     /* colon operator */
-    if(*(lexer->p) == ':' && *(lexer->p + 1) != '-') {
+    if(*(lexer->p) == ':' && (*(lexer->p + 1) != ')' && *(lexer->p + 1) != '(' && *(lexer->p + 1) != 'o')) {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_COLON, lexer->buf, lexer->line, prev);
     }
