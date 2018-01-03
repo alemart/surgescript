@@ -35,11 +35,13 @@ struct surgescript_object_t
     SSARRAY(unsigned, child); /* handles to the children */
 
     /* inner state */
+    surgescript_program_t* current_state; /* current state */
     char* state_name; /* current state name */
     bool is_active; /* can i run programs? */
     bool is_killed; /* am i scheduled to be destroyed? */
     bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
     clock_t last_state_change; /* moment of the last state change */
+    clock_t time_spent; /* how much time did this object consume (at the last frame) */
 
     /* local transform */
     surgescript_transform_t* transform;
@@ -54,7 +56,8 @@ void surgescript_object_release(surgescript_object_t* object);
 /* private stuff */
 #define MAIN_STATE "main"
 static char* state2fun(const char* state);
-static void run_state(surgescript_object_t* object, const char* state_name);
+static clock_t run_current_state(const surgescript_object_t* object);
+static surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
 static bool simple_traversal(surgescript_object_t* object, void* data);
 
@@ -87,10 +90,12 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     ssarray_init(obj->child);
 
     obj->state_name = ssstrdup(MAIN_STATE);
+    obj->current_state = get_state_program(obj, obj->state_name);
+    obj->last_state_change = clock();
     obj->is_active = true;
     obj->is_killed = false;
     obj->is_reachable = false;
-    obj->last_state_change = clock();
+    obj->time_spent = 0;
 
     obj->transform = NULL;
     obj->user_data = user_data;
@@ -385,6 +390,7 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
 {
     ssfree(object->state_name);
     object->state_name = ssstrdup(state_name ? state_name : MAIN_STATE);
+    object->current_state = get_state_program(object, object->state_name);
     object->last_state_change = clock();
 }
 
@@ -545,13 +551,14 @@ bool surgescript_object_update(surgescript_object_t* object)
     }
 
     /* update myself */
-    if(object->is_active)
-        run_state(object, object->state_name);
-    else
+    if(object->is_active) {
+        object->time_spent = run_current_state(object);
+        return true; /* success! */
+    }
+    else {
+        object->time_spent = 0;
         return false; /* optimize; don't update my children */
-
-    /* success! */
-    return true;
+    }
 }
 
 /*
@@ -592,9 +599,9 @@ bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* dat
  */
 void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const surgescript_var_t* param[], int num_params, surgescript_var_t* return_value)
 {
-    int i;
     surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
-    surgescript_renv_t* runtime_environment;
+    surgescript_renv_t* runtime_environment = object->renv;
+    int i;
 
     /* parameters are stacked left-to-right */
     surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
@@ -602,12 +609,9 @@ void surgescript_object_call_function(surgescript_object_t* object, const char* 
         surgescript_stack_push(stack, surgescript_var_clone(param[i]));
 
     /* call the program */
-    /*runtime_environment = surgescript_renv_create(object, stack, object->heap, surgescript_renv_programpool(obj->renv), surgescript_renv_objectmanager(obj->renv), NULL);*/ /* a clone of object->renv (so the original tmp's won't be messed up) -- do we need this? */
-    runtime_environment = object->renv;
     surgescript_program_lowcall(runtime_environment, fun_name, num_params);
     if(return_value != NULL)
         surgescript_var_copy(return_value, *(surgescript_renv_tmp(runtime_environment) + 0)); /* the return value of the function (if any) */
-    /*surgescript_renv_destroy(runtime_environment);*/
 
     /* pop stuff from the stack */
     surgescript_stack_popn(stack, 1 + ssmax(0, num_params));
@@ -625,6 +629,24 @@ void surgescript_object_call_state(surgescript_object_t* object, const char* sta
 }
 
 
+/*
+ * surgescript_object_timespent()
+ * Time consumption at the last frame (in seconds)
+ */
+float surgescript_object_timespent(const surgescript_object_t* object)
+{
+    return object->time_spent / CLOCKS_PER_SEC;
+}
+
+/*
+ * surgescript_object_memspent()
+ * Memory consumption at the last frame (in bytes)
+ */
+size_t surgescript_object_memspent(const surgescript_object_t* object)
+{
+    return 0;
+}
+
 
 
 /* private stuff */
@@ -636,14 +658,21 @@ char* state2fun(const char* state)
     return strcat(strcpy(fun_name, prefix), state);
 }
 
-void run_state(surgescript_object_t* object, const char* state_name)
+clock_t run_current_state(const surgescript_object_t* object)
 {
-    char *fun_name = state2fun(state_name);
+    clock_t start = clock();
+    if(object->current_state != NULL)
+        surgescript_program_run(object->current_state, object->renv);
+    return clock() - start;
+}
+
+surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name)
+{
+    char* fun_name = state2fun(state_name);
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
     surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
-    if(program)
-        surgescript_program_run(program, object->renv);
     ssfree(fun_name);
+    return program;
 }
 
 bool object_exists(surgescript_programpool_t* program_pool, const char* object_name)

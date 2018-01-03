@@ -40,6 +40,8 @@ struct surgescript_objectmanager_t* surgescript_object_manager(const surgescript
 void* surgescript_object_userdata(const surgescript_object_t* object); /* custom user-data (if any) */
 bool surgescript_object_has_tag(const surgescript_object_t* object, const char* tag_name); /* is this object tagged tag_name? */
 float surgescript_object_elapsed_time(const surgescript_object_t* object); /* elapsed time (in seconds) since last state change */
+float surgescript_object_timespent(const surgescript_object_t* object); /* time consumption at the last frame (in seconds) */
+size_t surgescript_object_memspent(const surgescript_object_t* object); /* memory consumption at the last frame (in bytes) */
 
 /* object tree */
 unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer handle (in the object manager) */
