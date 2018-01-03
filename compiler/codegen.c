@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * compiler/codegen.c
  * SurgeScript Compiler: Code Generator
@@ -90,31 +90,6 @@ void emit_varsetter(surgescript_nodecontext_t context, const char* identifier)
     SSASM(SSOP_SPEEK, T0, I(-1)); /* t0 is now the first parameter of the function call */
     surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
     SSASM(SSOP_RET);
-}
-
-static void emit_accessor(const char* fun_name, void* ctx)
-{
-    /* run only if fun_name is an accessor (getSomething / setSomething) */
-    if((strncmp(fun_name, "get", 3) == 0 || strncmp(fun_name, "set", 3) == 0) && fun_name[3] != '\0') {
-        /* fun_name is an accessor */
-        surgescript_nodecontext_t* context = (surgescript_nodecontext_t*)ctx;
-        char* accessor = ssstrdup(fun_name + 3);
-        accessor[0] = tolower(fun_name[3]);
-
-        /* now that we have the accessor name, add it to the symbol table */
-        if(!surgescript_symtable_has_symbol(context->symtable, accessor))
-            surgescript_symtable_put_fun_symbol(context->symtable, accessor);
-
-        /* done */
-        ssfree(accessor);
-    }
-}
-
-void emit_accessors(surgescript_nodecontext_t context, const char* object_name, surgescript_programpool_t* program_pool)
-{
-    /* look for all accessors in object_name
-       and add them to the symbol table */
-    surgescript_programpool_foreach_ex(program_pool, object_name, &context, emit_accessor);
 }
 
 /* expressions */

@@ -12,6 +12,7 @@
 #include <string.h>
 #include <locale.h>
 #include <errno.h>
+#include <ctype.h>
 #include "parser.h"
 #include "lexer.h"
 #include "token.h"
@@ -52,6 +53,8 @@ static void unexpected_symbol(surgescript_parser_t* parser);
 static void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static surgescript_var_t* disable_object(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
 static void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier);
+static void import_public_vars(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* object_name);
+static void make_accessor(const char* fun_name, void* symtable);
 
 /* non-terminals */
 static void objectlist(surgescript_parser_t* parser);
@@ -497,7 +500,7 @@ void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context
     while(got_type(parser, SSTOK_IDENTIFIER) || got_type(parser, SSTOK_PUBLIC))
         vardecl(parser, context);
 
-    emit_accessors(context, "Object", parser->program_pool);
+    import_public_vars(parser, context, "Object");
 }
 
 void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -1307,4 +1310,28 @@ void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
     else
         expect(parser, SSTOK_NUMBER); /* will throw an error */
+}
+
+void make_accessor(const char* fun_name, void* symtable)
+{
+    /* run only if fun_name is an accessor (getSomething / setSomething) */
+    if((strncmp(fun_name, "get", 3) == 0 || strncmp(fun_name, "set", 3) == 0) && fun_name[3] != '\0') {
+        /* fun_name is an accessor */
+        char* accessor = ssstrdup(fun_name + 3);
+        accessor[0] = tolower(fun_name[3]);
+
+        /* now that we have the accessor name, add it to the symbol table */
+        if(!surgescript_symtable_has_symbol((surgescript_symtable_t*)symtable, accessor))
+            surgescript_symtable_put_fun_symbol((surgescript_symtable_t*)symtable, accessor);
+
+        /* done */
+        ssfree(accessor);
+    }
+}
+
+void import_public_vars(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* object_name)
+{
+    /* look for all accessors in object_name
+       and add them to the symbol table */
+    surgescript_programpool_foreach_ex(parser->program_pool, object_name, context.symtable, make_accessor);
 }
