@@ -305,8 +305,8 @@ object "SurgeScriptTest"
         items = [];
         for(j = 1; j <= stressLimit; j++)
             items.push(j);
-        for(x in items)
-            stress["o" + items[x]] = items[x];
+        foreach(item in items)
+            stress["o" + item] = item;
         items.shuffle();
         test(stress["o500"] == 500) || fail(18);
         test(stress["o657"] == 657) || fail(19);
@@ -318,16 +318,16 @@ object "SurgeScriptTest"
         del = [ 1, 812, 726, 111, 182, 313, 6, 7, 8, 10, 88 ];
         newSize = stressLimit - del.length;
         test23 = true;
-        for(x in del) {
-            stress.delete("o" + del[x]);
-            test23 = test23 && !stress.has("o" + del[x]);
+        foreach(item in del) {
+            stress.delete("o" + item);
+            test23 = test23 && !stress.has("o" + item);
         }
         test(test23) || fail(23);
         test(stress.size == newSize) || fail(24);
 
         del = [ -5, 0, -2, 31415, 12345, "a" ];
         test25 = true;
-        for(x in del) {
+        for(x = 0; x < del.length; x++) {
             stress.delete("o" + del[x]), stress.delete(del[x]);
             test25 = test25 && !stress.has("o" + del[x]) && !stress.has(del[x]);
         }
@@ -337,8 +337,8 @@ object "SurgeScriptTest"
         del = [];
         for(j = 1; j <= stressLimit; j++)
             del.push(j);
-        for(x in del)
-            stress.delete("o" + del[x]);
+        foreach(item in del)
+            stress.delete("o" + item);
         test(stress.size == 0) || fail(27);
 
         dict = { "a": 1, "b": 2, "c": 3 };
