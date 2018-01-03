@@ -19,9 +19,9 @@
  * <script> := <objectlist> // start here
  *
  * <objectlist> := <object> <objectlist> | e
- * <object> := object string { <objectdecl> }
+ * <object> := object string <qualifierlist> { <objectdecl> }
  * <objectdecl> := <tags> <vardecllist> <statedecllist> <fundecllist>
- *
+ * <qualifierlist> := emoticon <qualifierlist> | e
  * <tags> := tag string ; <tags> | e
  *
  * <vardecllist> := <vardecl> <vardecllist> | e

@@ -57,8 +57,9 @@ static void create_getter_and_setter(surgescript_parser_t* parser, surgescript_n
 static void objectlist(surgescript_parser_t* parser);
 static void object(surgescript_parser_t* parser);
 static void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-
+static void qualifierlist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void taglist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+
 static void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void statedecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -152,6 +153,7 @@ bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* abso
         size_t read_chars = 0, data_size = 0;
 
         /* read file to data[] */
+        sslog("Reading file %s...", absolute_path);
         do {
             data_size += BUFSIZE;
             data = ssrealloc(data, data_size + 1);
@@ -428,6 +430,7 @@ void object(surgescript_parser_t* parser)
 
     /* read the object */
     match(parser, SSTOK_STRING);
+    qualifierlist(parser, context);
     match(parser, SSTOK_LCURLY);
     objectdecl(parser, context);
     match(parser, SSTOK_RCURLY);
@@ -457,6 +460,25 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* tell the program how many variables should be allocated */
     emit_object_footer(context, start, end);
+}
+
+void qualifierlist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    int love_counter = 0;
+    while(got_type(parser, SSTOK_EMOTICON)) {
+        const char* emoticon = surgescript_token_lexeme(parser->lookahead);
+        surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, emoticon);
+
+        /* easter egg */
+        if(strcmp(emoticon, "<3") == 0) {
+            if(++love_counter == 3)
+                sslog("Object \"%s\" is truly loved.", context.object_name);
+        }
+        else
+            love_counter = 4;
+
+        match(parser, SSTOK_EMOTICON);
+    }
 }
 
 void taglist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -522,6 +544,10 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     strcat(strcpy(program_name, prefix), state_name);
     match(parser, SSTOK_STRING);
 
+    /* duplicate check */
+    if(surgescript_programpool_shallowcheck(parser->program_pool, context.object_name, program_name))
+        ssfatal("Compile Error: duplicate state \"%s\" in object \"%s\" at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+
     /* function body */
     match(parser, SSTOK_LCURLY);
     fun_header = emit_function_header(context);
@@ -550,6 +576,10 @@ void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     char* program_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
     SSARRAY(surgescript_token_t*, arg);
     ssarray_init(arg);
+
+    /* duplicate check */
+    if(surgescript_programpool_shallowcheck(parser->program_pool, context.object_name, program_name))
+        ssfatal("Compile Error: duplicate function \"%s\" in object \"%s\" at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* read list of arguments */
     match(parser, SSTOK_IDENTIFIER);
