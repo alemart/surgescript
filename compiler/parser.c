@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * compiler/parser.c
  * SurgeScript compiler: syntax analyzer
@@ -1062,6 +1062,10 @@ bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         loopstmt(parser, context);
         return true;
     }
+    else if(got_type(parser, SSTOK_FOREACH)) {
+        loopstmt(parser, context);
+        return true;
+    }
     else if(got_type(parser, SSTOK_RETURN)) {
         retstmt(parser, context);
         return true;
@@ -1187,6 +1191,26 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             /* cleanup */
             ssfree(identifier);
         }
+    }
+    else if(optmatch(parser, SSTOK_FOREACH)) {
+        /* foreach loop */
+        char* identifier;
+
+        match(parser, SSTOK_LPAREN);
+        identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_IDENTIFIER);
+        match(parser, SSTOK_IN);
+        expr(parser, context);
+        match(parser, SSTOK_RPAREN);
+
+        /* emit code */
+        emit_foreach1(context, identifier, begin, end);
+        if(!stmt(parser, context))
+            unexpected_symbol(parser);
+        emit_foreach2(context, identifier, begin, end);
+
+        /* cleanup */
+        ssfree(identifier);
     }
 }
 

@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * compiler/lexer.c
  * SurgeScript compiler: lexical analyzer
@@ -15,8 +15,6 @@
 #include "../util/util.h"
 #include "../util/ssarray.h"
 
-/* size of the internal buffer */
-#define BUFSIZE                     1024
 
 /* previous state */
 typedef struct surgescript_lexer_prevstate_t
@@ -27,6 +25,7 @@ typedef struct surgescript_lexer_prevstate_t
 static const surgescript_lexer_prevstate_t* prev_state(surgescript_lexer_t* lexer, const char* prev_p, int prev_line);
 
 /* lexer */
+#define BUFSIZE                     1024 /* size of the internal buffer */
 struct surgescript_lexer_t
 {
     char buf[BUFSIZE]; /* auxiliary buffer */
@@ -37,7 +36,7 @@ struct surgescript_lexer_t
 };
 
 /* keywords */
-static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE, SSTOK_TYPEOF, SSTOK_PUBLIC, SSTOK_TAG };
+static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_FOREACH, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE, SSTOK_TYPEOF, SSTOK_PUBLIC, SSTOK_TAG };
 static int indexof_keyword(const char* identifier);
 static inline void bufadd(surgescript_lexer_t* lexer, char c);
 static inline void bufclear(surgescript_lexer_t* lexer);

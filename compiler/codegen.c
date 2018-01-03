@@ -815,6 +815,36 @@ void emit_for3(surgescript_nodecontext_t context, surgescript_program_label_t in
     LABEL(end);
 }
 
+void emit_foreach1(surgescript_nodecontext_t context, const char* identifier, surgescript_program_label_t begin, surgescript_program_label_t end)
+{
+    /* get the iterator */
+    SSASM(SSOP_PUSH, T0); /* push <expr> */
+    SSASM(SSOP_CALL, TEXT("iterator"), U(0));
+    SSASM(SSOP_PUSH, T0); /* push <expr>.iterator() */
+
+    /* reserve an address on the stack to the element of the foreach loop */
+    if(!surgescript_symtable_has_symbol(context.symtable, identifier))
+        surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_local_count(context.symtable) - surgescript_program_arity(context.program)));
+
+    /* foreach loop */
+    LABEL(begin);
+    SSASM(SSOP_CALL, TEXT("hasNext"), U(0));
+    SSASM(SSOP_TEST, T0, T0);
+    SSASM(SSOP_JE, U(end));
+    SSASM(SSOP_CALL, TEXT("next"), U(0));
+    surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
+}
+
+void emit_foreach2(surgescript_nodecontext_t context, const char* identifier, surgescript_program_label_t begin, surgescript_program_label_t end)
+{
+    /* go back to the beginning */
+    SSASM(SSOP_JMP, U(begin));
+
+    /* done */
+    LABEL(end);
+    SSASM(SSOP_POPN, U(2)); /* pop stuff */
+}
+
 void emit_break(surgescript_nodecontext_t context, int line)
 {
     if(context.loop_end != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)

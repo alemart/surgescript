@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * compiler/parser.h
  * SurgeScript compiler: syntax analyzer
@@ -103,6 +103,7 @@
  *            |  if ( <expr> ) <stmt> else <stmt>
  * <loopstmt> := while ( <expr> ) <stmt>
  *            |  for ( <expr> ; <expr> ; <expr> ) <stmt>
+ *            |  foreach ( identifier in <expr> ) <stmt>
  * <retstmt> := return <expr> ;
  *           |  return ;
  * <jumpstmt> := break ;

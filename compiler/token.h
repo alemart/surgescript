@@ -47,6 +47,7 @@
     F( SSTOK_ELSE, "else" )                                                     \
     F( SSTOK_WHILE, "while" )                                                   \
     F( SSTOK_FOR, "for" )                                                       \
+    F( SSTOK_FOREACH, "foreach" )                                               \
     F( SSTOK_IN, "in" )                                                         \
     F( SSTOK_BREAK, "break" )                                                   \
     F( SSTOK_CONTINUE, "continue" )                                             \
