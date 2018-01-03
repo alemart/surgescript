@@ -1146,51 +1146,24 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         emit_while2(context, begin, end);
     }
     else if(optmatch(parser, SSTOK_FOR)) {
-        /* for loops */
-        enum { FOR, FOR_IN } for_type = FOR;
-        match(parser, SSTOK_LPAREN);
-        if(optmatch(parser, SSTOK_IDENTIFIER)) {
-            for_type = got_type(parser, SSTOK_IN) ? FOR_IN : FOR;
-            unmatch(parser);
-        }
+        /* for loop */
+        surgescript_program_label_t body = surgescript_program_new_label(context.program);
+        surgescript_program_label_t increment = surgescript_program_new_label(context.program);
 
         /* emit code */
-        if(for_type == FOR) {
-            /* regular for(;;) loop */
-            surgescript_program_label_t body = surgescript_program_new_label(context.program);
-            surgescript_program_label_t increment = surgescript_program_new_label(context.program);
-
-            /* emit code */
-            expr(parser, context); /* initialization */
-            emit_for1(context, begin);
-            match(parser, SSTOK_SEMICOLON);
-            expr(parser, context); /* loop condition */
-            match(parser, SSTOK_SEMICOLON);
-            emit_forcheck(context, begin, body, increment, end);
-            expr(parser, context); /* increment */
-            match(parser, SSTOK_RPAREN);
-            emit_for2(context, begin, body);
-            if(!stmt(parser, context)) /* loop body */
-                unexpected_symbol(parser);
-            emit_for3(context, increment, end);
-        }
-        else if(for_type == FOR_IN) {
-            /* for .. in loop */
-            char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
-            match(parser, SSTOK_IDENTIFIER);
-            match(parser, SSTOK_IN);
-            expr(parser, context);
-            match(parser, SSTOK_RPAREN);
-
-            /* emit code */
-            emit_forin1(context, identifier, begin, end);
-            if(!stmt(parser, context))
-                unexpected_symbol(parser);
-            emit_forin2(context, identifier, begin, end);
-
-            /* cleanup */
-            ssfree(identifier);
-        }
+        match(parser, SSTOK_LPAREN);
+        expr(parser, context); /* initialization */
+        emit_for1(context, begin);
+        match(parser, SSTOK_SEMICOLON);
+        expr(parser, context); /* loop condition */
+        match(parser, SSTOK_SEMICOLON);
+        emit_forcheck(context, begin, body, increment, end);
+        expr(parser, context); /* increment */
+        match(parser, SSTOK_RPAREN);
+        emit_for2(context, begin, body);
+        if(!stmt(parser, context)) /* loop body */
+            unexpected_symbol(parser);
+        emit_for3(context, increment, end);
     }
     else if(optmatch(parser, SSTOK_FOREACH)) {
         /* foreach loop */
