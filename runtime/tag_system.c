@@ -106,6 +106,9 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
     surgescript_inversetagtable_t* ientry = NULL;
     surgescript_tag_t tag = generate_tag(tag_name);
 
+    if(surgescript_tagsystem_has_tag(tag_system, object_name, tag_name))
+        return;
+
     HASH_FIND(hh, tag_system->tag_table, object_name, strlen(object_name), entry);
     if(entry == NULL) {
         entry = ssmalloc(sizeof *entry);
