@@ -16,7 +16,7 @@
 #include "util.h"
 
 /* private stuff */
-static void crash(const char* location);
+static void mem_crash(const char* location);
 static void my_log(const char* message);
 static void my_fatal(const char* message);
 static void (*log_function)(const char* message) = my_log;
@@ -37,7 +37,7 @@ void* surgescript_util_malloc(size_t bytes, const char* location)
     void *m = malloc(bytes);
 
     if(m == NULL)
-        crash(location);
+        mem_crash(location);
 
     return m;
 }
@@ -51,7 +51,7 @@ void* surgescript_util_realloc(void* ptr, size_t bytes, const char* location)
     void *m = realloc(ptr, bytes);
 
     if(m == NULL)
-        crash(location);
+        mem_crash(location);
 
     return m;
 }
@@ -275,11 +275,11 @@ void my_fatal(const char* message)
     ;
 }
 
-void crash(const char* location) /* out of memory error */
+void mem_crash(const char* location) /* out of memory error */
 {
     static char buf[64] = "Out of memory in ";
     
-    strncat(buf, location, sizeof(buf) - 1);
+    strncpy(buf + 17, location, sizeof(buf) - 17 - 1);
     buf[sizeof(buf) - 1] = 0;
 
     log_function(buf);
