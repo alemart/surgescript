@@ -38,13 +38,10 @@ object "Application"
     // this function will add all weights stored in the Dictionary.
     fun computeTotalWeight()
     {
-        sum = 0.0;
+        sum = 0;
 
-        it = weight.iterator();
-        while(it.hasNext()) {
-            entry = it.next();
+        foreach(entry in weight)
             sum += entry.value;
-        }
 
         return sum;
     }
