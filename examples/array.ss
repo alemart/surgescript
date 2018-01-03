@@ -5,17 +5,28 @@
 //
 
 // The following program will print all the elements of the array
+// using different pieces of code
 object "Application"
 {
-    arr = [0, 1, 1, 2, 3, 5, 8, 13, 21, 34];
+    array = [1, 2, 3, 4, 5];
     
     state "main"
     {
-        Console.print("The array has " + arr.length + " elements.");
+        Console.print("The array has " + array.length + " elements.");
 
-        // i is an index ranging from 0 to 9
-        for(i in arr) {
-            Console.print(arr[i]);
+        // Loop with for
+        for(i = 0; i < array.length; i++)
+            Console.print(array[i]);
+
+        // Loop with foreach
+        foreach(element in array)
+            Console.print(element);
+
+        // Loop with iterators
+        it = array.iterator();
+        while(it.hasNext()) {
+            element = it.next();
+            Console.print(element);
         }
 
         Application.exit();
