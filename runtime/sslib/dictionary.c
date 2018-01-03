@@ -328,37 +328,39 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 
     /* iterate through the Dictionary */
     do {
+        surgescript_object_t* entry;
         surgescript_var_t* tmp = surgescript_var_create();
         surgescript_object_call_function(object, "iterator", NULL, 0, tmp),
         iterator = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(tmp));
         while(surgescript_object_call_function(iterator, "hasNext", NULL, 0, tmp), surgescript_var_get_bool(tmp)) {
-            surgescript_var_t* element = tmp; /* just an alias */
-            const surgescript_var_t* param[] = { element };
-            surgescript_object_call_function(iterator, "next", NULL, 0, element);
+            /* get entry */
+            surgescript_object_call_function(iterator, "next", NULL, 0, tmp);
+            entry = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(tmp));
 
             /* add whitespace */
             ssarray_push(sb, ' ');
 
             /* write key */
-            WRITE_ELEMENT(element, true);
+            surgescript_object_call_function(entry, "getKey", NULL, 0, tmp);
+            WRITE_ELEMENT(tmp, true);
             ssarray_push(sb, ':');
             ssarray_push(sb, ' ');
 
             /* write value */
-            surgescript_object_call_function(object, "get", param, 1, element);
-            if(!surgescript_var_typecheck(element, surgescript_var_type2code("object"))) {
-                surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(element);
+            surgescript_object_call_function(entry, "getValue", NULL, 0, tmp);
+            if(!surgescript_var_typecheck(tmp, surgescript_var_type2code("object"))) {
+                surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(tmp);
                 surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
                 if(strcmp(surgescript_object_name(object), "Array") != 0 && strcmp(surgescript_object_name(object), "Dictionary") != 0) {
                     if(can_descend)
-                        surgescript_object_call_function(object, "toString", NULL, 0, element);
-                    WRITE_ELEMENT(element, strcmp(surgescript_var_fast_get_string(element), "[object]"));
+                        surgescript_object_call_function(object, "toString", NULL, 0, tmp);
+                    WRITE_ELEMENT(tmp, strcmp(surgescript_var_fast_get_string(tmp), "[object]"));
                 }
                 else
-                    WRITE_ELEMENT(element, false);
+                    WRITE_ELEMENT(tmp, false);
             }
             else
-                WRITE_ELEMENT(element, !surgescript_var_typecheck(element, surgescript_var_type2code("string")));
+                WRITE_ELEMENT(tmp, !surgescript_var_typecheck(tmp, surgescript_var_type2code("string")));
 
             /* add separator */
             if(!(surgescript_object_call_function(iterator, "hasNext", NULL, 0, tmp), surgescript_var_get_bool(tmp))) {
