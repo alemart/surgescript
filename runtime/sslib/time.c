@@ -19,6 +19,7 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_gettime(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getdelta(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_gettickcount(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
 static const surgescript_heapptr_t TIME_ADDR = 0;
@@ -37,6 +38,7 @@ void surgescript_sslib_register_time(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Time", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Time", "getTime", fun_gettime, 0);
     surgescript_vm_bind(vm, "Time", "getDelta", fun_getdelta, 0);
+    surgescript_vm_bind(vm, "Time", "getTickCount", fun_gettickcount, 0);
 }
 
 
@@ -97,4 +99,10 @@ surgescript_var_t* fun_getdelta(surgescript_object_t* object, const surgescript_
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
     return surgescript_var_clone(surgescript_heap_at(heap, DELTA_ADDR));
+}
+
+/* the time (in seconds) since the app was started */
+surgescript_var_t* fun_gettickcount(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_number(surgescript_var_create(), surgescript_util_gettickcount());
 }
