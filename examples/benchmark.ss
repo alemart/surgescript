@@ -1,6 +1,6 @@
 //
 // benchmark.ss
-// Benchmarking in SurgeScript
+// Performance measurement in SurgeScript
 // Copyright (C) 2018  Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
@@ -31,7 +31,7 @@ object "Application"
     }
 }
 
-// This object benchmarks functor f
+// This object measures the performance of functor f
 object "Benchmark"
 {
     fun call(f)
