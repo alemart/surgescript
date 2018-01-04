@@ -36,11 +36,11 @@ object "Benchmark"
 {
     fun call(f)
     {
-        Console.print("Computing " + f + "...");
+        Console.write("Computing " + f + " = ");
         start = Time.tickCount;
         result = f();
         elapsed = Time.tickCount - start;
-        Console.print(f + " = " + result + " took " + elapsed + " seconds.");
+        Console.print(result + " \t\t done in " + elapsed + " seconds.");
         return elapsed;
     }
 }
