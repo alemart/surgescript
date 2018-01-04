@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/variable.c
  * SurgeScript variables
@@ -45,6 +45,35 @@ struct surgescript_var_t
     enum surgescript_vartype_t type;
 };
 
+/* var pool */
+//#define DISABLE_VARPOOL
+typedef struct surgescript_varpool_t surgescript_varpool_t;
+typedef struct surgescript_varbucket_t surgescript_varbucket_t;
+struct surgescript_varpool_t
+{
+    /* a pool is a collection of buckets */
+    #define VARPOOL_NUM_BUCKETS 937
+
+    struct surgescript_varbucket_t {
+        union {
+            /* the 1st element of the bucket (var) shares
+               the same address as the bucket itself */
+            surgescript_var_t var; /* var data */
+            surgescript_varbucket_t* next; /* free list */
+        };
+        bool in_use; /* is this bucket currently in use? */
+    } bucket[VARPOOL_NUM_BUCKETS];
+
+    surgescript_varpool_t* next;
+};
+static surgescript_varpool_t* new_varpool(surgescript_varpool_t* next);
+static surgescript_varpool_t* delete_varpools(surgescript_varpool_t* head);
+static surgescript_varbucket_t* get_1stbucket(surgescript_varpool_t* pool);
+static inline surgescript_varbucket_t* allocate_bucket();
+static inline surgescript_varbucket_t* free_bucket(surgescript_varbucket_t* bucket);
+static surgescript_varpool_t* varpool = NULL;
+static surgescript_varbucket_t* varpool_currbucket = NULL;
+
 /* helpers */
 #define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
                                     (var)->string = ssfree((var)->string); /* this will clear all bits */
@@ -63,10 +92,17 @@ static const int typecode[] = { 0, 'b', 'n', 's', 'o' };
  */
 surgescript_var_t* surgescript_var_create()
 {
+#ifndef DISABLE_VARPOOL
+    surgescript_var_t* var = (surgescript_var_t*)allocate_bucket();
+    var->type = SSVAR_NULL;
+    var->raw = 0;
+    return var;
+#else
     surgescript_var_t* var = ssmalloc(sizeof *var);
     var->type = SSVAR_NULL;
     var->raw = 0;
     return var;
+#endif
 }
 
 /*
@@ -75,9 +111,13 @@ surgescript_var_t* surgescript_var_create()
  */
 surgescript_var_t* surgescript_var_destroy(surgescript_var_t* var)
 {
+#ifndef DISABLE_VARPOOL
     RELEASE_DATA(var);
-    ssfree(var);
-    return NULL;
+    return free_bucket((surgescript_varbucket_t*)var);
+#else
+    RELEASE_DATA(var);
+    return ssfree(var);
+#endif
 }
 
 
@@ -486,6 +526,34 @@ surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int raw)
 
 
 
+
+/* var pooling */
+
+/*
+ * surgescript_var_init_pool()
+ * Initializes the pool
+ */
+void surgescript_var_init_pool()
+{
+#ifndef DISABLE_VARPOOL
+    varpool = new_varpool(NULL);
+    varpool_currbucket = get_1stbucket(varpool);
+#endif
+}
+
+/*
+ * surgescript_var_release_pool()
+ * Releases the pool
+ */
+void surgescript_var_release_pool()
+{
+#ifndef DISABLE_VARPOOL
+    varpool_currbucket = NULL;
+    varpool = delete_varpools(varpool);
+#endif
+}
+
+
 /* private section */
 
 /* Does str hold a valid number? */
@@ -501,4 +569,63 @@ bool isvalidnum(const char* str)
     }
 
     return true; /* the empty string is valid and translates to 0. */
+}
+
+/* Creates a new var pool */
+surgescript_varpool_t* new_varpool(surgescript_varpool_t* next)
+{
+    surgescript_varpool_t* pool;
+    sslog("Allocating a new var pool...");
+
+    pool = ssmalloc(sizeof *pool);
+    for(int i = 0; i < VARPOOL_NUM_BUCKETS - 1; i++) {
+        pool->bucket[i].next = &(pool->bucket[i + 1]);
+        pool->bucket[i].in_use = false;
+    }
+    pool->bucket[VARPOOL_NUM_BUCKETS - 1].next = NULL;
+    pool->bucket[VARPOOL_NUM_BUCKETS - 1].in_use = false;
+    pool->next = next;
+
+    return pool;
+}
+
+/* Deletes all var pools */
+surgescript_varpool_t* delete_varpools(surgescript_varpool_t* head)
+{
+    if(head->next)
+        delete_varpools(head->next);
+    return ssfree(head);
+}
+
+/* Gets the 1st bucket of a pool */
+surgescript_varbucket_t* get_1stbucket(surgescript_varpool_t* pool)
+{
+    return &(pool->bucket[0]);
+}
+
+/* Allocates a bucket (must be fast) */
+surgescript_varbucket_t* allocate_bucket()
+{
+    surgescript_varbucket_t* bucket = varpool_currbucket;
+
+    /* consistency check */
+    ssassert(bucket && !bucket->in_use);
+
+    /* select bucket */
+    if(bucket->next == NULL)
+        bucket->next = get_1stbucket(varpool = new_varpool(varpool));
+    varpool_currbucket = bucket->next;
+    bucket->in_use = true;
+
+    /* done! */
+    return bucket;
+}
+
+/* Deallocates a bucket (must be fast) */
+surgescript_varbucket_t* free_bucket(surgescript_varbucket_t* bucket)
+{
+    bucket->in_use = false;
+    bucket->next = varpool_currbucket;
+    varpool_currbucket = bucket;
+    return NULL;
 }

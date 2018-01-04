@@ -52,6 +52,10 @@ surgescript_vm_t* surgescript_vm_create()
 {
     surgescript_vm_t* vm = ssmalloc(sizeof *vm);
 
+    /* boot */
+    sslog("Booting up the VM...");
+    surgescript_var_init_pool();
+
     /* set up the VM */
     vm->stack = surgescript_stack_create();
     vm->program_pool = surgescript_programpool_create();
@@ -85,11 +89,13 @@ surgescript_vm_t* surgescript_vm_create()
  */
 surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
 {
+    sslog("Shutting down the VM...");
     surgescript_parser_destroy(vm->parser);
     surgescript_objectmanager_destroy(vm->object_manager);
     surgescript_tagsystem_destroy(vm->tag_system);
     surgescript_programpool_destroy(vm->program_pool);
     surgescript_stack_destroy(vm->stack);
+    surgescript_var_release_pool();
     return ssfree(vm);
 }
 

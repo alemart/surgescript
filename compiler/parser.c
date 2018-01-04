@@ -556,7 +556,6 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     fun_header = emit_function_header(context);
     stmtlist(parser, context);
     emit_function_footer(context, surgescript_symtable_local_count(context.symtable), fun_header);
-    printf("fun %s tem %d locals\n", program_name, surgescript_symtable_local_count(context.symtable));
     match(parser, SSTOK_RCURLY);
 
     /* register the function and cleanup */
