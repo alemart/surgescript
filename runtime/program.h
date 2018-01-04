@@ -71,8 +71,7 @@ static inline surgescript_program_operand_t surgescript_program_operand_i(int i)
 surgescript_program_t* surgescript_program_create(int arity); /* create a new program */
 surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_program_cfunction_t cfunction); /* a C-program must return a newly-allocated surgescript_var_t*, or NULL */
 surgescript_program_t* surgescript_program_destroy(surgescript_program_t* program); /* called by the program pool */
-void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment); /* simply run the program (you need to push the stack frame by yourself) */
-void surgescript_program_call(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment); /* run the program, pushing a new stack frame automatically */
+void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t* runtime_environment, int num_params); /* low-level call; you'll need to push the stack parameters by yourself */
 
 /* write the program */
 surgescript_program_label_t surgescript_program_new_label(surgescript_program_t* program); /* creates and returns a new label */
@@ -87,8 +86,5 @@ int surgescript_program_add_text(surgescript_program_t* program, const char* tex
 int surgescript_program_find_text(const surgescript_program_t* program, const char* text); /* finds the first index such that text[index] == text, or -1 if not found */
 int surgescript_program_text_count(const surgescript_program_t* program); /* how many string literals exist in the program? */
 void surgescript_program_dump(surgescript_program_t* program, FILE* fp); /* dump the program to a file */
-
-/* call a program from C */
-void surgescript_program_lowcall(surgescript_renv_t* runtime_environment, const char* program_name, int num_params); /* you'll need to manage the stack yourself */
 
 #endif

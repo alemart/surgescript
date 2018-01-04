@@ -504,19 +504,23 @@ void surgescript_object_init(surgescript_object_t* object)
 {
     static const char* CONSTRUCTOR_FUN = "constructor"; /* regular constructor */
     static const char* PRE_CONSTRUCTOR_FUN = "__ssconstructor"; /* a constructor reserved for the VM */
+    surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+    surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
 
     if(surgescript_programpool_exists(program_pool, object->name, PRE_CONSTRUCTOR_FUN)) {
         surgescript_program_t* pre_constructor = surgescript_programpool_get(program_pool, object->name, PRE_CONSTRUCTOR_FUN);
-        surgescript_program_run(pre_constructor, object->renv);
+        surgescript_program_call(pre_constructor, object->renv, 0);
     }
 
     if(surgescript_programpool_exists(program_pool, object->name, CONSTRUCTOR_FUN)) {
         surgescript_program_t* constructor = surgescript_programpool_get(program_pool, object->name, CONSTRUCTOR_FUN);
         if(surgescript_program_arity(constructor) != 0)
             ssfatal("Runtime Error: Object \"%s\"'s %s() cannot receive parameters", object->name, CONSTRUCTOR_FUN);
-        surgescript_program_run(constructor, object->renv); /* would be surgescript_program_call() if the constructor received parameters */
+        surgescript_program_call(constructor, object->renv, 0);
     }
+
+    surgescript_stack_pop(stack);
 }
 
 /*
@@ -529,10 +533,15 @@ void surgescript_object_release(surgescript_object_t* object)
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
 
     if(surgescript_programpool_exists(program_pool, object->name, DESTRUCTOR_FUN)) {
+        surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
         surgescript_program_t* destructor = surgescript_programpool_get(program_pool, object->name, DESTRUCTOR_FUN);
+        
         if(surgescript_program_arity(destructor) != 0)
             ssfatal("Runtime Error: Object \"%s\" %s() cannot receive parameters", object->name, DESTRUCTOR_FUN);
-        surgescript_program_run(destructor, object->renv);
+
+        surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
+        surgescript_program_call(destructor, object->renv, 0);
+        surgescript_stack_pop(stack);
     }
 }
 
@@ -599,8 +608,8 @@ bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* dat
  */
 void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const surgescript_var_t* param[], int num_params, surgescript_var_t* return_value)
 {
+    surgescript_program_t* program = surgescript_programpool_get(surgescript_renv_programpool(object->renv), object->name, fun_name);
     surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
-    surgescript_renv_t* runtime_environment = object->renv;
     int i;
 
     /* parameters are stacked left-to-right */
@@ -609,9 +618,13 @@ void surgescript_object_call_function(surgescript_object_t* object, const char* 
         surgescript_stack_push(stack, surgescript_var_clone(param[i]));
 
     /* call the program */
-    surgescript_program_lowcall(runtime_environment, fun_name, num_params);
-    if(return_value != NULL)
-        surgescript_var_copy(return_value, *(surgescript_renv_tmp(runtime_environment) + 0)); /* the return value of the function (if any) */
+    if(program != NULL) {
+        surgescript_program_call(program, object->renv, num_params);
+        if(return_value != NULL)
+            surgescript_var_copy(return_value, *(surgescript_renv_tmp(object->renv) + 0)); /* the return value of the function (if any) */
+    }
+    else
+        ssfatal("Runtime Error: function %s.%s/%d doesn't exist.", object->name, fun_name, num_params);
 
     /* pop stuff from the stack */
     surgescript_stack_popn(stack, 1 + ssmax(0, num_params));
@@ -661,7 +674,10 @@ char* state2fun(const char* state)
 clock_t run_current_state(const surgescript_object_t* object)
 {
     clock_t start = clock();
-    surgescript_program_call(object->current_state, object->renv);
+    surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
+    surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
+    surgescript_program_call(object->current_state, object->renv, 0);
+    surgescript_stack_pop(stack);
     return clock() - start;
 }
 

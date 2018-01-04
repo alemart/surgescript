@@ -221,27 +221,6 @@ int surgescript_program_arity(const surgescript_program_t* program)
     return program->arity;
 }
 
-/*
- * surgescript_program_call()
- * Runs a written program, pushing a new stack frame automatically
- */
-void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
-{
-    surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
-    surgescript_stack_pushenv(stack); /* push a new stack frame */
-    surgescript_program_run(program, runtime_environment);
-    surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */
-}
-
-/*
- * surgescript_program_run()
- * Runs a program without pushing the stack frame (you have to do it yourself)
- */
-void surgescript_program_run(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
-{
-    program->run(program, runtime_environment);
-}
-
 /* dump the program to a file */
 void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 {
@@ -300,13 +279,22 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 
 
 /*
- * surgescript_program_lowcall()
+ * surgescript_program_call()
  * Low-level SurgeScript function call.
- * you'll need to manage the stack yourself (prefer using surgescript_object_call_program() instead)
+ * You'll need to push the stack parameters yourself (prefer using surgescript_object_call_function() instead)
 */
-void surgescript_program_lowcall(surgescript_renv_t* runtime_environment, const char* program_name, int num_params)
+void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t* runtime_environment, int num_params)
 {
-    call_program(runtime_environment, program_name, num_params);
+    if(num_params == program->arity) {
+        surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
+        surgescript_stack_pushenv(stack);
+        program->run(program, runtime_environment);
+        surgescript_stack_popenv(stack);
+    }
+    else {
+        surgescript_object_t* owner = surgescript_renv_owner(runtime_environment);
+        ssfatal("Runtime Error: internal call - function of object \"%s\" expects %d parameters, but received %d.", surgescript_object_name(owner), program->arity, num_params);
+    }
 }
 
 
@@ -709,7 +697,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
                     );
 
                     /* call the program */
-                    surgescript_program_run(program, callee_runtime_environment);
+                    program->run(program, callee_runtime_environment);
 
                     /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
                     /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(callee_runtime_environment));*/
