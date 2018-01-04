@@ -45,7 +45,7 @@ object "Benchmark"
     }
 }
 
-// This functor computes the Fibonacci sequence with an exponential algorithm
+// This functor computes the Fibonacci sequence using an exponential algorithm
 object "ExponentialFibonacci"
 {
     public n = 1;
