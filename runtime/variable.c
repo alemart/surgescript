@@ -46,7 +46,9 @@ struct surgescript_var_t
 };
 
 /* var pool */
-//#define DISABLE_VARPOOL
+/*#define DISABLE_VARPOOL*/
+#ifndef DISABLE_VARPOOL
+
 typedef struct surgescript_varpool_t surgescript_varpool_t;
 typedef struct surgescript_varbucket_t surgescript_varbucket_t;
 struct surgescript_varpool_t
@@ -70,9 +72,11 @@ static surgescript_varpool_t* new_varpool(surgescript_varpool_t* next);
 static surgescript_varpool_t* delete_varpools(surgescript_varpool_t* head);
 static surgescript_varbucket_t* get_1stbucket(surgescript_varpool_t* pool);
 static inline surgescript_varbucket_t* allocate_bucket();
-static inline surgescript_varbucket_t* free_bucket(surgescript_varbucket_t* bucket);
+static inline void free_bucket(surgescript_varbucket_t* bucket);
 static surgescript_varpool_t* varpool = NULL;
 static surgescript_varbucket_t* varpool_currbucket = NULL;
+
+#endif
 
 /* helpers */
 #define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
@@ -113,10 +117,12 @@ surgescript_var_t* surgescript_var_destroy(surgescript_var_t* var)
 {
 #ifndef DISABLE_VARPOOL
     RELEASE_DATA(var);
-    return free_bucket((surgescript_varbucket_t*)var);
+    free_bucket((surgescript_varbucket_t*)var);
+    return NULL;
 #else
     RELEASE_DATA(var);
-    return ssfree(var);
+    ssfree(var);
+    return NULL;
 #endif
 }
 
@@ -538,6 +544,8 @@ void surgescript_var_init_pool()
 #ifndef DISABLE_VARPOOL
     varpool = new_varpool(NULL);
     varpool_currbucket = get_1stbucket(varpool);
+#else
+    sslog("Warning: SurgeScript has been compiled with disabled var pooling.");
 #endif
 }
 
@@ -570,6 +578,10 @@ bool isvalidnum(const char* str)
 
     return true; /* the empty string is valid and translates to 0. */
 }
+
+
+/* private var pool routines */
+#ifndef DISABLE_VARPOOL
 
 /* Creates a new var pool */
 surgescript_varpool_t* new_varpool(surgescript_varpool_t* next)
@@ -609,7 +621,7 @@ surgescript_varbucket_t* allocate_bucket()
     surgescript_varbucket_t* bucket = varpool_currbucket;
 
     /* consistency check */
-    ssassert(bucket && !bucket->in_use);
+    /*ssassert(bucket && !bucket->in_use);*/
 
     /* select bucket */
     if(bucket->next == NULL)
@@ -622,10 +634,11 @@ surgescript_varbucket_t* allocate_bucket()
 }
 
 /* Deallocates a bucket (must be fast) */
-surgescript_varbucket_t* free_bucket(surgescript_varbucket_t* bucket)
+void free_bucket(surgescript_varbucket_t* bucket)
 {
     bucket->in_use = false;
     bucket->next = varpool_currbucket;
     varpool_currbucket = bucket;
-    return NULL;
 }
+
+#endif
