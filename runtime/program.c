@@ -293,7 +293,7 @@ void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t
     }
     else {
         surgescript_object_t* owner = surgescript_renv_owner(runtime_environment);
-        ssfatal("Runtime Error: internal call - function of object \"%s\" expects %d parameters, but received %d.", surgescript_object_name(owner), program->arity, num_params);
+        ssfatal("Runtime Error: internal program call - function of object \"%s\" expects %d parameters, but received %d.", surgescript_object_name(owner), program->arity, num_params);
     }
 }
 
