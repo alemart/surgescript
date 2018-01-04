@@ -280,7 +280,7 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 
 /*
  * surgescript_program_call()
- * Low-level SurgeScript function call.
+ * Low-level SurgeScript program call.
  * You'll need to push the stack parameters yourself (prefer using surgescript_object_call_function() instead)
 */
 void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t* runtime_environment, int num_params)
