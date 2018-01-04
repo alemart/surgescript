@@ -17,7 +17,7 @@
 object "Application"
 {
     benchmark = spawn("Benchmark");
-    fib = spawn("FibonacciGenerator");
+    fib = spawn("Fibonacci");
 
     state "main"
     {
@@ -70,7 +70,7 @@ object "ExponentialFibonacci"
 }
 
 // This object generates a Fibonacci functor
-object "FibonacciGenerator"
+object "Fibonacci"
 {
     fun call(n)
     {
