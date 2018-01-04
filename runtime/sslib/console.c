@@ -77,6 +77,7 @@ surgescript_var_t* fun_write(surgescript_object_t* object, const surgescript_var
     const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     char* str = surgescript_var_get_string(param[0], manager);
     fputs(str, stdout);
+    fflush(stdout);
     ssfree(str);
     return NULL;
 }
