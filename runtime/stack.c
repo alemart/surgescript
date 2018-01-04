@@ -162,7 +162,7 @@ void surgescript_stack_popn(surgescript_stack_t* stack, size_t n)
  * surgescript_stack_top()
  * Gets the top element from the stack
  */
-const surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack)
+const surgescript_var_t* surgescript_stack_top(const surgescript_stack_t* stack)
 {
     return stack->data[stack->sp];
 }
@@ -172,7 +172,7 @@ const surgescript_var_t* surgescript_stack_top(surgescript_stack_t* stack)
  * surgescript_stack_peek()
  * Reads the (base+offset)-th element from the stack
  */
-const surgescript_var_t* surgescript_stack_peek(surgescript_stack_t* stack, surgescript_stackptr_t offset)
+const surgescript_var_t* surgescript_stack_peek(const surgescript_stack_t* stack, surgescript_stackptr_t offset)
 {
     const surgescript_stackptr_t idx = stack->bp + offset;
 
@@ -201,7 +201,7 @@ void surgescript_stack_poke(surgescript_stack_t* stack, surgescript_stackptr_t o
  * surgescript_stack_empty()
  * Is the stack empty?
  */
-int surgescript_stack_empty(surgescript_stack_t* stack)
+int surgescript_stack_empty(const surgescript_stack_t* stack)
 {
     return stack->sp <= stack->bp;
 }
@@ -221,4 +221,13 @@ void surgescript_stack_scan_objects(surgescript_stack_t* stack, void* userdata, 
             }
         }
     }
+}
+
+/*
+ * surgescript_stack_size()
+ * Returns the stack size
+ */
+size_t surgescript_stack_size(const surgescript_stack_t* stack)
+{
+    return stack->sp;
 }

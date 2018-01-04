@@ -556,6 +556,7 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     fun_header = emit_function_header(context);
     stmtlist(parser, context);
     emit_function_footer(context, surgescript_symtable_local_count(context.symtable), fun_header);
+    printf("fun %s tem %d locals\n", program_name, surgescript_symtable_local_count(context.symtable));
     match(parser, SSTOK_RCURLY);
 
     /* register the function and cleanup */
@@ -952,19 +953,19 @@ void dictgetexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
 
 void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name)
 {
-    int i = 0;
+    int num_params = 0;
     match(parser, SSTOK_LPAREN);
 
     emit_pushparam(context); /* push the object handle */
     if(!got_type(parser, SSTOK_RPAREN)) { /* read the parameters */
         do {
-            i++;
+            ++num_params;
             assignexpr(parser, context);
             emit_pushparam(context); /* push the i-th param */
         } while(optmatch(parser, SSTOK_COMMA));
     }
-    emit_funcall(context, fun_name, i);
-    emit_popparams(context, 1 + i); /* pop the parameters and the object handle */
+    emit_funcall(context, fun_name, num_params);
+    emit_popparams(context, 1 + num_params); /* pop the parameters and the object handle */
 
     match(parser, SSTOK_RPAREN);
 }

@@ -71,7 +71,8 @@ static inline surgescript_program_operand_t surgescript_program_operand_i(int i)
 surgescript_program_t* surgescript_program_create(int arity); /* create a new program */
 surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_program_cfunction_t cfunction); /* a C-program must return a newly-allocated surgescript_var_t*, or NULL */
 surgescript_program_t* surgescript_program_destroy(surgescript_program_t* program); /* called by the program pool */
-void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment); /* run the program */
+void surgescript_program_run(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment); /* simply run the program (you need to push the stack frame by yourself) */
+void surgescript_program_call(surgescript_program_t* program, struct surgescript_renv_t* runtime_environment); /* run the program, pushing a new stack frame automatically */
 
 /* write the program */
 surgescript_program_label_t surgescript_program_new_label(surgescript_program_t* program); /* creates and returns a new label */

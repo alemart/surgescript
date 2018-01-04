@@ -72,8 +72,6 @@ void emit_endif(surgescript_nodecontext_t context, surgescript_program_label_t d
 void emit_while1(surgescript_nodecontext_t context, surgescript_program_label_t begin);
 void emit_whilecheck(surgescript_nodecontext_t context, surgescript_program_label_t end);
 void emit_while2(surgescript_nodecontext_t context, surgescript_program_label_t begin, surgescript_program_label_t end);
-void emit_forin1(surgescript_nodecontext_t context, const char* it, surgescript_program_label_t begin, surgescript_program_label_t end);
-void emit_forin2(surgescript_nodecontext_t context, const char* it, surgescript_program_label_t begin, surgescript_program_label_t end);
 void emit_foreach1(surgescript_nodecontext_t context, const char* identifier, surgescript_program_label_t begin, surgescript_program_label_t end);
 void emit_foreach2(surgescript_nodecontext_t context, const char* identifier, surgescript_program_label_t begin, surgescript_program_label_t end);
 void emit_for1(surgescript_nodecontext_t context, surgescript_program_label_t begin);
@@ -103,8 +101,6 @@ void emit_zero(surgescript_nodecontext_t context);
 /* misc */
 void emit_setstate(surgescript_nodecontext_t context);
 void emit_nop(surgescript_nodecontext_t context);
-void emit_push(surgescript_nodecontext_t context);
-void emit_pop(surgescript_nodecontext_t context);
 void emit_breakpoint(surgescript_nodecontext_t context, const char* text);
 
 #endif

@@ -729,42 +729,6 @@ void emit_while2(surgescript_nodecontext_t context, surgescript_program_label_t 
     LABEL(end);
 }
 
-void emit_forin1(surgescript_nodecontext_t context, const char* it, surgescript_program_label_t begin, surgescript_program_label_t end)
-{
-    SSASM(SSOP_PUSH, T0); /* push the array <expr> */
-    SSASM(SSOP_CALL, TEXT("getLength"), U(0));
-    SSASM(SSOP_POPN, U(1));
-    SSASM(SSOP_PUSH, T0); /* the length of the array is saved on the stack */
-
-    if(!surgescript_symtable_has_symbol(context.symtable, it)) {
-        /* reserve an address on the stack to the iterator */
-        surgescript_symtable_put_stack_symbol(context.symtable, it, (surgescript_stackptr_t)(1 + surgescript_symtable_local_count(context.symtable) - surgescript_program_arity(context.program)));
-    }
-    SSASM(SSOP_XOR, T1, T1); /* initialize the loop counter to zero */
-    surgescript_symtable_emit_write(context.symtable, it, context.program, 1);
-
-    LABEL(begin);
-
-    SSASM(SSOP_POP, T0); /* t0 = array length */
-    /*surgescript_symtable_emit_read(context.symtable, it, context.program, 1);*/ /* loop counter */
-    SSASM(SSOP_PUSH, T0);
-    SSASM(SSOP_CMP, T1, T0);
-    SSASM(SSOP_JGE, U(end));
-}
-
-void emit_forin2(surgescript_nodecontext_t context, const char* it, surgescript_program_label_t begin, surgescript_program_label_t end)
-{
-    /* increment the loop counter */
-    surgescript_symtable_emit_read(context.symtable, it, context.program, 1);
-    SSASM(SSOP_INC, T1);
-    surgescript_symtable_emit_write(context.symtable, it, context.program, 1);
-
-    /* jump to the beginning */
-    SSASM(SSOP_JMP, U(begin));
-    LABEL(end);
-    SSASM(SSOP_POP, T0); /* release the length */
-}
-
 void emit_for1(surgescript_nodecontext_t context, surgescript_program_label_t begin)
 {
     LABEL(begin);
@@ -846,7 +810,7 @@ void emit_function_footer(surgescript_nodecontext_t context, int num_locals, int
 {
     if(num_locals > 0)
         surgescript_program_chg_line(context.program, fun_header, SSOP_PUSHN, U(num_locals), U(0));
-    SSASM(SSOP_MOVN, T0);
+    SSASM(SSOP_MOVN, T0); /* return null */
     /*SSASM(SSOP_POPN, U(num_locals));*/ /* not needed, since popenv() clears the stack frame for us */
     SSASM(SSOP_RET);
 }
@@ -923,16 +887,6 @@ void emit_setstate(surgescript_nodecontext_t context)
 void emit_nop(surgescript_nodecontext_t context)
 {
     SSASM(SSOP_NOP);
-}
-
-void emit_push(surgescript_nodecontext_t context)
-{
-    SSASM(SSOP_PUSH, T0);
-}
-
-void emit_pop(surgescript_nodecontext_t context)
-{
-    SSASM(SSOP_POP, T0);
 }
 
 void emit_breakpoint(surgescript_nodecontext_t context, const char* text)

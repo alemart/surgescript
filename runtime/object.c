@@ -515,7 +515,7 @@ void surgescript_object_init(surgescript_object_t* object)
         surgescript_program_t* constructor = surgescript_programpool_get(program_pool, object->name, CONSTRUCTOR_FUN);
         if(surgescript_program_arity(constructor) != 0)
             ssfatal("Runtime Error: Object \"%s\"'s %s() cannot receive parameters", object->name, CONSTRUCTOR_FUN);
-        surgescript_program_run(constructor, object->renv);
+        surgescript_program_run(constructor, object->renv); /* would be surgescript_program_call() if the constructor received parameters */
     }
 }
 
@@ -661,8 +661,7 @@ char* state2fun(const char* state)
 clock_t run_current_state(const surgescript_object_t* object)
 {
     clock_t start = clock();
-    if(object->current_state != NULL)
-        surgescript_program_run(object->current_state, object->renv);
+    surgescript_program_call(object->current_state, object->renv);
     return clock() - start;
 }
 
@@ -671,6 +670,10 @@ surgescript_program_t* get_state_program(const surgescript_object_t* object, con
     char* fun_name = state2fun(state_name);
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
     surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
+
+    if(program == NULL)
+        ssfatal("Runtime Error: state \"%s\" of object \"%s\" doesn't exist.", state_name, object->name);
+
     ssfree(fun_name);
     return program;
 }

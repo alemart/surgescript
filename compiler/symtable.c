@@ -223,7 +223,7 @@ bool surgescript_symtable_has_parent(surgescript_symtable_t* symtable)
 
 /*
  * surgescript_symtable_push_addr()
- * pushes an address (equivalent to symbol) to the stack
+ * Pushes an address (equivalent to symbol) to the stack
  */
 void surgescript_symtable_push_addr(surgescript_symtable_t* symtable, const char* symbol, surgescript_program_t* program)
 {

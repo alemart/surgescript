@@ -37,7 +37,6 @@ struct surgescript_program_t
 {
     int arity; /* config */
     void (*run)(surgescript_program_t*, surgescript_renv_t*); /* run function; strategy pattern */
-
     SSARRAY(surgescript_program_operation_t, line); /* a set of operations (or lines of code) */
     SSARRAY(surgescript_program_label_t, label); /* labels (label[j] is the index of a line of code, j is a label) */
     SSARRAY(char*, text); /* read-only text data */
@@ -223,8 +222,20 @@ int surgescript_program_arity(const surgescript_program_t* program)
 }
 
 /*
+ * surgescript_program_call()
+ * Runs a written program, pushing a new stack frame automatically
+ */
+void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
+{
+    surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
+    surgescript_stack_pushenv(stack); /* push a new stack frame */
+    surgescript_program_run(program, runtime_environment);
+    surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */
+}
+
+/*
  * surgescript_program_run()
- * Runs a written program
+ * Runs a program without pushing the stack frame (you have to do it yourself)
  */
 void surgescript_program_run(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
 {
@@ -774,7 +785,7 @@ bool is_jump_instruction(surgescript_program_operator_t instruction)
 }
 
 /* removes all labels from the program, placing the correct line numbers
-   on all jump instructions. Returns true if there were removed labels. */
+   on all jump instructions. Returns true if there were any removed labels. */
 bool remove_labels(surgescript_program_t* program)
 {
     if(ssarray_length(program->label) > 0) {
