@@ -1,13 +1,12 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * util/object.c
  * SurgeScript object
  */
 
-#include <time.h>
 #include <string.h>
 #include "object.h"
 #include "program_pool.h"
@@ -40,8 +39,8 @@ struct surgescript_object_t
     bool is_active; /* can i run programs? */
     bool is_killed; /* am i scheduled to be destroyed? */
     bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
-    clock_t last_state_change; /* moment of the last state change */
-    clock_t time_spent; /* how much time did this object consume (at the last frame) */
+    float last_state_change; /* moment of the last state change */
+    float time_spent; /* how much time did this object consume (at the last frame) */
 
     /* local transform */
     surgescript_transform_t* transform;
@@ -56,7 +55,7 @@ void surgescript_object_release(surgescript_object_t* object);
 /* private stuff */
 #define MAIN_STATE "main"
 static char* state2fun(const char* state);
-static clock_t run_current_state(const surgescript_object_t* object);
+static float run_current_state(const surgescript_object_t* object);
 static surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
 static bool simple_traversal(surgescript_object_t* object, void* data);
@@ -91,7 +90,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
 
     obj->state_name = ssstrdup(MAIN_STATE);
     obj->current_state = get_state_program(obj, obj->state_name);
-    obj->last_state_change = clock();
+    obj->last_state_change = surgescript_util_gettickcount();
     obj->is_active = true;
     obj->is_killed = false;
     obj->is_reachable = false;
@@ -391,7 +390,7 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
     ssfree(object->state_name);
     object->state_name = ssstrdup(state_name ? state_name : MAIN_STATE);
     object->current_state = get_state_program(object, object->state_name);
-    object->last_state_change = clock();
+    object->last_state_change = surgescript_util_gettickcount();
 }
 
 
@@ -401,8 +400,7 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
  */
 float surgescript_object_elapsed_time(const surgescript_object_t* object)
 {
-    clock_t elapsed_time = clock() - object->last_state_change;
-    return (float)elapsed_time / CLOCKS_PER_SEC;
+    return surgescript_util_gettickcount() - object->last_state_change;
 }
 
 /*
@@ -648,7 +646,7 @@ void surgescript_object_call_state(surgescript_object_t* object, const char* sta
  */
 float surgescript_object_timespent(const surgescript_object_t* object)
 {
-    return object->time_spent / CLOCKS_PER_SEC;
+    return object->time_spent;
 }
 
 /*
@@ -671,14 +669,14 @@ char* state2fun(const char* state)
     return strcat(strcpy(fun_name, prefix), state);
 }
 
-clock_t run_current_state(const surgescript_object_t* object)
+float run_current_state(const surgescript_object_t* object)
 {
-    clock_t start = clock();
+    float start = surgescript_util_gettickcount();
     surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
     surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
     surgescript_program_call(object->current_state, object->renv, 0);
     surgescript_stack_pop(stack);
-    return clock() - start;
+    return surgescript_util_gettickcount() - start;
 }
 
 surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name)
