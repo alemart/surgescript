@@ -51,13 +51,11 @@ char* surgescript_util_strncpy(char* dst, const char* src, size_t n); /* strcpy 
 char* surgescript_util_strdup(const char* src, const char* location); /* strdup */
 uint32_t surgescript_util_str2hash(const char* str); /* converts a string to a 32-bit hash */
 uint32_t surgescript_util_strpair2hash(const char* str1, const char* str2); /* a variant of str2hash() for an ordered pair of strings */
-
-unsigned long surgescript_util_htob(unsigned long x); /* host to big-endian */
-unsigned long surgescript_util_btoh(unsigned long x); /* big to host-endian */
-
 const char* surgescript_util_basename(const char* path); /* basename */
 char* surgescript_util_camelcaseprefix(const char* prefix, const char* text); /* camelCase prefixing function */
 
-float surgescript_util_gettickcount(); /* number of seconds since the start of the program */
+unsigned surgescript_util_htob(unsigned x); /* host to big-endian */
+unsigned surgescript_util_btoh(unsigned x); /* big to host-endian */
+unsigned surgescript_util_gettickcount(); /* number of milliseconds since some arbitrary zero */
 
 #endif

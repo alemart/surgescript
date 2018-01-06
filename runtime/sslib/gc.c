@@ -65,7 +65,7 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
     surgescript_heap_t* heap = surgescript_object_heap(object);
     float frequency = surgescript_var_get_number(surgescript_heap_at(heap, FREQUENCY_ADDR));
     float last_collect = surgescript_var_get_number(surgescript_heap_at(heap, LASTCOLLECT_ADDR));
-    float now = surgescript_util_gettickcount();
+    float now = surgescript_util_gettickcount() * 0.001f;
 
     surgescript_objectmanager_garbagecheck(manager);
     if(now - last_collect >= frequency) {

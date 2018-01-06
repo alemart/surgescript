@@ -34,6 +34,7 @@ struct surgescript_vm_t
     surgescript_tagsystem_t* tag_system;
     surgescript_objectmanager_t* object_manager;
     surgescript_parser_t* parser;
+    float start_time;
 };
 
 
@@ -57,6 +58,7 @@ surgescript_vm_t* surgescript_vm_create()
     surgescript_var_init_pool();
 
     /* set up the VM */
+    vm->start_time = 0.0f;
     vm->stack = surgescript_stack_create();
     vm->program_pool = surgescript_programpool_create();
     vm->tag_system = surgescript_tagsystem_create();
@@ -275,7 +277,6 @@ void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const ch
 
 
 
-
 /* ----- private ----- */
 
 /* these auxiliary functions help traversing the object tree */
@@ -304,4 +305,3 @@ bool call_updater3(surgescript_object_t* object, void* updater)
     vm_updater->late_update(object, vm_updater->user_data);
     return update_children;
 }
-

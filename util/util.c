@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * util/util.c
  * SurgeScript utilities
@@ -14,6 +14,12 @@
 #include <ctype.h>
 #include <time.h>
 #include "util.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#else
+#include <sys/time.h>
+#endif
 
 /* private stuff */
 static void mem_crash(const char* location);
@@ -203,7 +209,7 @@ uint32_t surgescript_util_strpair2hash(const char* str1, const char* str2)
  * surgescript_util_htob()
  * Convert a 32-bit number from host to big-endian notation
  */
-unsigned long surgescript_util_htob(unsigned long x)
+unsigned surgescript_util_htob(unsigned x)
 {
     static const union { int i; char c[sizeof(int)]; } u = { .i = 1 };
     return *(u.c) ? ((x & 0xFF000000) >> 24) | ((x & 0x00FF0000) >> 8) | ((x & 0x0000FF00) << 8) | ((x & 0x000000FF) << 24) : x;
@@ -213,7 +219,7 @@ unsigned long surgescript_util_htob(unsigned long x)
  * surgescript_util_btoh()
  * Convert a 32-bit number from big to host-endian notation
  */
-unsigned long surgescript_util_btoh(unsigned long x)
+unsigned surgescript_util_btoh(unsigned x)
 {
     return surgescript_util_htob(x);
 }
@@ -250,15 +256,21 @@ char* surgescript_util_camelcaseprefix(const char* prefix, const char* text)
     return str;
 }
 
-
 /*
  * surgescript_util_gettickcount()
- * Returns the number of seconds since the app was started
+ * Returns the number of milliseconds since some arbitrary zero
+ * This is a system-specific routine
  */
-float surgescript_util_gettickcount()
+unsigned surgescript_util_gettickcount()
 {
-    /* this might crash after 24.8 days of uninterrupt execution */
-    return (float)clock() / CLOCKS_PER_SEC;
+#ifndef _WIN32
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    return (unsigned)((now.tv_sec * 1000) + (now.tv_usec / 1000));
+    /*return 1000 * clock() / CLOCKS_PER_SEC;*/ /* not very accurate */
+#else
+    return GetTickCount();
+#endif
 }
 
 

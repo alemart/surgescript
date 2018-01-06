@@ -24,6 +24,7 @@ static surgescript_var_t* fun_gettickcount(surgescript_object_t* object, const s
 /* utilities */
 static const surgescript_heapptr_t TIME_ADDR = 0;
 static const surgescript_heapptr_t DELTA_ADDR = 1;
+static const surgescript_heapptr_t START_ADDR = 2;
 
 
 /*
@@ -52,9 +53,11 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
 
     ssassert(TIME_ADDR == surgescript_heap_malloc(heap));
     ssassert(DELTA_ADDR == surgescript_heap_malloc(heap));
+    ssassert(START_ADDR == surgescript_heap_malloc(heap));
 
-    surgescript_var_set_number(surgescript_heap_at(heap, TIME_ADDR), surgescript_util_gettickcount());
+    surgescript_var_set_number(surgescript_heap_at(heap, TIME_ADDR), 0.0f);
     surgescript_var_set_number(surgescript_heap_at(heap, DELTA_ADDR), 0.016f);
+    surgescript_var_set_number(surgescript_heap_at(heap, START_ADDR), surgescript_util_gettickcount() * 0.001f);
 
     return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
 }
@@ -63,7 +66,8 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
-    float new_time = surgescript_util_gettickcount();
+    float start_time = surgescript_var_get_number(surgescript_heap_at(heap, START_ADDR));
+    float new_time = surgescript_util_gettickcount() * 0.001f - start_time;
     float old_time = surgescript_var_get_number(surgescript_heap_at(heap, TIME_ADDR));
 
     /* update the timers */
@@ -104,5 +108,8 @@ surgescript_var_t* fun_getdelta(surgescript_object_t* object, const surgescript_
 /* the time (in seconds) since the app was started */
 surgescript_var_t* fun_gettickcount(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), surgescript_util_gettickcount());
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    float start_time = surgescript_var_get_number(surgescript_heap_at(heap, START_ADDR));
+    float current_time = surgescript_util_gettickcount() * 0.001f - start_time;
+    return surgescript_var_set_number(surgescript_var_create(), current_time);
 }

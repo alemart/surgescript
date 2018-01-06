@@ -39,8 +39,8 @@ struct surgescript_object_t
     bool is_active; /* can i run programs? */
     bool is_killed; /* am i scheduled to be destroyed? */
     bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
-    float last_state_change; /* moment of the last state change */
-    float time_spent; /* how much time did this object consume (at the last frame) */
+    unsigned last_state_change; /* moment of the last state change */
+    unsigned time_spent; /* how much time did this object consume (at the last frame) */
 
     /* local transform */
     surgescript_transform_t* transform;
@@ -400,7 +400,7 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
  */
 float surgescript_object_elapsed_time(const surgescript_object_t* object)
 {
-    return surgescript_util_gettickcount() - object->last_state_change;
+    return (surgescript_util_gettickcount() - object->last_state_change) * 0.001f;
 }
 
 /*
@@ -671,12 +671,12 @@ char* state2fun(const char* state)
 
 float run_current_state(const surgescript_object_t* object)
 {
-    float start = surgescript_util_gettickcount();
+    unsigned long start = surgescript_util_gettickcount();
     surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
     surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
     surgescript_program_call(object->current_state, object->renv, 0);
     surgescript_stack_pop(stack);
-    return surgescript_util_gettickcount() - start;
+    return (surgescript_util_gettickcount() - start) * 0.001f;
 }
 
 surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name)
