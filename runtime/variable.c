@@ -542,8 +542,10 @@ surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int raw)
 void surgescript_var_init_pool()
 {
 #ifndef DISABLE_VARPOOL
-    varpool = new_varpool(NULL);
-    varpool_currbucket = get_1stbucket(varpool);
+    if(varpool == NULL) {
+        varpool = new_varpool(NULL);
+        varpool_currbucket = get_1stbucket(varpool);
+    }
 #else
     sslog("Warning: SurgeScript has been compiled with disabled var pooling.");
 #endif
@@ -556,8 +558,10 @@ void surgescript_var_init_pool()
 void surgescript_var_release_pool()
 {
 #ifndef DISABLE_VARPOOL
-    varpool_currbucket = NULL;
-    varpool = delete_varpools(varpool);
+    if(varpool != NULL) {
+        varpool_currbucket = NULL;
+        varpool = delete_varpools(varpool);
+    }
 #endif
 }
 
