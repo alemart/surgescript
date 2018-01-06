@@ -250,7 +250,7 @@ float surgescript_var_get_number(const surgescript_var_t* var)
         case SSVAR_BOOL:
             return var->boolean ? 1.0f : 0.0f;
         case SSVAR_STRING:
-            return isvalidnum(var->string) ? atof(var->string) : NAN;
+            return isvalidnum(var->string) ? atof(var->string) : 0.0f; /*NAN;*/
         case SSVAR_NULL:
             return 0.0f;
         case SSVAR_OBJECTHANDLE:
