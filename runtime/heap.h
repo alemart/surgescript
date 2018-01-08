@@ -30,5 +30,6 @@ struct surgescript_var_t* surgescript_heap_at(const surgescript_heap_t* heap, su
 void surgescript_heap_scan_objects(surgescript_heap_t* heap, void* userdata, bool (*callback)(unsigned,void*));
 size_t surgescript_heap_size(const surgescript_heap_t* heap);
 bool surgescript_heap_validaddress(const surgescript_heap_t* heap, surgescript_heapptr_t ptr);
+size_t surgescript_heap_memspent(const surgescript_heap_t* heap);
 
 #endif

@@ -530,6 +530,19 @@ surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int raw)
 }
 
 
+/*
+ * surgescript_var_size()
+ * Used memory in user space, in bytes
+ */
+size_t surgescript_var_size(const surgescript_var_t* var)
+{
+    if(var->type == SSVAR_STRING)
+        return sizeof(surgescript_var_t) + (1 + strlen(var->string)) * sizeof(char);
+    else
+        return sizeof(surgescript_var_t);
+}
+
+
 
 
 

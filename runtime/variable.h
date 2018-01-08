@@ -53,6 +53,7 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
 void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b); /* swaps a <-> b */
 int surgescript_var_get_rawbits(const surgescript_var_t* var); /* the binary value stored in var */
 surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int raw); /* sets its binary value */
+size_t surgescript_var_size(const surgescript_var_t* var); /* used memory in user space, in bytes */
 
 /* var pooling */
 void surgescript_var_init_pool();

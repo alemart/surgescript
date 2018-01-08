@@ -655,7 +655,7 @@ float surgescript_object_timespent(const surgescript_object_t* object)
  */
 size_t surgescript_object_memspent(const surgescript_object_t* object)
 {
-    return 0;
+    return surgescript_heap_memspent(object->heap);
 }
 
 

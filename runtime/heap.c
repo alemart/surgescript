@@ -148,3 +148,19 @@ bool surgescript_heap_validaddress(const surgescript_heap_t* heap, surgescript_h
 {
     return (ptr >= 0 && ptr < heap->size && heap->mem[ptr] != NULL);
 }
+
+/*
+ * surgescript_heap_memspent()
+ * Memory spent by the heap, in user space (in bytes)
+ */
+size_t surgescript_heap_memspent(const surgescript_heap_t* heap)
+{
+    size_t size = 0;
+
+    for(surgescript_heapptr_t ptr = 0; ptr < heap->size; ptr++) {
+        if(heap->mem[ptr] != NULL)
+            size += surgescript_var_size(heap->mem[ptr]);
+    }
+
+    return size;
+}
