@@ -89,6 +89,7 @@ surgescript_tagsystem_t* surgescript_tagsystem_destroy(surgescript_tagsystem_t* 
 
     HASH_ITER(hh, tag_system->tag_table, it, tmp) {
         HASH_DEL(tag_system->tag_table, it);
+        ssarray_release(it->tag);
         ssfree(it->object_name);
         ssfree(it);
     }
