@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * util/object_manager.c
  * SurgeScript object manager
@@ -41,7 +41,7 @@ static const char* ROOT_OBJECT = "System";
 static const char* SYSTEM_OBJECTS[] = {
     "String", "Number", "Boolean",
     "Time", "Math", "Console",
-    "__Temp", "__GC",
+    "__Temp", "__GC", "__TagSystem",
     "Application", NULL
 }; /* this must be a NULL-terminated array, and "Application" should be the last element (as objects are spawned in this order) */
 

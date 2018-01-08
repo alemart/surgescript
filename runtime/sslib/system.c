@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/sslib/system.c
  * SurgeScript standard library: System object
@@ -24,6 +24,7 @@ static surgescript_var_t* fun_getversion(surgescript_object_t* object, const sur
 static surgescript_var_t* fun_getinfo(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getgc(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_gettags(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_heapptr_t ISACTIVE_ADDR = 0;
 
@@ -41,6 +42,7 @@ void surgescript_sslib_register_system(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "System", "getInfo", fun_getinfo, 0);
     surgescript_vm_bind(vm, "System", "getTemp", fun_gettemp, 0);
     surgescript_vm_bind(vm, "System", "getGc", fun_getgc, 0);
+    surgescript_vm_bind(vm, "System", "getTags", fun_gettags, 0);
     surgescript_vm_bind(vm, "System", "state:main", fun_main, 0);
 }
 
@@ -114,6 +116,12 @@ surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_getgc(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_child(object, "__GC"));
+}
+
+/* get a reference to the Tag System */
+surgescript_var_t* fun_gettags(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_child(object, "__TagSystem"));
 }
 
 
