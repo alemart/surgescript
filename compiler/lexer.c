@@ -215,7 +215,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     }
 
     /* colon operator */
-    if(*(lexer->p) == ':' && (*(lexer->p + 1) != ')' && *(lexer->p + 1) != '(' && *(lexer->p + 1) != 'o')) {
+    if(*(lexer->p) == ':' && (*(lexer->p + 1) != ')' && *(lexer->p + 1) != '(' && *(lexer->p + 1) != 'P')) {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_COLON, lexer->buf, lexer->line, prev);
     }
@@ -390,7 +390,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line, prev);
     }
-    else if(*(lexer->p) == ':' && (*(lexer->p + 1) == ')' || *(lexer->p + 1) == '(' || *(lexer->p + 1) == 'o')) {
+    else if(*(lexer->p) == ':' && (*(lexer->p + 1) == ')' || *(lexer->p + 1) == '(' || *(lexer->p + 1) == 'P')) {
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line, prev);
