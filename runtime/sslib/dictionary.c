@@ -26,6 +26,7 @@ static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescrip
 static surgescript_var_t* fun_clear(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_delete(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_has(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_keys(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -90,6 +91,7 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Dictionary", "clear", fun_clear, 0);
     surgescript_vm_bind(vm, "Dictionary", "delete", fun_delete, 1);
     surgescript_vm_bind(vm, "Dictionary", "has", fun_has, 1);
+    surgescript_vm_bind(vm, "Dictionary", "keys", fun_keys, 0);
     surgescript_vm_bind(vm, "Dictionary", "iterator", fun_iterator, 0);
     surgescript_vm_bind(vm, "Dictionary", "toString", fun_tostring, 0);
 
@@ -285,7 +287,7 @@ surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_
     return surgescript_var_set_objecthandle(surgescript_var_create(), it_handle);
 }
 
-/* converts to string */
+/* toString(): converts to string */
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
@@ -383,6 +385,33 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
     /* done! */
     return stringified_dictionary;
 }
+
+/* keys(): returns an array containing the keys of the dictionary */
+surgescript_var_t* fun_keys(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t array_handle = surgescript_objectmanager_spawn_array(manager);
+    surgescript_object_t* array = surgescript_objectmanager_get(manager, array_handle);
+    surgescript_object_t* iterator = NULL;
+    surgescript_var_t* tmp = surgescript_var_create();
+    const surgescript_var_t* p[] = { tmp };
+
+    /* iterate through the Dictionary */
+    surgescript_object_call_function(object, "iterator", NULL, 0, tmp),
+    iterator = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(tmp));
+    while(surgescript_object_call_function(iterator, "hasNext", NULL, 0, tmp), surgescript_var_get_bool(tmp)) {
+        surgescript_object_t* entry = NULL;
+        surgescript_object_call_function(iterator, "next", NULL, 0, tmp);
+        entry = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(tmp));
+        surgescript_object_call_function(entry, "getKey", NULL, 0, tmp);
+        surgescript_object_call_function(array, "push", p, 1, NULL);
+    }
+
+    /* done! */
+    return surgescript_var_set_objecthandle(tmp, array_handle);
+}
+
+
 
 
 /* --- DictionaryIterator --- */
