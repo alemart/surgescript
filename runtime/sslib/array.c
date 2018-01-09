@@ -135,7 +135,7 @@ surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t
     if(index >= 0 && index < ARRAY_LENGTH(heap))
         return surgescript_var_clone(surgescript_heap_at(heap, BASE_ADDR + index));
 
-    ssfatal("Can't get %d-%s element of the array: the index is out of bounds.", index, ORDINAL(index));
+    /* index out of bounds: fail silently */
     return NULL;
 }
 
