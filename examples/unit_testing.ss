@@ -267,10 +267,33 @@ object "SurgeScriptTest"
         test((arr = [5,0,1], arr.push(7), arr.length == 4 && arr[3] == 7)) || fail(10);
         test(arr.pop() == 7 && arr.length == 3) || fail(11);
         test(arr.shift() == 5 && arr.length == 2 && arr[0] == 0 && arr[1] == 1) || fail(12);
-        Console.print(arr);
-        //test(arr.unshift(3) && arr[0] == 3 && arr.length == 3) || fail(13);
-        arr.unshift(3);
-        Console.print(arr);
+        test((arr.unshift(3), arr[0] == 3 && arr.length == 3)) || fail(13);
+
+        arr = [54,192,19,74,-1,292,123,124,122].sort(null);
+        for(inOrder = true, i = 0; i < arr.length - 1 && inOrder; i++)
+            inOrder = arr[i] < arr[i + 1];
+        test(inOrder) || fail(14);
+
+        arr = arr.reverse();
+        for(inOrder = true, i = 0; i < arr.length - 1 && inOrder; i++)
+            inOrder = arr[i] > arr[i + 1];
+        test(inOrder) || fail(15);
+
+        test([4,9,2,123,3,-1,0,4].indexOf(0) == 6) || fail(16);
+        test([4,9,2,123,3,-1,0,4].indexOf('a') < 0) || fail(17);
+        test([4,9,2,123,3,-1,0,4].indexOf(4) == 0) || fail(18);
+        test([[],[],[5],[],[]].length == 5) || fail(19);
+
+        arr = [1,2,3,4,5]; sum = 0.0;
+        foreach(entry in arr)
+            sum += entry;
+        test(sum == 15) || fail(20);
+
+        test([1,2,3,4,5].toString() == [5,4,3,2,1].reverse().toString()) || fail(21);
+        test([1,2,3].toString().length == [1,1,1].toString().length) || fail(22);
+        test([1,2,3,4,5].shuffle().sort(null).toString() == [4,2,5,3,1].shuffle().sort(null).toString()) || fail(23);
+        test([1,2,3,4,5].shuffle().toString().length == [1,2,3,4,5].shuffle().toString().length) || fail(24);
+        test([1,2,3,4,5].shuffle().length == 5) || fail(25);
         end();
     }
 
@@ -278,10 +301,11 @@ object "SurgeScriptTest"
     {
         begin("Dictionary");
 
-        weight = spawn("Dictionary");
-        weight["Surge"] = 35.0;
-        weight["Neon"] = 25.0;
-        weight["Charge"] = 37.5;
+        weight = {
+            "Surge": 35.0,
+            "Neon": 25.0,
+            "Charge": 37.5
+        };
 
         test(weight["Surge"] == 35.0) || fail(1);
         test(weight["Neon"] == 25.0) || fail(2);
