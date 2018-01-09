@@ -151,6 +151,7 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
     }
 }
 
+
 /*
  * surgescript_programpool_get()
  * Gets a program from the pool (returns NULL if not found)
@@ -197,6 +198,33 @@ void surgescript_programpool_foreach_ex(surgescript_programpool_t* pool, const c
 {
     traverse_metadata(pool, object_name, data, callback);
 }
+
+
+
+/*
+ * surgescript_programpool_replace()
+ * Replaces a program in the pool (if it doesn't exist, create it)
+ */
+bool surgescript_programpool_replace(surgescript_programpool_t* pool, const char* object_name, const char* program_name, surgescript_program_t* program)
+{
+    surgescript_programpool_hashpair_t* pair = NULL;
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    
+    /* find the program */
+    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
+    delete_signature(signature);
+
+    /* replace the program */
+    if(pair != NULL) {
+        surgescript_program_destroy(pair->program);
+        pair->program = program;
+        return true;
+    }
+    else
+        return surgescript_programpool_put(pool, object_name, program_name, program); /* program doesn't exist yet */
+}
+
+
 
 
 /* -------------------------------
