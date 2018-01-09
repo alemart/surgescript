@@ -254,7 +254,24 @@ object "SurgeScriptTest"
 
     fun array()
     {
-        // TODO
+        begin("Array");
+        test([].__name == "Array") || fail(1);
+        test([] != []) || fail(2);
+        test(spawn("Array").parent != [].parent) || fail(3);
+        test([].parent == [].parent) || fail(4);
+        test([1,2,3,4,5].length == 5) || fail(5);
+        test([1,2,3][2] == 3) || fail(6);
+        test((arr = [1,2,3], arr[0] = 5, arr[0] == 5)) || fail(7);
+        test([1,2,3][-1] == null) || fail(8);
+        test([1,2,3][5] == null) || fail(9);
+        test((arr = [5,0,1], arr.push(7), arr.length == 4 && arr[3] == 7)) || fail(10);
+        test(arr.pop() == 7 && arr.length == 3) || fail(11);
+        test(arr.shift() == 5 && arr.length == 2 && arr[0] == 0 && arr[1] == 1) || fail(12);
+        Console.print(arr);
+        //test(arr.unshift(3) && arr[0] == 3 && arr.length == 3) || fail(13);
+        arr.unshift(3);
+        Console.print(arr);
+        end();
     }
 
     fun dictionary()

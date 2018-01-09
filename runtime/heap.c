@@ -95,8 +95,10 @@ surgescript_heapptr_t surgescript_heap_malloc(surgescript_heap_t* heap)
  */
 surgescript_heapptr_t surgescript_heap_free(surgescript_heap_t* heap, surgescript_heapptr_t ptr)
 {
-    if(ptr >= 0 && ptr < heap->size && heap->mem[ptr] != NULL)
+    if(ptr >= 0 && ptr < heap->size && heap->mem[ptr] != NULL) {
         heap->mem[ptr] = surgescript_var_destroy(heap->mem[ptr]);
+        heap->ptr = ptr;
+    }
 
     return 0;
 }
