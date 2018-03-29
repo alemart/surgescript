@@ -44,6 +44,7 @@ struct surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surges
 /* garbage collector */
 void surgescript_objectmanager_garbagecheck(surgescript_objectmanager_t* manager); /* checks for garbage (incrementally) */
 bool surgescript_objectmanager_garbagecollect(surgescript_objectmanager_t* manager); /* runs the garbage collector */
+int surgescript_objectmanager_garbagecount(const surgescript_objectmanager_t* manager); /* last number of garbage collected objects */
 
 /* root & built-in objects */
 surgescript_objecthandle_t surgescript_objectmanager_null(const surgescript_objectmanager_t* manager); /* handle to a null object */

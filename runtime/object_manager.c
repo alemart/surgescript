@@ -30,6 +30,7 @@ struct surgescript_objectmanager_t
     SSARRAY(surgescript_objecthandle_t, objects_to_be_scanned); /* garbage collection */
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
+    int garbage_count; /* last number of garbage-collected objects */
 };
 
 /* fixed objects */
@@ -60,7 +61,6 @@ extern void surgescript_object_set_reachable(surgescript_object_t* object, bool 
 /* garbage collector: private stuff */
 static bool mark_as_reachable(unsigned handle, void* mgr);
 static bool sweep_unreachables(surgescript_object_t* object);
-static const int MIN_OBJECTS_FOR_DISPOSAL = 1; /* we need at least this amount to delete unreachable objects from memory */
 
 /* other */
 #define is_power_of_two(x)                !((x) & ((x) - 1)) /* this assumes x > 0 */
@@ -90,6 +90,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     ssarray_init(manager->objects_to_be_scanned);
     manager->first_object_to_be_scanned = 0;
     manager->reachables_count = 0;
+    manager->garbage_count = 0;
 
     return manager;
 }
@@ -296,29 +297,17 @@ surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_o
 bool surgescript_objectmanager_garbagecollect(surgescript_objectmanager_t* manager)
 {
     bool disposed = false;
-    sslog("Calling the Garbage Collector...");
 
     /* if there are no objects to be scanned, scan the root */
     if(ssarray_length(manager->objects_to_be_scanned) == manager->first_object_to_be_scanned) {
         if(surgescript_objectmanager_exists(manager, ROOT_HANDLE)) {
             /* I have already scanned some objects */
             if(ssarray_length(manager->objects_to_be_scanned) > 0) {
-                int unreachables = manager->count - manager->reachables_count;
-
                 /* clear the unreachable objects */
-                if(unreachables >= MIN_OBJECTS_FOR_DISPOSAL) {
-                    surgescript_object_t* root = surgescript_objectmanager_get(manager, ROOT_HANDLE);
-                    sslog("Garbage Collector: disposing %d of %d object%s.", unreachables, manager->count, manager->count > 1 ? "s" : "");
-                    surgescript_object_traverse_tree(root, sweep_unreachables);
-                    disposed = true;
-                }
-                else { /* or, at least, unmark everyone (could be more efficient?) */
-                    for(int i = 0; i < ssarray_length(manager->objects_to_be_scanned); i++) {
-                        surgescript_objecthandle_t handle = manager->objects_to_be_scanned[i];
-                        if(manager->data[handle])
-                            surgescript_object_set_reachable(manager->data[handle], false);
-                    }
-                }
+                surgescript_object_t* root = surgescript_objectmanager_get(manager, ROOT_HANDLE);
+                manager->garbage_count = 0;
+                surgescript_object_traverse_tree(root, sweep_unreachables);
+                disposed = true;
             }
 
             /* start a new cycle */
@@ -350,6 +339,15 @@ void surgescript_objectmanager_garbagecheck(surgescript_objectmanager_t* manager
         }
     }
     manager->first_object_to_be_scanned = old_length;
+}
+
+/*
+ * surgescript_objectmanager_garbagecount()
+ * Last number of garbage-collected objects
+ */
+int surgescript_objectmanager_garbagecount(const surgescript_objectmanager_t* manager)
+{
+    return manager->garbage_count;
 }
 
 /*
@@ -400,8 +398,9 @@ bool sweep_unreachables(surgescript_object_t* object)
 {
     /* dispose the object */
     if(!surgescript_object_is_reachable(object)) {
-        sslog("Garbage Collector: disposing \"%s\"...", surgescript_object_name(object));
+        /*sslog("Garbage Collector: disposing \"%s\"...", surgescript_object_name(object));*/
         surgescript_object_kill(object);
+        surgescript_object_manager(object)->garbage_count++;
     }
 
     /* reset the mark */
