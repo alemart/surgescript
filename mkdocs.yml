@@ -1,0 +1,5 @@
+site_name: 'SurgeScript Documentation'
+theme:
+    name: 'material'
+pages:
+    - 'Introduction': 'index.md'
