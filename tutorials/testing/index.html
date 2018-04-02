@@ -31,20 +31,20 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="/assets/images/favicon.png">
+      <link rel="shortcut icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-0.17.3, mkdocs-material-2.7.1">
     
     
       
-        <title>SurgeScript Documentation</title>
+        <title>Testing your scripts - SurgeScript Documentation</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/application.78aab2dc.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.78aab2dc.css">
       
     
     
-      <script src="/assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
     
     
       <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -70,12 +70,16 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
+      <a href="#testing-your-scripts" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
     
       <header class="md-header" data-md-component="header">
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="/" title="SurgeScript Documentation" class="md-header-nav__button md-logo">
+        <a href="../.." title="SurgeScript Documentation" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -92,7 +96,7 @@
                 SurgeScript Documentation
               </span>
               <span class="md-header-nav__topic">
-                
+                Testing your scripts
               </span>
             
           
@@ -163,7 +167,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/" title="Introduction" class="md-nav__link">
+    <a href="../.." title="Introduction" class="md-nav__link">
       Introduction
     </a>
   </li>
@@ -173,10 +177,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
     
     <label class="md-nav__link" for="nav-2">
       SurgeScript Crash Course
@@ -194,7 +200,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/tutorials/hello/" title="Hello, World!" class="md-nav__link">
+    <a href="../hello/" title="Hello, World!" class="md-nav__link">
       Hello, World!
     </a>
   </li>
@@ -204,11 +210,56 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="/tutorials/testing/" title="Testing your scripts" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Testing your scripts
+      </label>
+    
+    <a href="./" title="Testing your scripts" class="md-nav__link md-nav__link--active">
       Testing your scripts
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#testing-on-open-surge" title="Testing on Open Surge" class="md-nav__link">
+    Testing on Open Surge
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-standalone-version" title="Using the standalone version" class="md-nav__link">
+    Using the standalone version
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -218,7 +269,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/tutorials/objects/" title="Introduction to objects" class="md-nav__link">
+    <a href="../objects/" title="Introduction to objects" class="md-nav__link">
       Introduction to objects
     </a>
   </li>
@@ -230,7 +281,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/tutorials/variables/" title="Variables" class="md-nav__link">
+    <a href="../variables/" title="Variables" class="md-nav__link">
       Variables
     </a>
   </li>
@@ -242,7 +293,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/tutorials/functions/" title="Functions" class="md-nav__link">
+    <a href="../functions/" title="Functions" class="md-nav__link">
       Functions
     </a>
   </li>
@@ -254,7 +305,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/tutorials/tags/" title="Tags" class="md-nav__link">
+    <a href="../tags/" title="Tags" class="md-nav__link">
       Tags
     </a>
   </li>
@@ -266,7 +317,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/tutorials/objects/" title="Entity-component-system" class="md-nav__link">
+    <a href="../objects/" title="Entity-component-system" class="md-nav__link">
       Entity-component-system
     </a>
   </li>
@@ -278,7 +329,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/tutorials/getters_and_setters/" title="Getters & setters" class="md-nav__link">
+    <a href="../getters_and_setters/" title="Getters & setters" class="md-nav__link">
       Getters & setters
     </a>
   </li>
@@ -290,7 +341,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/tutorials/objects/" title="Best practices" class="md-nav__link">
+    <a href="../objects/" title="Best practices" class="md-nav__link">
       Best practices
     </a>
   </li>
@@ -326,7 +377,7 @@
 
 
   <li class="md-nav__item">
-    <a href="/reference/application/" title="Application" class="md-nav__link">
+    <a href="../../reference/application/" title="Application" class="md-nav__link">
       Application
     </a>
   </li>
@@ -344,12 +395,92 @@
               </div>
             
             
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#testing-on-open-surge" title="Testing on Open Surge" class="md-nav__link">
+    Testing on Open Surge
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-the-standalone-version" title="Using the standalone version" class="md-nav__link">
+    Using the standalone version
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
           
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
-  <h1>404 - Not found</h1>
+                
+                
+                <h1 id="testing-your-scripts">Testing your scripts</h1>
+<p>There are two main ways of testing your scripts: using the Open Surge Engine or using only the standalone version of SurgeScript (without the game engine).</p>
+<h2 id="testing-on-open-surge">Testing on Open Surge</h2>
+<p>TODO</p>
+<h2 id="using-the-standalone-version">Using the standalone version</h2>
+<p>If you downloaded the standalone version of the language (i.e., SurgeScript without the full game engine):</p>
+<ul>
+<li>First of all, save the following script to a file named <em>hello.ss</em>. This file should be placed on the same directory as the surgescript executable.</li>
+</ul>
+<pre><code>object &quot;Application&quot;
+{
+    state &quot;main&quot;
+    {
+        Console.print(&quot;Hello, world!&quot;);
+        Application.exit();
+    }
+}
+</code></pre>
 
+<ul>
+<li>Then, open up a Terminal and type:</li>
+</ul>
+<pre><code>cd /path/to/surgescript
+./surgescript hello.ss
+</code></pre>
+
+<ul>
+<li>If you're using Microsoft Windows, open up a Command Prompt and type:</li>
+</ul>
+<pre><code>cd C:\path\to\surgescript
+surgescript.exe hello.ss
+</code></pre>
+
+<ul>
+<li>You should see the output of the script as a result:</li>
+</ul>
+<pre><code>Hello, world!
+</code></pre>
+                
+                  
+                
+              
               
                 
 
@@ -362,6 +493,41 @@
       
         
 <footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../hello/" title="Hello, World!" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Hello, World!
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../objects/" title="Introduction to objects" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Introduction to objects
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -382,9 +548,9 @@
       
     </div>
     
-      <script src="/assets/javascripts/application.8eb9be28.js"></script>
+      <script src="../../assets/javascripts/application.8eb9be28.js"></script>
       
-      <script>app.initialize({version:"0.17.3",url:{base:""}})</script>
+      <script>app.initialize({version:"0.17.3",url:{base:"../.."}})</script>
       
     
     

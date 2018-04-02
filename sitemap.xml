@@ -4,9 +4,77 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2018-03-31</lastmod>
+     <lastmod>2018-04-02</lastmod>
      <changefreq>daily</changefreq>
     </url>
+    
+
+    
+        
+    <url>
+     <loc>/tutorials/hello/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/testing/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/objects/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/variables/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/functions/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/tags/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/objects/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/getters_and_setters/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/objects/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    
+
+    
+        
+    <url>
+     <loc>/reference/application/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
     
 
 </urlset>
