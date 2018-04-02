@@ -131,3 +131,5 @@ object "Surge"
     }
 }
 ```
+
+Furthermore, *object-level* variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are *private* to the objects). You need to define [functions](functions) or [getters and setters](getters_and_setters) for that.

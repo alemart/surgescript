@@ -8,9 +8,10 @@ pages:
         - 'Testing your scripts': 'tutorials/testing.md'
         - 'Introduction to objects': 'tutorials/objects.md'
         - 'Variables': 'tutorials/variables.md'
-        - 'Functions': 'tutorials/objects.md'
-        - 'Tags': 'tutorials/objects.md'
+        - 'Functions': 'tutorials/functions.md'
+        - 'Tags': 'tutorials/tags.md'
         - 'Entity-component-system': 'tutorials/objects.md'
+        - 'Getters & setters': 'tutorials/getters_and_setters.md'
         - 'Best practices': 'tutorials/objects.md'
     - 'Language Reference':
         - 'Application': 'reference/application.md'
