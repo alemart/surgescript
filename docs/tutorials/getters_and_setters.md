@@ -1,7 +1,7 @@
 Getters and setters
 ===================
 
-There are no public variables in SurgeScript. This means that variables may only be accessed from the objects that defined them. However, SurgeScript has a *syntax sugar* that allows objects to modify other objects' data in a way that looks like dealing with regular variables.
+In SurgeScript, variables are private. This means that variables may only be accessed from the objects that defined them. However, SurgeScript features a *syntax sugar* that allows objects to modify other objects' data in a way that looks like dealing with regular variables.
 
 Suppose you have an object called **Animal** with a variable called *sound* and a function called *talk()*:
 
@@ -37,7 +37,36 @@ Run this script and you'll see:
 meow!
 ```
 
-What if an external object could modify the sound of the animal? Trying to access `animal.sound` externally will trigger an error, unless we define getters and setters:
+What if an external object could modify the sound of the animal? Trying to access `animal.sound` externally will trigger an error, unless you add the **public** keyword to your variable:
+
+```
+object "Animal"
+{
+    public sound = "meow!";
+
+    fun talk()
+    {
+        Console.print(sound);
+    }
+}
+```
+
+Now, external objects may modify (and read) the *sound* variable:
+
+```
+object "Application"
+{
+    animal = spawn("Animal");
+
+    state "main"
+    {
+        animal.sound = 'rrrrgh!!!';
+        animal.talk();
+    }
+}
+```
+
+In reality, however, there are no public variables in SurgeScript. Behind the scenes, the language defines special functions called **getters and setters** that will perform the read/write logic for you. Rather than typing public, you may want to define the getters and the setters yourself:
 
 ```
 object "Animal"
@@ -61,19 +90,6 @@ object "Animal"
 }
 ```
 
-Now, external objects may modify the *sound* variable. In reality, they are calling *setSound()* and *getSound()* behind the scenes, but the syntax sugar makes it much neater.
+This code is the same (semantically); it's just a bit longer.
 
-```
-object "Application"
-{
-    animal = spawn("Animal");
-
-    state "main"
-    {
-        animal.sound = 'rrrrgh!!!';
-        animal.talk();
-    }
-}
-```
-
-An advantage of defining getters and setters is that you control what goes inside the objects. You may want to validate the data before changing the internal variables of the objects, for example.
+An advantage of defining getters and setters yourself is that you control how the data passes through the objects. You may want to validate the data before changing the internal variables of the objects, for example.

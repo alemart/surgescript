@@ -13,8 +13,8 @@ Type|Description|Examples
 Number|A floating-point number|1, 2, 3, 3.14159
 String|Some text|"Hello, world!", 'single-quoted'
 Boolean|True or false|true, false
+Object|Reference to an object|Application, this, [ ]
 Null|An empty value|null
-Object|Reference to an object|Application, this
 
 As an example, the script below features an object with 3 variables that may be accessed throughout the whole object:
 
@@ -33,7 +33,7 @@ object "Surge"
 }
 ```
 
-### Built-in data structures
+### Abstract types
 
 #### Arrays
 
@@ -64,7 +64,7 @@ Arrays have many interesting properties and operations that you can see in the [
 
 #### Dictionaries
 
-Dictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or simply hash tables. Here's the syntax:
+Dictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:
 
 ```
 object "Surge"
@@ -103,7 +103,7 @@ object "Application"
     state "main"
     {
         // err is instantiated at every frame of the application,
-        // thus wasting memory with duplicate objects
+        // thus memory is wasted with duplicate objects
         err = [ "don't", "do", "this" ]; // WRONG!
     }
 }
@@ -111,7 +111,7 @@ object "Application"
 
 Scoping
 -------
-Variables that are defined before any state or function are *object-level* variables. This means that they can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are *local variables*. This means that their lifespan is restricted to their own block of code.
+Variables that are defined before any state or function are *object-level* variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are *local variables*. This means that their lifespan is restricted to their own block of code.
 
 ```
 object "Surge"
@@ -132,4 +132,4 @@ object "Surge"
 }
 ```
 
-Furthermore, *object-level* variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are *private* to the objects). You need to define [functions](functions) or [getters and setters](getters_and_setters) for that.
+Furthermore, *object-level* variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are *private* to the objects). You need to define [functions](functions) or [getters and setters](getters_and_setters) to accomplish that.

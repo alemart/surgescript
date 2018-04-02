@@ -11,7 +11,7 @@ TODO
 Using the standalone version
 ----------------------------
 
-If you downloaded the standalone version of the language (i.e., SurgeScript without the full game engine):
+If you've downloaded the standalone version of the language (i.e., SurgeScript without the full game engine):
 
 - First of all, save the following script to a file named *hello.ss*. This file should be placed on the same directory as the surgescript executable.
 ```
