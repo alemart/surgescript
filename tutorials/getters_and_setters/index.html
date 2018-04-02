@@ -248,6 +248,30 @@
 
 
   <li class="md-nav__item">
+    <a href="../conditionals/" title="Conditionals" class="md-nav__link">
+      Conditionals
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../loops/" title="Loops" class="md-nav__link">
+      Loops
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../functions/" title="Functions" class="md-nav__link">
       Functions
     </a>
@@ -272,8 +296,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../objects/" title="Entity-component-system" class="md-nav__link">
-      Entity-component-system
+    <a href="../objects/" title="Object tree" class="md-nav__link">
+      Object tree
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../components/" title="Components" class="md-nav__link">
+      Components
     </a>
   </li>
 
@@ -296,6 +332,18 @@
       Getters & setters
     </a>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../advanced_features/" title="Advanced Features" class="md-nav__link">
+      Advanced Features
+    </a>
   </li>
 
         
@@ -381,7 +429,7 @@
                 
                 
                 <h1 id="getters-and-setters">Getters and setters</h1>
-<p>There are no public variables in SurgeScript. This means that variables may only be accessed from the objects that defined them. However, SurgeScript has a <em>syntax sugar</em> that allows objects to modify other objects' data in a way that looks like dealing with regular variables.</p>
+<p>In SurgeScript, variables are private. This means that variables may only be accessed from the objects that defined them. However, SurgeScript features a <em>syntax sugar</em> that allows objects to modify other objects' data in a way that looks like dealing with regular variables.</p>
 <p>Suppose you have an object called <strong>Animal</strong> with a variable called <em>sound</em> and a function called <em>talk()</em>:</p>
 <pre><code>object &quot;Animal&quot;
 {
@@ -410,7 +458,32 @@
 <pre><code>meow!
 </code></pre>
 
-<p>What if an external object could modify the sound of the animal? Trying to access <code>animal.sound</code> externally will trigger an error, unless we define getters and setters:</p>
+<p>What if an external object could modify the sound of the animal? Trying to access <code>animal.sound</code> externally will trigger an error, unless you add the <strong>public</strong> keyword to your variable:</p>
+<pre><code>object &quot;Animal&quot;
+{
+    public sound = &quot;meow!&quot;;
+
+    fun talk()
+    {
+        Console.print(sound);
+    }
+}
+</code></pre>
+
+<p>Now, external objects may modify (and read) the <em>sound</em> variable:</p>
+<pre><code>object &quot;Application&quot;
+{
+    animal = spawn(&quot;Animal&quot;);
+
+    state &quot;main&quot;
+    {
+        animal.sound = 'rrrrgh!!!';
+        animal.talk();
+    }
+}
+</code></pre>
+
+<p>In reality, however, there are no public variables in SurgeScript. Behind the scenes, the language defines special functions called <strong>getters and setters</strong> that will perform the read/write logic for you. Rather than typing public, you may want to define the getters and the setters yourself:</p>
 <pre><code>object &quot;Animal&quot;
 {
     sound = &quot;meow!&quot;;
@@ -432,20 +505,8 @@
 }
 </code></pre>
 
-<p>Now, external objects may modify the <em>sound</em> variable. In reality, they are calling <em>setSound()</em> and <em>getSound()</em> behind the scenes, but the syntax sugar makes it much neater.</p>
-<pre><code>object &quot;Application&quot;
-{
-    animal = spawn(&quot;Animal&quot;);
-
-    state &quot;main&quot;
-    {
-        animal.sound = 'rrrrgh!!!';
-        animal.talk();
-    }
-}
-</code></pre>
-
-<p>An advantage of defining getters and setters is that you control what goes inside the objects. You may want to validate the data before changing the internal variables of the objects, for example.</p>
+<p>This code is the same (semantically); it's just a bit longer.</p>
+<p>An advantage of defining getters and setters yourself is that you control how the data passes through the objects. You may want to validate the data before changing the internal variables of the objects, for example.</p>
                 
                   
                 
@@ -466,7 +527,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../objects/" title="Entity-component-system" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../components/" title="Components" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -475,19 +536,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Entity-component-system
+                Components
               </span>
             </div>
           </a>
         
         
-          <a href="../objects/" title="Best practices" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../advanced_features/" title="Advanced Features" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Best practices
+                Advanced Features
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

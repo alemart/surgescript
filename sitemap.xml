@@ -36,6 +36,18 @@
     </url>
         
     <url>
+     <loc>/tutorials/conditionals/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/loops/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
      <loc>/tutorials/functions/</loc>
      <lastmod>2018-04-02</lastmod>
      <changefreq>daily</changefreq>
@@ -54,7 +66,19 @@
     </url>
         
     <url>
+     <loc>/tutorials/components/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
      <loc>/tutorials/getters_and_setters/</loc>
+     <lastmod>2018-04-02</lastmod>
+     <changefreq>daily</changefreq>
+    </url>
+        
+    <url>
+     <loc>/tutorials/advanced_features/</loc>
      <lastmod>2018-04-02</lastmod>
      <changefreq>daily</changefreq>
     </url>

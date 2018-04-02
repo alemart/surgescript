@@ -278,8 +278,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#built-in-data-structures" title="Built-in data structures" class="md-nav__link">
-    Built-in data structures
+  <a href="#abstract-types" title="Abstract types" class="md-nav__link">
+    Abstract types
   </a>
   
     <nav class="md-nav">
@@ -340,6 +340,30 @@
 
 
   <li class="md-nav__item">
+    <a href="../conditionals/" title="Conditionals" class="md-nav__link">
+      Conditionals
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../loops/" title="Loops" class="md-nav__link">
+      Loops
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../functions/" title="Functions" class="md-nav__link">
       Functions
     </a>
@@ -364,8 +388,20 @@
 
 
   <li class="md-nav__item">
-    <a href="../objects/" title="Entity-component-system" class="md-nav__link">
-      Entity-component-system
+    <a href="../objects/" title="Object tree" class="md-nav__link">
+      Object tree
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../components/" title="Components" class="md-nav__link">
+      Components
     </a>
   </li>
 
@@ -378,6 +414,18 @@
   <li class="md-nav__item">
     <a href="../getters_and_setters/" title="Getters & setters" class="md-nav__link">
       Getters & setters
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../advanced_features/" title="Advanced Features" class="md-nav__link">
+      Advanced Features
     </a>
   </li>
 
@@ -471,8 +519,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#built-in-data-structures" title="Built-in data structures" class="md-nav__link">
-    Built-in data structures
+  <a href="#abstract-types" title="Abstract types" class="md-nav__link">
+    Abstract types
   </a>
   
     <nav class="md-nav">
@@ -562,14 +610,14 @@
 <td>true, false</td>
 </tr>
 <tr>
+<td>Object</td>
+<td>Reference to an object</td>
+<td>Application, this, [ ]</td>
+</tr>
+<tr>
 <td>Null</td>
 <td>An empty value</td>
 <td>null</td>
-</tr>
-<tr>
-<td>Object</td>
-<td>Reference to an object</td>
-<td>Application, this</td>
 </tr>
 </tbody>
 </table>
@@ -588,7 +636,7 @@
 }
 </code></pre>
 
-<h3 id="built-in-data-structures">Built-in data structures</h3>
+<h3 id="abstract-types">Abstract types</h3>
 <h4 id="arrays">Arrays</h4>
 <p>Arrays are collections of values that you may access using a zero-based index. Example:</p>
 <pre><code>object &quot;Application&quot;
@@ -613,7 +661,7 @@
 
 <p>Arrays have many interesting properties and operations that you can see in the <a href="../reference/array.md">Language Reference</a>.</p>
 <h4 id="dictionaries">Dictionaries</h4>
-<p>Dictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or simply hash tables. Here's the syntax:</p>
+<p>Dictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:</p>
 <pre><code>object &quot;Surge&quot;
 {
     // A dictionary that stores the weight (kg) of each character
@@ -646,14 +694,14 @@
     state &quot;main&quot;
     {
         // err is instantiated at every frame of the application,
-        // thus wasting memory with duplicate objects
+        // thus memory is wasted with duplicate objects
         err = [ &quot;don't&quot;, &quot;do&quot;, &quot;this&quot; ]; // WRONG!
     }
 }
 </code></pre>
 
 <h2 id="scoping">Scoping</h2>
-<p>Variables that are defined before any state or function are <em>object-level</em> variables. This means that they can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are <em>local variables</em>. This means that their lifespan is restricted to their own block of code.</p>
+<p>Variables that are defined before any state or function are <em>object-level</em> variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are <em>local variables</em>. This means that their lifespan is restricted to their own block of code.</p>
 <pre><code>object &quot;Surge&quot;
 {
     name = &quot;Surge the Rabbit&quot;; // object-level variable
@@ -672,7 +720,7 @@
 }
 </code></pre>
 
-<p>Furthermore, <em>object-level</em> variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are <em>private</em> to the objects). You need to define <a href="../functions">functions</a> or <a href="../getters_and_setters">getters and setters</a> for that.</p>
+<p>Furthermore, <em>object-level</em> variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are <em>private</em> to the objects). You need to define <a href="../functions">functions</a> or <a href="../getters_and_setters">getters and setters</a> to accomplish that.</p>
                 
                   
                 
@@ -708,13 +756,13 @@
           </a>
         
         
-          <a href="../functions/" title="Functions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../conditionals/" title="Conditionals" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Functions
+                Conditionals
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

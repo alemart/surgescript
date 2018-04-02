@@ -291,6 +291,30 @@
 
 
   <li class="md-nav__item">
+    <a href="../conditionals/" title="Conditionals" class="md-nav__link">
+      Conditionals
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../loops/" title="Loops" class="md-nav__link">
+      Loops
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../functions/" title="Functions" class="md-nav__link">
       Functions
     </a>
@@ -322,11 +346,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Entity-component-system
+        Object tree
       </label>
     
-    <a href="./" title="Entity-component-system" class="md-nav__link md-nav__link--active">
-      Entity-component-system
+    <a href="./" title="Object tree" class="md-nav__link md-nav__link--active">
+      Object tree
     </a>
     
       
@@ -370,8 +394,32 @@
 
 
   <li class="md-nav__item">
+    <a href="../components/" title="Components" class="md-nav__link">
+      Components
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../getters_and_setters/" title="Getters & setters" class="md-nav__link">
       Getters & setters
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../advanced_features/" title="Advanced Features" class="md-nav__link">
+      Advanced Features
     </a>
   </li>
 
@@ -528,18 +576,18 @@
                 <h1 id="introduction-to-objects">Introduction to objects</h1>
 <p>In SurgeScript, objects are units of code and data. Each object define a finite state machine, a mathematical construct used to describe the behavior of in-game objects. But what's a finite state machine?</p>
 <h2 id="state-machines">State machines</h2>
-<p>A finite state machine is a mathematical abstraction composed of a finite number of <strong>states</strong> and by <strong>transitions</strong> between these states. Only one state can be active at any given time.</p>
+<p>A finite state machine is a mathematical abstraction composed of a finite number of <strong>states</strong> and by <strong>transitions</strong> between these states. Only one state can be active at any given time (we'll call it the active state). There must be one <strong>initial state</strong> (i.e., the first one to be active). A transition is a change of the active state that is triggered when a certain condition is met.</p>
 <p>As a concrete example, suppose that you want to create a door in your game. You, the developer, may open or close the door at will.</p>
 <p>That is said to be an <em>informal</em> description of the problem. We need to transform it in something more rigorous. What is a door? We'll show one possible solution here.</p>
-<p>A door is an object with two states (see Figure below):</p>
+<p>A door is an object with two states (see the Figure below):</p>
 <ul>
-<li>Opened</li>
+<li>Opened (initial state)</li>
 <li>Closed</li>
 </ul>
 <p><img alt="State machine" src="../../img/state-machine.png" /></p>
 <p>From the Opened state, only one transition is possible: Close. Once the Close transition is called, the door will go to the Closed state. Conversely, from the Closed state, only one transition is available: Open. When the Open transition is executed, the door will return to the Opened state.</p>
 <h2 id="objects-in-surgescript">Objects in SurgeScript</h2>
-<p>In SurgeScript, each object has a name. Objects may have any number of states you'd like. The initial active state is always called <strong>main</strong>. The syntax is as follows:</p>
+<p>In SurgeScript, each object has a name. Objects may have any number of states you'd like. The initial state is always called <strong>main</strong>. The syntax is as follows:</p>
 <pre><code>object &quot;name of the object&quot;
 {
     state &quot;state name&quot;
@@ -560,7 +608,7 @@
 
     state &quot;opened&quot;
     {
-        if(timeout(2)) // if we have been on the opened state for 2 seconds
+        if(timeout(2)) // if we have been on the opened state for 2+ seconds
             state = &quot;closed&quot;; // go to the closed state
     }
 
@@ -572,7 +620,7 @@
 }
 </code></pre>
 
-<p>Notice how the code just shown defines states and transitions between these states.</p>
+<p>Notice how the code just shown defines states and transitions between these states. Each state contains its own code.</p>
 <p><strong>Note:</strong> once a state is active, its code will be repeated (at every frame) until the state changes or until the object is destroyed.</p>
                 
                   
@@ -594,7 +642,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../getters_and_setters/" title="Getters & setters" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../advanced_features/" title="Advanced Features" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -603,7 +651,7 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Getters & setters
+                Advanced Features
               </span>
             </div>
           </a>
