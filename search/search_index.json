@@ -37,12 +37,12 @@
         }, 
         {
             "location": "/tutorials/testing/", 
-            "text": "Testing your scripts\n\n\nThere are two main ways of testing your scripts: using the Open Surge Engine or using only the standalone version of SurgeScript (without the game engine).\n\n\nTesting on Open Surge\n\n\nTODO\n\n\nUsing the standalone version\n\n\nIf you've downloaded the standalone version of the language (i.e., SurgeScript without the full game engine):\n\n\n\n\nFirst of all, save the following script to a file named \nhello.ss\n. This file should be placed on the same directory as the surgescript executable.\n\n\n\n\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        Application.exit();\n    }\n}\n\n\n\n\n\n\nThen, open up a Terminal and type:\n\n\n\n\ncd /path/to/surgescript\n./surgescript hello.ss\n\n\n\n\n\n\nIf you're using Microsoft Windows, open up a Command Prompt and type:\n\n\n\n\ncd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss\n\n\n\n\n\n\nYou should see the output of the script as a result:\n\n\n\n\nHello, world!", 
+            "text": "Testing your scripts\n\n\nThere are two main ways of testing your scripts: using the Open Surge Engine or the \nstandalone version\n of SurgeScript (i.e., the version without the game engine).\n\n\nTesting on Open Surge\n\n\nTODO\n\n\nUsing the standalone version\n\n\nIf you've downloaded the standalone version of the language:\n\n\n\n\nFirst of all, save the following script to a file named \nhello.ss\n. This file should be placed on the same directory as the surgescript executable.\n\n\n\n\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        Application.exit();\n    }\n}\n\n\n\n\n\n\nThen, open up a Terminal and type:\n\n\n\n\ncd /path/to/surgescript\n./surgescript hello.ss\n\n\n\n\n\n\nIf you're using Microsoft Windows, open up a Command Prompt and type:\n\n\n\n\ncd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss\n\n\n\n\n\n\nYou should see the output of the script as a result:\n\n\n\n\nHello, world!", 
             "title": "Testing your scripts"
         }, 
         {
             "location": "/tutorials/testing/#testing-your-scripts", 
-            "text": "There are two main ways of testing your scripts: using the Open Surge Engine or using only the standalone version of SurgeScript (without the game engine).", 
+            "text": "There are two main ways of testing your scripts: using the Open Surge Engine or the  standalone version  of SurgeScript (i.e., the version without the game engine).", 
             "title": "Testing your scripts"
         }, 
         {
@@ -52,7 +52,7 @@
         }, 
         {
             "location": "/tutorials/testing/#using-the-standalone-version", 
-            "text": "If you've downloaded the standalone version of the language (i.e., SurgeScript without the full game engine):   First of all, save the following script to a file named  hello.ss . This file should be placed on the same directory as the surgescript executable.   object  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        Application.exit();\n    }\n}   Then, open up a Terminal and type:   cd /path/to/surgescript\n./surgescript hello.ss   If you're using Microsoft Windows, open up a Command Prompt and type:   cd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss   You should see the output of the script as a result:   Hello, world!", 
+            "text": "If you've downloaded the standalone version of the language:   First of all, save the following script to a file named  hello.ss . This file should be placed on the same directory as the surgescript executable.   object  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        Application.exit();\n    }\n}   Then, open up a Terminal and type:   cd /path/to/surgescript\n./surgescript hello.ss   If you're using Microsoft Windows, open up a Command Prompt and type:   cd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss   You should see the output of the script as a result:   Hello, world!", 
             "title": "Using the standalone version"
         }, 
         {
