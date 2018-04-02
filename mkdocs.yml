@@ -3,3 +3,14 @@ theme:
     name: 'material'
 pages:
     - 'Introduction': 'index.md'
+    - 'SurgeScript Crash Course':
+        - 'Hello, World!': 'tutorials/hello.md'
+        - 'Testing your scripts': 'tutorials/testing.md'
+        - 'Introduction to objects': 'tutorials/objects.md'
+        - 'Variables': 'tutorials/variables.md'
+        - 'Functions': 'tutorials/objects.md'
+        - 'Tags': 'tutorials/objects.md'
+        - 'Entity-component-system': 'tutorials/objects.md'
+        - 'Best practices': 'tutorials/objects.md'
+    - 'Language Reference':
+        - 'Application': 'reference/application.md'
