@@ -1,7 +1,7 @@
 Variables
 =========
 
-Variables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.
+Variables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object handle). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.
 
 Types
 -----
@@ -28,7 +28,7 @@ object "Surge"
     state "main"
     {
         Console.print(name); // Surge the Rabbit
-        Console.print(age + " years old"); // 23 years old
+        Console.print(age); // 23
     }
 }
 ```
@@ -90,9 +90,9 @@ object "Surge"
 
 Dictionaries have many interesting properties and operations that you can see in the [Language Reference](../reference/dictionary.md).
 
-#### Cautionary note
-
-Whenever you define an array or a dictionary, you spawn a new object. One is advised to **NOT** define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.
+> **Cautionary note**
+> 
+> Whenever you define an array or a dictionary, you spawn a new object. One is advised to **NOT** define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.
 
 ```
 object "Application"

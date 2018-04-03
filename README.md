@@ -1,5 +1,9 @@
 ## SurgeScript
-SurgeScript is a lightweight programming language for computer games and interactive apps, built originally for the Open Surge Engine. It is easy and fun to use, yet powerful enough for experts. It may be embedded into any C project.
+SurgeScript is a scripting language for games. It is easy and fun to use, yet powerful enough for experts. It may be embedded into any C project.
+
+> **First timer?**
+>
+> If this is your first time here, please go to the [Introduction](https://alemart.github.io/surgescript) page.
 
 Quick start:
 ```
@@ -14,7 +18,7 @@ You should see:
 Hello, world!
 ```
 
-**© 2016-2017  Alexandre Martins &lt;alemartf(at)gmail(dot)com&gt;**
+**© 2016-2018  Alexandre Martins &lt;alemartf(at)gmail(dot)com&gt;**
 
 ### Introduction
 Computer games usually have tons of objects running around the screen. Some of them enable users (aka "modders") to modify the content and the behavior of the games (creating MODs). However, adding modding capabilities to a game engine usually imply a lot of work to developers.
@@ -55,7 +59,7 @@ For more examples, please check the [examples](./examples) folder.
 
 ##### What is SurgeScript?
 
-SurgeScript is a programming language designed for games and interactive apps.
+SurgeScript is a scripting language designed for games.
 
 ##### Who created it?
 
@@ -63,11 +67,11 @@ SurgeScript has been originally created by Alexandre Martins, a developer from B
 
 ##### How do I learn SurgeScript?
 
-TODO (Wiki tutorials)
+Read the [Documentation](https://alemart.github.io/surgescript/).
 
 ##### Why not use some other languages such as Lua?
 
-Unlike other languages in the market, SurgeScript has been designed with the specific needs of computer games and interactive apps in mind. This includes: the state-machine pattern (all objects are state machines), the composition-approach (you may design complex objects and behaviors by means of composition), as well as the hierarchy system (objects have a parent and may have children, in a tree-like structure). This comes from years of experience of the author dealing with game engines, applications related to computer graphics, and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
+Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. This includes: the state-machine pattern (all objects are state machines), the composition-approach (you may design complex objects and behaviors by means of composition), as well as the hierarchy system (objects have a parent and may have children, in a tree-like structure). This comes from years of experience of the author dealing with game engines, applications related to computer graphics, and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
 ##### How do I embed SurgeScript into my game?
 

@@ -8,6 +8,7 @@ pages:
         - 'Testing your scripts': 'tutorials/testing.md'
         - 'Introduction to objects': 'tutorials/objects.md'
         - 'Variables': 'tutorials/variables.md'
+        - 'Expressions': 'tutorials/expressions.md'
         - 'Conditionals': 'tutorials/conditionals.md'
         - 'Loops': 'tutorials/loops.md'
         - 'Functions': 'tutorials/functions.md'

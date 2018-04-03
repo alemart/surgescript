@@ -15,9 +15,9 @@ SurgeScript in a nutshell
 SurgeScript is:
 
 * A scripting language for games
-* Easy for beginners, yet powerful to experts
+* Easy for beginners, powerful for experts
 * Free and open-source
-* Object-oriented, dynamically typed and state-machine based
+* Object-oriented, dynamically typed and based on state machines
 * The only programming language in the world that allows you to tag objects with emoticons (natively! ;)
 
 You can start your learning adventure by checking the [Hello World Tutorial](tutorials/hello.md).

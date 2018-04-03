@@ -1,7 +1,7 @@
 Getters and setters
 ===================
 
-In SurgeScript, variables are private. This means that variables may only be accessed from the objects that defined them. However, SurgeScript features a *syntax sugar* that allows objects to modify other objects' data in a way that looks like dealing with regular variables.
+In SurgeScript, variables are private. This means that variables may only be accessed from the objects that defined them. However, SurgeScript features a *syntax sugar* that allows objects to modify other objects' data in a way that looks like dealing with regular (public) variables.
 
 Suppose you have an object called **Animal** with a variable called *sound* and a function called *talk()*:
 
