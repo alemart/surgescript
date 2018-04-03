@@ -5,21 +5,6 @@ SurgeScript is a scripting language for games. It is easy and fun to use, yet po
 >
 > If this is your first time here, please go to the [Introduction](https://alemart.github.io/surgescript) page.
 
-### Quick start
-
-Open a terminal and type:
-```
-$ git clone https://github.com/alemart/surgescript.git
-$ cd surgescript
-$ make
-$ ./surgescript examples/hello.ss
-```
-
-You should see:
-```
-Hello, world!
-```
-
 **© 2016-2018  Alexandre Martins &lt;alemartf(at)gmail(dot)com&gt;**
 
 ### Introduction
@@ -37,6 +22,21 @@ SurgeScript enables developers to easily add modding capabilities to their progr
 - **Type system**: SurgeScript is a dynamically typed language. Five basic types are available: string, number, boolean, object and null.
 - **C-like syntax**: constructions like if, while, variable assignments, function calls and so on are all available.
 - **Automatic garbage collection**: unneeded (unreachable) objects are automatically discarded from memory.
+
+### Quick start
+
+Open a terminal and type:
+```
+$ git clone https://github.com/alemart/surgescript.git
+$ cd surgescript
+$ make
+$ ./surgescript examples/hello.ss
+```
+
+You should see:
+```
+Hello, world!
+```
 
 ### Examples
 
