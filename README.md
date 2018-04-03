@@ -5,7 +5,9 @@ SurgeScript is a scripting language for games. It is easy and fun to use, yet po
 >
 > If this is your first time here, please go to the [Introduction](https://alemart.github.io/surgescript) page.
 
-Quick start:
+### Quick start
+
+Open a terminal and type:
 ```
 $ git clone https://github.com/alemart/surgescript.git
 $ cd surgescript
