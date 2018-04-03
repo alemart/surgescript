@@ -299,13 +299,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#cautionary-note" title="Cautionary note" class="md-nav__link">
-    Cautionary note
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -331,6 +324,18 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../expressions/" title="Expressions" class="md-nav__link">
+      Expressions
+    </a>
   </li>
 
         
@@ -540,13 +545,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#cautionary-note" title="Cautionary note" class="md-nav__link">
-    Cautionary note
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -582,7 +580,7 @@
                 
                 
                 <h1 id="variables">Variables</h1>
-<p>Variables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.</p>
+<p>Variables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object handle). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.</p>
 <h2 id="types">Types</h2>
 <h3 id="primitive-types">Primitive types</h3>
 <table>
@@ -631,7 +629,7 @@
     state &quot;main&quot;
     {
         Console.print(name); // Surge the Rabbit
-        Console.print(age + &quot; years old&quot;); // 23 years old
+        Console.print(age); // 23
     }
 }
 </code></pre>
@@ -684,8 +682,10 @@
 </code></pre>
 
 <p>Dictionaries have many interesting properties and operations that you can see in the <a href="../reference/dictionary.md">Language Reference</a>.</p>
-<h4 id="cautionary-note">Cautionary note</h4>
+<blockquote>
+<p><strong>Cautionary note</strong></p>
 <p>Whenever you define an array or a dictionary, you spawn a new object. One is advised to <strong>NOT</strong> define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.</p>
+</blockquote>
 <pre><code>object &quot;Application&quot;
 {
     // arr will be instantiated once the object is created
@@ -756,13 +756,13 @@
           </a>
         
         
-          <a href="../conditionals/" title="Conditionals" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../expressions/" title="Expressions" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Conditionals
+                Expressions
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
