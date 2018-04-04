@@ -177,19 +177,31 @@
       
       
 
+
+  <li class="md-nav__item">
+    <a href="../../download/" title="Download" class="md-nav__link">
+      Download
+    </a>
+  </li>
+
+    
+      
+      
+      
+
   
 
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
     
-    <label class="md-nav__link" for="nav-2">
-      SurgeScript Crash Course
+    <label class="md-nav__link" for="nav-3">
+      Crash Course
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-2">
-        SurgeScript Crash Course
+      <label class="md-nav__title" for="nav-3">
+        Crash Course
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -308,7 +320,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../objects/" title="Object tree" class="md-nav__link">
+    <a href="../object_tree/" title="Object tree" class="md-nav__link">
       Object tree
     </a>
   </li>
@@ -401,7 +413,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../objects/" title="Best practices" class="md-nav__link">
+    <a href="../best_practices/" title="Best practices" class="md-nav__link">
       Best practices
     </a>
   </li>
@@ -419,14 +431,50 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
     
-    <label class="md-nav__link" for="nav-3">
-      Language Reference
+    <label class="md-nav__link" for="nav-4">
+      SurgeScript Reference
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
-        Language Reference
+      <label class="md-nav__title" for="nav-4">
+        SurgeScript Reference
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/application/" title="Application" class="md-nav__link">
+      Application
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
+    
+    <label class="md-nav__link" for="nav-5">
+      Engine Reference
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-5">
+        Engine Reference
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
         
@@ -500,7 +548,7 @@
                 
                 
                 <h1 id="components">Components</h1>
-<p>Entity Component System (ECS) is a software pattern used in game development. The idea is that in-game objects (called <em>entities</em>) can be customized by adding or removing objects (called <em>components</em>) during runtime. components add functionalities or behaviors to the entities to which they are attached to. In SurgeScript, both entities and components are objects - the difference is conceptual.</p>
+<p>Entity Component System (ECS) is a software pattern used in game development. The idea is that in-game objects (called <em>entities</em>) can be customized by adding or removing objects (called <em>components</em>) in runtime. Components add functionalities or behaviors to the entities to which they are attached to. In SurgeScript, both entities and components are objects - the difference is conceptual.</p>
 <p>As an example, consider an in-game object called <strong>Parrot</strong>. Objects by themselves are empty; they do nothing. However, an interesting behavior of parrots is that they are blabbers: they keep repeating the same thing over and over again. So, let's create an empty object <strong>Parrot</strong> and spawn on it the <strong>Blabber</strong> component:</p>
 <pre><code>object &quot;Parrot&quot;
 {
@@ -534,7 +582,7 @@ Hello!
 ...
 </code></pre>
 
-<p>Suppose now that your Parrot is a Kamikaze Robot: it will blab so much that it will explode itself after some time. We'll attach a <strong>Time Bomb</strong> to the parroting robot, so that it will stop blabbing after a while:</p>
+<p>Suppose now that your Parrot is a Kamikaze Robot: it blabs so much that it will explode itself after some time. We'll attach a <strong>Time Bomb</strong> to the parroting robot, so that it will stop blabbing after a while:</p>
 <pre><code>object &quot;Time Bomb&quot;
 {
     state &quot;main&quot;
@@ -572,10 +620,10 @@ Hello!
 BOOOM!
 </code></pre>
 
-<p>In this example, <strong>Parrot</strong> is an entity and <strong>Blabber</strong> and <strong>Time Bomb</strong> are its components.</p>
+<p>In this example, <strong>Parrot</strong> is an entity and <strong>Blabber</strong> and <strong>Time Bomb</strong> are its components. Once the entity is destroyed, its components (its children) are also destroyed automatically.</p>
 <h4 id="design-considerations">Design considerations</h4>
-<p>In some implementations of ECS, entities are usually implemented as integer numbers and components consist of raw data only. The game logic is executed by the System layer, which iterates throughout all entities continuously and executes the logic according to the components attached to them.</p>
-<p>In SurgeScript, however, components execute their own code and can be attached to entities simply by spawning them as children.</p>
+<p>In some implementations of ECS, entities are implemented as integers and components consist of raw data only. The game logic is executed by the System layer, which iterates throughout all entities continuously and executes the logic according to the components attached to them.</p>
+<p>In SurgeScript, components execute their own code and can be attached to entities simply by spawning them as children. Still, you can use the former approach if you wish to do so.</p>
 <h4 id="composition-over-inheritance">Composition over inheritance</h4>
 <p>SurgeScript does not support inheritance, a feature found in many object-oriented languages. The usage of components is encouraged instead. SurgeScript favors composition over inheritance, allowing for greater flexibility when defining in-game objects.</p>
                 
@@ -598,7 +646,7 @@ BOOOM!
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../objects/" title="Object tree" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../object_tree/" title="Object tree" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
