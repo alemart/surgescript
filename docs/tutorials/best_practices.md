@@ -1,7 +1,7 @@
 Best Practices
 ==============
 
-- Read the [Components](components) section. It's crucial that you understand.
+- Read the [Components](components) section. It's crucial that you understand it.
 - Follow the golden rule: objects should **not** mess with each others' internals!
     - Objects should **not** change other objects' variables or states directly (won't allow it!)
     - Objects should define [functions](functions) that can be operated upon by the external world (API)

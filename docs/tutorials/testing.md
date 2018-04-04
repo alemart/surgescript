@@ -1,7 +1,7 @@
 Testing your scripts
 ====================
 
-There are two main ways of testing your scripts: using the Open Surge Engine or the [standalone version](https://github.com/alemart/surgescript) of SurgeScript (i.e., the version without the game engine).
+There are two main ways to test your scripts: using the Open Surge Engine or the [standalone version](https://github.com/alemart/surgescript) of SurgeScript (i.e., the version without the game engine).
 
 Testing on Open Surge
 ---------------------

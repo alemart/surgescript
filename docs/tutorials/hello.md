@@ -14,6 +14,6 @@ object "Application"
 }
 ```
 
-In SurgeScript, each object defines a state machine (more on that later). The initial state is called **main**. In the code presented, we display a *Hello, world!* message and then exit the application.
+In SurgeScript, each object defines a state machine (more on that later). The initial state is called **main**. In the code just presented, we display a *Hello, world!* message and then exit the app.
 
 Let's go on and read [Introduction to objects](objects). Or, alternatively, you may want to [test your scripts](testing).

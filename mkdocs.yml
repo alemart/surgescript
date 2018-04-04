@@ -13,6 +13,7 @@ pages:
         - 'Conditionals': 'tutorials/conditionals.md'
         - 'Loops': 'tutorials/loops.md'
         - 'Functions': 'tutorials/functions.md'
+        - 'Comments': 'tutorials/comments.md'
         - 'Tags': 'tutorials/tags.md'
         - 'Object tree': 'tutorials/object_tree.md'
         - 'Components': 'tutorials/components.md'
