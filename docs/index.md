@@ -9,6 +9,8 @@ The best way to try SurgeScript for the first time is to use the Open Surge Engi
 
 It's such a joy to program in SurgeScript! You and your users will love it.
 
+[![Download](img/download.png)](download)
+
 SurgeScript in a nutshell
 -------------------------
 
