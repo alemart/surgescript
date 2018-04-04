@@ -3,7 +3,8 @@ theme:
     name: 'material'
 pages:
     - 'Introduction': 'index.md'
-    - 'SurgeScript Crash Course':
+    - 'Download': 'download.md'
+    - 'Crash Course':
         - 'Hello, World!': 'tutorials/hello.md'
         - 'Testing your scripts': 'tutorials/testing.md'
         - 'Introduction to objects': 'tutorials/objects.md'
@@ -13,10 +14,12 @@ pages:
         - 'Loops': 'tutorials/loops.md'
         - 'Functions': 'tutorials/functions.md'
         - 'Tags': 'tutorials/tags.md'
-        - 'Object tree': 'tutorials/objects.md'
+        - 'Object tree': 'tutorials/object_tree.md'
         - 'Components': 'tutorials/components.md'
         - 'Getters & setters': 'tutorials/getters_and_setters.md'
         - 'Advanced Features': 'tutorials/advanced_features.md'
-        - 'Best practices': 'tutorials/objects.md'
-    - 'Language Reference':
+        - 'Best practices': 'tutorials/best_practices.md'
+    - 'SurgeScript Reference':
+        - 'Application': 'reference/application.md'
+    - 'Engine Reference':
         - 'Application': 'reference/application.md'

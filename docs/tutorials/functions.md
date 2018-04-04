@@ -1,0 +1,129 @@
+Functions
+=========
+
+Functions are blocks of code that you can reuse throughout your program. They may receive input parameters and they always output something. The syntax is as follows:
+
+```
+fun function_name(param_1, param_2, param_3, ..., param_n)
+{
+    // block of code
+    // to be executed
+}
+```
+
+Functions may be associated to objects. Any function associated to an object may be used (called) by the object itself or by other objects. This means that functions are *public* (they are visible to the outside world).
+
+**Note:** in an object, functions should be defined after the states.
+
+The return statement
+--------------------
+
+Use the **return** statement to stop executing the function and to return some value to the caller. Example:
+
+```
+// This function will return the double of input parameter x
+function double(x)
+{
+    return 2 * x;
+    Console.print("This line will never be executed.");
+}
+```
+
+If no value is specified after the **return** keyword, the function will be stopped and its return value will be *null*. Additionally, if no **return** statement is found, then the return value will also be *null*.
+
+Example
+-------
+
+In the example below, we have an object called **Calculator** with two functions: *greet()* and *sum()*. *greet()* takes no input parameters and just greets the user. On the other hand, *sum()* takes two input parameters, *a* and *b*, and returns the sum *a* + *b*:
+
+```
+object "Calculator"
+{
+    fun greet()
+    {
+        Console.print("Hello! I am a Calculator!");
+    }
+
+    fun sum(a, b)
+    {
+        return a + b;
+    }
+}
+```
+
+In function *sum()*, variables *a* and *b* hold the input data and are only visible inside the function.
+
+Now, let's create a program that uses this **Calculator**. Remember that the functions defined above can be called by any object, including **Application**:
+
+
+```
+object "Application"
+{
+    calculator = spawn("Calculator");
+
+    state "main"
+    {
+        // greet the user
+        calculator.greet();
+
+        // do some computation
+        result = calculator.sum(5, 7);
+        Console.print(result);
+
+        // we're done!
+        Application.exit();
+    }
+}
+```
+
+The output of the above program is:
+
+```
+Hello! I am a Calculator!
+12
+```
+
+Notice that the **Application** does not need to know *how* the functions of the **Calculator** are implemented. It just needs to know *what* they do. This means that you may change the implementation of the **Calculator** without changing the **Application**, and the end-result will stay the same.
+
+Constructors and destructors
+----------------------------
+
+In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectivelly. It's not mandatory to define them, but it may be useful to do so (to set up things, for example). Neither may receive any arguments.
+
+Let's take our **Calculator** again. In the following example, *constructor()* is called automatically whenever a **Calculator** object is created. Likewise, *destructor()* is called automatically when the object is destroyed.
+
+```
+object "Calculator"
+{
+    fun constructor()
+    {
+        Console.print("Creating a Calculator...");
+    }
+
+    fun destructor()
+    {
+        Console.print("Destroying a Calculator...");
+    }
+    
+    fun greet()
+    {
+        Console.print("Hello! I am a Calculator!");
+    }
+
+    fun sum(a, b)
+    {
+        return a + b;
+    }
+}
+```
+
+Now, if we run the **Application** of the previous section without any modification, the output of the program will be:
+
+```
+Creating a Calculator...
+Hello! I am a Calculator!
+12
+Destroying a Calculator...
+```
+
+Please note that, for any object, its *constructor()* runs *before* its main state.
