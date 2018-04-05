@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2016-2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2016-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * util/util.h
  * SurgeScript utilities
@@ -15,7 +15,7 @@
 
 /* SurgeScript info */
 #define SSPROJECT                   "SurgeScript"
-#define SSVERSION                   "0.5.0"
+#define SSVERSION                   "0.5.0 (beta)"
 #ifndef SSBUILD
 #define SSBUILD                     "custom build"
 #endif
