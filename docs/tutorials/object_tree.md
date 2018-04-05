@@ -1,9 +1,9 @@
 Object tree
 ===========
 
-In SurgeScript, objects have a hierarchical relationship Suppose that object P spawns (or *instantiates*) object C. We say that object P is the *parent* of C. Similarly, object C is a *child* of P.
+In SurgeScript, objects have a hierarchical relationship. Suppose that object P spawns (or *instantiates*) object C. We say that object P is the *parent* of C. Similarly, object C is a *child* of P.
 
-An object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (or tree). The Figure below shows an example:
+An object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (or a tree). The Figure below shows an example:
 
 ![An object tree](../img/tree.png)
 
