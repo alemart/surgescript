@@ -17,7 +17,7 @@ Get SurgeScript on the [Download page](https://alemart.github.io/surgescript/dow
 Examples
 --------
 
-This is an example script:
+The following script prints a message to the screen:
 
 ```
 object "Application"
@@ -30,9 +30,9 @@ object "Application"
 }
 ```
 
-It first prints a message to the screen. Then, it exits the app.
+Please read the [SurgeScript Crash Course](https://alemart.github.io/surgescript/tutorials/hello) to learn more.
 
-For more examples, please check the [examples](./examples) folder.
+Additionally, please check the [examples](examples) folder.
 
 Compiling SurgeScript
 ---------------------
@@ -104,7 +104,7 @@ If you're a C developer, you may embed SurgeScript in your project studying the 
 You'll need [mkdocs](http://www.mkdocs.org). After you get the sources, go to the *surgescript/* folder and type:
 
 ```
-mkdocs build
+$ mkdocs build
 ```
 
 The documentation will be available in the *site/* subdirectory.
