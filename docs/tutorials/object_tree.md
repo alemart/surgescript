@@ -48,10 +48,18 @@ object "Parent"
 }
 ```
 
+> **Automatic Garbage Collection**
+>
+> When you spawn an object, make sure you store a reference to it somewhere.
+>
+> If an object cannot be reached from the root (no reachable object has any references to it), it will be automatically destroyed by SurgeScript's Garbage Collector.
+
+
+
 Destroying objects
 ------------------
 
-Objects can be destroyed by calling *destroy()*. Whenever an object is destroyed, its children are destroyed as well.
+Objects can be destroyed manually by calling *destroy()*. Whenever an object is destroyed, its children are destroyed as well.
 
 ```
 object "Foo"
