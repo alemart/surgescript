@@ -308,6 +308,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../comments/" title="Comments" class="md-nav__link">
+      Comments
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../tags/" title="Tags" class="md-nav__link">
       Tags
     </a>
@@ -383,15 +395,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dictionary-operators" title="Dictionary operators" class="md-nav__link">
-    Dictionary operators
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#iterators" title="Iterators" class="md-nav__link">
-    Iterators
+  <a href="#lookup-operator" title="Lookup operator" class="md-nav__link">
+    Lookup operator
   </a>
   
 </li>
@@ -399,6 +404,13 @@
         <li class="md-nav__item">
   <a href="#functors" title="Functors" class="md-nav__link">
     Functors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iterators" title="Iterators" class="md-nav__link">
+    Iterators
   </a>
   
 </li>
@@ -524,15 +536,8 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#dictionary-operators" title="Dictionary operators" class="md-nav__link">
-    Dictionary operators
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#iterators" title="Iterators" class="md-nav__link">
-    Iterators
+  <a href="#lookup-operator" title="Lookup operator" class="md-nav__link">
+    Lookup operator
   </a>
   
 </li>
@@ -540,6 +545,13 @@
         <li class="md-nav__item">
   <a href="#functors" title="Functors" class="md-nav__link">
     Functors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iterators" title="Iterators" class="md-nav__link">
+    Iterators
   </a>
   
 </li>
@@ -562,9 +574,133 @@
                 
                 
                 <h1 id="advanced-features">Advanced Features</h1>
-<h2 id="dictionary-operators">Dictionary operators</h2>
-<h2 id="iterators">Iterators</h2>
+<p>This section describes advanced features of SurgeScript.</p>
+<h2 id="lookup-operator">Lookup operator</h2>
+<p>Some programming languages, such as C++, have a feature called <em>operator overloading</em>. It's a <em>syntactic sugar</em> that allows the programmer to attribute custom implementations to different operators.</p>
+<p>In SurgeScript, the <em>[ ]</em> operator (also called the <em>lookup operator</em>), used by Arrays and Dictionaries, is used to <strong>get</strong> and <strong>set</strong> values from/to the data structure. Still, the <em>[ ]</em> operator can be used by any object, for any purpose. It is necessary to define, in your object, functions <em>get()</em> and <em>set()</em> with the following signature:</p>
+<pre><code>fun get(key)
+{
+    // custom implementation
+}
+
+fun set(key, value)
+{
+    // custom implementation
+}
+</code></pre>
+
+<p>Given an object <code>obj</code>, the expression <code>x = obj[key]</code> is equivalent to <code>x = obj.get(key)</code>. Similarly, <code>obj[key] = value</code> is equivalent to <code>obj.set(key, value)</code>.</p>
 <h2 id="functors">Functors</h2>
+<p>In SurgeScript, objects can be made to behave like functions. We call these objects <em>functors</em>. To make an object behave like a function, you have to overload the <em>( )</em> operator (also known as the <em>function operator</em>). This is done by defining function <em>call()</em> in your object:</p>
+<pre><code>fun call()
+{
+    // custom implementation
+}
+</code></pre>
+
+<p>Function <em>call()</em> may take any number of parameters. Given an object <code>f</code>, the expression <code>y = f(x)</code> is equivalent to <code>y = f.call(x)</code>. Notice that, since <code>f</code> is an object, you may exchange its implementation during runtime.</p>
+<h2 id="iterators">Iterators</h2>
+<p>As seen in the <a href="../loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function <em>iterator()</em>. If you have ever used Java, you'll find this to be familiar.</p>
+<pre><code>object &quot;MyCollection&quot;
+{
+    fun iterator()
+    {
+        // function iterator() takes no arguments and 
+        // should return a new iterator object
+    }
+}
+</code></pre>
+
+<p>For each collection you define, you should also define its iterator object. The iterator object should implement functions <em>next()</em> and <em>hasNext()</em> (both take no arguments):</p>
+<pre><code>object &quot;MyIterator&quot;
+{
+    fun next()
+    {
+        // returns the next element of the collection
+        // and advances the iteration pointer
+        // the collection is usually the parent object
+    }
+
+    function hasNext()
+    {
+        // returns true if the enumeration isn't over
+        // returns false if there are no more elements
+    }
+}
+</code></pre>
+
+<p>You may iterate through a collection using the following code:</p>
+<pre><code>it = collection.iterator();
+while(it.hasNext()) {
+    x = it.next();
+
+    // do something with x
+    // x is an element of the collection
+    Console.print(x);
+}
+</code></pre>
+
+<p>Or, alternatively, using the compact foreach:</p>
+<pre><code>foreach(x in collection) {
+    Console.print(x);
+}
+</code></pre>
+
+<p>For the sake of completion, the following code demonstrates how to implement a custom collection that hold even numbers from 0 up to 20.</p>
+<pre><code>object &quot;Application&quot;
+{
+    evenNumbers = spawn(&quot;EvenNumbers&quot;);
+
+    state &quot;main&quot;
+    {
+        // iterate through the collection
+        foreach(number in evenNumbers)
+            Console.print(number);
+
+        // exit the app
+        Application.exit();
+    }
+}
+
+object &quot;EvenNumbers&quot;
+{
+    fun iterator()
+    {
+        return spawn(&quot;EvenIterator&quot;);
+    }
+}
+
+object &quot;EvenIterator&quot;
+{
+    nextNumber = 0;
+
+    fun next()
+    {
+        currentNumber = nextNumber;
+        nextNumber += 2;
+        return currentNumber;
+    }
+
+    fun hasNext()
+    {
+        return nextNumber &lt;= 20;
+    }
+}
+</code></pre>
+
+<p>The result of this code is:</p>
+<pre><code>0
+2
+4
+6
+8
+10
+12
+14
+16
+18
+20
+</code></pre>
                 
                   
                 
