@@ -75,7 +75,7 @@ object "Foo"
 Traversing the hierarchy
 ------------------------
 
-Relevant data about the object hierarchy can be obtained using the following properties and functions:
+Relevant data about the object hierarchy can be obtained using the following properties and functions (read more on the [Object reference](../reference/object)):
 
 Function / property|Description
 -------------------|-----------
@@ -83,7 +83,6 @@ Function / property|Description
 *obj.childCount* (read-only) | Number of immediate children
 *obj.child(name)* | Gets a child object named *name*
 *obj.findChild(name)* | Finds\* a descendant named *name*
-*obj.children()* | Returns an Array with all the children of the object
 *obj.sibling(name)* | Gets a sibling\*\* named *name*
 
 > **Notes:**
