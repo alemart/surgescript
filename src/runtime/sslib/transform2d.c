@@ -26,13 +26,13 @@ static surgescript_var_t* fun_scale(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_getxpos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getypos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getwidth(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getheight(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getscalex(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getscaley(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setxpos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setypos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_setwidth(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_setheight(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setscalex(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setscaley(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 static surgescript_var_t* fun_getworldx(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getworldy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -76,10 +76,10 @@ void surgescript_sslib_register_transform2d(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Transform2D", "setYpos", fun_setypos, 1);
     surgescript_vm_bind(vm, "Transform2D", "getAngle", fun_getangle, 0);
     surgescript_vm_bind(vm, "Transform2D", "setAngle", fun_setangle, 1);
-    surgescript_vm_bind(vm, "Transform2D", "getWidth", fun_getwidth, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setWidth", fun_setwidth, 1);
-    surgescript_vm_bind(vm, "Transform2D", "getHeight", fun_getheight, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setHeight", fun_setheight, 1);
+    surgescript_vm_bind(vm, "Transform2D", "getScaleX", fun_getscalex, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setScaleX", fun_setscalex, 1);
+    surgescript_vm_bind(vm, "Transform2D", "getScaleY", fun_getscaley, 0);
+    surgescript_vm_bind(vm, "Transform2D", "setScaleY", fun_setscaley, 1);
 
     surgescript_vm_bind(vm, "Transform2D", "getWorldX", fun_getworldx, 0);
     surgescript_vm_bind(vm, "Transform2D", "setWorldX", fun_setworldx, 1);
@@ -160,13 +160,13 @@ surgescript_var_t* fun_getangle(surgescript_object_t* object, const surgescript_
     return surgescript_var_set_number(surgescript_var_create(), transform->rotation.z);
 }
 
-surgescript_var_t* fun_getwidth(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_getscalex(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     return surgescript_var_set_number(surgescript_var_create(), transform->scale.x);
 }
 
-surgescript_var_t* fun_getheight(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_getscaley(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     return surgescript_var_set_number(surgescript_var_create(), transform->scale.y);
@@ -193,14 +193,14 @@ surgescript_var_t* fun_setangle(surgescript_object_t* object, const surgescript_
     return NULL;
 }
 
-surgescript_var_t* fun_setwidth(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_setscalex(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     transform->scale.x = surgescript_var_get_number(param[0]);
     return NULL;
 }
 
-surgescript_var_t* fun_setheight(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_setscaley(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     transform->scale.y = surgescript_var_get_number(param[0]);
@@ -258,7 +258,7 @@ surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_va
 {
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_object_t* looker = target(object);
-    surgescript_object_t* looked = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0]));
+    surgescript_object_t* looked = target(surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0])));
     float looked_x, looked_y, looker_x, looker_y, angle;
 
     worldposition2d(looker, &looker_x, &looker_y);
@@ -277,7 +277,7 @@ surgescript_var_t* fun_distanceto(surgescript_object_t* object, const surgescrip
 {
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_object_t* src = target(object);
-    surgescript_object_t* dst = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0]));
+    surgescript_object_t* dst = target(surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0])));
     float dst_x, dst_y, src_x, src_y, distance2;
 
     worldposition2d(src, &src_x, &src_y);
