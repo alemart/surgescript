@@ -23,8 +23,8 @@ Properties
 >
 > ² Rotation angles should be given in degrees.
 
-Methods
--------
+Functions
+---------
 
 #### translate
 
