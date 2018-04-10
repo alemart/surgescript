@@ -1,7 +1,7 @@
 Object
 ======
 
-In SurgeScript, all objects are also instance of `Object`. This means that the properties and methods listed below are available for all objects:
+In SurgeScript, all objects are also instances of `Object`. This means that the properties and functions listed below are available for all objects:
 
 Properties
 ----------
