@@ -302,7 +302,7 @@
         }, 
         {
             "location": "/tutorials/object_tree/", 
-            "text": "Object tree\n\n\nIn SurgeScript, objects have a hierarchical relationship. Suppose that object P spawns (or \ninstantiates\n) object C. We say that object P is the \nparent\n of C. Similarly, object C is a \nchild\n of P.\n\n\nAn object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (or a tree). The Figure below shows an example:\n\n\n\n\nIn this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero.\n\n\nIn SurgeScript, the root of the hierarchy is a predefined object called \nSystem\n. Its parent is itself. All other objects are descendants of \nSystem\n.\n\n\nSpawning objects\n\n\nYou can use \nspawn()\n to instantiate an object. Example:\n\n\nobject \nParent\n\n{\n    child = spawn(\nChild\n);\n\n    state \nmain\n\n    {\n    }\n}\n\nobject \nChild\n\n{\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nFunction \nspawn()\n may be invoked on objects other than the caller. In this case, the caller won't be the parent of the newly created object:\n\n\nobject \nParent\n\n{\n    child = spawn(\nChild\n);\n    grandChild = child.spawn(\nChild\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\n\n\nAutomatic Garbage Collection\n\n\nWhen you spawn an object, make sure you store a reference to it somewhere.\n\n\nIf an object cannot be reached from the root (no reachable object has any references to it), it will be automatically destroyed by SurgeScript's Garbage Collector.\n\n\n\n\nDestroying objects\n\n\nObjects can be destroyed manually by calling \ndestroy()\n. Whenever an object is destroyed, its children are destroyed as well.\n\n\nobject \nFoo\n\n{\n    state \nmain\n\n    {\n        Console.print(\nThis object does nothing.\n);\n        destroy();\n    }\n}\n\n\n\n\nTraversing the hierarchy\n\n\nRelevant data about the object hierarchy can be obtained using the following properties and functions:\n\n\n\n\n\n\n\n\nFunction / property\n\n\nDescription\n\n\n\n\n\n\n\n\n\n\nobj.parent\n (read-only)\n\n\nThe parent object\n\n\n\n\n\n\nobj.childCount\n (read-only)\n\n\nNumber of immediate children\n\n\n\n\n\n\nobj.child(name)\n\n\nGets a child object named \nname\n\n\n\n\n\n\nobj.findChild(name)\n\n\nFinds* a descendant named \nname\n\n\n\n\n\n\nobj.children()\n\n\nReturns an Array with all the children of the object\n\n\n\n\n\n\nobj.sibling(name)\n\n\nGets a sibling** named \nname\n\n\n\n\n\n\n\n\n\n\nNotes:\n\n\n* findChild() may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.\n\n\n** We say that two distinct objects are siblings if they share the same parent.\n\n\n\n\nExample:\n\n\nobject \nParent\n\n{\n    child = spawn(\nChild\n);\n    otherChild = spawn(\nChild\n);\n\n    state \nmain\n\n    {\n        Console.print(\nThis object has \n + childCount + \n children.\n);\n        destroy();\n    }\n}\n\n\n\n\nThe output is as follows:\n\n\nThis object has 2 children.", 
+            "text": "Object tree\n\n\nIn SurgeScript, objects have a hierarchical relationship. Suppose that object P spawns (or \ninstantiates\n) object C. We say that object P is the \nparent\n of C. Similarly, object C is a \nchild\n of P.\n\n\nAn object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (or a tree). The Figure below shows an example:\n\n\n\n\nIn this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero.\n\n\nIn SurgeScript, the root of the hierarchy is a predefined object called \nSystem\n. Its parent is itself. All other objects are descendants of \nSystem\n.\n\n\nSpawning objects\n\n\nYou can use \nspawn()\n to instantiate an object. Example:\n\n\nobject \nParent\n\n{\n    child = spawn(\nChild\n);\n\n    state \nmain\n\n    {\n    }\n}\n\nobject \nChild\n\n{\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nFunction \nspawn()\n may be invoked on objects other than the caller. In this case, the caller won't be the parent of the newly created object:\n\n\nobject \nParent\n\n{\n    child = spawn(\nChild\n);\n    grandChild = child.spawn(\nChild\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\n\n\nAutomatic Garbage Collection\n\n\nWhen you spawn an object, make sure you store a reference to it somewhere.\n\n\nIf an object cannot be reached from the root (no reachable object has any references to it), it will be automatically destroyed by SurgeScript's Garbage Collector.\n\n\n\n\nDestroying objects\n\n\nObjects can be destroyed manually by calling \ndestroy()\n. Whenever an object is destroyed, its children are destroyed as well.\n\n\nobject \nFoo\n\n{\n    state \nmain\n\n    {\n        Console.print(\nThis object does nothing.\n);\n        destroy();\n    }\n}\n\n\n\n\nTraversing the hierarchy\n\n\nRelevant data about the object hierarchy can be obtained using the following properties and functions (read more on the \nObject reference\n):\n\n\n\n\n\n\n\n\nFunction / property\n\n\nDescription\n\n\n\n\n\n\n\n\n\n\nobj.parent\n (read-only)\n\n\nThe parent object\n\n\n\n\n\n\nobj.childCount\n (read-only)\n\n\nNumber of immediate children\n\n\n\n\n\n\nobj.child(name)\n\n\nGets a child object named \nname\n\n\n\n\n\n\nobj.findChild(name)\n\n\nFinds* a descendant named \nname\n\n\n\n\n\n\nobj.sibling(name)\n\n\nGets a sibling** named \nname\n\n\n\n\n\n\n\n\n\n\nNotes:\n\n\n* findChild() may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.\n\n\n** We say that two distinct objects are siblings if they share the same parent.\n\n\n\n\nExample:\n\n\nobject \nParent\n\n{\n    child = spawn(\nChild\n);\n    otherChild = spawn(\nChild\n);\n\n    state \nmain\n\n    {\n        Console.print(\nThis object has \n + childCount + \n children.\n);\n        destroy();\n    }\n}\n\n\n\n\nThe output is as follows:\n\n\nThis object has 2 children.", 
             "title": "Object tree"
         }, 
         {
@@ -322,7 +322,7 @@
         }, 
         {
             "location": "/tutorials/object_tree/#traversing-the-hierarchy", 
-            "text": "Relevant data about the object hierarchy can be obtained using the following properties and functions:     Function / property  Description      obj.parent  (read-only)  The parent object    obj.childCount  (read-only)  Number of immediate children    obj.child(name)  Gets a child object named  name    obj.findChild(name)  Finds* a descendant named  name    obj.children()  Returns an Array with all the children of the object    obj.sibling(name)  Gets a sibling** named  name      Notes:  * findChild() may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.  ** We say that two distinct objects are siblings if they share the same parent.   Example:  object  Parent \n{\n    child = spawn( Child );\n    otherChild = spawn( Child );\n\n    state  main \n    {\n        Console.print( This object has   + childCount +   children. );\n        destroy();\n    }\n}  The output is as follows:  This object has 2 children.", 
+            "text": "Relevant data about the object hierarchy can be obtained using the following properties and functions (read more on the  Object reference ):     Function / property  Description      obj.parent  (read-only)  The parent object    obj.childCount  (read-only)  Number of immediate children    obj.child(name)  Gets a child object named  name    obj.findChild(name)  Finds* a descendant named  name    obj.sibling(name)  Gets a sibling** named  name      Notes:  * findChild() may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.  ** We say that two distinct objects are siblings if they share the same parent.   Example:  object  Parent \n{\n    child = spawn( Child );\n    otherChild = spawn( Child );\n\n    state  main \n    {\n        Console.print( This object has   + childCount +   children. );\n        destroy();\n    }\n}  The output is as follows:  This object has 2 children.", 
             "title": "Traversing the hierarchy"
         }, 
         {
@@ -392,13 +392,243 @@
         }, 
         {
             "location": "/reference/application/", 
-            "text": "", 
+            "text": "Application\n\n\nRepresents the Application. You do not need to instantiate it, as it is instantiated automatically. Object \nApplication\n can be accessed by any other object, in any script.\n\n\nProperties\n\n\n\n\nsession\n is a \nDictionary\n of session variables that persist throughout the entire application.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\ncrash\n\n\ncrash(message)\n\n\nExits the Application with an error message.\n\n\nArguments\n\n\n\n\nmessage\n: string. The message to be displayed to the user.\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nA synonym for \nApplication.exit()\n.", 
             "title": "Application"
         }, 
         {
-            "location": "/reference/application/", 
-            "text": "", 
+            "location": "/reference/application/#application", 
+            "text": "Represents the Application. You do not need to instantiate it, as it is instantiated automatically. Object  Application  can be accessed by any other object, in any script.", 
             "title": "Application"
+        }, 
+        {
+            "location": "/reference/application/#properties", 
+            "text": "session  is a  Dictionary  of session variables that persist throughout the entire application.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/application/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/application/#exit", 
+            "text": "exit()  Exits the Application.", 
+            "title": "exit"
+        }, 
+        {
+            "location": "/reference/application/#crash", 
+            "text": "crash(message)  Exits the Application with an error message.  Arguments   message : string. The message to be displayed to the user.", 
+            "title": "crash"
+        }, 
+        {
+            "location": "/reference/application/#destroy", 
+            "text": "destroy()  A synonym for  Application.exit() .", 
+            "title": "destroy"
+        }, 
+        {
+            "location": "/reference/object/", 
+            "text": "Object\n\n\nIn SurgeScript, all objects are also instance of \nObject\n. This means that the properties and methods listed below are available for all objects:\n\n\nProperties\n\n\n\n\nparent\n is a reference to the parent object.\n\n\nchildCount\n is an integer corresponding to the number of children of this object.\n\n\n__name\n is the name of this object (string).\n\n\n__children\n spawns a new array containing references to the children of this object.\n\n\n__functions\n spawns a new array of strings containing the functions of this object.\n\n\n__timespent\n is the approximate time spent in this object in the last frame (in seconds).\n\n\n__memspent\n is the current memory consumption of this object (in bytes) - not implemented.\n\n\n\n\nFunctions\n\n\nspawn\n\n\nspawn(objectName)\n\n\nSpawns an object named \nobjectName\n.\n\n\nArguments\n\n\n\n\nobjectName\n: string. The name of the object to be spawned / instantiated.\n\n\n\n\nReturns\n\n\nA new object of the desired name. Note that the newly created object will be a child of \nthis\n.\n\n\ndestroy\n\n\ndestroy()\n\n\nDestroys the object.\n\n\nchild\n\n\nchild(childName)\n\n\nLooks for a child named \nchildName\n.\n\n\nArguments\n\n\n\n\nchildName\n: string. The name of the desired child.\n\n\n\n\nReturns\n\n\nA child of name \nchildName\n, or \nnull\n if there is no such object.\n\n\nsibling\n\n\nsibling(siblingName)\n\n\nLooks for a sibling named \nsiblingName\n. Two objects are siblings if they share the same parent.\n\n\nArguments\n\n\n\n\nsiblingName\n: string. The name of the desired sibling.\n\n\n\n\nReturns\n\n\nA sibling of name \nsiblingName\n, or \nnull\n if there is no such object.\n\n\nfindChild\n\n\nfindChild(childName)\n\n\nSearches for a descendant (child, grand-child, and so on) named \nchildName\n. Since this function traverses the \nobject tree\n, it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.\n\n\nArguments\n\n\n\n\nchildName\n: string. The name of the desired object.\n\n\n\n\nReturns\n\n\nA descendant of name \nchildName\n, or \nnull\n if there is no such object.\n\n\nExample\n\n\nobject \nTestObject\n\n{\n    // will search for SomeOtherObject in the Application\n    obj = Application.findChild(\nSomeOtherObject\n);\n\n    state \nmain\n\n    {\n        if(obj != null)\n            Console.print(\nFound the object.\n);\n        else\n            Console.print(\nObject not found.\n);\n\n        destroy();\n    }\n}\n\n\n\n\ntimeout\n\n\ntimeout(seconds)\n\n\nChecks if the object has been on the same state for more than a given amount of \nseconds\n.\n\n\nArguments\n\n\n\n\nseconds\n: number. The number of seconds.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the object has been on the current state for more than \nseconds\n seconds.\n\n\nExample\n\n\nobject \nTime Test\n\n{\n    state \nmain\n\n    {\n        // Will wait for 2 seconds before changing the state\n        if(timeout(2.0))\n            state = \ndone\n;\n    }\n\n    state \ndone\n\n    {\n        Console.print(\nDone!\n);\n        destroy();\n    }\n}\n\n\n\n\ntoString\n\n\ntoString()\n\n\nConverts the object to a string. This function is designed to be overloaded by your own objects.\n\n\nReturns\n\n\nA string.\n\n\nequals\n\n\nequals(otherObject)\n\n\nCompares \nthis\n object to \notherObject\n. This function is designed to be overloaded by your own objects.\n\n\nArguments\n\n\n\n\notherObject\n: object. An object to compare \nthis\n to.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the objects are equal; \nfalse\n otherwise.\n\n\nhasFunction\n\n\nhasFunction(functionName)\n\n\nChecks if the object has a function named \nfunctionName\n.\n\n\nArguments\n\n\n\n\nfunctionName\n: string. The name of the function.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the object has a function named \nfunctionName\n.\n\n\nhasTag\n\n\nhasFunction(tagName)\n\n\nChecks if the object has been tagged with \ntagName\n.\n\n\nArguments\n\n\n\n\ntagName\n: string. The name of the tag.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the object has been tagged with \ntagName\n.", 
+            "title": "Object"
+        }, 
+        {
+            "location": "/reference/object/#object", 
+            "text": "In SurgeScript, all objects are also instance of  Object . This means that the properties and methods listed below are available for all objects:", 
+            "title": "Object"
+        }, 
+        {
+            "location": "/reference/object/#properties", 
+            "text": "parent  is a reference to the parent object.  childCount  is an integer corresponding to the number of children of this object.  __name  is the name of this object (string).  __children  spawns a new array containing references to the children of this object.  __functions  spawns a new array of strings containing the functions of this object.  __timespent  is the approximate time spent in this object in the last frame (in seconds).  __memspent  is the current memory consumption of this object (in bytes) - not implemented.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/object/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/object/#spawn", 
+            "text": "spawn(objectName)  Spawns an object named  objectName .  Arguments   objectName : string. The name of the object to be spawned / instantiated.   Returns  A new object of the desired name. Note that the newly created object will be a child of  this .", 
+            "title": "spawn"
+        }, 
+        {
+            "location": "/reference/object/#destroy", 
+            "text": "destroy()  Destroys the object.", 
+            "title": "destroy"
+        }, 
+        {
+            "location": "/reference/object/#child", 
+            "text": "child(childName)  Looks for a child named  childName .  Arguments   childName : string. The name of the desired child.   Returns  A child of name  childName , or  null  if there is no such object.", 
+            "title": "child"
+        }, 
+        {
+            "location": "/reference/object/#sibling", 
+            "text": "sibling(siblingName)  Looks for a sibling named  siblingName . Two objects are siblings if they share the same parent.  Arguments   siblingName : string. The name of the desired sibling.   Returns  A sibling of name  siblingName , or  null  if there is no such object.", 
+            "title": "sibling"
+        }, 
+        {
+            "location": "/reference/object/#findchild", 
+            "text": "findChild(childName)  Searches for a descendant (child, grand-child, and so on) named  childName . Since this function traverses the  object tree , it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.  Arguments   childName : string. The name of the desired object.   Returns  A descendant of name  childName , or  null  if there is no such object.  Example  object  TestObject \n{\n    // will search for SomeOtherObject in the Application\n    obj = Application.findChild( SomeOtherObject );\n\n    state  main \n    {\n        if(obj != null)\n            Console.print( Found the object. );\n        else\n            Console.print( Object not found. );\n\n        destroy();\n    }\n}", 
+            "title": "findChild"
+        }, 
+        {
+            "location": "/reference/object/#timeout", 
+            "text": "timeout(seconds)  Checks if the object has been on the same state for more than a given amount of  seconds .  Arguments   seconds : number. The number of seconds.   Returns  Returns  true  if the object has been on the current state for more than  seconds  seconds.  Example  object  Time Test \n{\n    state  main \n    {\n        // Will wait for 2 seconds before changing the state\n        if(timeout(2.0))\n            state =  done ;\n    }\n\n    state  done \n    {\n        Console.print( Done! );\n        destroy();\n    }\n}", 
+            "title": "timeout"
+        }, 
+        {
+            "location": "/reference/object/#tostring", 
+            "text": "toString()  Converts the object to a string. This function is designed to be overloaded by your own objects.  Returns  A string.", 
+            "title": "toString"
+        }, 
+        {
+            "location": "/reference/object/#equals", 
+            "text": "equals(otherObject)  Compares  this  object to  otherObject . This function is designed to be overloaded by your own objects.  Arguments   otherObject : object. An object to compare  this  to.   Returns  Returns  true  if the objects are equal;  false  otherwise.", 
+            "title": "equals"
+        }, 
+        {
+            "location": "/reference/object/#hasfunction", 
+            "text": "hasFunction(functionName)  Checks if the object has a function named  functionName .  Arguments   functionName : string. The name of the function.   Returns  Returns  true  if the object has a function named  functionName .", 
+            "title": "hasFunction"
+        }, 
+        {
+            "location": "/reference/object/#hastag", 
+            "text": "hasFunction(tagName)  Checks if the object has been tagged with  tagName .  Arguments   tagName : string. The name of the tag.   Returns  Returns  true  if the object has been tagged with  tagName .", 
+            "title": "hasTag"
+        }, 
+        {
+            "location": "/reference/system/", 
+            "text": "System\n\n\nThe root object. Used to gather data from the language and to access special objects. It can be accessed by typing \nSystem\n.\n\n\nProperties\n\n\n\n\nversion\n is the version of the language runtime (string).\n\n\ninfo\n tells you information about the SurgeScript runtime (string).\n\n\ntags\n is a reference to the \nTag System\n.\n\n\ngc\n is a reference to the \nGarbage Collector\n.\n\n\nobjectCount\n is the total number of objects at this moment.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\nExample\n\n\n// This utility displays System.info\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(System.info);\n        System.exit();\n    }\n}\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nThe same as \nexit()\n.", 
+            "title": "System"
+        }, 
+        {
+            "location": "/reference/system/#system", 
+            "text": "The root object. Used to gather data from the language and to access special objects. It can be accessed by typing  System .", 
+            "title": "System"
+        }, 
+        {
+            "location": "/reference/system/#properties", 
+            "text": "version  is the version of the language runtime (string).  info  tells you information about the SurgeScript runtime (string).  tags  is a reference to the  Tag System .  gc  is a reference to the  Garbage Collector .  objectCount  is the total number of objects at this moment.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/system/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/system/#exit", 
+            "text": "exit()  Exits the Application.  Example  // This utility displays System.info\nobject  Application \n{\n    state  main \n    {\n        Console.print(System.info);\n        System.exit();\n    }\n}", 
+            "title": "exit"
+        }, 
+        {
+            "location": "/reference/system/#destroy", 
+            "text": "destroy()  The same as  exit() .", 
+            "title": "destroy"
+        }, 
+        {
+            "location": "/reference/transform2d/", 
+            "text": "Transform2D\n\n\nTransform2D encapsulates a 2D Transform. Transform2D comes with neat functions for translating, rotating and scaling things - and it's very useful for games! Whenever you spawn a Transform2D component on your object, it gains a position and a rotation in 2D space.\n\n\nIf an object with a Transform2D component has any children, the transform of the children will be affected by the transform of their parent. For example: if you move the parent object, the children will be moved as well.\n\n\nProperties\n\n\n\n\nxpos\n: number, read-write. The x-position of the object in local coordinates\u00b9.\n\n\nypos\n: number, read-write. The y-position of the object in local coordinates\u00b9.\n\n\nangle\n: number, read-write. The angle specifying the rotation of the object\u00b2.\n\n\nscaleX\n: number, read-write. Scale multiplier in the x-axis - defaults to 1.0.\n\n\nscaleY\n: number, read-write. Scale multiplier in the y-axis - defaults to 1.0.\n\n\nworldX\n: number, read-write. The x-position of the object in world coordinates.\n\n\nworldY\n: number, read-write. The y-position of the object in world coordinates.\n\n\nworldAngle\n: number, read-write. The rotation angle\u00b2 of the object in world coordinates.\n\n\n\n\n\n\nNotes:\n\n\n\u00b9 Local coordinates mean: relative to the parent.\n\n\n\u00b2 Rotation angles should be given in degrees.\n\n\n\n\nFunctions\n\n\ntranslate\n\n\ntranslate(xpos, ypos)\n\n\nMoves the object by (\nxpos\n, \nypos\n).\n\n\nArguments\n\n\n\n\nxpos\n: number.\n\n\nypos\n: number.\n\n\n\n\nrotate\n\n\nrotate(degrees)\n\n\nRotates the object by \ndegrees\n.\n\n\nArguments\n\n\n\n\ndegrees\n: number.\n\n\n\n\nscale\n\n\nscale(x, y)\n\n\nScales the transform by (\nx\n, \ny\n). Both parameters are multipliers that default to 1.0.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\ny\n: number.\n\n\n\n\nlookAt\n\n\nlookAt(transform)\n\n\nUse this function to make your object look at some point in space.\n\n\nArguments\n\n\n\n\ntransform\n: Transform2D object.\n\n\n\n\ndistanceTo\n\n\ndistanceTo(transform)\n\n\nCompute the distance between two points in space.\n\n\nArguments\n\n\n\n\ntransform\n: Transform2D object.\n\n\n\n\nReturns\n\n\nA number representing the distance, in world coordinates, between the position stored by \nthis\n and \ntransform\n.", 
+            "title": "Transform2D"
+        }, 
+        {
+            "location": "/reference/transform2d/#transform2d", 
+            "text": "Transform2D encapsulates a 2D Transform. Transform2D comes with neat functions for translating, rotating and scaling things - and it's very useful for games! Whenever you spawn a Transform2D component on your object, it gains a position and a rotation in 2D space.  If an object with a Transform2D component has any children, the transform of the children will be affected by the transform of their parent. For example: if you move the parent object, the children will be moved as well.", 
+            "title": "Transform2D"
+        }, 
+        {
+            "location": "/reference/transform2d/#properties", 
+            "text": "xpos : number, read-write. The x-position of the object in local coordinates\u00b9.  ypos : number, read-write. The y-position of the object in local coordinates\u00b9.  angle : number, read-write. The angle specifying the rotation of the object\u00b2.  scaleX : number, read-write. Scale multiplier in the x-axis - defaults to 1.0.  scaleY : number, read-write. Scale multiplier in the y-axis - defaults to 1.0.  worldX : number, read-write. The x-position of the object in world coordinates.  worldY : number, read-write. The y-position of the object in world coordinates.  worldAngle : number, read-write. The rotation angle\u00b2 of the object in world coordinates.    Notes:  \u00b9 Local coordinates mean: relative to the parent.  \u00b2 Rotation angles should be given in degrees.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/transform2d/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/transform2d/#translate", 
+            "text": "translate(xpos, ypos)  Moves the object by ( xpos ,  ypos ).  Arguments   xpos : number.  ypos : number.", 
+            "title": "translate"
+        }, 
+        {
+            "location": "/reference/transform2d/#rotate", 
+            "text": "rotate(degrees)  Rotates the object by  degrees .  Arguments   degrees : number.", 
+            "title": "rotate"
+        }, 
+        {
+            "location": "/reference/transform2d/#scale", 
+            "text": "scale(x, y)  Scales the transform by ( x ,  y ). Both parameters are multipliers that default to 1.0.  Arguments   x : number.  y : number.", 
+            "title": "scale"
+        }, 
+        {
+            "location": "/reference/transform2d/#lookat", 
+            "text": "lookAt(transform)  Use this function to make your object look at some point in space.  Arguments   transform : Transform2D object.", 
+            "title": "lookAt"
+        }, 
+        {
+            "location": "/reference/transform2d/#distanceto", 
+            "text": "distanceTo(transform)  Compute the distance between two points in space.  Arguments   transform : Transform2D object.   Returns  A number representing the distance, in world coordinates, between the position stored by  this  and  transform .", 
+            "title": "distanceTo"
+        }, 
+        {
+            "location": "/reference/iterator/", 
+            "text": "Iterator\n\n\nIn SurgeScript, Iterator is an abstract contract, or protocol, that define a set of functions that should be written in concrete implementations. If you're familiar with object oriented programming, Iterator is an interface. Iterators are used to traverse containers / collections / data structures and access its elements.\n\n\nConcrete implementations of Iterator include: \nArrayIterator\n and \nDictionaryIterator\n. If you wish to \nwrite your own iterators\n, you need to specify the \nfunctions described below\n.\n\n\nThe data structure that you wish to traverse should include an \niterator()\n function that spawns the concrete implementation of the Iterator. Thus, the \nparent\n object of the Iterator will be the structure to be traversed.\n\n\nThe basic usage of an Iterator is as follows:\n\n\n// container is an object such as an Array\niterator = container.iterator(); // spawn an iterator to traverse the container\nwhile(iterator.hasNext()) {\n    element = iterator.next();\n    Console.print(element);\n}\n\n\n\n\nFunctions\n\n\nhasNext\n\n\nhasNext()\n\n\nChecks if there are more elements to be accessed in the iteration.\n\n\nReturns\n\n\nReturns \ntrue\n if there are more elements to be visited, or \nfalse\n otherwise.\n\n\nnext\n\n\nnext()\n\n\nGets the next element of the container and advances the iteration.\n\n\nReturns\n\n\nThe next element of the container, or \nnull\n if there is no such element. The first call to \nnext()\n returns the first element of the container, and so on.", 
+            "title": "Iterator"
+        }, 
+        {
+            "location": "/reference/iterator/#iterator", 
+            "text": "In SurgeScript, Iterator is an abstract contract, or protocol, that define a set of functions that should be written in concrete implementations. If you're familiar with object oriented programming, Iterator is an interface. Iterators are used to traverse containers / collections / data structures and access its elements.  Concrete implementations of Iterator include:  ArrayIterator  and  DictionaryIterator . If you wish to  write your own iterators , you need to specify the  functions described below .  The data structure that you wish to traverse should include an  iterator()  function that spawns the concrete implementation of the Iterator. Thus, the  parent  object of the Iterator will be the structure to be traversed.  The basic usage of an Iterator is as follows:  // container is an object such as an Array\niterator = container.iterator(); // spawn an iterator to traverse the container\nwhile(iterator.hasNext()) {\n    element = iterator.next();\n    Console.print(element);\n}", 
+            "title": "Iterator"
+        }, 
+        {
+            "location": "/reference/iterator/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/iterator/#hasnext", 
+            "text": "hasNext()  Checks if there are more elements to be accessed in the iteration.  Returns  Returns  true  if there are more elements to be visited, or  false  otherwise.", 
+            "title": "hasNext"
+        }, 
+        {
+            "location": "/reference/iterator/#next", 
+            "text": "next()  Gets the next element of the container and advances the iteration.  Returns  The next element of the container, or  null  if there is no such element. The first call to  next()  returns the first element of the container, and so on.", 
+            "title": "next"
+        }, 
+        {
+            "location": "/reference/application/", 
+            "text": "Application\n\n\nRepresents the Application. You do not need to instantiate it, as it is instantiated automatically. Object \nApplication\n can be accessed by any other object, in any script.\n\n\nProperties\n\n\n\n\nsession\n is a \nDictionary\n of session variables that persist throughout the entire application.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\ncrash\n\n\ncrash(message)\n\n\nExits the Application with an error message.\n\n\nArguments\n\n\n\n\nmessage\n: string. The message to be displayed to the user.\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nA synonym for \nApplication.exit()\n.", 
+            "title": "Application"
+        }, 
+        {
+            "location": "/reference/application/#application", 
+            "text": "Represents the Application. You do not need to instantiate it, as it is instantiated automatically. Object  Application  can be accessed by any other object, in any script.", 
+            "title": "Application"
+        }, 
+        {
+            "location": "/reference/application/#properties", 
+            "text": "session  is a  Dictionary  of session variables that persist throughout the entire application.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/application/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/application/#exit", 
+            "text": "exit()  Exits the Application.", 
+            "title": "exit"
+        }, 
+        {
+            "location": "/reference/application/#crash", 
+            "text": "crash(message)  Exits the Application with an error message.  Arguments   message : string. The message to be displayed to the user.", 
+            "title": "crash"
+        }, 
+        {
+            "location": "/reference/application/#destroy", 
+            "text": "destroy()  A synonym for  Application.exit() .", 
+            "title": "destroy"
         }
     ]
 }
