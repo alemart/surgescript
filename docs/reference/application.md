@@ -8,8 +8,8 @@ Properties
 
 * `session` is a [`Dictionary`](dictionary) of session variables that persist throughout the entire application.
 
-Methods
--------
+Functions
+---------
 
 #### exit
 

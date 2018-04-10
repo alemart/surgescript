@@ -14,8 +14,8 @@ Properties
 * `__timespent` is the approximate time spent in this object in the last frame (in seconds).
 * `__memspent` is the current memory consumption of this object (in bytes) - not implemented.
 
-Methods
--------
+Functions
+---------
 
 #### spawn
 

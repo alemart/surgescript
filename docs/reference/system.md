@@ -12,8 +12,8 @@ Properties
 * `gc` is a reference to the [Garbage Collector](garbage_collector.md).
 * `objectCount` is the total number of objects at this moment.
 
-Methods
--------
+Functions
+---------
 
 #### exit
 
