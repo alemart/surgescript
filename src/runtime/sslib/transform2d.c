@@ -46,6 +46,7 @@ static surgescript_var_t* fun_distanceto(surgescript_object_t* object, const sur
 
 /* misc */
 static inline surgescript_object_t* target(const surgescript_object_t* object);
+static inline surgescript_object_t* checked_target(const surgescript_object_t* object);
 static void world2localposition(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle, surgescript_objecthandle_t root, float *xpos, float *ypos);
 static inline void worldposition2d(surgescript_object_t* object, float* world_x, float* world_y);
 static inline void setworldposition2d(surgescript_object_t* object, float world_x, float world_y, int flags);
@@ -257,17 +258,20 @@ surgescript_var_t* fun_setworldangle(surgescript_object_t* object, const surgesc
 surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-    surgescript_object_t* looker = target(object);
-    surgescript_object_t* looked = target(surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0])));
-    float looked_x, looked_y, looker_x, looker_y, angle;
+    surgescript_object_t* looked = checked_target(surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0])));
 
-    worldposition2d(looker, &looker_x, &looker_y);
-    worldposition2d(looked, &looked_x, &looked_y);
+    if(looked != NULL) {
+        surgescript_object_t* looker = target(object);
+        float looked_x, looked_y, looker_x, looker_y, angle;
 
-    errno = 0;
-    angle = atan2f(looked_y - looker_y, looked_x - looker_x);
-    if(errno == 0)
-        setworldangle2d(looker, angle * RAD2DEG);
+        worldposition2d(looker, &looker_x, &looker_y);
+        worldposition2d(looked, &looked_x, &looked_y);
+
+        errno = 0;
+        angle = atan2f(looked_y - looker_y, looked_x - looker_x);
+        if(errno == 0)
+            setworldangle2d(looker, angle * RAD2DEG);
+    }
 
     return NULL;
 }
@@ -276,15 +280,20 @@ surgescript_var_t* fun_lookat(surgescript_object_t* object, const surgescript_va
 surgescript_var_t* fun_distanceto(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-    surgescript_object_t* src = target(object);
-    surgescript_object_t* dst = target(surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0])));
-    float dst_x, dst_y, src_x, src_y, distance2;
+    surgescript_object_t* dst = checked_target(surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(param[0])));
 
-    worldposition2d(src, &src_x, &src_y);
-    worldposition2d(dst, &dst_x, &dst_y);
-    distance2 = (dst_x - src_x) * (dst_x - src_x) + (dst_y - src_y) * (dst_y - src_y);
+    if(dst != NULL) {
+        surgescript_object_t* src = target(object);
+        float dst_x, dst_y, src_x, src_y, distance2;
 
-    return surgescript_var_set_number(surgescript_var_create(), sqrt(distance2));
+        worldposition2d(src, &src_x, &src_y);
+        worldposition2d(dst, &dst_x, &dst_y);
+        distance2 = (dst_x - src_x) * (dst_x - src_x) + (dst_y - src_y) * (dst_y - src_y);
+
+        return surgescript_var_set_number(surgescript_var_create(), sqrt(distance2));
+    }
+
+    return NULL;
 }
 
 
@@ -298,6 +307,17 @@ surgescript_object_t* target(const surgescript_object_t* object)
         surgescript_object_manager(object),
         surgescript_object_parent(object)
     );
+}
+
+/* will check if the given object is a Transform2D and return its target object */
+surgescript_object_t* checked_target(const surgescript_object_t* object)
+{
+    const char* name = surgescript_object_name(object);
+
+    if(strcmp(name, "Transform2D") != 0)
+        return NULL;
+        
+    return target(object);
 }
 
 /* this will help compute the local position, recursively, of an object given its world position */
