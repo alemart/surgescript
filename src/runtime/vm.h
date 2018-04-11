@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017, 2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/vm.h
  * SurgeScript Virtual Machine for the Runtime Engine
@@ -20,6 +20,7 @@
 
 /* types */
 typedef struct surgescript_vm_t surgescript_vm_t;
+struct surgescript_vmargs_t;
 struct surgescript_parser_t;
 
 /* api */
@@ -33,6 +34,7 @@ bool surgescript_vm_compile_code_in_memory(surgescript_vm_t* vm, const char* cod
 /* VM lifecycle */
 bool surgescript_vm_is_active(surgescript_vm_t* vm); /* is the vm active? */
 void surgescript_vm_launch(surgescript_vm_t* vm); /* boots up the vm */
+void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv); /* boots up the vm with command line arguments */
 void surgescript_vm_terminate(surgescript_vm_t* vm); /* terminates the vm */
 bool surgescript_vm_update(surgescript_vm_t* vm); /* updates the vm */
 bool surgescript_vm_update_ex(surgescript_vm_t* vm, void* user_data, void (*user_update)(surgescript_object_t*,void*), void (*late_update)(surgescript_object_t*,void*)); /* updates the vm and allows more callbacks */
@@ -42,6 +44,7 @@ surgescript_programpool_t* surgescript_vm_programpool(const surgescript_vm_t* vm
 surgescript_tagsystem_t* surgescript_vm_tagsystem(const surgescript_vm_t* vm); /* gets the tag system */
 surgescript_objectmanager_t* surgescript_vm_objectmanager(const surgescript_vm_t* vm); /* gets the object manager */
 struct surgescript_parser_t* surgescript_vm_parser(const surgescript_vm_t* vm); /* gets the parser */
+struct surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm); /* gets the command-line arguments */
 
 /* utilities */
 surgescript_object_t* surgescript_vm_root_object(surgescript_vm_t* vm); /* root object */

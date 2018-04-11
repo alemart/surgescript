@@ -19,6 +19,9 @@
 #include "../util/util.h"
 
 /* types */
+typedef struct surgescript_vmargs_t surgescript_vmargs_t;
+
+/* object manager */
 struct surgescript_objectmanager_t
 {
     int count; /* how many objects are allocated at the moment */
@@ -27,6 +30,7 @@ struct surgescript_objectmanager_t
     surgescript_programpool_t* program_pool; /* reference to the program pool */
     surgescript_stack_t* stack; /* reference to the stack */
     surgescript_tagsystem_t* tag_system; /* tag system */
+    surgescript_vmargs_t* args; /* VM command-line arguments (NULL-terminated array) */
     SSARRAY(surgescript_objecthandle_t, objects_to_be_scanned); /* garbage collection */
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
@@ -74,7 +78,7 @@ static surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr);
  * surgescript_objectmanager_create()
  * Creates a new object manager
  */
-surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_programpool_t* program_pool, surgescript_tagsystem_t* tag_system, surgescript_stack_t* stack)
+surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_programpool_t* program_pool, surgescript_tagsystem_t* tag_system, surgescript_stack_t* stack, surgescript_vmargs_t* args)
 {
     surgescript_objectmanager_t* manager = ssmalloc(sizeof *manager);
 
@@ -85,6 +89,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     manager->program_pool = program_pool;
     manager->tag_system = tag_system;
     manager->stack = stack;
+    manager->args = args;
     manager->handle_ptr = ROOT_HANDLE;
 
     ssarray_init(manager->objects_to_be_scanned);
@@ -287,6 +292,15 @@ surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescri
 surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_objectmanager_t* manager)
 {
     return manager->tag_system;
+}
+
+/*
+ * surgescript_objectmanager_vmargs()
+ * VM command-line arguments
+ */
+surgescript_vmargs_t* surgescript_objectmanager_vmargs(const surgescript_objectmanager_t* manager)
+{
+    return manager->args;
 }
 
 /*

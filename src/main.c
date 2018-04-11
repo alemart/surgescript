@@ -29,7 +29,7 @@ int main(int argc, char* argv[])
         surgescript_vm_compile(vm, file);
 
         /* run the VM */
-        surgescript_vm_launch(vm);
+        surgescript_vm_launch_ex(vm, argc, argv);
         while(surgescript_vm_update(vm)) {
             ;
         }

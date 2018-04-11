@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/sslib/application.c
  * SurgeScript standard library: routines for the Application object
@@ -19,6 +19,7 @@ static surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescri
 static surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getsession(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getargs(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -31,6 +32,7 @@ void surgescript_sslib_register_application(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Application", "crash", fun_crash, 1);
     surgescript_vm_bind(vm, "Application", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
     surgescript_vm_bind(vm, "Application", "getSession", fun_getsession, 0);
+    surgescript_vm_bind(vm, "Application", "getArgs", fun_getargs, 0);
 }
 
 
@@ -98,4 +100,20 @@ surgescript_var_t* fun_getsession(surgescript_object_t* object, const surgescrip
 
     /* done! */
     return surgescript_var_set_objecthandle(surgescript_var_create(), session);
+}
+
+/* command line arguments */
+surgescript_var_t* fun_getargs(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t this_handle = surgescript_object_handle(object);
+    surgescript_objecthandle_t args_handle = surgescript_object_child(object, "Arguments");
+    surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
+
+    /* lazy spawn */
+    if(args_handle == null_handle)
+        args_handle = surgescript_objectmanager_spawn(manager, this_handle, "Arguments", NULL);
+
+    /* done! */
+    return surgescript_var_set_objecthandle(surgescript_var_create(), args_handle);
 }

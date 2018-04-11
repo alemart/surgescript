@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A lightweight programming language for computer games and interactive apps
- * Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * runtime/vm.c
  * SurgeScript Virtual Machine for the Runtime Engine
@@ -25,6 +25,16 @@ struct surgescript_vm_updater_t {
     void (*late_update)(surgescript_object_t*,void*); /* runs immediately after surgescript_object_update() */
 };
 
+/* VM command-line arguments */
+typedef struct surgescript_vmargs_t surgescript_vmargs_t;
+struct surgescript_vmargs_t {
+    char** data; /* NULL-terminated string; must be the 1st element */
+};
+
+static surgescript_vmargs_t* surgescript_vmargs_create();
+static surgescript_vmargs_t* surgescript_vmargs_destroy(surgescript_vmargs_t* args);
+static surgescript_vmargs_t* surgescript_vmargs_configure(surgescript_vmargs_t* args, int argc, char** argv);
+
 
 /* VM */
 struct surgescript_vm_t
@@ -34,6 +44,7 @@ struct surgescript_vm_t
     surgescript_tagsystem_t* tag_system;
     surgescript_objectmanager_t* object_manager;
     surgescript_parser_t* parser;
+    surgescript_vmargs_t* args;
     float start_time;
 };
 
@@ -62,7 +73,8 @@ surgescript_vm_t* surgescript_vm_create()
     vm->stack = surgescript_stack_create();
     vm->program_pool = surgescript_programpool_create();
     vm->tag_system = surgescript_tagsystem_create();
-    vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->tag_system, vm->stack);
+    vm->args = surgescript_vmargs_create();
+    vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->tag_system, vm->stack, vm->args);
     vm->parser = surgescript_parser_create(vm->program_pool, vm->tag_system);
 
     /* load the SurgeScript library */
@@ -79,6 +91,7 @@ surgescript_vm_t* surgescript_vm_create()
     surgescript_sslib_register_transform2d(vm);
     surgescript_sslib_register_tagsystem(vm);
     surgescript_sslib_register_console(vm);
+    surgescript_sslib_register_arguments(vm);
     surgescript_sslib_register_application(vm);
     surgescript_sslib_register_system(vm);
 
@@ -95,6 +108,7 @@ surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
     sslog("Shutting down the VM...");
     surgescript_parser_destroy(vm->parser);
     surgescript_objectmanager_destroy(vm->object_manager);
+    surgescript_vmargs_destroy(vm->args);
     surgescript_tagsystem_destroy(vm->tag_system);
     surgescript_programpool_destroy(vm->program_pool);
     surgescript_stack_destroy(vm->stack);
@@ -128,8 +142,20 @@ bool surgescript_vm_compile_code_in_memory(surgescript_vm_t* vm, const char* cod
  */
 void surgescript_vm_launch(surgescript_vm_t* vm)
 {
+    surgescript_vm_launch_ex(vm, 0, NULL);
+}
+
+/*
+ * surgescript_vm_launch_ex()
+ * Boots up the vm with command line arguments
+ */
+void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
+{
     /* SurgeScript uses UTF-8 */
     setlocale(LC_ALL, "en_US.UTF-8");
+
+    /* Setup the command line arguments */
+    surgescript_vmargs_configure(vm->args, argc, argv);
 
     /* Create the root object */
     surgescript_objectmanager_spawn_root(vm->object_manager);
@@ -234,6 +260,15 @@ surgescript_parser_t* surgescript_vm_parser(const surgescript_vm_t* vm)
 }
 
 /*
+ * surgescript_vm_args()
+ * Gets the command-line arguments
+ */
+surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm)
+{
+    return vm->args;
+}
+
+/*
  * surgescript_vm_root_object()
  * Gets the root object
  */
@@ -305,4 +340,40 @@ bool call_updater3(surgescript_object_t* object, void* updater)
     update_children = surgescript_object_update(object);
     vm_updater->late_update(object, vm_updater->user_data);
     return update_children;
+}
+
+/* VM command-line arguments */
+surgescript_vmargs_t* surgescript_vmargs_create()
+{
+    surgescript_vmargs_t* args = ssmalloc(sizeof *args);
+    args->data = NULL;
+    return args;
+}
+
+surgescript_vmargs_t* surgescript_vmargs_configure(surgescript_vmargs_t* args, int argc, char** argv)
+{
+    /* delete existing data */
+    if(args->data != NULL) {
+        for(char** it = args->data; *it != NULL; it++)
+            ssfree(*it);
+        ssfree(args->data);
+        args->data = NULL;
+    }
+
+    /* set up the new data */
+    if(argc >= 0) {
+        args->data = ssmalloc((1 + argc) * sizeof(*(args->data)));
+        args->data[argc] = NULL;
+        while(argc--)
+            args->data[argc] = ssstrdup(argv[argc]);
+    }
+
+    /* done! */
+    return args;
+}
+
+surgescript_vmargs_t* surgescript_vmargs_destroy(surgescript_vmargs_t* args)
+{
+    surgescript_vmargs_configure(args, -1, NULL);
+    return ssfree(args);
 }

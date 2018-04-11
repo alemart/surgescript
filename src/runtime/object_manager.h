@@ -21,12 +21,13 @@ struct surgescript_object_t;
 struct surgescript_programpool_t;
 struct surgescript_stack_t;
 struct surgescript_tagsystem_t;
+struct surgescript_vmargs_t;
 
 
 /* public methods */
 
 /* life-cycle */
-surgescript_objectmanager_t* surgescript_objectmanager_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system, struct surgescript_stack_t* stack);
+surgescript_objectmanager_t* surgescript_objectmanager_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system, struct surgescript_stack_t* stack, struct surgescript_vmargs_t* args);
 surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objectmanager_t* manager);
 
 /* operations */
@@ -40,6 +41,7 @@ int surgescript_objectmanager_count(const surgescript_objectmanager_t* manager);
 /* components */
 struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */
 struct surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_objectmanager_t* manager); /* pointer to the tag manager */
+struct surgescript_vmargs_t* surgescript_objectmanager_vmargs(const surgescript_objectmanager_t* manager); /* VM command-line arguments */
 
 /* garbage collector */
 void surgescript_objectmanager_garbagecheck(surgescript_objectmanager_t* manager); /* checks for garbage (incrementally) */
