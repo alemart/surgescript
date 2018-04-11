@@ -21,6 +21,7 @@ static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescrip
 static surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getdata(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_option(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* misc */
 static void populate_data_array(surgescript_object_t* array, struct surgescript_vmargs_t* args);
@@ -33,13 +34,14 @@ static const surgescript_heapptr_t DATA_ARRAY = 0;
  */
 void surgescript_sslib_register_arguments(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Arguments", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Arguments", "state:main", fun_main, 0);
+    surgescript_vm_bind(vm, "Arguments", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Arguments", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
+    surgescript_vm_bind(vm, "Arguments", "get__data", fun_getdata, 0);
     surgescript_vm_bind(vm, "Arguments", "get", fun_get, 1);
     surgescript_vm_bind(vm, "Arguments", "getLength", fun_getlength, 0);
-    surgescript_vm_bind(vm, "Arguments", "getData", fun_getdata, 0);
     surgescript_vm_bind(vm, "Arguments", "iterator", fun_iterator, 0);
+    surgescript_vm_bind(vm, "Arguments", "option", fun_option, 1);
 }
 
 
@@ -77,10 +79,10 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const surgescript_var_t* p[] = { param[0] };
-    surgescript_var_t* argument = surgescript_var_create();
+    surgescript_var_t* value = surgescript_var_create();
     surgescript_object_t* data_array = get_data_array(object);
-    surgescript_object_call_function(data_array, "get", p, 1, argument);
-    return argument;
+    surgescript_object_call_function(data_array, "get", p, 1, value);
+    return value;
 }
 
 /* how many arguments? */
@@ -105,6 +107,30 @@ surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_
     surgescript_var_t* value = surgescript_var_create();
     surgescript_object_t* data_array = get_data_array(object);
     surgescript_object_call_function(data_array, "iterator", NULL, 0, value);
+    return value;
+}
+
+/* retrieves the value of a command-line option */
+surgescript_var_t* fun_option(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const surgescript_var_t* p[] = { param[0] };
+    surgescript_var_t* value = surgescript_var_create();
+    surgescript_object_t* data_array = get_data_array(object);
+    surgescript_object_call_function(data_array, "indexOf", p, 1, value); /* searches the option */
+
+    if(surgescript_var_get_number(value) >= 0) {
+        /* the required option has been found */
+        surgescript_var_t* index = surgescript_var_create();
+        const surgescript_var_t* q[] = { index };
+        surgescript_var_set_number(index, 1 + surgescript_var_get_number(value));
+        surgescript_object_call_function(data_array, "get", q, 1, value);
+        surgescript_var_destroy(index);
+    }
+    else {
+        /* option not found */
+        surgescript_var_set_null(value);
+    }
+
     return value;
 }
 
