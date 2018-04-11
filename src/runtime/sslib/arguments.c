@@ -23,6 +23,7 @@ static surgescript_var_t* fun_getlength(surgescript_object_t* object, const surg
 static surgescript_var_t* fun_getdata(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_option(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_hasoption(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* misc */
 static void populate_data_array(surgescript_object_t* array, struct surgescript_vmargs_t* args);
@@ -44,6 +45,7 @@ void surgescript_sslib_register_arguments(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Arguments", "getLength", fun_getlength, 0);
     surgescript_vm_bind(vm, "Arguments", "iterator", fun_iterator, 0);
     surgescript_vm_bind(vm, "Arguments", "option", fun_option, 1);
+    surgescript_vm_bind(vm, "Arguments", "hasOption", fun_hasoption, 1);
 }
 
 
@@ -145,6 +147,16 @@ surgescript_var_t* fun_option(surgescript_object_t* object, const surgescript_va
     return value;
 }
 
+/* checks if a command-line option has been specified */
+surgescript_var_t* fun_hasoption(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const surgescript_var_t* p[] = { param[0] };
+    surgescript_var_t* value = surgescript_var_create();
+    surgescript_object_t* data_array = get_data_array(object);
+    surgescript_object_call_function(data_array, "indexOf", p, 1, value);
+    bool has_option = (surgescript_var_get_number(value) >= 0);
+    return surgescript_var_set_bool(value, has_option);
+}
 
 
 
