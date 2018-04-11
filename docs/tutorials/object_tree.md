@@ -82,12 +82,12 @@ Function / property|Description
 *obj.parent* (read-only) | The parent object
 *obj.childCount* (read-only) | Number of immediate children
 *obj.child(name)* | Gets a child object named *name*
-*obj.findChild(name)* | Finds\* a descendant named *name*
+*obj.findObject(name)* | Finds\* a descendant named *name*
 *obj.sibling(name)* | Gets a sibling\*\* named *name*
 
 > **Notes:**
 >
-> \* findChild() may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.
+> \* findObject() may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.
 >
 > \*\* We say that two distinct objects are siblings if they share the same parent.
 

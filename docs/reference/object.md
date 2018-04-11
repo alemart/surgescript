@@ -65,19 +65,19 @@ Looks for a sibling named `siblingName`. Two objects are siblings if they share 
 
 A sibling of name `siblingName`, or `null` if there is no such object.
 
-#### findChild
+#### findObject
 
-`findChild(childName)`
+`findObject(objectName)`
 
-Searches for a descendant (child, grand-child, and so on) named `childName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Searches for a descendant (child, grand-child, and so on) named `objectName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
 
 *Arguments*
 
-* `childName`: string. The name of the desired object.
+* `objectName`: string. The name of the desired object.
 
 *Returns*
 
-A descendant of name `childName`, or `null` if there is no such object.
+A descendant named `objectName`, or `null` if there is no such object.
 
 *Example*
 
@@ -85,7 +85,7 @@ A descendant of name `childName`, or `null` if there is no such object.
 object "TestObject"
 {
     // will search for SomeOtherObject in the Application
-    obj = Application.findChild("SomeOtherObject");
+    obj = Application.findObject("SomeOtherObject");
 
     state "main"
     {

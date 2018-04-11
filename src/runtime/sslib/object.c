@@ -23,7 +23,7 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_findobject(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_timeout(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_functions(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -47,7 +47,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "getParent", fun_parent, 0);
     surgescript_vm_bind(vm, "Object", "getChildCount", fun_childcount, 0);
     surgescript_vm_bind(vm, "Object", "child", fun_child, 1);
-    surgescript_vm_bind(vm, "Object", "findChild", fun_findchild, 1);
+    surgescript_vm_bind(vm, "Object", "findObject", fun_findobject, 1);
     surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Object", "equals", fun_equals, 1);
@@ -96,8 +96,8 @@ surgescript_var_t* fun_sibling(surgescript_object_t* object, const surgescript_v
     return surgescript_var_set_objecthandle(surgescript_var_create(), sibling);
 }
 
-/* finds a child (or grand-child, or grand-grand-child, and so on) named param[0] */
-surgescript_var_t* fun_findchild(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+/* finds a descendant (child, or grand-child, or grand-grand-child, and so on) named param[0] */
+surgescript_var_t* fun_findobject(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* name = surgescript_var_fast_get_string(param[0]);
     surgescript_objecthandle_t child = surgescript_object_find_child(object, name);

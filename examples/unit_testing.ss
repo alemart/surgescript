@@ -175,9 +175,9 @@ object "SurgeScriptTest"
         test(this.toString() == "[object]") || fail(5);
         test(this.hasFunction("objects")) || fail(6);
         test(!this.hasFunction("nope")) || fail(7);
-        test(findChild("nope") == null) || fail(8);
+        test(findObject("nope") == null) || fail(8);
         test((c = spawn("Boolean"), c != null && child("Boolean") == c)) || fail(9);
-        test((d = spawn("Number"), d != null && d == findChild("Number"))) || fail(10);
+        test((d = spawn("Number"), d != null && d == findObject("Number"))) || fail(10);
         test(typeof null == "null") || fail(11);
         test(!this.equals(Application) && this.equals(this)) || fail(12);
         end();
