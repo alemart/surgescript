@@ -102,7 +102,7 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
     surgescript_heapptr_t length_addr = surgescript_heap_malloc(heap);
     surgescript_var_set_number(surgescript_heap_at(heap, length_addr), 0);
     ssassert(length_addr == LENGTH_ADDR);
-    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
+    return NULL;
 }
 
 /* destructor */

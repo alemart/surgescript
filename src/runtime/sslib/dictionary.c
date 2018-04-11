@@ -588,7 +588,7 @@ surgescript_var_t* fun_bst_constructor(surgescript_object_t* object, const surge
     surgescript_var_set_objecthandle(surgescript_heap_at(heap, BST_LEFT), null_handle);
     surgescript_var_set_objecthandle(surgescript_heap_at(heap, BST_RIGHT), null_handle);
 
-    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
+    return NULL;
 }
 
 /* main state */

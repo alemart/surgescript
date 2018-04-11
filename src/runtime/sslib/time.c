@@ -59,7 +59,7 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
     surgescript_var_set_number(surgescript_heap_at(heap, DELTA_ADDR), 0.016f);
     surgescript_var_set_number(surgescript_heap_at(heap, START_ADDR), surgescript_util_gettickcount() * 0.001f);
 
-    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
+    return NULL;
 }
 
 /* main state */

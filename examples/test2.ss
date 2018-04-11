@@ -24,6 +24,8 @@ object "Application"
     fun test()
     {
         Console.print(Application.args);
+        Console.print(Application.args.__data);
+        Console.print(Application.args.option('--level') || 88);
     }
 
 

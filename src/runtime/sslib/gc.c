@@ -58,7 +58,7 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
     surgescript_var_set_number(surgescript_heap_at(heap, INTERVAL_ADDR), DEFAULT_GC_INTERVAL);
     surgescript_var_set_number(surgescript_heap_at(heap, LASTCOLLECT_ADDR), now);
 
-    return surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
+    return NULL;
 }
 
 /* main state */
