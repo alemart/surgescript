@@ -392,7 +392,7 @@
         }, 
         {
             "location": "/reference/application/", 
-            "text": "Application\n\n\nRepresents the Application. You do not need to instantiate it, as it is instantiated automatically. Object \nApplication\n can be accessed by any other object, in any script.\n\n\nProperties\n\n\n\n\nsession\n is a \nDictionary\n of session variables that persist throughout the entire application.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\ncrash\n\n\ncrash(message)\n\n\nExits the Application with an error message.\n\n\nArguments\n\n\n\n\nmessage\n: string. The message to be displayed to the user.\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nA synonym for \nApplication.exit()\n.", 
+            "text": "Application\n\n\nRepresents the Application. You do not need to instantiate it, as it is instantiated automatically. Object \nApplication\n can be accessed by any other object, in any script.\n\n\nProperties\n\n\n\n\nsession\n: \nSession\n object. Session variables that persist throughout the entire application.\n\n\nargs\n: \nArguments\n object. Use it to read command-line arguments.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\ncrash\n\n\ncrash(message)\n\n\nExits the Application with an error message.\n\n\nArguments\n\n\n\n\nmessage\n: string. The message to be displayed to the user.\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nA synonym for \nApplication.exit()\n.", 
             "title": "Application"
         }, 
         {
@@ -402,7 +402,7 @@
         }, 
         {
             "location": "/reference/application/#properties", 
-            "text": "session  is a  Dictionary  of session variables that persist throughout the entire application.", 
+            "text": "session :  Session  object. Session variables that persist throughout the entire application.  args :  Arguments  object. Use it to read command-line arguments.", 
             "title": "Properties"
         }, 
         {
@@ -424,6 +424,76 @@
             "location": "/reference/application/#destroy", 
             "text": "destroy()  A synonym for  Application.exit() .", 
             "title": "destroy"
+        }, 
+        {
+            "location": "/reference/arguments/", 
+            "text": "Arguments\n\n\nIf you've launched your application via the command-line, this Array-like object can be used to read command-line arguments. This is available at \nApplication.args\n.\n\n\nThe example below prints all the arguments to the screen:\n\n\n// Method 1 (foreach)\nforeach(argument in Application.args)\n    Console.print(argument);\n\n// Method 2 (for loops)\nfor(i = 0; i \n Application.args.length; i++)\n    Console.print(Application.args[i]);\n\n// Or, alternatively:\nConsole.print(Application.args);\n\n\n\n\nProperties\n\n\n\n\nlength\n: number. The number of command-line arguments, including the executable.\n\n\n__data\n: \nArray\n object. Internal representation of the command-line arguments.\n\n\n\n\nFunctions\n\n\nget\n\n\nget(index)\n\n\nGets the specified command-line argument. Instead of calling \nget()\n, one may use equivalently the \n[ ]\n operator.\n\n\nArguments\n\n\n\n\nindex\n: integer number between 0 and \nApplication.args.length - 1\n, inclusive.\n\n\n\n\nReturns\n\n\nA string with the specified command-line argument, or \nnull\n if there is no such argument.\n\n\nExample\n\n\n// Suppose that you run surgescript via the command-line:\n// surgescript test_args.ss\nexecutable = Application.args[0]; // \nsurgescript\n\nscript_file = Application.args[1]; // \ntest_args.ss\n\n\n\n\n\noption\n\n\noption(optionName)\n\n\nGets the value of a certain command-line option.\n\n\nArguments\n\n\n\n\noptionName\n: string. The option you want to read.\n\n\n\n\nReturns\n\n\nA string featuring the value of the desired command-line option, or \nnull\n if such an option hasn't been provided by the user.\n\n\nExample\n\n\n// Suppose that you run surgescript via the command-line:\n// surgescript test_args.ss --my-option 12345\nmy_option = Application.args.option(\n--my-option\n);\n\n// Options -p and --port are equivalent\n// surgescript test_args.ss -p 80\n// surgescript test_args.ss --port 80\nport = Application.args.option(\n--port\n) || Application.args.option(\n-p\n);\n\n// Default values (useful if the option is not present)\n// surgescript test_args.ss\n// surgescript test_args.ss --name alice\nname = Application.args.option(\n--name\n) || \nanonymous\n;\n\n\n\n\nhasOption\n\n\nhasOption(optionName)\n\n\nChecks if the specified option is present in the command-line.\n\n\nArguments\n\n\n\n\noptionName\n: string.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified option is present in the command-line; or \nfalse\n otherwise.\n\n\niterator\n\n\niterator()\n\n\nSpawns an iterator.\n\n\nReturns\n\n\nAn iterator to loop through the command-line arguments.\n\n\ntoString\n\n\ntoString()\n\n\nConverts the command-line arguments to a string.\n\n\nReturns\n\n\nA string featuring the command-line arguments.", 
+            "title": "Arguments"
+        }, 
+        {
+            "location": "/reference/arguments/#arguments", 
+            "text": "If you've launched your application via the command-line, this Array-like object can be used to read command-line arguments. This is available at  Application.args .  The example below prints all the arguments to the screen:  // Method 1 (foreach)\nforeach(argument in Application.args)\n    Console.print(argument);\n\n// Method 2 (for loops)\nfor(i = 0; i   Application.args.length; i++)\n    Console.print(Application.args[i]);\n\n// Or, alternatively:\nConsole.print(Application.args);", 
+            "title": "Arguments"
+        }, 
+        {
+            "location": "/reference/arguments/#properties", 
+            "text": "length : number. The number of command-line arguments, including the executable.  __data :  Array  object. Internal representation of the command-line arguments.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/arguments/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/arguments/#get", 
+            "text": "get(index)  Gets the specified command-line argument. Instead of calling  get() , one may use equivalently the  [ ]  operator.  Arguments   index : integer number between 0 and  Application.args.length - 1 , inclusive.   Returns  A string with the specified command-line argument, or  null  if there is no such argument.  Example  // Suppose that you run surgescript via the command-line:\n// surgescript test_args.ss\nexecutable = Application.args[0]; //  surgescript \nscript_file = Application.args[1]; //  test_args.ss", 
+            "title": "get"
+        }, 
+        {
+            "location": "/reference/arguments/#option", 
+            "text": "option(optionName)  Gets the value of a certain command-line option.  Arguments   optionName : string. The option you want to read.   Returns  A string featuring the value of the desired command-line option, or  null  if such an option hasn't been provided by the user.  Example  // Suppose that you run surgescript via the command-line:\n// surgescript test_args.ss --my-option 12345\nmy_option = Application.args.option( --my-option );\n\n// Options -p and --port are equivalent\n// surgescript test_args.ss -p 80\n// surgescript test_args.ss --port 80\nport = Application.args.option( --port ) || Application.args.option( -p );\n\n// Default values (useful if the option is not present)\n// surgescript test_args.ss\n// surgescript test_args.ss --name alice\nname = Application.args.option( --name ) ||  anonymous ;", 
+            "title": "option"
+        }, 
+        {
+            "location": "/reference/arguments/#hasoption", 
+            "text": "hasOption(optionName)  Checks if the specified option is present in the command-line.  Arguments   optionName : string.   Returns  Returns  true  if the specified option is present in the command-line; or  false  otherwise.", 
+            "title": "hasOption"
+        }, 
+        {
+            "location": "/reference/arguments/#iterator", 
+            "text": "iterator()  Spawns an iterator.  Returns  An iterator to loop through the command-line arguments.", 
+            "title": "iterator"
+        }, 
+        {
+            "location": "/reference/arguments/#tostring", 
+            "text": "toString()  Converts the command-line arguments to a string.  Returns  A string featuring the command-line arguments.", 
+            "title": "toString"
+        }, 
+        {
+            "location": "/reference/iterator/", 
+            "text": "Iterator\n\n\nIn SurgeScript, Iterator is an abstract contract, or protocol, that define a set of functions that should be written in concrete implementations. If you're familiar with object oriented programming, Iterator is an interface. Iterators are used to traverse containers / collections / data structures and access its elements.\n\n\nConcrete implementations of Iterator include: \nArrayIterator\n and \nDictionaryIterator\n. If you wish to \nwrite your own iterators\n, you need to specify the \nfunctions described below\n.\n\n\nThe data structure that you wish to traverse should include an \niterator()\n function that spawns the concrete implementation of the Iterator. Thus, the \nparent\n object of the Iterator will be the structure to be traversed.\n\n\nThe basic usage of an Iterator is as follows:\n\n\n// container is an object such as an Array\niterator = container.iterator(); // spawn an iterator to traverse the container\nwhile(iterator.hasNext()) {\n    element = iterator.next();\n    Console.print(element);\n}\n\n\n\n\nFunctions\n\n\nhasNext\n\n\nhasNext()\n\n\nChecks if there are more elements to be accessed in the iteration.\n\n\nReturns\n\n\nReturns \ntrue\n if there are more elements to be visited, or \nfalse\n otherwise.\n\n\nnext\n\n\nnext()\n\n\nGets the next element of the container and advances the iteration.\n\n\nReturns\n\n\nThe next element of the container, or \nnull\n if there is no such element. The first call to \nnext()\n returns the first element of the container, and so on.", 
+            "title": "Iterator"
+        }, 
+        {
+            "location": "/reference/iterator/#iterator", 
+            "text": "In SurgeScript, Iterator is an abstract contract, or protocol, that define a set of functions that should be written in concrete implementations. If you're familiar with object oriented programming, Iterator is an interface. Iterators are used to traverse containers / collections / data structures and access its elements.  Concrete implementations of Iterator include:  ArrayIterator  and  DictionaryIterator . If you wish to  write your own iterators , you need to specify the  functions described below .  The data structure that you wish to traverse should include an  iterator()  function that spawns the concrete implementation of the Iterator. Thus, the  parent  object of the Iterator will be the structure to be traversed.  The basic usage of an Iterator is as follows:  // container is an object such as an Array\niterator = container.iterator(); // spawn an iterator to traverse the container\nwhile(iterator.hasNext()) {\n    element = iterator.next();\n    Console.print(element);\n}", 
+            "title": "Iterator"
+        }, 
+        {
+            "location": "/reference/iterator/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/iterator/#hasnext", 
+            "text": "hasNext()  Checks if there are more elements to be accessed in the iteration.  Returns  Returns  true  if there are more elements to be visited, or  false  otherwise.", 
+            "title": "hasNext"
+        }, 
+        {
+            "location": "/reference/iterator/#next", 
+            "text": "next()  Gets the next element of the container and advances the iteration.  Returns  The next element of the container, or  null  if there is no such element. The first call to  next()  returns the first element of the container, and so on.", 
+            "title": "next"
         }, 
         {
             "location": "/reference/object/", 
@@ -496,36 +566,6 @@
             "title": "hasTag"
         }, 
         {
-            "location": "/reference/system/", 
-            "text": "System\n\n\nThe root object. Used to gather data from the language and to access special objects. It can be accessed by typing \nSystem\n.\n\n\nProperties\n\n\n\n\nversion\n is the version of the language runtime (string).\n\n\ninfo\n tells you information about the SurgeScript runtime (string).\n\n\ntags\n is a reference to the \nTag System\n.\n\n\ngc\n is a reference to the \nGarbage Collector\n.\n\n\nobjectCount\n is the total number of objects at this moment.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\nExample\n\n\n// This utility displays System.info\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(System.info);\n        System.exit();\n    }\n}\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nThe same as \nexit()\n.", 
-            "title": "System"
-        }, 
-        {
-            "location": "/reference/system/#system", 
-            "text": "The root object. Used to gather data from the language and to access special objects. It can be accessed by typing  System .", 
-            "title": "System"
-        }, 
-        {
-            "location": "/reference/system/#properties", 
-            "text": "version  is the version of the language runtime (string).  info  tells you information about the SurgeScript runtime (string).  tags  is a reference to the  Tag System .  gc  is a reference to the  Garbage Collector .  objectCount  is the total number of objects at this moment.", 
-            "title": "Properties"
-        }, 
-        {
-            "location": "/reference/system/#functions", 
-            "text": "", 
-            "title": "Functions"
-        }, 
-        {
-            "location": "/reference/system/#exit", 
-            "text": "exit()  Exits the Application.  Example  // This utility displays System.info\nobject  Application \n{\n    state  main \n    {\n        Console.print(System.info);\n        System.exit();\n    }\n}", 
-            "title": "exit"
-        }, 
-        {
-            "location": "/reference/system/#destroy", 
-            "text": "destroy()  The same as  exit() .", 
-            "title": "destroy"
-        }, 
-        {
             "location": "/reference/transform2d/", 
             "text": "Transform2D\n\n\nTransform2D encapsulates a 2D Transform. Transform2D comes with neat functions for translating, rotating and scaling things - and it's very useful for games! Whenever you spawn a Transform2D component on your object, it gains a position and a rotation in 2D space.\n\n\nIf an object with a Transform2D component has any children, the transform of the children will be affected by the transform of their parent. For example: if you move the parent object, the children will be moved as well.\n\n\nProperties\n\n\n\n\nxpos\n: number, read-write. The x-position of the object in local coordinates\u00b9.\n\n\nypos\n: number, read-write. The y-position of the object in local coordinates\u00b9.\n\n\nangle\n: number, read-write. The angle specifying the rotation of the object\u00b2.\n\n\nscaleX\n: number, read-write. Scale multiplier in the x-axis - defaults to 1.0.\n\n\nscaleY\n: number, read-write. Scale multiplier in the y-axis - defaults to 1.0.\n\n\nworldX\n: number, read-write. The x-position of the object in world coordinates.\n\n\nworldY\n: number, read-write. The y-position of the object in world coordinates.\n\n\nworldAngle\n: number, read-write. The rotation angle\u00b2 of the object in world coordinates.\n\n\n\n\n\n\nNotes:\n\n\n\u00b9 Local coordinates mean: relative to the parent.\n\n\n\u00b2 Rotation angles should be given in degrees.\n\n\n\n\nFunctions\n\n\ntranslate\n\n\ntranslate(xpos, ypos)\n\n\nMoves the object by (\nxpos\n, \nypos\n).\n\n\nArguments\n\n\n\n\nxpos\n: number.\n\n\nypos\n: number.\n\n\n\n\nrotate\n\n\nrotate(degrees)\n\n\nRotates the object by \ndegrees\n.\n\n\nArguments\n\n\n\n\ndegrees\n: number.\n\n\n\n\nscale\n\n\nscale(x, y)\n\n\nScales the transform by (\nx\n, \ny\n). Both parameters are multipliers that default to 1.0.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\ny\n: number.\n\n\n\n\nlookAt\n\n\nlookAt(transform)\n\n\nUse this function to make your object look at some point in space.\n\n\nArguments\n\n\n\n\ntransform\n: Transform2D object.\n\n\n\n\ndistanceTo\n\n\ndistanceTo(transform)\n\n\nCompute the distance between two points in space.\n\n\nArguments\n\n\n\n\ntransform\n: Transform2D object.\n\n\n\n\nReturns\n\n\nA number representing the distance, in world coordinates, between the position stored by \nthis\n and \ntransform\n.", 
             "title": "Transform2D"
@@ -571,33 +611,88 @@
             "title": "distanceTo"
         }, 
         {
-            "location": "/reference/iterator/", 
-            "text": "Iterator\n\n\nIn SurgeScript, Iterator is an abstract contract, or protocol, that define a set of functions that should be written in concrete implementations. If you're familiar with object oriented programming, Iterator is an interface. Iterators are used to traverse containers / collections / data structures and access its elements.\n\n\nConcrete implementations of Iterator include: \nArrayIterator\n and \nDictionaryIterator\n. If you wish to \nwrite your own iterators\n, you need to specify the \nfunctions described below\n.\n\n\nThe data structure that you wish to traverse should include an \niterator()\n function that spawns the concrete implementation of the Iterator. Thus, the \nparent\n object of the Iterator will be the structure to be traversed.\n\n\nThe basic usage of an Iterator is as follows:\n\n\n// container is an object such as an Array\niterator = container.iterator(); // spawn an iterator to traverse the container\nwhile(iterator.hasNext()) {\n    element = iterator.next();\n    Console.print(element);\n}\n\n\n\n\nFunctions\n\n\nhasNext\n\n\nhasNext()\n\n\nChecks if there are more elements to be accessed in the iteration.\n\n\nReturns\n\n\nReturns \ntrue\n if there are more elements to be visited, or \nfalse\n otherwise.\n\n\nnext\n\n\nnext()\n\n\nGets the next element of the container and advances the iteration.\n\n\nReturns\n\n\nThe next element of the container, or \nnull\n if there is no such element. The first call to \nnext()\n returns the first element of the container, and so on.", 
-            "title": "Iterator"
+            "location": "/reference/session/", 
+            "text": "Session\n\n\nThis Dictionary-like object store session variables: variables that persist throughout the entire Application. Session variables are available at \nApplication.session\n.\n\n\nUsage:\n\n\n// number of lives\nApplication.session[\nlives\n] = 3;\n\n...\n\n// game over\nif(Application.session[\nlives\n] == 0)\n    gameOver();\n\n\n\n\nProperties\n\n\n\n\n__data\n: \nDictionary\n object. Internal representation of the session variables.\n\n\n\n\nFunctions\n\n\nget\n\n\nget(variableName)\n\n\nGets the value of the specified session variable. The \n[ ]\n operator may be used equivalently.\n\n\nArguments\n\n\n\n\nvariableName\n: string. The name of the variable.\n\n\n\n\nReturns\n\n\nThe value of the specified variable (it can be of any type), or \nnull\n if there is no such variable.\n\n\nset\n\n\nset(variableName, value)\n\n\nSets a new value to the specified session variable. The \n[ ]\n operator may be used equivalently.\n\n\nArguments\n\n\n\n\nvariableName\n: string. The name of the variable.\n\n\nvalue\n: any type. The new value of the variable.\n\n\n\n\nisset\n\n\nisset(variableName)\n\n\nChecks if a session variable has been set.\n\n\nArguments\n\n\n\n\nvariableName\n: string. The name of the variable.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified variable has been set; or \nfalse\n otherwise.\n\n\nunset\n\n\nunset(variableName)\n\n\nErases a certain session variable from the memory.\n\n\nArguments\n\n\n\n\nvariableName\n: string. The name of the variable.\n\n\n\n\nclear\n\n\nclear()\n\n\nErases all session variables.\n\n\ntoString\n\n\ntoString()\n\n\nConverts the set of session variables to a string, in a Dictionary-like format.\n\n\nReturns\n\n\nThe set of session variables converted to a string.", 
+            "title": "Session"
         }, 
         {
-            "location": "/reference/iterator/#iterator", 
-            "text": "In SurgeScript, Iterator is an abstract contract, or protocol, that define a set of functions that should be written in concrete implementations. If you're familiar with object oriented programming, Iterator is an interface. Iterators are used to traverse containers / collections / data structures and access its elements.  Concrete implementations of Iterator include:  ArrayIterator  and  DictionaryIterator . If you wish to  write your own iterators , you need to specify the  functions described below .  The data structure that you wish to traverse should include an  iterator()  function that spawns the concrete implementation of the Iterator. Thus, the  parent  object of the Iterator will be the structure to be traversed.  The basic usage of an Iterator is as follows:  // container is an object such as an Array\niterator = container.iterator(); // spawn an iterator to traverse the container\nwhile(iterator.hasNext()) {\n    element = iterator.next();\n    Console.print(element);\n}", 
-            "title": "Iterator"
+            "location": "/reference/session/#session", 
+            "text": "This Dictionary-like object store session variables: variables that persist throughout the entire Application. Session variables are available at  Application.session .  Usage:  // number of lives\nApplication.session[ lives ] = 3;\n\n...\n\n// game over\nif(Application.session[ lives ] == 0)\n    gameOver();", 
+            "title": "Session"
         }, 
         {
-            "location": "/reference/iterator/#functions", 
+            "location": "/reference/session/#properties", 
+            "text": "__data :  Dictionary  object. Internal representation of the session variables.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/session/#functions", 
             "text": "", 
             "title": "Functions"
         }, 
         {
-            "location": "/reference/iterator/#hasnext", 
-            "text": "hasNext()  Checks if there are more elements to be accessed in the iteration.  Returns  Returns  true  if there are more elements to be visited, or  false  otherwise.", 
-            "title": "hasNext"
+            "location": "/reference/session/#get", 
+            "text": "get(variableName)  Gets the value of the specified session variable. The  [ ]  operator may be used equivalently.  Arguments   variableName : string. The name of the variable.   Returns  The value of the specified variable (it can be of any type), or  null  if there is no such variable.", 
+            "title": "get"
         }, 
         {
-            "location": "/reference/iterator/#next", 
-            "text": "next()  Gets the next element of the container and advances the iteration.  Returns  The next element of the container, or  null  if there is no such element. The first call to  next()  returns the first element of the container, and so on.", 
-            "title": "next"
+            "location": "/reference/session/#set", 
+            "text": "set(variableName, value)  Sets a new value to the specified session variable. The  [ ]  operator may be used equivalently.  Arguments   variableName : string. The name of the variable.  value : any type. The new value of the variable.", 
+            "title": "set"
+        }, 
+        {
+            "location": "/reference/session/#isset", 
+            "text": "isset(variableName)  Checks if a session variable has been set.  Arguments   variableName : string. The name of the variable.   Returns  Returns  true  if the specified variable has been set; or  false  otherwise.", 
+            "title": "isset"
+        }, 
+        {
+            "location": "/reference/session/#unset", 
+            "text": "unset(variableName)  Erases a certain session variable from the memory.  Arguments   variableName : string. The name of the variable.", 
+            "title": "unset"
+        }, 
+        {
+            "location": "/reference/session/#clear", 
+            "text": "clear()  Erases all session variables.", 
+            "title": "clear"
+        }, 
+        {
+            "location": "/reference/session/#tostring", 
+            "text": "toString()  Converts the set of session variables to a string, in a Dictionary-like format.  Returns  The set of session variables converted to a string.", 
+            "title": "toString"
+        }, 
+        {
+            "location": "/reference/system/", 
+            "text": "System\n\n\nThe root object. Used to gather data from the language and to access special objects. It can be accessed by typing \nSystem\n.\n\n\nProperties\n\n\n\n\nversion\n is the version of the language runtime (string).\n\n\ninfo\n tells you information about the SurgeScript runtime (string).\n\n\ntags\n is a reference to the \nTag System\n.\n\n\ngc\n is a reference to the \nGarbage Collector\n.\n\n\nobjectCount\n is the total number of objects at this moment.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\nExample\n\n\n// This utility displays System.info\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(System.info);\n        System.exit();\n    }\n}\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nThe same as \nexit()\n.", 
+            "title": "System"
+        }, 
+        {
+            "location": "/reference/system/#system", 
+            "text": "The root object. Used to gather data from the language and to access special objects. It can be accessed by typing  System .", 
+            "title": "System"
+        }, 
+        {
+            "location": "/reference/system/#properties", 
+            "text": "version  is the version of the language runtime (string).  info  tells you information about the SurgeScript runtime (string).  tags  is a reference to the  Tag System .  gc  is a reference to the  Garbage Collector .  objectCount  is the total number of objects at this moment.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/system/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/system/#exit", 
+            "text": "exit()  Exits the Application.  Example  // This utility displays System.info\nobject  Application \n{\n    state  main \n    {\n        Console.print(System.info);\n        System.exit();\n    }\n}", 
+            "title": "exit"
+        }, 
+        {
+            "location": "/reference/system/#destroy", 
+            "text": "destroy()  The same as  exit() .", 
+            "title": "destroy"
         }, 
         {
             "location": "/reference/application/", 
-            "text": "Application\n\n\nRepresents the Application. You do not need to instantiate it, as it is instantiated automatically. Object \nApplication\n can be accessed by any other object, in any script.\n\n\nProperties\n\n\n\n\nsession\n is a \nDictionary\n of session variables that persist throughout the entire application.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\ncrash\n\n\ncrash(message)\n\n\nExits the Application with an error message.\n\n\nArguments\n\n\n\n\nmessage\n: string. The message to be displayed to the user.\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nA synonym for \nApplication.exit()\n.", 
+            "text": "Application\n\n\nRepresents the Application. You do not need to instantiate it, as it is instantiated automatically. Object \nApplication\n can be accessed by any other object, in any script.\n\n\nProperties\n\n\n\n\nsession\n: \nSession\n object. Session variables that persist throughout the entire application.\n\n\nargs\n: \nArguments\n object. Use it to read command-line arguments.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\ncrash\n\n\ncrash(message)\n\n\nExits the Application with an error message.\n\n\nArguments\n\n\n\n\nmessage\n: string. The message to be displayed to the user.\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nA synonym for \nApplication.exit()\n.", 
             "title": "Application"
         }, 
         {
@@ -607,7 +702,7 @@
         }, 
         {
             "location": "/reference/application/#properties", 
-            "text": "session  is a  Dictionary  of session variables that persist throughout the entire application.", 
+            "text": "session :  Session  object. Session variables that persist throughout the entire application.  args :  Arguments  object. Use it to read command-line arguments.", 
             "title": "Properties"
         }, 
         {
