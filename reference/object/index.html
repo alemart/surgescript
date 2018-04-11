@@ -498,8 +498,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#findchild" title="findChild" class="md-nav__link">
-    findChild
+  <a href="#findobject" title="findObject" class="md-nav__link">
+    findObject
   </a>
   
 </li>
@@ -696,8 +696,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#findchild" title="findChild" class="md-nav__link">
-    findChild
+  <a href="#findobject" title="findObject" class="md-nav__link">
+    findObject
   </a>
   
 </li>
@@ -760,7 +760,7 @@
                 
                 
                 <h1 id="object">Object</h1>
-<p>In SurgeScript, all objects are also instance of <code>Object</code>. This means that the properties and methods listed below are available for all objects:</p>
+<p>In SurgeScript, all objects are also instances of <code>Object</code>. This means that the properties and functions listed below are available for all objects:</p>
 <h2 id="properties">Properties</h2>
 <ul>
 <li><code>parent</code> is a reference to the parent object.</li>
@@ -802,20 +802,20 @@
 </ul>
 <p><em>Returns</em></p>
 <p>A sibling of name <code>siblingName</code>, or <code>null</code> if there is no such object.</p>
-<h4 id="findchild">findChild</h4>
-<p><code>findChild(childName)</code></p>
-<p>Searches for a descendant (child, grand-child, and so on) named <code>childName</code>. Since this function traverses the <a href="../../tutorials/object_tree">object tree</a>, it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.</p>
+<h4 id="findobject">findObject</h4>
+<p><code>findObject(objectName)</code></p>
+<p>Searches for a descendant (child, grand-child, and so on) named <code>objectName</code>. Since this function traverses the <a href="../../tutorials/object_tree">object tree</a>, it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>childName</code>: string. The name of the desired object.</li>
+<li><code>objectName</code>: string. The name of the desired object.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>A descendant of name <code>childName</code>, or <code>null</code> if there is no such object.</p>
+<p>A descendant named <code>objectName</code>, or <code>null</code> if there is no such object.</p>
 <p><em>Example</em></p>
 <pre><code>object &quot;TestObject&quot;
 {
     // will search for SomeOtherObject in the Application
-    obj = Application.findChild(&quot;SomeOtherObject&quot;);
+    obj = Application.findObject(&quot;SomeOtherObject&quot;);
 
     state &quot;main&quot;
     {
