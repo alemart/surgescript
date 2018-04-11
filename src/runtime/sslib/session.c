@@ -37,7 +37,7 @@ void surgescript_sslib_register_session(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Session", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Session", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Session", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
-    surgescript_vm_bind(vm, "Session", "getData", fun_getdata, 0);
+    surgescript_vm_bind(vm, "Session", "get__data", fun_getdata, 0);
     surgescript_vm_bind(vm, "Session", "get", fun_get, 1);
     surgescript_vm_bind(vm, "Session", "set", fun_set, 2);
     surgescript_vm_bind(vm, "Session", "isset", fun_isset, 1);
