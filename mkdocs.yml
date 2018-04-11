@@ -22,9 +22,11 @@ pages:
         - 'Best practices': 'tutorials/best_practices.md'
     - 'SurgeScript Reference':
         - 'Application': 'reference/application.md'
-        - 'Object': 'reference/object.md'
-        - 'System': 'reference/system.md'
-        - 'Transform2D': 'reference/transform2d.md'
+        - 'Arguments': 'reference/arguments.md'
         - 'Iterator': 'reference/iterator.md'
+        - 'Object': 'reference/object.md'
+        - 'Transform2D': 'reference/transform2d.md'
+        - 'Session': 'reference/session.md'
+        - 'System': 'reference/system.md'
     - 'Engine Reference':
         - 'Application': 'reference/application.md'
