@@ -17,6 +17,7 @@
 static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getdata(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -36,7 +37,8 @@ void surgescript_sslib_register_arguments(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Arguments", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Arguments", "constructor", fun_constructor, 0);
-    surgescript_vm_bind(vm, "Arguments", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
+    surgescript_vm_bind(vm, "Arguments", "destroy", fun_destroy, 0);
+    surgescript_vm_bind(vm, "Arguments", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Arguments", "get__data", fun_getdata, 0);
     surgescript_vm_bind(vm, "Arguments", "get", fun_get, 1);
     surgescript_vm_bind(vm, "Arguments", "getLength", fun_getlength, 0);
@@ -73,6 +75,15 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     return NULL;
+}
+
+/* converts to string */
+surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_var_t* value = surgescript_var_create();
+    surgescript_object_t* data_array = get_data_array(object);
+    surgescript_object_call_function(data_array, "toString", NULL, 0, value);
+    return value;
 }
 
 /* gets the i-th argument, 0 <= i < length */

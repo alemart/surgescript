@@ -1,10 +1,11 @@
 object "Application"
 {
     evenNumbers = spawn("EvenNumbers");
-        p = spawn("Parent");
+    p = spawn("Parent");
 
     state "main"
     {
+        test();
         state = "2";
     }
 
@@ -17,6 +18,15 @@ object "Application"
         // exit the app
         Application.exit();
     }
+
+
+
+    fun test()
+    {
+        Console.print(Application.args);
+    }
+
+
 }
 
 object "Parent"

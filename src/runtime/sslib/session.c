@@ -17,6 +17,7 @@
 static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getdata(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -34,9 +35,10 @@ static const surgescript_heapptr_t DATA_DICT = 0;
  */
 void surgescript_sslib_register_session(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Session", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Session", "state:main", fun_main, 0);
-    surgescript_vm_bind(vm, "Session", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
+    surgescript_vm_bind(vm, "Session", "constructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "Session", "destroy", fun_destroy, 0);
+    surgescript_vm_bind(vm, "Session", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Session", "get__data", fun_getdata, 0);
     surgescript_vm_bind(vm, "Session", "get", fun_get, 1);
     surgescript_vm_bind(vm, "Session", "set", fun_set, 2);
@@ -73,6 +75,15 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     return NULL;
+}
+
+/* converts to string */
+surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_var_t* value = surgescript_var_create();
+    surgescript_object_t* data_dict = get_data_dict(object);
+    surgescript_object_call_function(data_dict, "toString", NULL, 0, value);
+    return value;
 }
 
 /* gets the data dictionary */
