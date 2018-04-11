@@ -6,7 +6,8 @@ Represents the Application. You do not need to instantiate it, as it is instanti
 Properties
 ----------
 
-* `session` is a [`Dictionary`](dictionary) of session variables that persist throughout the entire application.
+* `session`: [Session](session) object. Session variables that persist throughout the entire application.
+* `args`: [Arguments](arguments) object. Use it to read command-line arguments.
 
 Functions
 ---------
