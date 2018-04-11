@@ -90,6 +90,7 @@ surgescript_vm_t* surgescript_vm_create()
     surgescript_sslib_register_dictionary(vm);
     surgescript_sslib_register_transform2d(vm);
     surgescript_sslib_register_tagsystem(vm);
+    surgescript_sslib_register_session(vm);
     surgescript_sslib_register_console(vm);
     surgescript_sslib_register_arguments(vm);
     surgescript_sslib_register_application(vm);

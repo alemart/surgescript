@@ -407,10 +407,12 @@ object "SurgeScriptTest"
         Application.session["name"] = "alex";
         test(Application.session["name"] == "alex") || fail(3);
 
-        test(Application.session.size == 2) || fail(4);
+        test(Application.session.data.size == 2) || fail(4);
+        test(Application.session.isset("name")) || fail(5);
+        test((Application.session.unset("name"), !Application.session.isset("name") && Application.session.data.size == 1)) || fail(6);
 
         Application.session.clear();
-        test(Application.session.size == 0) || fail(5);
+        test(Application.session.data.size == 0) || fail(7);
         end();
     }
 
