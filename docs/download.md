@@ -3,11 +3,11 @@ Download SurgeScript
 
 There are two ways to get SurgeScript:
 
-- The first is to get Open Surge. This is recommended for most users.
-- The second is to get the standalone version of the language. This is useful if you're a C developer and want to integrate SurgeScript into your own projects.
+- The first is to [get Open Surge](#open-surge). This is recommended for most users.
+- The second is to [get the standalone version](#standalone-version) of the language. This is useful if you're a C developer and want to integrate SurgeScript into your own projects.
 
-Get Open Surge
---------------
+Open Surge
+----------
 
 To get Open Surge, go to its website **(URL SOON)** and follow the instructions.
 
@@ -15,8 +15,8 @@ When you get Open Surge, you also get a full game engine featuring SurgeScript. 
 
 Once you download Open Surge, the next step is to [create your first script](tutorials/hello).
 
-Get the standalone version
---------------------------
+Standalone version
+------------------
 
 To get the standalone version, go to the [SurgeScript page on GitHub](https://github.com/alemart/surgescript). There you'll find instructions on how to compile SurgeScript.
 

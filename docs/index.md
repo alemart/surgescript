@@ -5,7 +5,7 @@ Welcome to SurgeScript!
 
 SurgeScript is a scripting language for games. It has unique features that make it suitable for games - and it is extremely valuable for empowering users to generate their own content. Built originally for the Open Surge Engine, SurgeScript can be embedded into any C project.
 
-The best way to try SurgeScript for the first time is to get [Open Surge](download). Alternatively, a standalone version of the language is also available on [GitHub](download).
+The best way to try SurgeScript for the first time is to get [Open Surge](download#open-surge). Alternatively, a standalone version of the language is also available on [GitHub](download#standalone-version).
 
 It's such a joy to program in SurgeScript! You and your users will love it.
 

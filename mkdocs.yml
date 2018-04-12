@@ -23,6 +23,7 @@ pages:
     - 'SurgeScript Reference':
         - 'Application': 'reference/application.md'
         - 'Arguments': 'reference/arguments.md'
+        - 'Math': 'reference/math.md'
         - 'Iterator': 'reference/iterator.md'
         - 'Object': 'reference/object.md'
         - 'Transform2D': 'reference/transform2d.md'

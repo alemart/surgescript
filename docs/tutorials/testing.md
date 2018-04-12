@@ -1,7 +1,7 @@
 Testing your scripts
 ====================
 
-There are two main ways to test your scripts: using the [Open Surge Engine](../download#get-open-surge) or the [standalone version](../download#get-the-standalone-version) of SurgeScript (i.e., the version without the game engine).
+There are two main ways to test your scripts: using the [Open Surge Engine](../download#open-surge) or the [standalone version](../download#standalone-version) of SurgeScript (i.e., the version without the game engine).
 
 Testing on Open Surge
 ---------------------
@@ -13,7 +13,7 @@ Testing using the standalone version
 
 If you've downloaded the standalone version of the language:
 
-- First of all, save the following script to a file named *hello.ss*. This file should be placed on the same directory as the surgescript executable.
+- First of all, save the following script to a file named *hello.ss*. For testing purposes, please place the file on the same directory as the surgescript executable.
 ```
 object "Application"
 {
