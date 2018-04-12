@@ -346,7 +346,7 @@ Returns `val` clamped between `min` and `max`. Supposing `min < max`, `clamp` be
 
 `approximately(x, y)`
 
-Compares two floating point values. Since comparing two numbers for equality directly may result in inaccuracies, this is a handy function.
+Compares two floating point values. Since comparing two floating point numbers for equality directly may result in inaccuracies, this is a handy function.
 
 *Arguments*
 
