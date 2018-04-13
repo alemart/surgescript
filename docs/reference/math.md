@@ -336,7 +336,7 @@ Clamps a value between a minimum and a maximum.
 
 *Returns*
 
-Returns `val` clamped between `min` and `max`. Supposing `min < max`, `clamp` behave as follows:
+Returns `val` clamped between `min` and `max`. Function `clamp` behave as follows:
 
 * if `val` < `min`, it returns `min`
 * if `val` > `max`, it returns `max`
