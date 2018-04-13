@@ -36,7 +36,7 @@
     
     
       
-        <title>System - SurgeScript Documentation</title>
+        <title>Boolean - SurgeScript Documentation</title>
       
     
     
@@ -70,7 +70,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#system" tabindex="1" class="md-skip">
+      <a href="#boolean" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -96,7 +96,7 @@
                 SurgeScript Documentation
               </span>
               <span class="md-header-nav__topic">
-                System
+                Boolean
               </span>
             
           
@@ -438,11 +438,76 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../boolean/" title="Boolean" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Boolean
+      </label>
+    
+    <a href="./" title="Boolean" class="md-nav__link md-nav__link--active">
       Boolean
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#functions" title="Functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#valueof" title="valueOf" class="md-nav__link">
+    valueOf
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tostring" title="toString" class="md-nav__link">
+    toString
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#equals" title="equals" class="md-nav__link">
+    equals
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -570,76 +635,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        System
-      </label>
-    
-    <a href="./" title="System" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../system/" title="System" class="md-nav__link">
       System
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#properties" title="Properties" class="md-nav__link">
-    Properties
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#functions" title="Functions" class="md-nav__link">
-    Functions
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#exit" title="exit" class="md-nav__link">
-    exit
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#destroy" title="destroy" class="md-nav__link">
-    destroy
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -705,13 +705,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#properties" title="Properties" class="md-nav__link">
-    Properties
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#functions" title="Functions" class="md-nav__link">
     Functions
   </a>
@@ -720,15 +713,22 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#exit" title="exit" class="md-nav__link">
-    exit
+  <a href="#valueof" title="valueOf" class="md-nav__link">
+    valueOf
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#destroy" title="destroy" class="md-nav__link">
-    destroy
+  <a href="#tostring" title="toString" class="md-nav__link">
+    toString
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#equals" title="equals" class="md-nav__link">
+    equals
   </a>
   
 </li>
@@ -755,35 +755,28 @@
               
                 
                 
-                <h1 id="system">System</h1>
-<p>The root object. Used to gather data from the language and to access special objects. It can be accessed by typing <code>System</code>.</p>
-<h2 id="properties">Properties</h2>
-<ul>
-<li><code>version</code> is the version of the language runtime (string).</li>
-<li><code>info</code> tells you information about the SurgeScript runtime (string).</li>
-<li><code>tags</code> is a reference to the <a href="tag_system.md">Tag System</a>.</li>
-<li><code>gc</code> is a reference to the <a href="garbage_collector.md">Garbage Collector</a>.</li>
-<li><code>objectCount</code> is the total number of objects at this moment.</li>
-</ul>
+                <h1 id="boolean">Boolean</h1>
+<p>Routines for booleans. The Boolean object is not supposed to be used directly. The functions below are available for primitive values of the boolean type.</p>
 <h2 id="functions">Functions</h2>
-<h4 id="exit">exit</h4>
-<p><code>exit()</code></p>
-<p>Exits the Application.</p>
-<p><em>Example</em></p>
-<pre><code>// This utility displays System.info
-object &quot;Application&quot;
-{
-    state &quot;main&quot;
-    {
-        Console.print(System.info);
-        System.exit();
-    }
-}
-</code></pre>
-
-<h4 id="destroy">destroy</h4>
-<p><code>destroy()</code></p>
-<p>The same as <code>exit()</code>.</p>
+<h4 id="valueof">valueOf</h4>
+<p><code>valueOf()</code></p>
+<p>The primitive value of the boolean, i.e., the boolean itself.</p>
+<p><em>Returns</em></p>
+<p>The boolean.</p>
+<h4 id="tostring">toString</h4>
+<p><code>toString()</code></p>
+<p>Convert boolean to string.</p>
+<p><em>Returns</em></p>
+<p>The boolean converted to a string.</p>
+<h4 id="equals">equals</h4>
+<p><code>equals(b)</code></p>
+<p>Compares the boolean to another boolean <code>b</code>.</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>b</code>: boolean. The value to compare the boolean to.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns <code>true</code> if the booleans are equal.</p>
                 
                   
                 
@@ -804,7 +797,7 @@ object &quot;Application&quot;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../string/" title="String" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../arguments/" title="Arguments" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -813,19 +806,19 @@ object &quot;Application&quot;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                String
+                Arguments
               </span>
             </div>
           </a>
         
         
-          <a href="../application/" title="Application" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../gc/" title="GC" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Application
+                GC
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

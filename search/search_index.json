@@ -27,23 +27,23 @@
         }, 
         {
             "location": "/download/", 
-            "text": "Download SurgeScript\n\n\nThere are two ways to get SurgeScript:\n\n\n\n\nThe first is to get Open Surge. This is recommended for most users.\n\n\nThe second is to get the standalone version of the language. This is useful if you're a C developer and want to integrate SurgeScript into your own projects.\n\n\n\n\nGet Open Surge\n\n\nTo get Open Surge, go to its website \n(URL SOON)\n and follow the instructions.\n\n\nWhen you get Open Surge, you also get a full game engine featuring SurgeScript. This allows you to create your own scripts and games with plenty of interactivity and ease.\n\n\nOnce you download Open Surge, the next step is to \ncreate your first script\n.\n\n\nGet the standalone version\n\n\nTo get the standalone version, go to the \nSurgeScript page on GitHub\n. There you'll find instructions on how to compile SurgeScript.\n\n\nWhen you compile SurgeScript, you'll end up with a text-only program. There are no graphics and no game engine is attached to it. You can try your scripts using the command line.\n\n\nOnce you get the standalone version, the next step is to \ncreate your first script\n.", 
+            "text": "Download SurgeScript\n\n\nThere are two ways to get SurgeScript:\n\n\n\n\nThe first is to \nget Open Surge\n. This is recommended for most users.\n\n\nThe second is to \nget the standalone version\n of the language. This is useful if you're a C developer and want to integrate SurgeScript into your own projects.\n\n\n\n\nOpen Surge\n\n\nTo get Open Surge, go to its website \n(URL SOON)\n and follow the instructions.\n\n\nWhen you get Open Surge, you also get a full game engine featuring SurgeScript. This allows you to create your own scripts and games with plenty of interactivity and ease.\n\n\nOnce you download Open Surge, the next step is to \ncreate your first script\n.\n\n\nStandalone version\n\n\nTo get the standalone version, go to the \nSurgeScript page on GitHub\n. There you'll find instructions on how to compile SurgeScript.\n\n\nWhen you compile SurgeScript, you'll end up with a text-only program. There are no graphics and no game engine is attached to it. You can try your scripts using the command line.\n\n\nOnce you get the standalone version, the next step is to \ncreate your first script\n.", 
             "title": "Download"
         }, 
         {
             "location": "/download/#download-surgescript", 
-            "text": "There are two ways to get SurgeScript:   The first is to get Open Surge. This is recommended for most users.  The second is to get the standalone version of the language. This is useful if you're a C developer and want to integrate SurgeScript into your own projects.", 
+            "text": "There are two ways to get SurgeScript:   The first is to  get Open Surge . This is recommended for most users.  The second is to  get the standalone version  of the language. This is useful if you're a C developer and want to integrate SurgeScript into your own projects.", 
             "title": "Download SurgeScript"
         }, 
         {
-            "location": "/download/#get-open-surge", 
+            "location": "/download/#open-surge", 
             "text": "To get Open Surge, go to its website  (URL SOON)  and follow the instructions.  When you get Open Surge, you also get a full game engine featuring SurgeScript. This allows you to create your own scripts and games with plenty of interactivity and ease.  Once you download Open Surge, the next step is to  create your first script .", 
-            "title": "Get Open Surge"
+            "title": "Open Surge"
         }, 
         {
-            "location": "/download/#get-the-standalone-version", 
+            "location": "/download/#standalone-version", 
             "text": "To get the standalone version, go to the  SurgeScript page on GitHub . There you'll find instructions on how to compile SurgeScript.  When you compile SurgeScript, you'll end up with a text-only program. There are no graphics and no game engine is attached to it. You can try your scripts using the command line.  Once you get the standalone version, the next step is to  create your first script .", 
-            "title": "Get the standalone version"
+            "title": "Standalone version"
         }, 
         {
             "location": "/tutorials/hello/", 
@@ -57,7 +57,7 @@
         }, 
         {
             "location": "/tutorials/testing/", 
-            "text": "Testing your scripts\n\n\nThere are two main ways to test your scripts: using the \nOpen Surge Engine\n or the \nstandalone version\n of SurgeScript (i.e., the version without the game engine).\n\n\nTesting on Open Surge\n\n\nTODO\n\n\nTesting using the standalone version\n\n\nIf you've downloaded the standalone version of the language:\n\n\n\n\nFirst of all, save the following script to a file named \nhello.ss\n. This file should be placed on the same directory as the surgescript executable.\n\n\n\n\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        Application.exit();\n    }\n}\n\n\n\n\n\n\nThen, open up a Terminal and type:\n\n\n\n\ncd /path/to/surgescript\n./surgescript hello.ss\n\n\n\n\n\n\nIf you're using Microsoft Windows, open up a Command Prompt and type:\n\n\n\n\ncd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss\n\n\n\n\n\n\nYou should see the output of the script as a result:\n\n\n\n\nHello, world!", 
+            "text": "Testing your scripts\n\n\nThere are two main ways to test your scripts: using the \nOpen Surge Engine\n or the \nstandalone version\n of SurgeScript (i.e., the version without the game engine).\n\n\nTesting on Open Surge\n\n\nTODO\n\n\nTesting using the standalone version\n\n\nIf you've downloaded the standalone version of the language:\n\n\n\n\nFirst of all, save the following script to a file named \nhello.ss\n. For testing purposes, please place the file on the same directory as the surgescript executable.\n\n\n\n\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        Application.exit();\n    }\n}\n\n\n\n\n\n\nThen, open up a Terminal and type:\n\n\n\n\ncd /path/to/surgescript\n./surgescript hello.ss\n\n\n\n\n\n\nIf you're using Microsoft Windows, open up a Command Prompt and type:\n\n\n\n\ncd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss\n\n\n\n\n\n\nYou should see the output of the script as a result:\n\n\n\n\nHello, world!", 
             "title": "Testing your scripts"
         }, 
         {
@@ -72,7 +72,7 @@
         }, 
         {
             "location": "/tutorials/testing/#testing-using-the-standalone-version", 
-            "text": "If you've downloaded the standalone version of the language:   First of all, save the following script to a file named  hello.ss . This file should be placed on the same directory as the surgescript executable.   object  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        Application.exit();\n    }\n}   Then, open up a Terminal and type:   cd /path/to/surgescript\n./surgescript hello.ss   If you're using Microsoft Windows, open up a Command Prompt and type:   cd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss   You should see the output of the script as a result:   Hello, world!", 
+            "text": "If you've downloaded the standalone version of the language:   First of all, save the following script to a file named  hello.ss . For testing purposes, please place the file on the same directory as the surgescript executable.   object  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        Application.exit();\n    }\n}   Then, open up a Terminal and type:   cd /path/to/surgescript\n./surgescript hello.ss   If you're using Microsoft Windows, open up a Command Prompt and type:   cd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss   You should see the output of the script as a result:   Hello, world!", 
             "title": "Testing using the standalone version"
         }, 
         {
@@ -97,7 +97,7 @@
         }, 
         {
             "location": "/tutorials/variables/", 
-            "text": "Variables\n\n\nVariables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object handle). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.\n\n\nTypes\n\n\nPrimitive types\n\n\n\n\n\n\n\n\nType\n\n\nDescription\n\n\nExamples\n\n\n\n\n\n\n\n\n\n\nNumber\n\n\nA floating-point number\n\n\n1, 2, 3, 3.14159\n\n\n\n\n\n\nString\n\n\nSome text\n\n\n\"Hello, world!\", 'single-quoted'\n\n\n\n\n\n\nBoolean\n\n\nTrue or false\n\n\ntrue, false\n\n\n\n\n\n\nObject\n\n\nReference to an object\n\n\nApplication, this, [ ]\n\n\n\n\n\n\nNull\n\n\nAn empty value\n\n\nnull\n\n\n\n\n\n\n\n\nAs an example, the script below features an object with 3 variables that may be accessed throughout the whole object:\n\n\nobject \nSurge\n\n{\n    name = \nSurge the Rabbit\n;\n    age = 23;\n    underage = false;\n\n    state \nmain\n\n    {\n        Console.print(name); // Surge the Rabbit\n        Console.print(age); // 23\n    }\n}\n\n\n\n\nAbstract types\n\n\nArrays\n\n\nArrays are collections of values that you may access using a zero-based index. Example:\n\n\nobject \nApplication\n\n{\n    // The 'characters' array hold 3 strings\n    characters = [ \nSurge\n, \nNeon\n, \nCharge\n ];\n\n    state \nmain\n\n    {\n        // who are the characters?\n        Console.print(\nThe characters are:\n);\n        Console.print(characters[0]); // will print Surge\n        Console.print(characters[1]); // will print Neon\n        Console.print(characters[2]); // will print Charge\n\n        // how many characters?\n        Console.print(\nNumber of characters:\n);\n        Console.print(characters.length); // will print 3\n    }\n}\n\n\n\n\nArrays have many interesting properties and operations that you can see in the \nLanguage Reference\n.\n\n\nDictionaries\n\n\nDictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:\n\n\nobject \nSurge\n\n{\n    // A dictionary that stores the weight (kg) of each character\n    weight = {\n        \nSurge\n: 35,\n        \nNeon\n: 20,\n        \nCharge\n: 37.5,\n        \nGimacian\n: 70\n    };\n\n    // print the weights\n    state \nmain\n\n    {\n        Console.print(\nSurge weighs \n + weight[\nSurge\n] + \n kg.\n);\n        Console.print(\nNeon weighs \n + weight[\nNeon\n] + \n kg.\n);\n        Console.print(\nCharge weighs \n + weight[\nCharge\n] + \n kg.\n);\n        Console.print(\nGimacian weighs \n + weight[\nGimacian\n] + \n kg.\n);\n    }\n}\n\n\n\n\nDictionaries have many interesting properties and operations that you can see in the \nLanguage Reference\n.\n\n\n\n\nCautionary note\n\n\nWhenever you define an array or a dictionary, you spawn a new object. One is advised to \nNOT\n define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.\n\n\n\n\nobject \nApplication\n\n{\n    // arr will be instantiated once the object is created\n    arr = [ 1, 2, 3 ]; // RIGHT!\n\n    state \nmain\n\n    {\n        // err is instantiated at every frame of the application,\n        // thus memory is wasted with duplicate objects\n        err = [ \ndon't\n, \ndo\n, \nthis\n ]; // WRONG!\n    }\n}\n\n\n\n\nScoping\n\n\nVariables that are defined before any state or function are \nobject-level\n variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are \nlocal variables\n. This means that their lifespan is restricted to their own block of code.\n\n\nobject \nSurge\n\n{\n    name = \nSurge the Rabbit\n; // object-level variable\n\n    state \nmain\n\n    {\n        weight = 35; // local variable\n        state = \nprint-data\n; // change the state\n    }\n\n    state \nprint-data\n\n    {\n        Console.print(name); // Surge the Rabbit\n        Console.print(weight); // ERROR: weight is not defined\n    }\n}\n\n\n\n\nFurthermore, \nobject-level\n variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are \nprivate\n to the objects). You need to define \nfunctions\n or \ngetters and setters\n to accomplish that.", 
+            "text": "Variables\n\n\nVariables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object handle). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.\n\n\nTypes\n\n\nPrimitive types\n\n\n\n\n\n\n\n\nType\n\n\nDescription\n\n\nExamples\n\n\n\n\n\n\n\n\n\n\nNumber\n\n\nA floating-point number\n\n\n1, 2, 3, 3.14159\n\n\n\n\n\n\nString\n\n\nSome text\n\n\n\"Hello, world!\", 'single-quoted'\n\n\n\n\n\n\nBoolean\n\n\nTrue or false\n\n\ntrue, false\n\n\n\n\n\n\nObject\n\n\nReference to an object\n\n\nApplication, this, [ ]\n\n\n\n\n\n\nNull\n\n\nAn empty value\n\n\nnull\n\n\n\n\n\n\n\n\nAs an example, the script below features an object with 3 variables that may be accessed throughout the whole object:\n\n\nobject \nSurge\n\n{\n    name = \nSurge the Rabbit\n;\n    age = 23;\n    underage = false;\n\n    state \nmain\n\n    {\n        Console.print(name); // Surge the Rabbit\n        Console.print(age); // 23\n    }\n}\n\n\n\n\nAbstract types\n\n\nArrays\n\n\nArrays are collections of values that you may access using a zero-based index. Example:\n\n\nobject \nApplication\n\n{\n    // The 'characters' array hold 3 strings\n    characters = [ \nSurge\n, \nNeon\n, \nCharge\n ];\n\n    state \nmain\n\n    {\n        // who are the characters?\n        Console.print(\nThe characters are:\n);\n        Console.print(characters[0]); // will print Surge\n        Console.print(characters[1]); // will print Neon\n        Console.print(characters[2]); // will print Charge\n\n        // how many characters?\n        Console.print(\nNumber of characters:\n);\n        Console.print(characters.length); // will print 3\n    }\n}\n\n\n\n\nArrays have many interesting properties and operations that you can see in the \nLanguage Reference\n.\n\n\nDictionaries\n\n\nDictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:\n\n\nobject \nSurge\n\n{\n    // A dictionary that stores the weight (kg) of each character\n    weight = {\n        \nSurge\n: 35,\n        \nNeon\n: 20,\n        \nCharge\n: 37.5,\n        \nGimacian\n: 70\n    };\n\n    // print the weights\n    state \nmain\n\n    {\n        Console.print(\nSurge weighs \n + weight[\nSurge\n] + \n kg.\n);\n        Console.print(\nNeon weighs \n + weight[\nNeon\n] + \n kg.\n);\n        Console.print(\nCharge weighs \n + weight[\nCharge\n] + \n kg.\n);\n        Console.print(\nGimacian weighs \n + weight[\nGimacian\n] + \n kg.\n);\n    }\n}\n\n\n\n\nDictionaries have many interesting properties and operations that you can see in the \nLanguage Reference\n.\n\n\n\n\nCautionary note\n\n\nWhenever you define an array or a dictionary, you spawn a new object. One is advised to \nNOT\n define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.\n\n\n\n\nobject \nApplication\n\n{\n    // arr will be instantiated once the object is created\n    arr = [ 1, 2, 3 ]; // RIGHT!\n\n    state \nmain\n\n    {\n        // err is instantiated at every frame of the application,\n        // thus memory is wasted with duplicate objects\n        err = [ \ndon't\n, \ndo\n, \nthis\n ]; // WRONG!\n    }\n}\n\n\n\n\nCasting\n\n\nYou can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling \nNumber(value)\n, \nString(value)\n or \nBoolean(value)\n. Example:\n\n\n// Convert string to number\nstr = \n2\n;\nval = Number(str); // val is 2\n\n// Convert number to string\nval = 123;\nstr = String(val); // str is \n123\n\n\n\n\n\nScoping\n\n\nVariables that are defined before any state or function are \nobject-level\n variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are \nlocal variables\n. This means that their lifespan is restricted to their own block of code.\n\n\nobject \nSurge\n\n{\n    name = \nSurge the Rabbit\n; // object-level variable\n\n    state \nmain\n\n    {\n        weight = 35; // local variable\n        state = \nprint-data\n; // change the state\n    }\n\n    state \nprint-data\n\n    {\n        Console.print(name); // Surge the Rabbit\n        Console.print(weight); // ERROR: weight is not defined\n    }\n}\n\n\n\n\nFurthermore, \nobject-level\n variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are \nprivate\n to the objects). You need to define \nfunctions\n or \ngetters and setters\n to accomplish that.", 
             "title": "Variables"
         }, 
         {
@@ -129,6 +129,11 @@
             "location": "/tutorials/variables/#dictionaries", 
             "text": "Dictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:  object  Surge \n{\n    // A dictionary that stores the weight (kg) of each character\n    weight = {\n         Surge : 35,\n         Neon : 20,\n         Charge : 37.5,\n         Gimacian : 70\n    };\n\n    // print the weights\n    state  main \n    {\n        Console.print( Surge weighs   + weight[ Surge ] +   kg. );\n        Console.print( Neon weighs   + weight[ Neon ] +   kg. );\n        Console.print( Charge weighs   + weight[ Charge ] +   kg. );\n        Console.print( Gimacian weighs   + weight[ Gimacian ] +   kg. );\n    }\n}  Dictionaries have many interesting properties and operations that you can see in the  Language Reference .   Cautionary note  Whenever you define an array or a dictionary, you spawn a new object. One is advised to  NOT  define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.   object  Application \n{\n    // arr will be instantiated once the object is created\n    arr = [ 1, 2, 3 ]; // RIGHT!\n\n    state  main \n    {\n        // err is instantiated at every frame of the application,\n        // thus memory is wasted with duplicate objects\n        err = [  don't ,  do ,  this  ]; // WRONG!\n    }\n}", 
             "title": "Dictionaries"
+        }, 
+        {
+            "location": "/tutorials/variables/#casting", 
+            "text": "You can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling  Number(value) ,  String(value)  or  Boolean(value) . Example:  // Convert string to number\nstr =  2 ;\nval = Number(str); // val is 2\n\n// Convert number to string\nval = 123;\nstr = String(val); // str is  123", 
+            "title": "Casting"
         }, 
         {
             "location": "/tutorials/variables/#scoping", 
@@ -471,6 +476,236 @@
             "title": "toString"
         }, 
         {
+            "location": "/reference/boolean/", 
+            "text": "Boolean\n\n\nRoutines for booleans. The Boolean object is not supposed to be used directly. The functions below are available for primitive values of the boolean type.\n\n\nFunctions\n\n\nvalueOf\n\n\nvalueOf()\n\n\nThe primitive value of the boolean, i.e., the boolean itself.\n\n\nReturns\n\n\nThe boolean.\n\n\ntoString\n\n\ntoString()\n\n\nConvert boolean to string.\n\n\nReturns\n\n\nThe boolean converted to a string.\n\n\nequals\n\n\nequals(b)\n\n\nCompares the boolean to another boolean \nb\n.\n\n\nArguments\n\n\n\n\nb\n: boolean. The value to compare the boolean to.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the booleans are equal.", 
+            "title": "Boolean"
+        }, 
+        {
+            "location": "/reference/boolean/#boolean", 
+            "text": "Routines for booleans. The Boolean object is not supposed to be used directly. The functions below are available for primitive values of the boolean type.", 
+            "title": "Boolean"
+        }, 
+        {
+            "location": "/reference/boolean/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/boolean/#valueof", 
+            "text": "valueOf()  The primitive value of the boolean, i.e., the boolean itself.  Returns  The boolean.", 
+            "title": "valueOf"
+        }, 
+        {
+            "location": "/reference/boolean/#tostring", 
+            "text": "toString()  Convert boolean to string.  Returns  The boolean converted to a string.", 
+            "title": "toString"
+        }, 
+        {
+            "location": "/reference/boolean/#equals", 
+            "text": "equals(b)  Compares the boolean to another boolean  b .  Arguments   b : boolean. The value to compare the boolean to.   Returns  Returns  true  if the booleans are equal.", 
+            "title": "equals"
+        }, 
+        {
+            "location": "/reference/gc/", 
+            "text": "GC\n\n\nSurgeScript features a Garbage Collector (GC) that automatically disposes objects that cannot be reached from the root (i.e., their references are lost). The Garbage Collector is available at \nSystem.gc\n. Generally, you do not need to modify any of its settings.\n\n\nProperties\n\n\n\n\ninterval\n: number, read-write. At every \ninterval\n seconds, the garbage collector will be called automatically.\n\n\nobjectCount\n: number. How many objects were disposed when the garbage collector was last called.\n\n\n\n\nFunctions\n\n\ncollect\n\n\ncollect()\n\n\nCalls the Garbage Collector manually.", 
+            "title": "GC"
+        }, 
+        {
+            "location": "/reference/gc/#gc", 
+            "text": "SurgeScript features a Garbage Collector (GC) that automatically disposes objects that cannot be reached from the root (i.e., their references are lost). The Garbage Collector is available at  System.gc . Generally, you do not need to modify any of its settings.", 
+            "title": "GC"
+        }, 
+        {
+            "location": "/reference/gc/#properties", 
+            "text": "interval : number, read-write. At every  interval  seconds, the garbage collector will be called automatically.  objectCount : number. How many objects were disposed when the garbage collector was last called.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/gc/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/gc/#collect", 
+            "text": "collect()  Calls the Garbage Collector manually.", 
+            "title": "collect"
+        }, 
+        {
+            "location": "/reference/math/", 
+            "text": "Math\n\n\nBuilt-in mathematical functions.\n\n\nExamples:\n\n\n// Math functions\ntwo = Math.sqrt(4); // square root of 4\neight = Math.pow(2, 3); // 2 raised to the 3rd power\nzero = Math.sin(0); // sine of 0\nseven = Math.max(5, 7); // maximum of 5 and 7\n\n\n\n\nProperties\n\n\n\n\npi\n: number. An approximation of pi (3.1415926535...)\n\n\nepsilon\n: number. The difference between 1 and the smallest floating point number that is greater than 1.\n\n\ninfinity\n: number. A floating point number representing positive infinity.\n\n\ndeg2rad\n: number. A multiplier used to convert degrees to radians: equivalent to pi / 180.\n\n\nrad2deg\n: number. A multiplier used to convert radians to degrees: equivalent to 180 / pi.\n\n\n\n\nFunctions\n\n\nsqrt\n\n\nsqrt(x)\n\n\nSquare root function.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nThe square root of \nx\n.\n\n\npow\n\n\npow(x, p)\n\n\nRaise to power.\n\n\nArguments\n\n\n\n\nx\n: number. The base.\n\n\np\n: number. The exponent.\n\n\n\n\nReturns\n\n\nReturns \nx\n raised to the \np\n power.\n\n\nexp\n\n\ne(x)\n\n\nExponential function.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nReturns \ne\n raised to the \nx\n power.\n\n\nlog\n\n\nlog(x)\n\n\nNatural logarithm.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nThe natural logarithm (base \ne\n) of \nx\n.\n\n\nlog10\n\n\nlog10(x)\n\n\nBase 10 logarithm.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nThe base 10 logarithm of \nx\n.\n\n\nsin\n\n\nsin(x)\n\n\nSine function.\n\n\nArguments\n\n\n\n\nx\n: number. Angle in radians.\n\n\n\n\nReturns\n\n\nThe sine of \nx\n.\n\n\ncos\n\n\ncos(x)\n\n\nCosine function.\n\n\nArguments\n\n\n\n\nx\n: number. Angle in radians.\n\n\n\n\nReturns\n\n\nThe cosine of \nx\n.\n\n\ntan\n\n\ntan(x)\n\n\nTangent function.\n\n\nArguments\n\n\n\n\nx\n: number. Angle in radians.\n\n\n\n\nReturns\n\n\nThe tangent of \nx\n.\n\n\nasin\n\n\nasin(x)\n\n\nArc-sine function.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nThe angle in radians whose sine is \nx\n.\n\n\nacos\n\n\nacos(x)\n\n\nArc-cosine function.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nThe angle in radians whose cosine is \nx\n.\n\n\natan\n\n\natan(x)\n\n\nArc-tangent function.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nThe angle in radians whose tangent is \nx\n.\n\n\natan2\n\n\natan2(y, x)\n\n\nFunction atan2.\n\n\nArguments\n\n\n\n\ny\n: number.\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nThe angle, in radians, between the positive x-axis and the \n(x, y)\n vector.\n\n\nrandom\n\n\nrandom()\n\n\nRandom value.\n\n\nReturns\n\n\nA random number between 0 (inclusive) and 1 (exclusive).\n\n\nfloor\n\n\nfloor(x)\n\n\nFloor function.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nThe largest integer smaller or equal than \nx\n.\n\n\nceil\n\n\nceil(x)\n\n\nCeiling function.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nThe smallest integer greater or equal than \nx\n.\n\n\nround\n\n\nround(x)\n\n\nRound to the nearest integer.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nReturns \nx\n rounded to the nearest integer.\n\n\nIf the fraction of \nx\n is 0.5, this function uses the \ncommercial rounding\n tie-breaking method.\n\n\nmod\n\n\nmod(x, y)\n\n\nModulus function. Used to get the remainder of a division.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\ny\n: number.\n\n\n\n\nReturns\n\n\nThe remainder of \nx / y\n.\n\n\nsign\n\n\nsign(x)\n\n\nThe sign of \nx\n.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nReturns 1 if \nx\n is positive or zero; or -1 if \nx\n is negative.\n\n\nabs\n\n\nabs(x)\n\n\nAbsolute value of \nx\n.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\n\n\nReturns\n\n\nReturns \n-x\n if \nx\n is negative, or \nx\n otherwise.\n\n\nmin\n\n\nmin(x, y)\n\n\nThe minimum of two values.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\ny\n: number.\n\n\n\n\nReturns\n\n\nReturns the smallest of two values: \nx\n and \ny\n.\n\n\nmax\n\n\nmax(x, y)\n\n\nThe maximum of two values.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\ny\n: number.\n\n\n\n\nReturns\n\n\nReturns the largest of two values: \nx\n and \ny\n.\n\n\nclamp\n\n\nclamp(val, min, max)\n\n\nClamps a value between a minimum and a maximum.\n\n\nArguments\n\n\n\n\nval\n: number. The value to be clamped.\n\n\nmin\n: number. Minimum value.\n\n\nmax\n: number. Maximum value.\n\n\n\n\nReturns\n\n\nReturns \nval\n clamped between \nmin\n and \nmax\n. Function \nclamp\n behave as follows:\n\n\n\n\nif \nval\n \n \nmin\n, it returns \nmin\n\n\nif \nval\n \n \nmax\n, it returns \nmax\n\n\notherwise, it returns \nval\n\n\n\n\napproximately\n\n\napproximately(x, y)\n\n\nCompares two floating point values. Since comparing two floating point numbers for equality directly may result in inaccuracies, this is a handy function.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\ny\n: number.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if \nx\n and \ny\n are \n\"approximately\"\n equal (they are within a small distance of \nepsilon\n of each other).\n\n\nlerp\n\n\nlerp(a, b, t)\n\n\nLinear interpolation.\n\n\nArguments\n\n\n\n\na\n: number.\n\n\nb\n: number.\n\n\nt\n: number. A value between 0 and 1.\n\n\n\n\nReturns\n\n\nReturns the linear interpolation between \na\n and \nb\n by \nt\n.\n\n\nValue \nt\n is clamped automatically to range \n[0, 1]\n.\n\n\nAs an example, note that \nlerp\n:\n\n\n\n\nreturns \na\n if \nt\n is \n0\n\n\nreturns \nb\n if \nt\n is \n1\n\n\nreturns \n(a + b) / 2\n if \nt\n is \n0.5\n\n\n\n\nsmoothstep\n\n\nsmoothstep(a, b, t)\n\n\nInterpolation smoothing at the limits.\n\n\nArguments\n\n\n\n\na\n: number.\n\n\nb\n: number.\n\n\nt\n: number. A value between 0 and 1.\n\n\n\n\nReturns\n\n\nReturns an interpolated value between \na\n and \nb\n by \nt\n, in a similar way to \nlerp\n. Unlike the linear \nlerp\n, \nsmoothstep\n is smooth at the limits. This is useful to create smooth transitions and animations.\n\n\nValue \nt\n is clamped automatically to range \n[0, 1]\n.", 
+            "title": "Math"
+        }, 
+        {
+            "location": "/reference/math/#math", 
+            "text": "Built-in mathematical functions.  Examples:  // Math functions\ntwo = Math.sqrt(4); // square root of 4\neight = Math.pow(2, 3); // 2 raised to the 3rd power\nzero = Math.sin(0); // sine of 0\nseven = Math.max(5, 7); // maximum of 5 and 7", 
+            "title": "Math"
+        }, 
+        {
+            "location": "/reference/math/#properties", 
+            "text": "pi : number. An approximation of pi (3.1415926535...)  epsilon : number. The difference between 1 and the smallest floating point number that is greater than 1.  infinity : number. A floating point number representing positive infinity.  deg2rad : number. A multiplier used to convert degrees to radians: equivalent to pi / 180.  rad2deg : number. A multiplier used to convert radians to degrees: equivalent to 180 / pi.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/math/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/math/#sqrt", 
+            "text": "sqrt(x)  Square root function.  Arguments   x : number.   Returns  The square root of  x .", 
+            "title": "sqrt"
+        }, 
+        {
+            "location": "/reference/math/#pow", 
+            "text": "pow(x, p)  Raise to power.  Arguments   x : number. The base.  p : number. The exponent.   Returns  Returns  x  raised to the  p  power.", 
+            "title": "pow"
+        }, 
+        {
+            "location": "/reference/math/#exp", 
+            "text": "e(x)  Exponential function.  Arguments   x : number.   Returns  Returns  e  raised to the  x  power.", 
+            "title": "exp"
+        }, 
+        {
+            "location": "/reference/math/#log", 
+            "text": "log(x)  Natural logarithm.  Arguments   x : number.   Returns  The natural logarithm (base  e ) of  x .", 
+            "title": "log"
+        }, 
+        {
+            "location": "/reference/math/#log10", 
+            "text": "log10(x)  Base 10 logarithm.  Arguments   x : number.   Returns  The base 10 logarithm of  x .", 
+            "title": "log10"
+        }, 
+        {
+            "location": "/reference/math/#sin", 
+            "text": "sin(x)  Sine function.  Arguments   x : number. Angle in radians.   Returns  The sine of  x .", 
+            "title": "sin"
+        }, 
+        {
+            "location": "/reference/math/#cos", 
+            "text": "cos(x)  Cosine function.  Arguments   x : number. Angle in radians.   Returns  The cosine of  x .", 
+            "title": "cos"
+        }, 
+        {
+            "location": "/reference/math/#tan", 
+            "text": "tan(x)  Tangent function.  Arguments   x : number. Angle in radians.   Returns  The tangent of  x .", 
+            "title": "tan"
+        }, 
+        {
+            "location": "/reference/math/#asin", 
+            "text": "asin(x)  Arc-sine function.  Arguments   x : number.   Returns  The angle in radians whose sine is  x .", 
+            "title": "asin"
+        }, 
+        {
+            "location": "/reference/math/#acos", 
+            "text": "acos(x)  Arc-cosine function.  Arguments   x : number.   Returns  The angle in radians whose cosine is  x .", 
+            "title": "acos"
+        }, 
+        {
+            "location": "/reference/math/#atan", 
+            "text": "atan(x)  Arc-tangent function.  Arguments   x : number.   Returns  The angle in radians whose tangent is  x .", 
+            "title": "atan"
+        }, 
+        {
+            "location": "/reference/math/#atan2", 
+            "text": "atan2(y, x)  Function atan2.  Arguments   y : number.  x : number.   Returns  The angle, in radians, between the positive x-axis and the  (x, y)  vector.", 
+            "title": "atan2"
+        }, 
+        {
+            "location": "/reference/math/#random", 
+            "text": "random()  Random value.  Returns  A random number between 0 (inclusive) and 1 (exclusive).", 
+            "title": "random"
+        }, 
+        {
+            "location": "/reference/math/#floor", 
+            "text": "floor(x)  Floor function.  Arguments   x : number.   Returns  The largest integer smaller or equal than  x .", 
+            "title": "floor"
+        }, 
+        {
+            "location": "/reference/math/#ceil", 
+            "text": "ceil(x)  Ceiling function.  Arguments   x : number.   Returns  The smallest integer greater or equal than  x .", 
+            "title": "ceil"
+        }, 
+        {
+            "location": "/reference/math/#round", 
+            "text": "round(x)  Round to the nearest integer.  Arguments   x : number.   Returns  Returns  x  rounded to the nearest integer.  If the fraction of  x  is 0.5, this function uses the  commercial rounding  tie-breaking method.", 
+            "title": "round"
+        }, 
+        {
+            "location": "/reference/math/#mod", 
+            "text": "mod(x, y)  Modulus function. Used to get the remainder of a division.  Arguments   x : number.  y : number.   Returns  The remainder of  x / y .", 
+            "title": "mod"
+        }, 
+        {
+            "location": "/reference/math/#sign", 
+            "text": "sign(x)  The sign of  x .  Arguments   x : number.   Returns  Returns 1 if  x  is positive or zero; or -1 if  x  is negative.", 
+            "title": "sign"
+        }, 
+        {
+            "location": "/reference/math/#abs", 
+            "text": "abs(x)  Absolute value of  x .  Arguments   x : number.   Returns  Returns  -x  if  x  is negative, or  x  otherwise.", 
+            "title": "abs"
+        }, 
+        {
+            "location": "/reference/math/#min", 
+            "text": "min(x, y)  The minimum of two values.  Arguments   x : number.  y : number.   Returns  Returns the smallest of two values:  x  and  y .", 
+            "title": "min"
+        }, 
+        {
+            "location": "/reference/math/#max", 
+            "text": "max(x, y)  The maximum of two values.  Arguments   x : number.  y : number.   Returns  Returns the largest of two values:  x  and  y .", 
+            "title": "max"
+        }, 
+        {
+            "location": "/reference/math/#clamp", 
+            "text": "clamp(val, min, max)  Clamps a value between a minimum and a maximum.  Arguments   val : number. The value to be clamped.  min : number. Minimum value.  max : number. Maximum value.   Returns  Returns  val  clamped between  min  and  max . Function  clamp  behave as follows:   if  val     min , it returns  min  if  val     max , it returns  max  otherwise, it returns  val", 
+            "title": "clamp"
+        }, 
+        {
+            "location": "/reference/math/#approximately", 
+            "text": "approximately(x, y)  Compares two floating point values. Since comparing two floating point numbers for equality directly may result in inaccuracies, this is a handy function.  Arguments   x : number.  y : number.   Returns  Returns  true  if  x  and  y  are  \"approximately\"  equal (they are within a small distance of  epsilon  of each other).", 
+            "title": "approximately"
+        }, 
+        {
+            "location": "/reference/math/#lerp", 
+            "text": "lerp(a, b, t)  Linear interpolation.  Arguments   a : number.  b : number.  t : number. A value between 0 and 1.   Returns  Returns the linear interpolation between  a  and  b  by  t .  Value  t  is clamped automatically to range  [0, 1] .  As an example, note that  lerp :   returns  a  if  t  is  0  returns  b  if  t  is  1  returns  (a + b) / 2  if  t  is  0.5", 
+            "title": "lerp"
+        }, 
+        {
+            "location": "/reference/math/#smoothstep", 
+            "text": "smoothstep(a, b, t)  Interpolation smoothing at the limits.  Arguments   a : number.  b : number.  t : number. A value between 0 and 1.   Returns  Returns an interpolated value between  a  and  b  by  t , in a similar way to  lerp . Unlike the linear  lerp ,  smoothstep  is smooth at the limits. This is useful to create smooth transitions and animations.  Value  t  is clamped automatically to range  [0, 1] .", 
+            "title": "smoothstep"
+        }, 
+        {
+            "location": "/reference/number/", 
+            "text": "Number\n\n\nRoutines for numbers. The Number object is not supposed to be used directly. The functions below are available for primitive values of the number type.\n\n\nExample:\n\n\nx = 2.toString(); // x is \n2\n\nt = typeof(x); // t is \nstring\n\n\n\n\n\nFunctions\n\n\nvalueOf\n\n\nvalueOf()\n\n\nThe primitive value of the number, i.e., the number itself.\n\n\nReturns\n\n\nThe number.\n\n\ntoString\n\n\ntoString()\n\n\nConvert number to string.\n\n\nReturns\n\n\nThe number converted to a string.\n\n\nequals\n\n\nequals(x)\n\n\nCompares the number to another number \nx\n. Since this routine performs a comparison between floating point numbers, it's recommended to use \nMath.approximately()\n instead.\n\n\nArguments\n\n\n\n\nx\n: number. The value to compare the number to.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the numbers are equal.", 
+            "title": "Number"
+        }, 
+        {
+            "location": "/reference/number/#number", 
+            "text": "Routines for numbers. The Number object is not supposed to be used directly. The functions below are available for primitive values of the number type.  Example:  x = 2.toString(); // x is  2 \nt = typeof(x); // t is  string", 
+            "title": "Number"
+        }, 
+        {
+            "location": "/reference/number/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/number/#valueof", 
+            "text": "valueOf()  The primitive value of the number, i.e., the number itself.  Returns  The number.", 
+            "title": "valueOf"
+        }, 
+        {
+            "location": "/reference/number/#tostring", 
+            "text": "toString()  Convert number to string.  Returns  The number converted to a string.", 
+            "title": "toString"
+        }, 
+        {
+            "location": "/reference/number/#equals", 
+            "text": "equals(x)  Compares the number to another number  x . Since this routine performs a comparison between floating point numbers, it's recommended to use  Math.approximately()  instead.  Arguments   x : number. The value to compare the number to.   Returns  Returns  true  if the numbers are equal.", 
+            "title": "equals"
+        }, 
+        {
             "location": "/reference/iterator/", 
             "text": "Iterator\n\n\nIn SurgeScript, Iterator is an abstract contract, or protocol, that define a set of functions that should be written in concrete implementations. If you're familiar with object oriented programming, Iterator is an interface. Iterators are used to traverse containers / collections / data structures and access its elements.\n\n\nConcrete implementations of Iterator include: \nArrayIterator\n and \nDictionaryIterator\n. If you wish to \nwrite your own iterators\n, you need to specify the \nfunctions described below\n.\n\n\nThe data structure that you wish to traverse should include an \niterator()\n function that spawns the concrete implementation of the Iterator. Thus, the \nparent\n object of the Iterator will be the structure to be traversed.\n\n\nThe basic usage of an Iterator is as follows:\n\n\n// container is an object such as an Array\niterator = container.iterator(); // spawn an iterator to traverse the container\nwhile(iterator.hasNext()) {\n    element = iterator.next();\n    Console.print(element);\n}\n\n\n\n\nFunctions\n\n\nhasNext\n\n\nhasNext()\n\n\nChecks if there are more elements to be accessed in the iteration.\n\n\nReturns\n\n\nReturns \ntrue\n if there are more elements to be visited, or \nfalse\n otherwise.\n\n\nnext\n\n\nnext()\n\n\nGets the next element of the container and advances the iteration.\n\n\nReturns\n\n\nThe next element of the container, or \nnull\n if there is no such element. The first call to \nnext()\n returns the first element of the container, and so on.", 
             "title": "Iterator"
@@ -566,6 +801,51 @@
             "title": "hasTag"
         }, 
         {
+            "location": "/reference/tags/", 
+            "text": "TagSystem\n\n\nUtility functions for dealing with object tags. This object is available at \nSystem.tags\n and shouldn't be instantiated directly.\n\n\nFunctions\n\n\nlist\n\n\nlist()\n\n\nLists all tags used in all objects.\n\n\nReturns\n\n\nThis function spawns a new Array object with all tags and returns it.\n\n\nselect\n\n\nselect(tagName)\n\n\nSelects all objects that are tagged with \ntagName\n.\n\n\nArguments\n\n\n\n\ntagName\n: string.\n\n\n\n\nReturns\n\n\nThis function returns a new Array with all the names of the objects tagged with \ntagName\n.", 
+            "title": "TagSystem"
+        }, 
+        {
+            "location": "/reference/tags/#tagsystem", 
+            "text": "Utility functions for dealing with object tags. This object is available at  System.tags  and shouldn't be instantiated directly.", 
+            "title": "TagSystem"
+        }, 
+        {
+            "location": "/reference/tags/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/tags/#list", 
+            "text": "list()  Lists all tags used in all objects.  Returns  This function spawns a new Array object with all tags and returns it.", 
+            "title": "list"
+        }, 
+        {
+            "location": "/reference/tags/#select", 
+            "text": "select(tagName)  Selects all objects that are tagged with  tagName .  Arguments   tagName : string.   Returns  This function returns a new Array with all the names of the objects tagged with  tagName .", 
+            "title": "select"
+        }, 
+        {
+            "location": "/reference/time/", 
+            "text": "Time\n\n\nTime utilities. This object is available simply by typing \nTime\n.\n\n\nExample\n\n\n// This object will be moved at a rate of 20 pixels per second\nobject \nMoveTest\n\n{\n    // ...\n    transform = spawn(\nTransform2D\n);\n\n    state \nmain\n\n    {\n        // CORRECT: this adds 20 pixels to transform.xpos at every second\n        transform.xpos += 20 * Time.delta;\n\n        // INCORRECT: this adds 30 pixels to transform.ypos at every FRAME\n        //transform.ypos += 30;\n\n        // since the framerate may vary across different systems, it's advisable\n        // to multiply the value by Time.delta to make the behavior consistent.\n\n        // ...\n    }\n}\n\n\n\n\nProperties\n\n\n\n\ntime\n: number. The number of seconds since the application was started at the beginning of this frame.\n\n\ndelta\n: number. The time, in second, taken to complete the last frame of the application. Use this value to make your application behave consistently regardless of the frame rate.\n\n\ntickCount\n: number. The number of seconds since the application was started at the moment this property is evaluated*.\n\n\n\n\n\n\nNote:\n\n\n* Since \nTime.tickCount\n may return different values during the same frame of your application, it's generally advisable to use \nTime.time\n instead.", 
+            "title": "Time"
+        }, 
+        {
+            "location": "/reference/time/#time", 
+            "text": "Time utilities. This object is available simply by typing  Time .", 
+            "title": "Time"
+        }, 
+        {
+            "location": "/reference/time/#example", 
+            "text": "// This object will be moved at a rate of 20 pixels per second\nobject  MoveTest \n{\n    // ...\n    transform = spawn( Transform2D );\n\n    state  main \n    {\n        // CORRECT: this adds 20 pixels to transform.xpos at every second\n        transform.xpos += 20 * Time.delta;\n\n        // INCORRECT: this adds 30 pixels to transform.ypos at every FRAME\n        //transform.ypos += 30;\n\n        // since the framerate may vary across different systems, it's advisable\n        // to multiply the value by Time.delta to make the behavior consistent.\n\n        // ...\n    }\n}", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/reference/time/#properties", 
+            "text": "time : number. The number of seconds since the application was started at the beginning of this frame.  delta : number. The time, in second, taken to complete the last frame of the application. Use this value to make your application behave consistently regardless of the frame rate.  tickCount : number. The number of seconds since the application was started at the moment this property is evaluated*.    Note:  * Since  Time.tickCount  may return different values during the same frame of your application, it's generally advisable to use  Time.time  instead.", 
+            "title": "Properties"
+        }, 
+        {
             "location": "/reference/transform2d/", 
             "text": "Transform2D\n\n\nTransform2D encapsulates a 2D Transform. Transform2D comes with neat functions for translating, rotating and scaling things - and it's very useful for games! Whenever you spawn a Transform2D component on your object, it gains a position and a rotation in 2D space.\n\n\nIf an object with a Transform2D component has any children, the transform of the children will be affected by the transform of their parent. For example: if you move the parent object, the children will be moved as well.\n\n\nProperties\n\n\n\n\nxpos\n: number, read-write. The x-position of the object in local coordinates\u00b9.\n\n\nypos\n: number, read-write. The y-position of the object in local coordinates\u00b9.\n\n\nangle\n: number, read-write. The angle specifying the rotation of the object\u00b2.\n\n\nscaleX\n: number, read-write. Scale multiplier in the x-axis - defaults to 1.0.\n\n\nscaleY\n: number, read-write. Scale multiplier in the y-axis - defaults to 1.0.\n\n\nworldX\n: number, read-write. The x-position of the object in world coordinates.\n\n\nworldY\n: number, read-write. The y-position of the object in world coordinates.\n\n\nworldAngle\n: number, read-write. The rotation angle\u00b2 of the object in world coordinates.\n\n\n\n\n\n\nNotes:\n\n\n\u00b9 Local coordinates mean: relative to the parent.\n\n\n\u00b2 Rotation angles should be given in degrees.\n\n\n\n\nFunctions\n\n\ntranslate\n\n\ntranslate(xpos, ypos)\n\n\nMoves the object by (\nxpos\n, \nypos\n).\n\n\nArguments\n\n\n\n\nxpos\n: number.\n\n\nypos\n: number.\n\n\n\n\nrotate\n\n\nrotate(degrees)\n\n\nRotates the object by \ndegrees\n.\n\n\nArguments\n\n\n\n\ndegrees\n: number.\n\n\n\n\nscale\n\n\nscale(x, y)\n\n\nScales the transform by (\nx\n, \ny\n). Both parameters are multipliers that default to 1.0.\n\n\nArguments\n\n\n\n\nx\n: number.\n\n\ny\n: number.\n\n\n\n\nlookAt\n\n\nlookAt(transform)\n\n\nUse this function to make your object look at some point in space.\n\n\nArguments\n\n\n\n\ntransform\n: Transform2D object.\n\n\n\n\ndistanceTo\n\n\ndistanceTo(transform)\n\n\nCompute the distance between two points in space.\n\n\nArguments\n\n\n\n\ntransform\n: Transform2D object.\n\n\n\n\nReturns\n\n\nA number representing the distance, in world coordinates, between the position stored by \nthis\n and \ntransform\n.", 
             "title": "Transform2D"
@@ -659,6 +939,81 @@
             "location": "/reference/session/#tostring", 
             "text": "toString()  Converts the set of session variables to a string, in a Dictionary-like format.  Returns  The set of session variables converted to a string.", 
             "title": "toString"
+        }, 
+        {
+            "location": "/reference/string/", 
+            "text": "String\n\n\nRoutines for strings. The String object is not supposed to be used directly. The functions below are available for primitive values that are strings.\n\n\nExample:\n\n\n// Useful string routines\nx = \nSurgeScript\n.toLowerCase(); // \nsurgescript\n\ny = x.substr(0, 5); // \nsurge\n\nz = x[0]; // \ns\n (first character of x)\nn = y.length; // 5\n\n\n\n\nProperties\n\n\n\n\nlength\n: number. The length of the string.\n\n\n\n\nFunctions\n\n\nvalueOf\n\n\nvalueOf()\n\n\nThe primitive value of the string, i.e., the string itself.\n\n\nReturns\n\n\nThe string.\n\n\ntoString\n\n\ntoString()\n\n\nConvert to string.\n\n\nReturns\n\n\nThe string itself.\n\n\nequals\n\n\nequals(str)\n\n\nCompares the string to another string \nstr\n.\n\n\nArguments\n\n\n\n\nstr\n: string.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the strings are equal.\n\n\nplus\n\n\nplus(str)\n\n\nConcatenates two strings. This is the same as using the \n+\n operator.\n\n\nArguments\n\n\n\n\nstr\n: string.\n\n\n\n\nReturns\n\n\nThe caller string concatenated with \nstr\n at the end.\n\n\nget\n\n\nget(i)\n\n\nGets the \ni\n-th character of the string. The \n[ ]\n operator can be used equivalently.\n\n\nArguments\n\n\n\n\ni\n: integer number. A value between 0 (inclusive) and the length of the string (exclusive).\n\n\n\n\nReturns\n\n\nThe \ni\n-th character of the string (0-based index).\n\n\nindexOf\n\n\nindexOf(str)\n\n\nFinds the position of the first occurrence of \nstr\n in the string.\n\n\nArguments\n\n\n\n\nstr\n: string. The string to be searched for.\n\n\n\n\nReturns\n\n\nThe position (0-based index) of the first occurrence of \nstr\n in the string, or \n-1\n if there is no such occurrence.\n\n\nExample\n\n\nname = \nSurgeScript\n;\na = name.indexOf(\nSurge\n); // a is 0\nb = name.indexOf(\nNeon\n); // b is -1\nc = name.indexOf(\ne\n); // c is 4\nd = name.indexOf(\nscript\n); // d is -1, as the search is case-sensitive\n\n\n\n\nsubstr\n\n\nsubstr(start, length)\n\n\nExtracts the substring starting at position \nstart\n with length \nlength\n.\n\n\nArguments\n\n\n\n\nstart\n: number. The start position.\n\n\nlength\n: number. The length of the substring.\n\n\n\n\nReturns\n\n\nThe substring with length \nlength\n starting at \nstart\n.\n\n\nExample\n\n\nname = \nSurgeScript\n;\nsurge = name.substr(0, 5); // \nSurge\n\nscript = name.substr(5, 6); // \nScript\n\ne = name.substr(4, 2); // \ne\n\nempty = name.substr(555, 1); // \n\n\n\n\n\nconcat\n\n\nconcat(str)\n\n\nConcatenates two strings.\n\n\nArguments\n\n\n\n\nstr\n: string.\n\n\n\n\nReturns\n\n\nThe caller string concatenated with \nstr\n at the end.\n\n\nreplace\n\n\nreplace(oldstr, newstr)\n\n\nReplaces all occurrences of \noldstr\n to \nnewstr\n in the caller string.\n\n\nArguments\n\n\n\n\noldstr\n: string. The substring to be replaced.\n\n\nnewstr\n: string. The substring that should appear in the result.\n\n\n\n\nReturns\n\n\nThe caller string having all its occurrences of \noldstr\n replaced to \nnewstr\n.\n\n\nExample\n\n\n// dst is \nGimacian, Neon and Charge\n\nsrc = \nSurge, Neon and Charge\n;\ndst = src.replace(\nSurge\n, \nGimacian\n);\n\n\n\n\ntoLowerCase\n\n\ntoLowerCase()\n\n\nConverts the string to lower case.\n\n\nReturns\n\n\nThe string converted to lower case.\n\n\ntoUpperCase\n\n\ntoUpperCase()\n\n\nConverts the string to upper case.\n\n\nReturns\n\n\nThe string converted to upper case.", 
+            "title": "String"
+        }, 
+        {
+            "location": "/reference/string/#string", 
+            "text": "Routines for strings. The String object is not supposed to be used directly. The functions below are available for primitive values that are strings.  Example:  // Useful string routines\nx =  SurgeScript .toLowerCase(); //  surgescript \ny = x.substr(0, 5); //  surge \nz = x[0]; //  s  (first character of x)\nn = y.length; // 5", 
+            "title": "String"
+        }, 
+        {
+            "location": "/reference/string/#properties", 
+            "text": "length : number. The length of the string.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/string/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/string/#valueof", 
+            "text": "valueOf()  The primitive value of the string, i.e., the string itself.  Returns  The string.", 
+            "title": "valueOf"
+        }, 
+        {
+            "location": "/reference/string/#tostring", 
+            "text": "toString()  Convert to string.  Returns  The string itself.", 
+            "title": "toString"
+        }, 
+        {
+            "location": "/reference/string/#equals", 
+            "text": "equals(str)  Compares the string to another string  str .  Arguments   str : string.   Returns  Returns  true  if the strings are equal.", 
+            "title": "equals"
+        }, 
+        {
+            "location": "/reference/string/#plus", 
+            "text": "plus(str)  Concatenates two strings. This is the same as using the  +  operator.  Arguments   str : string.   Returns  The caller string concatenated with  str  at the end.", 
+            "title": "plus"
+        }, 
+        {
+            "location": "/reference/string/#get", 
+            "text": "get(i)  Gets the  i -th character of the string. The  [ ]  operator can be used equivalently.  Arguments   i : integer number. A value between 0 (inclusive) and the length of the string (exclusive).   Returns  The  i -th character of the string (0-based index).", 
+            "title": "get"
+        }, 
+        {
+            "location": "/reference/string/#indexof", 
+            "text": "indexOf(str)  Finds the position of the first occurrence of  str  in the string.  Arguments   str : string. The string to be searched for.   Returns  The position (0-based index) of the first occurrence of  str  in the string, or  -1  if there is no such occurrence.  Example  name =  SurgeScript ;\na = name.indexOf( Surge ); // a is 0\nb = name.indexOf( Neon ); // b is -1\nc = name.indexOf( e ); // c is 4\nd = name.indexOf( script ); // d is -1, as the search is case-sensitive", 
+            "title": "indexOf"
+        }, 
+        {
+            "location": "/reference/string/#substr", 
+            "text": "substr(start, length)  Extracts the substring starting at position  start  with length  length .  Arguments   start : number. The start position.  length : number. The length of the substring.   Returns  The substring with length  length  starting at  start .  Example  name =  SurgeScript ;\nsurge = name.substr(0, 5); //  Surge \nscript = name.substr(5, 6); //  Script \ne = name.substr(4, 2); //  e \nempty = name.substr(555, 1); //", 
+            "title": "substr"
+        }, 
+        {
+            "location": "/reference/string/#concat", 
+            "text": "concat(str)  Concatenates two strings.  Arguments   str : string.   Returns  The caller string concatenated with  str  at the end.", 
+            "title": "concat"
+        }, 
+        {
+            "location": "/reference/string/#replace", 
+            "text": "replace(oldstr, newstr)  Replaces all occurrences of  oldstr  to  newstr  in the caller string.  Arguments   oldstr : string. The substring to be replaced.  newstr : string. The substring that should appear in the result.   Returns  The caller string having all its occurrences of  oldstr  replaced to  newstr .  Example  // dst is  Gimacian, Neon and Charge \nsrc =  Surge, Neon and Charge ;\ndst = src.replace( Surge ,  Gimacian );", 
+            "title": "replace"
+        }, 
+        {
+            "location": "/reference/string/#tolowercase", 
+            "text": "toLowerCase()  Converts the string to lower case.  Returns  The string converted to lower case.", 
+            "title": "toLowerCase"
+        }, 
+        {
+            "location": "/reference/string/#touppercase", 
+            "text": "toUpperCase()  Converts the string to upper case.  Returns  The string converted to upper case.", 
+            "title": "toUpperCase"
         }, 
         {
             "location": "/reference/system/", 
