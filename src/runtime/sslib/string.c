@@ -24,7 +24,6 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_tonumber(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -50,7 +49,6 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "equals", fun_equals, 2);
     surgescript_vm_bind(vm, "String", "call", fun_call, 1);
     surgescript_vm_bind(vm, "String", "plus", fun_plus, 2);
-    surgescript_vm_bind(vm, "String", "toNumber", fun_tonumber, 1);
     surgescript_vm_bind(vm, "String", "getLength", fun_getlength, 1);
     surgescript_vm_bind(vm, "String", "get", fun_get, 2);
     surgescript_vm_bind(vm, "String", "set", fun_set, 3);
@@ -107,13 +105,9 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     if(surgescript_var_typecode(param[0]) == surgescript_var_typecode(param[1])) {
-        const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-        char* a = surgescript_var_get_string(param[0], manager);
-        char* b = surgescript_var_get_string(param[1], manager);
-        int cmp = strcmp(a, b);
-        ssfree(a);
-        ssfree(b);
-        return surgescript_var_set_bool(surgescript_var_create(), cmp == 0);
+        const char* a = surgescript_var_get_string(param[0]); /* can be assumed to be a string, for sure */
+        const char* b = surgescript_var_get_string(param[1]); /* it's a string, since param[0] is a string */
+        return surgescript_var_set_bool(surgescript_var_create(), strcmp(a, b) == 0);
     }
     else
         return surgescript_var_set_bool(surgescript_var_create(), false);
@@ -148,12 +142,6 @@ surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_
     ssfree(str[0]);
 
     return ret;
-}
-
-/* converts to number */
-surgescript_var_t* fun_tonumber(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    return surgescript_var_set_number(surgescript_var_create(), surgescript_var_get_number(param[0]));
 }
 
 /* length of the string */
