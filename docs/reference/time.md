@@ -10,8 +10,8 @@ Example
 // This object will be moved at a rate of 20 pixels per second
 object "MoveTest"
 {
-    transform = spawn("Transform2D");
     // ...
+    transform = spawn("Transform2D");
 
     state "main"
     {
