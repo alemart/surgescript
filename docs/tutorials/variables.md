@@ -109,6 +109,21 @@ object "Application"
 }
 ```
 
+Casting
+-------
+
+You can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling `Number(value)`, `String(value)` or `Boolean(value)`. Example:
+
+```
+// Convert string to number
+str = "2";
+val = Number(str); // val is 2
+
+// Convert number to string
+val = 123;
+str = String(val); // str is "123"
+```
+
 Scoping
 -------
 Variables that are defined before any state or function are *object-level* variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are *local variables*. This means that their lifespan is restricted to their own block of code.
