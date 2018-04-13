@@ -1,7 +1,7 @@
 Application
 ===========
 
-Represents the Application. You do not need to instantiate it, as it is instantiated automatically. Object `Application` can be accessed by any other object, in any script.
+Represents the Application. You do not need to instantiate it, as it is instantiated automatically. This object can be accessed by any other object, in any script, simply by typing `Application`.
 
 Properties
 ----------

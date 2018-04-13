@@ -26,6 +26,10 @@ object "Application"
         Console.print(Application.args);
         Console.print(Application.args.__data);
         Console.print(Application.args.option('--level') || 88);
+        Console.print("ae> \"" + "SurgeScript".substr(4, 2) + "\"");
+        Console.print("1" == 1);
+        Console.print("1" === 1);
+        Console.print("----------aa");
     }
 
 

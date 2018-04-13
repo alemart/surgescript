@@ -22,8 +22,10 @@ pages:
         - 'Best practices': 'tutorials/best_practices.md'
     - 'SurgeScript Reference':
         - 'Application': 'reference/application.md'
+        - 'Array': 'reference/array.md'
         - 'Arguments': 'reference/arguments.md'
         - 'Boolean': 'reference/boolean.md'
+        - 'Dictionary': 'reference/dictionary.md'
         - 'GC': 'reference/gc.md'
         - 'Math': 'reference/math.md'
         - 'Number': 'reference/number.md'
@@ -35,5 +37,3 @@ pages:
         - 'Session': 'reference/session.md'
         - 'String': 'reference/string.md'
         - 'System': 'reference/system.md'
-    - 'Engine Reference':
-        - 'Application': 'reference/application.md'

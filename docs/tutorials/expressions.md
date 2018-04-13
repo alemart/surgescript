@@ -68,6 +68,8 @@ Operator|Meaning
 <= | Less or equal
 \> | Greater than
 \>= | Greater or equal
+=== | Strong equality
+!== | Strong inequality
 
 Examples:
 
@@ -82,6 +84,10 @@ t = x >= 1; // t is true
 > **Pay attention!**
 >
 > Notice that the equality operator, used for comparing expressions for equality, is *==*. Pay attention! Don't confuse the equality operator (*==*) with the assignment operator (*=*). The expression `(x = 1)` always evaluates to 1, whereas `(x == 1)` is *true* only if x equals 1.
+
+> **Strong equality**
+>
+> Unlike their counterparts, strong equality/inequality operators compare not only the content of the operands, but also their type. While `"1" == 1` evalutes to `true`, `"1" === 1` does not.
 
 Logical operators
 -----------------
