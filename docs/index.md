@@ -35,4 +35,4 @@ The motivation behind SurgeScript is to allow players to unleash their creativit
 
 Who did this?
 -------------
-SurgeScript was originally conceived by Alexandre Martins, a developer from Brazil. Many thanks to the Open Surge community for the continued feedback.
+SurgeScript was originally conceived by [Alexandre Martins](https://github.com/alemart), a developer from Brazil. Many thanks to the Open Surge community for the continued feedback.
