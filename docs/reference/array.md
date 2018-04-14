@@ -15,16 +15,29 @@ object "Application"
     {
         // who are the characters?
         Console.print("The characters are:");
-        Console.print(characters[0]); // will print Surge
-        Console.print(characters[1]); // will print Neon
-        Console.print(characters[2]); // will print Charge
+        Console.print(characters[0]);
+        Console.print(characters[1]);
+        Console.print(characters[2]);
 
         // how many characters?
-        Console.print("Number of characters:");
-        Console.print(characters.length); // will print 3
+        Console.print("Number of characters: " + characters.length);
     }
 }
 ```
+
+Output:
+
+```
+The characters are:
+Surge
+Neon
+Charge
+Number of characters: 3
+```
+
+> **Note:**
+> 
+> Whenever you define a array, you spawn a new object. One is advised to **NOT** define arrays within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.
 
 Properties
 ----------
