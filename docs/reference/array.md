@@ -1,0 +1,253 @@
+Array
+=====
+
+An Array is a collection of values organized in sequencial fashion. To instantiate an Array, use the `[ value_1, value_2, ..., value_n ]` syntax rather than the `spawn()` function.
+
+Example:
+
+```
+object "Application"
+{
+    // The 'characters' array hold 3 strings
+    characters = [ "Surge", "Neon", "Charge" ];
+
+    state "main"
+    {
+        // who are the characters?
+        Console.print("The characters are:");
+        Console.print(characters[0]); // will print Surge
+        Console.print(characters[1]); // will print Neon
+        Console.print(characters[2]); // will print Charge
+
+        // how many characters?
+        Console.print("Number of characters:");
+        Console.print(characters.length); // will print 3
+    }
+}
+```
+
+Properties
+----------
+
+* `length`: number. The number of elements in the Array.
+
+Functions
+---------
+
+#### get
+
+`get(index)`
+
+Gets the specified element of the Array. Instead of calling `get()` directly, you may equivalently use the `[ ]` operator.
+
+*Arguments*
+
+* `index`: integer number between 0 and `this.length - 1`, inclusive.
+
+*Returns*
+
+The Array element at position `index` (0-based).
+
+*Example*
+
+```
+characters = [ "Surge", "Neon", "Charge" ];
+
+...
+
+surge = characters[0];  // first element ("Surge")
+neon = characters[1];   // second element ("Neon")
+charge = characters[2]; // third element ("Charge")
+```
+
+#### set
+
+`set(index, value)`
+
+Sets to `value` the element of the Array at position `index`. Instead of calling `set()` directly, you may equivalently use the `[ ]` operator.
+
+*Arguments*
+
+* `index`: integer number between 0 and `this.length - 1`, inclusive.
+* `value`: any type. The new value to be placed on the Array.
+
+*Example*
+
+```
+characters = [ "Surge", "Neon", "Charge" ];
+characters[0] = "Gimacian";
+Console.print(characters[0]); // Gimacian
+```
+
+
+#### push
+
+`push(value)`
+
+Adds a new element to the end of the Array.
+
+*Arguments*
+
+* `value`: any type. The element to be added to the Array.
+
+*Example*
+
+```
+characters = [ "Surge", "Neon", "Charge" ];
+characters.push("Gimacian");
+Console.print(characters); // [ "Surge", "Neon", "Charge", "Gimacian" ]
+```
+
+#### pop
+
+`pop()`
+
+Removes the last element of the Array and returns it.
+
+*Returns*
+
+The removed element.
+
+#### shift
+
+`shift()`
+
+Removes the first element of the Array and returns it.
+
+*Returns*
+
+The removed element.
+
+#### unshift
+
+`unshift(value)`
+
+Adds a new element to the beginning of the Array.
+
+*Arguments*
+
+* `value`: any type. The element to be added to the Array.
+
+#### indexOf
+
+`indexOf(value)`
+
+Search the Array for element `value` and return its position.
+
+*Arguments*
+
+* `value`: any type. The element to be searched for.
+
+*Returns*
+
+The position of the searched element - a number between 0 and `this.length - 1`, inclusive. If the desired element is not found, this function returns *-1*.
+
+*Example*
+
+```
+characters = [ "Surge", "Neon", "Charge" ];
+...
+two = characters.indexOf("Neon"); // 2
+gimacian = characters.indexOf("Gimacian"); // -1
+if(gimacian < 0)
+    Console.print("Not found");
+```
+
+#### sort
+
+`sort(sortingStrategy)`
+
+Sorts the Array according to a certain strategy (algorithm). If no strategy is provided (`sortingStrategy` is *null*), the Array will be sorted in ascending order.
+
+*Arguments*
+
+* `sortingStrategy`: object | null. This [functor](../tutorials/advanced_features#functors) implements function *call(a, b)* that compares two array elements as described in the example below.
+
+*Example*
+
+```
+// this example will print the elements
+// of the Array in ascending order
+object "Application"
+{
+    arr = [ 3, 9, 4, 8, 5, 6, 7, 1, 2, 0 ];
+
+    state "main"
+    {
+        // sort and print the Array
+        arr.sort(null);
+        Console.print(arr);
+        Application.exit();
+    }
+}
+```
+
+Output: `[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]`
+
+```
+// this example will print the elements
+// of the Array in descending order
+object "Application"
+{
+    arr = [ 3, 9, 4, 8, 5, 6, 7, 1, 2, 0 ];
+    cmp = spawn("Sort.OrderByDesc");
+
+    state "main"
+    {
+        // sort and print the Array
+        arr.sort(cmp);
+        Console.print(arr);
+        Application.exit();
+    }
+}
+
+object "Sort.OrderByDesc"
+{
+    // This function compares two
+    // elements of the Array: a and b.
+    //
+    // It should return a number:
+    //   < 0 if a must come BEFORE b
+    //   = 0 if a and b are equivalent
+    //   > 0 if a must come AFTER b
+    fun call(a, b)
+    {
+        // sort in descending order
+        return b - a;
+    }
+}
+```
+
+Output: `[ 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ]`
+
+#### reverse
+
+`reverse()`
+
+Reverses the order of the elements in the Array.
+
+#### shuffle
+
+`shuffle()`
+
+Shuffles the elements of the Array, placing its elements at random spots.
+
+#### iterator
+
+`iterator()`
+
+Spawns an iterator.
+
+*Returns*
+
+An iterator to loop through the elements of the Array.
+
+#### toString
+
+`toString()`
+
+Converts the Array to a string.
+
+*Returns*
+
+A string.
