@@ -955,6 +955,18 @@ void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     int num_params = 0;
     match(parser, SSTOK_LPAREN);
 
+    /* quick validation */
+    if(strcmp(fun_name, "constructor") == 0 || strcmp(fun_name, "destructor") == 0) {
+        ssfatal(
+            "Compile Error: the %s of \"%s\" can't be called directly in %s:%d.",
+            fun_name,
+            context.object_name,
+            context.source_file,
+            surgescript_token_linenumber(parser->lookahead)
+        );
+    }
+
+    /* emit the function call code */
     emit_pushparam(context); /* push the object handle */
     if(!got_type(parser, SSTOK_RPAREN)) { /* read the parameters */
         do {
