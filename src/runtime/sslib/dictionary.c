@@ -20,7 +20,7 @@
 /* Dictionary */
 static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getsize(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getcount(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_clear(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -85,7 +85,7 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Dictionary", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Dictionary", "state:main", fun_main, 0);
-    surgescript_vm_bind(vm, "Dictionary", "getSize", fun_getsize, 0);
+    surgescript_vm_bind(vm, "Dictionary", "getCount", fun_getcount, 0);
     surgescript_vm_bind(vm, "Dictionary", "get", fun_get, 1);
     surgescript_vm_bind(vm, "Dictionary", "set", fun_set, 2);
     surgescript_vm_bind(vm, "Dictionary", "clear", fun_clear, 0);
@@ -146,8 +146,8 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
     return NULL;
 }
 
-/* getSize(): how many entries does this Dictionary have? */
-surgescript_var_t* fun_getsize(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+/* getCount(): how many entries does this Dictionary have? */
+surgescript_var_t* fun_getcount(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
