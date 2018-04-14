@@ -97,7 +97,7 @@
         }, 
         {
             "location": "/tutorials/variables/", 
-            "text": "Variables\n\n\nVariables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object handle). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.\n\n\nTypes\n\n\nPrimitive types\n\n\n\n\n\n\n\n\nType\n\n\nDescription\n\n\nExamples\n\n\n\n\n\n\n\n\n\n\nNumber\n\n\nA floating-point number\n\n\n1, 2, 3, 3.14159\n\n\n\n\n\n\nString\n\n\nSome text\n\n\n\"Hello, world!\", 'single-quoted'\n\n\n\n\n\n\nBoolean\n\n\nTrue or false\n\n\ntrue, false\n\n\n\n\n\n\nObject\n\n\nReference to an object\n\n\nApplication, this, [ ]\n\n\n\n\n\n\nNull\n\n\nAn empty value\n\n\nnull\n\n\n\n\n\n\n\n\nAs an example, the script below features an object with 3 variables that may be accessed throughout the whole object:\n\n\nobject \nSurge\n\n{\n    name = \nSurge the Rabbit\n;\n    age = 23;\n    underage = false;\n\n    state \nmain\n\n    {\n        Console.print(name); // Surge the Rabbit\n        Console.print(age); // 23\n    }\n}\n\n\n\n\nAbstract types\n\n\nArrays\n\n\nArrays are collections of values that you may access using a zero-based index. Example:\n\n\nobject \nApplication\n\n{\n    // The 'characters' array hold 3 strings\n    characters = [ \nSurge\n, \nNeon\n, \nCharge\n ];\n\n    state \nmain\n\n    {\n        // who are the characters?\n        Console.print(\nThe characters are:\n);\n        Console.print(characters[0]); // will print Surge\n        Console.print(characters[1]); // will print Neon\n        Console.print(characters[2]); // will print Charge\n\n        // how many characters?\n        Console.print(\nNumber of characters:\n);\n        Console.print(characters.length); // will print 3\n    }\n}\n\n\n\n\nArrays have many interesting properties and operations that you can see in the \nLanguage Reference\n.\n\n\nDictionaries\n\n\nDictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:\n\n\nobject \nSurge\n\n{\n    // A dictionary that stores the weight (kg) of each character\n    weight = {\n        \nSurge\n: 35,\n        \nNeon\n: 20,\n        \nCharge\n: 37.5,\n        \nGimacian\n: 70\n    };\n\n    // print the weights\n    state \nmain\n\n    {\n        Console.print(\nSurge weighs \n + weight[\nSurge\n] + \n kg.\n);\n        Console.print(\nNeon weighs \n + weight[\nNeon\n] + \n kg.\n);\n        Console.print(\nCharge weighs \n + weight[\nCharge\n] + \n kg.\n);\n        Console.print(\nGimacian weighs \n + weight[\nGimacian\n] + \n kg.\n);\n    }\n}\n\n\n\n\nDictionaries have many interesting properties and operations that you can see in the \nLanguage Reference\n.\n\n\n\n\nCautionary note\n\n\nWhenever you define an array or a dictionary, you spawn a new object. One is advised to \nNOT\n define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.\n\n\n\n\nobject \nApplication\n\n{\n    // arr will be instantiated once the object is created\n    arr = [ 1, 2, 3 ]; // RIGHT!\n\n    state \nmain\n\n    {\n        // err is instantiated at every frame of the application,\n        // thus memory is wasted with duplicate objects\n        err = [ \ndon't\n, \ndo\n, \nthis\n ]; // WRONG!\n    }\n}\n\n\n\n\nCasting\n\n\nYou can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling \nNumber(value)\n, \nString(value)\n or \nBoolean(value)\n. Example:\n\n\n// Convert string to number\nstr = \n2\n;\nval = Number(str); // val is 2\n\n// Convert number to string\nval = 123;\nstr = String(val); // str is \n123\n\n\n\n\n\nScoping\n\n\nVariables that are defined before any state or function are \nobject-level\n variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are \nlocal variables\n. This means that their lifespan is restricted to their own block of code.\n\n\nobject \nSurge\n\n{\n    name = \nSurge the Rabbit\n; // object-level variable\n\n    state \nmain\n\n    {\n        weight = 35; // local variable\n        state = \nprint-data\n; // change the state\n    }\n\n    state \nprint-data\n\n    {\n        Console.print(name); // Surge the Rabbit\n        Console.print(weight); // ERROR: weight is not defined\n    }\n}\n\n\n\n\nFurthermore, \nobject-level\n variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are \nprivate\n to the objects). You need to define \nfunctions\n or \ngetters and setters\n to accomplish that.", 
+            "text": "Variables\n\n\nVariables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object handle). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.\n\n\nTypes\n\n\nPrimitive types\n\n\n\n\n\n\n\n\nType\n\n\nDescription\n\n\nExamples\n\n\n\n\n\n\n\n\n\n\nNumber\n\n\nA floating-point number\n\n\n1, 2, 3, 3.14159\n\n\n\n\n\n\nString\n\n\nSome text\n\n\n\"Hello, world!\", 'single-quoted'\n\n\n\n\n\n\nBoolean\n\n\nTrue or false\n\n\ntrue, false\n\n\n\n\n\n\nObject\n\n\nReference to an object\n\n\nApplication, this, [ ]\n\n\n\n\n\n\nNull\n\n\nAn empty value\n\n\nnull\n\n\n\n\n\n\n\n\nAs an example, the script below features an object with 3 variables that may be accessed throughout the whole object:\n\n\nobject \nSurge\n\n{\n    name = \nSurge the Rabbit\n;\n    age = 23;\n    underage = false;\n\n    state \nmain\n\n    {\n        Console.print(name); // Surge the Rabbit\n        Console.print(age); // 23\n    }\n}\n\n\n\n\nAbstract types\n\n\nArrays\n\n\nArrays are collections of values that you may access using a zero-based index. Example:\n\n\nobject \nApplication\n\n{\n    // The 'characters' array hold 3 strings\n    characters = [ \nSurge\n, \nNeon\n, \nCharge\n ];\n\n    state \nmain\n\n    {\n        // who are the characters?\n        Console.print(\nThe characters are:\n);\n        Console.print(characters[0]); // will print Surge\n        Console.print(characters[1]); // will print Neon\n        Console.print(characters[2]); // will print Charge\n\n        // how many characters?\n        Console.print(\nNumber of characters:\n);\n        Console.print(characters.length); // will print 3\n    }\n}\n\n\n\n\nArrays have many interesting properties and operations that you can see in the \nLanguage Reference\n.\n\n\nDictionaries\n\n\nDictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:\n\n\nobject \nSurge\n\n{\n    // A dictionary that stores the weight (kg) of each character\n    weight = {\n        \nSurge\n: 35,\n        \nNeon\n: 20,\n        \nCharge\n: 37.5,\n        \nGimacian\n: 70\n    };\n\n    // print the weights\n    state \nmain\n\n    {\n        Console.print(\nSurge weighs \n + weight[\nSurge\n] + \n kg.\n);\n        Console.print(\nNeon weighs \n + weight[\nNeon\n] + \n kg.\n);\n        Console.print(\nCharge weighs \n + weight[\nCharge\n] + \n kg.\n);\n        Console.print(\nGimacian weighs \n + weight[\nGimacian\n] + \n kg.\n);\n    }\n}\n\n\n\n\nDictionaries have many interesting properties and operations that you can see in the \nLanguage Reference\n.\n\n\n\n\nCautionary note\n\n\nWhenever you define an array or a dictionary, you spawn a new object. One is advised to \nNOT\n define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.\n\n\n\n\nobject \nApplication\n\n{\n    // arr will be instantiated once the object is created\n    arr = [ 1, 2, 3 ]; // RIGHT!\n\n    state \nmain\n\n    {\n        // err is instantiated at every frame of the application,\n        // thus memory is wasted with duplicate objects\n        err = [ \ndon't\n, \ndo\n, \nthis\n ]; // WRONG!\n    }\n}\n\n\n\n\nCasting\n\n\nYou can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling \nNumber(value)\n, \nString(value)\n or \nBoolean(value)\n. Example:\n\n\n// Convert string to number\nstr = \n2\n;\nval = Number(str); // val is 2\n\n// Convert number to string\nval = 123;\nstr = String(val); // str is \n123\n\n\n\n\n\nWhen converting an object to a string, SurgeScript will implicitly call \nobject.toString()\n.\n\n\nScoping\n\n\nVariables that are defined before any state or function are \nobject-level\n variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are \nlocal variables\n. This means that their lifespan is restricted to their own block of code.\n\n\nobject \nSurge\n\n{\n    name = \nSurge the Rabbit\n; // object-level variable\n\n    state \nmain\n\n    {\n        weight = 35; // local variable\n        state = \nprint-data\n; // change the state\n    }\n\n    state \nprint-data\n\n    {\n        Console.print(name); // Surge the Rabbit\n        Console.print(weight); // ERROR: weight is not defined\n    }\n}\n\n\n\n\nFurthermore, \nobject-level\n variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are \nprivate\n to the objects). You need to define \nfunctions\n or \ngetters and setters\n to accomplish that.", 
             "title": "Variables"
         }, 
         {
@@ -132,7 +132,7 @@
         }, 
         {
             "location": "/tutorials/variables/#casting", 
-            "text": "You can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling  Number(value) ,  String(value)  or  Boolean(value) . Example:  // Convert string to number\nstr =  2 ;\nval = Number(str); // val is 2\n\n// Convert number to string\nval = 123;\nstr = String(val); // str is  123", 
+            "text": "You can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling  Number(value) ,  String(value)  or  Boolean(value) . Example:  // Convert string to number\nstr =  2 ;\nval = Number(str); // val is 2\n\n// Convert number to string\nval = 123;\nstr = String(val); // str is  123   When converting an object to a string, SurgeScript will implicitly call  object.toString() .", 
             "title": "Casting"
         }, 
         {
@@ -142,7 +142,7 @@
         }, 
         {
             "location": "/tutorials/expressions/", 
-            "text": "Expressions\n\n\nSurgeScript supports many kinds of expressions. Expressions may involve strings, numbers or booleans. Let's study each case:\n\n\nConstants\n\n\nConstants are types of expressions. They may be numbers, strings, booleans... You may attribute constant values to variables using the assignment operator (\n=\n):\n\n\n// strings\nname = \nSurge\n; // variable name receives string \nSurge\n\nmessage = \nSurge's home\n;\notherMessage = 'Single-quoted strings are also allowed';\n\n// numbers\nweight = 35;\nspeed = 42.2;\n\n// booleans\nlike = true;\ncrazy = false;\n\n// null\nnext = null;\n\n\n\n\nArithmetic operators\n\n\nSurgeScript can perform basic arithmetic. The operators are as follows:\n\n\n\n\n\n\n\n\nOperator\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\n+\n\n\nAddition\n\n\n\n\n\n\n-\n\n\nSubtraction\n\n\n\n\n\n\n*\n\n\nMultiplication\n\n\n\n\n\n\n/\n\n\nDivision\n\n\n\n\n\n\n\n\nExamples:\n\n\ntwo = 1 + 1;\nten = 5 * 2;\neleven = 5 * 2 + 1;\nfour = two * two;\nfifteen = eleven + four;\nthree = fifteen / 5;\npositive = +5;\nnegative = -1;\nzero = 15 - 10 - 5;\none = 15 - (10 + 4);\ntwelve = (2 + 2) * 3;\nprime = -(-15 + 8);\n\n\n\n\nComparison operators\n\n\nComparison operators compare two operands.\n\n\n\n\n\n\n\n\nOperator\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\n==\n\n\nEquality operator\n\n\n\n\n\n\n!=\n\n\nInequality operator\n\n\n\n\n\n\n\n\nLess than\n\n\n\n\n\n\n=\n\n\nLess or equal\n\n\n\n\n\n\n>\n\n\nGreater than\n\n\n\n\n\n\n>=\n\n\nGreater or equal\n\n\n\n\n\n\n\n\nExamples:\n\n\nx = 1;\ny = (x == 1); // y is true\nz = (x != 1); // z is false\nw = x \n 1; // w is false\nt = x \n= 1; // t is true\n\n\n\n\n\n\nPay attention!\n\n\nNotice that the equality operator, used for comparing expressions for equality, is \n==\n. Pay attention! Don't confuse the equality operator (\n==\n) with the assignment operator (\n=\n). The expression \n(x = 1)\n always evaluates to 1, whereas \n(x == 1)\n is \ntrue\n only if x equals 1.\n\n\n\n\nLogical operators\n\n\nLogical operators involve booleans (\ntrue\n or \nfalse\n values). While the \nnot\n operator requires only one operand, operators \nand\n and \nor\n require two.\n\n\n\n\n\n\n\n\nOperator\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\n\n\nand\n\n\n\n\n\n\n||\n\n\nor\n\n\n\n\n\n\n!\n\n\nnot\n\n\n\n\n\n\n\n\nThe table below summarizes the basic logical expressions:\n\n\n\n\n\n\n\n\nExpression\n\n\nResult\n\n\n\n\n\n\n\n\n\n\na \n b\n\n\ntrue\n only if both a and b are true\n\n\n\n\n\n\na || b\n\n\ntrue\n if either a or b are true (or both)\n\n\n\n\n\n\n!a\n\n\ntrue\n if a is false, \nfalse\n if a is true\n\n\n\n\n\n\n\n\nNotice that \nnot\n has higher precedence than the other two operators. Examples:\n\n\nx = 5 \n 2; // evaluates to false\ny = !x; // evaluates to true\nz = 18 \n 35 || x; // evaluates to true\nw = (z \n x) || true; // evaluates to true\nt = !x \n x; // evaluates to false\n\n\n\n\nTextual expressions\n\n\nYou may concatenate strings with the \n+\n operator. Example:\n\n\nmessage = \nSurge\n + \n rocks!\n; // evaluates to \nSurge rocks!\n\n\n\n\n\nOther data types, such as numbers and booleans, may also be implicitly converted to strings when using this feature. Example:\n\n\ngroup = \nJackson \n + 5; // evaluates to \nJackson 5\n\n\n\n\n\nAssignment operators\n\n\nThe attribution operator (\n=\n) may be used to attribute data to variables. However, there's more to that. The expression \nvariable = \"data\"\n is itself evaluated to string \n\"data\"\n.\n\n\nLikewise, the expression \nvariable = variable + 5\n is evaluated to \nvariable + 5\n and may be shortened to \nvariable += 5\n.\n\n\nLet's see what kind of assignment expressions we have:\n\n\n\n\n\n\n\n\nExpression\n\n\nTranslates to\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\nx = value\n\n\nx = value\n\n\nAssigns \nvalue\n to x\n\n\n\n\n\n\nx += value\n\n\nx = x + value\n\n\nAdds \nvalue\n to x\n\n\n\n\n\n\nx -= value\n\n\nx = x - value\n\n\nSubtracts \nvalue\n from x\n\n\n\n\n\n\nx *= value\n\n\nx = x * value\n\n\nMultiplies x by \nvalue\n\n\n\n\n\n\nx /= value\n\n\nx = x / value\n\n\nDivides x by \nvalue\n\n\n\n\n\n\n\n\nExample:\n\n\nlanguage = \nSurge\n;\nlanguage += \nScript\n;\n// language now evaluates to \nSurgeScript\n\n\n\n\n\nIncrement and decrement\n\n\nIncrement and decrement operators should be used only on numeric variables.\n\n\n\n\n\n\n\n\nExpression\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\nx++\n\n\nIncrements x by 1 and returns the old value of x\n\n\n\n\n\n\nx--\n\n\nDecrements x by 1 and returns the old value of x\n\n\n\n\n\n\n++x\n\n\nIncrements x by 1 and returns the new value of x\n\n\n\n\n\n\n--x\n\n\nDecrements x by 1 and returns the new value of x\n\n\n\n\n\n\n\n\nExample:\n\n\nx = 1;   // x is 1\ny = x++; // y is 1\nz = ++x; // z is 3\nw = --x; // w is 2\nt = --x; // t is 1\nConsole.print(x); // prints 1\n\n\n\n\nChained expressions\n\n\nYou may chain assignment operations:\n\n\nx = y = z = 1;\n\n\n\n\nUsing commas will evaluate all expressions between then and return the right-most one:\n\n\nx = 1; // x is 1\ny = x++, 2; // y is 2\nz = y--, --x; // z is 1\n// x, y and z end up equal to 1\n\n\n\n\nOther expressions\n\n\ntypeof\n\n\nThe expression \ntypeof expr\n evaluates to a string informing the type of \nexpr\n. Example:\n\n\nt = typeof 5; // t will hold the string \nnumber\n\n\n\n\n\nThe possible types are: \nnumber\n, \nstring\n, \nboolean\n, \nnull\n, \nobject\n.\n\n\nthis\n\n\nThe keyword \nthis\n represents the object in which it appears. Example:\n\n\nthis.destroy(); // destroys this object", 
+            "text": "Expressions\n\n\nSurgeScript supports many kinds of expressions. Expressions may involve strings, numbers or booleans. Let's study each case:\n\n\nConstants\n\n\nConstants are types of expressions. They may be numbers, strings, booleans... You may attribute constant values to variables using the assignment operator (\n=\n):\n\n\n// strings\nname = \nSurge\n; // variable name receives string \nSurge\n\nmessage = \nSurge's home\n;\notherMessage = 'Single-quoted strings are also allowed';\n\n// numbers\nweight = 35;\nspeed = 42.2;\n\n// booleans\nlike = true;\ncrazy = false;\n\n// null\nnext = null;\n\n\n\n\nArithmetic operators\n\n\nSurgeScript can perform basic arithmetic. The operators are as follows:\n\n\n\n\n\n\n\n\nOperator\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\n+\n\n\nAddition\n\n\n\n\n\n\n-\n\n\nSubtraction\n\n\n\n\n\n\n*\n\n\nMultiplication\n\n\n\n\n\n\n/\n\n\nDivision\n\n\n\n\n\n\n\n\nExamples:\n\n\ntwo = 1 + 1;\nten = 5 * 2;\neleven = 5 * 2 + 1;\nfour = two * two;\nfifteen = eleven + four;\nthree = fifteen / 5;\npositive = +5;\nnegative = -1;\nzero = 15 - 10 - 5;\none = 15 - (10 + 4);\ntwelve = (2 + 2) * 3;\nprime = -(-15 + 8);\n\n\n\n\nComparison operators\n\n\nComparison operators compare two operands.\n\n\n\n\n\n\n\n\nOperator\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\n==\n\n\nEquality operator\n\n\n\n\n\n\n!=\n\n\nInequality operator\n\n\n\n\n\n\n\n\nLess than\n\n\n\n\n\n\n=\n\n\nLess or equal\n\n\n\n\n\n\n>\n\n\nGreater than\n\n\n\n\n\n\n>=\n\n\nGreater or equal\n\n\n\n\n\n\n===\n\n\nStrong equality\n\n\n\n\n\n\n!==\n\n\nStrong inequality\n\n\n\n\n\n\n\n\nExamples:\n\n\nx = 1;\ny = (x == 1); // y is true\nz = (x != 1); // z is false\nw = x \n 1; // w is false\nt = x \n= 1; // t is true\n\n\n\n\n\n\nPay attention!\n\n\nNotice that the equality operator, used for comparing expressions for equality, is \n==\n. Pay attention! Don't confuse the equality operator (\n==\n) with the assignment operator (\n=\n). The expression \n(x = 1)\n always evaluates to 1, whereas \n(x == 1)\n is \ntrue\n only if x equals 1.\n\n\nStrong equality\n\n\nUnlike their counterparts, strong equality/inequality operators compare not only the content of the operands, but also their type. While \n\"1\" == 1\n evalutes to \ntrue\n, \n\"1\" === 1\n does not.\n\n\n\n\nLogical operators\n\n\nLogical operators involve booleans (\ntrue\n or \nfalse\n values). While the \nnot\n operator requires only one operand, operators \nand\n and \nor\n require two.\n\n\n\n\n\n\n\n\nOperator\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\n\n\nand\n\n\n\n\n\n\n||\n\n\nor\n\n\n\n\n\n\n!\n\n\nnot\n\n\n\n\n\n\n\n\nThe table below summarizes the basic logical expressions:\n\n\n\n\n\n\n\n\nExpression\n\n\nResult\n\n\n\n\n\n\n\n\n\n\na \n b\n\n\ntrue\n only if both a and b are true\n\n\n\n\n\n\na || b\n\n\ntrue\n if either a or b are true (or both)\n\n\n\n\n\n\n!a\n\n\ntrue\n if a is false, \nfalse\n if a is true\n\n\n\n\n\n\n\n\nNotice that \nnot\n has higher precedence than the other two operators. Examples:\n\n\nx = 5 \n 2; // evaluates to false\ny = !x; // evaluates to true\nz = 18 \n 35 || x; // evaluates to true\nw = (z \n x) || true; // evaluates to true\nt = !x \n x; // evaluates to false\n\n\n\n\nTextual expressions\n\n\nYou may concatenate strings with the \n+\n operator. Example:\n\n\nmessage = \nSurge\n + \n rocks!\n; // evaluates to \nSurge rocks!\n\n\n\n\n\nOther data types, such as numbers and booleans, may also be implicitly converted to strings when using this feature. Example:\n\n\ngroup = \nJackson \n + 5; // evaluates to \nJackson 5\n\n\n\n\n\nAssignment operators\n\n\nThe attribution operator (\n=\n) may be used to attribute data to variables. However, there's more to that. The expression \nvariable = \"data\"\n is itself evaluated to string \n\"data\"\n.\n\n\nLikewise, the expression \nvariable = variable + 5\n is evaluated to \nvariable + 5\n and may be shortened to \nvariable += 5\n.\n\n\nLet's see what kind of assignment expressions we have:\n\n\n\n\n\n\n\n\nExpression\n\n\nTranslates to\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\nx = value\n\n\nx = value\n\n\nAssigns \nvalue\n to x\n\n\n\n\n\n\nx += value\n\n\nx = x + value\n\n\nAdds \nvalue\n to x\n\n\n\n\n\n\nx -= value\n\n\nx = x - value\n\n\nSubtracts \nvalue\n from x\n\n\n\n\n\n\nx *= value\n\n\nx = x * value\n\n\nMultiplies x by \nvalue\n\n\n\n\n\n\nx /= value\n\n\nx = x / value\n\n\nDivides x by \nvalue\n\n\n\n\n\n\n\n\nExample:\n\n\nlanguage = \nSurge\n;\nlanguage += \nScript\n;\n// language now evaluates to \nSurgeScript\n\n\n\n\n\nIncrement and decrement\n\n\nIncrement and decrement operators should be used only on numeric variables.\n\n\n\n\n\n\n\n\nExpression\n\n\nMeaning\n\n\n\n\n\n\n\n\n\n\nx++\n\n\nIncrements x by 1 and returns the old value of x\n\n\n\n\n\n\nx--\n\n\nDecrements x by 1 and returns the old value of x\n\n\n\n\n\n\n++x\n\n\nIncrements x by 1 and returns the new value of x\n\n\n\n\n\n\n--x\n\n\nDecrements x by 1 and returns the new value of x\n\n\n\n\n\n\n\n\nExample:\n\n\nx = 1;   // x is 1\ny = x++; // y is 1\nz = ++x; // z is 3\nw = --x; // w is 2\nt = --x; // t is 1\nConsole.print(x); // prints 1\n\n\n\n\nChained expressions\n\n\nYou may chain assignment operations:\n\n\nx = y = z = 1;\n\n\n\n\nUsing commas will evaluate all expressions between then and return the right-most one:\n\n\nx = 1; // x is 1\ny = x++, 2; // y is 2\nz = y--, --x; // z is 1\n// x, y and z end up equal to 1\n\n\n\n\nOther expressions\n\n\ntypeof\n\n\nThe expression \ntypeof expr\n evaluates to a string informing the type of \nexpr\n. Example:\n\n\nt = typeof 5; // t will hold the string \nnumber\n\n\n\n\n\nThe possible types are: \nnumber\n, \nstring\n, \nboolean\n, \nnull\n, \nobject\n.\n\n\nthis\n\n\nThe keyword \nthis\n represents the object in which it appears. Example:\n\n\nthis.destroy(); // destroys this object", 
             "title": "Expressions"
         }, 
         {
@@ -162,7 +162,7 @@
         }, 
         {
             "location": "/tutorials/expressions/#comparison-operators", 
-            "text": "Comparison operators compare two operands.     Operator  Meaning      ==  Equality operator    !=  Inequality operator     Less than    =  Less or equal    >  Greater than    >=  Greater or equal     Examples:  x = 1;\ny = (x == 1); // y is true\nz = (x != 1); // z is false\nw = x   1; // w is false\nt = x  = 1; // t is true   Pay attention!  Notice that the equality operator, used for comparing expressions for equality, is  == . Pay attention! Don't confuse the equality operator ( == ) with the assignment operator ( = ). The expression  (x = 1)  always evaluates to 1, whereas  (x == 1)  is  true  only if x equals 1.", 
+            "text": "Comparison operators compare two operands.     Operator  Meaning      ==  Equality operator    !=  Inequality operator     Less than    =  Less or equal    >  Greater than    >=  Greater or equal    ===  Strong equality    !==  Strong inequality     Examples:  x = 1;\ny = (x == 1); // y is true\nz = (x != 1); // z is false\nw = x   1; // w is false\nt = x  = 1; // t is true   Pay attention!  Notice that the equality operator, used for comparing expressions for equality, is  == . Pay attention! Don't confuse the equality operator ( == ) with the assignment operator ( = ). The expression  (x = 1)  always evaluates to 1, whereas  (x == 1)  is  true  only if x equals 1.  Strong equality  Unlike their counterparts, strong equality/inequality operators compare not only the content of the operands, but also their type. While  \"1\" == 1  evalutes to  true ,  \"1\" === 1  does not.", 
             "title": "Comparison operators"
         }, 
         {
@@ -397,12 +397,12 @@
         }, 
         {
             "location": "/reference/application/", 
-            "text": "Application\n\n\nRepresents the Application. You do not need to instantiate it, as it is instantiated automatically. Object \nApplication\n can be accessed by any other object, in any script.\n\n\nProperties\n\n\n\n\nsession\n: \nSession\n object. Session variables that persist throughout the entire application.\n\n\nargs\n: \nArguments\n object. Use it to read command-line arguments.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\ncrash\n\n\ncrash(message)\n\n\nExits the Application with an error message.\n\n\nArguments\n\n\n\n\nmessage\n: string. The message to be displayed to the user.\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nA synonym for \nApplication.exit()\n.", 
+            "text": "Application\n\n\nRepresents the Application. You do not need to instantiate it, as it is instantiated automatically. This object can be accessed by any other object, in any script, simply by typing \nApplication\n.\n\n\nProperties\n\n\n\n\nsession\n: \nSession\n object. Session variables that persist throughout the entire application.\n\n\nargs\n: \nArguments\n object. Use it to read command-line arguments.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\ncrash\n\n\ncrash(message)\n\n\nExits the Application with an error message.\n\n\nArguments\n\n\n\n\nmessage\n: string. The message to be displayed to the user.\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nA synonym for \nApplication.exit()\n.", 
             "title": "Application"
         }, 
         {
             "location": "/reference/application/#application", 
-            "text": "Represents the Application. You do not need to instantiate it, as it is instantiated automatically. Object  Application  can be accessed by any other object, in any script.", 
+            "text": "Represents the Application. You do not need to instantiate it, as it is instantiated automatically. This object can be accessed by any other object, in any script, simply by typing  Application .", 
             "title": "Application"
         }, 
         {
@@ -429,6 +429,86 @@
             "location": "/reference/application/#destroy", 
             "text": "destroy()  A synonym for  Application.exit() .", 
             "title": "destroy"
+        }, 
+        {
+            "location": "/reference/array/", 
+            "text": "Array\n\n\nAn Array is a collection of values organized in sequencial fashion. To instantiate an Array, use the \n[ value_1, value_2, ..., value_n ]\n syntax rather than the \nspawn()\n function.\n\n\nExample:\n\n\nobject \nApplication\n\n{\n    // The 'characters' array hold 3 strings\n    characters = [ \nSurge\n, \nNeon\n, \nCharge\n ];\n\n    state \nmain\n\n    {\n        // who are the characters?\n        Console.print(\nThe characters are:\n);\n        Console.print(characters[0]);\n        Console.print(characters[1]);\n        Console.print(characters[2]);\n\n        // how many characters?\n        Console.print(\nNumber of characters: \n + characters.length);\n    }\n}\n\n\n\n\nOutput:\n\n\nThe characters are:\nSurge\nNeon\nCharge\nNumber of characters: 3\n\n\n\n\n\n\nNote:\n\n\nWhenever you define a array, you spawn a new object. One is advised to \nNOT\n define arrays within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.\n\n\n\n\nProperties\n\n\n\n\nlength\n: number. The number of elements in the Array.\n\n\n\n\nFunctions\n\n\nget\n\n\nget(index)\n\n\nGets the specified element of the Array. Instead of calling \nget()\n directly, you may equivalently use the \n[ ]\n operator.\n\n\nArguments\n\n\n\n\nindex\n: integer number between 0 and \nthis.length - 1\n, inclusive.\n\n\n\n\nReturns\n\n\nThe Array element at position \nindex\n (0-based).\n\n\nExample\n\n\ncharacters = [ \nSurge\n, \nNeon\n, \nCharge\n ];\n\n...\n\nsurge = characters[0];  // first element (\nSurge\n)\nneon = characters[1];   // second element (\nNeon\n)\ncharge = characters[2]; // third element (\nCharge\n)\n\n\n\n\nset\n\n\nset(index, value)\n\n\nSets to \nvalue\n the element of the Array at position \nindex\n. Instead of calling \nset()\n directly, you may equivalently use the \n[ ]\n operator.\n\n\nArguments\n\n\n\n\nindex\n: integer number between 0 and \nthis.length - 1\n, inclusive.\n\n\nvalue\n: any type. The new value to be placed on the Array.\n\n\n\n\nExample\n\n\ncharacters = [ \nSurge\n, \nNeon\n, \nCharge\n ];\ncharacters[0] = \nGimacian\n;\nConsole.print(characters[0]); // Gimacian\n\n\n\n\npush\n\n\npush(value)\n\n\nAdds a new element to the end of the Array.\n\n\nArguments\n\n\n\n\nvalue\n: any type. The element to be added to the Array.\n\n\n\n\nExample\n\n\ncharacters = [ \nSurge\n, \nNeon\n, \nCharge\n ];\ncharacters.push(\nGimacian\n);\nConsole.print(characters); // [ \nSurge\n, \nNeon\n, \nCharge\n, \nGimacian\n ]\n\n\n\n\npop\n\n\npop()\n\n\nRemoves the last element of the Array and returns it.\n\n\nReturns\n\n\nThe removed element.\n\n\nshift\n\n\nshift()\n\n\nRemoves the first element of the Array and returns it.\n\n\nReturns\n\n\nThe removed element.\n\n\nunshift\n\n\nunshift(value)\n\n\nAdds a new element to the beginning of the Array.\n\n\nArguments\n\n\n\n\nvalue\n: any type. The element to be added to the Array.\n\n\n\n\nindexOf\n\n\nindexOf(value)\n\n\nSearch the Array for element \nvalue\n and return its position.\n\n\nArguments\n\n\n\n\nvalue\n: any type. The element to be searched for.\n\n\n\n\nReturns\n\n\nThe position of the searched element - a number between 0 and \nthis.length - 1\n, inclusive. If the desired element is not found, this function returns \n-1\n.\n\n\nExample\n\n\ncharacters = [ \nSurge\n, \nNeon\n, \nCharge\n ];\n...\ntwo = characters.indexOf(\nNeon\n); // 2\ngimacian = characters.indexOf(\nGimacian\n); // -1\nif(gimacian \n 0)\n    Console.print(\nNot found\n);\n\n\n\n\nsort\n\n\nsort(sortingStrategy)\n\n\nSorts the Array according to a certain strategy (algorithm). If no strategy is provided (\nsortingStrategy\n is \nnull\n), the Array will be sorted in ascending order.\n\n\nArguments\n\n\n\n\nsortingStrategy\n: object | null. This \nfunctor\n implements function \ncall(a, b)\n that compares two array elements as described in the example below.\n\n\n\n\nExample\n\n\n// this example will print the elements\n// of the Array in ascending order\nobject \nApplication\n\n{\n    arr = [ 3, 9, 4, 8, 5, 6, 7, 1, 2, 0 ];\n\n    state \nmain\n\n    {\n        // sort and print the Array\n        arr.sort(null);\n        Console.print(arr);\n        Application.exit();\n    }\n}\n\n\n\n\nOutput: \n[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]\n\n\n// this example will print the elements\n// of the Array in descending order\nobject \nApplication\n\n{\n    arr = [ 3, 9, 4, 8, 5, 6, 7, 1, 2, 0 ];\n    cmp = spawn(\nSort.OrderByDesc\n);\n\n    state \nmain\n\n    {\n        // sort and print the Array\n        arr.sort(cmp);\n        Console.print(arr);\n        Application.exit();\n    }\n}\n\nobject \nSort.OrderByDesc\n\n{\n    // This function compares two\n    // elements of the Array: a and b.\n    //\n    // It should return a number:\n    //   \n 0 if a must come BEFORE b\n    //   = 0 if a and b are equivalent\n    //   \n 0 if a must come AFTER b\n    fun call(a, b)\n    {\n        // sort in descending order\n        return b - a;\n    }\n}\n\n\n\n\nOutput: \n[ 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ]\n\n\nreverse\n\n\nreverse()\n\n\nReverses the order of the elements in the Array.\n\n\nshuffle\n\n\nshuffle()\n\n\nShuffles the elements of the Array, placing its elements at random spots.\n\n\niterator\n\n\niterator()\n\n\nSpawns an iterator.\n\n\nReturns\n\n\nAn iterator to loop through the elements of the Array.\n\n\ntoString\n\n\ntoString()\n\n\nConverts the Array to a string.\n\n\nReturns\n\n\nA string.", 
+            "title": "Array"
+        }, 
+        {
+            "location": "/reference/array/#array", 
+            "text": "An Array is a collection of values organized in sequencial fashion. To instantiate an Array, use the  [ value_1, value_2, ..., value_n ]  syntax rather than the  spawn()  function.  Example:  object  Application \n{\n    // The 'characters' array hold 3 strings\n    characters = [  Surge ,  Neon ,  Charge  ];\n\n    state  main \n    {\n        // who are the characters?\n        Console.print( The characters are: );\n        Console.print(characters[0]);\n        Console.print(characters[1]);\n        Console.print(characters[2]);\n\n        // how many characters?\n        Console.print( Number of characters:   + characters.length);\n    }\n}  Output:  The characters are:\nSurge\nNeon\nCharge\nNumber of characters: 3   Note:  Whenever you define a array, you spawn a new object. One is advised to  NOT  define arrays within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.", 
+            "title": "Array"
+        }, 
+        {
+            "location": "/reference/array/#properties", 
+            "text": "length : number. The number of elements in the Array.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/array/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/array/#get", 
+            "text": "get(index)  Gets the specified element of the Array. Instead of calling  get()  directly, you may equivalently use the  [ ]  operator.  Arguments   index : integer number between 0 and  this.length - 1 , inclusive.   Returns  The Array element at position  index  (0-based).  Example  characters = [  Surge ,  Neon ,  Charge  ];\n\n...\n\nsurge = characters[0];  // first element ( Surge )\nneon = characters[1];   // second element ( Neon )\ncharge = characters[2]; // third element ( Charge )", 
+            "title": "get"
+        }, 
+        {
+            "location": "/reference/array/#set", 
+            "text": "set(index, value)  Sets to  value  the element of the Array at position  index . Instead of calling  set()  directly, you may equivalently use the  [ ]  operator.  Arguments   index : integer number between 0 and  this.length - 1 , inclusive.  value : any type. The new value to be placed on the Array.   Example  characters = [  Surge ,  Neon ,  Charge  ];\ncharacters[0] =  Gimacian ;\nConsole.print(characters[0]); // Gimacian", 
+            "title": "set"
+        }, 
+        {
+            "location": "/reference/array/#push", 
+            "text": "push(value)  Adds a new element to the end of the Array.  Arguments   value : any type. The element to be added to the Array.   Example  characters = [  Surge ,  Neon ,  Charge  ];\ncharacters.push( Gimacian );\nConsole.print(characters); // [  Surge ,  Neon ,  Charge ,  Gimacian  ]", 
+            "title": "push"
+        }, 
+        {
+            "location": "/reference/array/#pop", 
+            "text": "pop()  Removes the last element of the Array and returns it.  Returns  The removed element.", 
+            "title": "pop"
+        }, 
+        {
+            "location": "/reference/array/#shift", 
+            "text": "shift()  Removes the first element of the Array and returns it.  Returns  The removed element.", 
+            "title": "shift"
+        }, 
+        {
+            "location": "/reference/array/#unshift", 
+            "text": "unshift(value)  Adds a new element to the beginning of the Array.  Arguments   value : any type. The element to be added to the Array.", 
+            "title": "unshift"
+        }, 
+        {
+            "location": "/reference/array/#indexof", 
+            "text": "indexOf(value)  Search the Array for element  value  and return its position.  Arguments   value : any type. The element to be searched for.   Returns  The position of the searched element - a number between 0 and  this.length - 1 , inclusive. If the desired element is not found, this function returns  -1 .  Example  characters = [  Surge ,  Neon ,  Charge  ];\n...\ntwo = characters.indexOf( Neon ); // 2\ngimacian = characters.indexOf( Gimacian ); // -1\nif(gimacian   0)\n    Console.print( Not found );", 
+            "title": "indexOf"
+        }, 
+        {
+            "location": "/reference/array/#sort", 
+            "text": "sort(sortingStrategy)  Sorts the Array according to a certain strategy (algorithm). If no strategy is provided ( sortingStrategy  is  null ), the Array will be sorted in ascending order.  Arguments   sortingStrategy : object | null. This  functor  implements function  call(a, b)  that compares two array elements as described in the example below.   Example  // this example will print the elements\n// of the Array in ascending order\nobject  Application \n{\n    arr = [ 3, 9, 4, 8, 5, 6, 7, 1, 2, 0 ];\n\n    state  main \n    {\n        // sort and print the Array\n        arr.sort(null);\n        Console.print(arr);\n        Application.exit();\n    }\n}  Output:  [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]  // this example will print the elements\n// of the Array in descending order\nobject  Application \n{\n    arr = [ 3, 9, 4, 8, 5, 6, 7, 1, 2, 0 ];\n    cmp = spawn( Sort.OrderByDesc );\n\n    state  main \n    {\n        // sort and print the Array\n        arr.sort(cmp);\n        Console.print(arr);\n        Application.exit();\n    }\n}\n\nobject  Sort.OrderByDesc \n{\n    // This function compares two\n    // elements of the Array: a and b.\n    //\n    // It should return a number:\n    //     0 if a must come BEFORE b\n    //   = 0 if a and b are equivalent\n    //     0 if a must come AFTER b\n    fun call(a, b)\n    {\n        // sort in descending order\n        return b - a;\n    }\n}  Output:  [ 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ]", 
+            "title": "sort"
+        }, 
+        {
+            "location": "/reference/array/#reverse", 
+            "text": "reverse()  Reverses the order of the elements in the Array.", 
+            "title": "reverse"
+        }, 
+        {
+            "location": "/reference/array/#shuffle", 
+            "text": "shuffle()  Shuffles the elements of the Array, placing its elements at random spots.", 
+            "title": "shuffle"
+        }, 
+        {
+            "location": "/reference/array/#iterator", 
+            "text": "iterator()  Spawns an iterator.  Returns  An iterator to loop through the elements of the Array.", 
+            "title": "iterator"
+        }, 
+        {
+            "location": "/reference/array/#tostring", 
+            "text": "toString()  Converts the Array to a string.  Returns  A string.", 
+            "title": "toString"
         }, 
         {
             "location": "/reference/arguments/", 
@@ -504,6 +584,66 @@
             "location": "/reference/boolean/#equals", 
             "text": "equals(b)  Compares the boolean to another boolean  b .  Arguments   b : boolean. The value to compare the boolean to.   Returns  Returns  true  if the booleans are equal.", 
             "title": "equals"
+        }, 
+        {
+            "location": "/reference/dictionary/", 
+            "text": "Dictionary\n\n\nA Dictionary is a collection of key-value pairs. Dictionary keys are strings. Their corresponding values can be of any type. To create a Dictionary, use the \n{ key_1: value_1, key_2: value_2, ..., key_n: value_n }\n syntax rather than the \nspawn()\n function.\n\n\nExample:\n\n\nobject \nApplication\n\n{\n    dictionary = {\n        \nSurge\n: 35,\n        \nNeon\n: 20,\n        \nCharge\n: 37.5,\n        \nGimacian\n: 70\n    };\n\n    state \nmain\n\n    {\n        // usage example\n        Console.print(dictionary[\nSurge\n]); // will print 35\n        Console.print(dictionary[\nNeon\n]); // will print 20\n\n        // will print all entries\n        foreach(entry in dictionary)\n            Console.print(entry.key + \n: \n + entry.value);\n\n        // done!\n        Application.exit();\n    }\n}\n\n\n\n\nOutput:\n\n\n35\n20\nSurge: 35\nNeon: 20\nCharge: 37.5\nGimacian: 70\n\n\n\n\n\n\nNote:\n\n\nWhenever you define a dictionary, you spawn a new object. One is advised to \nNOT\n define dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.\n\n\n\n\nProperties\n\n\n\n\ncount\n: integer number. The number of elements in the Dictionary.\n\n\n\n\nFunctions\n\n\nget\n\n\nget(key)\n\n\nGets the value of the specified key in the Dictionary. Instead of calling \nget()\n directly, you may equivalently use the \n[ ]\n operator.\n\n\nArguments\n\n\n\n\nkey\n: string.\n\n\n\n\nReturns\n\n\nThe value corresponding to the specified key, or \nnull\n if there is no such an entry in the Dictionary.\n\n\nExample\n\n\ndict = { \nSurge\n: 10 };\nten = dict[\nSurge\n];\n\n\n\n\nset\n\n\nset(key, value)\n\n\nSets the value of the specified key in the Dictionary. Instead of calling \nset()\n directly, you may equivalently use the \n[ ]\n operator.\n\n\nArguments\n\n\n\n\nkey\n: string.\n\n\nvalue\n: any type.\n\n\n\n\nExample\n\n\ndict = { };\ndict[\nSurge\n] = 10;\n\n\n\n\nclear\n\n\nclear()\n\n\nRemoves all entries from the Dictionary.\n\n\ndelete\n\n\ndelete(key)\n\n\nDeletes the entry having the specified key.\n\n\nArguments\n\n\n\n\nkey\n: string. The key of the entry to be removed.\n\n\n\n\nhas\n\n\nhas(key)\n\n\nChecks if an entry having the specified key belongs to the Dictionary.\n\n\nArguments\n\n\n\n\nkey\n: string. The key of the entry.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the Dictionary has such an entry.\n\n\nkeys\n\n\nkeys()\n\n\nGets a collection containing the keys of the Dictionary.\n\n\nReturns\n\n\nReturns a new \nArray\n containing the keys of the Dictionary.\n\n\niterator\n\n\niterator()\n\n\nSpawns an iterator.\n\n\nReturns\n\n\nAn iterator to loop through the elements of the Dictionary.\n\n\ntoString\n\n\ntoString()\n\n\nConverts the Dictionary to a string.\n\n\nReturns\n\n\nA string.", 
+            "title": "Dictionary"
+        }, 
+        {
+            "location": "/reference/dictionary/#dictionary", 
+            "text": "A Dictionary is a collection of key-value pairs. Dictionary keys are strings. Their corresponding values can be of any type. To create a Dictionary, use the  { key_1: value_1, key_2: value_2, ..., key_n: value_n }  syntax rather than the  spawn()  function.  Example:  object  Application \n{\n    dictionary = {\n         Surge : 35,\n         Neon : 20,\n         Charge : 37.5,\n         Gimacian : 70\n    };\n\n    state  main \n    {\n        // usage example\n        Console.print(dictionary[ Surge ]); // will print 35\n        Console.print(dictionary[ Neon ]); // will print 20\n\n        // will print all entries\n        foreach(entry in dictionary)\n            Console.print(entry.key +  :   + entry.value);\n\n        // done!\n        Application.exit();\n    }\n}  Output:  35\n20\nSurge: 35\nNeon: 20\nCharge: 37.5\nGimacian: 70   Note:  Whenever you define a dictionary, you spawn a new object. One is advised to  NOT  define dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.", 
+            "title": "Dictionary"
+        }, 
+        {
+            "location": "/reference/dictionary/#properties", 
+            "text": "count : integer number. The number of elements in the Dictionary.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/reference/dictionary/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/reference/dictionary/#get", 
+            "text": "get(key)  Gets the value of the specified key in the Dictionary. Instead of calling  get()  directly, you may equivalently use the  [ ]  operator.  Arguments   key : string.   Returns  The value corresponding to the specified key, or  null  if there is no such an entry in the Dictionary.  Example  dict = {  Surge : 10 };\nten = dict[ Surge ];", 
+            "title": "get"
+        }, 
+        {
+            "location": "/reference/dictionary/#set", 
+            "text": "set(key, value)  Sets the value of the specified key in the Dictionary. Instead of calling  set()  directly, you may equivalently use the  [ ]  operator.  Arguments   key : string.  value : any type.   Example  dict = { };\ndict[ Surge ] = 10;", 
+            "title": "set"
+        }, 
+        {
+            "location": "/reference/dictionary/#clear", 
+            "text": "clear()  Removes all entries from the Dictionary.", 
+            "title": "clear"
+        }, 
+        {
+            "location": "/reference/dictionary/#delete", 
+            "text": "delete(key)  Deletes the entry having the specified key.  Arguments   key : string. The key of the entry to be removed.", 
+            "title": "delete"
+        }, 
+        {
+            "location": "/reference/dictionary/#has", 
+            "text": "has(key)  Checks if an entry having the specified key belongs to the Dictionary.  Arguments   key : string. The key of the entry.   Returns  Returns  true  if the Dictionary has such an entry.", 
+            "title": "has"
+        }, 
+        {
+            "location": "/reference/dictionary/#keys", 
+            "text": "keys()  Gets a collection containing the keys of the Dictionary.  Returns  Returns a new  Array  containing the keys of the Dictionary.", 
+            "title": "keys"
+        }, 
+        {
+            "location": "/reference/dictionary/#iterator", 
+            "text": "iterator()  Spawns an iterator.  Returns  An iterator to loop through the elements of the Dictionary.", 
+            "title": "iterator"
+        }, 
+        {
+            "location": "/reference/dictionary/#tostring", 
+            "text": "toString()  Converts the Dictionary to a string.  Returns  A string.", 
+            "title": "toString"
         }, 
         {
             "location": "/reference/gc/", 
@@ -1043,41 +1183,6 @@
         {
             "location": "/reference/system/#destroy", 
             "text": "destroy()  The same as  exit() .", 
-            "title": "destroy"
-        }, 
-        {
-            "location": "/reference/application/", 
-            "text": "Application\n\n\nRepresents the Application. You do not need to instantiate it, as it is instantiated automatically. Object \nApplication\n can be accessed by any other object, in any script.\n\n\nProperties\n\n\n\n\nsession\n: \nSession\n object. Session variables that persist throughout the entire application.\n\n\nargs\n: \nArguments\n object. Use it to read command-line arguments.\n\n\n\n\nFunctions\n\n\nexit\n\n\nexit()\n\n\nExits the Application.\n\n\ncrash\n\n\ncrash(message)\n\n\nExits the Application with an error message.\n\n\nArguments\n\n\n\n\nmessage\n: string. The message to be displayed to the user.\n\n\n\n\ndestroy\n\n\ndestroy()\n\n\nA synonym for \nApplication.exit()\n.", 
-            "title": "Application"
-        }, 
-        {
-            "location": "/reference/application/#application", 
-            "text": "Represents the Application. You do not need to instantiate it, as it is instantiated automatically. Object  Application  can be accessed by any other object, in any script.", 
-            "title": "Application"
-        }, 
-        {
-            "location": "/reference/application/#properties", 
-            "text": "session :  Session  object. Session variables that persist throughout the entire application.  args :  Arguments  object. Use it to read command-line arguments.", 
-            "title": "Properties"
-        }, 
-        {
-            "location": "/reference/application/#functions", 
-            "text": "", 
-            "title": "Functions"
-        }, 
-        {
-            "location": "/reference/application/#exit", 
-            "text": "exit()  Exits the Application.", 
-            "title": "exit"
-        }, 
-        {
-            "location": "/reference/application/#crash", 
-            "text": "crash(message)  Exits the Application with an error message.  Arguments   message : string. The message to be displayed to the user.", 
-            "title": "crash"
-        }, 
-        {
-            "location": "/reference/application/#destroy", 
-            "text": "destroy()  A synonym for  Application.exit() .", 
             "title": "destroy"
         }
     ]

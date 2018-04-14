@@ -542,6 +542,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../reference/array/" title="Array" class="md-nav__link">
+      Array
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../reference/arguments/" title="Arguments" class="md-nav__link">
       Arguments
     </a>
@@ -556,6 +568,18 @@
   <li class="md-nav__item">
     <a href="../../reference/boolean/" title="Boolean" class="md-nav__link">
       Boolean
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/dictionary/" title="Dictionary" class="md-nav__link">
+      Dictionary
     </a>
   </li>
 
@@ -688,42 +712,6 @@
   <li class="md-nav__item">
     <a href="../../reference/system/" title="System" class="md-nav__link">
       System
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5" type="checkbox" id="nav-5">
-    
-    <label class="md-nav__link" for="nav-5">
-      Engine Reference
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-5">
-        Engine Reference
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../reference/application/" title="Application" class="md-nav__link">
-      Application
     </a>
   </li>
 
@@ -951,6 +939,14 @@ prime = -(-15 + 8);
 <td>>=</td>
 <td>Greater or equal</td>
 </tr>
+<tr>
+<td>===</td>
+<td>Strong equality</td>
+</tr>
+<tr>
+<td>!==</td>
+<td>Strong inequality</td>
+</tr>
 </tbody>
 </table>
 <p>Examples:</p>
@@ -964,6 +960,8 @@ t = x &gt;= 1; // t is true
 <blockquote>
 <p><strong>Pay attention!</strong></p>
 <p>Notice that the equality operator, used for comparing expressions for equality, is <em>==</em>. Pay attention! Don't confuse the equality operator (<em>==</em>) with the assignment operator (<em>=</em>). The expression <code>(x = 1)</code> always evaluates to 1, whereas <code>(x == 1)</code> is <em>true</em> only if x equals 1.</p>
+<p><strong>Strong equality</strong></p>
+<p>Unlike their counterparts, strong equality/inequality operators compare not only the content of the operands, but also their type. While <code>"1" == 1</code> evalutes to <code>true</code>, <code>"1" === 1</code> does not.</p>
 </blockquote>
 <h2 id="logical-operators">Logical operators</h2>
 <p>Logical operators involve booleans (<em>true</em> or <em>false</em> values). While the <strong>not</strong> operator requires only one operand, operators <strong>and</strong> and <strong>or</strong> require two.</p>
