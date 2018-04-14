@@ -156,48 +156,48 @@ surgescript_var_t* fun_random(surgescript_object_t* object, const surgescript_va
     return surgescript_var_set_number(surgescript_var_create(), rand() / ((double)RAND_MAX + 1.0));
 }
 
-/* sin(x): sine of x, x in degrees */
+/* sin(x): sine of x, x in radians */
 surgescript_var_t* fun_sin(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), sinf(surgescript_var_get_number(param[0]) * DEG2RAD));
+    return surgescript_var_set_number(surgescript_var_create(), sinf(surgescript_var_get_number(param[0])));
 }
 
-/* cos(x): cosine of x, x in degrees */
+/* cos(x): cosine of x, x in radians */
 surgescript_var_t* fun_cos(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), cosf(surgescript_var_get_number(param[0]) * DEG2RAD));
+    return surgescript_var_set_number(surgescript_var_create(), cosf(surgescript_var_get_number(param[0])));
 }
 
-/* tan(x): tangent of x, x in degrees */
+/* tan(x): tangent of x, x in radians */
 surgescript_var_t* fun_tan(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), tanf(surgescript_var_get_number(param[0]) * DEG2RAD));
+    return surgescript_var_set_number(surgescript_var_create(), tanf(surgescript_var_get_number(param[0])));
 }
 
-/* asin(x): arc sin of x, returned in degrees */
+/* asin(x): arc sin of x, returned in radians */
 surgescript_var_t* fun_asin(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), asinf(surgescript_var_get_number(param[0])) * RAD2DEG);
+    return surgescript_var_set_number(surgescript_var_create(), asinf(surgescript_var_get_number(param[0])));
 }
 
-/* acos(x): arc cosine of x, returned in degrees */
+/* acos(x): arc cosine of x, returned in radians */
 surgescript_var_t* fun_acos(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), acosf(surgescript_var_get_number(param[0])) * RAD2DEG);
+    return surgescript_var_set_number(surgescript_var_create(), acosf(surgescript_var_get_number(param[0])));
 }
 
-/* atan(x): arc tangent of x, returned in degrees */
+/* atan(x): arc tangent of x, returned in radians */
 surgescript_var_t* fun_atan(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), atanf(surgescript_var_get_number(param[0])) * RAD2DEG);
+    return surgescript_var_set_number(surgescript_var_create(), atanf(surgescript_var_get_number(param[0])));
 }
 
-/* atan2(y,x): returns the angle, in degrees, between the positive x-axis and the vector (x,y) */
+/* atan2(y,x): returns the angle, in radians, between the positive x-axis and the vector (x,y) */
 surgescript_var_t* fun_atan2(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     float y = surgescript_var_get_number(param[0]);
     float x = surgescript_var_get_number(param[1]);
-    return surgescript_var_set_number(surgescript_var_create(), atan2f(y, x) * RAD2DEG);
+    return surgescript_var_set_number(surgescript_var_create(), atan2f(y, x));
 }
 
 /* pow(base, exponent): returns the value of base raised to the power exponent */
