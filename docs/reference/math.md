@@ -1,7 +1,7 @@
 Math
 ====
 
-Built-in mathematical functions.
+Built-in mathematical functions. The Math object can be accessed simply by typing `Math`.
 
 Examples:
 

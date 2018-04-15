@@ -10,7 +10,7 @@ Properties
 * `childCount`: integer number. The number of children of this object.
 * `active`: boolean, read-write. Indicates whether this object is active\* or not.
 * `__name`: string. The name of this object (string).
-* `__children`: Array object. This spawns a new array containing references to the children of this object.
+* `__children`: Array object. Reading this spawns a new array containing references to the children of this object.
 * `__functions`: Array object. The functions of this object represented as a collection of strings.
 * `__timespent`: number. The approximate time spent in this object in the last frame (in seconds).
 * `__memspent`: number. The current memory consumption of this object (in bytes) - not implemented.
