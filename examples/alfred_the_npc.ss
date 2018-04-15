@@ -1,7 +1,7 @@
 //
 // alfred_the_npc.ss
 // Talk to Alfred, the NPC.
-// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Alfred"

@@ -50,7 +50,7 @@ object "SurgeScriptTest"
         test("alexandre".indexOf("z") < 0) || fail(5);
         test("ale" + "xandre" == "ale".concat("xandre")) || fail(6);
         test("alê".length == 3) || fail(7);
-        test("37".toNumber() == 37) || fail(8);
+        test(Number("37") == 37) || fail(8);
         test("çáàê€".length == 5) || fail(9);
         test(!"") || fail(10);
         test(("\n" + "\n").length == 2) || fail(11);
@@ -97,8 +97,8 @@ object "SurgeScriptTest"
         test(1 == 1) || fail(1);
         test(2 + 2 == 4) || fail(2);
         test((3 * 3).toString() == "9") || fail(3);
-        test(4.toString().toNumber() == 4.valueOf()) || fail(4);
-        test(5 * "25".toNumber() == 625 / 5) || fail(5);
+        test(Number(4.toString()) == 4.valueOf()) || fail(4);
+        test(Number(5 * "25") == 625 / 5) || fail(5);
         test(0 == -0) || fail(6);
         test(-(-(-1)) * -1 == +1) || fail(7);
         test(.5 == 0.5) || fail(8);
@@ -328,17 +328,17 @@ object "SurgeScriptTest"
         test(weight["Neon"] == 26) || fail(9);
         test(weight.has("Neon")) || fail(10);
 
-        test(weight.size == 3) || fail(11);
+        test(weight.count == 3) || fail(11);
         weight.delete("Neon");
         weight.delete("404");
         weight.delete(404);
         test(weight.has("Surge")) || fail(12);
         test(!weight.has("Neon")) || fail(13);
         test(weight.has("Charge")) || fail(14);
-        test(weight.size == 2) || fail(15);
+        test(weight.count == 2) || fail(15);
 
         weight.clear();
-        test(weight.size == 0) || fail(16);
+        test(weight.count == 0) || fail(16);
         test(!weight.iterator().hasNext() && null == weight.iterator().next()) || fail(17);
 
         stress = spawn("Dictionary");
@@ -353,7 +353,7 @@ object "SurgeScriptTest"
         test(stress["o657"] == 657) || fail(19);
         test(!stress.has("o0") && stress.has("o700")) || fail(20);
         for(sum = 0, it = stress.iterator(); it.hasNext(); sum += stress[it.next().key]);
-        test(stress.size == stressLimit) || fail(21);
+        test(stress.count == stressLimit) || fail(21);
         test(sum == 500500) || fail(22);
 
         del = [ 1, 812, 726, 111, 182, 313, 6, 7, 8, 10, 88 ];
@@ -364,7 +364,7 @@ object "SurgeScriptTest"
             test23 = test23 && !stress.has("o" + item);
         }
         test(test23) || fail(23);
-        test(stress.size == newSize) || fail(24);
+        test(stress.count == newSize) || fail(24);
 
         del = [ -5, 0, -2, 31415, 12345, "a" ];
         test25 = true;
@@ -373,14 +373,14 @@ object "SurgeScriptTest"
             test25 = test25 && !stress.has("o" + del[x]) && !stress.has(del[x]);
         }
         test(test25) || fail(25);
-        test(stress.size == newSize) || fail(26);
+        test(stress.count == newSize) || fail(26);
 
         del = [];
         for(j = 1; j <= stressLimit; j++)
             del.push(j);
         foreach(item in del)
             stress.delete("o" + item);
-        test(stress.size == 0) || fail(27);
+        test(stress.count == 0) || fail(27);
 
         dict = { "a": 1, "b": 2, "c": 3 };
         test(dict["a"] + dict["b"] + dict["c"] == 6) || fail(28);
@@ -407,12 +407,12 @@ object "SurgeScriptTest"
         Application.session["name"] = "alex";
         test(Application.session["name"] == "alex") || fail(3);
 
-        test(Application.session.__data.size == 2) || fail(4);
+        test(Application.session.__data.count == 2) || fail(4);
         test(Application.session.isset("name")) || fail(5);
-        test((Application.session.unset("name"), !Application.session.isset("name") && Application.session.__data.size == 1)) || fail(6);
+        test((Application.session.unset("name"), !Application.session.isset("name") && Application.session.__data.count == 1)) || fail(6);
 
         Application.session.clear();
-        test(Application.session.__data.size == 0) || fail(7);
+        test(Application.session.__data.count == 0) || fail(7);
         end();
     }
 

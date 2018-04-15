@@ -1,7 +1,7 @@
 //
 // transform2d.ss
 // This script demonstrates how the Transform2D works with attached objects
-// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"

@@ -1,7 +1,7 @@
 //
 // array.ss
 // Arrays in SurgeScript
-// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 // The following program will print all the elements of the array

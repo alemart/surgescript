@@ -1,66 +1,57 @@
 //
 // component.ss
 // Basic Component usage
-// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2018 Alexandre Martins <alemartf(at)gmail(dot)com>
 // 
 
-// TestObject has two components: A and B.
-// Component B calls Component A.
-// How does B access A? We'll see.
-
-object "ComponentB"
+// Object Parrot has two components:
+// Blabber and Time Bomb.
+object "Parrot"
 {
-    a = requireComponent("ComponentA");
+    blabber = spawn("Blabber");
+    bomb = spawn("Time Bomb");
 
     state "main"
     {
-        Console.print("Component B will call Component A...");
-        a.call();
-        destroy();
-    }
-
-    // will spawn the object if it doesn't exist
-    fun requireComponent(name)
-    {
-        return sibling(name) || parent.spawn(name);
     }
 }
 
-object "ComponentA"
+object "Blabber"
 {
     state "main"
     {
+        if(timeout(2)) // blab every 2 seconds
+            state = "blab";
     }
 
-    fun constructor()
+    state "blab"
     {
-        Console.print("Spawned Component A");
-    }
-
-    fun call()
-    {
-        Console.print("Called Component A!");
+        Console.print("Hello!");
+        state = "main";
     }
 }
 
-object "TestObject"
+object "Time Bomb"
 {
-    a = spawn("ComponentA"); // try commenting this line. It will still work.
-    b = spawn("ComponentB");
-
     state "main"
     {
-        ;
+        if(timeout(15)) // explode after 15 seconds
+            state = "explode";
+    }
+
+    state "explode"
+    {
+        Console.print("BOOOM!");
+        parent.destroy(); // destroy the parent object
+        Application.exit();
     }
 }
 
 object "Application"
 {
-    obj = spawn("TestObject");
+    parrot = spawn("Parrot");
 
     state "main"
     {
-        if(timeout(1.0))
-            exit();
     }
 }

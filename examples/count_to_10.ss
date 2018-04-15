@@ -1,7 +1,7 @@
 //
 // count_to_10.ss
 // Count to 10 SurgeScript
-// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"

@@ -1,7 +1,7 @@
 //
 // dictionary.ss
 // How to use the Dictionary in SurgeScript
-// Copyright (C) 2017-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"

@@ -1,7 +1,7 @@
 //
 // benchmark.ss
 // Performance measurement in SurgeScript
-// Copyright (C) 2018  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2018 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 //

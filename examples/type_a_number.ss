@@ -1,7 +1,7 @@
 //
 // type_a_number.ss
 // Type a number plaything
-// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"

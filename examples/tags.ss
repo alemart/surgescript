@@ -1,7 +1,7 @@
 //
 // tags.ss
 // Tags in SurgeScript
-// Copyright (C) 2017  Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"
