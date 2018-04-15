@@ -174,7 +174,7 @@ Returns `true` if the object has a function named `functionName`.
 
 #### hasTag
 
-`hasFunction(tagName)`
+`hasTag(tagName)`
 
 Checks if the object has been tagged with `tagName`.
 
