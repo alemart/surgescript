@@ -16,6 +16,13 @@ set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
+# Set build number
+set(BUILD_FILE_PATH "${CMAKE_BINARY_DIR}/build_number.txt")
+if(EXISTS ${BUILD_FILE_PATH})
+    file(STRINGS ${BUILD_FILE_PATH} BUILD_NUMBER)
+    add_definitions(-DSSBUILD="${BUILD_NUMBER}")
+endif()
+
 # Executable
 add_executable(surgescript ${SRC})
 target_link_libraries(surgescript m)
