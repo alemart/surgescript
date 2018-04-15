@@ -14,6 +14,10 @@ Get SurgeScript
 
 Get SurgeScript on the [Download page](https://alemart.github.io/surgescript/download).
 
+Already using SurgeScript? Please support us, so we can continue working on this project and on Open Surge:
+
+[![Support us](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
+
 Examples
 --------
 
@@ -79,7 +83,7 @@ SurgeScript is a scripting language for games.
 
 ##### Who created it?
 
-SurgeScript has been originally created by Alexandre Martins, a developer from Brazil. The author has also created the Open Surge game engine, thus the name *SurgeScript*.
+SurgeScript has been originally created by [Alexandre Martins](https://github.com/alemart), a developer from Brazil. He has also created the Open Surge game engine, thus the name *SurgeScript*.
 
 ##### How do I learn SurgeScript?
 

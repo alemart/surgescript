@@ -11,6 +11,10 @@ It's such a joy to program in SurgeScript! You and your users will love it.
 
 [![Download](img/download.png)](download)
 
+**Are you benefiting from SurgeScript?** We ask you to support us, so we can continue working on this project and on Open Surge:
+ 
+[![Support us](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
+
 SurgeScript in a nutshell
 -------------------------
 
