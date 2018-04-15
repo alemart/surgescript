@@ -7,4 +7,4 @@ Best Practices
     - Objects should define [functions](functions) that can be operated upon by the external world (API)
 - Use *camelCase* names for both variables and functions.
 - Use *4 spaces* for indenting your code.
-- Read this documentation often.
+- Read [this documentation](../../) often.
