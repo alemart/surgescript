@@ -6,13 +6,18 @@ In SurgeScript, all objects are also instances of `Object`. This means that the 
 Properties
 ----------
 
-* `parent` is a reference to the parent object.
-* `childCount` is an integer corresponding to the number of children of this object.
-* `__name` is the name of this object (string).
-* `__children` spawns a new array containing references to the children of this object.
-* `__functions` spawns a new array of strings containing the functions of this object.
-* `__timespent` is the approximate time spent in this object in the last frame (in seconds).
-* `__memspent` is the current memory consumption of this object (in bytes) - not implemented.
+* `parent`: object. Reference to the parent object.
+* `childCount`: integer number. The number of children of this object.
+* `active`: boolean, read-write. Indicates whether this object is active\* or not.
+* `__name`: string. The name of this object (string).
+* `__children`: Array object. This spawns a new array containing references to the children of this object.
+* `__functions`: Array object. The functions of this object represented as a collection of strings.
+* `__timespent`: number. The approximate time spent in this object in the last frame (in seconds).
+* `__memspent`: number. The current memory consumption of this object (in bytes) - not implemented.
+
+> **Note:**
+>
+> \* Objects are active by default. Whenever an object is set to be inactive, its state machine is paused. Additionally, the state machines of all its descendants are also paused.
 
 Functions
 ---------

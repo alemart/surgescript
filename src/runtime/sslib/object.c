@@ -42,6 +42,8 @@ static surgescript_var_t* fun_functions(surgescript_object_t* object, const surg
 static surgescript_var_t* fun_timespent(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_memspent(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_children(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
 static void add_to_function_array(const char* fun_name, void* arr);
@@ -57,6 +59,8 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Object", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Object", "getParent", fun_parent, 0);
+    surgescript_vm_bind(vm, "Object", "getActive", fun_getactive, 0);
+    surgescript_vm_bind(vm, "Object", "setActive", fun_setactive, 1);
     surgescript_vm_bind(vm, "Object", "getChildCount", fun_childcount, 0);
     surgescript_vm_bind(vm, "Object", "child", fun_child, 1);
     surgescript_vm_bind(vm, "Object", "findObject", fun_findobject, 1);
@@ -228,6 +232,19 @@ surgescript_var_t* fun_children(surgescript_object_t* object, const surgescript_
     }
 
     return surgescript_var_set_objecthandle(tmp, array_handle);
+}
+
+/* is this object active? */
+surgescript_var_t* fun_getactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_bool(surgescript_var_create(), surgescript_object_is_active(object));
+}
+
+/* activates or deactivates this object (set active to true or false) */
+surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_object_set_active(object, surgescript_var_get_bool(param[0]));
+    return NULL;
 }
 
 
