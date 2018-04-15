@@ -5,9 +5,9 @@ SurgeScript
 
 SurgeScript is a scripting language for games. It has unique features that make it suitable for games - and it is extremely valuable for empowering users to generate their own content. Built originally for the Open Surge Engine, SurgeScript can be embedded into any C project.
 
-> **First timer?**
->
-> If this is your first time here, please go to the [Welcome page](https://alemart.github.io/surgescript).
+**First timer?**
+
+If this is your first time here, please go to the [Welcome page](https://alemart.github.io/surgescript).
 
 Get SurgeScript
 ---------------
