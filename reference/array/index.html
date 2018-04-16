@@ -1004,11 +1004,11 @@ if(gimacian &lt; 0)
 </code></pre>
 
 <h4 id="sort">sort</h4>
-<p><code>sort(sortingStrategy)</code></p>
-<p>Sorts the Array according to a certain strategy (algorithm). If no strategy is provided (<code>sortingStrategy</code> is <em>null</em>), the Array will be sorted in ascending order.</p>
+<p><code>sort(cmpFunc)</code></p>
+<p>Sorts the Array. If no comparison <a href="../../tutorials/advanced_features#functors">functor</a> is provided (<code>cmpFunc</code> is <em>null</em>), the Array will be sorted in ascending order.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>sortingStrategy</code>: object | null. This <a href="../../tutorials/advanced_features#functors">functor</a> implements function <em>call(a, b)</em> that compares two array elements as described in the example below.</li>
+<li><code>cmpFunc</code>: object | null. This <a href="../../tutorials/advanced_features#functors">functor</a> implements function <em>call(a, b)</em> that compares two array elements as described in the example below.</li>
 </ul>
 <p><em>Example</em></p>
 <pre><code>// this example will print the elements
