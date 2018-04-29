@@ -176,6 +176,10 @@ Sorts the Array. If no comparison [functor](../tutorials/advanced_features#funct
 
 * `cmpFunc`: object | null. This [functor](../tutorials/advanced_features#functors) implements function *call(a, b)* that compares two array elements as described in the example below.
 
+*Returns*
+
+The sorted array. The returned array is the same array as you called *sort()* on; it's not a copy.
+
 *Example*
 
 ```
