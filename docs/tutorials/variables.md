@@ -128,7 +128,7 @@ When converting an object to a string, SurgeScript will implicitly call `object.
 
 Scoping
 -------
-Variables that are defined before any state or function are *object-level* variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are *local variables*. This means that their lifespan is restricted to their own block of code.
+Variables that are defined before any state or function are *object-level* variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are *local variables*. This means that their lifespan is restricted to their own locus of code.
 
 ```
 object "Surge"
