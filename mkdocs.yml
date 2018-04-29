@@ -25,6 +25,7 @@ pages:
         - 'Array': 'reference/array.md'
         - 'Arguments': 'reference/arguments.md'
         - 'Boolean': 'reference/boolean.md'
+        - 'Console': 'reference/console.md'
         - 'Dictionary': 'reference/dictionary.md'
         - 'GC': 'reference/gc.md'
         - 'Math': 'reference/math.md'
