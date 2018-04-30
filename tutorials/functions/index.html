@@ -323,15 +323,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-return-statement" title="The return statement" class="md-nav__link">
-    The return statement
+  <a href="#return-statement" title="Return statement" class="md-nav__link">
+    Return statement
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
+  <a href="#simple-example" title="Simple example" class="md-nav__link">
+    Simple example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recursive-functions" title="Recursive functions" class="md-nav__link">
+    Recursive functions
   </a>
   
 </li>
@@ -516,6 +523,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../reference/console/" title="Console" class="md-nav__link">
+      Console
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../reference/dictionary/" title="Dictionary" class="md-nav__link">
       Dictionary
     </a>
@@ -680,15 +699,22 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#the-return-statement" title="The return statement" class="md-nav__link">
-    The return statement
+  <a href="#return-statement" title="Return statement" class="md-nav__link">
+    Return statement
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
+  <a href="#simple-example" title="Simple example" class="md-nav__link">
+    Simple example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recursive-functions" title="Recursive functions" class="md-nav__link">
+    Recursive functions
   </a>
   
 </li>
@@ -728,7 +754,7 @@
 
 <p>Functions may be associated to objects. Any function associated to an object may be used (called) by the object itself or by other objects. This means that functions are <em>public</em> (they are visible to the outside world).</p>
 <p><strong>Note:</strong> in an object, functions should be defined after the states.</p>
-<h2 id="the-return-statement">The return statement</h2>
+<h2 id="return-statement">Return statement</h2>
 <p>Use the <strong>return</strong> statement to stop executing the function and to return some value to the caller. Example:</p>
 <pre><code>// This function will return the double of input parameter x
 function double(x)
@@ -739,7 +765,7 @@ function double(x)
 </code></pre>
 
 <p>If no value is specified after the <strong>return</strong> keyword, the function will be stopped and its return value will be <em>null</em>. Additionally, if no <strong>return</strong> statement is found, then the return value will also be <em>null</em>.</p>
-<h2 id="example">Example</h2>
+<h2 id="simple-example">Simple example</h2>
 <p>In the example below, we have an object called <strong>Calculator</strong> with two functions: <em>greet()</em> and <em>sum()</em>. <em>greet()</em> takes no input parameters and just greets the user. On the other hand, <em>sum()</em> takes two input parameters, <em>a</em> and <em>b</em>, and returns the sum <em>a</em> + <em>b</em>:</p>
 <pre><code>object &quot;Calculator&quot;
 {
@@ -782,6 +808,44 @@ function double(x)
 </code></pre>
 
 <p>Notice that the <strong>Application</strong> does not need to know <em>how</em> the functions of the <strong>Calculator</strong> are implemented. It just needs to know <em>what</em> they do. This means that you may change the implementation of the <strong>Calculator</strong> without changing the <strong>Application</strong>, and the end-result will stay the same.</p>
+<h2 id="recursive-functions">Recursive functions</h2>
+<p>In SurgeScript, a function is said to be <strong>recursive</strong> when it calls itself within its code. Recursion can be useful in many ways; namely, when you define a problem in terms of itself. In mathematics, the factorial of a non-negative integer number <em>n</em>, denoted as <em>n!</em>, is such an example:</p>
+<pre><code>n! = { n * (n-1)!    if n &gt; 1
+     { 1             otherwise
+</code></pre>
+
+<p>One interesting example of recursion that arises in computer science is called the <strong>binary search</strong> algorithm. Given a sorted <a href="../../reference/array">Array</a>, the binary search finds the position of a target value without having to inspect the whole collection. In the example below, <em>bsearch()</em> is a recursive function:</p>
+<pre><code>object &quot;BinarySearch&quot;
+{
+    // Given an array *sorted in ascending order*, find()
+    // finds the position of the target value in the array.
+    // It returns its index, or -1 if the target is not found.
+    fun find(array, value)
+    {
+        return bsearch(array, value, 0, array.length - 1);
+    }
+
+    // Performs a binary search in array[start..end]
+    fun bsearch(array, value, start, end)
+    {
+        // get the middle point
+        mid = start + Math.floor((end - start) / 2);
+
+        // compare the middle point to the target value
+        if(start &gt; end)
+            return -1; // target not found
+        else if(value == array[mid])
+            return mid; // found the target value
+        else if(value &lt; array[mid])
+            return bsearch(array, value, start, mid - 1);
+        else
+            return bsearch(array, value, mid + 1, end);
+    }
+}
+</code></pre>
+
+<p>Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is <code>n &lt;= 1</code> (the factorial is 1). In the binary search example, the base case is <code>start &gt; end</code>, meaning that the array is empty and the target value cannot be found.</p>
+<p>As the sages say: <em>to understand recursion, you must first understand recursion</em>.</p>
 <h2 id="constructors-and-destructors">Constructors and destructors</h2>
 <p>In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectivelly. It's not mandatory to define them, but it may be useful to do so (to set up things, for example). Neither may receive any arguments.</p>
 <p>Let's take our <strong>Calculator</strong> again. In the following example, <em>constructor()</em> is called automatically whenever a <strong>Calculator</strong> object is created. Likewise, <em>destructor()</em> is called automatically when the object is destroyed.</p>
