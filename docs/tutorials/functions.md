@@ -15,8 +15,8 @@ Functions may be associated to objects. Any function associated to an object may
 
 **Note:** in an object, functions should be defined after the states.
 
-The return statement
---------------------
+Return statement
+----------------
 
 Use the **return** statement to stop executing the function and to return some value to the caller. Example:
 
@@ -31,8 +31,8 @@ function double(x)
 
 If no value is specified after the **return** keyword, the function will be stopped and its return value will be *null*. Additionally, if no **return** statement is found, then the return value will also be *null*.
 
-Example
--------
+Simple example
+--------------
 
 In the example below, we have an object called **Calculator** with two functions: *greet()* and *sum()*. *greet()* takes no input parameters and just greets the user. On the other hand, *sum()* takes two input parameters, *a* and *b*, and returns the sum *a* + *b*:
 
@@ -84,6 +84,52 @@ Hello! I am a Calculator!
 ```
 
 Notice that the **Application** does not need to know *how* the functions of the **Calculator** are implemented. It just needs to know *what* they do. This means that you may change the implementation of the **Calculator** without changing the **Application**, and the end-result will stay the same.
+
+Recursive functions
+-------------------
+
+In SurgeScript, a function is said to be **recursive** when it calls itself within its code. Recursion can be useful in many ways; namely, when you define a problem in terms of itself. In mathematics, the factorial of a non-negative integer number *n*, denoted as *n!*, is such an example:
+
+```
+n! = { n * (n-1)!    if n > 1
+     { 1             otherwise
+```
+
+One interesting example of recursion that arises in computer science is called the **binary search** algorithm. Given a sorted [Array](../reference/array), the binary search finds the position of a target value without having to inspect the whole collection. In the example below, *bsearch()* is a recursive function:
+
+```
+object "BinarySearch"
+{
+    // Given an array *sorted in ascending order*, find()
+    // finds the position of the target value in the array.
+    // It returns its index, or -1 if the target is not found.
+    fun find(array, value)
+    {
+        return bsearch(array, value, 0, array.length - 1);
+    }
+
+    // Performs a binary search in array[start..end]
+    fun bsearch(array, value, start, end)
+    {
+        // get the middle point
+        mid = start + Math.floor((end - start) / 2);
+
+        // compare the middle point to the target value
+        if(start > end)
+            return -1; // target not found
+        else if(value == array[mid])
+            return mid; // found the target value
+        else if(value < array[mid])
+            return bsearch(array, value, start, mid - 1);
+        else
+            return bsearch(array, value, mid + 1, end);
+    }
+}
+```
+
+Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is `n <= 1` (the factorial is 1). In the binary search example, the base case is `start > end`, meaning that the array is empty and the target value cannot be found.
+
+As the sages say: *to understand recursion, you must first understand recursion*.
 
 Constructors and destructors
 ----------------------------
