@@ -31,6 +31,7 @@
 #include "runtime/heap.h"
 #include "runtime/stack.h"
 #include "runtime/variable.h"
+#include "util/transform.h"
 #include "util/ssarray.h"
 #include "util/util.h"
 
