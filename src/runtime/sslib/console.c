@@ -23,6 +23,7 @@
 #include <string.h>
 #include "../vm.h"
 #include "../object.h"
+#include "../object_manager.h"
 #include "../../util/util.h"
 
 /* private stuff */

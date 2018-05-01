@@ -22,6 +22,10 @@
 #include <ctype.h>
 #include <string.h>
 #include "../vm.h"
+#include "../object.h"
+#include "../object_manager.h"
+#include "../program_pool.h"
+#include "../tag_system.h"
 #include "../../util/util.h"
 
 /* private stuff */

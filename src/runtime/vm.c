@@ -16,12 +16,16 @@
  * limitations under the License.
  *
  * runtime/vm.c
- * SurgeScript Virtual Machine for the Runtime Engine
+ * SurgeScript Virtual Machine - Runtime Engine
  */
 
 #include <locale.h>
 #include "vm.h"
 #include "stack.h"
+#include "variable.h"
+#include "program_pool.h"
+#include "tag_system.h"
+#include "object_manager.h"
 #include "sslib/sslib.h"
 #include "../compiler/parser.h"
 #include "../util/util.h"

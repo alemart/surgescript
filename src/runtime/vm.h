@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2017, 2018  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  * limitations under the License.
  *
  * runtime/vm.h
- * SurgeScript Virtual Machine for the Runtime Engine
+ * SurgeScript Virtual Machine - Runtime Engine
  */
 
 #ifndef _SURGESCRIPT_RUNTIME_VM_H
@@ -25,15 +25,14 @@
 #include <stdbool.h>
 #include "program.h"
 #include "object.h"
-#include "program_pool.h"
-#include "tag_system.h"
-#include "object_manager.h"
-#include "variable.h"
 
 /* types */
 typedef struct surgescript_vm_t surgescript_vm_t;
 struct surgescript_vmargs_t;
 struct surgescript_parser_t;
+struct surgescript_programpool_t;
+struct surgescript_tagsystem_t;
+struct surgescript_objectmanager_t;
 
 /* api */
 surgescript_vm_t* surgescript_vm_create();
@@ -52,9 +51,9 @@ bool surgescript_vm_update(surgescript_vm_t* vm); /* updates the vm */
 bool surgescript_vm_update_ex(surgescript_vm_t* vm, void* user_data, void (*user_update)(surgescript_object_t*,void*), void (*late_update)(surgescript_object_t*,void*)); /* updates the vm and allows more callbacks */
 
 /* VM components */
-surgescript_programpool_t* surgescript_vm_programpool(const surgescript_vm_t* vm); /* gets the program pool */
-surgescript_tagsystem_t* surgescript_vm_tagsystem(const surgescript_vm_t* vm); /* gets the tag system */
-surgescript_objectmanager_t* surgescript_vm_objectmanager(const surgescript_vm_t* vm); /* gets the object manager */
+struct surgescript_programpool_t* surgescript_vm_programpool(const surgescript_vm_t* vm); /* gets the program pool */
+struct surgescript_tagsystem_t* surgescript_vm_tagsystem(const surgescript_vm_t* vm); /* gets the tag system */
+struct surgescript_objectmanager_t* surgescript_vm_objectmanager(const surgescript_vm_t* vm); /* gets the object manager */
 struct surgescript_parser_t* surgescript_vm_parser(const surgescript_vm_t* vm); /* gets the parser */
 struct surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm); /* gets the command-line arguments */
 

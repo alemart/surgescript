@@ -23,6 +23,7 @@
 #include <ctype.h>
 #include "../vm.h"
 #include "../object.h"
+#include "../object_manager.h"
 #include "../../util/ssarray.h"
 #include "../../util/util.h"
 #include "../../util/utf8.h"
