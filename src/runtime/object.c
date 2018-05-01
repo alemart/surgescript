@@ -547,7 +547,7 @@ void surgescript_object_release(surgescript_object_t* object)
         surgescript_program_t* destructor = surgescript_programpool_get(program_pool, object->name, DESTRUCTOR_FUN);
         
         if(surgescript_program_arity(destructor) != 0)
-            ssfatal("Runtime Error: Object \"%s\" %s() cannot receive parameters", object->name, DESTRUCTOR_FUN);
+            ssfatal("Runtime Error: Object \"%s\"'s %s() cannot receive parameters", object->name, DESTRUCTOR_FUN);
 
         surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
         surgescript_program_call(destructor, object->renv, 0);
