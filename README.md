@@ -18,8 +18,8 @@ Already using SurgeScript? Please support us, so we can continue working on this
 
 [![Support us](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
 
-Examples
---------
+Example
+-------
 
 The following script prints a message to the screen:
 
@@ -34,9 +34,21 @@ object "Application"
 }
 ```
 
+To test this script, please save it to *hello.ss* and run:
+
+```
+surgescript hello.ss
+```
+
+You'll see:
+
+```
+Hello, world!
+```
+
 Please read the [SurgeScript Crash Course](https://alemart.github.io/surgescript/tutorials/hello) to learn more.
 
-Additionally, please check the [examples](examples) folder.
+For more examples, please check the [examples](examples) folder.
 
 Compiling SurgeScript
 ---------------------
@@ -45,33 +57,25 @@ If you're using Open Surge, you don't need to compile SurgeScript. It's compiled
 
 If you want to compile SurgeScript by yourself, you'll need [CMake](https://cmake.org) and gcc.
 
-First of all, you'll need the source code:
+First of all, download the source code:
 
 ```
-$ git clone https://github.com/alemart/surgescript.git
-$ cd surgescript
+git clone https://github.com/alemart/surgescript.git
+cd surgescript
 ```
 
 Then, you may compile SurgeScript as follows:
 
 ```
-$ mkdir build && cd build
-$ cmake ..
-$ make
+mkdir build && cd build
+cmake ..
+make
 ```
 
-A **surgescript** executable will be available on the *surgescript/* folder.
-
-To test a script, please go to the *surgescript/* folder and run:
+A **surgescript** executable will be available on the project folder for testing scripts. Additionally, SurgeScript will also be compiled as a static library. To make a system-wide installation, run:
 
 ```
-$ ./surgescript examples/hello.ss
-```
-
-You'll see:
-
-```
-Hello, world!
+sudo make install
 ```
 
 FAQ
@@ -87,7 +91,7 @@ SurgeScript has been originally created by [Alexandre Martins](https://github.co
 
 ##### How do I learn SurgeScript?
 
-Read the [Documentation](https://alemart.github.io/surgescript/).
+Please read the [documentation](https://alemart.github.io/surgescript/).
 
 ##### Why not use some other languages such as Lua?
 
@@ -95,7 +99,7 @@ Unlike other programming languages, SurgeScript has been designed with the speci
 
 ##### How do I embed SurgeScript into my project?
 
-If you're a C developer, you may embed SurgeScript in your project studying the *main.c* file in the *src/* folder. The steps needed are:
+If you're a C developer, you may embed SurgeScript in your project by studying the *main.c* file in the *src/* folder. The steps needed are:
 
 1. Create a SurgeScript Virtual Machine (VM).
 2. Insert the scripts you want into the VM (let it compile).
@@ -103,12 +107,14 @@ If you're a C developer, you may embed SurgeScript in your project studying the 
 4. At every frame of your game/app, update the VM.
 5. Once you're done, release the VM.
 
+You'll need to *#include <surgescript.h>* and link your project with *-lsurgescript*.
+
 ##### How do I build the documentation?
 
-You'll need [mkdocs](http://www.mkdocs.org). After you get the sources, go to the *surgescript/* folder and type:
+You'll need [mkdocs](http://www.mkdocs.org). After you get the sources, go to the project folder and run:
 
 ```
-$ mkdocs build
+mkdocs build
 ```
 
 The documentation will be available in the *site/* subdirectory.
