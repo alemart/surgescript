@@ -27,11 +27,9 @@
 
 /* SurgeScript info */
 #define SSPROJECT                   "SurgeScript"
-#define SSVERSION                   "0.5.0 (beta)"
-#ifndef SSBUILD
-#define SSBUILD                     "custom build"
-#endif
-#define SSINFO                      SSPROJECT " " SSVERSION " - " SSBUILD
+#define SSVERSION                   "0.5.1"
+#define SSINFO                      SSPROJECT " " SSVERSION
+#define SSURL                       "https://github.com/alemart/surgescript"
 
 /* macros */
 #define ssmin(a, b)                 ((a) < (b) ? (a) : (b))

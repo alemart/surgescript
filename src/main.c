@@ -20,8 +20,13 @@
  */
 
 #include <stdio.h>
-#include "util/util.h"
-#include "runtime/vm.h"
+#include <string.h>
+#include "surgescript.h"
+
+static surgescript_vm_t* make_vm(int argc, char** argv);
+static void show_help(const char* executable);
+static void print_to_console(const char* message);
+static void discard_message(const char* message);
 
 /*
  * main()
@@ -29,26 +34,126 @@
  */
 int main(int argc, char* argv[])
 {
-    const char* file = argc > 1 ? argv[1] : NULL;
-    if(file) {
-        /* spawn the VM and compile the input file */
-        surgescript_vm_t* vm = surgescript_vm_create();
-        surgescript_vm_compile(vm, file);
+    if(argc > 1) {
+        /* create the VM and compile the input file(s) */
+        surgescript_vm_t* vm = make_vm(argc, argv);
+        if(vm != NULL) {
+            /* run the VM */
+            while(surgescript_vm_update(vm)) {
+                ;
+            }
 
-        /* run the VM */
-        surgescript_vm_launch_ex(vm, argc, argv);
-        while(surgescript_vm_update(vm)) {
-            ;
+            /* destroy the VM */
+            surgescript_vm_destroy(vm);
         }
-        surgescript_vm_destroy(vm);
-
-        /* done! */
-        return 0;
     }
     else {
         /* print usage */
-        printf("%s\n", SSINFO);
-        printf("Usage: %s input-script.ss\n", surgescript_util_basename(argv[0]));
-        return 1;
+        show_help(surgescript_util_basename(argv[0]));
     }
+
+    /* done! */
+    return 0;
+}
+
+/*
+ * make_vm()
+ * Parses the command line arguments and creates a VM
+ * with the compiled scripts
+ */
+surgescript_vm_t* make_vm(int argc, char** argv)
+{
+    surgescript_vm_t* vm = NULL;
+    int i;
+
+    /* disable debugging */
+    surgescript_util_set_error_functions(discard_message, print_to_console);
+
+    /* parse the command line options */
+    for(i = 1; i < argc && *argv[i] == '-'; i++) {
+        const char* arg = argv[i];
+        if(strcmp(arg, "--debug") == 0 || strcmp(arg, "-D") == 0) {
+            /* enable debugging */
+            surgescript_util_set_error_functions(print_to_console, print_to_console);
+        }
+        else if(strcmp(arg, "--version") == 0 || strcmp(arg, "-v") == 0) {
+            /* display version */
+            printf("%s\n", SSINFO);
+            return NULL;
+        }
+        else if(strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
+            /* show help */
+            show_help(surgescript_util_basename(argv[0]));
+            return NULL;
+        }
+        else {
+            printf("Unrecognized option: '%s'.\nType '%s --help' for more information.\n", arg, surgescript_util_basename(argv[0]));
+            return NULL;
+        }
+    }
+
+    /* create an empty VM */
+    vm = surgescript_vm_create();
+
+    /* compile the scripts */
+    for(; i < argc; i++) {
+        const char* file = argv[i];
+        surgescript_vm_compile(vm, file);
+    }
+
+    /* launch the VM */
+    surgescript_vm_launch_ex(vm, argc, argv);
+
+    /* done! */
+    return vm;
+}
+
+/*
+ * show_help()
+ * Shows a help message
+ */
+void show_help(const char* executable)
+{
+    printf(
+        "%s by Alexandre Martins\n"
+        "Usage: %s [OPTIONS] <script>...\n"
+        "Compiles and executes the given script(s).\n"
+        "\n"
+        "Options:\n"
+        "\t-v, --version\t\t\tshows the version of the scripting engine\n"
+        "\t-D, --debug\t\t\tprints debugging information\n"
+        "\t-h, --help\t\t\tshows this message\n"
+        "\n"
+        "Examples:\n"
+        "\t%s script.ss\t\tCompiles and executes script.ss\n"
+        "\t%s file1.ss file2.ss\tCompiles and executes file1.ss and file2.ss\n"
+        "\t%s --debug test.ss\tCompiles and runs test.ss with debugging information\n"
+        "\n"
+        "Full documentation at: <%s>\n"
+        "(also available locally on the docs/ folder)\n",
+        SSINFO,
+        executable,
+        executable,
+        executable,
+        executable,
+        SSURL
+    );
+}
+
+/*
+ * print_to_console()
+ * Prints a message to the standard output
+ */
+void print_to_console(const char* message)
+{
+    puts(message);
+}
+
+/*
+ * discard_message()
+ * Discards a message
+ */
+void discard_message(const char* message)
+{
+    ;
 }
