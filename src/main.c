@@ -25,7 +25,8 @@
 
 static surgescript_vm_t* make_vm(int argc, char** argv);
 static void show_help(const char* executable);
-static void print_to_console(const char* message);
+static void print_to_stdout(const char* message);
+static void print_to_stderr(const char* message);
 static void discard_message(const char* message);
 
 /*
@@ -67,14 +68,14 @@ surgescript_vm_t* make_vm(int argc, char** argv)
     int i;
 
     /* disable debugging */
-    surgescript_util_set_error_functions(discard_message, print_to_console);
+    surgescript_util_set_error_functions(discard_message, print_to_stderr);
 
     /* parse the command line options */
     for(i = 1; i < argc && *argv[i] == '-'; i++) {
         const char* arg = argv[i];
         if(strcmp(arg, "--debug") == 0 || strcmp(arg, "-D") == 0) {
             /* enable debugging */
-            surgescript_util_set_error_functions(print_to_console, print_to_console);
+            surgescript_util_set_error_functions(print_to_stdout, print_to_stderr);
         }
         else if(strcmp(arg, "--version") == 0 || strcmp(arg, "-v") == 0) {
             /* display version */
@@ -141,12 +142,21 @@ void show_help(const char* executable)
 }
 
 /*
- * print_to_console()
+ * print_to_stdout()
  * Prints a message to the standard output
  */
-void print_to_console(const char* message)
+void print_to_stdout(const char* message)
 {
     puts(message);
+}
+
+/*
+ * print_to_stderr()
+ * Writes a message to the standard error stream
+ */
+void print_to_stderr(const char* message)
+{
+    fprintf(stderr, "%s\n", message);
 }
 
 /*
