@@ -117,7 +117,6 @@ void surgescript_util_fatal(const char* fmt, ...)
     vsnprintf(buf+len, sizeof(buf)-len, fmt, args);
     va_end(args);
 
-    log_function(buf);
     fatal_function(buf);
     exit(1); /* just in case */
 }
@@ -291,12 +290,12 @@ unsigned surgescript_util_gettickcount()
  * ------------------------------- */
 void my_log(const char* message)
 {
-    fprintf(stderr, "%s\n", message);
+    printf("%s\n", message);
 }
 
 void my_fatal(const char* message)
 {
-    ;
+    fprintf(stderr, "%s\n", message);
 }
 
 void mem_crash(const char* location) /* out of memory error */
@@ -306,7 +305,6 @@ void mem_crash(const char* location) /* out of memory error */
     strncpy(buf + 17, location, sizeof(buf) - 17 - 1);
     buf[sizeof(buf) - 1] = 0;
 
-    log_function(buf);
     fatal_function(buf);
     exit(1); /* just in case */
 }
