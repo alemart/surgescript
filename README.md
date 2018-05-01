@@ -34,7 +34,7 @@ object "Application"
 }
 ```
 
-To test this script, please save it to *hello.ss* and run:
+To test this script, save it to *hello.ss* and run:
 
 ```
 surgescript hello.ss
@@ -78,6 +78,8 @@ A **surgescript** executable will be available on the project folder for testing
 sudo make install
 ```
 
+**Linux users:** the installation folder defaults to */usr/local*. If you want to change it (optional), call `cmake .. -DCMAKE_INSTALL_PREFIX=/path/to/install` before running make.
+
 FAQ
 ---
 
@@ -107,7 +109,7 @@ If you're a C developer, you may embed SurgeScript in your project by studying t
 4. At every frame of your game/app, update the VM.
 5. Once you're done, release the VM.
 
-You'll need to *#include <surgescript.h>* and link your project with *-lsurgescript*.
+You'll need to `#include <surgescript.h>` in your code and link your project with *-lsurgescript*.
 
 ##### How do I build the documentation?
 
