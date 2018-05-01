@@ -125,9 +125,9 @@ void show_help(const char* executable)
         "\t-h, --help\t\t\tshows this message\n"
         "\n"
         "Examples:\n"
-        "\t%s script.ss\t\tCompiles and executes script.ss\n"
-        "\t%s file1.ss file2.ss\tCompiles and executes file1.ss and file2.ss\n"
-        "\t%s --debug test.ss\tCompiles and runs test.ss with debugging information\n"
+        "\t%s script.ss\t\tcompiles and executes script.ss\n"
+        "\t%s file1.ss file2.ss\tcompiles and executes file1.ss and file2.ss\n"
+        "\t%s --debug test.ss\tcompiles and runs test.ss with debugging information\n"
         "\n"
         "Full documentation at: <%s>\n"
         "(also available locally on the docs/ folder)\n",
