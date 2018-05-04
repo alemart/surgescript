@@ -844,7 +844,7 @@ function double(x)
 }
 </code></pre>
 
-<p>Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is <code>n &lt;= 1</code> (the factorial is 1). In the binary search example, the base case is <code>start &gt; end</code>, meaning that the array is empty and the target value cannot be found.</p>
+<p>Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is <code>n &lt;= 1</code> (the factorial is 1). In the binary search example, the base case is <code>start &gt; end</code>, meaning that the array is empty and the target value cannot be found, or <code>value == array[mid]</code>, meaning that the target value has been found at <code>mid</code>.</p>
 <p>As the sages say: <em>to understand recursion, you must first understand recursion</em>.</p>
 <h2 id="constructors-and-destructors">Constructors and destructors</h2>
 <p>In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectively. It's not mandatory to define them, but it may be useful to do so (to set up things, for example). Neither may receive any arguments.</p>
