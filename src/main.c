@@ -131,7 +131,6 @@ void show_help(const char* executable)
         "\t%s --debug test.ss\tcompiles and runs test.ss with debugging information\n"
         "\n"
         "Full documentation at: <%s>\n"
-        "(also available locally on the docs/ folder)\n",
         SSINFO,
         executable,
         executable,

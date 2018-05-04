@@ -3,7 +3,7 @@ SurgeScript
 
 ![SurgeScript](docs/img/opensurge.png)
 
-SurgeScript is a scripting language for games. It has unique features that make it suitable for games - and it is extremely valuable for empowering users to generate their own content. Built originally for the Open Surge Engine, SurgeScript can be embedded into any C project.
+SurgeScript is a scripting language for games. It has unique features that make it suitable for games - and it is extremely valuable for empowering users to generate their own content. SurgeScript is built in C, which is nearly universal.
 
 **First-timer?**
 
@@ -101,7 +101,7 @@ Unlike other programming languages, SurgeScript has been designed with the speci
 
 ##### How do I embed SurgeScript into my project?
 
-If you're a C developer, you may embed SurgeScript in your project by studying the *main.c* file in the *src/* folder. The steps needed are:
+If you're a C developer, you may embed SurgeScript in your project by studying the *main.c* file in the *src/* folder. The steps are:
 
 1. Create a SurgeScript Virtual Machine (VM).
 2. Insert the scripts you want into the VM (let it compile).
