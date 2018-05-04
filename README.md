@@ -109,7 +109,7 @@ If you're a C developer, you may embed SurgeScript in your project by studying t
 4. At every frame of your game/app, update the VM.
 5. Once you're done, release the VM.
 
-You'll need to `#include <surgescript.h>` in your code and link your project with *-lsurgescript*.
+You'll need to `#include <surgescript.h>` in your code and link your project with *-lsurgescript -lm*.
 
 ##### How do I build the documentation?
 
