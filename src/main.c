@@ -130,7 +130,7 @@ void show_help(const char* executable)
         "\t%s file1.ss file2.ss\tcompiles and executes file1.ss and file2.ss\n"
         "\t%s --debug test.ss\tcompiles and runs test.ss with debugging information\n"
         "\n"
-        "Full documentation at: <%s>\n"
+        "Full documentation at: <%s>\n",
         SSINFO,
         executable,
         executable,
