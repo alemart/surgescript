@@ -127,7 +127,7 @@ object "BinarySearch"
 }
 ```
 
-Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is `n <= 1` (the factorial is 1). In the binary search example, the base case is `start > end`, meaning that the array is empty and the target value cannot be found.
+Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is `n <= 1` (the factorial is 1). In the binary search example, the base case is `start > end`, meaning that the array is empty and the target value cannot be found, or `value == array[mid]`, meaning that the target value has been found at `mid`.
 
 As the sages say: *to understand recursion, you must first understand recursion*.
 
