@@ -19,15 +19,15 @@
  * SurgeScript Runtime Engine entry point
  */
 
-#include <stdio.h>
+#include <surgescript.h>
 #include <string.h>
-#include "surgescript.h"
+#include <stdio.h>
 
-static surgescript_vm_t* make_vm(int argc, char** argv);
-static void show_help(const char* executable);
-static void print_to_stdout(const char* message);
-static void print_to_stderr(const char* message);
-static void discard_message(const char* message);
+surgescript_vm_t* make_vm(int argc, char** argv);
+void print_to_stdout(const char* message);
+void print_to_stderr(const char* message);
+void discard_message(const char* message);
+void show_help(const char* executable);
 
 /*
  * main()
