@@ -22,17 +22,17 @@
 #ifndef _SURGESCRIPT_H
 #define _SURGESCRIPT_H
 
-#include "runtime/vm.h"
-#include "runtime/program.h"
-#include "runtime/object.h"
-#include "runtime/program_pool.h"
-#include "runtime/tag_system.h"
-#include "runtime/object_manager.h"
-#include "runtime/heap.h"
-#include "runtime/stack.h"
-#include "runtime/variable.h"
-#include "util/transform.h"
-#include "util/ssarray.h"
-#include "util/util.h"
+#include "surgescript/runtime/vm.h"
+#include "surgescript/runtime/program.h"
+#include "surgescript/runtime/object.h"
+#include "surgescript/runtime/program_pool.h"
+#include "surgescript/runtime/tag_system.h"
+#include "surgescript/runtime/object_manager.h"
+#include "surgescript/runtime/heap.h"
+#include "surgescript/runtime/stack.h"
+#include "surgescript/runtime/variable.h"
+#include "surgescript/util/transform.h"
+#include "surgescript/util/ssarray.h"
+#include "surgescript/util/util.h"
 
 #endif
