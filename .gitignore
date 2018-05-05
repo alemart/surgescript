@@ -28,3 +28,4 @@ surgescript
 site/
 build/
 private/
+CMakeFiles/
