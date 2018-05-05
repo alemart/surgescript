@@ -25,6 +25,6 @@ Session.vim
 *.o
 *.a
 surgescript
-todos.txt
 site/
 build/
+private/
