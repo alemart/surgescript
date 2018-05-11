@@ -13,6 +13,8 @@ z = x[0]; // "s" (first character of x)
 n = y.length; // 5
 ```
 
+Please note that strings in SurgeScript are immutable. Once a string is set, its individual characters cannot be changed. If you need to modify the content of a string, reassign the variable to a new string.
+
 Properties
 ----------
 
