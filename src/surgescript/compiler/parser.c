@@ -845,26 +845,15 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
             match(parser, SSTOK_INCDECOP);
         }
         else if(got_type(parser, SSTOK_LPAREN)) { /* we have a function call here */
-            unsigned sys = surgescript_objectmanager_system_object(NULL, identifier);
-            unmatch(parser); /* put the identifier back */
-            if(sys == surgescript_objectmanager_null(NULL) && !surgescript_symtable_has_symbol(context.symtable, identifier)) {
+            if(!surgescript_symtable_has_symbol(context.symtable, identifier)) {
                 /* regular function call */
                 emit_this(context);
-                match(parser, SSTOK_IDENTIFIER);
                 funcallexpr(parser, context, identifier);
                 postfixexpr1(parser, context);
             }
-            else if(surgescript_symtable_has_symbol(context.symtable, identifier)) {
+            else {
                 /* call "call" method */
                 surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);
-                match(parser, SSTOK_IDENTIFIER);
-                funcallexpr(parser, context, "call");
-                postfixexpr1(parser, context);
-            }
-            else {
-                /* call "call" method (system object) */
-                emit_object(context, sys);
-                match(parser, SSTOK_IDENTIFIER);
                 funcallexpr(parser, context, "call");
                 postfixexpr1(parser, context);
             }
