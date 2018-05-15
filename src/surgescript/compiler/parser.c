@@ -48,6 +48,8 @@ struct surgescript_parser_t
     char* filename;
     surgescript_programpool_t* program_pool;
     surgescript_tagsystem_t* tag_system;
+    SSARRAY(char*, imported_plugins); /* imported plugins in the current file / code unit */
+    SSARRAY(char*, known_plugins); /* known plugins in all files */
 };
 
 /* helpers */
@@ -121,6 +123,32 @@ static void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t 
 static void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 
+/* plugin helpers */
+const char* DEFAULT_PLUGINS[] = { "Math", "Time", "Console", NULL }; /* NULL-terminated array */
+
+#define add_to_plugins_list(plugin_list, plugin_name) \
+    ssarray_push(plugin_list, ssstrdup(plugin_name))
+
+#define clear_plugins_list(plugin_list) \
+    do { \
+        char* plugin = NULL; \
+        while(ssarray_length(plugin_list) > 0) { \
+            ssarray_pop(plugin_list, plugin); \
+            ssfree(plugin); \
+        } \
+        ssarray_reset(plugin_list); \
+    } while(0)
+
+#define populate_plugins_list(plugin_list) \
+    do { \
+        for(const char** plugin = DEFAULT_PLUGINS; *plugin != NULL; plugin++) \
+            add_to_plugins_list(plugin_list, *plugin); \
+    } while(0)
+
+
+
+
+
 /* public api */
 
 
@@ -136,6 +164,9 @@ surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* progr
     parser->filename = ssstrdup("<unspecified>");
     parser->program_pool = program_pool;
     parser->tag_system = tag_system;
+    ssarray_init(parser->imported_plugins);
+    ssarray_init(parser->known_plugins);
+    populate_plugins_list(parser->known_plugins);
     setlocale(LC_NUMERIC, "C"); /* use '.' as the decimal separator on atof() */
     return parser;
 }
@@ -152,6 +183,9 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser)
         surgescript_token_destroy(parser->lookahead);
     if(parser->previous)
         surgescript_token_destroy(parser->previous);
+    clear_plugins_list(parser->known_plugins);
+    ssarray_release(parser->known_plugins);
+    ssarray_release(parser->imported_plugins);
     return ssfree(parser);
 }
 
@@ -218,6 +252,18 @@ const char* surgescript_parser_filename(surgescript_parser_t* parser)
 */
 
 
+
+/*
+ * surgescript_parser_foreach_plugin()
+ * Calls fun() for each plugin found in any parsed script
+ */
+void surgescript_parser_foreach_plugin(surgescript_parser_t* parser, void* data, void (*fun)(const char*,void*))
+{
+    for(int i = 0; i < ssarray_length(parser->known_plugins); i++)
+        fun(parser->known_plugins[i], data);
+}
+
+
 /* privates & helpers */
 
 
@@ -225,9 +271,11 @@ const char* surgescript_parser_filename(surgescript_parser_t* parser)
 /* parses a script */
 void parse(surgescript_parser_t* parser)
 {
-    /*sslog("Parsing \"%s\"...", parser->filename);*/
+    populate_plugins_list(parser->imported_plugins);
+    add_to_plugins_list(parser->imported_plugins, "Application"); /* little hack */
     parser->lookahead = surgescript_lexer_scan(parser->lexer); /* grab first symbol */
-    return objectlist(parser);
+    objectlist(parser);
+    clear_plugins_list(parser->imported_plugins);
 }
 
 /* does the lookahead symbol have the given type? */
