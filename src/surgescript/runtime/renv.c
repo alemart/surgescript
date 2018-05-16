@@ -29,7 +29,7 @@
 #include "../util/util.h"
 
 /* how many temporary vars does a runtime environment have? */
-static const int MAX_TMPVARS = 4; /* used for calculations. the last one is used as a return value (for functions) */
+static const int MAX_TMPVARS = 4; /* used for calculations */
 static surgescript_renv_t* full_destructor(surgescript_renv_t* runtime_environment);
 static surgescript_renv_t* partial_destructor(surgescript_renv_t* runtime_environment);
 

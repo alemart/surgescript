@@ -699,21 +699,14 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
             if(program) {
                 if(number_of_given_params == program->arity) {
                     /* the parameters are pushed onto the stack (left-to-right) */
-                    surgescript_renv_t* callee_runtime_environment = surgescript_renv_create(
-                        object,
-                        stack,
-                        surgescript_object_heap(object),
-                        surgescript_renv_programpool(caller_runtime_environment),
-                        manager,
-                        surgescript_renv_tmp(caller_runtime_environment)
-                    );
+                    /* faster: no dynamic memory allocation required */
+                    surgescript_renv_t callee_runtime_environment = *caller_runtime_environment;
 
                     /* call the program */
-                    program->run(program, callee_runtime_environment);
+                    program->run(program, &callee_runtime_environment);
 
                     /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
                     /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(callee_runtime_environment));*/
-                    surgescript_renv_destroy(callee_runtime_environment);
                 }
                 else
                     ssfatal("Runtime Error: function %s.%s (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
