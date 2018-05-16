@@ -24,7 +24,6 @@
 #include "../heap.h"
 #include "../object.h"
 #include "../object_manager.h"
-#include "../variable.h"
 #include "../../util/util.h"
 
 /* private stuff */
@@ -77,7 +76,7 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
     ssassert(isactive_addr == ISACTIVE_ADDR);
     surgescript_var_set_bool(surgescript_heap_at(heap, ISACTIVE_ADDR), true);
 
-    /* spawn system objects */
+    /* spawn children */
     for(const char** p = system_objects; *p != NULL; p++) {
         surgescript_var_t* mem = surgescript_heap_at(heap, surgescript_heap_malloc(heap));
         surgescript_var_set_objecthandle(mem, surgescript_objectmanager_spawn(manager, me, *p, NULL));

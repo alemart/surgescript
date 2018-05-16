@@ -42,14 +42,14 @@
 /* the parser */
 struct surgescript_parser_t
 {
-    surgescript_token_t* lookahead;
-    surgescript_token_t* previous;
-    surgescript_lexer_t* lexer;
-    char* filename;
-    surgescript_programpool_t* program_pool;
-    surgescript_tagsystem_t* tag_system;
-    SSARRAY(char*, imported_plugins); /* imported plugins in the current file / code unit */
-    SSARRAY(char*, known_plugins); /* known plugins in all files */
+    surgescript_token_t* lookahead; /* scanned symbol */
+    surgescript_token_t* previous; /* previous symbol */
+    surgescript_lexer_t* lexer; /* lexer */
+    char* filename; /* current filename */
+    surgescript_programpool_t* program_pool; /* reference to the program pool */
+    surgescript_tagsystem_t* tag_system; /* reference to the tag system */
+    surgescript_symtable_t* plugins; /* imported plugins in the current file (code unit) */
+    SSARRAY(char*, known_plugins); /* known plugins in all files (the names of the objects) */
 };
 
 /* helpers */
@@ -69,6 +69,9 @@ static surgescript_var_t* disable_object(surgescript_object_t* object, const sur
 static void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier);
 static void import_public_vars(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* object_name);
 static void make_accessor(const char* fun_name, void* symtable);
+static void init_plugins_list(surgescript_parser_t* parser);
+static void add_to_plugins_list(surgescript_parser_t* parser, const char* plugin_name);
+static void release_plugins_list(surgescript_parser_t* parser);
 
 /* non-terminals */
 static void objectlist(surgescript_parser_t* parser);
@@ -123,30 +126,6 @@ static void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t 
 static void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 
-/* plugin helpers */
-const char* DEFAULT_PLUGINS[] = { "Math", "Time", "Console", NULL }; /* NULL-terminated array */
-
-#define add_to_plugins_list(plugin_list, plugin_name) \
-    ssarray_push(plugin_list, ssstrdup(plugin_name))
-
-#define clear_plugins_list(plugin_list) \
-    do { \
-        char* plugin = NULL; \
-        while(ssarray_length(plugin_list) > 0) { \
-            ssarray_pop(plugin_list, plugin); \
-            ssfree(plugin); \
-        } \
-        ssarray_reset(plugin_list); \
-    } while(0)
-
-#define populate_plugins_list(plugin_list) \
-    do { \
-        for(const char** plugin = DEFAULT_PLUGINS; *plugin != NULL; plugin++) \
-            add_to_plugins_list(plugin_list, *plugin); \
-    } while(0)
-
-
-
 
 
 /* public api */
@@ -164,9 +143,8 @@ surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* progr
     parser->filename = ssstrdup("<unspecified>");
     parser->program_pool = program_pool;
     parser->tag_system = tag_system;
-    ssarray_init(parser->imported_plugins);
-    ssarray_init(parser->known_plugins);
-    populate_plugins_list(parser->known_plugins);
+    parser->plugins = NULL;
+    init_plugins_list(parser);
     setlocale(LC_NUMERIC, "C"); /* use '.' as the decimal separator on atof() */
     return parser;
 }
@@ -183,9 +161,9 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser)
         surgescript_token_destroy(parser->lookahead);
     if(parser->previous)
         surgescript_token_destroy(parser->previous);
-    clear_plugins_list(parser->known_plugins);
-    ssarray_release(parser->known_plugins);
-    ssarray_release(parser->imported_plugins);
+    if(parser->plugins)
+        surgescript_symtable_destroy(parser->plugins);
+    release_plugins_list(parser);
     return ssfree(parser);
 }
 
@@ -271,11 +249,11 @@ void surgescript_parser_foreach_plugin(surgescript_parser_t* parser, void* data,
 /* parses a script */
 void parse(surgescript_parser_t* parser)
 {
-    populate_plugins_list(parser->imported_plugins);
-    add_to_plugins_list(parser->imported_plugins, "Application"); /* little hack */
+    parser->plugins = surgescript_symtable_create(NULL);
+    surgescript_symtable_put_plugin_symbol(parser->plugins, "Application"); /* little hack to make Application accessible everywhere */
     parser->lookahead = surgescript_lexer_scan(parser->lexer); /* grab first symbol */
     objectlist(parser);
-    clear_plugins_list(parser->imported_plugins);
+    parser->plugins = surgescript_symtable_destroy(parser->plugins);
 }
 
 /* does the lookahead symbol have the given type? */
@@ -487,7 +465,7 @@ void object(surgescript_parser_t* parser)
         (object_name = ssstrdup(
             surgescript_token_lexeme(parser->lookahead)
         )),
-        surgescript_symtable_create(NULL), /* symbol table */
+        surgescript_symtable_create(parser->plugins), /* symbol table */
         surgescript_program_create(0) /* object constructor */
     );
 
@@ -1399,4 +1377,24 @@ void import_public_vars(surgescript_parser_t* parser, surgescript_nodecontext_t 
     /* look for all accessors in object_name
        and add them to the symbol table */
     surgescript_programpool_foreach_ex(parser->program_pool, object_name, context.symtable, make_accessor);
+}
+
+void init_plugins_list(surgescript_parser_t* parser)
+{
+    ssarray_init(parser->known_plugins);
+}
+
+void release_plugins_list(surgescript_parser_t* parser)
+{
+    char* plugin = NULL;
+    while(ssarray_length(parser->known_plugins) > 0) {
+        ssarray_pop(parser->known_plugins, plugin);
+        ssfree(plugin);
+    }
+    ssarray_release(parser->known_plugins);
+}
+
+void add_to_plugins_list(surgescript_parser_t* parser, const char* plugin_name)
+{
+    ssarray_push(parser->known_plugins, ssstrdup(plugin_name));
 }

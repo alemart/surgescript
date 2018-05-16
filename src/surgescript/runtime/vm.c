@@ -64,11 +64,11 @@ struct surgescript_vm_t
     float start_time;
 };
 
-
 /* misc */
 static bool call_updater1(surgescript_object_t* object, void* updater);
 static bool call_updater2(surgescript_object_t* object, void* updater);
 static bool call_updater3(surgescript_object_t* object, void* updater);
+static void install_plugin(const char* object_name, void* data);
 
 
 
@@ -100,14 +100,15 @@ surgescript_vm_t* surgescript_vm_create()
     surgescript_sslib_register_boolean(vm);
     surgescript_sslib_register_temp(vm);
     surgescript_sslib_register_gc(vm);
-    surgescript_sslib_register_time(vm);
-    surgescript_sslib_register_math(vm);
     surgescript_sslib_register_array(vm);
     surgescript_sslib_register_dictionary(vm);
+    surgescript_sslib_register_time(vm);
+    surgescript_sslib_register_math(vm);
+    surgescript_sslib_register_console(vm);
     surgescript_sslib_register_transform2d(vm);
     surgescript_sslib_register_tagsystem(vm);
     surgescript_sslib_register_session(vm);
-    surgescript_sslib_register_console(vm);
+    surgescript_sslib_register_plugin(vm);
     surgescript_sslib_register_arguments(vm);
     surgescript_sslib_register_application(vm);
     surgescript_sslib_register_system(vm);
@@ -173,6 +174,9 @@ void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
 
     /* Setup the command line arguments */
     surgescript_vmargs_configure(vm->args, argc, argv);
+
+    /* Install plugins */
+    surgescript_parser_foreach_plugin(vm->parser, vm, install_plugin);
 
     /* Create the root object */
     surgescript_objectmanager_spawn_root(vm->object_manager);
@@ -357,6 +361,13 @@ bool call_updater3(surgescript_object_t* object, void* updater)
     update_children = surgescript_object_update(object);
     vm_updater->late_update(object, vm_updater->user_data);
     return update_children;
+}
+
+/* plugin installer */
+void install_plugin(const char* object_name, void* data)
+{
+    surgescript_vm_t* vm = (surgescript_vm_t*)data;
+    surgescript_objectmanager_install_plugin(vm->object_manager, object_name);
 }
 
 /* VM command-line arguments */

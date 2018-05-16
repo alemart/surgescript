@@ -137,7 +137,7 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser);
 bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* absolute_path);
 bool surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_in_memory);
 
-/* foreach plugin found in any parsed script */
+/* foreach plugin object found in any parsed script, run fun(object_name, data) */
 void surgescript_parser_foreach_plugin(surgescript_parser_t* parser, void* data, void (*fun)(const char*,void*));
 
 #endif

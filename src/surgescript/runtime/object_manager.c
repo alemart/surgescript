@@ -47,6 +47,7 @@ struct surgescript_objectmanager_t
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
     int garbage_count; /* last number of garbage-collected objects */
+    SSARRAY(char*, plugin_list); /* plugin list */
 };
 
 /* fixed objects */
@@ -55,12 +56,13 @@ static const surgescript_objecthandle_t ROOT_HANDLE = 1;
 
 /* names of important objects */
 static const char* ROOT_OBJECT = "System";
+static const char* APPLICATION_OBJECT = "Application";
 static const char* SYSTEM_OBJECTS[] = {
     "String", "Number", "Boolean",
-    "Time", "Math", "Console",
     "__Temp", "__GC", "__TagSystem",
-    "Application", NULL
-}; /* this must be a NULL-terminated array, and "Application" should be the last element (as objects are spawned in this order) */
+    "Math", "Time", "Console",
+    NULL
+}; /* this must be a NULL-terminated array; all system objects have known addresses at compile-time */
 
 /* object methods acessible by me */
 extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data); /* creates a new blank object */
@@ -81,6 +83,10 @@ static bool sweep_unreachables(surgescript_object_t* object);
 /* other */
 #define is_power_of_two(x)                !((x) & ((x) - 1)) /* this assumes x > 0 */
 static surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr);
+static void add_to_plugin_list(surgescript_objectmanager_t* manager, const char* object_name);
+static void release_plugin_list(surgescript_objectmanager_t* manager);
+static const char** children_of_the_root(const surgescript_objectmanager_t* manager);
+static int number_of_system_objects(const surgescript_objectmanager_t* manager);
 
 /* -------------------------------
  * public methods
@@ -109,6 +115,8 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     manager->reachables_count = 0;
     manager->garbage_count = 0;
 
+    ssarray_init(manager->plugin_list);
+
     return manager;
 }
 
@@ -125,6 +133,8 @@ surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objec
 
     ssarray_release(manager->data);
     ssarray_release(manager->objects_to_be_scanned);
+    release_plugin_list(manager);
+
     return ssfree(manager);
 }
 
@@ -175,12 +185,14 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_obje
 {
     if(manager->handle_ptr == ROOT_HANDLE) {
         /* spawn the root object */
-        surgescript_object_t *object = surgescript_object_create(ROOT_OBJECT, ROOT_HANDLE, manager, manager->program_pool, manager->stack, SYSTEM_OBJECTS);
+        const char** children = children_of_the_root(manager);
+        surgescript_object_t *object = surgescript_object_create(ROOT_OBJECT, ROOT_HANDLE, manager, manager->program_pool, manager->stack, children);
         ssarray_push(manager->data, object);
         manager->count++;
 
         /* initializes the root and call its constructor */
         surgescript_object_init(object);
+        ssfree(children);
     }
     else
         ssfatal("The root object should be the first one to be spawned.");
@@ -255,7 +267,7 @@ surgescript_objecthandle_t surgescript_objectmanager_root(const surgescript_obje
  */
 surgescript_objecthandle_t surgescript_objectmanager_application(const surgescript_objectmanager_t* manager)
 {
-    return surgescript_objectmanager_system_object(manager, "Application");
+    return surgescript_objectmanager_system_object(manager, APPLICATION_OBJECT);
 }
 
 /*
@@ -396,7 +408,15 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescrip
     return surgescript_objectmanager_spawn(manager, temp, "Dictionary", NULL);
 }
 
-
+/*
+ * surgescript_objectmanager_install_plugin()
+ * Installs a plugin. Call this before spawning the root object.
+ */
+void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manager, const char* object_name)
+{
+    printf("Installing plugin %s...\n", object_name);
+    add_to_plugin_list(manager, object_name);
+}
 
 
 
@@ -442,4 +462,54 @@ surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr)
     while(mgr->handle_ptr < ssarray_length(mgr->data) && mgr->data[mgr->handle_ptr] != NULL)
         mgr->handle_ptr++;
     return mgr->handle_ptr;
+}
+
+/* adds an object to the plugin list */
+void add_to_plugin_list(surgescript_objectmanager_t* manager, const char* object_name)
+{
+    ssarray_push(manager->plugin_list, ssstrdup(object_name));
+}
+
+/* releases the plugin list */
+void release_plugin_list(surgescript_objectmanager_t* manager)
+{
+    char* plugin = NULL;
+    while(ssarray_length(manager->plugin_list) > 0) {
+        ssarray_pop(manager->plugin_list, plugin);
+        ssfree(plugin);
+    }
+    ssarray_release(manager->plugin_list);
+}
+
+/* instantiates a NULL-terminated array of strings with object names to be spawned by the root object */
+/* (you'll need to free this array) */
+const char** children_of_the_root(const surgescript_objectmanager_t* manager) {
+    int i = 0, j = 0;
+    int count = 2 + ssarray_length(manager->plugin_list) + number_of_system_objects(manager);
+    const char** buf = ssmalloc(count * sizeof(*buf)), **p = SYSTEM_OBJECTS;
+
+    /* register system objects */
+    while(*p != NULL)
+        buf[j++] = *p++;
+
+    /* register plugins */
+    while(i < ssarray_length(manager->plugin_list))
+        buf[j++] = manager->plugin_list[i++];
+
+    /* after spawning the system objects and the plugins, we can spawn the app */
+    buf[j++] = APPLICATION_OBJECT; /* this must be the last object */
+    buf[j++] = NULL; /* end of list */
+
+    /* done! */
+    ssassert(j == count);
+    return buf;
+}
+
+/* how many system objects are there? */
+int number_of_system_objects(const surgescript_objectmanager_t* manager)
+{
+    int count = 0;
+    for(const char** p = SYSTEM_OBJECTS; *p != NULL; p++)
+        count++;
+    return count;
 }

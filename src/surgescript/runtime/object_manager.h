@@ -49,6 +49,7 @@ bool surgescript_objectmanager_exists(const surgescript_objectmanager_t* manager
 struct surgescript_object_t* surgescript_objectmanager_get(const surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* returns NULL if the object is not found */
 bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* deletes an existing object; returns true on success */
 int surgescript_objectmanager_count(const surgescript_objectmanager_t* manager); /* how many objects there are? */
+void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manager, const char* object_name); /* installs a plugin */
 
 /* components */
 struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */
