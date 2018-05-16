@@ -54,15 +54,28 @@ struct surgescript_objectmanager_t
 static const surgescript_objecthandle_t NULL_HANDLE = 0; /* must always be zero */
 static const surgescript_objecthandle_t ROOT_HANDLE = 1;
 
-/* names of important objects */
-static const char* ROOT_OBJECT = "System";
-static const char* APPLICATION_OBJECT = "Application";
+/* system objects are children of the root and
+   their addresses must be known at compile-time */
+#define SURGESCRIPT_SYSTEM_OBJECTS(F) \
+    F( "String" )       \
+    F( "Number" )       \
+    F( "Boolean" )      \
+    F( "__Temp" )       \
+    F( "__GC" )         \
+    F( "__TagSystem" )  \
+    F( "Math" )         \
+    F( "Time" )         \
+    F( "Console" )      \
+    F( "Plugin" )       /* Plugin must be the last element in the list, since it may spawn children */
+#define PRINT_SYSTEM_OBJECT(x) x,
+
+/* names of the builtin objects */
+#define ROOT_OBJECT         "System"
+#define APPLICATION_OBJECT  "Application"
 static const char* SYSTEM_OBJECTS[] = {
-    "String", "Number", "Boolean",
-    "__Temp", "__GC", "__TagSystem",
-    "Math", "Time", "Console",
-    "Plugin", NULL /* Plugin must be the last element, since it may spawn its own children */
-}; /* this must be a NULL-terminated array; all system objects have known addresses at compile-time */
+    SURGESCRIPT_SYSTEM_OBJECTS(PRINT_SYSTEM_OBJECT)
+    NULL
+}; /* this must be a NULL-terminated array */
 
 /* object methods acessible by me */
 extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data); /* creates a new blank object */
@@ -298,6 +311,23 @@ surgescript_objecthandle_t surgescript_objectmanager_system_object(const surgesc
 }
 
 /*
+ * surgescript_objectmanager_builtin_objects()
+ * Returns a NULL-terminated list of the names of the built-in objects
+ * The manager parameter may be set to NULL (useful when evaluating at compile-time)
+ */
+const char** surgescript_objectmanager_builtin_objects(const surgescript_objectmanager_t* manager)
+{
+    static const char* builtin_objects[] = {
+        ROOT_OBJECT,
+        APPLICATION_OBJECT,
+        SURGESCRIPT_SYSTEM_OBJECTS(PRINT_SYSTEM_OBJECT)
+        NULL
+    };
+
+    return builtin_objects;
+}
+
+/*
  * surgescript_objectmanager_count()
  * How many allocated objects there are?
  */
@@ -420,7 +450,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescrip
  */
 void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manager, const char* object_name)
 {
-    printf("Installing plugin %s...\n", object_name);
+    /*sslog("Installing plugin %s...\n", object_name);*/
     add_to_plugin_list(manager, object_name);
 }
 
