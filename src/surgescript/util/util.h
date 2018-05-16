@@ -27,7 +27,7 @@
 
 /* SurgeScript info */
 #define SSPROJECT                   "SurgeScript"
-#define SSVERSION                   "0.5.1"
+#define SSVERSION                   "0.5.2"
 #define SSINFO                      SSPROJECT " " SSVERSION
 #define SSURL                       "https://github.com/alemart/surgescript"
 
