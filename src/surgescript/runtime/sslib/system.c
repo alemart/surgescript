@@ -38,6 +38,9 @@ static surgescript_var_t* fun_getgc(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_gettags(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getobjectcount(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+
+/* helpers */
+static void install_plugins(surgescript_object_t* plugin_object, const char** plugins);
 static surgescript_heapptr_t ISACTIVE_ADDR = 0;
 
 /*
@@ -66,7 +69,8 @@ void surgescript_sslib_register_system(surgescript_vm_t* vm)
 /* register some built-in objects */
 surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    const char** system_objects = surgescript_object_userdata(object);
+    const char** system_objects = ((const char***)surgescript_object_userdata(object))[0];
+    const char** plugins = ((const char***)surgescript_object_userdata(object))[1];
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     surgescript_objecthandle_t me = surgescript_object_handle(object);
     surgescript_heap_t* heap = surgescript_object_heap(object);
@@ -76,12 +80,25 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
     ssassert(isactive_addr == ISACTIVE_ADDR);
     surgescript_var_set_bool(surgescript_heap_at(heap, ISACTIVE_ADDR), true);
 
-    /* spawn children */
+    /* spawn children; system_objects is a NULL-terminated array */
     for(const char** p = system_objects; *p != NULL; p++) {
         surgescript_var_t* mem = surgescript_heap_at(heap, surgescript_heap_malloc(heap));
         surgescript_var_set_objecthandle(mem, surgescript_objectmanager_spawn(manager, me, *p, NULL));
     }
 
+    /* spawn plugins */
+    install_plugins(
+        surgescript_objectmanager_get(manager, surgescript_object_child(object, "Plugin")),
+        plugins
+    );
+
+    /* spawn Application */
+    surgescript_var_set_objecthandle(
+        surgescript_heap_at(heap, surgescript_heap_malloc(heap)),
+        surgescript_objectmanager_spawn(manager, me, "Application", NULL)
+    );
+
+    /* done! */
     return NULL;
 }
 
@@ -145,9 +162,6 @@ surgescript_var_t* fun_getobjectcount(surgescript_object_t* object, const surges
     return surgescript_var_set_number(surgescript_var_create(), count);
 }
 
-
-
-
 /* main state */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
@@ -158,4 +172,15 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
         surgescript_object_kill(object);
 
     return NULL;
+}
+
+/* install a set of plugins in the plugin object */
+void install_plugins(surgescript_object_t* plugin_object, const char** plugins)
+{
+    surgescript_var_t* tmp = surgescript_var_create();
+    for(const char** p = plugins; *p != NULL; p++) {
+        const surgescript_var_t* param[] = { surgescript_var_set_string(tmp, *p) };
+        surgescript_object_call_function(plugin_object, "spawn", param, 1, NULL);
+    }
+    surgescript_var_destroy(tmp);
 }

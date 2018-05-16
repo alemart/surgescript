@@ -1365,7 +1365,7 @@ void make_accessor(const char* fun_name, void* symtable)
 
         /* now that we have the accessor name, add it to the symbol table */
         if(!surgescript_symtable_has_symbol((surgescript_symtable_t*)symtable, accessor))
-            surgescript_symtable_put_fun_symbol((surgescript_symtable_t*)symtable, accessor);
+            surgescript_symtable_put_accessor_symbol((surgescript_symtable_t*)symtable, accessor);
 
         /* done */
         ssfree(accessor);

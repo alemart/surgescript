@@ -35,7 +35,7 @@ surgescript_symtable_t* surgescript_symtable_destroy(surgescript_symtable_t* sym
 /* put a new symbol on the table */
 void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_heapptr_t address);
 void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_stackptr_t address);
-void surgescript_symtable_put_fun_symbol(surgescript_symtable_t* symtable, const char* symbol);
+void surgescript_symtable_put_accessor_symbol(surgescript_symtable_t* symtable, const char* symbol);
 void surgescript_symtable_put_plugin_symbol(surgescript_symtable_t* symtable, const char* path);
 
 /* emit surgescript program code so that t[k] is written to the address of the symbol */
