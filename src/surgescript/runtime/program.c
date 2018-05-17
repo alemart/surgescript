@@ -631,7 +631,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
     /* there is a program to be called */
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
     const surgescript_var_t* callee = surgescript_stack_peek(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
-    unsigned object_handle = surgescript_var_get_objecthandle(callee);
+    surgescript_objecthandle_t object_handle = surgescript_var_get_objecthandle(callee);
 
     /* surgescript can also call programs on primitive types */
     if(surgescript_var_typecheck(callee, surgescript_var_type2code("object")) != 0) /* callee is of a primitive type */
