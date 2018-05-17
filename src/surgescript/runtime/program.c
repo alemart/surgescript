@@ -629,51 +629,49 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
     surgescript_stack_pushenv(stack);
 
     /* there is a program to be called */
-    do {
-        surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
-        const surgescript_var_t* callee = surgescript_stack_peek(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
-        unsigned object_handle = surgescript_var_get_objecthandle(callee);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
+    const surgescript_var_t* callee = surgescript_stack_peek(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
+    unsigned object_handle = surgescript_var_get_objecthandle(callee);
 
-        /* surgescript can also call programs on primitive types */
-        if(surgescript_var_typecheck(callee, surgescript_var_type2code("object")) != 0) /* callee is of a primitive type */
-            number_of_given_params++; /* object_handle points to the appropriate wrapper */
+    /* surgescript can also call programs on primitive types */
+    if(surgescript_var_typecheck(callee, surgescript_var_type2code("object")) != 0) /* callee is of a primitive type */
+        number_of_given_params++; /* object_handle points to the appropriate wrapper */
 
-        /* finds the program */
-        if(surgescript_objectmanager_exists(manager, object_handle)) {
-            surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
-            const char* object_name = surgescript_object_name(object);
-            surgescript_programpool_t* pool = surgescript_renv_programpool(caller_runtime_environment);
-            surgescript_program_t* program = surgescript_programpool_get(pool, object_name, program_name); /* bottleneck? */
-            
-            /* does the selected program exist? */
-            if(program != NULL) {
-                if(number_of_given_params == program->arity) {
-                    /* the parameters are pushed onto the stack (left-to-right) */
-                    surgescript_renv_t callee_runtime_environment = {
-                        object,
-                        stack,
-                        surgescript_object_heap(object),
-                        pool,
-                        manager,
-                        surgescript_renv_tmp(caller_runtime_environment),
-                        NULL
-                    };
+    /* finds the program */
+    if(surgescript_objectmanager_exists(manager, object_handle)) {
+        surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
+        const char* object_name = surgescript_object_name(object);
+        surgescript_programpool_t* pool = surgescript_renv_programpool(caller_runtime_environment);
+        surgescript_program_t* program = surgescript_programpool_get(pool, object_name, program_name); /* bottleneck? */
+        
+        /* does the selected program exist? */
+        if(program != NULL) {
+            if(number_of_given_params == program->arity) {
+                /* the parameters are pushed onto the stack (left-to-right) */
+                surgescript_renv_t callee_runtime_environment = {
+                    object,
+                    stack,
+                    surgescript_object_heap(object),
+                    pool,
+                    manager,
+                    surgescript_renv_tmp(caller_runtime_environment),
+                    NULL
+                };
 
-                    /* call the program */
-                    program->run(program, &callee_runtime_environment);
+                /* call the program */
+                program->run(program, &callee_runtime_environment);
 
-                    /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
-                    /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(&callee_runtime_environment));*/
-                }
-                else
-                    ssfatal("Runtime Error: function %s.%s (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
+                /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
+                /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(&callee_runtime_environment));*/
             }
             else
-                ssfatal("Runtime Error: can't find function %s.%s (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
+                ssfatal("Runtime Error: function %s.%s (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
         }
         else
-            ssfatal("Runtime Error: null pointer exception - can't call function %s (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
-    } while(0);
+            ssfatal("Runtime Error: can't find function %s.%s (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
+    }
+    else
+        ssfatal("Runtime Error: null pointer exception - can't call function %s (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
 
     /* clean up */
     surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */
