@@ -96,6 +96,7 @@ surgescript_var_t* fun_child(surgescript_object_t* object, const surgescript_var
 {
     const char* name = surgescript_var_fast_get_string(param[0]);
     surgescript_objecthandle_t child = surgescript_object_child(object, name);
+    printf("child %s of \"%s\" is at %u, and Im at %u\n", name, surgescript_object_name(object), child, surgescript_object_handle(object));
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 
@@ -144,7 +145,15 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
 /* toString() method */
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_string(surgescript_var_create(), "[object]");
+    const char* object_name = surgescript_object_name(object);
+    char* str = ssmalloc((strlen(object_name) + 3) * sizeof(*str));
+    surgescript_var_t* value = surgescript_var_create();
+
+    strcat(strcat(strcpy(str, "["), object_name), "]");
+    surgescript_var_set_string(value, str);
+    ssfree(str);
+
+    return value;
 }
 
 /* equals() method */
