@@ -132,7 +132,7 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
             SSASM(SSOP_PUSH, T2);
             SSASM(SSOP_PUSH, T1);
             SSASM(SSOP_PUSH, T0);
-            SSASM(SSOP_CALL, TEXT("plus"), U(2));
+            SSASM(SSOP_CALL, TEXT("concat"), U(2));
             SSASM(SSOP_POPN, U(3));
             LABEL(end);
             surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
@@ -300,7 +300,7 @@ void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveo
             SSASM(SSOP_PUSH, T2);
             SSASM(SSOP_PUSH, T1);
             SSASM(SSOP_PUSH, T0);
-            SSASM(SSOP_CALL, TEXT("plus"), U(2));
+            SSASM(SSOP_CALL, TEXT("concat"), U(2));
             SSASM(SSOP_POPN, U(3));
             LABEL(end);
             break;
@@ -496,7 +496,7 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
                 SSASM(SSOP_PUSH, T2);
                 SSASM(SSOP_PUSH, T0);
                 SSASM(SSOP_PUSH, T1);
-                SSASM(SSOP_CALL, TEXT("plus"), U(2)); /* t0 = dict.get(<expr>).plus(<assignexpr>) */
+                SSASM(SSOP_CALL, TEXT("concat"), U(2)); /* t0 = dict.get(<expr>).concat(<assignexpr>) */
                 SSASM(SSOP_POPN, U(3));
                 LABEL(end);
             }
@@ -591,7 +591,7 @@ void emit_setter2(surgescript_nodecontext_t context, const char* property_name, 
             SSASM(SSOP_PUSH, T2);
             SSASM(SSOP_PUSH, T0);
             SSASM(SSOP_PUSH, T1);
-            SSASM(SSOP_CALL, TEXT("plus"), U(2)); /* t0 = object.property_name.plus(<assignexpr>) */
+            SSASM(SSOP_CALL, TEXT("concat"), U(2)); /* t0 = object.property_name.concat(<assignexpr>) */
             SSASM(SSOP_POPN, U(3));
             LABEL(end);
 

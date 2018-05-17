@@ -36,7 +36,6 @@ static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescri
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -61,7 +60,7 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "toString", fun_tostring, 1);
     surgescript_vm_bind(vm, "String", "equals", fun_equals, 2);
     surgescript_vm_bind(vm, "String", "call", fun_call, 1);
-    surgescript_vm_bind(vm, "String", "plus", fun_plus, 2);
+    surgescript_vm_bind(vm, "String", "plus", fun_concat, 2);
     surgescript_vm_bind(vm, "String", "getLength", fun_getlength, 1);
     surgescript_vm_bind(vm, "String", "get", fun_get, 2);
     surgescript_vm_bind(vm, "String", "set", fun_set, 3);
@@ -136,27 +135,6 @@ surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_
     return ret;
 }
 
-/* plus: overloads the '+' operator */
-surgescript_var_t* fun_plus(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-    surgescript_var_t* ret = surgescript_var_create();
-    char* str[] = { NULL, NULL };
-    char* buf = NULL;
-
-    str[0] = surgescript_var_get_string(param[0], manager);
-    str[1] = surgescript_var_get_string(param[1], manager);
-
-    buf = ssmalloc((1 + strlen(str[0]) + strlen(str[1])) * sizeof(*buf));
-    surgescript_var_set_string(ret, strcat(strcpy(buf, str[0]), str[1]));
-    ssfree(buf);
-
-    ssfree(str[1]);
-    ssfree(str[0]);
-
-    return ret;
-}
-
 /* length of the string */
 surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
@@ -183,9 +161,8 @@ surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t
 /* set a character */
 surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    /* strings are primitive values in SurgeScript */
-    /* this is an invalid operation; do nothing */
-    return surgescript_var_clone(param[2]);
+    /* strings are immutable in SurgeScript */
+    return surgescript_var_clone(param[0]);
 }
 
 /* finds the first occurence of param[1] in the string param[0] */
@@ -231,7 +208,22 @@ surgescript_var_t* fun_substr(surgescript_object_t* object, const surgescript_va
 /* concatenates two strings */
 surgescript_var_t* fun_concat(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return fun_plus(object, param, num_params);
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_var_t* ret = surgescript_var_create();
+    char* str[] = { NULL, NULL };
+    char* buf = NULL;
+
+    str[0] = surgescript_var_get_string(param[0], manager);
+    str[1] = surgescript_var_get_string(param[1], manager);
+
+    buf = ssmalloc((1 + strlen(str[0]) + strlen(str[1])) * sizeof(*buf));
+    surgescript_var_set_string(ret, strcat(strcpy(buf, str[0]), str[1]));
+    ssfree(buf);
+
+    ssfree(str[1]);
+    ssfree(str[0]);
+
+    return ret;
 }
 
 /* replaces param[1] by param[2] in param[0] */
