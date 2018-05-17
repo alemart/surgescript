@@ -430,7 +430,7 @@ void emit_popparams(surgescript_nodecontext_t context, int n)
 
 void emit_funcall(surgescript_nodecontext_t context, const char* fun_name, int num_params)
 {
-    BREAKPOINT(fun_name);
+    /*BREAKPOINT(fun_name);*/
     SSASM(SSOP_CALL, TEXT(fun_name), U(num_params));
 }
 

@@ -82,6 +82,12 @@ static inline int fast_float_sign(float f);
 static inline int fast_float_sign1(float f);
 static inline int fast_float_notzero(float f);
 
+/* debug mode? */
+/*#define SURGESCRIPT_DEBUG_MODE*/
+#ifdef SURGESCRIPT_DEBUG_MODE
+static inline void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_var_t** _t);
+#endif
+
 /* -------------------------------
  * public methods
  * ------------------------------- */
@@ -366,59 +372,8 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
     #define t(k)             _t[(k).u & 3]
 
     /* debug mode */
-    /*#define SSDEBUG*/
-    #ifdef SSDEBUG
-    do {
-        char hex[2][1 + 2 * sizeof(unsigned)];
-        if(instruction == SSOP_NOP && a.i == -1) {
-            int i;
-            const char* title = surgescript_program_get_text(program, b.u);
-            const surgescript_var_t* ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), 0);
-            const surgescript_var_t* top = surgescript_stack_top(surgescript_renv_stack(runtime_environment));
-            char* contents_of_t[] = {
-                surgescript_var_get_string(_t[0], NULL),
-                surgescript_var_get_string(_t[1], NULL),
-                surgescript_var_get_string(_t[2], NULL),
-                surgescript_var_get_string(_t[3], NULL)
-            };
-
-            /* breakpoint! */
-            printf(".. BREAKPOINT %s\n", title);
-
-            /* print stack */
-            printf("..\tSTACK\t");
-            for(i = -program->arity; ptr != top; i++) {
-                if(i != 0) {
-                    char* contents = surgescript_var_get_string(
-                        ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), i),
-                        surgescript_renv_objectmanager(runtime_environment)
-                    );
-                    printf("%s || ", contents);
-                    ssfree(contents);
-                }
-                else
-                    printf("|| prev_bp || ");
-            }
-
-            /* print temps */
-            for(i = 0; i < 4; i++) {
-                printf("\n..\tT%d\t%08X\t%s", i, (unsigned)surgescript_var_get_rawbits(_t[i]), contents_of_t[i]);
-                ssfree(contents_of_t[i]);
-            }
-
-
-
-            /* print text data */
-            for(i = 0; i < ssarray_length(program->text); i++)
-                printf("\n..\tTXT%d\t%s", i, program->text[i]);
-            printf("\n..");
-
-            /* done! */
-            getchar();
-        }
-        else
-            printf("..\t%s\t%s\t%s\n", instruction_name[instruction], hexdump(a.u, hex[0]), hexdump(b.u, hex[1]));
-    } while(0);
+    #ifdef SURGESCRIPT_DEBUG_MODE
+    debug(program, runtime_environment, instruction, a, b, _t);
     #endif
 
     /* run the instruction */
@@ -802,6 +757,61 @@ bool remove_labels(surgescript_program_t* program)
     else
         return false;
 }
+
+/* debug mode */
+#ifdef SURGESCRIPT_DEBUG_MODE
+void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_var_t** _t)
+{
+    int i;
+    char hex[2][1 + 2 * sizeof(unsigned)];
+
+    if(instruction == SSOP_NOP && a.i == -1) {
+        const char* title = surgescript_program_get_text(program, b.u);
+        const surgescript_var_t* ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), 0);
+        const surgescript_var_t* top = surgescript_stack_top(surgescript_renv_stack(runtime_environment));
+        char* contents_of_t[] = {
+            surgescript_var_get_string(_t[0], NULL),
+            surgescript_var_get_string(_t[1], NULL),
+            surgescript_var_get_string(_t[2], NULL),
+            surgescript_var_get_string(_t[3], NULL)
+        };
+
+        /* breakpoint! */
+        printf(".. BREAKPOINT %s\n", title);
+
+        /* print stack */
+        printf("..\tSTACK\t");
+        for(i = -program->arity; ptr != top; i++) {
+            if(i != 0) {
+                char* contents = surgescript_var_get_string(
+                    ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), i),
+                    surgescript_renv_objectmanager(runtime_environment)
+                );
+                printf("%s || ", contents);
+                ssfree(contents);
+            }
+            else
+                printf("|| prev_bp || ");
+        }
+
+        /* print temps */
+        for(i = 0; i < 4; i++) {
+            printf("\n..\tT%d\t%08X\t%s", i, (unsigned)surgescript_var_get_rawbits(_t[i]), contents_of_t[i]);
+            ssfree(contents_of_t[i]);
+        }
+
+        /* print text data */
+        for(i = 0; i < ssarray_length(program->text); i++)
+            printf("\n..\tTXT%d\t%s", i, program->text[i]);
+        printf("\n..");
+
+        /* done! */
+        getchar();
+    }
+    else
+        printf("..\t%s\t%s\t%s\n", instruction_name[instruction], hexdump(a.u, hex[0]), hexdump(b.u, hex[1]));
+}
+#endif
 
 
 
