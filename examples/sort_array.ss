@@ -50,8 +50,8 @@ object "SortStrategy.OddsFirst"
     //
     fun call(a, b)
     {
-        aIsOdd = (Math.fmod(a, 2) != 0);
-        bIsOdd = (Math.fmod(b, 2) != 0);
+        aIsOdd = (Math.mod(a, 2) != 0);
+        bIsOdd = (Math.mod(b, 2) != 0);
 
         if(aIsOdd && !bIsOdd)
             return -1;

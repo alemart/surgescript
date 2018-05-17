@@ -41,6 +41,7 @@ static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescri
 
 /* helpers */
 static void install_plugins(surgescript_object_t* plugin_object, const char** plugins);
+static surgescript_heapptr_t ISACTIVE_ADDR = 0;
 
 /*
  * surgescript_sslib_register_system()
@@ -74,6 +75,11 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
     surgescript_objecthandle_t me = surgescript_object_handle(object);
     surgescript_heap_t* heap = surgescript_object_heap(object);
 
+    /* is_active flag */
+    surgescript_heapptr_t isactive_addr = surgescript_heap_malloc(heap);
+    ssassert(isactive_addr == ISACTIVE_ADDR);
+    surgescript_var_set_bool(surgescript_heap_at(heap, ISACTIVE_ADDR), true);
+
     /* spawn children; system_objects is a NULL-terminated array */
     for(const char** p = system_objects; *p != NULL; p++) {
         surgescript_var_t* mem = surgescript_heap_at(heap, surgescript_heap_malloc(heap));
@@ -99,7 +105,13 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
 /* exit() will shut down the VM */
 surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    surgescript_object_kill(object);
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_var_set_bool(surgescript_heap_at(heap, ISACTIVE_ADDR), false);
+
+    /* can't do this directly, because in-use system objects
+       required by destructors may be deleted */
+    /*surgescript_object_kill(object);*/
+
     return NULL;
 }
 
@@ -158,7 +170,12 @@ surgescript_var_t* fun_getobjectcount(surgescript_object_t* object, const surges
 /* main state */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    /* do nothing */
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    bool is_active = surgescript_var_get_bool(surgescript_heap_at(heap, ISACTIVE_ADDR));
+
+    if(!is_active)
+        surgescript_object_kill(object);
+
     return NULL;
 }
 

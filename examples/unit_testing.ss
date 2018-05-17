@@ -19,7 +19,6 @@ object "Application"
         test.getset();
         test.array();
         test.dictionary();
-        test.session();
         exit();
     }
 }
@@ -172,7 +171,7 @@ object "SurgeScriptTest"
         test(this.__name == "SurgeScriptTest") || fail(2);
         test(Application != null && Application.__name == "Application") || fail(3);
         test(this != Application) || fail(4);
-        test(this.toString() == "[object]") || fail(5);
+        test(this.toString() == toString()) || fail(5);
         test(this.hasFunction("objects")) || fail(6);
         test(!this.hasFunction("nope")) || fail(7);
         test(findObject("nope") == null) || fail(8);
@@ -395,27 +394,6 @@ object "SurgeScriptTest"
 
         end();
     }
-
-    fun session()
-    {
-        begin("Session variables");
-        test(Application.session != null) || fail(1);
-        
-        Application.session["lives"] = 5;
-        test(Application.session["lives"] == 5) || fail(2);
-
-        Application.session["name"] = "alex";
-        test(Application.session["name"] == "alex") || fail(3);
-
-        test(Application.session.__data.count == 2) || fail(4);
-        test(Application.session.isset("name")) || fail(5);
-        test((Application.session.unset("name"), !Application.session.isset("name") && Application.session.__data.count == 1)) || fail(6);
-
-        Application.session.clear();
-        test(Application.session.__data.count == 0) || fail(7);
-        end();
-    }
-
 
 
 
