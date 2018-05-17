@@ -275,18 +275,6 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 
     /* print footer */
     fprintf(fp, "    ]\n}\n");
-
-    /* print labels */
-    /*fprintf(fp,
-        "    ],\n"
-        "    \"labels\": [ "
-    );
-
-    for(i = 0; i < ssarray_length(program->label); i++)
-        fprintf(fp, "%d%s ", program->label[i], (i < ssarray_length(program->label) - 1) ? "," : "");*/
-
-    /* print footer */
-    /*fprintf(fp, "]\n}\n");*/
 }
 
 
@@ -378,7 +366,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
     #define t(k)             _t[(k).u & 3]
 
     /* debug mode */
-    //#define SSDEBUG
+    /*#define SSDEBUG*/
     #ifdef SSDEBUG
     do {
         char hex[2][1 + 2 * sizeof(unsigned)];
@@ -394,27 +382,35 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 surgescript_var_get_string(_t[3], NULL)
             };
 
-            /* print temps */
+            /* breakpoint! */
             printf(".. BREAKPOINT %s\n", title);
-            for(i = 0; i < 4; i++) {
-                printf("..\t%d\t%08X\t%s\n", i, (unsigned)surgescript_var_get_rawbits(_t[i]), contents_of_t[i]);
-                ssfree(contents_of_t[i]);
-            }
 
             /* print stack */
-            printf("..\tstack\t");
+            printf("..\tSTACK\t");
             for(i = -program->arity; ptr != top; i++) {
                 if(i != 0) {
                     char* contents = surgescript_var_get_string(
                         ptr = surgescript_stack_peek(surgescript_renv_stack(runtime_environment), i),
-                        NULL
+                        surgescript_renv_objectmanager(runtime_environment)
                     );
-                    printf("%s ", contents);
+                    printf("%s || ", contents);
                     ssfree(contents);
                 }
                 else
-                    printf("prev_bp ");
+                    printf("|| prev_bp || ");
             }
+
+            /* print temps */
+            for(i = 0; i < 4; i++) {
+                printf("\n..\tT%d\t%08X\t%s", i, (unsigned)surgescript_var_get_rawbits(_t[i]), contents_of_t[i]);
+                ssfree(contents_of_t[i]);
+            }
+
+
+
+            /* print text data */
+            for(i = 0; i < ssarray_length(program->text); i++)
+                printf("\n..\tTXT%d\t%s", i, program->text[i]);
             printf("\n..");
 
             /* done! */
@@ -656,12 +652,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 break;
 
         /* function calls */
-        case SSOP_CALL: {
-            const char* program_name = (a.u < ssarray_length(program->text)) ? program->text[a.u] : "";
-            unsigned number_of_given_params = b.u;
-            call_program(runtime_environment, program_name, number_of_given_params);
+        case SSOP_CALL:
+            if(a.u < ssarray_length(program->text))
+                call_program(runtime_environment, program->text[a.u], b.u);
             break;
-        }
 
         case SSOP_RET:
             *ip = ssarray_length(program->line);
@@ -680,7 +674,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
     surgescript_stack_pushenv(stack);
 
     /* there is a program to be called */
-    if(*program_name) {
+    do {
         surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
         const surgescript_var_t* callee = surgescript_stack_peek(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
         unsigned object_handle = surgescript_var_get_objecthandle(callee);
@@ -693,20 +687,28 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
         if(surgescript_objectmanager_exists(manager, object_handle)) {
             surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
             const char* object_name = surgescript_object_name(object);
-            surgescript_program_t* program = surgescript_programpool_get(surgescript_renv_programpool(caller_runtime_environment), object_name, program_name);
+            surgescript_programpool_t* pool = surgescript_renv_programpool(caller_runtime_environment);
+            surgescript_program_t* program = surgescript_programpool_get(pool, object_name, program_name); /* bottleneck? */
             
             /* does the selected program exist? */
-            if(program) {
+            if(program != NULL) {
                 if(number_of_given_params == program->arity) {
                     /* the parameters are pushed onto the stack (left-to-right) */
-                    /* faster: no dynamic memory allocation required */
-                    surgescript_renv_t callee_runtime_environment = *caller_runtime_environment;
+                    surgescript_renv_t callee_runtime_environment = {
+                        object,
+                        stack,
+                        surgescript_object_heap(object),
+                        pool,
+                        manager,
+                        surgescript_renv_tmp(caller_runtime_environment),
+                        NULL
+                    };
 
                     /* call the program */
                     program->run(program, &callee_runtime_environment);
 
                     /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
-                    /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(callee_runtime_environment));*/
+                    /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(&callee_runtime_environment));*/
                 }
                 else
                     ssfatal("Runtime Error: function %s.%s (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
@@ -716,7 +718,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
         }
         else
             ssfatal("Runtime Error: null pointer exception - can't call function %s (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
-    }
+    } while(0);
 
     /* clean up */
     surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */

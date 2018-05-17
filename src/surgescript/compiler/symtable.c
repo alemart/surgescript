@@ -24,6 +24,7 @@
 #include "symtable.h"
 #include "../runtime/program.h"
 #include "../runtime/object_manager.h"
+#include "../runtime/object.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
 
@@ -39,8 +40,8 @@ static void read_from_getter(surgescript_symtable_entry_t* entry, surgescript_pr
 static void write_to_setter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void write_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
-static void read_system_object(const char* symbol, surgescript_program_t* program, unsigned k);
-static void write_system_object(const char* symbol, surgescript_program_t* program, unsigned k);
+static void read_static(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+static void write_static(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 
 /* vtable for the entries of the symbol table */
 struct surgescript_symtable_entry_vtable_t
@@ -52,6 +53,7 @@ static const surgescript_symtable_entry_vtable_t heapvt = { read_from_heap, writ
 static const surgescript_symtable_entry_vtable_t stackvt = { read_from_stack, write_to_stack };
 static const surgescript_symtable_entry_vtable_t accvt = { read_from_getter, write_to_setter };
 static const surgescript_symtable_entry_vtable_t pluginvt = { read_plugin, write_plugin };
+static const surgescript_symtable_entry_vtable_t staticvt = { read_static, write_static };
 
 /* a symbol table entry */
 struct surgescript_symtable_entry_t
@@ -110,7 +112,7 @@ bool surgescript_symtable_has_symbol(surgescript_symtable_t* symtable, const cha
             return true;
         symtable = symtable->parent;
     }
-    return (surgescript_objectmanager_system_object(NULL, symbol) != surgescript_objectmanager_null(NULL));
+    return false;
 }
 
 /*
@@ -185,6 +187,21 @@ void surgescript_symtable_put_plugin_symbol(surgescript_symtable_t* symtable, co
 }
 
 /*
+ * surgescript_symtable_put_static_symbol()
+ * Puts a symbol that references a built-in object
+ */
+void surgescript_symtable_put_static_symbol(surgescript_symtable_t* symtable, const char* symbol)
+{
+    if(indexof_symbol(symtable, symbol) < 0) {
+        char* symname = ssstrdup(symbol);
+        surgescript_symtable_entry_t entry = { .symbol = symname, .vtable = &staticvt };
+        ssarray_push(symtable->entry, entry);
+    }
+    else
+        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
+}
+
+/*
  * surgescript_symtable_emit_write()
  * Emits SurgeScript program code so that the contents of t[k] are written to the memory location pointed by the symbol
  */
@@ -198,8 +215,6 @@ void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const cha
     }
     else if(symtable->parent)
         surgescript_symtable_emit_write(symtable->parent, symbol, program, k);
-    else if(surgescript_objectmanager_system_object(NULL, symbol))
-        write_system_object(symbol, program, k);
     else
         ssfatal("Compile Error: undefined symbol \"%s\".", symbol);
 }
@@ -218,8 +233,6 @@ void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char
     }
     else if(symtable->parent)
         surgescript_symtable_emit_read(symtable->parent, symbol, program, k);
-    else if(surgescript_objectmanager_system_object(NULL, symbol))
-        read_system_object(symbol, program, k);
     else
         ssfatal("Compile Error: undefined symbol \"%s\".", symbol);
 }
@@ -311,15 +324,32 @@ void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* 
     surgescript_program_add_line(program, SSOP_SPOKE, SSOPu(k), SSOPi(address));
 }
 
-void read_system_object(const char* symbol, surgescript_program_t* program, unsigned k)
+void read_static(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
+    const char* symbol = entry->symbol;
     surgescript_objecthandle_t addr = surgescript_objectmanager_system_object(NULL, symbol);
-    surgescript_program_add_line(program, SSOP_MOVO, SSOPu(k), SSOPu(addr));
+    if(addr == surgescript_objectmanager_null(NULL)) {
+        /* no static address found; look for a direct child of the root */
+        surgescript_objecthandle_t root = surgescript_objectmanager_root(NULL);
+        surgescript_program_add_line(program, SSOP_MOVO, SSOPu(0), SSOPu(root));
+        surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
+        surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOPu(surgescript_program_add_text(program, symbol)));
+        surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
+        surgescript_program_add_line(program, SSOP_CALL, SSOPu(surgescript_program_add_text(program, "child")), SSOPu(1));
+        surgescript_program_add_line(program, SSOP_POPN, SSOPu(2), SSOPu(0));
+
+        if(k != 0)
+            surgescript_program_add_line(program, SSOP_MOV, SSOPu(k), SSOPu(0));
+    }
+    else {
+        /* static address found at addr */
+        surgescript_program_add_line(program, SSOP_MOVO, SSOPu(k), SSOPu(addr));
+    }
 }
 
-void write_system_object(const char* symbol, surgescript_program_t* program, unsigned k)
+void write_static(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-    ; /* do nothing; system objects are read-only */
+    ; /* do nothing; static objects can't have their references messed up */
 }
 
 void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
@@ -327,9 +357,9 @@ void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* pro
     const char* symbol = entry->symbol;
     surgescript_objecthandle_t plugin_object = surgescript_objectmanager_system_object(NULL, "Plugin");
     surgescript_program_add_line(program, SSOP_MOVO, SSOPu(0), SSOPu(plugin_object));
-    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(1), SSOPu(surgescript_program_add_text(program, symbol)));
     surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
-    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(1), SSOPu(0));
+    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOPu(surgescript_program_add_text(program, symbol)));
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
     surgescript_program_add_line(program, SSOP_CALL, SSOPu(surgescript_program_add_text(program, "get")), SSOPu(1));
     surgescript_program_add_line(program, SSOP_POPN, SSOPu(2), SSOPu(0));
 

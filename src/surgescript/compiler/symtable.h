@@ -37,6 +37,7 @@ void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, cons
 void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, const char* symbol, surgescript_stackptr_t address);
 void surgescript_symtable_put_accessor_symbol(surgescript_symtable_t* symtable, const char* symbol);
 void surgescript_symtable_put_plugin_symbol(surgescript_symtable_t* symtable, const char* path);
+void surgescript_symtable_put_static_symbol(surgescript_symtable_t* symtable, const char* symbol);
 
 /* emit surgescript program code so that t[k] is written to the address of the symbol */
 void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program, unsigned k);

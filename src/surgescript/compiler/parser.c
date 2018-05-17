@@ -48,7 +48,7 @@ struct surgescript_parser_t
     char* filename; /* current filename */
     surgescript_programpool_t* program_pool; /* reference to the program pool */
     surgescript_tagsystem_t* tag_system; /* reference to the tag system */
-    surgescript_symtable_t* plugins; /* imported plugins in the current file (code unit) */
+    surgescript_symtable_t* base_table; /* valid symbols in the current file (code unit) */
     SSARRAY(char*, known_plugins); /* known plugins in all files (the names of the objects) */
 };
 
@@ -72,6 +72,7 @@ static void make_accessor(const char* fun_name, void* symtable);
 static void init_plugins_list(surgescript_parser_t* parser);
 static void add_to_plugins_list(surgescript_parser_t* parser, const char* plugin_name);
 static void release_plugins_list(surgescript_parser_t* parser);
+static surgescript_symtable_t* configure_base_table(surgescript_symtable_t* base_table);
 
 /* non-terminals */
 static void objectlist(surgescript_parser_t* parser);
@@ -143,7 +144,7 @@ surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* progr
     parser->filename = ssstrdup("<unspecified>");
     parser->program_pool = program_pool;
     parser->tag_system = tag_system;
-    parser->plugins = NULL;
+    parser->base_table = NULL;
     init_plugins_list(parser);
     setlocale(LC_NUMERIC, "C"); /* use '.' as the decimal separator on atof() */
     return parser;
@@ -161,8 +162,8 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser)
         surgescript_token_destroy(parser->lookahead);
     if(parser->previous)
         surgescript_token_destroy(parser->previous);
-    if(parser->plugins)
-        surgescript_symtable_destroy(parser->plugins);
+    if(parser->base_table)
+        surgescript_symtable_destroy(parser->base_table);
     release_plugins_list(parser);
     return ssfree(parser);
 }
@@ -249,11 +250,10 @@ void surgescript_parser_foreach_plugin(surgescript_parser_t* parser, void* data,
 /* parses a script */
 void parse(surgescript_parser_t* parser)
 {
-    parser->plugins = surgescript_symtable_create(NULL);
-    surgescript_symtable_put_plugin_symbol(parser->plugins, "Application"); /* little hack to make Application accessible everywhere */
+    parser->base_table = configure_base_table(surgescript_symtable_create(NULL));
     parser->lookahead = surgescript_lexer_scan(parser->lexer); /* grab first symbol */
     objectlist(parser);
-    parser->plugins = surgescript_symtable_destroy(parser->plugins);
+    parser->base_table = surgescript_symtable_destroy(parser->base_table);
 }
 
 /* does the lookahead symbol have the given type? */
@@ -465,7 +465,7 @@ void object(surgescript_parser_t* parser)
         (object_name = ssstrdup(
             surgescript_token_lexeme(parser->lookahead)
         )),
-        surgescript_symtable_create(parser->plugins), /* symbol table */
+        surgescript_symtable_create(parser->base_table), /* symbol table */
         surgescript_program_create(0) /* object constructor */
     );
 
@@ -1397,4 +1397,15 @@ void release_plugins_list(surgescript_parser_t* parser)
 void add_to_plugins_list(surgescript_parser_t* parser, const char* plugin_name)
 {
     ssarray_push(parser->known_plugins, ssstrdup(plugin_name));
+}
+
+surgescript_symtable_t* configure_base_table(surgescript_symtable_t* base_table)
+{
+    const char** builtins = surgescript_objectmanager_builtin_objects(NULL);
+    while(*builtins) {
+        if(**builtins != '_')
+            surgescript_symtable_put_static_symbol(base_table, *builtins);
+        builtins++;
+    }
+    return base_table;
 }

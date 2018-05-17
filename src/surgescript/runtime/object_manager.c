@@ -66,7 +66,7 @@ static const surgescript_objecthandle_t ROOT_HANDLE = 1;
     F( "Math" )         \
     F( "Time" )         \
     F( "Console" )      \
-    F( "Plugin" )       /* Plugin must be the last element in the list, since it may spawn children */
+    F( "Plugin" )       /* Plugin must be the last element of the list, since it may spawn children */
 #define PRINT_SYSTEM_OBJECT(x) x,
 
 /* names of the builtin objects */
@@ -98,8 +98,7 @@ static bool sweep_unreachables(surgescript_object_t* object);
 static surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr);
 static void add_to_plugin_list(surgescript_objectmanager_t* manager, const char* object_name);
 static void release_plugin_list(surgescript_objectmanager_t* manager);
-static const char** compile_plugins_list(const surgescript_objectmanager_t* manager);
-static int number_of_system_objects(const surgescript_objectmanager_t* manager);
+static char** compile_plugins_list(const surgescript_objectmanager_t* manager);
 
 /* -------------------------------
  * public methods
@@ -198,8 +197,8 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_obje
 {
     if(manager->handle_ptr == ROOT_HANDLE) {
         /* preparing the data */
-        const char** plugins = compile_plugins_list(manager);
-        const char** data[] = { SYSTEM_OBJECTS, plugins };
+        char** plugins = compile_plugins_list(manager);
+        char** data[] = { (char**)SYSTEM_OBJECTS, plugins };
 
         /* spawn the root object */
         surgescript_object_t *object = surgescript_object_create(ROOT_OBJECT, ROOT_HANDLE, manager, manager->program_pool, manager->stack, data);
@@ -273,6 +272,7 @@ surgescript_objecthandle_t surgescript_objectmanager_null(const surgescript_obje
 /*
  * surgescript_objectmanager_root()
  * Returns a handle to the root object in the pool
+ * The manager parameter may be set to NULL (useful when evaluating at compile-time)
  */
 surgescript_objecthandle_t surgescript_objectmanager_root(const surgescript_objectmanager_t* manager)
 {
@@ -282,6 +282,7 @@ surgescript_objecthandle_t surgescript_objectmanager_root(const surgescript_obje
 /*
  * surgescript_objectmanager_application()
  * Returns a handle to the user's application
+ * This can only be determined at runtime
  */
 surgescript_objecthandle_t surgescript_objectmanager_application(const surgescript_objectmanager_t* manager)
 {
@@ -519,9 +520,9 @@ void release_plugin_list(surgescript_objectmanager_t* manager)
 
 /* instantiates a NULL-terminated array of strings with object names to be spawned as plugins */
 /* you'll need to ssfree() this array */
-const char** compile_plugins_list(const surgescript_objectmanager_t* manager) {
+char** compile_plugins_list(const surgescript_objectmanager_t* manager) {
     int i = 0, j = 0, count = 1 + ssarray_length(manager->plugin_list);
-    const char** buf = ssmalloc(count * sizeof(*buf));
+    char** buf = ssmalloc(count * sizeof(*buf));
 
     /* register plugins */
     while(i < ssarray_length(manager->plugin_list))
@@ -529,15 +530,5 @@ const char** compile_plugins_list(const surgescript_objectmanager_t* manager) {
     buf[j++] = NULL; /* end of list */
 
     /* done! */
-    ssassert(j == count);
     return buf;
-}
-
-/* how many system objects are there? */
-int number_of_system_objects(const surgescript_objectmanager_t* manager)
-{
-    int count = 0;
-    for(const char** p = SYSTEM_OBJECTS; *p != NULL; p++)
-        count++;
-    return count;
 }

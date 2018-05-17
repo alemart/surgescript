@@ -96,7 +96,6 @@ surgescript_var_t* fun_child(surgescript_object_t* object, const surgescript_var
 {
     const char* name = surgescript_var_fast_get_string(param[0]);
     surgescript_objecthandle_t child = surgescript_object_child(object, name);
-    printf("child %s of \"%s\" is at %u, and Im at %u\n", name, surgescript_object_name(object), child, surgescript_object_handle(object));
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 

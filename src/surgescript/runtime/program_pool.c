@@ -167,6 +167,7 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
 /*
  * surgescript_programpool_get()
  * Gets a program from the pool (returns NULL if not found)
+ * This needs to be fast!
  */
 surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
