@@ -97,7 +97,7 @@ surgescript_vm_t* make_vm(int argc, char** argv)
     vm = surgescript_vm_create();
 
     /* compile the scripts */
-    for(; i < argc; i++) {
+    for(; i < argc && strcmp(argv[i], "--") != 0; i++) {
         const char* file = argv[i];
         surgescript_vm_compile(vm, file);
     }
@@ -129,9 +129,11 @@ void show_help(const char* executable)
         "\t%s script.ss\t\tcompiles and executes script.ss\n"
         "\t%s file1.ss file2.ss\tcompiles and executes file1.ss and file2.ss\n"
         "\t%s --debug test.ss\tcompiles and runs test.ss with debugging information\n"
+        "\t%s file.ss -- -x -y\tpasses custom arguments -x and -y to file.ss\n"
         "\n"
         "Full documentation at: <%s>\n",
         SSINFO,
+        executable,
         executable,
         executable,
         executable,

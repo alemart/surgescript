@@ -15,6 +15,9 @@ object "Application"
         foreach(argument in Application.args)
             Console.print(argument);
 
+        // argument count
+        Console.print("Argument count: " + Application.args.length);
+
         // using for loops
         for(i = 0; i < Application.args.length; i++)
             Console.print(Application.args[i]);
