@@ -177,9 +177,11 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 /* install a set of plugins in the plugin object */
 void install_plugins(surgescript_object_t* plugin_object, const char** plugins)
 {
+    /* Plugins are spawned in no particular order. At some
+       point, we might want to add a dependency resolver. */
     surgescript_var_t* tmp = surgescript_var_create();
-    for(const char** p = plugins; *p != NULL; p++) {
-        const surgescript_var_t* param[] = { surgescript_var_set_string(tmp, *p) };
+    while(*plugins) {
+        const surgescript_var_t* param[] = { surgescript_var_set_string(tmp, *plugins++) };
         surgescript_object_call_function(plugin_object, "spawn", param, 1, NULL);
     }
     surgescript_var_destroy(tmp);
