@@ -302,7 +302,7 @@ surgescript_programpool_signature_t generate_signature(const char* object_name, 
 {
     /* uthash will compute a hash of this hash. Our app must enforce key uniqueness. */
     uint32_t pc = 0, pb = 0;
-    hashlittle2(object_name, strlen(object_name), &pc, &pb);
+    hashlittle2(object_name, strlen(object_name), &pc, &pb); /* strlen() is reasonably fast */
     hashlittle2(program_name, strlen(program_name), &pc, &pb);
     return (uint64_t)pc | (((uint64_t)pb) << 32);
 }
