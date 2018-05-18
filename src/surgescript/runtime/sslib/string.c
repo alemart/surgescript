@@ -60,7 +60,6 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "toString", fun_tostring, 1);
     surgescript_vm_bind(vm, "String", "equals", fun_equals, 2);
     surgescript_vm_bind(vm, "String", "call", fun_call, 1);
-    surgescript_vm_bind(vm, "String", "plus", fun_concat, 2);
     surgescript_vm_bind(vm, "String", "getLength", fun_getlength, 1);
     surgescript_vm_bind(vm, "String", "get", fun_get, 2);
     surgescript_vm_bind(vm, "String", "set", fun_set, 3);

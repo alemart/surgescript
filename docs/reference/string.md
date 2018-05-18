@@ -57,20 +57,6 @@ Compares the string to another string `str`.
 
 Returns `true` if the strings are equal.
 
-#### plus
-
-`plus(str)`
-
-Concatenates two strings. This is the same as using the `+` operator.
-
-*Arguments*
-
-* `str`: string.
-
-*Returns*
-
-The caller string concatenated with `str` at the end.
-
 #### get
 
 `get(i)`
@@ -138,7 +124,7 @@ empty = name.substr(555, 1); // ""
 
 `concat(str)`
 
-Concatenates two strings.
+Concatenates two strings. This is the same as using the `+` operator.
 
 *Arguments*
 
