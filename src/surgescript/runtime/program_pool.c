@@ -47,7 +47,7 @@ typedef char* surgescript_programpool_signature_t;
 
 static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name); /* generates a function signature, given an object name and a program name */
 static inline void delete_signature(surgescript_programpool_signature_t signature); /* deletes a signature */
-
+extern void hashlittle2(const void *key, size_t length, uint32_t* pc, uint32_t* pb);
 
 /* metadata */
 typedef struct surgescript_programpool_metadata_t surgescript_programpool_metadata_t;
@@ -301,9 +301,10 @@ void traverse_adapter(const char* program_name, void* callback)
 surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
 {
     /* uthash will compute a hash of this hash. Our app must enforce key uniqueness. */
-    surgescript_programpool_signature_t a = surgescript_util_str2hash(object_name); /* will it collide? */
-    surgescript_programpool_signature_t b = surgescript_util_strpair2hash(object_name, program_name); /* 32-bits per hash */
-    return (surgescript_programpool_signature_t)(a << 32) | b; /* combined 64-bit hash */
+    uint32_t pc = 0, pb = 0;
+    hashlittle2(object_name, strlen(object_name), &pc, &pb);
+    hashlittle2(program_name, strlen(program_name), &pc, &pb);
+    return (uint64_t)pc | (((uint64_t)pb) << 32);
 }
 
 void delete_signature(surgescript_programpool_signature_t signature)

@@ -183,40 +183,6 @@ uint32_t surgescript_util_str2hash(const char* str)
 }
 
 /*
- * surgescript_util_strpair2hash()
- * A variant of surgescript_util_str2hash() for an ordered pair of strings
- */
-uint32_t surgescript_util_strpair2hash(const char* str1, const char* str2)
-{
-    const char* p = str1;
-    const char* q = str2;
-
-    if(p != NULL && q != NULL) {
-        uint32_t hash = 0;
-
-        while(*p) {
-            hash += *(p++);
-            hash += hash << 10;
-            hash ^= hash >> 6;
-        }
-        while(*q) {
-            hash += *(q++);
-            hash += hash << 10;
-            hash ^= hash >> 6;
-        }
-        hash += hash << 3;
-        hash ^= hash >> 11;
-        hash += hash << 15;
-        
-        return hash;
-    }
-    else if(p != NULL)
-        return surgescript_util_str2hash(p);
-    else
-        return surgescript_util_str2hash(q);
-}
-
-/*
  * surgescript_util_htob()
  * Convert a 32-bit number from host to big-endian notation
  */
