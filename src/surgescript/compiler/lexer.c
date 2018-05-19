@@ -408,6 +408,14 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line, prev);
     }
 
+    /* read an annotation */
+    if(*(lexer->p) == '@' && (isalpha(*(lexer->p + 1)) || *(lexer->p + 1) == '_')) {
+        bufadd(lexer, *(lexer->p++));
+        while(isalnum(*(lexer->p)) || *(lexer->p) == '_')
+            bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_ANNOTATION, lexer->buf, lexer->line, prev);
+    }
+
     /* read an identifier */
     if(isidchar(*(lexer->p)) && !isdigit(*(lexer->p))) {
         int kw;
