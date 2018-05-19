@@ -87,6 +87,8 @@ object "Greeter"
 }
 ```
 
+Please note: in the example above, objects spawned by `Greeter` will be children of `Greeter`.
+
 Iterators
 ---------
 
