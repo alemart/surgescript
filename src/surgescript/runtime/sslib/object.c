@@ -48,6 +48,7 @@ static surgescript_var_t* fun_memspent(surgescript_object_t* object, const surge
 static surgescript_var_t* fun_children(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_invoke(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
 static void add_to_function_array(const char* fun_name, void* arr);
@@ -60,7 +61,6 @@ static bool is_visible_function(const char* fun_name);
  */
 void surgescript_sslib_register_object(surgescript_vm_t* vm)
 {
-    surgescript_vm_bind(vm, "Object", "get__name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Object", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Object", "getParent", fun_parent, 0);
@@ -75,6 +75,8 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "timeout", fun_timeout, 1);
+    surgescript_vm_bind(vm, "Object", "__invoke", fun_invoke, 2);
+    surgescript_vm_bind(vm, "Object", "get__name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "get__functions", fun_functions, 0);
     surgescript_vm_bind(vm, "Object", "get__children", fun_children, 0);
     surgescript_vm_bind(vm, "Object", "get__timespent", fun_timespent, 0);

@@ -451,7 +451,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescrip
  */
 void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manager, const char* object_name)
 {
-    sslog("Installing plugin %s...", object_name);
+    sslog("Installing plugin \"%s\"...", object_name);
     add_to_plugin_list(manager, object_name);
 }
 
@@ -504,6 +504,13 @@ surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr)
 /* adds an object to the plugin list */
 void add_to_plugin_list(surgescript_objectmanager_t* manager, const char* object_name)
 {
+    /* no repeated elements are allowed */
+    for(int i = 0; i < ssarray_length(manager->plugin_list); i++) {
+        if(strcmp(manager->plugin_list[i], object_name) == 0)
+            return;
+    }
+
+    /* add the object */
     ssarray_push(manager->plugin_list, ssstrdup(object_name));
 }
 
