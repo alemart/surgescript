@@ -27,7 +27,7 @@ Given an object `obj`, the expression `x = obj[key]` is equivalent to `x = obj.g
 Functors
 --------
 
-In SurgeScript, objects can be made to behave like functions. We call these objects *functors*. To make an object behave like a function, you have to overload the *( )* operator (also known as the *function operator*). This is done by defining function *call()* in your object:
+In SurgeScript, objects can be made to behave like functions. We call these objects *functors* (or function objects). To make an object behave like a function, you have to overload the *( )* operator (also known as the *function operator*). This is done by defining function *call()* in your object:
 
 ```
 fun call()
@@ -37,6 +37,55 @@ fun call()
 ```
 
 Function *call()* may take any number of parameters. Given an object `f`, the expression `y = f(x)` is equivalent to `y = f.call(x)`. Notice that, since `f` is an object, you may exchange its implementation during runtime.
+
+Factory
+-------
+
+In SurgeScript, a factory is a functor that spawns an object for you. The object can be spawned and configured in a single call, so you can quickly create your objects with no hassle at all. In the example below, factory `Greeter` spawns and configures `Greeting` objects. We annotate the factory with `@Plugin`, so it can be imported anywhere in the code.
+
+To the end-user, calling `Greeter()` is simpler than manually spawning and configuring a `Greeting` every time it is needed.
+
+```
+// Factory example
+using Greeter; // import the factory
+
+object "Application"
+{
+    state "main"
+    {
+		// This will print:
+		// Hello, alex!
+		g = Greeter("alex");
+		g.greet();
+        exit();
+    }
+}
+
+// File: greeting.ss
+object "Greeting"
+{
+	public name = "anon";
+
+	fun greet()
+	{
+		Console.print("Hello, " + name + "!");
+	}
+}
+
+@Plugin
+object "Greeter"
+{
+	// Greeter is a factory. It spawns and configures
+	// a Greeting object for you. Being a plugin,
+	// Greeter can be used anywhere in the code.
+	fun call(name)
+	{
+		g = spawn("Greeting");
+		g.name = name;
+		return g;
+	}
+}
+```
 
 Iterators
 ---------
