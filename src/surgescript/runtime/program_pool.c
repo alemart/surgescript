@@ -316,10 +316,11 @@ void delete_signature(surgescript_programpool_signature_t signature)
 
 surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
 {
-    char* signature = ssmalloc((strlen(object_name) + strlen(program_name) + 2) * sizeof(*signature));
+    size_t olen = strlen(object_name);
+    char* signature = ssmalloc((olen + strlen(program_name) + 2) * sizeof(*signature));
     strcpy(signature, object_name);
-    strcat(signature, ".");
-    strcat(signature, program_name);
+    signature[olen] = '\036';
+    strcpy(signature + olen + 1, program_name);
     return signature;
 }
 
