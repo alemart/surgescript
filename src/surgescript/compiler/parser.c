@@ -73,6 +73,9 @@ static void init_plugins_list(surgescript_parser_t* parser);
 static void add_to_plugins_list(surgescript_parser_t* parser, const char* plugin_name);
 static void release_plugins_list(surgescript_parser_t* parser);
 static surgescript_symtable_t* configure_base_table(surgescript_symtable_t* base_table);
+static void read_annotations(surgescript_parser_t* parser, char*** annotations);
+static void release_annotations(char** annotations);
+static void process_annotations(surgescript_parser_t* parser, char** annotations, const char* object_name);
 
 /* non-terminals */
 static void objectlist(surgescript_parser_t* parser);
@@ -454,8 +457,11 @@ void objectlist(surgescript_parser_t* parser)
 void object(surgescript_parser_t* parser)
 {
     surgescript_nodecontext_t context;
+    char** annotations;
     char* object_name;
 
+    /* object name */
+    read_annotations(parser, &annotations);
     match(parser, SSTOK_OBJECT);
     expect(parser, SSTOK_STRING);
 
@@ -480,9 +486,13 @@ void object(surgescript_parser_t* parser)
     objectdecl(parser, context);
     match(parser, SSTOK_RCURLY);
 
-    /* register the ssconstructor and cleanup */
+    /* object configuration */
+    process_annotations(parser, annotations, object_name);
     surgescript_programpool_put(parser->program_pool, object_name, "__ssconstructor", context.program);
+
+    /* cleanup */
     surgescript_symtable_destroy(context.symtable);
+    release_annotations(annotations);
     ssfree(object_name);
 }
 
@@ -1396,6 +1406,13 @@ void release_plugins_list(surgescript_parser_t* parser)
 
 void add_to_plugins_list(surgescript_parser_t* parser, const char* plugin_name)
 {
+    /* won't accept repeated elements */
+    for(int i = 0; i < ssarray_length(parser->known_plugins); i++) {
+        if(strcmp(parser->known_plugins[i], plugin_name) == 0)
+            return;
+    }
+
+    /* add to the plugins list */
     ssarray_push(parser->known_plugins, ssstrdup(plugin_name));
 }
 
@@ -1408,4 +1425,54 @@ surgescript_symtable_t* configure_base_table(surgescript_symtable_t* base_table)
         builtins++;
     }
     return base_table;
+}
+
+void read_annotations(surgescript_parser_t* parser, char*** annotations)
+{
+    /* read the annotations into a NULL-terminated array of strings */
+    if(got_type(parser, SSTOK_ANNOTATION)) {
+        /* initialize & read */
+        SSARRAY(char*, buf);
+        ssarray_init(buf);
+        while(got_type(parser, SSTOK_ANNOTATION)) {
+            ssarray_push(buf, ssstrdup(surgescript_token_lexeme(parser->lookahead)));
+            match(parser, SSTOK_ANNOTATION);
+        }
+        ssarray_push(buf, NULL);
+
+        /* copy to the annotations output parameter */
+        *annotations = memcpy(
+            ssmalloc(ssarray_length(buf) * sizeof(char*)),
+            buf, ssarray_length(buf) * sizeof(char*)
+        );
+
+        /* release */
+        ssarray_release(buf);
+    }
+    else
+        *annotations = NULL; /* no annotations found */
+}
+
+void release_annotations(char** annotations)
+{
+    if(annotations != NULL) {
+        for(char** it = annotations; *it != NULL; it++)
+            ssfree(*it);
+        ssfree(annotations); /* ssarray_release not needed */
+    }
+}
+
+void process_annotations(surgescript_parser_t* parser, char** annotations, const char* object_name)
+{
+    /* I have made the annotations system in such
+       a way that it can be extended later */
+    if(annotations != NULL) {
+        while(*annotations != NULL) {
+            const char* annotation = *annotations++;
+            if(strcmp(annotation, "@Plugin") == 0)
+                add_to_plugins_list(parser, object_name);
+            else
+                ssfatal("Compile Error: unrecognized annotation \"%s\" around object \"%s\" in %s.", annotation, object_name, parser->filename);
+        }
+    }
 }
