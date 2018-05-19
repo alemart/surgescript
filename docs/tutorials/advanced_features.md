@@ -87,7 +87,7 @@ object "Greeter"
 }
 ```
 
-Please note: in the example above, objects spawned by `Greeter` will be children of `Greeter`.
+Please note: in the example above, objects spawned by `Greeter` will be children of `Greeter`. If you need to control the parent of the spawned object, it's usually better to write the factory as a regular function of the caller object - with code such as `parentObject.spawn(objectName)`.
 
 Iterators
 ---------
