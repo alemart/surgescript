@@ -409,6 +409,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#factory" title="Factory" class="md-nav__link">
+    Factory
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#iterators" title="Iterators" class="md-nav__link">
     Iterators
   </a>
@@ -718,6 +725,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#factory" title="Factory" class="md-nav__link">
+    Factory
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#iterators" title="Iterators" class="md-nav__link">
     Iterators
   </a>
@@ -759,7 +773,7 @@ fun set(key, value)
 
 <p>Given an object <code>obj</code>, the expression <code>x = obj[key]</code> is equivalent to <code>x = obj.get(key)</code>. Similarly, <code>obj[key] = value</code> is equivalent to <code>obj.set(key, value)</code>.</p>
 <h2 id="functors">Functors</h2>
-<p>In SurgeScript, objects can be made to behave like functions. We call these objects <em>functors</em>. To make an object behave like a function, you have to overload the <em>( )</em> operator (also known as the <em>function operator</em>). This is done by defining function <em>call()</em> in your object:</p>
+<p>In SurgeScript, objects can be made to behave like functions. We call these objects <em>functors</em> (or function objects). To make an object behave like a function, you have to overload the <em>( )</em> operator (also known as the <em>function operator</em>). This is done by defining function <em>call()</em> in your object:</p>
 <pre><code>fun call()
 {
     // custom implementation
@@ -767,6 +781,50 @@ fun set(key, value)
 </code></pre>
 
 <p>Function <em>call()</em> may take any number of parameters. Given an object <code>f</code>, the expression <code>y = f(x)</code> is equivalent to <code>y = f.call(x)</code>. Notice that, since <code>f</code> is an object, you may exchange its implementation during runtime.</p>
+<h2 id="factory">Factory</h2>
+<p>In SurgeScript, a factory is a functor that spawns an object for you. The object can be spawned and configured in a single call, so you can quickly create your objects with no hassle at all. In the example below, factory <code>Greeter</code> spawns and configures <code>Greeting</code> objects. We annotate the factory with <code>@Plugin</code>, so it can be imported anywhere in the code.</p>
+<p>To the end-user, calling <code>Greeter()</code> is simpler than manually spawning and configuring a <code>Greeting</code> every time it is needed.</p>
+<pre><code>// Factory example
+using Greeter; // import the factory
+
+object &quot;Application&quot;
+{
+    state &quot;main&quot;
+    {
+        // This will print:
+        // Hello, alex!
+        g = Greeter(&quot;alex&quot;);
+        g.greet();
+        exit();
+    }
+}
+
+// File: greeting.ss
+object &quot;Greeting&quot;
+{
+    public name = &quot;anon&quot;;
+
+    fun greet()
+    {
+        Console.print(&quot;Hello, &quot; + name + &quot;!&quot;);
+    }
+}
+
+@Plugin
+object &quot;Greeter&quot;
+{
+    // Greeter is a factory. It spawns and configures
+    // a Greeting object for you. Being a plugin,
+    // Greeter can be used anywhere in the code.
+    fun call(name)
+    {
+        g = spawn(&quot;Greeting&quot;);
+        g.name = name;
+        return g;
+    }
+}
+</code></pre>
+
 <h2 id="iterators">Iterators</h2>
 <p>As seen in the <a href="../loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function <em>iterator()</em>. If you have ever used Java, you'll find this to be familiar.</p>
 <pre><code>object &quot;MyCollection&quot;

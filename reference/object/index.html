@@ -901,8 +901,8 @@
 <li><code>childCount</code>: integer number. The number of children of this object.</li>
 <li><code>active</code>: boolean, read-write. Indicates whether this object is active* or not.</li>
 <li><code>__name</code>: string. The name of this object (string).</li>
-<li><code>__children</code>: Array object. Reading this spawns a new array containing references to the children of this object.</li>
-<li><code>__functions</code>: Array object. The functions of this object represented as a collection of strings.</li>
+<li><code>__children</code>: <a href="../array/">Array</a>. Reading this spawns a new array containing references to the children of this object.</li>
+<li><code>__functions</code>: <a href="../array/">Array</a>. The functions of this object represented as a collection of strings.</li>
 <li><code>__timespent</code>: number. The approximate time spent in this object in the last frame (in seconds).</li>
 <li><code>__memspent</code>: number. The current memory consumption of this object (in bytes) - not implemented.</li>
 </ul>
@@ -1029,12 +1029,12 @@
 <p>Returns <code>true</code> if the object has been tagged with <code>tagName</code>.</p>
 <h4 id="__invoke">__invoke</h4>
 <p><code>__invoke(functionName, paramsArray)</code></p>
-<p>Invokes function <code>functionName</code>, passing the parameters specified in the <a href="../array">Array</a> <code>paramsArray</code>. Please note that the number of elements of <code>paramsArray</code> must be the same as the number of parameters required by the function to be invoked.</p>
+<p>Invokes function <code>functionName</code>, passing the parameters specified in <code>paramsArray</code>. Please note that the number of elements of <code>paramsArray</code> must be the same as the number of parameters required by the function to be invoked.</p>
 <p><em>Available since:</em> SurgeScript 0.5.2</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>functionName</code>: string. The name of the function to be called.</li>
-<li><code>paramsArray</code>: <a href="../array">Array</a>. The parameters to be passed to the function.</li>
+<li><code>paramsArray</code>: <a href="../array/">Array</a>. The parameters to be passed to the function.</li>
 </ul>
 <p><em>Returns</em></p>
 <p>Returns the value returned by the invoked function.</p>
