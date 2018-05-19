@@ -370,7 +370,6 @@ void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* pro
         ), SSOPu(0));
         surgescript_program_add_line(program, SSOP_POPN, SSOPu(1), SSOPu(0));
         tok = next + 1;
-        printf("|%s| (%d)\n", getter, strlen(getter));
         ssfree(getter);
     }
     surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
@@ -378,7 +377,6 @@ void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* pro
         surgescript_program_add_text(program, getter = surgescript_util_camelcaseprefix("get", tok))
     ), SSOPu(0));
     surgescript_program_add_line(program, SSOP_POPN, SSOPu(1), SSOPu(0));
-    printf("|%s| (%d) -- last\n", getter, strlen(getter));
 
     /* set t[k] to the address of the plugin */
     if(k != 0)

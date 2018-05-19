@@ -78,6 +78,7 @@ static void release_annotations(char** annotations);
 static void process_annotations(surgescript_parser_t* parser, char** annotations, const char* object_name);
 
 /* non-terminals */
+static void importlist(surgescript_parser_t* parser);
 static void objectlist(surgescript_parser_t* parser);
 static void object(surgescript_parser_t* parser);
 static void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -255,6 +256,7 @@ void parse(surgescript_parser_t* parser)
 {
     parser->base_table = configure_base_table(surgescript_symtable_create(NULL));
     parser->lookahead = surgescript_lexer_scan(parser->lexer); /* grab first symbol */
+    importlist(parser);
     objectlist(parser);
     parser->base_table = surgescript_symtable_destroy(parser->base_table);
 }
@@ -544,6 +546,34 @@ void taglist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, tag_name);
         match(parser, SSTOK_STRING);
         match(parser, SSTOK_SEMICOLON);
+    }
+}
+
+void importlist(surgescript_parser_t* parser)
+{
+    while(optmatch(parser, SSTOK_USING)) {
+        SSARRAY(char, path);
+        ssarray_init(path);
+
+        /* read the import path */
+        do {
+            const char* subpath = surgescript_token_lexeme(parser->lookahead);
+            expect(parser, SSTOK_IDENTIFIER);
+            while(*subpath)
+                ssarray_push(path, *subpath++);
+            ssarray_push(path, '.');
+            match(parser, SSTOK_IDENTIFIER);
+        } while(optmatch(parser, SSTOK_DOT));
+        match(parser, SSTOK_SEMICOLON);
+
+        /* import the path into the symbol table */
+        if(ssarray_length(path) > 0) {
+            path[ssarray_length(path) - 1] = 0;
+            surgescript_symtable_put_plugin_symbol(parser->base_table, path);
+        }
+
+        /* release the path */
+        ssarray_release(path);
     }
 }
 

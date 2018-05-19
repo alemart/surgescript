@@ -28,7 +28,7 @@
  *
  *
  *
- * <script> := <objectlist> // start here
+ * <script> := <importlist> <objectlist> // start here
  *
  * <objectlist> := <object> <objectlist> | e
  * <object> := <annotations> object string <qualifierlist> { <objectdecl> }
@@ -49,6 +49,9 @@
  *           |  fun identifier ( <funargs> ) { <stmtlist> }
  * <funargs> := identifier <funargs1>
  * <funargs1> := , identifier <funargs1> | e
+ *
+ * <importlist> := using <plugin>; <importlist> | e
+ * <plugin> := identifier | identifier . <plugin>
  *
  *
  *
