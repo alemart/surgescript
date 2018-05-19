@@ -10,8 +10,8 @@ Properties
 * `childCount`: integer number. The number of children of this object.
 * `active`: boolean, read-write. Indicates whether this object is active\* or not.
 * `__name`: string. The name of this object (string).
-* `__children`: Array object. Reading this spawns a new array containing references to the children of this object.
-* `__functions`: Array object. The functions of this object represented as a collection of strings.
+* `__children`: [Array](array.md). Reading this spawns a new array containing references to the children of this object.
+* `__functions`: [Array](array.md). The functions of this object represented as a collection of strings.
 * `__timespent`: number. The approximate time spent in this object in the last frame (in seconds).
 * `__memspent`: number. The current memory consumption of this object (in bytes) - not implemented.
 
@@ -195,14 +195,14 @@ Returns `true` if the object has been tagged with `tagName`.
 
 `__invoke(functionName, paramsArray)`
 
-Invokes function `functionName`, passing the parameters specified in the [Array](array) `paramsArray`. Please note that the number of elements of `paramsArray` must be the same as the number of parameters required by the function to be invoked.
+Invokes function `functionName`, passing the parameters specified in `paramsArray`. Please note that the number of elements of `paramsArray` must be the same as the number of parameters required by the function to be invoked.
 
 *Available since:* SurgeScript 0.5.2
 
 *Arguments*
 
 * `functionName`: string. The name of the function to be called.
-* `paramsArray`: [Array](array). The parameters to be passed to the function.
+* `paramsArray`: [Array](array.md). The parameters to be passed to the function.
 
 *Returns*
 
