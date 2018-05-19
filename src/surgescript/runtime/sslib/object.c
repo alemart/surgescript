@@ -51,6 +51,7 @@ static surgescript_var_t* fun_setactive(surgescript_object_t* object, const surg
 
 /* utilities */
 static void add_to_function_array(const char* fun_name, void* arr);
+static bool is_visible_function(const char* fun_name);
 
 
 /*
@@ -267,16 +268,24 @@ surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript
 /* auxiliary to fun_functions() */
 void add_to_function_array(const char* fun_name, void* arr)
 {
-    surgescript_object_t* array = (surgescript_object_t*)arr;
-    surgescript_var_t* fun = surgescript_var_set_string(surgescript_var_create(), fun_name);
-    surgescript_var_t* ret = surgescript_var_create();
-    const surgescript_var_t* param[] = { fun };
+    if(is_visible_function(fun_name)) {
+        surgescript_object_t* array = (surgescript_object_t*)arr;
+        surgescript_var_t* fun = surgescript_var_set_string(surgescript_var_create(), fun_name);
+        surgescript_var_t* ret = surgescript_var_create();
+        const surgescript_var_t* param[] = { fun };
 
-    /* if(array.indexOf(funName) < 0) array.push(funName); */
-    surgescript_object_call_function(array, "indexOf", param, 1, ret);
-    if(surgescript_var_get_number(ret) < 0)
-        surgescript_object_call_function(array, "push", param, 1, NULL);
-    
-    surgescript_var_destroy(ret);
-    surgescript_var_destroy(fun);
+        /* if(array.indexOf(funName) < 0) array.push(funName); */
+        surgescript_object_call_function(array, "indexOf", param, 1, ret);
+        if(surgescript_var_get_number(ret) < 0)
+            surgescript_object_call_function(array, "push", param, 1, NULL);
+        
+        surgescript_var_destroy(ret);
+        surgescript_var_destroy(fun);
+    }
+}
+
+/* is fun_name publicly visible or not? */
+bool is_visible_function(const char* fun_name)
+{
+    return strncmp(fun_name, "state:", 6) && strcmp(fun_name, "__ssconstructor");
 }
