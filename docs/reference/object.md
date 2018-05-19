@@ -190,3 +190,43 @@ Checks if the object has been tagged with `tagName`.
 *Returns*
 
 Returns `true` if the object has been tagged with `tagName`.
+
+#### __invoke
+
+`__invoke(functionName, paramsArray)`
+
+Invokes function `functionName`, passing the parameters specified in the [Array](array) `paramsArray`. Please note that the number of elements of `paramsArray` must be the same as the number of parameters required by the function to be invoked.
+
+*Arguments*
+
+* `functionName`: string. The name of the function to be called.
+* `paramsArray`: [Array](array). The parameters to be passed to the function.
+
+*Returns*
+
+Returns the value returned by the invoked function.
+
+*Example*
+
+```
+// The program below will return:
+// 12
+// 12
+// true
+
+object "Application"
+{
+    state "main"
+    {
+        Console.print(this.sum(5, 7));
+        Console.print(this.__invoke("sum", [5, 7]));
+        Console.print(sum(5, 7) == __invoke("sum", [5, 7]));
+        Application.exit();
+    }
+
+	fun sum(a, b)
+	{
+		return a + b;
+	}
+}
+```
