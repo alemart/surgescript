@@ -134,6 +134,13 @@ Concatenates two strings. This is the same as using the `+` operator.
 
 The caller string concatenated with `str` at the end.
 
+*Example*
+
+```
+name = "Surge".concat("Script"); // SurgeScript
+name = "Surge" + "Script"; // SurgeScript
+```
+
 #### replace
 
 `replace(oldstr, newstr)`

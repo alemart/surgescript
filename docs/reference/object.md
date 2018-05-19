@@ -197,6 +197,8 @@ Returns `true` if the object has been tagged with `tagName`.
 
 Invokes function `functionName`, passing the parameters specified in the [Array](array) `paramsArray`. Please note that the number of elements of `paramsArray` must be the same as the number of parameters required by the function to be invoked.
 
+*Available since:* SurgeScript 0.5.2
+
 *Arguments*
 
 * `functionName`: string. The name of the function to be called.
