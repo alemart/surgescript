@@ -451,7 +451,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescrip
  */
 void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manager, const char* object_name)
 {
-    /*sslog("Installing plugin %s...\n", object_name);*/
+    sslog("Installing plugin %s...", object_name);
     add_to_plugin_list(manager, object_name);
 }
 

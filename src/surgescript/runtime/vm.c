@@ -331,6 +331,16 @@ void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const ch
     surgescript_programpool_replace(vm->program_pool, object_name, fun_name, cprogram);
 }
 
+/*
+ * surgescript_vm_install_plugin()
+ * Sets a certain object as a plugin. Call before launching the VM.
+ */
+void surgescript_vm_install_plugin(surgescript_vm_t* vm, const char* object_name)
+{
+    surgescript_objectmanager_t* manager = vm->object_manager;
+    surgescript_objectmanager_install_plugin(manager, object_name);
+}
+
 
 
 
