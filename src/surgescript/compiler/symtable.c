@@ -42,6 +42,9 @@ static void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program
 static void write_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void read_static(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void write_static(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+static char* pack_plugin_path(const char* path);
+static char* unpack_plugin_path(const char* symbol);
+static const char* plugin_symbol(const char* path);
 
 /* vtable for the entries of the symbol table */
 struct surgescript_symtable_entry_vtable_t
@@ -176,14 +179,13 @@ void surgescript_symtable_put_accessor_symbol(surgescript_symtable_t* symtable, 
  */
 void surgescript_symtable_put_plugin_symbol(surgescript_symtable_t* symtable, const char* path)
 {
-    const char* symbol = path; /* TODO */
-    if(indexof_symbol(symtable, symbol) < 0) {
-        char* symname = ssstrdup(symbol);
+    if(indexof_symbol(symtable, plugin_symbol(path)) < 0) {
+        char* symname = pack_plugin_path(path);
         surgescript_symtable_entry_t entry = { .symbol = symname, .vtable = &pluginvt };
         ssarray_push(symtable->entry, entry);
     }
     else
-        ssfatal("Compile Error: found duplicate entry \"%s\" when importing \"%s\".", symbol, path);
+        ssfatal("Compile Error: found duplicate symbol \"%s\" when importing \"%s\".", plugin_symbol(path), path);
 }
 
 /*
@@ -354,22 +356,42 @@ void write_static(surgescript_symtable_entry_t* entry, surgescript_program_t* pr
 
 void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-    const char* symbol = entry->symbol;
     surgescript_objecthandle_t plugin_object = surgescript_objectmanager_system_object(NULL, "Plugin");
-    surgescript_program_add_line(program, SSOP_MOVO, SSOPu(0), SSOPu(plugin_object));
-    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
-    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOPu(surgescript_program_add_text(program, symbol)));
-    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
-    surgescript_program_add_line(program, SSOP_CALL, SSOPu(surgescript_program_add_text(program, "get")), SSOPu(1));
-    surgescript_program_add_line(program, SSOP_POPN, SSOPu(2), SSOPu(0));
+    char* path = unpack_plugin_path(entry->symbol);
+    char* next, *tok = path, *getter;
 
+    /* generate the bytecode to access the plugin */
+    surgescript_program_add_line(program, SSOP_MOVO, SSOPu(0), SSOPu(plugin_object));
+    while(next = strchr(tok, '.')) {
+        *next = 0;
+        surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
+        surgescript_program_add_line(program, SSOP_CALL, SSOPu(
+            surgescript_program_add_text(program, getter = surgescript_util_camelcaseprefix("get", tok))
+        ), SSOPu(0));
+        surgescript_program_add_line(program, SSOP_POPN, SSOPu(1), SSOPu(0));
+        tok = next + 1;
+        printf("|%s| (%d)\n", getter, strlen(getter));
+        ssfree(getter);
+    }
+    surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
+    surgescript_program_add_line(program, SSOP_CALL, SSOPu(
+        surgescript_program_add_text(program, getter = surgescript_util_camelcaseprefix("get", tok))
+    ), SSOPu(0));
+    surgescript_program_add_line(program, SSOP_POPN, SSOPu(1), SSOPu(0));
+    printf("|%s| (%d) -- last\n", getter, strlen(getter));
+
+    /* set t[k] to the address of the plugin */
     if(k != 0)
         surgescript_program_add_line(program, SSOP_MOV, SSOPu(k), SSOPu(0));
+
+    /* release */
+    ssfree(getter);
+    ssfree(path);
 }
 
 void write_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-    ; /* do nothing; plugin objects are read-only */
+    ; /* do nothing; plugin objects can't have their references changed */
 }
 
 void read_from_getter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
@@ -395,4 +417,26 @@ void write_to_setter(surgescript_symtable_entry_t* entry, surgescript_program_t*
     surgescript_program_add_line(program, SSOP_CALL, SSOPu(surgescript_program_add_text(program, fun_name)), SSOPu(1));
     surgescript_program_add_line(program, SSOP_POPN, SSOPu(2), SSOPu(0));
     ssfree(fun_name);
+}
+
+char* pack_plugin_path(const char* path)
+{
+    const char* symbol = plugin_symbol(path);
+    size_t symbol_len = strlen(symbol);
+    char* buf = ssmalloc((3 + symbol_len + strlen(path)) * sizeof(*buf));
+    strcpy(buf, symbol);
+    strcpy(buf + symbol_len + 1, path);
+    return buf;
+}
+
+char* unpack_plugin_path(const char* symbol)
+{
+    size_t symbol_len = strlen(symbol);
+    return ssstrdup(symbol + symbol_len + 1);
+}
+
+const char* plugin_symbol(const char* path)
+{
+    const char* symbol = strrchr(path, '.');
+    return symbol ? symbol + 1 : path;
 }
