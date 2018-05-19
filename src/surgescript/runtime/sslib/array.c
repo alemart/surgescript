@@ -519,5 +519,5 @@ int custom_sort_function(surgescript_object_t* object, const surgescript_var_t* 
     return_value = surgescript_var_get_number(ret);
     surgescript_var_destroy(ret);
 
-    return ((return_value < 0) ? -1 : (return_value > 0 ? 1 : 0));
+    return (return_value > 0.0f) - (return_value < 0.0f);
 }

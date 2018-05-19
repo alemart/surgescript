@@ -262,6 +262,58 @@ surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript
     return NULL;
 }
 
+/* invokes a function, given by string param[0], with parameters specified in Array param[1] */
+surgescript_var_t* fun_invoke(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_programpool_t* pool = surgescript_objectmanager_programpool(manager);
+    const char* object_name = surgescript_object_name(object);
+    char* program_name = surgescript_var_get_string(param[0], manager);
+    surgescript_program_t* program = surgescript_programpool_get(pool, object_name, program_name);
+    surgescript_var_t* ret = surgescript_var_create();
+
+    /* Does the invoked function exist? */
+    if(program != NULL) {
+        surgescript_objecthandle_t params_handle = surgescript_var_get_objecthandle(param[1]);
+        surgescript_object_t* params_array = surgescript_objectmanager_get(manager, params_handle);
+        int arity = surgescript_program_arity(program);
+
+        /* Is the second argument an Array? */
+        if(strcmp(surgescript_object_name(params_array), "Array") == 0) {
+            /* Does it have the same arity as the length of the input array? */
+            surgescript_object_call_function(params_array, "getLength", NULL, 0, ret);
+            if((int)surgescript_var_get_number(ret) == arity) {
+                /* Obtain the parameters */
+                surgescript_var_t** params_native_array = ssmalloc(arity * sizeof(*params_native_array));
+                for(int i = 0; i < arity; i++) {
+                    const surgescript_var_t* p[] = { surgescript_var_set_number(ret, i) };
+                    surgescript_object_call_function(params_array, "get", p, 1, ret);
+                    params_native_array[i] = surgescript_var_clone(ret);
+                }
+
+                /* Invoke the desired function */
+                surgescript_object_call_function(object, program_name, (const surgescript_var_t**)params_native_array, arity, ret);
+
+                /* Release the parameters */
+                while(arity--)
+                    surgescript_var_destroy(params_native_array[arity]);
+                ssfree(params_native_array);
+            }
+            else {
+                surgescript_var_set_null(ret);
+                ssfatal("Runtime Error: can't invoke \"%s.%s\" - function requires %d argument%s.", object_name, program_name, arity, arity != 1 ? "s" : "");
+            }
+        }
+        else
+            ssfatal("Runtime Error: can't invoke \"%s.%s\" - need parameters array.", object_name, program_name);
+    }
+    else
+        ssfatal("Runtime Error: can't invoke \"%s.%s\" - function doesn't exist.", object_name, program_name);
+
+    ssfree(program_name);
+    return ret;
+}
+
 
 
 

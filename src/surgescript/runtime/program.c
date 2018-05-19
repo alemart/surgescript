@@ -814,39 +814,11 @@ void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environme
 
 
 /* --------------- float utilities --------------- */
-#define FAST_FLOAT_FUNCTIONS
-#ifdef FAST_FLOAT_FUNCTIONS
-
-static_assert(
-    sizeof(float) == 4 && sizeof(float) == sizeof(int),
-    "Code relies on float taking 4 bytes under the IEEE-754 floating-point representation. "
-    "Undefine FAST_FLOAT_FUNCTIONS in " __FILE__ " to fix this."
-);
 
 /* returns -1 if f < 0, 0 if if == 0, 1 if f > 0 */
 int fast_float_sign(float f)
 {
-    return (*((int*)&f) & 0x7FFFFFFF) ? (1 - ((*((int*)&f) & 0x80000000) >> 30)) : 0;
-}
-
-/* returns -1 if f <= -0, 1 if f >= +0 */
-int fast_float_sign1(float f)
-{
-    return 1 - ((*((int*)&f) & 0x80000000) >> 30);
-}
-
-/* returns "true" iff f != +0 and f != -0 */
-int fast_float_notzero(float f)
-{
-    return (*((int*)&f) & 0x7FFFFFFF);
-}
-
-#else
-
-/* returns -1 if f < 0, 0 if if == 0, 1 if f > 0 */
-int fast_float_sign(float f)
-{
-    return fast_float_notzero(f) ? fast_float_sign1(f) : 0;
+    return (f > 0.0f) - (f < 0.0f);
 }
 
 /* returns -1 if f <= -0, 1 if f >= +0 */
@@ -860,5 +832,3 @@ int fast_float_notzero(float f)
 {
     return fpclassify(f) != FP_ZERO;
 }
-
-#endif
