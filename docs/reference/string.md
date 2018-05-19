@@ -1,7 +1,7 @@
 String
 ======
 
-Routines for strings. The String object is not supposed to be used directly. The functions below are available for primitive values that are strings.
+Routines for strings. The String object is not supposed to be used directly. The functions below are available for primitive values of the string type.
 
 Example:
 

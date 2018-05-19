@@ -32,6 +32,7 @@ pages:
         - 'Number': 'reference/number.md'
         - 'Iterator': 'reference/iterator.md'
         - 'Object': 'reference/object.md'
+        - 'Plugin': 'reference/plugin.md'
         - 'TagSystem': 'reference/tags.md'
         - 'Time': 'reference/time.md'
         - 'Transform2D': 'reference/transform2d.md'
