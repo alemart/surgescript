@@ -548,6 +548,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../plugin/" title="Plugin" class="md-nav__link">
+      Plugin
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../tags/" title="TagSystem" class="md-nav__link">
       TagSystem
     </a>
@@ -654,13 +666,6 @@
           <li class="md-nav__item">
   <a href="#equals" title="equals" class="md-nav__link">
     equals
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#plus" title="plus" class="md-nav__link">
-    plus
   </a>
   
 </li>
@@ -804,13 +809,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#plus" title="plus" class="md-nav__link">
-    plus
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#get" title="get" class="md-nav__link">
     get
   </a>
@@ -882,7 +880,7 @@
                 
                 
                 <h1 id="string">String</h1>
-<p>Routines for strings. The String object is not supposed to be used directly. The functions below are available for primitive values that are strings.</p>
+<p>Routines for strings. The String object is not supposed to be used directly. The functions below are available for primitive values of the string type.</p>
 <p>Example:</p>
 <pre><code>// Useful string routines
 x = &quot;SurgeScript&quot;.toLowerCase(); // &quot;surgescript&quot;
@@ -916,15 +914,6 @@ n = y.length; // 5
 </ul>
 <p><em>Returns</em></p>
 <p>Returns <code>true</code> if the strings are equal.</p>
-<h4 id="plus">plus</h4>
-<p><code>plus(str)</code></p>
-<p>Concatenates two strings. This is the same as using the <code>+</code> operator.</p>
-<p><em>Arguments</em></p>
-<ul>
-<li><code>str</code>: string.</li>
-</ul>
-<p><em>Returns</em></p>
-<p>The caller string concatenated with <code>str</code> at the end.</p>
 <h4 id="get">get</h4>
 <p><code>get(i)</code></p>
 <p>Gets the <code>i</code>-th character of the string. The <code>[ ]</code> operator can be used equivalently.</p>
@@ -971,13 +960,18 @@ empty = name.substr(555, 1); // &quot;&quot;
 
 <h4 id="concat">concat</h4>
 <p><code>concat(str)</code></p>
-<p>Concatenates two strings.</p>
+<p>Concatenates two strings. This is the same as using the <code>+</code> operator.</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>str</code>: string.</li>
 </ul>
 <p><em>Returns</em></p>
 <p>The caller string concatenated with <code>str</code> at the end.</p>
+<p><em>Example</em></p>
+<pre><code>name = &quot;Surge&quot;.concat(&quot;Script&quot;); // SurgeScript
+name = &quot;Surge&quot; + &quot;Script&quot;; // SurgeScript
+</code></pre>
+
 <h4 id="replace">replace</h4>
 <p><code>replace(oldstr, newstr)</code></p>
 <p>Replaces all occurrences of <code>oldstr</code> to <code>newstr</code> in the caller string.</p>

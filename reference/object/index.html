@@ -647,6 +647,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#__invoke" title="__invoke" class="md-nav__link">
+    __invoke
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -660,6 +667,18 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../plugin/" title="Plugin" class="md-nav__link">
+      Plugin
+    </a>
   </li>
 
         
@@ -845,6 +864,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#__invoke" title="__invoke" class="md-nav__link">
+    __invoke
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1001,6 +1027,39 @@
 </ul>
 <p><em>Returns</em></p>
 <p>Returns <code>true</code> if the object has been tagged with <code>tagName</code>.</p>
+<h4 id="__invoke">__invoke</h4>
+<p><code>__invoke(functionName, paramsArray)</code></p>
+<p>Invokes function <code>functionName</code>, passing the parameters specified in the <a href="../array">Array</a> <code>paramsArray</code>. Please note that the number of elements of <code>paramsArray</code> must be the same as the number of parameters required by the function to be invoked.</p>
+<p><em>Available since:</em> SurgeScript 0.5.2</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>functionName</code>: string. The name of the function to be called.</li>
+<li><code>paramsArray</code>: <a href="../array">Array</a>. The parameters to be passed to the function.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns the value returned by the invoked function.</p>
+<p><em>Example</em></p>
+<pre><code>// The program below will return:
+// 12
+// 12
+// true
+
+object &quot;Application&quot;
+{
+    state &quot;main&quot;
+    {
+        Console.print(this.sum(5, 7));
+        Console.print(this.__invoke(&quot;sum&quot;, [5, 7]));
+        Console.print(sum(5, 7) == __invoke(&quot;sum&quot;, [5, 7]));
+        Application.exit();
+    }
+
+    fun sum(a, b)
+    {
+        return a + b;
+    }
+}
+</code></pre>
                 
                   
                 
@@ -1036,13 +1095,13 @@
           </a>
         
         
-          <a href="../tags/" title="TagSystem" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../plugin/" title="Plugin" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                TagSystem
+                Plugin
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
