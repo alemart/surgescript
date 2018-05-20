@@ -1,4 +1,4 @@
-Advanced Features
+Advanced features
 =================
 
 This section describes advanced features of SurgeScript.
@@ -87,7 +87,7 @@ object "Greeter"
 }
 ```
 
-Please note: in the example above, objects spawned by `Greeter` will be children of `Greeter`. If you need to control the parent of the spawned object, it's usually better to write the factory as a regular function of the caller object - with code such as `parentObject.spawn(objectName)`.
+Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might spawn `Greeter` as a child of the caller object and have the factory spawn `Greeting` on its parent object (i.e., the caller object). The code would be like this: `g = parent.spawn("Greeting")`.
 
 Iterators
 ---------
