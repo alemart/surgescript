@@ -93,7 +93,7 @@ SurgeScript has been originally created by [Alexandre Martins](https://github.co
 
 ##### How do I learn SurgeScript?
 
-Please read the [documentation](https://alemart.github.io/surgescript/).
+Please read the [documentation](https://alemart.github.io/surgescript/). The author also releases SurgeScript video tutorials on his [YouTube channel](https://youtube.com/alemart88).
 
 ##### Why not use some other languages such as Lua?
 
@@ -101,12 +101,12 @@ Unlike other programming languages, SurgeScript has been designed with the speci
 
 ##### How do I embed SurgeScript into my project?
 
-If you're a C developer, you may embed SurgeScript in your project by studying the *main.c* file in the *src/* folder. The steps are:
+If you're a C developer, you may embed SurgeScript into your project studying the *main.c* file (located in the *src/* folder). The steps are:
 
 1. Create a SurgeScript Virtual Machine (VM).
-2. Insert the scripts you want into the VM (let it compile).
+2. Insert the scripts you want into the VM (let it compile the scripts).
 3. Launch the VM.
-4. At every frame of your game/app, update the VM.
+4. At every frame of your game/app, update the VM (game loop).
 5. Once you're done, release the VM.
 
 You'll need to `#include <surgescript.h>` in your code and link your project with *-lsurgescript -lm*.
