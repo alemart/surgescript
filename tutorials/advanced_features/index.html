@@ -36,7 +36,7 @@
     
     
       
-        <title>Advanced Features - SurgeScript Documentation</title>
+        <title>Advanced features - SurgeScript Documentation</title>
       
     
     
@@ -96,7 +96,7 @@
                 SurgeScript Documentation
               </span>
               <span class="md-header-nav__topic">
-                Advanced Features
+                Advanced features
               </span>
             
           
@@ -377,11 +377,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Advanced Features
+        Advanced features
       </label>
     
-    <a href="./" title="Advanced Features" class="md-nav__link md-nav__link--active">
-      Advanced Features
+    <a href="./" title="Advanced features" class="md-nav__link md-nav__link--active">
+      Advanced features
     </a>
     
       
@@ -755,7 +755,7 @@
               
                 
                 
-                <h1 id="advanced-features">Advanced Features</h1>
+                <h1 id="advanced-features">Advanced features</h1>
 <p>This section describes advanced features of SurgeScript.</p>
 <h2 id="lookup-operator">Lookup operator</h2>
 <p>Some programming languages, such as C++, have a feature called <em>operator overloading</em>. It's a <em>syntactic sugar</em> that allows the programmer to attribute custom implementations to different operators.</p>
@@ -825,6 +825,7 @@ object &quot;Greeter&quot;
 }
 </code></pre>
 
+<p>Please note: in the example above, objects spawned by <code>Greeter</code> will be children of <code>Greeter</code>. If you need to control the parent of the spawned object, it's usually better to write the factory as a regular function of the caller object - with code such as <code>parentObject.spawn(objectName)</code>.</p>
 <h2 id="iterators">Iterators</h2>
 <p>As seen in the <a href="../loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function <em>iterator()</em>. If you have ever used Java, you'll find this to be familiar.</p>
 <pre><code>object &quot;MyCollection&quot;
