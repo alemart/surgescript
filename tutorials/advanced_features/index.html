@@ -825,7 +825,7 @@ object &quot;Greeter&quot;
 }
 </code></pre>
 
-<p>Please note: in the example above, objects spawned by <code>Greeter</code> will be children of <code>Greeter</code>. If you need to control the parent of the spawned object, it's usually better to write the factory as a regular function of the caller object - with code such as <code>parentObject.spawn(objectName)</code>.</p>
+<p>Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might spawn <code>Greeter</code> as a child of the caller object and have the factory spawn <code>Greeting</code> on its parent object (i.e., the caller object). The code would be like this: <code>g = parent.spawn("Greeting")</code>.</p>
 <h2 id="iterators">Iterators</h2>
 <p>As seen in the <a href="../loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function <em>iterator()</em>. If you have ever used Java, you'll find this to be familiar.</p>
 <pre><code>object &quot;MyCollection&quot;
