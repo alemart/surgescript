@@ -24,10 +24,11 @@ Session.vim
 # mine
 *.o
 *.a
-./surgescript
-./surgescript.exe
-./libsurgescript.a
+libsurgescript.a
+surgescript.exe
+surgescript
 site/
 build/
 private/
 CMakeFiles/
+!src/**
