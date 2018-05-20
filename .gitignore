@@ -24,7 +24,9 @@ Session.vim
 # mine
 *.o
 *.a
-surgescript
+./surgescript
+./surgescript.exe
+./libsurgescript.a
 site/
 build/
 private/
