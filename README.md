@@ -93,11 +93,11 @@ SurgeScript has been originally created by [Alexandre Martins](https://github.co
 
 ##### How do I learn SurgeScript?
 
-Please read the [documentation](https://alemart.github.io/surgescript/). The author also releases SurgeScript video tutorials on his [YouTube channel](https://youtube.com/alemart88).
+Please read the [documentation](https://alemart.github.io/surgescript/). The author also releases SurgeScript tutorials on his [YouTube channel](https://youtube.com/alemart88).
 
-##### Why not use some other languages such as Lua?
+##### Why not use other languages such as Lua?
 
-Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. This includes: the state-machine pattern (all objects are state machines), the composition-approach (you may design complex objects and behaviors by means of composition), as well as the hierarchy system (objects have a parent and may have children, in a tree-like structure). This comes from years of experience of the author dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
+Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. This includes: the state-machine pattern (objects are state machines), the composition-approach (you may design complex objects and behaviors by means of composition), as well as the hierarchy system (objects have a parent and may have children, in a tree-like structure). This comes from years of experience of the author dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
 ##### How do I embed SurgeScript into my project?
 
