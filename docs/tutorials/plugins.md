@@ -91,7 +91,7 @@ object "ParrotSoft"
 // ...
 ```
 
-A user of the `ParrotSoft` package may import Parrot's utilities simply by importing the plugin. Individual utilities may also be imported. The code below shows a usage example:
+A user of the `ParrotSoft` package may import *Parrot*'s utilities simply by importing the plugin. Individual utilities may also be imported. The code below shows a usage example:
 
 ```
 using ParrotSoft.Matrices.Matrix2;
