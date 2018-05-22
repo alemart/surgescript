@@ -1,6 +1,9 @@
 Conditionals
 ============
 
+Introduction
+------------
+
 Conditionals are *if ... then ...* expressions. If a certain condition is *true*, execute a block of code. If not, don't execute it.
 
 ```

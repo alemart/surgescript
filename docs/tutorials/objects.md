@@ -1,7 +1,11 @@
 Introduction to objects
 =======================
 
-In SurgeScript, objects are units of code and data. Each object define a finite state machine, a mathematical construct used to describe the behavior of in-game objects. But what's a finite state machine?
+In SurgeScript, objects are units of code and data. Each object define a finite state machine, a mathematical construct used to describe the behavior of in-game objects.
+
+> **Did you know?**
+> 
+> Almost all games implement what is called a game loop. In SurgeScript, the game loop is defined implicitly. State machines stand out as one of the key features of SurgeScript.
 
 State machines
 --------------
