@@ -33,7 +33,6 @@ set(
     src/surgescript/runtime/sslib/number.c
     src/surgescript/runtime/sslib/object.c
     src/surgescript/runtime/sslib/plugin.c
-    src/surgescript/runtime/sslib/session.c
     src/surgescript/runtime/sslib/string.c
     src/surgescript/runtime/sslib/system.c
     src/surgescript/runtime/sslib/tags.c
