@@ -535,9 +535,6 @@ void emit_getter(surgescript_nodecontext_t context, const char* property_name)
 {
     char* getter_name = surgescript_util_accessorfun("get", property_name);
 
-    if(isupper(property_name[0]))
-        sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
-
     SSASM(SSOP_PUSH, T0); /* object pointer */
     SSASM(SSOP_CALL, TEXT(getter_name), U(0));
     SSASM(SSOP_POPN, U(1));
@@ -549,9 +546,6 @@ void emit_setter1(surgescript_nodecontext_t context, const char* property_name)
 {
     char* getter_name = surgescript_util_accessorfun("get", property_name); /* get the value first */
 
-    if(isupper(property_name[0]))
-        sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
-
     SSASM(SSOP_PUSH, T0); /* object pointer */
     SSASM(SSOP_CALL, TEXT(getter_name), U(0));
     SSASM(SSOP_PUSH, T0); /* push object.property_name */
@@ -562,9 +556,6 @@ void emit_setter1(surgescript_nodecontext_t context, const char* property_name)
 void emit_setter2(surgescript_nodecontext_t context, const char* property_name, const char* assignop)
 {
     char* setter_name = surgescript_util_accessorfun("set", property_name);
-
-    if(isupper(property_name[0]))
-        sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
 
     SSASM(SSOP_POP, T1);
     SSASM(SSOP_XCHG, T0, T1);
@@ -638,9 +629,6 @@ void emit_setterincdec(surgescript_nodecontext_t context, const char* property_n
 {
     char* getter_name = surgescript_util_accessorfun("get", property_name);
     char* setter_name = surgescript_util_accessorfun("set", property_name);
-
-    if(isupper(property_name[0]))
-        sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
 
     SSASM(SSOP_PUSH, T0); /* object pointer */
     SSASM(SSOP_CALL, TEXT(getter_name), U(0)); /* t0 = old value */
