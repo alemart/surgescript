@@ -78,12 +78,12 @@ object "Animal"
         Console.print(sound);
     }
 
-    fun setSound(value)
+    fun set_sound(value)
     {
         sound = value;
     }
 
-    fun getSound()
+    fun get_sound()
     {
         return sound;
     }

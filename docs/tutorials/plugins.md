@@ -72,17 +72,17 @@ object "ParrotSoft"
     complex = spawn("ParrotComplexNumbers");
     stringUtils = spawn("ParrotStringUtils");
 
-    fun getMatrices()
+    fun get_Matrices()
     {
         return matrices;
     }
 
-    fun getComplex()
+    fun get_Complex()
     {
         return complex;
     }
 
-    fun getStringUtils()
+    fun get_StringUtils()
     {
         return stringUtils;
     }
