@@ -42,7 +42,7 @@ void surgescript_sslib_register_application(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Application", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "Application", "crash", fun_crash, 1);
     surgescript_vm_bind(vm, "Application", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
-    surgescript_vm_bind(vm, "Application", "getArgs", fun_getargs, 0);
+    surgescript_vm_bind(vm, "Application", "get_args", fun_getargs, 0);
 }
 
 

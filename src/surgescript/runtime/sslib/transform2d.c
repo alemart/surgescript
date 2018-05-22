@@ -83,23 +83,23 @@ void surgescript_sslib_register_transform2d(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Transform2D", "rotate", fun_rotate, 1);
     surgescript_vm_bind(vm, "Transform2D", "scale", fun_scale, 2);
 
-    surgescript_vm_bind(vm, "Transform2D", "getXpos", fun_getxpos, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setXpos", fun_setxpos, 1);
-    surgescript_vm_bind(vm, "Transform2D", "getYpos", fun_getypos, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setYpos", fun_setypos, 1);
-    surgescript_vm_bind(vm, "Transform2D", "getAngle", fun_getangle, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setAngle", fun_setangle, 1);
-    surgescript_vm_bind(vm, "Transform2D", "getScaleX", fun_getscalex, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setScaleX", fun_setscalex, 1);
-    surgescript_vm_bind(vm, "Transform2D", "getScaleY", fun_getscaley, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setScaleY", fun_setscaley, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_xpos", fun_getxpos, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_xpos", fun_setxpos, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_ypos", fun_getypos, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_ypos", fun_setypos, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_angle", fun_getangle, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_angle", fun_setangle, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_scaleX", fun_getscalex, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_scaleX", fun_setscalex, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_scaleY", fun_getscaley, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_scaleY", fun_setscaley, 1);
 
-    surgescript_vm_bind(vm, "Transform2D", "getWorldX", fun_getworldx, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setWorldX", fun_setworldx, 1);
-    surgescript_vm_bind(vm, "Transform2D", "getWorldY", fun_getworldy, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setWorldY", fun_setworldy, 1);
-    surgescript_vm_bind(vm, "Transform2D", "getWorldAngle", fun_getworldangle, 0);
-    surgescript_vm_bind(vm, "Transform2D", "setWorldAngle", fun_setworldangle, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_worldX", fun_getworldx, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_worldX", fun_setworldx, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_worldY", fun_getworldy, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_worldY", fun_setworldy, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_worldAngle", fun_getworldangle, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_worldAngle", fun_setworldangle, 1);
 
     surgescript_vm_bind(vm, "Transform2D", "lookAt", fun_lookat, 1);
     surgescript_vm_bind(vm, "Transform2D", "distanceTo", fun_distanceto, 1);

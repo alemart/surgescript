@@ -366,7 +366,7 @@ void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* pro
         *next = 0;
         surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
         surgescript_program_add_line(program, SSOP_CALL, SSOPu(
-            surgescript_program_add_text(program, getter = surgescript_util_camelcaseprefix("get", tok))
+            surgescript_program_add_text(program, getter = surgescript_util_accessorfun("get", tok))
         ), SSOPu(0));
         surgescript_program_add_line(program, SSOP_POPN, SSOPu(1), SSOPu(0));
         tok = next + 1;
@@ -374,7 +374,7 @@ void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* pro
     }
     surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
     surgescript_program_add_line(program, SSOP_CALL, SSOPu(
-        surgescript_program_add_text(program, getter = surgescript_util_camelcaseprefix("get", tok))
+        surgescript_program_add_text(program, getter = surgescript_util_accessorfun("get", tok))
     ), SSOPu(0));
     surgescript_program_add_line(program, SSOP_POPN, SSOPu(1), SSOPu(0));
 
@@ -394,7 +394,7 @@ void write_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* pr
 
 void read_from_getter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-    char* fun_name = surgescript_util_camelcaseprefix("get", entry->symbol);
+    char* fun_name = surgescript_util_accessorfun("get", entry->symbol);
     surgescript_program_add_line(program, SSOP_SELF, SSOPu(0), SSOPu(0));
     surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
     surgescript_program_add_line(program, SSOP_CALL, SSOPu(surgescript_program_add_text(program, fun_name)), SSOPu(0));
@@ -407,7 +407,7 @@ void read_from_getter(surgescript_symtable_entry_t* entry, surgescript_program_t
 
 void write_to_setter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-    char* fun_name = surgescript_util_camelcaseprefix("set", entry->symbol);
+    char* fun_name = surgescript_util_accessorfun("set", entry->symbol);
     unsigned w = (k + 1) % 2; /* w in {0, 1} is different than k */
     surgescript_program_add_line(program, SSOP_SELF, SSOPu(w), SSOPu(0));
     surgescript_program_add_line(program, SSOP_PUSH, SSOPu(w), SSOPu(0));

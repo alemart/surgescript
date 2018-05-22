@@ -533,7 +533,7 @@ void emit_dictincdec(surgescript_nodecontext_t context, const char* op)
 
 void emit_getter(surgescript_nodecontext_t context, const char* property_name)
 {
-    char* getter_name = surgescript_util_camelcaseprefix("get", property_name);
+    char* getter_name = surgescript_util_accessorfun("get", property_name);
 
     if(isupper(property_name[0]))
         sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
@@ -547,7 +547,7 @@ void emit_getter(surgescript_nodecontext_t context, const char* property_name)
 
 void emit_setter1(surgescript_nodecontext_t context, const char* property_name)
 {
-    char* getter_name = surgescript_util_camelcaseprefix("get", property_name); /* get the value first */
+    char* getter_name = surgescript_util_accessorfun("get", property_name); /* get the value first */
 
     if(isupper(property_name[0]))
         sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
@@ -561,7 +561,7 @@ void emit_setter1(surgescript_nodecontext_t context, const char* property_name)
 
 void emit_setter2(surgescript_nodecontext_t context, const char* property_name, const char* assignop)
 {
-    char* setter_name = surgescript_util_camelcaseprefix("set", property_name);
+    char* setter_name = surgescript_util_accessorfun("set", property_name);
 
     if(isupper(property_name[0]))
         sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);
@@ -636,8 +636,8 @@ void emit_setter2(surgescript_nodecontext_t context, const char* property_name, 
 
 void emit_setterincdec(surgescript_nodecontext_t context, const char* property_name, const char* op)
 {
-    char* getter_name = surgescript_util_camelcaseprefix("get", property_name);
-    char* setter_name = surgescript_util_camelcaseprefix("set", property_name);
+    char* getter_name = surgescript_util_accessorfun("get", property_name);
+    char* setter_name = surgescript_util_accessorfun("set", property_name);
 
     if(isupper(property_name[0]))
         sslog("Warning: property \"%s\" should start with a lowercase character - in \"%s\" (object \"%s\")", property_name, context.source_file, context.object_name);

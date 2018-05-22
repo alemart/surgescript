@@ -81,7 +81,7 @@ void surgescript_sslib_register_array(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Array", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Array", "destructor", fun_destructor, 0);
     surgescript_vm_bind(vm, "Array", "state:main", fun_main, 0);
-    surgescript_vm_bind(vm, "Array", "getLength", fun_getlength, 0);
+    surgescript_vm_bind(vm, "Array", "get_length", fun_getlength, 0);
     surgescript_vm_bind(vm, "Array", "get", fun_get, 1);
     surgescript_vm_bind(vm, "Array", "set", fun_set, 2);
     surgescript_vm_bind(vm, "Array", "push", fun_push, 1);

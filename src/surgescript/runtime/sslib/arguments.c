@@ -52,9 +52,9 @@ void surgescript_sslib_register_arguments(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Arguments", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Arguments", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Arguments", "toString", fun_tostring, 0);
-    surgescript_vm_bind(vm, "Arguments", "get__data", fun_getdata, 0);
+    surgescript_vm_bind(vm, "Arguments", "get___data", fun_getdata, 0);
     surgescript_vm_bind(vm, "Arguments", "get", fun_get, 1);
-    surgescript_vm_bind(vm, "Arguments", "getLength", fun_getlength, 0);
+    surgescript_vm_bind(vm, "Arguments", "get_length", fun_getlength, 0);
     surgescript_vm_bind(vm, "Arguments", "iterator", fun_iterator, 0);
     surgescript_vm_bind(vm, "Arguments", "option", fun_option, 1);
     surgescript_vm_bind(vm, "Arguments", "hasOption", fun_hasoption, 1);
@@ -115,7 +115,7 @@ surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript
 {
     surgescript_var_t* value = surgescript_var_create();
     surgescript_object_t* data_array = get_data_array(object);
-    surgescript_object_call_function(data_array, "getLength", NULL, 0, value);
+    surgescript_object_call_function(data_array, "get_length", NULL, 0, value);
     return value;
 }
 

@@ -55,7 +55,7 @@ void surgescript_sslib_register_plugin(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Plugin", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Plugin", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Plugin", "get", fun_get, 1);
-    surgescript_vm_bind(vm, "Plugin", "getCount", fun_getcount, 0);
+    surgescript_vm_bind(vm, "Plugin", "get_count", fun_getcount, 0);
 }
 
 
@@ -103,7 +103,7 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
         if(is_valid_name(plugin_name)) {
             const char* object_name = surgescript_object_name(object);
             surgescript_programpool_t* pool = surgescript_objectmanager_programpool(manager);
-            char* accessor_name = surgescript_util_camelcaseprefix("get", plugin_name);
+            char* accessor_name = surgescript_util_accessorfun("get", plugin_name);
             if(surgescript_programpool_get(pool, object_name, accessor_name) == NULL) {
                 surgescript_program_t* accessor = make_accessor(plugin_handle);
                 surgescript_programpool_put(pool, object_name, accessor_name, accessor);

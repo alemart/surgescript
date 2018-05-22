@@ -61,7 +61,7 @@ char* surgescript_util_strncpy(char* dst, const char* src, size_t n); /* strcpy 
 char* surgescript_util_strdup(const char* src, const char* location); /* strdup */
 uint32_t surgescript_util_str2hash(const char* str); /* converts a string to a 32-bit hash */
 const char* surgescript_util_basename(const char* path); /* basename */
-char* surgescript_util_camelcaseprefix(const char* prefix, const char* text); /* camelCase prefixing function */
+char* surgescript_util_accessorfun(const char* prefix, const char* text); /* getter/setter prefixing function */
 
 unsigned surgescript_util_htob(unsigned x); /* host to big-endian */
 unsigned surgescript_util_btoh(unsigned x); /* big to host-endian */

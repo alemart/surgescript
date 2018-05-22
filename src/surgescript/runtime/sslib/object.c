@@ -63,10 +63,10 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Object", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Object", "destroy", fun_destroy, 0);
-    surgescript_vm_bind(vm, "Object", "getParent", fun_parent, 0);
-    surgescript_vm_bind(vm, "Object", "getActive", fun_getactive, 0);
-    surgescript_vm_bind(vm, "Object", "setActive", fun_setactive, 1);
-    surgescript_vm_bind(vm, "Object", "getChildCount", fun_childcount, 0);
+    surgescript_vm_bind(vm, "Object", "get_parent", fun_parent, 0);
+    surgescript_vm_bind(vm, "Object", "get_active", fun_getactive, 0);
+    surgescript_vm_bind(vm, "Object", "set_active", fun_setactive, 1);
+    surgescript_vm_bind(vm, "Object", "get_childCount", fun_childcount, 0);
     surgescript_vm_bind(vm, "Object", "child", fun_child, 1);
     surgescript_vm_bind(vm, "Object", "findObject", fun_findobject, 1);
     surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
@@ -76,11 +76,11 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "timeout", fun_timeout, 1);
     surgescript_vm_bind(vm, "Object", "__invoke", fun_invoke, 2);
-    surgescript_vm_bind(vm, "Object", "get__name", fun_name, 0);
-    surgescript_vm_bind(vm, "Object", "get__functions", fun_functions, 0);
-    surgescript_vm_bind(vm, "Object", "get__children", fun_children, 0);
-    surgescript_vm_bind(vm, "Object", "get__timespent", fun_timespent, 0);
-    surgescript_vm_bind(vm, "Object", "get__memspent", fun_memspent, 0);
+    surgescript_vm_bind(vm, "Object", "get___name", fun_name, 0);
+    surgescript_vm_bind(vm, "Object", "get___functions", fun_functions, 0);
+    surgescript_vm_bind(vm, "Object", "get___children", fun_children, 0);
+    surgescript_vm_bind(vm, "Object", "get___timespent", fun_timespent, 0);
+    surgescript_vm_bind(vm, "Object", "get___memspent", fun_memspent, 0);
 }
 
 
@@ -282,7 +282,7 @@ surgescript_var_t* fun_invoke(surgescript_object_t* object, const surgescript_va
             if(strcmp(surgescript_object_name(params_array), "Array") == 0) {
                 /* Does it have the same arity as the length of the input array? */
                 int arity = surgescript_program_arity(program);
-                surgescript_object_call_function(params_array, "getLength", NULL, 0, ret);
+                surgescript_object_call_function(params_array, "get_length", NULL, 0, ret);
                 if((int)surgescript_var_get_number(ret) == arity) {
                     /* Obtain the parameters */
                     surgescript_var_t** params_native_array = ssmalloc(arity * sizeof(*params_native_array));

@@ -49,9 +49,9 @@ void surgescript_sslib_register_time(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Time", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Time", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Time", "spawn", fun_spawn, 1);
-    surgescript_vm_bind(vm, "Time", "getTime", fun_gettime, 0);
-    surgescript_vm_bind(vm, "Time", "getDelta", fun_getdelta, 0);
-    surgescript_vm_bind(vm, "Time", "getTickCount", fun_gettickcount, 0);
+    surgescript_vm_bind(vm, "Time", "get_time", fun_gettime, 0);
+    surgescript_vm_bind(vm, "Time", "get_delta", fun_getdelta, 0);
+    surgescript_vm_bind(vm, "Time", "get_tickCount", fun_gettickcount, 0);
 }
 
 

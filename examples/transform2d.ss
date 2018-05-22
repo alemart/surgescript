@@ -100,16 +100,16 @@ object "Bee"
     {
     }
 
-    // getTransform()
+    // get_transform()
     // allows the transform to be accessed externally, e.g., bee.transform.xpos = 10;
-    fun getTransform()
+    fun get_transform()
     {
         return transform;
     }
 
-    // getLocation()
+    // get_location()
     // returns a nice "(x,y)" string displaying where the bee is in the world
-    fun getLocation()
+    fun get_location()
     {
         return "(" + transform.worldX + "," + transform.worldY + ")";
     }

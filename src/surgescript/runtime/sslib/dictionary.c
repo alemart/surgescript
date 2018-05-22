@@ -97,7 +97,7 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Dictionary", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Dictionary", "state:main", fun_main, 0);
-    surgescript_vm_bind(vm, "Dictionary", "getCount", fun_getcount, 0);
+    surgescript_vm_bind(vm, "Dictionary", "get_count", fun_getcount, 0);
     surgescript_vm_bind(vm, "Dictionary", "get", fun_get, 1);
     surgescript_vm_bind(vm, "Dictionary", "set", fun_set, 2);
     surgescript_vm_bind(vm, "Dictionary", "clear", fun_clear, 0);
@@ -115,18 +115,18 @@ void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
 
     surgescript_vm_bind(vm, "DictionaryEntry", "constructor", fun_entry_constructor, 0);
     surgescript_vm_bind(vm, "DictionaryEntry", "state:main", fun_entry_main, 0);
-    surgescript_vm_bind(vm, "DictionaryEntry", "getKey", fun_entry_getkey, 0);
-    surgescript_vm_bind(vm, "DictionaryEntry", "getValue", fun_entry_getvalue, 0);
-    surgescript_vm_bind(vm, "DictionaryEntry", "setValue", fun_entry_setvalue, 1);
+    surgescript_vm_bind(vm, "DictionaryEntry", "get_key", fun_entry_getkey, 0);
+    surgescript_vm_bind(vm, "DictionaryEntry", "get_value", fun_entry_getvalue, 0);
+    surgescript_vm_bind(vm, "DictionaryEntry", "set_value", fun_entry_setvalue, 1);
     surgescript_vm_bind(vm, "DictionaryEntry", "toString", fun_entry_tostring, 0);
 
     surgescript_vm_bind(vm, "BSTNode", "constructor", fun_bst_constructor, 0);
     surgescript_vm_bind(vm, "BSTNode", "state:main", fun_bst_main, 0);
-    surgescript_vm_bind(vm, "BSTNode", "getKey", fun_bst_getkey, 0);
-    surgescript_vm_bind(vm, "BSTNode", "getValue", fun_bst_getvalue, 0);
-    surgescript_vm_bind(vm, "BSTNode", "setValue", fun_bst_setvalue, 1);
-    surgescript_vm_bind(vm, "BSTNode", "getLeft", fun_bst_getleft, 0);
-    surgescript_vm_bind(vm, "BSTNode", "getRight", fun_bst_getright, 0);
+    surgescript_vm_bind(vm, "BSTNode", "get_key", fun_bst_getkey, 0);
+    surgescript_vm_bind(vm, "BSTNode", "get_value", fun_bst_getvalue, 0);
+    surgescript_vm_bind(vm, "BSTNode", "set_value", fun_bst_setvalue, 1);
+    surgescript_vm_bind(vm, "BSTNode", "get_left", fun_bst_getleft, 0);
+    surgescript_vm_bind(vm, "BSTNode", "get_right", fun_bst_getright, 0);
     surgescript_vm_bind(vm, "BSTNode", "count", fun_bst_count, 0);
     surgescript_vm_bind(vm, "BSTNode", "find", fun_bst_find, 1);
     surgescript_vm_bind(vm, "BSTNode", "insert", fun_bst_insert, 2);
@@ -355,13 +355,13 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
             ssarray_push(sb, ' ');
 
             /* write key */
-            surgescript_object_call_function(entry, "getKey", NULL, 0, tmp);
+            surgescript_object_call_function(entry, "get_key", NULL, 0, tmp);
             WRITE_ELEMENT(tmp, true);
             ssarray_push(sb, ':');
             ssarray_push(sb, ' ');
 
             /* write value */
-            surgescript_object_call_function(entry, "getValue", NULL, 0, tmp);
+            surgescript_object_call_function(entry, "get_value", NULL, 0, tmp);
             if(!surgescript_var_typecheck(tmp, surgescript_var_type2code("object"))) {
                 surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(tmp);
                 surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
@@ -415,7 +415,7 @@ surgescript_var_t* fun_keys(surgescript_object_t* object, const surgescript_var_
         surgescript_object_t* entry = NULL;
         surgescript_object_call_function(iterator, "next", NULL, 0, tmp);
         entry = surgescript_objectmanager_get(manager, surgescript_var_get_objecthandle(tmp));
-        surgescript_object_call_function(entry, "getKey", NULL, 0, tmp);
+        surgescript_object_call_function(entry, "get_key", NULL, 0, tmp);
         surgescript_object_call_function(array, "push", p, 1, NULL);
     }
 

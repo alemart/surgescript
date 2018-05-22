@@ -50,9 +50,9 @@ void surgescript_sslib_register_gc(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "__GC", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "__GC", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "__GC", "collect", fun_collect, 0);
-    surgescript_vm_bind(vm, "__GC", "getInterval", fun_getinterval, 0);
-    surgescript_vm_bind(vm, "__GC", "setInterval", fun_setinterval, 1);
-    surgescript_vm_bind(vm, "__GC", "getObjectCount", fun_getobjectcount, 0);
+    surgescript_vm_bind(vm, "__GC", "get_interval", fun_getinterval, 0);
+    surgescript_vm_bind(vm, "__GC", "set_interval", fun_setinterval, 1);
+    surgescript_vm_bind(vm, "__GC", "get_objectCount", fun_getobjectcount, 0);
 }
 
 

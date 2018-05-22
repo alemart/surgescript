@@ -75,11 +75,11 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Math", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Math", "spawn", fun_spawn, 1);
-    surgescript_vm_bind(vm, "Math", "getEpsilon", fun_getepsilon, 0);
-    surgescript_vm_bind(vm, "Math", "getPi", fun_getpi, 0);
-    surgescript_vm_bind(vm, "Math", "getDeg2rad", fun_getdeg2rad, 0);
-    surgescript_vm_bind(vm, "Math", "getRad2deg", fun_getrad2deg, 0);
-    surgescript_vm_bind(vm, "Math", "getInfinity", fun_getinfinity, 0);
+    surgescript_vm_bind(vm, "Math", "get_epsilon", fun_getepsilon, 0);
+    surgescript_vm_bind(vm, "Math", "get_pi", fun_getpi, 0);
+    surgescript_vm_bind(vm, "Math", "get_deg2rad", fun_getdeg2rad, 0);
+    surgescript_vm_bind(vm, "Math", "get_rad2deg", fun_getrad2deg, 0);
+    surgescript_vm_bind(vm, "Math", "get_infinity", fun_getinfinity, 0);
     surgescript_vm_bind(vm, "Math", "random", fun_random, 0);
     surgescript_vm_bind(vm, "Math", "sin", fun_sin, 1);
     surgescript_vm_bind(vm, "Math", "cos", fun_cos, 1);

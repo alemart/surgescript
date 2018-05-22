@@ -414,8 +414,8 @@ surgescript_var_t* disable_object(surgescript_object_t* object, const surgescrip
 /* we'll create a getter and a setter for the variable named identifier */
 void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier)
 {
-    char* getter_name = surgescript_util_camelcaseprefix("get", identifier);
-    char* setter_name = surgescript_util_camelcaseprefix("set", identifier);
+    char* getter_name = surgescript_util_accessorfun("get", identifier);
+    char* setter_name = surgescript_util_accessorfun("set", identifier);
     surgescript_program_t* getter = surgescript_program_create(0);
     surgescript_program_t* setter = surgescript_program_create(1);
 
@@ -1397,18 +1397,14 @@ void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void make_accessor(const char* fun_name, void* symtable)
 {
-    /* run only if fun_name is an accessor (getSomething / setSomething) */
-    if((strncmp(fun_name, "get", 3) == 0 || strncmp(fun_name, "set", 3) == 0) && fun_name[3] != '\0') {
+    /* run only if fun_name is an accessor */
+    if((strncmp(fun_name, "get_", 4) == 0 || strncmp(fun_name, "set_", 4) == 0) && fun_name[4] != '\0') {
         /* fun_name is an accessor */
-        char* accessor = ssstrdup(fun_name + 3);
-        accessor[0] = tolower(fun_name[3]);
+        const char* accessor = fun_name + 4;
 
         /* now that we have the accessor name, add it to the symbol table */
         if(!surgescript_symtable_has_symbol((surgescript_symtable_t*)symtable, accessor))
             surgescript_symtable_put_accessor_symbol((surgescript_symtable_t*)symtable, accessor);
-
-        /* done */
-        ssfree(accessor);
     }
 }
 

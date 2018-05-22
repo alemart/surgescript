@@ -218,17 +218,18 @@ const char* surgescript_util_basename(const char* path)
 }
 
 /*
- * surgescript_util_camelcaseprefix()
- * camelCase prefixing function: returns "prefixText"
+ * surgescript_util_acessor2fun()
+ * Getter/setter prefixing function: returns "prefix_text".
+ * You need to ssfree() this.
  */
-char* surgescript_util_camelcaseprefix(const char* prefix, const char* text)
+char* surgescript_util_accessorfun(const char* prefix, const char* text)
 {
-    char* str = ssmalloc((strlen(prefix) + strlen(text) + 1) * sizeof(char));
-    char first[2] = { toupper(text[0]), '\0' };
+    char* str = ssmalloc((strlen(prefix) + strlen(text) + 2) * sizeof(char));
+    char tmp[2] = { '_', '\0' };
 
     strcpy(str, prefix);
-    strcat(str, first);
-    strcat(str, text + 1);
+    strcat(str, tmp);
+    strcat(str, text);
 
     return str;
 }

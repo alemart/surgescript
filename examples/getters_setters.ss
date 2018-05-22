@@ -12,7 +12,7 @@ object "Application"
     {
         hello();
         showStatus();
-        obj.eyes = 4; // the same as obj.setEyes(4)
+        obj.eyes = 4; // the same as obj.set_eyes(4)
         //obj.name = "master"; // will crash; no setter defined. Try uncommenting this.
         showStatus();
         Application.exit();
@@ -20,7 +20,7 @@ object "Application"
 
     fun hello()
     {
-        // typing obj.name is the same as obj.getName()
+        // typing obj.name is the same as obj.get_name()
         Console.print("Hello, " + obj.name);
     }
 
@@ -39,23 +39,23 @@ object "Skull"
     {
     }
 
-    // getEyes()
-    // syntax sugar: typing obj.eyes yields the same as obj.getEyes()
-    fun getEyes()
+    // get_eyes()
+    // syntax sugar: typing obj.eyes yields the same as obj.get_eyes()
+    fun get_eyes()
     {
         return eyes;
     }
 
-    // setEyes()
-    // syntax sugar to obj.eyes = value (will call obj.setEyes(value) behind the scenes)
-    fun setEyes(value)
+    // set_eyes()
+    // syntax sugar to obj.eyes = value (will call obj.set_eyes(value) behind the scenes)
+    fun set_eyes(value)
     {
         eyes = value;
     }
 
-    // getName()
+    // get_name()
     // obj.name will return the [private] variable name. Notice we did not define a setter.
-    fun getName()
+    fun get_name()
     {
         return name;
     }
