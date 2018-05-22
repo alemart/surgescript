@@ -36,7 +36,7 @@
     
     
       
-        <title>Comments - SurgeScript Documentation</title>
+        <title>Plugin system - SurgeScript Documentation</title>
       
     
     
@@ -70,7 +70,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#comments" tabindex="1" class="md-skip">
+      <a href="#plugins" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -96,7 +96,7 @@
                 SurgeScript Documentation
               </span>
               <span class="md-header-nav__topic">
-                Comments
+                Plugin system
               </span>
             
           
@@ -306,56 +306,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Comments
-      </label>
-    
-    <a href="./" title="Comments" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../comments/" title="Comments" class="md-nav__link">
       Comments
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#single-line-comments" title="Single-line comments" class="md-nav__link">
-    Single-line comments
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#multi-line-comments" title="Multi-line comments" class="md-nav__link">
-    Multi-line comments
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -411,11 +366,56 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../plugins/" title="Plugin system" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Plugin system
+      </label>
+    
+    <a href="./" title="Plugin system" class="md-nav__link md-nav__link--active">
       Plugin system
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-example" title="Basic example" class="md-nav__link">
+    Basic example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#package-example" title="Package example" class="md-nav__link">
+    Package example
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -709,15 +709,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#single-line-comments" title="Single-line comments" class="md-nav__link">
-    Single-line comments
+  <a href="#basic-example" title="Basic example" class="md-nav__link">
+    Basic example
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#multi-line-comments" title="Multi-line comments" class="md-nav__link">
-    Multi-line comments
+  <a href="#package-example" title="Package example" class="md-nav__link">
+    Package example
   </a>
   
 </li>
@@ -739,24 +739,99 @@
               
                 
                 
-                <h1 id="comments">Comments</h1>
-<p>Comments are used to make your code more human-readable. They are ignored by the computer. SurgeScript allows two kinds of comments: single-line comments and multi-line comments.</p>
-<h2 id="single-line-comments">Single-line comments</h2>
-<p>Single-line comments start with a <code>//</code>. Example:</p>
-<pre><code>// This line has no effect on the code (it's just for improved readability)
-x = 3 + 4; // x is now 7
+                <h1 id="plugins">Plugins</h1>
+<p>Plugins are objects that allow you to extend the functionalities of the language. Once declared, they can be imported anywhere in the code. They can also be easily shared with others, so everyone benefits.</p>
+<h2 id="basic-example">Basic example</h2>
+<p>Suppose you want to extend the language by adding new routines related to string manipulation. The routines you want will be used frequently throughout your project, and you'd like easy access to them. This makes it perfect for implementing them as a plugin.</p>
+<p>We'll define an object called <code>StringUtils</code> with a <code>reverse()</code> function that reverses a string. We make the object a plugin by annotating it with <code>@Plugin</code>. Please see in the example below:</p>
+<pre><code>// File: stringutils.ss
+
+@Plugin
+object &quot;StringUtils&quot;
+{
+    fun reverse(str)
+    {
+        buf = &quot;&quot;;
+        for(i = str.length - 1; i &gt;= 0; i--)
+            buf += str[i];
+        return buf;
+    }
+}
 </code></pre>
 
-<h2 id="multi-line-comments">Multi-line comments</h2>
-<p>Multi-line comments start with a <code>/*</code> and end with a <code>*/</code>. Example:</p>
-<pre><code>/*
- * Comments can, but don't have to, take
- * multiple lines if you use this form.
- */
-x = 3 + 4; /* x is now 7 */
+<p>When you annotate an object definition with <code>@Plugin</code>, SurgeScript will spawn an instance of such an object before spawning the <code>Application</code>. Additionally, the plugin object may be imported anywhere with the <code>using</code> keyword:</p>
+<pre><code>// File: app.ss
+using StringUtils;
+
+object &quot;Application&quot;
+{
+    state &quot;main&quot;
+    {
+        str = StringUtils.reverse(&quot;alucard&quot;);
+        Console.print(str); // will print &quot;dracula&quot;
+        exit();
+    }
+}
 </code></pre>
 
-<p>Comments of this form cannot be nested.</p>
+<p><strong>Note:</strong> it's recommended not to include any special characters in the name of your plugins, otherwise you may have trouble importing them.</p>
+<p>In the example above, <code>Application</code> and <code>StringUtils</code> are located in two separate files. If you want to test them using the SurgeScript command line utility, pass both files as parameters:</p>
+<pre><code>surgescript plugin.ss app.ss
+</code></pre>
+
+<blockquote>
+<p><strong>Spawning order</strong></p>
+<p>Although plugins are spawned before the <em>Application</em> object, for the time being they are spawned in no particular order. You may not access a plugin from within the constructor of another plugin, as of now there is no dependency resolver implemented. Use the <em>main</em> state.</p>
+</blockquote>
+<h2 id="package-example">Package example</h2>
+<p>You may use the Plugin system to create an independent package (or namespace) that aggregates many functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.</p>
+<p>Suppose that user <em>Parrot</em>, the owner of <em>ParrotSoft</em>, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called <code>ParrotSoft</code>. Since he implemented getters for each of his utilities (see the code below), his package provides easy access to all of them. Furthermore, he annotated his package with <code>@Plugin</code> (but <strong>not</strong> the individual utilities), so his package can be accessed anywhere.</p>
+<pre><code>// File: parrotsoft.ss
+
+@Plugin
+object &quot;ParrotSoft&quot;
+{
+    matrices = spawn(&quot;ParrotMatrices&quot;);
+    complex = spawn(&quot;ParrotComplexNumbers&quot;);
+    stringUtils = spawn(&quot;ParrotStringUtils&quot;);
+
+    fun getMatrices()
+    {
+        return matrices;
+    }
+
+    fun getComplex()
+    {
+        return complex;
+    }
+
+    fun getStringUtils()
+    {
+        return stringUtils;
+    }
+}
+
+// ...
+</code></pre>
+
+<p>A user of the <code>ParrotSoft</code> package may import Parrot's utilities simply by importing the plugin. Individual utilities may also be imported. The code below shows a usage example:</p>
+<pre><code>using ParrotSoft.Matrices.Matrix2;
+using ParrotSoft.Complex;
+using ParrotSoft;
+
+object &quot;Application&quot;
+{
+    state &quot;main&quot;
+    {
+        identity = Matrix2([[1, 0], [0, 1]]); // 2x2 matrix
+        z = Complex(2, 3); // 2 + 3i
+        neon = ParrotSoft.StringUtils.reverse(&quot;noen&quot;);
+        exit();
+    }
+}
+</code></pre>
+
+<p>In the example above, writing <code>Complex</code> is equivalent to writing <code>ParrotSoft.Complex</code>, since we imported this utility with <code>using ParrotSoft.Complex</code>. Notice that <code>ParrotSoft</code> implements a getter for <code>Complex</code>. Additionally, <code>ParrotSoft</code> has been annotated with <code>@Plugin</code>, but <code>Complex</code> has <strong>not</strong>. This means that the statement <code>using Complex</code> will <strong>not</strong> yield correct results - and it shouldn't, since <code>Complex</code> is a part of the <code>ParrotSoft</code> package that can only be accessed from it. Finally, since we haven't imported <code>StringUtils</code> explicitly, we type <code>ParrotSoft.StringUtils</code> to access it.</p>
                 
                   
                 
@@ -777,7 +852,7 @@ x = 3 + 4; /* x is now 7 */
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../functions/" title="Functions" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../getters_and_setters/" title="Getters & setters" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -786,19 +861,19 @@ x = 3 + 4; /* x is now 7 */
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Functions
+                Getters & setters
               </span>
             </div>
           </a>
         
         
-          <a href="../tags/" title="Tags" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../advanced_features/" title="Advanced features" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Tags
+                Advanced features
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
