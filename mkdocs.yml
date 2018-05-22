@@ -18,6 +18,7 @@ pages:
         - 'Object tree': 'tutorials/object_tree.md'
         - 'Components': 'tutorials/components.md'
         - 'Getters & setters': 'tutorials/getters_and_setters.md'
+        - 'Plugin system': 'tutorials/plugins.md'
         - 'Advanced features': 'tutorials/advanced_features.md'
         - 'Best practices': 'tutorials/best_practices.md'
     - 'SurgeScript Reference':
