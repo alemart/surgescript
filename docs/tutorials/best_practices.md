@@ -7,4 +7,6 @@ Best Practices
     - Objects should define [functions](functions) that can be operated upon by the external world (API)
 - Use *camelCase* names for both variables and functions.
 - Use *4 spaces* when indenting your code.
-- Read [this documentation](../../) often.
+- Combine related [plugins](plugins) into a single package.
+    - Do **not** pollute the global namespace.
+- Read the [SurgeScript documentation](../../) often.
