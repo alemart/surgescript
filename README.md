@@ -97,7 +97,11 @@ Please read the [documentation](https://alemart.github.io/surgescript/). The aut
 
 ##### Why not use other languages such as Lua?
 
-Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. This includes: the state-machine pattern (objects are state machines), the composition-approach (you may design complex objects and behaviors by means of composition), as well as the hierarchy system (objects have a parent and may have children, in a tree-like structure). This comes from years of experience of the author dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
+Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. Its features include:
+- The state-machine pattern: objects are state machines (and the game loop is implicit)
+- The composition approach: you may design complex objects and behaviors using composition
+- The hierarchy system: objects have a parent and may have children, in a tree-like structure
+These features come from years of experience of the author dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
 ##### How do I embed SurgeScript into my project?
 
