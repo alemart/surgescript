@@ -31,8 +31,6 @@ static surgescript_var_t* fun_constructor(surgescript_object_t* object, const su
 static surgescript_var_t* fun_exit(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getinfo(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getgc(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_gettags(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -53,8 +51,6 @@ void surgescript_sslib_register_system(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "System", "exit", fun_exit, 0);
     surgescript_vm_bind(vm, "System", "destroy", fun_destroy, 0); /* overloads Object's destroy() */
     surgescript_vm_bind(vm, "System", "spawn", fun_spawn, 1);
-    surgescript_vm_bind(vm, "System", "get_version", fun_getversion, 0);
-    surgescript_vm_bind(vm, "System", "get_info", fun_getinfo, 0);
     surgescript_vm_bind(vm, "System", "get_temp", fun_gettemp, 0);
     surgescript_vm_bind(vm, "System", "get_gc", fun_getgc, 0);
     surgescript_vm_bind(vm, "System", "get_tags", fun_gettags, 0);
@@ -129,18 +125,6 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
     return NULL;
 }
  
-/* SurgeScript version */
-surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    return surgescript_var_set_string(surgescript_var_create(), SSVERSION);
-}
-
-/* SurgeScript info */
-surgescript_var_t* fun_getinfo(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    return surgescript_var_set_string(surgescript_var_create(), SSINFO);
-}
-
 /* get the temp area */
 surgescript_var_t* fun_gettemp(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {

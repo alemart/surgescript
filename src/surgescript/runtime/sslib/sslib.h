@@ -42,7 +42,7 @@ void surgescript_sslib_register_time(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_temp(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_gc(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_tagsystem(struct surgescript_vm_t* vm);
-void surgescript_sslib_register_session(struct surgescript_vm_t* vm);
+void surgescript_sslib_register_surgescript(struct surgescript_vm_t* vm);
 void surgescript_sslib_register_plugin(struct surgescript_vm_t* vm);
 
 #endif

@@ -63,6 +63,7 @@ static const surgescript_objecthandle_t ROOT_HANDLE = 1;
     F( "__Temp" )       \
     F( "__GC" )         \
     F( "__TagSystem" )  \
+    F( "SurgeScript" )  \
     F( "Math" )         \
     F( "Time" )         \
     F( "Console" )      \
