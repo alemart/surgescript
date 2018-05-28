@@ -49,7 +49,8 @@ bool surgescript_object_update(surgescript_object_t* object); /* runs my program
 const char* surgescript_object_name(const surgescript_object_t* object); /* what's my name? */
 struct surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object); /* each object has its own heap */
 struct surgescript_objectmanager_t* surgescript_object_manager(const surgescript_object_t* object); /* pointer to the object manager */
-void* surgescript_object_userdata(const surgescript_object_t* object); /* custom user-data (if any) */
+void* surgescript_object_userdata(const surgescript_object_t* object); /* custom user data (if any) */
+void surgescript_object_set_userdata(surgescript_object_t* object, void* data); /* set custom user data */
 bool surgescript_object_has_tag(const surgescript_object_t* object, const char* tag_name); /* is this object tagged tag_name? */
 float surgescript_object_elapsed_time(const surgescript_object_t* object); /* elapsed time (in seconds) since last state change */
 float surgescript_object_timespent(const surgescript_object_t* object); /* time consumption at the last frame (in seconds) */

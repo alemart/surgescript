@@ -196,11 +196,20 @@ surgescript_objectmanager_t* surgescript_object_manager(const surgescript_object
 
 /*
  * surgescript_object_userdata()
- * Custom user-data (if any)
+ * Custom user data (if any)
  */
 void* surgescript_object_userdata(const surgescript_object_t* object)
 {
     return object->user_data;
+}
+
+/*
+ * surgescript_object_set_userdata()
+ * Set custom user data
+ */
+void surgescript_object_set_userdata(surgescript_object_t* object, void* data)
+{
+    object->user_data = data;
 }
 
 /*
