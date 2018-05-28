@@ -55,7 +55,7 @@ typedef enum surgescript_program_operator_t { // let t[a .. c] be the registers 
 
 /* operands */
 typedef union surgescript_program_operand_t {
-    float f;
+    double f;
     unsigned u:32;
     int i:32;
     bool b;
@@ -68,7 +68,7 @@ typedef union surgescript_program_operand_t {
 #define SSOPb(x) surgescript_program_operand_b(x)
 
 static inline surgescript_program_operand_t surgescript_program_operand_u(unsigned u) { surgescript_program_operand_t o = { .u = u }; return o; }
-static inline surgescript_program_operand_t surgescript_program_operand_f(float f) { surgescript_program_operand_t o = { .f = f }; return o; }
+static inline surgescript_program_operand_t surgescript_program_operand_f(double f) { surgescript_program_operand_t o = { .f = f }; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_b(bool b) { surgescript_program_operand_t o = { .u = 0 }; o.b = b; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_i(int i) { surgescript_program_operand_t o = { .i = i }; return o; }
 

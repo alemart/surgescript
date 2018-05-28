@@ -47,9 +47,7 @@
     F( SSOP_MOVU, "movu" )                              /* t[a] = (u32)b */ \
     F( SSOP_XCHG, "xchg" )                           /* swap(t[a], t[b]) */ \
                                                                             \
-    F( SSOP_ALLOC, "alloc" )              /* t[a] = allocate memory cell */ \
-    F( SSOP_LOAD, "load" )                             /* t[a] = *(t[b]) */ \
-    F( SSOP_STORE, "store" )                           /* *(t[b]) = t[a] */ \
+    F( SSOP_ALLOC, "alloc" )                   /* t[a] = allocate_cell() */ \
     F( SSOP_PEEK, "peek" )                                /* t[a] = (*b) */ \
     F( SSOP_POKE, "poke" )                                /* (*b) = t[a] */ \
                                                                             \

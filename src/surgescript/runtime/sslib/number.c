@@ -84,9 +84,10 @@ surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_va
 {
     /* tip for users: use Math.approximately() instead */
     if(surgescript_var_typecode(param[0]) == surgescript_var_typecode(param[1])) {
-        float a = surgescript_var_get_number(param[0]);
-        float b = surgescript_var_get_number(param[1]);
-        return surgescript_var_set_bool(surgescript_var_create(), fabsf(a - b) <= FLT_EPSILON);
+        double a = surgescript_var_get_number(param[0]);
+        double b = surgescript_var_get_number(param[1]);
+        double ma = fabs(a), mb = fabs(b);
+        return surgescript_var_set_bool(surgescript_var_create(), (a == b) || fabs(a - b) <= ssmax(ma, mb) * FLT_EPSILON);
     }
     else
         return surgescript_var_set_bool(surgescript_var_create(), false);
@@ -136,20 +137,20 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
 /* is the number finite? */
 surgescript_var_t* fun_isfinite(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float x = surgescript_var_get_number(param[0]);
+    double x = surgescript_var_get_number(param[0]);
     return surgescript_var_set_bool(surgescript_var_create(), isfinite(x));
 }
 
 /* is the value NaN? */
 surgescript_var_t* fun_isnan(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float x = surgescript_var_get_number(param[0]);
+    double x = surgescript_var_get_number(param[0]);
     return surgescript_var_set_bool(surgescript_var_create(), isnan(x));
 }
 
 /* is the number an integer? */
 surgescript_var_t* fun_isinteger(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float x = surgescript_var_get_number(param[0]);
+    double x = surgescript_var_get_number(param[0]);
     return surgescript_var_set_bool(surgescript_var_create(), isfinite(x) && x == ceil(x));
 }

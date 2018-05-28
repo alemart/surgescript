@@ -419,9 +419,9 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
  * surgescript_object_elapsed_time()
  * elapsed time (in seconds) since last state change
  */
-float surgescript_object_elapsed_time(const surgescript_object_t* object)
+double surgescript_object_elapsed_time(const surgescript_object_t* object)
 {
-    return (surgescript_util_gettickcount() - object->last_state_change) * 0.001f;
+    return (surgescript_util_gettickcount() - object->last_state_change) * 0.001;
 }
 
 /*
@@ -665,9 +665,9 @@ void surgescript_object_call_state(surgescript_object_t* object, const char* sta
  * surgescript_object_timespent()
  * Time consumption at the last frame (in seconds)
  */
-float surgescript_object_timespent(const surgescript_object_t* object)
+double surgescript_object_timespent(const surgescript_object_t* object)
 {
-    return object->time_spent * 0.001f;
+    return object->time_spent * 0.001;
 }
 
 /*

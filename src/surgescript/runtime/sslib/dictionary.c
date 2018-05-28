@@ -447,11 +447,11 @@ surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surges
 
     surgescript_var_set_objecthandle(surgescript_heap_at(heap, IT_ENTRYREF), entry_handle);
     if(surgescript_objectmanager_exists(manager, bst) && 0 == strcmp(parent_name, "Dictionary")) {
-        surgescript_var_set_number(surgescript_heap_at(heap, IT_STACKSIZE), 1.0f);
+        surgescript_var_set_number(surgescript_heap_at(heap, IT_STACKSIZE), 1.0);
         surgescript_var_set_objecthandle(surgescript_heap_at(heap, IT_STACKBASE), bst);
     }
     else {
-        surgescript_var_set_number(surgescript_heap_at(heap, IT_STACKSIZE), 0.0f);
+        surgescript_var_set_number(surgescript_heap_at(heap, IT_STACKSIZE), 0.0);
         surgescript_var_set_objecthandle(surgescript_heap_at(heap, IT_STACKBASE), surgescript_objectmanager_null(manager));
     }
 

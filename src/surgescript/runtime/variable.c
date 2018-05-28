@@ -47,13 +47,16 @@ enum surgescript_vartype_t {
 /* the variable struct */
 struct surgescript_var_t
 {
+    /* data */
     union {
         char* string;
-        float number;
+        double number;
         unsigned handle:32;
         bool boolean;
         int raw:32;
     };
+
+    /* metadata */
     enum surgescript_vartype_t type;
 };
 
@@ -172,7 +175,7 @@ surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, bool boolean
  * surgescript_var_set_number()
  * Sets the variable to a numeric variable
  */
-surgescript_var_t* surgescript_var_set_number(surgescript_var_t* var, float number)
+surgescript_var_t* surgescript_var_set_number(surgescript_var_t* var, double number)
 {
     RELEASE_DATA(var);
     var->type = SSVAR_NUMBER;
@@ -197,8 +200,10 @@ surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char
         var->type = SSVAR_STRING;
         var->string = ssstrdup("");
     }
-    else
-        ssfatal("Runtime Error: string too large!");
+    else {
+        ((char*)string)[128] = '\0';
+        ssfatal("Runtime Error: string \"%s...\" is too large!", string);
+    }
 
     return var;
 }
@@ -238,7 +243,7 @@ bool surgescript_var_get_bool(const surgescript_var_t* var)
         case SSVAR_BOOL:
             return var->boolean;
         case SSVAR_NUMBER:
-            return var->raw && var->number != 0.0f;
+            return var->raw && fpclassify(var->number) != FP_ZERO;
         case SSVAR_STRING:
             return *(var->string) != 0;
         case SSVAR_NULL:
@@ -254,22 +259,22 @@ bool surgescript_var_get_bool(const surgescript_var_t* var)
  * surgescript_var_get_number()
  * Gets the numeric value of a variable
  */
-float surgescript_var_get_number(const surgescript_var_t* var)
+double surgescript_var_get_number(const surgescript_var_t* var)
 {
     switch(var->type) {
         case SSVAR_NUMBER:
             return var->number;
         case SSVAR_BOOL:
-            return var->boolean ? 1.0f : 0.0f;
+            return var->boolean ? 1.0 : 0.0;
         case SSVAR_STRING:
-            return isvalidnum(var->string) ? atof(var->string) : 0.0f; /*NAN;*/
+            return isvalidnum(var->string) ? atof(var->string) : 0.0;
         case SSVAR_NULL:
-            return 0.0f;
+            return 0.0;
         case SSVAR_OBJECTHANDLE:
             return NAN;
     }
 
-    return 0.0f;
+    return 0.0;
 }
 
 /*
@@ -458,13 +463,15 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
                 return a->handle != b->handle ? (a->handle > b->handle ? 1 : -1) : 0;
             case SSVAR_STRING:
                 return strcmp(a->string, b->string);
-            case SSVAR_NUMBER: /* using absolute tolerance floating-point comparison */
+            case SSVAR_NUMBER: {
+                double ma = fabs(a->number), mb = fabs(b->number);
                 if(a->number > b->number)
-                    return a->number - b->number <= FLT_EPSILON ? 0 : 1;
+                    return a->number - b->number <= FLT_EPSILON * ssmax(ma, mb) ? 0 : 1;
                 else if(a->number < b->number)
-                    return b->number - a->number <= FLT_EPSILON ? 0 : -1;
+                    return b->number - a->number <= FLT_EPSILON * ssmax(ma, mb) ? 0 : -1;
                 else
                     return 0;
+            }
             default:
                 return 0;
         }
@@ -485,12 +492,13 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             }
         }
         else if(a->type == SSVAR_NUMBER || b->type == SSVAR_NUMBER) {
-            float x = surgescript_var_get_number(a);
-            float y = surgescript_var_get_number(b);
+            double x = surgescript_var_get_number(a);
+            double y = surgescript_var_get_number(b);
+            double mx = fabs(x), my = fabs(y);
             if(x > y)
-                return x - y <= FLT_EPSILON ? 0 : 1;
+                return x - y <= FLT_EPSILON * ssmax(mx, my) ? 0 : 1;
             else if(x < y)
-                return y - x <= FLT_EPSILON ? 0 : -1;
+                return y - x <= FLT_EPSILON * ssmax(mx, my) ? 0 : -1;
             else
                 return 0;
         }
@@ -571,6 +579,7 @@ void surgescript_var_init_pool()
         varpool = new_varpool(NULL);
         varpool_currbucket = get_1stbucket(varpool);
     }
+    printf("var size: %u\n", sizeof(surgescript_varpool_t));
 #else
     sslog("Warning: SurgeScript has been compiled with disabled var pooling.");
 #endif

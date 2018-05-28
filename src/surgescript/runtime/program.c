@@ -78,9 +78,9 @@ static inline bool is_jump_instruction(surgescript_program_operator_t instructio
 static inline bool remove_labels(surgescript_program_t* program);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
 static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
-static inline int fast_float_sign(float f);
-static inline int fast_float_sign1(float f);
-static inline int fast_float_notzero(float f);
+static inline int fast_sign(double f);
+static inline int fast_sign1(double f);
+static inline int fast_notzero(double f);
 
 /* debug mode? */
 /*#define SURGESCRIPT_DEBUG_MODE*/
@@ -405,7 +405,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_bool(t(a), b.b);
             break;
 
-        case SSOP_MOVF: /* move number (float) */
+        case SSOP_MOVF: /* move number */
             surgescript_var_set_number(t(a), b.f);
             break;
 
@@ -433,14 +433,6 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         /* heap operations */
         case SSOP_ALLOC:
             surgescript_var_set_number(t(a), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
-            break;
-
-        case SSOP_STORE:
-            surgescript_var_copy(surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t(b))), t(a));
-            break;
-
-        case SSOP_LOAD:
-            surgescript_var_copy(t(a), surgescript_heap_at(surgescript_renv_heap(runtime_environment), (surgescript_heapptr_t)surgescript_var_get_number(t(b))));
             break;
 
         case SSOP_PEEK:
@@ -479,11 +471,17 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         /* basic arithmetic */
         case SSOP_INC:
-            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) + 1.0f); /* TODO: inc op */
+            if(a.u != 2)
+                surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) + 1);
+            else
+                surgescript_var_set_rawbits(t(a), surgescript_var_get_rawbits(t(a)) + 1);
             break;
 
         case SSOP_DEC:
-            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) - 1.0f); /* TODO: dec op */
+            if(a.u != 2)
+                surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) - 1);
+            else
+                surgescript_var_set_rawbits(t(a), surgescript_var_get_rawbits(t(a)) - 1);
             break;
 
         case SSOP_ADD:
@@ -499,12 +497,12 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_DIV:
-            if(fast_float_notzero(surgescript_var_get_number(t(b))))
+            if(fast_notzero(surgescript_var_get_number(t(b))))
                 surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) / surgescript_var_get_number(t(b)));
-            else if(fast_float_sign(surgescript_var_get_number(t(a))) >= 0)
-                surgescript_var_set_number(t(a), INFINITY * fast_float_sign1(surgescript_var_get_number(t(b))));
+            else if(fast_sign(surgescript_var_get_number(t(a))) >= 0)
+                surgescript_var_set_number(t(a), INFINITY * fast_sign1(surgescript_var_get_number(t(b))));
             else
-                surgescript_var_set_number(t(a), -INFINITY * fast_float_sign1(surgescript_var_get_number(t(b))));
+                surgescript_var_set_number(t(a), -INFINITY * fast_sign1(surgescript_var_get_number(t(b))));
             break;
 
         case SSOP_NEG:
@@ -813,22 +811,22 @@ void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environme
 
 
 
-/* --------------- float utilities --------------- */
+/* --------------- numeric utilities --------------- */
 
 /* returns -1 if f < 0, 0 if if == 0, 1 if f > 0 */
-int fast_float_sign(float f)
+int fast_sign(double f)
 {
-    return (f > 0.0f) - (f < 0.0f);
+    return (f > 0.0) - (f < 0.0);
 }
 
 /* returns -1 if f <= -0, 1 if f >= +0 */
-int fast_float_sign1(float f)
+int fast_sign1(double f)
 {
     return signbit(f) == 0 ? 1 : -1;
 }
 
 /* returns "true" iff f != +0 and f != -0 */
-int fast_float_notzero(float f)
+int fast_notzero(double f)
 {
     return fpclassify(f) != FP_ZERO;
 }

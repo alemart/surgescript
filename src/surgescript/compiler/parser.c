@@ -1376,7 +1376,7 @@ void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     token = parser->lookahead;
 
     if(got_type(parser, SSTOK_ADDITIVEOP)) {
-        float value = 0.0;
+        double value = 0.0;
         bool plus = (strcmp(surgescript_token_lexeme(token), "+") == 0);
         
         match(parser, SSTOK_ADDITIVEOP);

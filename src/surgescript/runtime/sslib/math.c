@@ -34,6 +34,7 @@ static surgescript_var_t* fun_getpi(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_getdeg2rad(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getrad2deg(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getinfinity(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getnan(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_random(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_sin(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_cos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -61,10 +62,10 @@ static surgescript_var_t* fun_lerp(surgescript_object_t* object, const surgescri
 static surgescript_var_t* fun_smoothstep(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* constants */
-static const float EPSILON = FLT_EPSILON; /*0.00001f;*/
-static const float PI = 3.1415926535f;
-static const float RAD2DEG = 57.2957795131f;
-static const float DEG2RAD = 0.01745329251f;
+static const double EPSILON = DBL_EPSILON;
+static const double PI = 3.1415926535;
+static const double RAD2DEG = 57.2957795131;
+static const double DEG2RAD = 0.01745329251;
 
 /*
  * surgescript_sslib_register_math()
@@ -80,6 +81,7 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "get_deg2rad", fun_getdeg2rad, 0);
     surgescript_vm_bind(vm, "Math", "get_rad2deg", fun_getrad2deg, 0);
     surgescript_vm_bind(vm, "Math", "get_infinity", fun_getinfinity, 0);
+    surgescript_vm_bind(vm, "Math", "get_NaN", fun_getnan, 0);
     surgescript_vm_bind(vm, "Math", "random", fun_random, 0);
     surgescript_vm_bind(vm, "Math", "sin", fun_sin, 1);
     surgescript_vm_bind(vm, "Math", "cos", fun_cos, 1);
@@ -162,6 +164,12 @@ surgescript_var_t* fun_getinfinity(surgescript_object_t* object, const surgescri
     return surgescript_var_set_number(surgescript_var_create(), INFINITY);
 }
 
+/* constant: NaN (Not-a-Number) */
+surgescript_var_t* fun_getnan(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_number(surgescript_var_create(), NAN);
+}
+
 /* random(): returns a random number between 0 (inclusive) and 1 (exclusive) */
 surgescript_var_t* fun_random(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
@@ -171,144 +179,144 @@ surgescript_var_t* fun_random(surgescript_object_t* object, const surgescript_va
 /* sin(x): sine of x, x in radians */
 surgescript_var_t* fun_sin(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), sinf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), sin(surgescript_var_get_number(param[0])));
 }
 
 /* cos(x): cosine of x, x in radians */
 surgescript_var_t* fun_cos(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), cosf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), cos(surgescript_var_get_number(param[0])));
 }
 
 /* tan(x): tangent of x, x in radians */
 surgescript_var_t* fun_tan(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), tanf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), tan(surgescript_var_get_number(param[0])));
 }
 
 /* asin(x): arc sin of x, returned in radians */
 surgescript_var_t* fun_asin(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), asinf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), asin(surgescript_var_get_number(param[0])));
 }
 
 /* acos(x): arc cosine of x, returned in radians */
 surgescript_var_t* fun_acos(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), acosf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), acos(surgescript_var_get_number(param[0])));
 }
 
 /* atan(x): arc tangent of x, returned in radians */
 surgescript_var_t* fun_atan(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), atanf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), atan(surgescript_var_get_number(param[0])));
 }
 
 /* atan2(y,x): returns the angle, in radians, between the positive x-axis and the vector (x,y) */
 surgescript_var_t* fun_atan2(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float y = surgescript_var_get_number(param[0]);
-    float x = surgescript_var_get_number(param[1]);
-    return surgescript_var_set_number(surgescript_var_create(), atan2f(y, x));
+    double y = surgescript_var_get_number(param[0]);
+    double x = surgescript_var_get_number(param[1]);
+    return surgescript_var_set_number(surgescript_var_create(), atan2(y, x));
 }
 
 /* pow(base, exponent): returns the value of base raised to the power exponent */
 surgescript_var_t* fun_pow(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float base = surgescript_var_get_number(param[0]);
-    float exponent = surgescript_var_get_number(param[1]);
-    return surgescript_var_set_number(surgescript_var_create(), powf(base, exponent));
+    double base = surgescript_var_get_number(param[0]);
+    double exponent = surgescript_var_get_number(param[1]);
+    return surgescript_var_set_number(surgescript_var_create(), pow(base, exponent));
 }
 
 /* sqrt(x): square root of x */
 surgescript_var_t* fun_sqrt(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), sqrtf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), sqrt(surgescript_var_get_number(param[0])));
 }
 
 /* exp(x): e raised to the power of x */
 surgescript_var_t* fun_exp(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), expf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), exp(surgescript_var_get_number(param[0])));
 }
 
 /* log(x): returns the natural logarithm of x */
 surgescript_var_t* fun_log(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), logf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), log(surgescript_var_get_number(param[0])));
 }
 
 /* log10(x): the base-10 logarithm of x */
 surgescript_var_t* fun_log10(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), log10f(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), log10(surgescript_var_get_number(param[0])));
 }
 
 /* floor(x): the floor of x */
 surgescript_var_t* fun_floor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), floorf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), floor(surgescript_var_get_number(param[0])));
 }
 
 /* ceil(x): the ceiling of x */
 surgescript_var_t* fun_ceil(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), ceilf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), ceil(surgescript_var_get_number(param[0])));
 }
 
 /* round(x): round x to the nearest integer */
 surgescript_var_t* fun_round(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float x = surgescript_var_get_number(param[0]); /* round x half away from zero */
-    return surgescript_var_set_number(surgescript_var_create(), (x >= 0.0f) ? floorf(x + 0.5f) : ceilf(x - 0.5f));
+    double x = surgescript_var_get_number(param[0]); /* round x half away from zero */
+    return surgescript_var_set_number(surgescript_var_create(), (x >= 0.0) ? floor(x + 0.5) : ceil(x - 0.5));
 }
 
 /* mod(x,y): the remainder of x/y */
 surgescript_var_t* fun_mod(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float x = surgescript_var_get_number(param[0]);
-    float y = surgescript_var_get_number(param[1]);
-    return surgescript_var_set_number(surgescript_var_create(), fmodf(x, y));
+    double x = surgescript_var_get_number(param[0]);
+    double y = surgescript_var_get_number(param[1]);
+    return surgescript_var_set_number(surgescript_var_create(), fmod(x, y));
 }
 
 /* sign(x): returns +1 if x is non-negative, or -1 otherwise */
 surgescript_var_t* fun_sign(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float x = surgescript_var_get_number(param[0]);
-    return surgescript_var_set_number(surgescript_var_create(), (x >= 0.0f) ? 1.0f : -1.0f);
+    double x = surgescript_var_get_number(param[0]);
+    return surgescript_var_set_number(surgescript_var_create(), (x >= 0.0) ? 1.0 : -1.0);
 }
 
 /* abs(x): the absolute value of x */
 surgescript_var_t* fun_abs(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), fabsf(surgescript_var_get_number(param[0])));
+    return surgescript_var_set_number(surgescript_var_create(), fabs(surgescript_var_get_number(param[0])));
 }
 
 /* min(x,y): the minimum between x and y */
 surgescript_var_t* fun_min(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float x = surgescript_var_get_number(param[0]);
-    float y = surgescript_var_get_number(param[1]);
+    double x = surgescript_var_get_number(param[0]);
+    double y = surgescript_var_get_number(param[1]);
     return surgescript_var_set_number(surgescript_var_create(), (x < y) ? x : y);
 }
 
 /* max(x,y): the maximum between x and y */
 surgescript_var_t* fun_max(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float x = surgescript_var_get_number(param[0]);
-    float y = surgescript_var_get_number(param[1]);
+    double x = surgescript_var_get_number(param[0]);
+    double y = surgescript_var_get_number(param[1]);
     return surgescript_var_set_number(surgescript_var_create(), (x >= y) ? x : y);
 }
 
 /* clamp(x,min,max): clamps x between min and max */
 surgescript_var_t* fun_clamp(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float x = surgescript_var_get_number(param[0]);
-    float minval = surgescript_var_get_number(param[1]);
-    float maxval = surgescript_var_get_number(param[2]);
+    double x = surgescript_var_get_number(param[0]);
+    double minval = surgescript_var_get_number(param[1]);
+    double maxval = surgescript_var_get_number(param[2]);
 
     if(minval > maxval) {
-        float tmp = minval;
+        double tmp = minval;
         minval = maxval;
         maxval = tmp;
     }
@@ -319,10 +327,10 @@ surgescript_var_t* fun_clamp(surgescript_object_t* object, const surgescript_var
 /* approximately(a,b): returns true if floating points a and b are approximately equal */
 surgescript_var_t* fun_approximately(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float a = surgescript_var_get_number(param[0]);
-    float b = surgescript_var_get_number(param[1]);
-    float fa = fabsf(a), fb = fabsf(b), fm = (fa >= fb ? fa : fb);
-    float eps = EPSILON * (fm >= 1.0f ? fm : 1.0f);
+    double a = surgescript_var_get_number(param[0]);
+    double b = surgescript_var_get_number(param[1]);
+    double fa = fabs(a), fb = fabs(b), fm = (fa >= fb ? fa : fb);
+    double eps = EPSILON * (fm >= 1.0 ? fm : 1.0);
 
     return surgescript_var_set_bool(surgescript_var_create(), (a >= b - eps) && (a <= b + eps));
 }
@@ -330,12 +338,12 @@ surgescript_var_t* fun_approximately(surgescript_object_t* object, const surgesc
 /* lerp(a,b,t): linear interpolation between a and b by t, where t is clamped to the range [0,1] */
 surgescript_var_t* fun_lerp(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float a = surgescript_var_get_number(param[0]);
-    float b = surgescript_var_get_number(param[1]);
-    float t = surgescript_var_get_number(param[2]);
+    double a = surgescript_var_get_number(param[0]);
+    double b = surgescript_var_get_number(param[1]);
+    double t = surgescript_var_get_number(param[2]);
 
     /* t = clamp01(t) */
-    t += (t > 1.0f) * (1.0f - t) - (t < 0.0f) * t;
+    t += (t > 1.0) * (1.0 - t) - (t < 0.0) * t;
 
     /* When t = 0, returns a. When t = 1, returns b. When t = 0.5, returns (a+b) / 2 */
     return surgescript_var_set_number(surgescript_var_create(), (b - a) * t + a);
@@ -345,12 +353,12 @@ surgescript_var_t* fun_lerp(surgescript_object_t* object, const surgescript_var_
 /* smoothstep(a,b,t): interpolates smoothly between a and b by t, where t is clamped to [0,1]. Similar to lerp. Good for fading & animations. */
 surgescript_var_t* fun_smoothstep(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float a = surgescript_var_get_number(param[0]);
-    float b = surgescript_var_get_number(param[1]);
-    float t = surgescript_var_get_number(param[2]);
+    double a = surgescript_var_get_number(param[0]);
+    double b = surgescript_var_get_number(param[1]);
+    double t = surgescript_var_get_number(param[2]);
 
-    t += (t > 1.0f) * (1.0f - t) - (t < 0.0f) * t;
-    t = (t * t) * (3.0f - 2.0f * t);
+    t += (t > 1.0) * (1.0 - t) - (t < 0.0) * t;
+    t = (t * t) * (3.0 - 2.0 * t);
 
     return surgescript_var_set_number(surgescript_var_create(), (b - a) * t + a);
 }

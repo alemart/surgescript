@@ -200,8 +200,8 @@ surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_va
 /* returns true iff the object has been on the same state for param[0] seconds or more */
 surgescript_var_t* fun_timeout(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    float elapsed = surgescript_object_elapsed_time(object);
-    float threshold = surgescript_var_get_number(param[0]);
+    double elapsed = surgescript_object_elapsed_time(object);
+    double threshold = surgescript_var_get_number(param[0]);
     return surgescript_var_set_bool(surgescript_var_create(), elapsed >= threshold);
 }
 

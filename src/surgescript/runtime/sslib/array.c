@@ -411,8 +411,8 @@ surgescript_var_t* fun_it_constructor(surgescript_object_t* object, const surges
     ssassert(IT_LENGTH_ADDR == surgescript_heap_malloc(heap));
     ssassert(IT_COUNTER_ADDR == surgescript_heap_malloc(heap));
 
-    surgescript_var_set_number(surgescript_heap_at(heap, IT_LENGTH_ADDR), 0.0f);
-    surgescript_var_set_number(surgescript_heap_at(heap, IT_COUNTER_ADDR), 0.0f);
+    surgescript_var_set_number(surgescript_heap_at(heap, IT_LENGTH_ADDR), 0.0);
+    surgescript_var_set_number(surgescript_heap_at(heap, IT_COUNTER_ADDR), 0.0);
     if(strcmp(parent_name, "Array") == 0)
         surgescript_var_set_number(surgescript_heap_at(heap, IT_LENGTH_ADDR), ARRAY_LENGTH(parent_heap));
 
@@ -512,12 +512,12 @@ int default_sort_function(surgescript_object_t* object, const surgescript_var_t*
 int custom_sort_function(surgescript_object_t* object, const surgescript_var_t* a, const surgescript_var_t* b)
 {
     const surgescript_var_t* param[] = { a, b };
-    float return_value = 0;
+    double return_value = 0;
 
     surgescript_var_t* ret = surgescript_var_create();
     surgescript_object_call_function(object, "call", param, 2, ret);
     return_value = surgescript_var_get_number(ret);
     surgescript_var_destroy(ret);
 
-    return (return_value > 0.0f) - (return_value < 0.0f);
+    return (return_value > 0) - (return_value < 0);
 }

@@ -61,7 +61,7 @@ struct surgescript_vm_t
     surgescript_objectmanager_t* object_manager;
     surgescript_parser_t* parser;
     surgescript_vmargs_t* args;
-    float start_time;
+    double start_time;
 };
 
 /* misc */
@@ -85,7 +85,7 @@ surgescript_vm_t* surgescript_vm_create()
     surgescript_var_init_pool();
 
     /* set up the VM */
-    vm->start_time = 0.0f;
+    vm->start_time = 0.0;
     vm->stack = surgescript_stack_create();
     vm->program_pool = surgescript_programpool_create();
     vm->tag_system = surgescript_tagsystem_create();
