@@ -653,8 +653,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/session/" title="Session" class="md-nav__link">
-      Session
+    <a href="../../reference/string/" title="String" class="md-nav__link">
+      String
     </a>
   </li>
 
@@ -665,8 +665,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/string/" title="String" class="md-nav__link">
-      String
+    <a href="../../reference/surgescript/" title="SurgeScript" class="md-nav__link">
+      SurgeScript
     </a>
   </li>
 
@@ -740,7 +740,11 @@
                 
                 
                 <h1 id="introduction-to-objects">Introduction to objects</h1>
-<p>In SurgeScript, objects are units of code and data. Each object define a finite state machine, a mathematical construct used to describe the behavior of in-game objects. But what's a finite state machine?</p>
+<p>In SurgeScript, objects are units of code and data. Each object define a finite state machine, a mathematical construct used to describe the behavior of in-game objects.</p>
+<blockquote>
+<p><strong>Did you know?</strong></p>
+<p>Almost all games implement what is called a game loop. In SurgeScript, the game loop is defined implicitly. State machines stand out as one of the key features of SurgeScript.</p>
+</blockquote>
 <h2 id="state-machines">State machines</h2>
 <p>A finite state machine is a mathematical abstraction composed of a finite number of <strong>states</strong> and by <strong>transitions</strong> between these states. Only one state can be active at any given time (we'll call it the active state). There must be one <strong>initial state</strong> (i.e., the first one to be active). A transition is a change of the active state that is triggered when a certain condition is met.</p>
 <p>As a concrete example, suppose that you want to create a door in your game. You, the developer, may open or close the door at will.</p>

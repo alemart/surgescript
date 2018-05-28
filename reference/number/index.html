@@ -579,6 +579,27 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#isfinite" title="isFinite" class="md-nav__link">
+    isFinite
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isnan" title="isNaN" class="md-nav__link">
+    isNaN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isinteger" title="isInteger" class="md-nav__link">
+    isInteger
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -673,8 +694,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../session/" title="Session" class="md-nav__link">
-      Session
+    <a href="../string/" title="String" class="md-nav__link">
+      String
     </a>
   </li>
 
@@ -685,8 +706,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../string/" title="String" class="md-nav__link">
-      String
+    <a href="../surgescript/" title="SurgeScript" class="md-nav__link">
+      SurgeScript
     </a>
   </li>
 
@@ -757,6 +778,27 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#isfinite" title="isFinite" class="md-nav__link">
+    isFinite
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isnan" title="isNaN" class="md-nav__link">
+    isNaN
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#isinteger" title="isInteger" class="md-nav__link">
+    isInteger
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -786,6 +828,7 @@
 t = typeof(x); // t is &quot;string&quot;
 </code></pre>
 
+<p><strong>Note:</strong> the SurgeScript Runtime stores numbers as 64-bit floating point values (following the IEEE 754 standard). Integer numbers are accurate up to 15 digits.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="valueof">valueOf</h4>
 <p><code>valueOf()</code></p>
@@ -794,7 +837,7 @@ t = typeof(x); // t is &quot;string&quot;
 <p>The number.</p>
 <h4 id="tostring">toString</h4>
 <p><code>toString()</code></p>
-<p>Convert number to string.</p>
+<p>Converts the number to a string.</p>
 <p><em>Returns</em></p>
 <p>The number converted to a string.</p>
 <h4 id="equals">equals</h4>
@@ -806,6 +849,24 @@ t = typeof(x); // t is &quot;string&quot;
 </ul>
 <p><em>Returns</em></p>
 <p>Returns <code>true</code> if the numbers are equal.</p>
+<h4 id="isfinite">isFinite</h4>
+<p><code>isFinite()</code></p>
+<p>Checks if the number is finite.</p>
+<p><em>Available since:</em> SurgeScript 0.5.2</p>
+<p><em>Returns</em></p>
+<p>Returns <code>true</code> if the number is finite.</p>
+<h4 id="isnan">isNaN</h4>
+<p><code>isNaN()</code></p>
+<p>Checks if the value is NaN (Not-a-Number).</p>
+<p><em>Available since:</em> SurgeScript 0.5.2</p>
+<p><em>Returns</em></p>
+<p>Returns <code>true</code> if the value is NaN.</p>
+<h4 id="isinteger">isInteger</h4>
+<p><code>isInteger()</code></p>
+<p>Checks if the number is an integer.</p>
+<p><em>Available since:</em> SurgeScript 0.5.2</p>
+<p><em>Returns</em></p>
+<p>Returns <code>true</code> if the number is an integer.</p>
                 
                   
                 

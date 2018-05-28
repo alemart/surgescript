@@ -667,8 +667,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/session/" title="Session" class="md-nav__link">
-      Session
+    <a href="../../reference/string/" title="String" class="md-nav__link">
+      String
     </a>
   </li>
 
@@ -679,8 +679,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/string/" title="String" class="md-nav__link">
-      String
+    <a href="../../reference/surgescript/" title="SurgeScript" class="md-nav__link">
+      SurgeScript
     </a>
   </li>
 
@@ -794,7 +794,7 @@ fun set(key, value)
 
 <p>Function <em>call()</em> may take any number of parameters. Given an object <code>f</code>, the expression <code>y = f(x)</code> is equivalent to <code>y = f.call(x)</code>. Notice that, since <code>f</code> is an object, you may exchange its implementation during runtime.</p>
 <h2 id="factory">Factory</h2>
-<p>In SurgeScript, a factory is a functor that spawns an object for you. The object can be spawned and configured in a single call, so you can quickly create your objects with no hassle at all. In the example below, factory <code>Greeter</code> spawns and configures <code>Greeting</code> objects. We annotate the factory with <code>@Plugin</code>, so it can be imported anywhere in the code.</p>
+<p>In SurgeScript, a factory is a functor that spawns an object for you. The object can be spawned and configured in a single call. In the example below, factory <code>Greeter</code> spawns and configures <code>Greeting</code> objects. We annotate the factory with <code>@Plugin</code>, so it can be imported anywhere in the code.</p>
 <p>To the end-user, calling <code>Greeter()</code> is simpler than manually spawning and configuring a <code>Greeting</code> every time it is needed.</p>
 <pre><code>// Factory example
 using Greeter; // import the factory
