@@ -35,6 +35,9 @@ static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_isfinite(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_isnan(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_isinteger(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -52,6 +55,9 @@ void surgescript_sslib_register_number(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Number", "call", fun_call, 1);
     surgescript_vm_bind(vm, "Number", "get", fun_get, 2);
     surgescript_vm_bind(vm, "Number", "set", fun_set, 3);
+    surgescript_vm_bind(vm, "Number", "isFinite", fun_isfinite, 1);
+    surgescript_vm_bind(vm, "Number", "isNaN", fun_isnan, 1);
+    surgescript_vm_bind(vm, "Number", "isInteger", fun_isinteger, 1);
 }
 
 
@@ -67,7 +73,7 @@ surgescript_var_t* fun_valueof(surgescript_object_t* object, const surgescript_v
 /* converts to string */
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* buf = surgescript_var_get_string(param[0], NULL);
+    char* buf = surgescript_var_get_string(param[0], surgescript_object_manager(object));
     surgescript_var_t* ret = surgescript_var_set_string(surgescript_var_create(), buf);
     ssfree(buf);
     return ret;
@@ -125,4 +131,25 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
     /* numbers are primitive values in SurgeScript */
     /* this is an invalid operation; do nothing */
     return surgescript_var_clone(param[2]);
+}
+
+/* is the number finite? */
+surgescript_var_t* fun_isfinite(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    float x = surgescript_var_get_number(param[0]);
+    return surgescript_vat_set_bool(surgescript_var_create(), isfinite(x));
+}
+
+/* is the value NaN? */
+surgescript_var_t* fun_isnan(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    float x = surgescript_var_get_number(param[0]);
+    return surgescript_vat_set_bool(surgescript_var_create(), isnan(x));
+}
+
+/* is the number an integer? */
+surgescript_var_t* fun_isinteger(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    float x = surgescript_var_get_number(param[0]);
+    return surgescript_vat_set_bool(surgescript_var_create(), isfinite(x) && x == ceil(x));
 }

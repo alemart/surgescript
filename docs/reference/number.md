@@ -27,7 +27,7 @@ The number.
 
 `toString()`
 
-Convert number to string.
+Converts the number to a string.
 
 *Returns*
 
@@ -46,3 +46,39 @@ Compares the number to another number `x`. Since this routine performs a compari
 *Returns*
 
 Returns `true` if the numbers are equal.
+
+#### isFinite
+
+`isFinite()`
+
+Checks if the number is finite.
+
+*Available since:* SurgeScript 0.5.2
+
+*Returns*
+
+Returns `true` if the number is finite.
+
+#### isNaN
+
+`isNaN()`
+
+Checks if the value is NaN (Not-a-Number).
+
+*Available since:* SurgeScript 0.5.2
+
+*Returns*
+
+Returns `true` if the value is NaN.
+
+#### isInteger
+
+`isInteger()`
+
+Checks if the number is an integer.
+
+*Available since:* SurgeScript 0.5.2
+
+*Returns*
+
+Returns `true` if the number is an integer.

@@ -421,10 +421,10 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
             return surgescript_util_strncpy(buf, "[object]", bufsize);
         case SSVAR_NUMBER: {
             char tmp[32];
-            if(var->number < LONG_MIN || var->number > LONG_MAX || var->number != (long)(var->number))
-                snprintf(tmp, sizeof(tmp), "%f", var->number);
+            if(var->number == ceil(var->numer)) /* integer check */
+                snprintf(tmp, sizeof(tmp), "%.0lf", var->number);
             else
-                snprintf(tmp, sizeof(tmp), "%ld", (long)(var->number)); /* it is an integer */
+                snprintf(tmp, sizeof(tmp), "%lf", var->number);
             return surgescript_util_strncpy(buf, tmp, bufsize);
         }
     }
