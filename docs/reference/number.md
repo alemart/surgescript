@@ -10,6 +10,8 @@ x = 2.toString(); // x is "2"
 t = typeof(x); // t is "string"
 ```
 
+**Note:** the SurgeScript Runtime stores numbers as 64-bit floating point values (following the IEEE 754 standard). Integer numbers are accurate up to 15 digits.
+
 Functions
 ---------
 
