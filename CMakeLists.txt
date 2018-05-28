@@ -27,6 +27,7 @@ set(
     src/surgescript/runtime/sslib/array.c
     src/surgescript/runtime/sslib/boolean.c
     src/surgescript/runtime/sslib/console.c
+    src/surgescript/runtime/sslib/date.c
     src/surgescript/runtime/sslib/dictionary.c
     src/surgescript/runtime/sslib/gc.c
     src/surgescript/runtime/sslib/math.c

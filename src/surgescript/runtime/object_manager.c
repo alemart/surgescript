@@ -63,10 +63,11 @@ static const surgescript_objecthandle_t ROOT_HANDLE = 1;
     F( "__Temp" )       \
     F( "__GC" )         \
     F( "__TagSystem" )  \
-    F( "SurgeScript" )  \
     F( "Math" )         \
     F( "Time" )         \
+    F( "Date" )         \
     F( "Console" )      \
+    F( "SurgeScript" )  \
     F( "Plugin" )       /* Plugin must be the last element of the list, since it may spawn children */
 #define PRINT_SYSTEM_OBJECT(x) x,
 

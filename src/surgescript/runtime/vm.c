@@ -103,6 +103,7 @@ surgescript_vm_t* surgescript_vm_create()
     surgescript_sslib_register_array(vm);
     surgescript_sslib_register_dictionary(vm);
     surgescript_sslib_register_time(vm);
+    surgescript_sslib_register_date(vm);
     surgescript_sslib_register_math(vm);
     surgescript_sslib_register_console(vm);
     surgescript_sslib_register_transform2d(vm);
