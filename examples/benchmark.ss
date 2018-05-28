@@ -6,7 +6,7 @@
 
 //
 // A functor is an object that behaves like a function.
-// SurgeScript has a syntax sugar that allows an object to be "called" like a function.
+// SurgeScript has a syntactic sugar that allows an object to be "called" like a function.
 // Example: given an object "obj", writing
 //     x = obj(param);
 // is the same as writing

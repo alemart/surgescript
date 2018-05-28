@@ -40,21 +40,21 @@ object "Skull"
     }
 
     // get_eyes()
-    // syntax sugar: typing obj.eyes yields the same as obj.get_eyes()
+    // Note: typing obj.eyes yields the same as obj.get_eyes()
     fun get_eyes()
     {
         return eyes;
     }
 
     // set_eyes()
-    // syntax sugar to obj.eyes = value (will call obj.set_eyes(value) behind the scenes)
+    // Syntactic sugar to obj.eyes = value (will call obj.set_eyes(value) behind the scenes)
     fun set_eyes(value)
     {
         eyes = value;
     }
 
     // get_name()
-    // obj.name will return the [private] variable name. Notice we did not define a setter.
+    // obj.name will return the [private] variable name. Note that we did not define a setter.
     fun get_name()
     {
         return name;

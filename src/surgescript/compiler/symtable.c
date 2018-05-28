@@ -160,7 +160,7 @@ void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, con
 
 /*
  * surgescript_symtable_put_accessor_symbol()
- * Puts a symbol on the table that is a syntax sugar to accessor function calls
+ * Puts a symbol on the table that is a syntactic sugar to accessor function calls
  */
 void surgescript_symtable_put_accessor_symbol(surgescript_symtable_t* symtable, const char* symbol)
 {
