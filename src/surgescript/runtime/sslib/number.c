@@ -137,19 +137,19 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
 surgescript_var_t* fun_isfinite(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     float x = surgescript_var_get_number(param[0]);
-    return surgescript_vat_set_bool(surgescript_var_create(), isfinite(x));
+    return surgescript_var_set_bool(surgescript_var_create(), isfinite(x));
 }
 
 /* is the value NaN? */
 surgescript_var_t* fun_isnan(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     float x = surgescript_var_get_number(param[0]);
-    return surgescript_vat_set_bool(surgescript_var_create(), isnan(x));
+    return surgescript_var_set_bool(surgescript_var_create(), isnan(x));
 }
 
 /* is the number an integer? */
 surgescript_var_t* fun_isinteger(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     float x = surgescript_var_get_number(param[0]);
-    return surgescript_vat_set_bool(surgescript_var_create(), isfinite(x) && x == ceil(x));
+    return surgescript_var_set_bool(surgescript_var_create(), isfinite(x) && x == ceil(x));
 }

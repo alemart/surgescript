@@ -421,7 +421,7 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
             return surgescript_util_strncpy(buf, "[object]", bufsize);
         case SSVAR_NUMBER: {
             char tmp[32];
-            if(var->number == ceil(var->numer)) /* integer check */
+            if(var->number == ceil(var->number)) /* integer check */
                 snprintf(tmp, sizeof(tmp), "%.0lf", var->number);
             else
                 snprintf(tmp, sizeof(tmp), "%lf", var->number);
