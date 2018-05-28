@@ -334,10 +334,8 @@ surgescript_var_t* fun_lerp(surgescript_object_t* object, const surgescript_var_
     float b = surgescript_var_get_number(param[1]);
     float t = surgescript_var_get_number(param[2]);
 
-    if(t < 0.0f)
-        t = 0.0f;
-    else if(t > 1.0f)
-        t = 1.0f;
+    /* t = clamp01(t) */
+    t += (t > 1.0f) * (1.0f - t) - (t < 0.0f) * t;
 
     /* When t = 0, returns a. When t = 1, returns b. When t = 0.5, returns (a+b) / 2 */
     return surgescript_var_set_number(surgescript_var_create(), (b - a) * t + a);
@@ -351,8 +349,8 @@ surgescript_var_t* fun_smoothstep(surgescript_object_t* object, const surgescrip
     float b = surgescript_var_get_number(param[1]);
     float t = surgescript_var_get_number(param[2]);
 
-    t = (t >= 0.0f) ? (t <= 1.0f ? t : 1.0f) : 0.0f;
+    t += (t > 1.0f) * (1.0f - t) - (t < 0.0f) * t;
     t = (t * t) * (3.0f - 2.0f * t);
 
-    return surgescript_var_set_number(surgescript_var_create(), a * (1.0f - t) + b * t);
+    return surgescript_var_set_number(surgescript_var_create(), (b - a) * t + a);
 }
