@@ -53,7 +53,7 @@ struct surgescript_var_t
         double number;
         unsigned handle:32;
         bool boolean;
-        int raw:32;
+        int64_t raw;
     };
 
     /* metadata */
@@ -532,7 +532,7 @@ void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b)
  * surgescript_var_get_rawbits()
  * Returns the binary value stored in the variable
  */
-int surgescript_var_get_rawbits(const surgescript_var_t* var)
+int64_t surgescript_var_get_rawbits(const surgescript_var_t* var)
 {
     return var->raw;
 }
@@ -541,7 +541,7 @@ int surgescript_var_get_rawbits(const surgescript_var_t* var)
  * surgescript_var_set_rawbits()
  * Sets the binary value of the variable (for internal use only)
  */
-surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int raw)
+surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int64_t raw)
 {
     RELEASE_DATA(var);
     var->type = SSVAR_NUMBER;
