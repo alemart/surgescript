@@ -7,9 +7,9 @@ Properties
 ----------
 
 * `parent`: object. Reference to the parent object.
-* `childCount`: integer number. The number of children of this object.
-* `active`: boolean, read-write. Indicates whether this object is active\* or not.
 * `__name`: string. The name of this object (string).
+* `__childCount`: number. The number of children of this object.
+* `__active`: boolean, read-write. Indicates whether this object is active\* or not.
 * `__children`: [Array](array.md). Reading this spawns a new array containing references to the children of this object.
 * `__functions`: [Array](array.md). The functions of this object represented as a collection of strings.
 * `__timespent`: number. The approximate time spent in this object in the last frame (in seconds).

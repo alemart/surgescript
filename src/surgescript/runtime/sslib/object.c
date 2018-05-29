@@ -65,9 +65,6 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Object", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Object", "get_parent", fun_parent, 0);
-    surgescript_vm_bind(vm, "Object", "get_active", fun_getactive, 0);
-    surgescript_vm_bind(vm, "Object", "set_active", fun_setactive, 1);
-    surgescript_vm_bind(vm, "Object", "get_childCount", fun_childcount, 0);
     surgescript_vm_bind(vm, "Object", "child", fun_child, 1);
     surgescript_vm_bind(vm, "Object", "findObject", fun_findobject, 1);
     surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
@@ -78,6 +75,9 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "timeout", fun_timeout, 1);
     surgescript_vm_bind(vm, "Object", "__invoke", fun_invoke, 2);
     surgescript_vm_bind(vm, "Object", "get___name", fun_name, 0);
+    surgescript_vm_bind(vm, "Object", "get___active", fun_getactive, 0);
+    surgescript_vm_bind(vm, "Object", "set___active", fun_setactive, 1);
+    surgescript_vm_bind(vm, "Object", "get___childCount", fun_childcount, 0);
     surgescript_vm_bind(vm, "Object", "get___functions", fun_functions, 0);
     surgescript_vm_bind(vm, "Object", "get___children", fun_children, 0);
     surgescript_vm_bind(vm, "Object", "get___timespent", fun_timespent, 0);
