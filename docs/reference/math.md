@@ -17,10 +17,11 @@ Properties
 ----------
 
 * `pi`: number. An approximation of pi (3.1415926535...)
-* `epsilon`: number. The difference between 1 and the smallest floating point number that is greater than 1.
-* `infinity`: number. A floating point number representing positive infinity.
 * `deg2rad`: number. A multiplier used to convert degrees to radians: equivalent to pi / 180.
 * `rad2deg`: number. A multiplier used to convert radians to degrees: equivalent to 180 / pi.
+* `epsilon`: number. The difference between 1 and the smallest floating point number that is greater than 1.
+* `infinity`: number. A floating point number representing positive infinity.
+* `NaN`: number. A floating point value which is "Not-a-Number".
 
 Functions
 ---------
