@@ -71,7 +71,7 @@ Please read the [documentation](https://alemart.github.io/surgescript/). The dev
 
 Are you a game developer in pain? Are you a modder feeling confined?
 
-- Unleash your creativity — build your own content with ease, flexibility and power!
+- Unleash your creativity! — build your own content with ease, flexibility and power!
 
 Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. Its features include:
 
