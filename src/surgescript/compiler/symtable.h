@@ -56,7 +56,4 @@ int surgescript_symtable_count(surgescript_symtable_t* symtable); /* including p
 /* does this table have a parent? */
 bool surgescript_symtable_has_parent(surgescript_symtable_t* symtable);
 
-/* misc */
-void surgescript_symtable_push_addr(surgescript_symtable_t* symtable, const char* symbol, struct surgescript_program_t* program); /* pushes an address to the stack */
-
 #endif

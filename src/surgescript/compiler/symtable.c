@@ -267,27 +267,6 @@ bool surgescript_symtable_has_parent(surgescript_symtable_t* symtable)
     return symtable->parent != NULL;
 }
 
-/*
- * surgescript_symtable_push_addr()
- * Pushes an address (equivalent to symbol) to the stack
- */
-void surgescript_symtable_push_addr(surgescript_symtable_t* symtable, const char* symbol, surgescript_program_t* program)
-{
-    int j;
-
-    if((j = indexof_symbol(symtable, symbol)) >= 0) {
-        surgescript_symtable_entry_t* entry = &(symtable->entry[j]);
-        surgescript_heapptr_t address = entry->heapaddr; /* a heap address is pushed */
-        surgescript_program_add_line(program, SSOP_MOVU, SSOPu(0), SSOPu(address));
-        surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
-    }
-    else if(symtable->parent)
-        surgescript_symtable_push_addr(symtable->parent, symbol, program);
-    else
-        ssfatal("Compile Error: can't push address - undefined symbol \"%s\".", symbol);
-}
-
-
 
 /* private stuff */
 
