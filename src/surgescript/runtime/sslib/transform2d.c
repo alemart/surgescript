@@ -342,12 +342,14 @@ void world2localposition(surgescript_objectmanager_t* manager, surgescript_objec
     if(handle != root)
         world2localposition(manager, surgescript_object_parent(object), root, xpos, ypos);
 
+    x = *xpos;
+    y = *ypos;
     surgescript_object_peek_transform(object, &transform);
     surgescript_transform_apply2dinverse(&transform, &x, &y);
-
-    /* alternatively, one could compute the world position of the parent and return the difference */
     *xpos = x;
     *ypos = y;
+
+    /* alternatively, one could compute the world position of the parent and return the difference */
 }
 
 /* Computes the 2D world position of the object */
