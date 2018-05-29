@@ -9,8 +9,6 @@ SurgeScript is a scripting language for games. It has unique features that make 
 
 [![Download](img/download.png)](download)
 
-The best way to try SurgeScript for the first time is to get [Open Surge](download#open-surge). Alternatively, a standalone version of the language is also available on [GitHub](download#standalone-version).
-
 **Are you benefiting from SurgeScript?** We ask you to support us, so we can continue working on this project:
  
 [![Support us](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
