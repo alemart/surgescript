@@ -478,7 +478,7 @@ void object(surgescript_parser_t* parser)
     );
 
     /* validate */
-    if(surgescript_programpool_exists(parser->program_pool, object_name, "__ssconstructor"))
+    if(surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))
         ssfatal("Compile Error: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
 
     /* read the object */
