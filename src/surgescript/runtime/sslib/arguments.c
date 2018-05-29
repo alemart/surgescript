@@ -28,6 +28,7 @@
 /* private stuff */
 static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -50,6 +51,7 @@ void surgescript_sslib_register_arguments(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Arguments", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Arguments", "constructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "Arguments", "spawn", fun_spawn, 0);
     surgescript_vm_bind(vm, "Arguments", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Arguments", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Arguments", "get___data", fun_getdata, 0);
@@ -82,11 +84,18 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
 /* do nothing */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
+    surgescript_object_set_active(object, false); /* we don't need to spend time updating this object */
     return NULL;
 }
 
 /* do nothing */
 surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return NULL;
+}
+
+/* do nothing */
+surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     return NULL;
 }

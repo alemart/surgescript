@@ -62,7 +62,7 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
 /* main state */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    /* do nothing */
+    surgescript_object_set_active(object, false); /* we don't need to spend time updating this object */
     return NULL;
 }
  
