@@ -503,6 +503,10 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     surgescript_program_label_t start = surgescript_program_new_label(context.program);
     surgescript_program_label_t end = surgescript_program_new_label(context.program);
 
+    /* import properties */
+    import_public_vars(parser, context, "Object");
+    import_public_vars(parser, context, context.object_name);
+
     /* allocate variables */
     emit_object_header(context, start, end);
 
@@ -581,8 +585,6 @@ void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context
 {
     while(got_type(parser, SSTOK_IDENTIFIER) || got_type(parser, SSTOK_PUBLIC))
         vardecl(parser, context);
-
-    import_public_vars(parser, context, "Object");
 }
 
 void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
