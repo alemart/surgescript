@@ -96,7 +96,7 @@ static surgescript_varbucket_t* varpool_currbucket = NULL;
 /* helpers */
 #define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
                                     (var)->string = ssfree((var)->string); /* this will clear all bits */
-static inline bool isvalidnum(const char* str);
+static inline bool is_number(const char* str);
 static const int typecode[] = { 0, 'b', 'n', 's', 'o' };
 
 /* -------------------------------
@@ -267,7 +267,7 @@ double surgescript_var_get_number(const surgescript_var_t* var)
         case SSVAR_BOOL:
             return var->boolean ? 1.0 : 0.0;
         case SSVAR_STRING:
-            return isvalidnum(var->string) ? atof(var->string) : 0.0;
+            return is_number(var->string) ? atof(var->string) : NAN;
         case SSVAR_NULL:
             return 0.0;
         case SSVAR_OBJECTHANDLE:
@@ -601,19 +601,29 @@ void surgescript_var_release_pool()
 
 /* private section */
 
-/* Does str hold a valid number? */
-bool isvalidnum(const char* str)
+bool is_number(const char* str)
 {
-    if(str) {
-        while(*str) {
-            if(isdigit(*str) || *str == '.' || *str == '-' || *str == '+')
-                str++; /* a state machine would be better suited */
-            else
-                return false;
+    if(str == NULL)
+        return false;
+    if(*str == '-' || *str == '+')
+        str++;
+    while(*str) {
+        if(*str == '.') {
+            str++;
+            break;
         }
+        else if(isdigit(*str))
+            str++;
+        else
+            return false;
     }
-
-    return true; /* the empty string is valid and translates to 0. */
+    while(*str) {
+        if(isdigit(*str))
+            str++;
+        else
+            return false;
+    }
+    return true;
 }
 
 
