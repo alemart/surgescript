@@ -75,7 +75,7 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
 
     SSASM(SSOP_RET);
     LABEL(end);
-        SSASM(SSOP_MOVU, T2, U(surgescript_symtable_local_count(context.symtable)));
+        SSASM(SSOP_MOVX, T2, U(surgescript_symtable_local_count(context.symtable)));
         LABEL(aloc);
             SSASM(SSOP_JE, U(start));
             SSASM(SSOP_ALLOC);

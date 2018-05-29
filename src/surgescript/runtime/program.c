@@ -418,7 +418,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_objecthandle(t(a), b.u);
             break;
 
-        case SSOP_MOVU: /* move u32 */
+        case SSOP_MOVX: /* move int64 */
             surgescript_var_set_rawbits(t(a), b.u);
             break;
 
