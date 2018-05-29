@@ -1,7 +1,10 @@
 SurgeScript
 ===========
 
-SurgeScript is a scripting language for games. It has unique features that make it suitable for games - and it is extremely valuable for empowering users to generate their own content. SurgeScript is built in C, which is nearly universal.
+Unleash your creativity!
+------------------------
+
+SurgeScript is a scripting language for games. It has unique features that make it suitable for games. It is extremely useful for empowering users to unleash their creativity and build their own content with ease, flexibility and power! It's such a joy to program in SurgeScript! You and your users will love it.
 
 <p align="center"><b>First-timer?</b></p>
 <p align="center">If this is your first time here,<br>please go to the <a href="https://alemart.github.io/surgescript">Welcome page</a>.</p>
@@ -14,7 +17,7 @@ Get SurgeScript
 
 Get SurgeScript on the [Download page](https://alemart.github.io/surgescript/download).
 
-Already using SurgeScript? Please support us, so we can continue working on this project and on Open Surge:
+Already using SurgeScript? Please support us, so we can continue working on this project:
 
 [![Support us](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
 
@@ -65,6 +68,10 @@ SurgeScript has been originally created by [Alexandre Martins](https://github.co
 Please read the [documentation](https://alemart.github.io/surgescript/). The developer also releases SurgeScript tutorials on his [YouTube channel](https://youtube.com/alemart88).
 
 ##### Why use SurgeScript?
+
+Are you a game developer in pain? Are you a modder feeling confined?
+
+- Unleash your creativity — build your own content with ease, flexibility and power!
 
 Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. Its features include:
 
