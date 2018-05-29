@@ -601,15 +601,20 @@ void surgescript_var_release_pool()
 
 /* private section */
 
+/* is str a number? */
 bool is_number(const char* str)
 {
+    const char* src = str;
     if(str == NULL)
         return false;
-    if(*str == '-' || *str == '+')
-        str++;
+    if(*str == '-' || *str == '+') {
+        if(!*++str)
+            return false;
+    }
     while(*str) {
         if(*str == '.') {
-            str++;
+            if(!*++str && str-src == 1)
+                return false;
             break;
         }
         else if(isdigit(*str))
