@@ -329,8 +329,9 @@ surgescript_var_t* fun_approximately(surgescript_object_t* object, const surgesc
 {
     double a = surgescript_var_get_number(param[0]);
     double b = surgescript_var_get_number(param[1]);
-    double fa = fabs(a), fb = fabs(b), fm = (fa >= fb ? fa : fb);
-    double eps = EPSILON * (fm >= 1.0 ? fm : 1.0);
+    double fa = fabs(a), fb = fabs(b);
+    double fm = ssmax(fa, fb);
+    double eps = EPSILON * ssmax(fm, 1.0);
 
     return surgescript_var_set_bool(surgescript_var_create(), (a >= b - eps) && (a <= b + eps));
 }
