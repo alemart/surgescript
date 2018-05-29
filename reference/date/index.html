@@ -36,7 +36,7 @@
     
     
       
-        <title>Application - SurgeScript Documentation</title>
+        <title>Date - SurgeScript Documentation</title>
       
     
     
@@ -70,7 +70,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#application" tabindex="1" class="md-skip">
+      <a href="#date" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -96,7 +96,7 @@
                 SurgeScript Documentation
               </span>
               <span class="md-header-nav__topic">
-                Application
+                Date
               </span>
             
           
@@ -426,83 +426,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="toc">
-        Application
-      </label>
-    
-    <a href="./" title="Application" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../application/" title="Application" class="md-nav__link">
       Application
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#properties" title="Properties" class="md-nav__link">
-    Properties
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#functions" title="Functions" class="md-nav__link">
-    Functions
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#exit" title="exit" class="md-nav__link">
-    exit
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#crash" title="crash" class="md-nav__link">
-    crash
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#destroy" title="destroy" class="md-nav__link">
-    destroy
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -558,11 +486,76 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../date/" title="Date" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Date
+      </label>
+    
+    <a href="./" title="Date" class="md-nav__link md-nav__link--active">
       Date
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#properties" title="Properties" class="md-nav__link">
+    Properties
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" title="Functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#timezoneoffset" title="timezoneOffset" class="md-nav__link">
+    timezoneOffset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tostring" title="toString" class="md-nav__link">
+    toString
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -763,22 +756,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#exit" title="exit" class="md-nav__link">
-    exit
+  <a href="#timezoneoffset" title="timezoneOffset" class="md-nav__link">
+    timezoneOffset
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#crash" title="crash" class="md-nav__link">
-    crash
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#destroy" title="destroy" class="md-nav__link">
-    destroy
+  <a href="#tostring" title="toString" class="md-nav__link">
+    toString
   </a>
   
 </li>
@@ -805,26 +791,56 @@
               
                 
                 
-                <h1 id="application">Application</h1>
-<p>Represents the Application. You do not need to instantiate it, as it is instantiated automatically. This object can be accessed by any other object, in any script, simply by typing <code>Application</code>.</p>
+                <h1 id="date">Date</h1>
+<p>Date is used to retrieve current date and time. You can access this object simply by typing <code>Date</code>.</p>
+<p>Example:</p>
+<pre><code>// What day is today?
+object &quot;Application&quot;
+{
+    // show the day
+    state &quot;main&quot;
+    {
+        today = Date.year + &quot;-&quot; + f(Date.month) + &quot;-&quot; + f(Date.day);
+        Console.print(&quot;Today is &quot; + today);
+        Application.exit();
+    }
+
+    // add a leading zero
+    fun f(x)
+    {
+        if(x &gt;= 10)
+            return x;
+        else
+            return &quot;0&quot; + x;
+    }
+}
+</code></pre>
+
+<p><em>Available since:</em> SurgeScript 0.5.2</p>
 <h2 id="properties">Properties</h2>
 <ul>
-<li><code>args</code>: <a href="../arguments">Arguments</a> object. Use it to read command-line arguments.</li>
+<li><code>year</code>: number. The current year.</li>
+<li><code>month</code>: number. Month of the year (1-12).</li>
+<li><code>day</code>: number. Day of the month (1-31).</li>
+<li><code>hour</code>: number. Hours since midnight (0-23).</li>
+<li><code>minute</code>: number. Minutes after the hour (0-59).</li>
+<li><code>second</code>: number. Seconds after the minute (0-59).</li>
+<li><code>weekday</code>: number. Days since Sunday (0-6).</li>
+<li><code>unixtime</code>: number. Seconds since Jan 1st, 1970 00:00 UTC.</li>
 </ul>
 <h2 id="functions">Functions</h2>
-<h4 id="exit">exit</h4>
-<p><code>exit()</code></p>
-<p>Exits the Application.</p>
-<h4 id="crash">crash</h4>
-<p><code>crash(message)</code></p>
-<p>Exits the Application with an error message.</p>
-<p><em>Arguments</em></p>
-<ul>
-<li><code>message</code>: string. The message to be displayed to the user.</li>
-</ul>
-<h4 id="destroy">destroy</h4>
-<p><code>destroy()</code></p>
-<p>A synonym for <code>Application.exit()</code>.</p>
+<h4 id="timezoneoffset">timezoneOffset</h4>
+<p><code>timezoneOffset()</code></p>
+<p>The difference, in minutes, from the Universal Coordinated Time (UTC) to the timezone of the host. Example: if your timezone is GMT-03:00, this function returns -180.</p>
+<p><em>Available since:</em> SurgeScript 0.5.2</p>
+<p><em>Returns</em></p>
+<p>The timezone difference in minutes.</p>
+<h4 id="tostring">toString</h4>
+<p><code>toString()</code></p>
+<p>Converts the current date and time to a string. The string is formatted according to the ISO 8601 standard.</p>
+<p><em>Available since:</em> SurgeScript 0.5.2</p>
+<p><em>Returns</em></p>
+<p>The current date and time expressed according to ISO 8601.</p>
                 
                   
                 
@@ -845,7 +861,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../../tutorials/best_practices/" title="Best practices" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../console/" title="Console" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -854,19 +870,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Best practices
+                Console
               </span>
             </div>
           </a>
         
         
-          <a href="../array/" title="Array" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../dictionary/" title="Dictionary" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Array
+                Dictionary
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
