@@ -67,6 +67,8 @@
     F( SSTOK_PUBLIC, "public" )                                                 \
     F( SSTOK_TAG, "tag" )                                                       \
     F( SSTOK_USING, "using" )                                                   \
+    F( SSTOK_DO, "do" )                                                         \
+    F( SSTOK_WAIT, "wait" )                                                     \
     F( SSTOK_ANNOTATION, "annotation")                                          \
     F( SSTOK_EMOTICON, "emoticon" )                                             \
     F( SSTOK_UNKNOWN, "<unknown>" )
