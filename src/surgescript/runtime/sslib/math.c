@@ -63,9 +63,9 @@ static surgescript_var_t* fun_smoothstep(surgescript_object_t* object, const sur
 
 /* constants */
 static const double EPSILON = DBL_EPSILON;
-static const double PI = 3.1415926535;
-static const double RAD2DEG = 57.2957795131;
-static const double DEG2RAD = 0.01745329251;
+static const double PI = 3.14159265358979323846;
+static const double RAD2DEG = 57.29577951308232087684;
+static const double DEG2RAD = 0.01745329251994329576;
 
 /*
  * surgescript_sslib_register_math()
