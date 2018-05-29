@@ -579,7 +579,6 @@ void surgescript_var_init_pool()
         varpool = new_varpool(NULL);
         varpool_currbucket = get_1stbucket(varpool);
     }
-    printf("var size: %u\n", sizeof(surgescript_varpool_t));
 #else
     sslog("Warning: SurgeScript has been compiled with disabled var pooling.");
 #endif
