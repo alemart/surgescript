@@ -89,19 +89,27 @@ SurgeScript is a scripting language for games.
 
 ##### Who created it?
 
-SurgeScript has been originally created by [Alexandre Martins](https://github.com/alemart), a developer from Brazil. He has also created the Open Surge game engine, thus the name *SurgeScript*.
+SurgeScript has been originally created by [Alexandre Martins](https://github.com/alemart), a computer scientist from Brazil. He has also created the Open Surge game engine, hence the name *SurgeScript*.
 
 ##### How do I learn SurgeScript?
 
-Please read the [documentation](https://alemart.github.io/surgescript/). The author also releases SurgeScript tutorials on his [YouTube channel](https://youtube.com/alemart88).
+Please read the [documentation](https://alemart.github.io/surgescript/). The developer also releases SurgeScript tutorials on his [YouTube channel](https://youtube.com/alemart88).
 
 ##### Why not use other languages?
 
 Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. Its features include:
+
 - The state-machine pattern: objects are state machines (and the game loop is defined implicitly)
 - The composition approach: you may design complex objects and behaviors by means of composition
 - The hierarchy system: objects have a parent and may have children, in a tree-like structure
-These features come from the experience of the author dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
+
+Other benefits include:
+
+- Small footprint, easy to integrate
+- C-like syntax, including plenty of features
+- Easy to extend via Plugins
+
+These features come from the experience of the developer dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
 ##### How do I embed SurgeScript into my project?
 
@@ -110,12 +118,14 @@ If you're a C developer, you may embed SurgeScript into your project studying th
 1. Create a SurgeScript Virtual Machine (VM).
 2. Insert the scripts you want into the VM (let it compile the scripts).
 3. Launch the VM.
-4. At every frame of your game/app, update the VM (game loop).
+4. In your game loop, update the VM.
 5. Once you're done, release the VM.
 
 You'll need to `#include <surgescript.h>` in your code and link your project with *-lsurgescript -lm*.
 
 Additionally, you may call C code from SurgeScript via *binding*. See *src/surgescript/runtime/sslib/* for more information.
+
+SurgeScript is available as a library.
 
 ##### How do I build the documentation?
 
