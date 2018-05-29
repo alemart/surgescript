@@ -6,7 +6,7 @@ Data related to the scripting language itself. You can access this object simply
 Example:
 
 ```
-// prints the version of the SurgeScript runtime
+// Prints the version of the SurgeScript runtime
 object "Application"
 {
 	state "main"
@@ -16,6 +16,8 @@ object "Application"
 	}
 }
 ```
+
+*Available since:* SurgeScript 0.5.2
 
 Properties
 ----------
