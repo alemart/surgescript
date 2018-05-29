@@ -49,7 +49,7 @@ Functions
 
 `timezoneOffset()`
 
-The difference, in minutes, from the Universal Coordinated Time (UTC) to the timezone of the host. Example: if your timezone is GMT-03:00, this function returns -180.
+The difference, in minutes, from the Coordinated Universal Time (UTC) to the timezone of the host. Example: if your timezone is UTC-03:00, this function returns -180.
 
 *Available since:* SurgeScript 0.5.2
 
