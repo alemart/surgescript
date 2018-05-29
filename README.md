@@ -95,7 +95,7 @@ SurgeScript has been originally created by [Alexandre Martins](https://github.co
 
 Please read the [documentation](https://alemart.github.io/surgescript/). The author also releases SurgeScript tutorials on his [YouTube channel](https://youtube.com/alemart88).
 
-##### Why not use other languages such as Lua?
+##### Why not use other languages?
 
 Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. Its features include:
 - The state-machine pattern: objects are state machines (and the game loop is defined implicitly)
@@ -114,6 +114,8 @@ If you're a C developer, you may embed SurgeScript into your project studying th
 5. Once you're done, release the VM.
 
 You'll need to `#include <surgescript.h>` in your code and link your project with *-lsurgescript -lm*.
+
+Additionally, you may call C code from SurgeScript via *binding*. See *src/surgescript/runtime/sslib/* for more information.
 
 ##### How do I build the documentation?
 
