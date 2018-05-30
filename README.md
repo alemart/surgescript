@@ -4,7 +4,7 @@ SurgeScript
 Unleash your creativity!
 ------------------------
 
-SurgeScript is a scripting language for games. It has unique features that make it suitable for games. It is extremely useful for empowering users to unleash their creativity and build their own content with ease, flexibility and power! It's such a joy to program in SurgeScript! You and your users will love it.
+SurgeScript is a scripting language for games. It has unique features that make it suitable for games. It is extremely useful for empowering users to unleash their creativity and build their own content with ease, flexibility and power. It's such a joy to program in SurgeScript! You and your users will love it.
 
 <p align="center"><b>First-timer?</b></p>
 <p align="center">If this is your first time here,<br>please go to the <a href="https://alemart.github.io/surgescript">Welcome page</a>.</p>
@@ -17,7 +17,7 @@ Get SurgeScript
 
 Get SurgeScript on the [Download page](https://alemart.github.io/surgescript/download).
 
-Already using SurgeScript? Please support us, so we can continue working on this project:
+Already using SurgeScript? Please support us, so we can continue to work on this project:
 
 [![Support us](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
 
@@ -83,8 +83,9 @@ Other benefits include:
 
 - Small footprint, easy to integrate
 - C-like syntax, including plenty of features
+- Automatic garbage collection
 - Easy to extend via Plugins
-- Free software
+- It's free software
 
 These features come from the experience of the developer dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
