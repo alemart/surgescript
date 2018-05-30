@@ -3,6 +3,8 @@ Plugins
 
 Plugins are objects that allow you to extend the functionalities of the language. Once declared, they can be imported anywhere in the code. They can also be easily shared with others, so everyone benefits.
 
+*Available since:* SurgeScript 0.5.2
+
 Basic example
 -------------
 
