@@ -40,7 +40,7 @@ Properties
 * `minute`: number. Minutes after the hour (0-59).
 * `second`: number. Seconds after the minute (0-59).
 * `weekday`: number. Days since Sunday (0-6).
-* `unixtime`: number. Seconds since Jan 1st, 1970 00:00 UTC.
+* `unixtime`: number. Seconds since Jan 1st, 1970 00:00:00 UTC.
 
 Functions
 ---------

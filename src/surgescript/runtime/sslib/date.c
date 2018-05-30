@@ -21,6 +21,7 @@
 
 #define __STDC_WANT_LIB_EXT1__ 1
 #include <time.h>
+#include <stdlib.h>
 #include "../vm.h"
 #include "../object.h"
 #include "../object_manager.h"
@@ -115,10 +116,13 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
 surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     struct tm* time_structure = (struct tm*)surgescript_object_userdata(object);
+    time_t now = time(NULL);
+    int len, offset = tz_offset(now);
     char buf[32];
 
-    localtime_x(time(NULL), time_structure);
-    strftime(buf, sizeof(buf) - 1, "%Y-%m-%dT%H:%M:%S%z", time_structure);
+    localtime_x(now, time_structure);
+    len = strftime(buf, sizeof(buf) - 1, "%Y-%m-%dT%H:%M:%S", time_structure);
+    snprintf(buf + len, sizeof(buf) - len, "%c%02d:%02d", (offset >= 0 ? '+' : '-'), abs(offset) / 60, abs(offset) % 60);
 
     return surgescript_var_set_string(surgescript_var_create(), buf);
 }
