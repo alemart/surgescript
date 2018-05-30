@@ -201,8 +201,9 @@ surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char
         var->string = ssstrdup("");
     }
     else {
-        ((char*)string)[128] = '\0';
-        ssfatal("Runtime Error: string \"%s...\" is too large!", string);
+        char buf[128];
+        surgescript_util_strncpy(buf, string, sizeof(buf));
+        ssfatal("Runtime Error: string \"%s...\" is too large!", buf);
     }
 
     return var;

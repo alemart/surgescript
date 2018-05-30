@@ -267,11 +267,8 @@ void my_fatal(const char* message)
 
 void mem_crash(const char* location) /* out of memory error */
 {
-    static char buf[64] = "Out of memory in ";
-    
-    strncpy(buf + 17, location, sizeof(buf) - 17 - 1);
-    buf[sizeof(buf) - 1] = 0;
-
+    static char buf[128] = "Out of memory in ";
+    surgescript_util_strncpy(buf + 17, location, sizeof(buf) - 17);
     fatal_function(buf);
     exit(1); /* just in case */
 }
