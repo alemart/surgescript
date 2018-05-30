@@ -975,7 +975,7 @@ Number of characters: 3
 <p>Gets the specified element of the Array. Instead of calling <code>get()</code> directly, you may equivalently use the <code>[ ]</code> operator.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>index</code>: integer number between 0 and <code>this.length - 1</code>, inclusive.</li>
+<li><code>index</code>: integer number between <code>0</code> and <code>this.length - 1</code>, inclusive.</li>
 </ul>
 <p><em>Returns</em></p>
 <p>The Array element at position <code>index</code> (0-based).</p>
@@ -994,7 +994,7 @@ charge = characters[2]; // third element (&quot;Charge&quot;)
 <p>Sets to <code>value</code> the element of the Array at position <code>index</code>. Instead of calling <code>set()</code> directly, you may equivalently use the <code>[ ]</code> operator.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>index</code>: integer number between 0 and <code>this.length - 1</code>, inclusive.</li>
+<li><code>index</code>: integer number between <code>0</code> and <code>this.length - 1</code>, inclusive.</li>
 <li><code>value</code>: any type. The new value to be placed on the Array.</li>
 </ul>
 <p><em>Example</em></p>
@@ -1041,7 +1041,7 @@ Console.print(characters); // [ &quot;Surge&quot;, &quot;Neon&quot;, &quot;Charg
 <li><code>value</code>: any type. The element to be searched for.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>The position of the searched element - a number between 0 and <code>this.length - 1</code>, inclusive. If the desired element is not found, this function returns <em>-1</em>.</p>
+<p>The position of the searched element - a number between <code>0</code> and <code>this.length - 1</code>, inclusive. If the desired element is not found, this function returns <code>-1</code>.</p>
 <p><em>Example</em></p>
 <pre><code>characters = [ &quot;Surge&quot;, &quot;Neon&quot;, &quot;Charge&quot; ];
 ...
@@ -1053,13 +1053,13 @@ if(gimacian &lt; 0)
 
 <h4 id="sort">sort</h4>
 <p><code>sort(cmpFunc)</code></p>
-<p>Sorts the Array. If no comparison <a href="../../tutorials/advanced_features#functors">functor</a> is provided (<code>cmpFunc</code> is <em>null</em>), the Array will be sorted in ascending order.</p>
+<p>Sorts the Array. If no comparison <a href="../../tutorials/advanced_features#functors">functor</a> is provided (<code>cmpFunc</code> is <code>null</code>), the Array will be sorted in ascending order.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>cmpFunc</code>: object | null. This <a href="../../tutorials/advanced_features#functors">functor</a> implements function <em>call(a, b)</em> that compares two array elements as described in the example below.</li>
+<li><code>cmpFunc</code>: object | null. This <a href="../../tutorials/advanced_features#functors">functor</a> implements function <code>call(a, b)</code> that compares two array elements as described in the example below.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>The sorted array. The returned array is the same array as you called <em>sort()</em> on; it's not a copy.</p>
+<p>The sorted array. The returned array is the same array as you called <code>sort()</code> on; it's not a copy.</p>
 <p><em>Example</em></p>
 <pre><code>// this example will print the elements
 // of the Array in ascending order
