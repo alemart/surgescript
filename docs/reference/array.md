@@ -55,7 +55,7 @@ Gets the specified element of the Array. Instead of calling `get()` directly, yo
 
 *Arguments*
 
-* `index`: integer number between 0 and `this.length - 1`, inclusive.
+* `index`: integer number between `0` and `this.length - 1`, inclusive.
 
 *Returns*
 
@@ -81,7 +81,7 @@ Sets to `value` the element of the Array at position `index`. Instead of calling
 
 *Arguments*
 
-* `index`: integer number between 0 and `this.length - 1`, inclusive.
+* `index`: integer number between `0` and `this.length - 1`, inclusive.
 * `value`: any type. The new value to be placed on the Array.
 
 *Example*
@@ -153,7 +153,7 @@ Search the Array for element `value` and return its position.
 
 *Returns*
 
-The position of the searched element - a number between 0 and `this.length - 1`, inclusive. If the desired element is not found, this function returns *-1*.
+The position of the searched element - a number between `0` and `this.length - 1`, inclusive. If the desired element is not found, this function returns `-1`.
 
 *Example*
 
@@ -170,15 +170,15 @@ if(gimacian < 0)
 
 `sort(cmpFunc)`
 
-Sorts the Array. If no comparison [functor](../tutorials/advanced_features#functors) is provided (`cmpFunc` is *null*), the Array will be sorted in ascending order.
+Sorts the Array. If no comparison [functor](../tutorials/advanced_features#functors) is provided (`cmpFunc` is `null`), the Array will be sorted in ascending order.
 
 *Arguments*
 
-* `cmpFunc`: object | null. This [functor](../tutorials/advanced_features#functors) implements function *call(a, b)* that compares two array elements as described in the example below.
+* `cmpFunc`: object | null. This [functor](../tutorials/advanced_features#functors) implements function `call(a, b)` that compares two array elements as described in the example below.
 
 *Returns*
 
-The sorted array. The returned array is the same array as you called *sort()* on; it's not a copy.
+The sorted array. The returned array is the same array as you called `sort()` on; it's not a copy.
 
 *Example*
 
