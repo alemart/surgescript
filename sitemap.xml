@@ -4,7 +4,7 @@
     
     <url>
      <loc>/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -12,7 +12,7 @@
     
     <url>
      <loc>/download/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
     
@@ -21,97 +21,97 @@
         
     <url>
      <loc>/tutorials/hello/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/testing/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/objects/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/variables/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/expressions/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/conditionals/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/loops/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/functions/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/comments/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/tags/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/object_tree/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/components/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/getters_and_setters/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/plugins/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/advanced_features/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/tutorials/best_practices/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
@@ -121,115 +121,115 @@
         
     <url>
      <loc>/reference/application/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/array/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/arguments/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/boolean/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/console/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/date/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/dictionary/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/gc/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/math/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/number/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/iterator/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/object/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/plugin/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/tags/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/time/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/transform2d/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/string/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/surgescript/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
     <url>
      <loc>/reference/system/</loc>
-     <lastmod>2018-05-29</lastmod>
+     <lastmod>2018-05-31</lastmod>
      <changefreq>daily</changefreq>
     </url>
         
