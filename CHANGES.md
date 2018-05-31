@@ -1,3 +1,13 @@
+# 0.5.2 - May 31st, 2018
+
+* Introduced the Plugin system
+* Introduced the Date object for date and time routines
+* Now representing numbers as 64-bit floating point values
+* Performance optimizations
+* Added Object.__invoke()
+* Updated the naming convention of getters/setters
+* Bugfixes and general improvements
+
 # 0.5.1 - May 5th, 2018
 
 * SurgeScript now compiles as a static library
