@@ -27,6 +27,7 @@
 #include "../../util/util.h"
 
 /* private stuff */
+static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -41,6 +42,7 @@ static surgescript_var_t* fun_readline(surgescript_object_t* object, const surge
  */
 void surgescript_sslib_register_console(surgescript_vm_t* vm)
 {
+    surgescript_vm_bind(vm, "Console", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Console", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Console", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Console", "spawn", fun_spawn, 1);
@@ -52,6 +54,13 @@ void surgescript_sslib_register_console(surgescript_vm_t* vm)
 
 
 /* my functions */
+
+/* constructor */
+surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* do nothing */
+    return NULL;
+}
 
 /* main state */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
@@ -81,6 +90,7 @@ surgescript_var_t* fun_print(surgescript_object_t* object, const surgescript_var
     char* str = surgescript_var_get_string(param[0], manager);
     puts(str);
     ssfree(str);
+    fflush(stdout); /* keep this */
     return NULL;
 }
 
@@ -90,8 +100,8 @@ surgescript_var_t* fun_write(surgescript_object_t* object, const surgescript_var
     const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     char* str = surgescript_var_get_string(param[0], manager);
     fputs(str, stdout);
-    fflush(stdout);
     ssfree(str);
+    fflush(stdout);
     return NULL;
 }
 
