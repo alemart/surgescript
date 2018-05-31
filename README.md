@@ -1,10 +1,10 @@
-SurgeScript
-===========
+SurgeScript: a scripting language for games
+===========================================
 
 Unleash your creativity!
 ------------------------
 
-SurgeScript is a scripting language for games. It has unique features that make it suitable for games. It is extremely useful for empowering users to unleash their creativity and build their own content with ease, flexibility and power. It's such a joy to program in SurgeScript! You and your users will love it.
+SurgeScript is a scripting language for games. It is extremely useful for empowering users to unleash their creativity and build their own content with ease, flexibility and power. It's such a joy to program in SurgeScript! You and your users will love it.
 
 <p align="center"><b>First-timer?</b></p>
 <p align="center">If this is your first time here,<br>please go to the <a href="https://alemart.github.io/surgescript">Welcome page</a>.</p>
