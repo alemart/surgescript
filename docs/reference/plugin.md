@@ -47,6 +47,8 @@ object "StringUtils"
 }
 ```
 
+*Available since:* SurgeScript 0.5.2
+
 Properties
 ----------
 
