@@ -22,7 +22,7 @@ Use the **return** statement to stop executing the function and to return some v
 
 ```
 // This function will return the double of input parameter x
-function double(x)
+fun double(x)
 {
     return 2 * x;
     Console.print("This line will never be executed.");
