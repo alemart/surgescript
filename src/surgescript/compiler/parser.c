@@ -445,7 +445,7 @@ void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecont
     ssfree(getter_name);
 }
 
-/* makes a program that returns filename */
+/* makes a program that returns source_file */
 surgescript_program_t* make_file_program(const char* source_file)
 {
     surgescript_program_t* program = surgescript_program_create(0);
