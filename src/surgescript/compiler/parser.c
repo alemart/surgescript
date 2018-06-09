@@ -76,6 +76,7 @@ static surgescript_symtable_t* configure_base_table(surgescript_symtable_t* base
 static void read_annotations(surgescript_parser_t* parser, char*** annotations);
 static void release_annotations(char** annotations);
 static void process_annotations(surgescript_parser_t* parser, char** annotations, const char* object_name);
+static surgescript_program_t* make_file_program(const char* source_file);
 
 /* non-terminals */
 static void importlist(surgescript_parser_t* parser);
@@ -444,6 +445,16 @@ void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecont
     ssfree(getter_name);
 }
 
+/* makes a program that returns filename */
+surgescript_program_t* make_file_program(const char* source_file)
+{
+    surgescript_program_t* program = surgescript_program_create(0);
+    int text = surgescript_program_add_text(program, source_file);
+    surgescript_program_add_line(program, SSOP_MOVS, SSOPu(0), SSOPi(text));
+    surgescript_program_add_line(program, SSOP_RET, SSOPu(0), SSOPu(0));
+    return program;
+}
+
 
 
 
@@ -491,6 +502,7 @@ void object(surgescript_parser_t* parser)
     /* object configuration */
     process_annotations(parser, annotations, object_name);
     surgescript_programpool_put(parser->program_pool, object_name, "__ssconstructor", context.program);
+    surgescript_programpool_put(parser->program_pool, object_name, "get___file", make_file_program(context.source_file));
 
     /* cleanup */
     surgescript_symtable_destroy(context.symtable);

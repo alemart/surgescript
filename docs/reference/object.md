@@ -13,7 +13,8 @@ Properties
 * `__children`: [Array](array.md). Reading this spawns a new array containing references to the children of this object.
 * `__functions`: [Array](array.md). The functions of this object represented as a collection of strings.
 * `__timespent`: number. The approximate time spent in this object in the last frame (in seconds).
-* `__memspent`: number. The current memory consumption of this object (in bytes) - not implemented.
+* `__memspent`: number. The current memory consumption of this object (in bytes). Not implemented.
+* `__file`: string. The source file of this object. Available since SurgeScript 0.5.3.
 
 > **Note:**
 >

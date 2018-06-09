@@ -49,6 +49,7 @@ static surgescript_var_t* fun_children(surgescript_object_t* object, const surge
 static surgescript_var_t* fun_getactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_invoke(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_file(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
 static void add_to_function_array(const char* fun_name, void* arr);
@@ -82,6 +83,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "get___children", fun_children, 0);
     surgescript_vm_bind(vm, "Object", "get___timespent", fun_timespent, 0);
     surgescript_vm_bind(vm, "Object", "get___memspent", fun_memspent, 0);
+    surgescript_vm_bind(vm, "Object", "get___file", fun_file, 0);
 }
 
 
@@ -267,6 +269,13 @@ surgescript_var_t* fun_getactive(surgescript_object_t* object, const surgescript
 surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_object_set_active(object, surgescript_var_get_bool(param[0]));
+    return NULL;
+}
+
+/* returns the source file of this object */
+surgescript_var_t* fun_file(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* subclass responsibility */
     return NULL;
 }
 

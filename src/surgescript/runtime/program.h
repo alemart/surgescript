@@ -23,6 +23,7 @@
 #define _SURGESCRIPT_RUNTIME_PROGRAM_H
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdbool.h>
 #include "renv.h"
 #include "program_operators.h"
@@ -56,9 +57,10 @@ typedef enum surgescript_program_operator_t { // let t[a .. c] be the registers 
 /* operands */
 typedef union surgescript_program_operand_t {
     double f;
-    unsigned u:32;
-    int i:32;
+    uint32_t u;
+    int32_t i;
     bool b;
+    uint64_t _u;
 } surgescript_program_operand_t;
 
 #define SSOP()   SSOPu(0)
@@ -69,7 +71,7 @@ typedef union surgescript_program_operand_t {
 
 static inline surgescript_program_operand_t surgescript_program_operand_u(unsigned u) { surgescript_program_operand_t o = { .u = u }; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_f(double f) { surgescript_program_operand_t o = { .f = f }; return o; }
-static inline surgescript_program_operand_t surgescript_program_operand_b(bool b) { surgescript_program_operand_t o = { .u = 0 }; o.b = b; return o; }
+static inline surgescript_program_operand_t surgescript_program_operand_b(bool b) { surgescript_program_operand_t o = { ._u = 0 }; o.b = b; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_i(int i) { surgescript_program_operand_t o = { .i = i }; return o; }
 
 
