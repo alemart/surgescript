@@ -502,7 +502,8 @@ void object(surgescript_parser_t* parser)
     /* object configuration */
     process_annotations(parser, annotations, object_name);
     surgescript_programpool_put(parser->program_pool, object_name, "__ssconstructor", context.program);
-    surgescript_programpool_put(parser->program_pool, object_name, "get___file", make_file_program(context.source_file));
+    if(!surgescript_programpool_shallowcheck(parser->program_pool, object_name, "get___file"))
+        surgescript_programpool_put(parser->program_pool, object_name, "get___file", make_file_program(context.source_file));
 
     /* cleanup */
     surgescript_symtable_destroy(context.symtable);
