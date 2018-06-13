@@ -36,6 +36,14 @@
 #include "../util/util.h"
 #include "../util/ssarray.h"
 
+/* require alloca */
+#if !(defined(__APPLE__) || defined(MACOSX) || defined(macintosh) || defined(Macintosh))
+#include <malloc.h>
+#if defined(__linux__) || defined(__linux) || defined(__EMSCRIPTEN__)
+#include <alloca.h>
+#endif
+#endif
+
 /* an operation / command */
 typedef struct surgescript_program_operation_t surgescript_program_operation_t;
 struct surgescript_program_operation_t
@@ -81,6 +89,7 @@ static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but e
 static inline int fast_sign(double f);
 static inline int fast_sign1(double f);
 static inline int fast_notzero(double f);
+static const int MAX_PROGRAM_ARITY = 256;
 
 /* debug mode? */
 /*#define SURGESCRIPT_DEBUG_MODE*/
@@ -312,7 +321,12 @@ void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t
 /* initializes a program */
 surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, surgescript_renv_t*))
 {
-    program->arity = arity;
+    /* sanity check */
+    if(arity > MAX_PROGRAM_ARITY)
+        ssfatal("MAX_PROGRAM_ARITY (%d) exceeded.", MAX_PROGRAM_ARITY); /* really?? */
+
+    /* initialization */
+    program->arity = ssmax(0, arity);
     program->run = run_function;
 
     ssarray_init(program->line);
@@ -338,7 +352,7 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
     surgescript_cprogram_t* cprogram = (surgescript_cprogram_t*)program;
     surgescript_object_t* caller = surgescript_renv_owner(runtime_environment);
     surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
-    const surgescript_var_t** param = program->arity > 0 ? ssmalloc(program->arity * sizeof(*param)) : NULL;
+    const surgescript_var_t** param = program->arity > 0 ? alloca(program->arity * sizeof(*param)) : NULL;
     surgescript_var_t* return_value = NULL;
 
     /* grab parameters from the stack (stacked in left-to-right order) */
@@ -353,10 +367,6 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
     }
     else
         surgescript_var_set_null(*(surgescript_renv_tmp(runtime_environment) + 0));
-
-    /* release parameters */
-    if(param)
-        ssfree(param);
 }
 
 /* runs an instruction */
@@ -653,7 +663,8 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
                     pool,
                     manager,
                     surgescript_renv_tmp(caller_runtime_environment),
-                    NULL
+                    NULL,
+                    surgescript_object_handle(surgescript_renv_owner(caller_runtime_environment))
                 };
 
                 /* call the program */
