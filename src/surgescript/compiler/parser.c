@@ -552,7 +552,7 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
                 break;
         }
 
-        /* read emoticons */
+        /* read emoticon */
         if(got_type(parser, SSTOK_EMOTICON)) {
             const char* emoticon = surgescript_token_lexeme(parser->lookahead);
             surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, emoticon);
