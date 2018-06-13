@@ -631,6 +631,10 @@ void surgescript_object_call_function(surgescript_object_t* object, const char* 
     surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
     int i;
 
+    /* sanity check */
+    if(num_params < 0)
+        num_params = 0;
+
     /* parameters are stacked left-to-right */
     surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
     for(i = 0; i < num_params; i++)
@@ -646,7 +650,7 @@ void surgescript_object_call_function(surgescript_object_t* object, const char* 
         ssfatal("Runtime Error: function %s.%s/%d doesn't exist.", object->name, fun_name, num_params);
 
     /* pop stuff from the stack */
-    surgescript_stack_popn(stack, 1 + ssmax(0, num_params));
+    surgescript_stack_popn(stack, 1 + num_params);
 }
 
 /*
