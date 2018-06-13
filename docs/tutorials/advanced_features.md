@@ -87,7 +87,7 @@ object "Greeter"
 }
 ```
 
-Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might spawn `Greeter` as a child of the caller object and have the factory spawn `Greeting` on its parent object (i.e., the caller object). The code would be like this: `g = parent.spawn("Greeting")`.
+Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might write `g = caller.spawn("Greeter")`. Keyword `caller` points to the object that called the function (or *null* if not applicable).
 
 Iterators
 ---------
