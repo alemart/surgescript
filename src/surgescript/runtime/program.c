@@ -350,7 +350,7 @@ void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_env
 void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
 {
     surgescript_cprogram_t* cprogram = (surgescript_cprogram_t*)program;
-    surgescript_object_t* caller = surgescript_renv_owner(runtime_environment);
+    surgescript_object_t* object = surgescript_renv_owner(runtime_environment);
     surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
     const surgescript_var_t** param = program->arity > 0 ? alloca(program->arity * sizeof(*param)) : NULL;
     surgescript_var_t* return_value = NULL;
@@ -360,7 +360,7 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
         param[program->arity-i] = surgescript_stack_peek(stack, -i);
 
     /* call C-function */
-    return_value = (surgescript_var_t*)(cprogram->cfunction(caller, (const surgescript_var_t**)param, program->arity));
+    return_value = (surgescript_var_t*)(cprogram->cfunction(object, (const surgescript_var_t**)param, program->arity));
     if(return_value != NULL) {
         surgescript_var_copy(*(surgescript_renv_tmp(runtime_environment) + 0), return_value);
         surgescript_var_destroy(return_value);
