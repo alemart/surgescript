@@ -41,6 +41,7 @@ typedef struct surgescript_renv_t
     struct surgescript_objectmanager_t* object_manager; /* pointer to the object manager */
     struct surgescript_var_t** tmp; /* temporary variables */
     struct surgescript_renv_t* (*_destructor)(struct surgescript_renv_t*); /* internal destructor */
+    unsigned caller; /* handle to the object that called this program */
 } surgescript_renv_t ;
 
 /* creates a new renv (the tmp parameter may be NULL) */
@@ -56,5 +57,6 @@ static inline struct surgescript_heap_t* surgescript_renv_heap(surgescript_renv_
 static inline struct surgescript_programpool_t* surgescript_renv_programpool(surgescript_renv_t* renv) { return renv->program_pool; }
 static inline struct surgescript_objectmanager_t* surgescript_renv_objectmanager(surgescript_renv_t* renv) { return renv->object_manager; }
 static inline struct surgescript_var_t** surgescript_renv_tmp(surgescript_renv_t* renv) { return renv->tmp; }
+static inline unsigned surgescript_renv_caller(surgescript_renv_t* renv) { return renv->caller; }
 
 #endif
