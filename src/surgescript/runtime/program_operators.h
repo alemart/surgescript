@@ -35,8 +35,9 @@
 */
 #define SURGESCRIPT_PROGRAM_OPERATORS(F) \
     F( SSOP_NOP, "nop" )                                 /* no-operation */ \
-    F( SSOP_SELF, "self" )             /* t[a] = handle to caller object */ \
+    F( SSOP_SELF, "self" )                      /* t[a] = "this" pointer */ \
     F( SSOP_STATE, "state" )   /* t[a] = get/set the state of the object */ \
+    F( SSOP_CALLER, "caller" )     /* t[a] = handle to the caller object */ \
                                                                             \
     F( SSOP_MOV, "mov" )                                  /* t[a] = t[b] */ \
     F( SSOP_MOVN, "movn" )                                /* t[a] = null */ \

@@ -392,7 +392,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
         case SSOP_NOP: /* no-operation */
             break;
 
-        case SSOP_SELF: /* move caller object ("this" pointer) */
+        case SSOP_SELF: /* owner object ("this" pointer) */
             surgescript_var_set_objecthandle(t(a), surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
             break;
 
@@ -404,6 +404,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             }
             else
                 surgescript_var_set_string(t(a), surgescript_object_state(surgescript_renv_owner(runtime_environment)));
+            break;
+
+        case SSOP_CALLER: /* caller object */
+            surgescript_var_set_objecthandle(t(a), surgescript_renv_caller(runtime_environment));
             break;
 
         /* assignment operations */

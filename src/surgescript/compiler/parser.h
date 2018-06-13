@@ -93,7 +93,7 @@
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
  * <lambdacall> := ( ) <lambdacall> | ( <funargsexprlist> ) <lambdacall> | e
- * <primaryexpr> := identifier | this | state | <constant> | <arrayexpr> | <dictexpr> | ( <expr> )
+ * <primaryexpr> := identifier | this | state | caller | <constant> | <arrayexpr> | <dictexpr> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e

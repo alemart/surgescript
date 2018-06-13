@@ -840,6 +840,11 @@ void emit_state(surgescript_nodecontext_t context)
     SSASM(SSOP_STATE, T0);
 }
 
+void emit_caller(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_CALLER, T0);
+}
+
 void emit_identifier(surgescript_nodecontext_t context, const char* identifier, int line)
 {
     if(surgescript_symtable_has_symbol(context.symtable, identifier))
