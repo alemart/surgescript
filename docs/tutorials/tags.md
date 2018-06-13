@@ -3,32 +3,25 @@ Tags
 
 You may tag objects with as many tags as you want. Tags are a way of attributing categories to different objects.
 
-Tags should be placed before any definitions of variables, states or functions. Example:
+Tags should be placed right after the object name. Example:
 
 ```
-object "Horse"
+object "Horse" is "animal", "vehicle"
 {
-    tag "animal";
-    tag "vehicle";
-
     state "main"
     {
     }
 }
 
-object "Cat"
+object "Cat" is "animal"
 {
-    tag "animal";
-
     state "main"
     {
     }
 }
 
-object "Car"
+object "Car" is "vehicle"
 {
-    tag "vehicle";
-
     state "main"
     {
     }
@@ -64,15 +57,18 @@ object "Application"
 You may also convey emotional states to objects using the following syntax:
 
 ```
-object "Good Day" :)
+object "Good Day" is "happy", "sunny" :)
 {
-    state "main"
-    {
-    }
+    ...
+}
+
+object "Good Night" is <3
+{
+    ...
 }
 ```
 
-The object will then be tagged with the specified emoticon(s). The following emoticons are available for your pleasure:
+The object will then be tagged with the specified emoticon. The following emoticons are available for your pleasure:
 
 Emoticon|Meaning
 --------|-------

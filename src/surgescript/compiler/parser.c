@@ -83,8 +83,7 @@ static void importlist(surgescript_parser_t* parser);
 static void objectlist(surgescript_parser_t* parser);
 static void object(surgescript_parser_t* parser);
 static void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void qualifierlist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void taglist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 static void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -494,7 +493,7 @@ void object(surgescript_parser_t* parser)
 
     /* read the object */
     match(parser, SSTOK_STRING);
-    qualifierlist(parser, context);
+    qualifiers(parser, context);
     match(parser, SSTOK_LCURLY);
     objectdecl(parser, context);
     match(parser, SSTOK_RCURLY);
@@ -524,7 +523,6 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     emit_object_header(context, start, end);
 
     /* read non-terminals */
-    taglist(parser, context);
     vardecllist(parser, context);
     statedecllist(parser, context);
     fundecllist(parser, context);
@@ -536,33 +534,30 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     emit_object_footer(context, start, end);
 }
 
-void qualifierlist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    int love_counter = 0;
-    while(got_type(parser, SSTOK_EMOTICON)) {
-        const char* emoticon = surgescript_token_lexeme(parser->lookahead);
-        surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, emoticon);
+    if(optmatch(parser, SSTOK_IS)) {
+        /* validate */
+        if(!got_type(parser, SSTOK_STRING) && !got_type(parser, SSTOK_EMOTICON))
+            unexpected_symbol(parser);
 
-        /* easter egg */
-        if(strcmp(emoticon, "<3") == 0) {
-            if(++love_counter == 3)
-                sslog("Object \"%s\" is truly loved.", context.object_name);
+        /* read tags */
+        while(got_type(parser, SSTOK_STRING)) {
+            const char* tag = surgescript_token_lexeme(parser->lookahead);
+            surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, tag);
+            match(parser, SSTOK_STRING);
+            if(optmatch(parser, SSTOK_COMMA))
+                expect(parser, SSTOK_STRING);
+            else
+                break;
         }
-        else
-            love_counter = 4;
 
-        match(parser, SSTOK_EMOTICON);
-    }
-}
-
-void taglist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
-{
-    while(optmatch(parser, SSTOK_TAG)) {
-        const char* tag_name = surgescript_token_lexeme(parser->lookahead);
-        expect(parser, SSTOK_STRING);
-        surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, tag_name);
-        match(parser, SSTOK_STRING);
-        match(parser, SSTOK_SEMICOLON);
+        /* read emoticons */
+        if(got_type(parser, SSTOK_EMOTICON)) {
+            const char* emoticon = surgescript_token_lexeme(parser->lookahead);
+            surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, emoticon);
+            match(parser, SSTOK_EMOTICON);
+        }
     }
 }
 

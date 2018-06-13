@@ -65,10 +65,12 @@
     F( SSTOK_CONTINUE, "continue" )                                             \
     F( SSTOK_TYPEOF, "typeof" )                                                 \
     F( SSTOK_PUBLIC, "public" )                                                 \
-    F( SSTOK_TAG, "tag" )                                                       \
     F( SSTOK_USING, "using" )                                                   \
     F( SSTOK_DO, "do" )                                                         \
     F( SSTOK_WAIT, "wait" )                                                     \
+    F( SSTOK_OF, "of" )                                                         \
+    F( SSTOK_IS, "is" )                                                         \
+    F( SSTOK_CALLER, "caller" )                                                 \
     F( SSTOK_ANNOTATION, "annotation")                                          \
     F( SSTOK_EMOTICON, "emoticon" )                                             \
     F( SSTOK_UNKNOWN, "<unknown>" )

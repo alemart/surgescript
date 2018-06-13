@@ -31,10 +31,10 @@
  * <script> := <importlist> <objectlist> // start here
  *
  * <objectlist> := <object> <objectlist> | e
- * <object> := <annotations> object string <qualifierlist> { <objectdecl> }
- * <objectdecl> := <tags> <vardecllist> <statedecllist> <fundecllist>
- * <qualifierlist> := emoticon <qualifierlist> | e
- * <tags> := tag string ; <tags> | e
+ * <object> := <annotations> object string <qualifiers> { <objectdecl> }
+ * <objectdecl> := <vardecllist> <statedecllist> <fundecllist>
+ * <qualifiers> := is <tags> | is <tags> emoticon | is emoticon | e
+ * <tags> := string , <tags> | string
  * <annotations> := annotation <annotations> | e
  *
  * <vardecllist> := <vardecl> <vardecllist> | e

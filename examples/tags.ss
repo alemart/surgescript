@@ -1,49 +1,40 @@
 //
 // tags.ss
 // Tags in SurgeScript
-// Copyright 2017 Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"
 {
-    obj = spawn("Banana"); // change to "Alfred" or "Coin"
+    banana = spawn("Banana");
+    coin = spawn("Coin");
 
     state "main"
     {
-        // check if the object is tagged "Pickup"
-        if(obj.hasTag("Pickup"))
-            Console.print("The object is a pickup.");
-        else
-            Console.print("The object is not a pickup.");
-
-        // done!
+        Console.print("Welcome!");
+        showStatus(banana);
+        showStatus(coin);
         Application.exit();
     }
+
+    fun showStatus(obj)
+    {
+        if(obj.hasTag("fruit"))
+            Console.print("Object " + obj.__name + " is a fruit.");
+        else
+            Console.print("Object " + obj.__name + " is not a fruit.");
+    }
 }
 
-object "Alfred"
+object "Banana" is "pickup", "fruit"
 {
-    tag "NPC";
-
     state "main"
     {
     }
 }
 
-object "Banana"
+object "Coin" is "pickup"
 {
-    tag "Pickup";
-    tag "Fruit";
-
-    state "main"
-    {
-    }
-}
-
-object "Coin"
-{
-    tag "Pickup";
-
     state "main"
     {
     }
