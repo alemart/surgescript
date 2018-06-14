@@ -251,15 +251,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#testing-on-open-surge" title="Testing on Open Surge" class="md-nav__link">
-    Testing on Open Surge
+  <a href="#using-open-surge" title="Using Open Surge" class="md-nav__link">
+    Using Open Surge
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#testing-using-the-standalone-version" title="Testing using the standalone version" class="md-nav__link">
-    Testing using the standalone version
+  <a href="#using-the-standalone-version" title="Using the standalone version" class="md-nav__link">
+    Using the standalone version
   </a>
   
 </li>
@@ -721,15 +721,15 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#testing-on-open-surge" title="Testing on Open Surge" class="md-nav__link">
-    Testing on Open Surge
+  <a href="#using-open-surge" title="Using Open Surge" class="md-nav__link">
+    Using Open Surge
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#testing-using-the-standalone-version" title="Testing using the standalone version" class="md-nav__link">
-    Testing using the standalone version
+  <a href="#using-the-standalone-version" title="Using the standalone version" class="md-nav__link">
+    Using the standalone version
   </a>
   
 </li>
@@ -752,15 +752,37 @@
                 
                 
                 <h1 id="testing-your-scripts">Testing your scripts</h1>
-<p>There are two main ways to test your scripts: using the <a href="../../download#open-surge">Open Surge Engine</a> or the <a href="../../download#standalone-version">standalone version</a> of SurgeScript (i.e., the version without the game engine).</p>
-<h2 id="testing-on-open-surge">Testing on Open Surge</h2>
-<p>TODO</p>
-<h2 id="testing-using-the-standalone-version">Testing using the standalone version</h2>
+<p>There are two main ways to test your scripts:</p>
+<ul>
+<li>using the <a href="#using-open-surge">Open Surge</a> game engine;</li>
+<li>using the <a href="#using-the-standalone-version">SurgeScript standalone</a> runtime (i.e., the version without the game engine).</li>
+</ul>
+<h2 id="using-open-surge">Using Open Surge</h2>
+<p>To test a script on Open Surge, place it on the <em>scripts/</em> folder and start the engine. Your test script must include an object called <em>Application</em>. Additionally, remove the script after you're done with the testing.</p>
+<p>As an example, save the following script to <em>scripts/hello.ss</em> and start the engine:</p>
+<pre><code>// hello.ss: test script
+// Please remove this file after you're done
+object &quot;Application&quot;
+{
+    state &quot;main&quot;
+    {
+        Console.print(&quot;Hello, world!&quot;);
+        state = &quot;blank&quot;;
+    }
+
+    state &quot;blank&quot;
+    {
+    }
+}
+</code></pre>
+
+<h2 id="using-the-standalone-version">Using the standalone version</h2>
 <p>If you've downloaded the standalone version of the language:</p>
 <ul>
 <li>First of all, save the following script to a file named <em>hello.ss</em>. For testing purposes, please place the file on the same directory as the surgescript executable.</li>
 </ul>
-<pre><code>object &quot;Application&quot;
+<pre><code>// hello.ss: test script
+object &quot;Application&quot;
 {
     state &quot;main&quot;
     {

@@ -694,30 +694,23 @@
                 
                 <h1 id="tags">Tags</h1>
 <p>You may tag objects with as many tags as you want. Tags are a way of attributing categories to different objects.</p>
-<p>Tags should be placed before any definitions of variables, states or functions. Example:</p>
-<pre><code>object &quot;Horse&quot;
+<p>Tags should be placed right after the object name. Example:</p>
+<pre><code>object &quot;Horse&quot; is &quot;animal&quot;, &quot;vehicle&quot;
 {
-    tag &quot;animal&quot;;
-    tag &quot;vehicle&quot;;
-
     state &quot;main&quot;
     {
     }
 }
 
-object &quot;Cat&quot;
+object &quot;Cat&quot; is &quot;animal&quot;
 {
-    tag &quot;animal&quot;;
-
     state &quot;main&quot;
     {
     }
 }
 
-object &quot;Car&quot;
+object &quot;Car&quot; is &quot;vehicle&quot;
 {
-    tag &quot;vehicle&quot;;
-
     state &quot;main&quot;
     {
     }
@@ -749,15 +742,18 @@ object &quot;Car&quot;
 </code></pre>
 
 <p>You may also convey emotional states to objects using the following syntax:</p>
-<pre><code>object &quot;Good Day&quot; :)
+<pre><code>object &quot;Good Day&quot; is &quot;happy&quot;, &quot;sunny&quot; :)
 {
-    state &quot;main&quot;
-    {
-    }
+    ...
+}
+
+object &quot;Good Night&quot; is &lt;3
+{
+    ...
 }
 </code></pre>
 
-<p>The object will then be tagged with the specified emoticon(s). The following emoticons are available for your pleasure:</p>
+<p>The object will then be tagged with the specified emoticon. The following emoticons are available for your pleasure:</p>
 <table>
 <thead>
 <tr>
