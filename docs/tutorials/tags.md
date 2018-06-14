@@ -54,7 +54,7 @@ object "Application"
 }
 ```
 
-You may also convey emotional states to objects using the following syntax:
+You may also tag objects with emoticons. The syntax is as follows:
 
 ```
 object "Good Day" is "happy", "sunny" :)
@@ -68,7 +68,7 @@ object "Good Night" is <3
 }
 ```
 
-The object will then be tagged with the specified emoticon. The following emoticons are available for your pleasure:
+The following emoticons are available for your pleasure:
 
 Emoticon|Meaning
 --------|-------
