@@ -9,7 +9,7 @@ There are two ways to get SurgeScript:
 Open Surge
 ----------
 
-To get Open Surge, go to its website **(URL SOON)** and follow the instructions.
+To get Open Surge, visit [opensurge2d.org](http://opensurge2d.org) and follow the instructions.
 
 When you get Open Surge, you also get a full game engine featuring SurgeScript. This allows you to create your own scripts and games with plenty of interactivity and ease.
 
