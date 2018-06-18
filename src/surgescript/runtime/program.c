@@ -360,7 +360,7 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
         param[program->arity-i] = surgescript_stack_peek(stack, -i);
 
     /* call C-function */
-    return_value = (surgescript_var_t*)(cprogram->cfunction(object, (const surgescript_var_t**)param, program->arity));
+    return_value = cprogram->cfunction(object, param, program->arity);
     if(return_value != NULL) {
         surgescript_var_copy(*(surgescript_renv_tmp(runtime_environment) + 0), return_value);
         surgescript_var_destroy(return_value);
