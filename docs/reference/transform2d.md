@@ -10,16 +10,16 @@ Properties
 
 * `xpos`: number, read-write. The x-position of the object in local coordinates¹.
 * `ypos`: number, read-write. The y-position of the object in local coordinates¹.
-* `angle`: number, read-write. The angle specifying the rotation of the object².
-* `scaleX`: number, read-write. Scale multiplier in the x-axis - defaults to 1.0.
-* `scaleY`: number, read-write. Scale multiplier in the y-axis - defaults to 1.0.
+* `angle`: number, read-write. The angle specifying the local rotation of the object².
+* `hscale`: number, read-write. Local horizontal scale (defaults to 1.0). *Since SurgeScript 0.5.3*.
+* `vscale`: number, read-write. Local vertical scale (defaults to 1.0). *Since SurgeScript 0.5.3*.
 * `worldX`: number, read-write. The x-position of the object in world coordinates.
 * `worldY`: number, read-write. The y-position of the object in world coordinates.
 * `worldAngle`: number, read-write. The rotation angle² of the object in world coordinates.
 
 > **Notes:**
 >
-> ¹ Local coordinates mean: relative to the parent.
+> ¹ Local coordinates mean: coordinates relative to the parent object.
 >
 > ² Rotation angles should be given in degrees.
 
@@ -46,17 +46,6 @@ Rotates the object by `degrees`.
 *Arguments*
 
 * `degrees`: number.
-
-#### scale
-
-`scale(x, y)`
-
-Scales the transform by (`x`, `y`). Both parameters are multipliers that default to 1.0.
-
-*Arguments*
-
-* `x`: number.
-* `y`: number.
 
 #### lookAt
 
