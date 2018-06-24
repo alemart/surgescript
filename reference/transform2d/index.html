@@ -664,13 +664,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#scale" title="scale" class="md-nav__link">
-    scale
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#lookat" title="lookAt" class="md-nav__link">
     lookAt
   </a>
@@ -791,13 +784,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#scale" title="scale" class="md-nav__link">
-    scale
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#lookat" title="lookAt" class="md-nav__link">
     lookAt
   </a>
@@ -840,16 +826,16 @@
 <ul>
 <li><code>xpos</code>: number, read-write. The x-position of the object in local coordinates¹.</li>
 <li><code>ypos</code>: number, read-write. The y-position of the object in local coordinates¹.</li>
-<li><code>angle</code>: number, read-write. The angle specifying the rotation of the object².</li>
-<li><code>scaleX</code>: number, read-write. Scale multiplier in the x-axis - defaults to 1.0.</li>
-<li><code>scaleY</code>: number, read-write. Scale multiplier in the y-axis - defaults to 1.0.</li>
+<li><code>angle</code>: number, read-write. The angle specifying the local rotation of the object².</li>
+<li><code>hscale</code>: number, read-write. Local horizontal scale (defaults to 1.0). <em>Since SurgeScript 0.5.3</em>.</li>
+<li><code>vscale</code>: number, read-write. Local vertical scale (defaults to 1.0). <em>Since SurgeScript 0.5.3</em>.</li>
 <li><code>worldX</code>: number, read-write. The x-position of the object in world coordinates.</li>
 <li><code>worldY</code>: number, read-write. The y-position of the object in world coordinates.</li>
 <li><code>worldAngle</code>: number, read-write. The rotation angle² of the object in world coordinates.</li>
 </ul>
 <blockquote>
 <p><strong>Notes:</strong></p>
-<p>¹ Local coordinates mean: relative to the parent.</p>
+<p>¹ Local coordinates mean: coordinates relative to the parent object.</p>
 <p>² Rotation angles should be given in degrees.</p>
 </blockquote>
 <h2 id="functions">Functions</h2>
@@ -867,14 +853,6 @@
 <p><em>Arguments</em></p>
 <ul>
 <li><code>degrees</code>: number.</li>
-</ul>
-<h4 id="scale">scale</h4>
-<p><code>scale(x, y)</code></p>
-<p>Scales the transform by (<code>x</code>, <code>y</code>). Both parameters are multipliers that default to 1.0.</p>
-<p><em>Arguments</em></p>
-<ul>
-<li><code>x</code>: number.</li>
-<li><code>y</code>: number.</li>
 </ul>
 <h4 id="lookat">lookAt</h4>
 <p><code>lookAt(transform)</code></p>
