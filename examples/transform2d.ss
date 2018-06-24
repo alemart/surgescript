@@ -45,15 +45,17 @@ object "Application"
         showBees();
 
         say("step 7: scale the transform of the parent bee by 10");
-        parentBee.transform.scale(10, 10);
+        parentBee.transform.hscale = 10;
+        parentBee.transform.vscale = 10;
         showBees();
 
         say("step 8: move the child bee by (2,0)");
         childBee.transform.translate(2,0);
         showBees();
 
-        say("step 9: scale the transform of the parent bee by 0.1 (thus reverting the previous scale)");
-        parentBee.transform.scale(0.1, 0.1);
+        say("step 9: revert the previous scale");
+        parentBee.transform.hscale = 1;
+        parentBee.transform.vscale = 1;
         showBees();
 
         say("step 10: move the child bee by (-2,0)");
