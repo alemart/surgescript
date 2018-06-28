@@ -11,8 +11,8 @@ Example
 using SurgeEngine.Camera;
 
 // Reading the Camera status
-// prints the position of the camera (every second)
-object "CameraStatus"
+// This app prints the position of the camera every second
+object "Application"
 {
     state "main"
     {

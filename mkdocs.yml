@@ -44,3 +44,5 @@ pages:
     - 'SurgeEngine Reference':
         - 'Actor': 'surgeengine/actor.md'
         - 'Camera': 'surgeengine/camera.md'
+        - 'Entity': 'surgeengine/entity.md'
+        - 'Input': 'surgeengine/input.md'

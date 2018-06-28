@@ -36,6 +36,15 @@ object "SurgeTest" is "entity"
         actor.transform.ypos = 150;
     }
 }
+
+object "Application"
+{
+    surge = spawn("SurgeTest");
+
+    state "main"
+    {
+    }
+}
 ```
 
 
