@@ -43,3 +43,4 @@ pages:
         - 'System': 'reference/system.md'
     - 'SurgeEngine Reference':
         - 'Actor': 'surgeengine/actor.md'
+        - 'Camera': 'surgeengine/camera.md'
