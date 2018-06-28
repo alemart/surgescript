@@ -41,3 +41,5 @@ pages:
         - 'String': 'reference/string.md'
         - 'SurgeScript': 'reference/surgescript.md'
         - 'System': 'reference/system.md'
+    - 'SurgeEngine Reference':
+        - 'Actor': 'surgeengine/actor.md'
