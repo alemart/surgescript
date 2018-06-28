@@ -1,7 +1,7 @@
 Entity
 ======
 
-Entity is not an object per-se, but rather a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are **not** entities. In Open Surge, all objects that are tagged *"entity"* are considered to be entities.
+Entity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are **not** entities. In Open Surge, all objects that are tagged *"entity"* are considered to be entities.
 
 Entites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.
 

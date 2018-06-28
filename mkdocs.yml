@@ -46,3 +46,4 @@ pages:
         - 'Camera': 'surgeengine/camera.md'
         - 'Entity': 'surgeengine/entity.md'
         - 'Input': 'surgeengine/input.md'
+        - 'Mouse': 'surgeengine/mouse.md'
