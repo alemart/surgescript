@@ -10,7 +10,6 @@ Example
 // sprite as a mouse cursor. Since MyCursor is
 // tagged as "detached", it will be rendered in
 // screen space (not world space).
-
 using SurgeEngine.Mouse;
 using SurgeEngine.Actor;
 
