@@ -1289,6 +1289,176 @@
             "location": "/reference/system/#destroy", 
             "text": "destroy()  The same as  exit() .", 
             "title": "destroy"
+        }, 
+        {
+            "location": "/engine/actor/", 
+            "text": "Actor\n\n\nThe Actor component is used to associate a sprite to a target object. The target object is required to be tagged as an \n\"entity\"\n.\n\n\nFactory\n\n\nSurgeEngine.Actor\n\n\nSurgeEngine.Actor(spriteName)\n\n\nSpawns a new Actor component with the given sprite name.\n\n\nArguments\n\n\n\n\nspriteName\n: string. The name of the sprite (defined in the \nsprites/\n folder).\n\n\n\n\nReturns\n\n\nAn Actor component.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\n\nobject \nSurgeTest\n is \nentity\n\n{\n    // spawns an Actor with the SD_SURGE sprite\n    actor = Actor(\nSD_SURGE\n);\n\n    // position the actor\n    state \nmain\n\n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n    }\n}\n\nobject \nApplication\n\n{\n    surge = spawn(\nSurgeTest\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nanim\n: number. An integer value corresponding to the animation number. Defaults to 0.\n\n\nalpha\n: number. Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.\n\n\nentity\n: object. The entity associated with this component.\n\n\nhflip\n: boolean. Should the actor be flipped horizontally?\n\n\nvflip\n: boolean. Should the actor be flipped vertically?\n\n\nvisible\n: boolean. Should the actor be rendered?\n\n\nwidth\n: number. The width of the actor.\n\n\nheight\n: number. The height of the actor.\n\n\ntransform\n: \nTransform2D\n object. An alias to the Transform of the entity.\n\n\nzindex\n: number. The zindex of the actor. Objects with greater zindex are rendered in front of others. Defaults to 0.5.\n\n\n\n\nFunctions\n\n\nanimationFinished\n\n\nanimationFinished()\n\n\nChecks if the current animation has finished playing.\n\n\nReturns\n\n\nReturns \ntrue\n if the animation has finished playing.", 
+            "title": "Actor"
+        }, 
+        {
+            "location": "/engine/actor/#actor", 
+            "text": "The Actor component is used to associate a sprite to a target object. The target object is required to be tagged as an  \"entity\" .", 
+            "title": "Actor"
+        }, 
+        {
+            "location": "/engine/actor/#factory", 
+            "text": "", 
+            "title": "Factory"
+        }, 
+        {
+            "location": "/engine/actor/#surgeengineactor", 
+            "text": "SurgeEngine.Actor(spriteName)  Spawns a new Actor component with the given sprite name.  Arguments   spriteName : string. The name of the sprite (defined in the  sprites/  folder).   Returns  An Actor component.  Example  using SurgeEngine.Actor;\n\nobject  SurgeTest  is  entity \n{\n    // spawns an Actor with the SD_SURGE sprite\n    actor = Actor( SD_SURGE );\n\n    // position the actor\n    state  main \n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n    }\n}\n\nobject  Application \n{\n    surge = spawn( SurgeTest );\n\n    state  main \n    {\n    }\n}", 
+            "title": "SurgeEngine.Actor"
+        }, 
+        {
+            "location": "/engine/actor/#properties", 
+            "text": "anim : number. An integer value corresponding to the animation number. Defaults to 0.  alpha : number. Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.  entity : object. The entity associated with this component.  hflip : boolean. Should the actor be flipped horizontally?  vflip : boolean. Should the actor be flipped vertically?  visible : boolean. Should the actor be rendered?  width : number. The width of the actor.  height : number. The height of the actor.  transform :  Transform2D  object. An alias to the Transform of the entity.  zindex : number. The zindex of the actor. Objects with greater zindex are rendered in front of others. Defaults to 0.5.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/engine/actor/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/engine/actor/#animationfinished", 
+            "text": "animationFinished()  Checks if the current animation has finished playing.  Returns  Returns  true  if the animation has finished playing.", 
+            "title": "animationFinished"
+        }, 
+        {
+            "location": "/engine/camera/", 
+            "text": "Camera\n\n\nThe Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.\n\n\nExample\n\n\n// Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera every second\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        if(timeout(1))\n            state = \nprint\n;\n    }\n\n    state \nprint\n\n    {\n        Console.print(Camera.xpos + \n,\n + Camera.ypos);\n        state = \nmain\n;\n    }\n}\n\n\n\n\nNote:\n objects tagged as \n\"detached\"\n do not follow the camera. They are not in world space, but in screen space.\n\n\nProperties\n\n\n\n\nxpos\n: number. The x-position of the camera in world space.\n\n\nypos\n: number. The y-position of the camera in world space.", 
+            "title": "Camera"
+        }, 
+        {
+            "location": "/engine/camera/#camera", 
+            "text": "The Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.", 
+            "title": "Camera"
+        }, 
+        {
+            "location": "/engine/camera/#example", 
+            "text": "// Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera every second\nobject  Application \n{\n    state  main \n    {\n        if(timeout(1))\n            state =  print ;\n    }\n\n    state  print \n    {\n        Console.print(Camera.xpos +  ,  + Camera.ypos);\n        state =  main ;\n    }\n}  Note:  objects tagged as  \"detached\"  do not follow the camera. They are not in world space, but in screen space.", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/engine/camera/#properties", 
+            "text": "xpos : number. The x-position of the camera in world space.  ypos : number. The y-position of the camera in world space.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/engine/entity/", 
+            "text": "Entity\n\n\nEntity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are \nnot\n entities. In Open Surge, all objects that are tagged \n\"entity\"\n are considered to be entities.\n\n\nEntites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.\n\n\nTags\n\n\n\n\nentity\n: tells Open Surge that the object is an entity and should be treated as such.\n\n\nawake\n: tells Open Surge to \nnot\n disable the object if it gets too far off camera.\n\n\ndetached\n: the object will \nnot\n follow the camera - it will be rendered in screen space.\n\n\ndisposable\n: will destroy the object automatically if it gets too far off camera.\n\n\n\n\nExample\n\n\n// In the example below, MyExplosion (entity) has a Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject \nMyExplosion\n is \nentity\n, \ndisposable\n\n{\n    actor = Actor(\nSD_EXPLOSION\n);\n\n    state \nmain\n\n    {\n        if(actor.animationFinished())\n            destroy();\n    }\n}", 
+            "title": "Entity"
+        }, 
+        {
+            "location": "/engine/entity/#entity", 
+            "text": "Entity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are  not  entities. In Open Surge, all objects that are tagged  \"entity\"  are considered to be entities.  Entites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.", 
+            "title": "Entity"
+        }, 
+        {
+            "location": "/engine/entity/#tags", 
+            "text": "entity : tells Open Surge that the object is an entity and should be treated as such.  awake : tells Open Surge to  not  disable the object if it gets too far off camera.  detached : the object will  not  follow the camera - it will be rendered in screen space.  disposable : will destroy the object automatically if it gets too far off camera.", 
+            "title": "Tags"
+        }, 
+        {
+            "location": "/engine/entity/#example", 
+            "text": "// In the example below, MyExplosion (entity) has a Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject  MyExplosion  is  entity ,  disposable \n{\n    actor = Actor( SD_EXPLOSION );\n\n    state  main \n    {\n        if(actor.animationFinished())\n            destroy();\n    }\n}", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/engine/input/", 
+            "text": "Input\n\n\nThe Input component is used to read input from the user.\n\n\nFactory\n\n\nSurgeEngine.Input\n\n\nSurgeEngine.Input(inputMap)\n\n\nSpawns a new Input component with the given input map.\n\n\nArguments\n\n\n\n\ninputMap\n: string. The name of the input map (defaults to \n\"default\"\n).\n\n\n\n\nReturns\n\n\nAn Input component.\n\n\nExample\n\n\nusing SurgeEngine.Input;\n\nobject \nApplication\n\n{\n    input = Input(\ndefault\n);\n\n    state \nmain\n\n    {\n        if(input.buttonDown(\nright\n))\n            Console.print(\nUser is holding right\n);\n    }\n}\n\n\n\n\nFunctions\n\n\nbuttonDown\n\n\nbuttonDown(buttonName)\n\n\nChecks if a button of the input map is currently being held down.\n\n\nArguments\n\n\n\n\nbuttonName\n: string. One of the following: \n\"up\", \"down\", \"left\", \"right\", \"fire1\", \"fire2\", ..., \"fire8\"\n.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button is being held down.\n\n\nbuttonPressed\n\n\nbuttonPressed(buttonName)\n\n\nChecks if a button has just been pressed.\n\n\nArguments\n\n\n\n\nbuttonName\n: string. One of the following: \n\"up\", \"down\", \"left\", \"right\", \"fire1\", \"fire2\", ..., \"fire8\"\n.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button has just been pressed.\n\n\nbuttonReleased\n\n\nbuttonReleased(buttonName)\n\n\nChecks if a button has just been released.\n\n\nArguments\n\n\n\n\nbuttonName\n: string. One of the following: \n\"up\", \"down\", \"left\", \"right\", \"fire1\", \"fire2\", ..., \"fire8\"\n.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button has just been released.", 
+            "title": "Input"
+        }, 
+        {
+            "location": "/engine/input/#input", 
+            "text": "The Input component is used to read input from the user.", 
+            "title": "Input"
+        }, 
+        {
+            "location": "/engine/input/#factory", 
+            "text": "", 
+            "title": "Factory"
+        }, 
+        {
+            "location": "/engine/input/#surgeengineinput", 
+            "text": "SurgeEngine.Input(inputMap)  Spawns a new Input component with the given input map.  Arguments   inputMap : string. The name of the input map (defaults to  \"default\" ).   Returns  An Input component.  Example  using SurgeEngine.Input;\n\nobject  Application \n{\n    input = Input( default );\n\n    state  main \n    {\n        if(input.buttonDown( right ))\n            Console.print( User is holding right );\n    }\n}", 
+            "title": "SurgeEngine.Input"
+        }, 
+        {
+            "location": "/engine/input/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/engine/input/#buttondown", 
+            "text": "buttonDown(buttonName)  Checks if a button of the input map is currently being held down.  Arguments   buttonName : string. One of the following:  \"up\", \"down\", \"left\", \"right\", \"fire1\", \"fire2\", ..., \"fire8\" .   Returns  Returns  true  if the specified button is being held down.", 
+            "title": "buttonDown"
+        }, 
+        {
+            "location": "/engine/input/#buttonpressed", 
+            "text": "buttonPressed(buttonName)  Checks if a button has just been pressed.  Arguments   buttonName : string. One of the following:  \"up\", \"down\", \"left\", \"right\", \"fire1\", \"fire2\", ..., \"fire8\" .   Returns  Returns  true  if the specified button has just been pressed.", 
+            "title": "buttonPressed"
+        }, 
+        {
+            "location": "/engine/input/#buttonreleased", 
+            "text": "buttonReleased(buttonName)  Checks if a button has just been released.  Arguments   buttonName : string. One of the following:  \"up\", \"down\", \"left\", \"right\", \"fire1\", \"fire2\", ..., \"fire8\" .   Returns  Returns  true  if the specified button has just been released.", 
+            "title": "buttonReleased"
+        }, 
+        {
+            "location": "/engine/mouse/", 
+            "text": "Mouse\n\n\nThe Mouse object is used to read input from the mouse.\n\n\nExample\n\n\n// This example shows how to use the Collectible\n// sprite as a mouse cursor. Since MyCursor is\n// tagged as \ndetached\n, it will be rendered in\n// screen space (not world space).\nusing SurgeEngine.Mouse;\nusing SurgeEngine.Actor;\n\nobject \nMyCursor\n is \nentity\n, \ndetached\n\n{\n    actor = Actor(\nSD_COLLECTIBLE\n);\n\n    state \nmain\n\n    {\n        actor.transform.xpos = Mouse.xpos;\n        actor.transform.ypos = Mouse.ypos;\n        if(Mouse.buttonPressed(0))\n            Console.print(\nleft click\n);\n    }\n}\n\nobject \nApplication\n\n{\n    mouseCursor = spawn(\nMyCursor\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nxpos\n: number, read-only. The x-position of the mouse cursor, in screen space.\n\n\nypos\n: number, read-only. The y-position of the mouse cursor, in screen space.\n\n\n\n\nFunctions\n\n\nbuttonDown\n\n\nbuttonDown(buttonId)\n\n\nChecks if a mouse button is currently being held down.\n\n\nArguments\n\n\n\n\nbuttonId\n: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button is being held down.\n\n\nbuttonPressed\n\n\nbuttonPressed(buttonId)\n\n\nChecks if a mouse button has just been pressed.\n\n\nArguments\n\n\n\n\nbuttonId\n: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button has just been pressed (i.e., a click has just occurred).\n\n\nbuttonReleased\n\n\nbuttonReleased(buttonId)\n\n\nChecks if a mouse button has just been released.\n\n\nArguments\n\n\n\n\nbuttonId\n: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button has just been released.", 
+            "title": "Mouse"
+        }, 
+        {
+            "location": "/engine/mouse/#mouse", 
+            "text": "The Mouse object is used to read input from the mouse.", 
+            "title": "Mouse"
+        }, 
+        {
+            "location": "/engine/mouse/#example", 
+            "text": "// This example shows how to use the Collectible\n// sprite as a mouse cursor. Since MyCursor is\n// tagged as  detached , it will be rendered in\n// screen space (not world space).\nusing SurgeEngine.Mouse;\nusing SurgeEngine.Actor;\n\nobject  MyCursor  is  entity ,  detached \n{\n    actor = Actor( SD_COLLECTIBLE );\n\n    state  main \n    {\n        actor.transform.xpos = Mouse.xpos;\n        actor.transform.ypos = Mouse.ypos;\n        if(Mouse.buttonPressed(0))\n            Console.print( left click );\n    }\n}\n\nobject  Application \n{\n    mouseCursor = spawn( MyCursor );\n\n    state  main \n    {\n    }\n}", 
+            "title": "Example"
+        }, 
+        {
+            "location": "/engine/mouse/#properties", 
+            "text": "xpos : number, read-only. The x-position of the mouse cursor, in screen space.  ypos : number, read-only. The y-position of the mouse cursor, in screen space.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/engine/mouse/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/engine/mouse/#buttondown", 
+            "text": "buttonDown(buttonId)  Checks if a mouse button is currently being held down.  Arguments   buttonId : number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).   Returns  Returns  true  if the specified button is being held down.", 
+            "title": "buttonDown"
+        }, 
+        {
+            "location": "/engine/mouse/#buttonpressed", 
+            "text": "buttonPressed(buttonId)  Checks if a mouse button has just been pressed.  Arguments   buttonId : number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).   Returns  Returns  true  if the specified button has just been pressed (i.e., a click has just occurred).", 
+            "title": "buttonPressed"
+        }, 
+        {
+            "location": "/engine/mouse/#buttonreleased", 
+            "text": "buttonReleased(buttonId)  Checks if a mouse button has just been released.  Arguments   buttonId : number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).   Returns  Returns  true  if the specified button has just been released.", 
+            "title": "buttonReleased"
+        }, 
+        {
+            "location": "/engine/surgeengine/", 
+            "text": "SurgeEngine\n\n\nThe SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).\n\n\nProperties\n\n\n\n\nversion\n: string, read-only. Open Surge version.", 
+            "title": "SurgeEngine"
+        }, 
+        {
+            "location": "/engine/surgeengine/#surgeengine", 
+            "text": "The SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).", 
+            "title": "SurgeEngine"
+        }, 
+        {
+            "location": "/engine/surgeengine/#properties", 
+            "text": "version : string, read-only. Open Surge version.", 
+            "title": "Properties"
         }
     ]
 }
