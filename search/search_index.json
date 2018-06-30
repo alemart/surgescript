@@ -1292,7 +1292,7 @@
         }, 
         {
             "location": "/engine/actor/", 
-            "text": "Actor\n\n\nThe Actor component is used to associate a sprite to a target object. The target object is required to be tagged as an \n\"entity\"\n.\n\n\nFactory\n\n\nSurgeEngine.Actor\n\n\nSurgeEngine.Actor(spriteName)\n\n\nSpawns a new Actor component with the given sprite name.\n\n\nArguments\n\n\n\n\nspriteName\n: string. The name of the sprite (defined in the \nsprites/\n folder).\n\n\n\n\nReturns\n\n\nAn Actor component.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\n\nobject \nSurgeTest\n is \nentity\n\n{\n    // spawns an Actor with the SD_SURGE sprite\n    actor = Actor(\nSD_SURGE\n);\n\n    // position the actor\n    state \nmain\n\n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n    }\n}\n\nobject \nApplication\n\n{\n    surge = spawn(\nSurgeTest\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nanim\n: number. An integer value corresponding to the animation number. Defaults to 0.\n\n\nalpha\n: number. Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.\n\n\nentity\n: object. The entity associated with this component.\n\n\nhflip\n: boolean. Should the actor be flipped horizontally?\n\n\nvflip\n: boolean. Should the actor be flipped vertically?\n\n\nvisible\n: boolean. Should the actor be rendered?\n\n\nwidth\n: number. The width of the actor.\n\n\nheight\n: number. The height of the actor.\n\n\ntransform\n: \nTransform2D\n object. An alias to the Transform of the entity.\n\n\nzindex\n: number. The zindex of the actor. Objects with greater zindex are rendered in front of others. Defaults to 0.5.\n\n\n\n\nFunctions\n\n\nanimationFinished\n\n\nanimationFinished()\n\n\nChecks if the current animation has finished playing.\n\n\nReturns\n\n\nReturns \ntrue\n if the animation has finished playing.", 
+            "text": "Actor\n\n\nThe Actor component is used to associate a sprite to a target object. The target object is required to be tagged as an \n\"entity\"\n.\n\n\nFactory\n\n\nSurgeEngine.Actor\n\n\nSurgeEngine.Actor(spriteName)\n\n\nSpawns a new Actor component with the given sprite name.\n\n\nArguments\n\n\n\n\nspriteName\n: string. The name of the sprite (defined in the \nsprites/\n folder).\n\n\n\n\nReturns\n\n\nAn Actor component.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\n\nobject \nSurgeTest\n is \nentity\n\n{\n    // spawns an Actor with the SD_SURGE sprite\n    actor = Actor(\nSD_SURGE\n);\n\n    // position the actor\n    state \nmain\n\n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n    }\n}\n\nobject \nApplication\n\n{\n    surge = spawn(\nSurgeTest\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nanim\n: number. An integer value corresponding to the animation number. Defaults to 0.\n\n\nalpha\n: number. Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.\n\n\nentity\n: object. The entity associated with this component.\n\n\nhflip\n: boolean. Should the actor be flipped horizontally?\n\n\nvflip\n: boolean. Should the actor be flipped vertically?\n\n\nvisible\n: boolean. Should the actor be rendered?\n\n\nwidth\n: number. The width of the actor.\n\n\nheight\n: number. The height of the actor.\n\n\ntransform\n: \nTransform2D\n object. An alias to the Transform of the entity.\n\n\nzindex\n: number. The zindex of the actor. Objects with greater zindex are rendered in front of others. Defaults to 0.5.\n\n\n\n\nFunctions\n\n\nanimFinished\n\n\nanimFinished()\n\n\nChecks if the current animation has finished playing.\n\n\nReturns\n\n\nReturns \ntrue\n if the animation has finished playing.\n\n\nanimRepeats\n\n\nanimRepeats()\n\n\nChecks if the currently playing animation repeats itself.\n\n\nReturns\n\n\nReturns \ntrue\n if the currently playing animation repeats itself.\n\n\nanimFPS\n\n\nanimFPS()\n\n\nThe frames-per-second (FPS) rate of the current animation.\n\n\nReturns\n\n\nReturns the FPS rate of the current animation.", 
             "title": "Actor"
         }, 
         {
@@ -1321,9 +1321,19 @@
             "title": "Functions"
         }, 
         {
-            "location": "/engine/actor/#animationfinished", 
-            "text": "animationFinished()  Checks if the current animation has finished playing.  Returns  Returns  true  if the animation has finished playing.", 
-            "title": "animationFinished"
+            "location": "/engine/actor/#animfinished", 
+            "text": "animFinished()  Checks if the current animation has finished playing.  Returns  Returns  true  if the animation has finished playing.", 
+            "title": "animFinished"
+        }, 
+        {
+            "location": "/engine/actor/#animrepeats", 
+            "text": "animRepeats()  Checks if the currently playing animation repeats itself.  Returns  Returns  true  if the currently playing animation repeats itself.", 
+            "title": "animRepeats"
+        }, 
+        {
+            "location": "/engine/actor/#animfps", 
+            "text": "animFPS()  The frames-per-second (FPS) rate of the current animation.  Returns  Returns the FPS rate of the current animation.", 
+            "title": "animFPS"
         }, 
         {
             "location": "/engine/camera/", 
@@ -1347,7 +1357,7 @@
         }, 
         {
             "location": "/engine/entity/", 
-            "text": "Entity\n\n\nEntity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are \nnot\n entities. In Open Surge, all objects that are tagged \n\"entity\"\n are considered to be entities.\n\n\nEntites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.\n\n\nTags\n\n\n\n\nentity\n: tells Open Surge that the object is an entity and should be treated as such.\n\n\nawake\n: tells Open Surge to \nnot\n disable the object if it gets too far off camera.\n\n\ndetached\n: the object will \nnot\n follow the camera - it will be rendered in screen space.\n\n\ndisposable\n: will destroy the object automatically if it gets too far off camera.\n\n\n\n\nExample\n\n\n// In the example below, MyExplosion (entity) has a Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject \nMyExplosion\n is \nentity\n, \ndisposable\n\n{\n    actor = Actor(\nSD_EXPLOSION\n);\n\n    state \nmain\n\n    {\n        if(actor.animationFinished())\n            destroy();\n    }\n}", 
+            "text": "Entity\n\n\nEntity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are \nnot\n entities. In Open Surge, all objects that are tagged \n\"entity\"\n are considered to be entities.\n\n\nEntites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.\n\n\nTags\n\n\n\n\nentity\n: tells Open Surge that the object is an entity and should be treated as such.\n\n\nawake\n: tells Open Surge to \nnot\n disable the object if it gets too far off camera.\n\n\ndetached\n: the object will \nnot\n follow the camera - it will be rendered in screen space.\n\n\ndisposable\n: will destroy the object automatically if it gets too far off camera.\n\n\n\n\nExample\n\n\n// In the example below, MyExplosion (entity) has a Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject \nMyExplosion\n is \nentity\n, \ndisposable\n\n{\n    actor = Actor(\nSD_EXPLOSION\n);\n\n    state \nmain\n\n    {\n        if(actor.animFinished())\n            destroy();\n    }\n}", 
             "title": "Entity"
         }, 
         {
@@ -1362,7 +1372,7 @@
         }, 
         {
             "location": "/engine/entity/#example", 
-            "text": "// In the example below, MyExplosion (entity) has a Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject  MyExplosion  is  entity ,  disposable \n{\n    actor = Actor( SD_EXPLOSION );\n\n    state  main \n    {\n        if(actor.animationFinished())\n            destroy();\n    }\n}", 
+            "text": "// In the example below, MyExplosion (entity) has a Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject  MyExplosion  is  entity ,  disposable \n{\n    actor = Actor( SD_EXPLOSION );\n\n    state  main \n    {\n        if(actor.animFinished())\n            destroy();\n    }\n}", 
             "title": "Example"
         }, 
         {
