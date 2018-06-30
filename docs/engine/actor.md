@@ -66,12 +66,32 @@ Properties
 Functions
 ---------
 
-#### animationFinished
+#### animFinished
 
-`animationFinished()`
+`animFinished()`
 
 Checks if the current animation has finished playing.
 
 *Returns*
 
 Returns `true` if the animation has finished playing.
+
+#### animRepeats
+
+`animRepeats()`
+
+Checks if the currently playing animation repeats itself.
+
+*Returns*
+
+Returns `true` if the currently playing animation repeats itself.
+
+#### animFPS
+
+`animFPS()`
+
+The frames-per-second (FPS) rate of the current animation.
+
+*Returns*
+
+Returns the FPS rate of the current animation.

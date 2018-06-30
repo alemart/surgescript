@@ -27,7 +27,7 @@ object "MyExplosion" is "entity", "disposable"
 
     state "main"
     {
-        if(actor.animationFinished())
+        if(actor.animFinished())
             destroy();
     }
 }
