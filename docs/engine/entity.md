@@ -17,7 +17,7 @@ Example
 -------
 
 ```
-// In the example below, MyExplosion (entity) has a Actor component
+// In the example below, MyExplosion (entity) has an Actor component
 // that gives it a visible form (a sprite) in world space.
 using SurgeEngine.Actor;
 
