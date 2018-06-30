@@ -1327,7 +1327,7 @@
         }, 
         {
             "location": "/engine/camera/", 
-            "text": "Camera\n\n\nThe Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.\n\n\nExample\n\n\n// Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera every second\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        if(timeout(1))\n            state = \nprint\n;\n    }\n\n    state \nprint\n\n    {\n        Console.print(Camera.xpos + \n,\n + Camera.ypos);\n        state = \nmain\n;\n    }\n}\n\n\n\n\nNote:\n objects tagged as \n\"detached\"\n do not follow the camera. They are not in world space, but in screen space.\n\n\nProperties\n\n\n\n\nxpos\n: number. The x-position of the camera in world space.\n\n\nypos\n: number. The y-position of the camera in world space.", 
+            "text": "Camera\n\n\nThe Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.\n\n\nExample\n\n\n// Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera at every second\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        if(timeout(1))\n            state = \nprint\n;\n    }\n\n    state \nprint\n\n    {\n        Console.print(Camera.xpos + \n,\n + Camera.ypos);\n        state = \nmain\n;\n    }\n}\n\n\n\n\nNote:\n objects tagged as \n\"detached\"\n do not follow the camera. They are not in world space, but in screen space.\n\n\nProperties\n\n\n\n\nxpos\n: number. The x-position of the camera in world space.\n\n\nypos\n: number. The y-position of the camera in world space.", 
             "title": "Camera"
         }, 
         {
@@ -1337,7 +1337,7 @@
         }, 
         {
             "location": "/engine/camera/#example", 
-            "text": "// Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera every second\nobject  Application \n{\n    state  main \n    {\n        if(timeout(1))\n            state =  print ;\n    }\n\n    state  print \n    {\n        Console.print(Camera.xpos +  ,  + Camera.ypos);\n        state =  main ;\n    }\n}  Note:  objects tagged as  \"detached\"  do not follow the camera. They are not in world space, but in screen space.", 
+            "text": "// Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera at every second\nobject  Application \n{\n    state  main \n    {\n        if(timeout(1))\n            state =  print ;\n    }\n\n    state  print \n    {\n        Console.print(Camera.xpos +  ,  + Camera.ypos);\n        state =  main ;\n    }\n}  Note:  objects tagged as  \"detached\"  do not follow the camera. They are not in world space, but in screen space.", 
             "title": "Example"
         }, 
         {
@@ -1446,14 +1446,54 @@
             "title": "buttonReleased"
         }, 
         {
+            "location": "/engine/sensor/", 
+            "text": "Sensor\n\n\nA Sensor is used to detect collisions with bricks (obstacle, cloud). Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.\n\n\nFactory\n\n\nSurgeEngine.Sensor\n\n\nSurgeEngine.Sensor(x, y, width, height)\n\n\nSpawns a new Sensor with the specified dimensions and having its top-left corner located at position (\nx\n, \ny\n) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both \nwidth\n and \nheight\n must be positive integers, and at least one of them must be equal to 1.\n\n\nArguments\n\n\n\n\nx\n: number. The x-position of the top-left corner of the sensor, relative to the parent object.\n\n\ny\n: number. The y-position of the top-left corner of the sensor, relative to the parent object.\n\n\nwidth\n: number. The width of the sensor, in pixels. Must be a positive integer.\n\n\nheight\n: number. The height of the sensor, in pixels. Must be a positive integer.\n\n\n\n\nReturns\n\n\nA Sensor with the specified parameters.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\nusing SurgeEngine.Sensor;\n\nobject \nSensorExample\n is \nentity\n\n{\n    actor = Actor(\nSD_SURGE\n);\n    sensor = Sensor(10, -50, 1, 50);\n\n    state \nmain\n\n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n        sensor.visible = true;\n        if(sensor.status != 0)\n            Console.print(\nGot brick\n);\n    }\n}\n\nobject \nApplication\n\n{\n    example = spawn(\nSensorExample\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nvisible\n: boolean. Should the sensor be rendered? Useful for debugging. Defaults to \nfalse\n.\n\n\nstatus\n: number, read-only. The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).\n\n\nangle\n: number, read-only. The angle of the colliding brick, in degrees.\n\n\n\n\nFunctions\n\n\nupdate\n\n\nupdate()\n\n\nThe sensor status is updated automatically once per frame. Use this function to update it manually. This is useful if you modify the position of the parent object and need the updated sensor status in the same frame (for example; you're working in a loop).", 
+            "title": "Sensor"
+        }, 
+        {
+            "location": "/engine/sensor/#sensor", 
+            "text": "A Sensor is used to detect collisions with bricks (obstacle, cloud). Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.", 
+            "title": "Sensor"
+        }, 
+        {
+            "location": "/engine/sensor/#factory", 
+            "text": "", 
+            "title": "Factory"
+        }, 
+        {
+            "location": "/engine/sensor/#surgeenginesensor", 
+            "text": "SurgeEngine.Sensor(x, y, width, height)  Spawns a new Sensor with the specified dimensions and having its top-left corner located at position ( x ,  y ) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both  width  and  height  must be positive integers, and at least one of them must be equal to 1.  Arguments   x : number. The x-position of the top-left corner of the sensor, relative to the parent object.  y : number. The y-position of the top-left corner of the sensor, relative to the parent object.  width : number. The width of the sensor, in pixels. Must be a positive integer.  height : number. The height of the sensor, in pixels. Must be a positive integer.   Returns  A Sensor with the specified parameters.  Example  using SurgeEngine.Actor;\nusing SurgeEngine.Sensor;\n\nobject  SensorExample  is  entity \n{\n    actor = Actor( SD_SURGE );\n    sensor = Sensor(10, -50, 1, 50);\n\n    state  main \n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n        sensor.visible = true;\n        if(sensor.status != 0)\n            Console.print( Got brick );\n    }\n}\n\nobject  Application \n{\n    example = spawn( SensorExample );\n\n    state  main \n    {\n    }\n}", 
+            "title": "SurgeEngine.Sensor"
+        }, 
+        {
+            "location": "/engine/sensor/#properties", 
+            "text": "visible : boolean. Should the sensor be rendered? Useful for debugging. Defaults to  false .  status : number, read-only. The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).  angle : number, read-only. The angle of the colliding brick, in degrees.", 
+            "title": "Properties"
+        }, 
+        {
+            "location": "/engine/sensor/#functions", 
+            "text": "", 
+            "title": "Functions"
+        }, 
+        {
+            "location": "/engine/sensor/#update", 
+            "text": "update()  The sensor status is updated automatically once per frame. Use this function to update it manually. This is useful if you modify the position of the parent object and need the updated sensor status in the same frame (for example; you're working in a loop).", 
+            "title": "update"
+        }, 
+        {
             "location": "/engine/surgeengine/", 
-            "text": "SurgeEngine\n\n\nThe SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).\n\n\nProperties\n\n\n\n\nversion\n: string, read-only. Open Surge version.", 
+            "text": "SurgeEngine\n\n\nThe SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).\n\n\nExample\n\n\n// Display Open Surge version\nusing SurgeEngine;\n\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(SurgeEngine.version);\n        state = \nblank\n;\n    }\n\n    state \nblank\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nversion\n: string, read-only. Open Surge version.", 
             "title": "SurgeEngine"
         }, 
         {
             "location": "/engine/surgeengine/#surgeengine", 
             "text": "The SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).", 
             "title": "SurgeEngine"
+        }, 
+        {
+            "location": "/engine/surgeengine/#example", 
+            "text": "// Display Open Surge version\nusing SurgeEngine;\n\nobject  Application \n{\n    state  main \n    {\n        Console.print(SurgeEngine.version);\n        state =  blank ;\n    }\n\n    state  blank \n    {\n    }\n}", 
+            "title": "Example"
         }, 
         {
             "location": "/engine/surgeengine/#properties", 

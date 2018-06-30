@@ -738,6 +738,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../sensor/" title="Sensor" class="md-nav__link">
+      Sensor
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -765,6 +777,13 @@
   
     <label class="md-nav__title" for="toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#example" title="Example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#properties" title="Properties" class="md-nav__link">
@@ -810,6 +829,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#example" title="Example" class="md-nav__link">
+    Example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#properties" title="Properties" class="md-nav__link">
     Properties
   </a>
@@ -835,6 +861,24 @@
                 
                 <h1 id="surgeengine">SurgeEngine</h1>
 <p>The SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).</p>
+<h2 id="example">Example</h2>
+<pre><code>// Display Open Surge version
+using SurgeEngine;
+
+object &quot;Application&quot;
+{
+    state &quot;main&quot;
+    {
+        Console.print(SurgeEngine.version);
+        state = &quot;blank&quot;;
+    }
+
+    state &quot;blank&quot;
+    {
+    }
+}
+</code></pre>
+
 <h2 id="properties">Properties</h2>
 <ul>
 <li><code>version</code>: string, read-only. Open Surge version.</li>
@@ -859,7 +903,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../mouse/" title="Mouse" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../sensor/" title="Sensor" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -868,7 +912,7 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Mouse
+                Sensor
               </span>
             </div>
           </a>
