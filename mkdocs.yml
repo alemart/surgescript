@@ -47,4 +47,5 @@ pages:
         - 'Entity': 'engine/entity.md'
         - 'Input': 'engine/input.md'
         - 'Mouse': 'engine/mouse.md'
+        - 'Sensor': 'engine/sensor.md'
         - 'SurgeEngine': 'engine/surgeengine.md'
