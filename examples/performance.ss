@@ -1,5 +1,5 @@
 //
-// benchmark.ss
+// performance.ss
 // Performance measurement in SurgeScript
 // Copyright 2018 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
