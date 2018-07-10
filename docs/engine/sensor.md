@@ -60,7 +60,6 @@ Properties
 
 * `visible`: boolean. Should the sensor be rendered? Useful for debugging. Defaults to `false`.
 * `status`: number, read-only. The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).
-* `angle`: number, read-only. The angle of the colliding brick, in degrees.
 
 Functions
 ---------
