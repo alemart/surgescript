@@ -41,7 +41,7 @@ static void (*log_function)(const char* message) = my_log;
 static void (*fatal_function)(const char* message) = my_fatal;
 
 /* current version of SurgeScript */
-static const char* version_code = "0.5.3";
+static const char* version_string = "0.5.3";
 
 
 
@@ -130,7 +130,7 @@ void surgescript_util_fatal(const char* fmt, ...)
  */
 const char* surgescript_util_version()
 {
-    return version_code;
+    return version_string;
 }
 
 /*
