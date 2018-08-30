@@ -1,7 +1,7 @@
 Components
 ==========
 
-Entity Component System (ECS) is a software pattern used in game development. The idea is that in-game objects (called *entities*) can be customized by adding or removing objects (called *components*) in runtime. Components add functionalities or behaviors to the entities to which they are attached to. In SurgeScript, both entities and components are objects - the difference is conceptual.
+Entity Component System (ECS) is a software pattern used in game development. The idea is that in-game objects (called *entities*) can be customized by adding or removing objects (called *components*) at runtime. Components add functionalities or behaviors to the entities to which they are attached to. In SurgeScript, both entities and components are objects - the difference is conceptual.
 
 As an example, consider an in-game object called **Parrot**. Objects by themselves are empty; they do nothing. However, an interesting behavior of parrots is that they are blabbers: they keep repeating the same thing over and over again. So, let's create an empty object **Parrot** and spawn on it the **Blabber** component:
 
@@ -31,7 +31,7 @@ object "Blabber"
 }
 ```
 
-Now, whenever you spawn a Parrot, it will keep blabbing unceasingly:
+Now, whenever you spawn a Parrot, it will keep blabbing (*parroting*) unceasingly:
 
 ```
 Hello!
@@ -92,4 +92,4 @@ In SurgeScript, components execute their own code and can be attached to entitie
 
 #### Composition over inheritance
 
-SurgeScript does not support inheritance, a feature found in many object-oriented languages. The usage of components is encouraged instead. SurgeScript favors composition over inheritance, allowing for greater flexibility when defining in-game objects.
+SurgeScript does not support inheritance, a feature found in other object-oriented languages. The usage of components is encouraged instead. SurgeScript favors composition over inheritance, allowing for greater flexibility when defining in-game objects.
