@@ -23,6 +23,7 @@
 #include <string.h>
 #include <stdio.h>
 
+const char* url = "https://github.com/alemart/surgescript";
 surgescript_vm_t* make_vm(int argc, char** argv);
 void print_to_stdout(const char* message);
 void print_to_stderr(const char* message);
@@ -79,7 +80,7 @@ surgescript_vm_t* make_vm(int argc, char** argv)
         }
         else if(strcmp(arg, "--version") == 0 || strcmp(arg, "-v") == 0) {
             /* display version */
-            printf("%s\n", SSINFO);
+            printf("%s\n", SSVERSION);
             return NULL;
         }
         else if(strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
@@ -116,7 +117,7 @@ surgescript_vm_t* make_vm(int argc, char** argv)
 void show_help(const char* executable)
 {
     printf(
-        "%s by Alexandre Martins\n"
+        "SurgeScript %s by Alexandre Martins\n"
         "Usage: %s [OPTIONS] <script>...\n"
         "Compiles and executes the given script(s).\n"
         "\n"
@@ -132,13 +133,13 @@ void show_help(const char* executable)
         "\t%s file.ss -- -x -y\tpasses custom arguments -x and -y to file.ss\n"
         "\n"
         "Full documentation at: <%s>\n",
-        SSINFO,
+        SSVERSION,
         executable,
         executable,
         executable,
         executable,
         executable,
-        SSURL
+        url
     );
 }
 

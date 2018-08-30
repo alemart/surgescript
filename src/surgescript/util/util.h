@@ -26,10 +26,7 @@
 #include <stdint.h>
 
 /* SurgeScript info */
-#define SSPROJECT                   "SurgeScript"
-#define SSVERSION                   "0.5.3"
-#define SSINFO                      SSPROJECT " " SSVERSION
-#define SSURL                       "https://github.com/alemart/surgescript"
+#define SSVERSION                   surgescript_util_version()
 
 /* macros */
 #define ssmin(a, b)                 ((a) < (b) ? (a) : (b))
@@ -49,6 +46,8 @@
 #define ssstrdup(str)               surgescript_util_strdup((str), __FILE__ ":" ssstr(__LINE__))
 
 /* public routines */
+const char* surgescript_util_version(); /* compiled version */
+
 void* surgescript_util_malloc(size_t bytes, const char* location); /* memory allocation */
 void* surgescript_util_realloc(void* ptr, size_t bytes, const char* location); /* memory reallocation */
 void* surgescript_util_free(void* ptr); /* memory deallocation */
