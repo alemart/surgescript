@@ -46,7 +46,8 @@
 #define ssstrdup(str)               surgescript_util_strdup((str), __FILE__ ":" ssstr(__LINE__))
 
 /* public routines */
-const char* surgescript_util_version(); /* compiled version */
+const char* surgescript_util_version(); /* compiled version of SurgeScript */
+int surgescript_util_versioncode(const char* version); /* converts a version string to a comparable number */
 
 void* surgescript_util_malloc(size_t bytes, const char* location); /* memory allocation */
 void* surgescript_util_realloc(void* ptr, size_t bytes, const char* location); /* memory reallocation */

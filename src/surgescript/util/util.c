@@ -134,6 +134,29 @@ const char* surgescript_util_version()
 }
 
 /*
+ * surgescript_util_versioncode()
+ * Converts a SurgeScript version string to a comparable number
+ * Note: if you pass NULL to version, it returns a comparable
+ * number of the current version of SurgeScript
+ */
+int surgescript_util_versioncode(const char* version)
+{
+    int code = 0, x = 0;
+
+    if(!version)
+        version = surgescript_util_version();
+
+    for(; *version; version++) {
+        if(isdigit(*version))
+            x = x * 10 + (*version - '0');
+        else if(*version == '.')
+            code = code * 100 + x, x = 0;
+    }
+
+    return code * 100 + x;
+}
+
+/*
  * surgescript_util_set_error_functions()
  * Customize the error messages
  */
