@@ -65,7 +65,7 @@ static void expect_something(surgescript_parser_t* parser);
 static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
 static void unexpected_symbol(surgescript_parser_t* parser);
 static void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static surgescript_var_t* disable_object(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
+static surgescript_var_t* empty_main(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
 static void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier);
 static void import_public_vars(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* object_name);
 static void make_accessor(const char* fun_name, void* symtable);
@@ -395,7 +395,7 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
     /* do we have a "main" state? */
     if(!surgescript_programpool_exists(parser->program_pool, context.object_name, "state:main")) {
         if(strcmp(context.object_name, "Application") != 0) {
-            surgescript_program_t* cprogram = surgescript_cprogram_create(0, disable_object);
+            surgescript_program_t* cprogram = surgescript_cprogram_create(0, empty_main);
             surgescript_programpool_put(parser->program_pool, context.object_name, "state:main", cprogram);
             /*sslog("Object \"%s\" in \"%s\" has omitted its \"main\" state and will be disabled.", context.object_name, context.source_file);*/
         }
@@ -404,10 +404,12 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
     }
 }
 
-/* an empty "main" state that disables the object for optimization purposes */
-surgescript_var_t* disable_object(surgescript_object_t* object, const surgescript_var_t* param[], int num_params)
+/* an empty "main" state */
+surgescript_var_t* empty_main(surgescript_object_t* object, const surgescript_var_t* param[], int num_params)
 {
-    surgescript_object_set_active(object, false);
+    /* disable the object for optimization purposes?
+       what about the children? */
+    /*surgescript_object_set_active(object, false);*/
     return NULL;
 }
 
