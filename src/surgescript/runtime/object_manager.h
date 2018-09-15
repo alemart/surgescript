@@ -66,6 +66,7 @@ surgescript_objecthandle_t surgescript_objectmanager_null(const surgescript_obje
 surgescript_objecthandle_t surgescript_objectmanager_root(const surgescript_objectmanager_t* manager); /* handle to the root object (the first one to be added) */
 surgescript_objecthandle_t surgescript_objectmanager_application(const surgescript_objectmanager_t* manager); /* handle to the user's application */
 surgescript_objecthandle_t surgescript_objectmanager_system_object(const surgescript_objectmanager_t* manager, const char* object_name); /* handle to the specified system object */
+surgescript_objecthandle_t surgescript_objectmanager_plugin_object(const surgescript_objectmanager_t* manager, const char* plugin_name); /* handle to a plugin object */
 const char** surgescript_objectmanager_builtin_objects(const surgescript_objectmanager_t* manager); /* NULL-terminated list of the names of the built-in objects */
 
 /* utilities */

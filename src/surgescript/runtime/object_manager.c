@@ -51,8 +51,8 @@ struct surgescript_objectmanager_t
 };
 
 /* fixed objects */
-static const surgescript_objecthandle_t NULL_HANDLE = 0; /* must always be zero */
-static const surgescript_objecthandle_t ROOT_HANDLE = 1;
+#define NULL_HANDLE                 0   /* must always be zero */
+#define ROOT_HANDLE                 1
 
 /* system objects are children of the root and
    their addresses must be known at compile-time */
@@ -101,6 +101,7 @@ static surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr);
 static void add_to_plugin_list(surgescript_objectmanager_t* manager, const char* object_name);
 static void release_plugin_list(surgescript_objectmanager_t* manager);
 static char** compile_plugins_list(const surgescript_objectmanager_t* manager);
+static inline surgescript_object_t* plugin_object(const surgescript_objectmanager_t* manager);
 
 /* -------------------------------
  * public methods
@@ -284,7 +285,7 @@ surgescript_objecthandle_t surgescript_objectmanager_root(const surgescript_obje
 /*
  * surgescript_objectmanager_application()
  * Returns a handle to the user's application
- * This can only be determined at runtime
+ * This can only be determined at runtime, hence the manager parameter must NOT be set to NULL
  */
 surgescript_objecthandle_t surgescript_objectmanager_application(const surgescript_objectmanager_t* manager)
 {
@@ -311,6 +312,33 @@ surgescript_objecthandle_t surgescript_objectmanager_system_object(const surgesc
     
     /* not found */
     return NULL_HANDLE;
+}
+
+/*
+ * surgescript_objectmanager_plugin_object()
+ * Returns the handle of the specified plugin object
+ * If plugin_name is NULL, returns a handle to Plugin (system object)
+ * This can only be determined at runtime, hence the manager parameter must NOT be set to NULL
+ */
+surgescript_objecthandle_t surgescript_objectmanager_plugin_object(const surgescript_objectmanager_t* manager, const char* plugin_name)
+{
+    surgescript_object_t* plugin = plugin_object(manager);
+    surgescript_objecthandle_t handle;
+
+    if(plugin_name != NULL) {
+        char* accessor_fun = surgescript_util_accessorfun("get", plugin_name);
+        surgescript_var_t* ret = surgescript_var_create();
+
+        surgescript_object_call_function(plugin, accessor_fun, NULL, 0, ret);
+        handle = surgescript_var_get_objecthandle(ret);
+
+        surgescript_var_destroy(ret);
+        ssfree(accessor_fun);
+    }
+    else
+        handle = surgescript_object_handle(plugin);
+
+    return handle;
 }
 
 /*
@@ -540,4 +568,15 @@ char** compile_plugins_list(const surgescript_objectmanager_t* manager) {
 
     /* done! */
     return buf;
+}
+
+/* returns the plugin object -- fast */
+surgescript_object_t* plugin_object(const surgescript_objectmanager_t* manager)
+{
+    static surgescript_objecthandle_t handle = NULL_HANDLE;
+
+    if(handle == NULL_HANDLE) /* cache the handle */
+        handle = surgescript_objectmanager_system_object(NULL, "Plugin");
+
+    return surgescript_objectmanager_get(manager, handle);
 }
