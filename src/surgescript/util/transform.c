@@ -25,6 +25,15 @@
 
 /* utilities */
 static const float DEG2RAD = 0.0174532925f;
+static surgescript_transform_t identity = {
+    .position = { .x = 0.0f, .y = 0.0f, .z = 0.0f },
+    .rotation = {
+        .x = 0.0f, .y = 0.0f, .z = 0.0f,
+        .sx = 0.0f, .sy = 0.0f, .sz = 0.0f,
+        .cx = 1.0f, .cy = 1.0f, .cz = 1.0f
+    },
+    .scale = { .x = 1.0f, .y = 1.0f, .z = 1.0f }
+};
 
 /*
  * surgescript_transform_create()
@@ -52,23 +61,7 @@ surgescript_transform_t* surgescript_transform_destroy(surgescript_transform_t* 
  */
 void surgescript_transform_reset(surgescript_transform_t* t)
 {
-    t->position.x = 0.0f;
-    t->position.y = 0.0f;
-    t->position.z = 0.0f;
-
-    t->rotation.x = 0.0f;
-    t->rotation.y = 0.0f;
-    t->rotation.z = 0.0f;
-    t->rotation.sx = 0.0f;
-    t->rotation.cx = 1.0f;
-    t->rotation.sy = 0.0f;
-    t->rotation.cy = 1.0f;
-    t->rotation.sz = 0.0f;
-    t->rotation.cz = 1.0f;
-
-    t->scale.x = 1.0f;
-    t->scale.y = 1.0f;
-    t->scale.z = 1.0f;
+    *t = identity;
 }
 
 /*
