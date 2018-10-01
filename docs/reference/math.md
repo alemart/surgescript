@@ -217,7 +217,7 @@ Floor function.
 
 *Returns*
 
-The largest integer smaller or equal than `x`.
+The largest integer less or equal than `x`.
 
 #### ceil
 
