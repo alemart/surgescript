@@ -200,7 +200,7 @@ char* surgescript_util_strdup(const char* src, const char* location)
  */
 uint32_t surgescript_util_str2hash(const char* str)
 {
-    const char* p = str;
+    const unsigned char* p = (const unsigned char*)str;
     uint32_t hash = 0;
 
     if(p != NULL) {
