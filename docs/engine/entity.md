@@ -12,6 +12,7 @@ Tags
 * `awake`: tells Open Surge to **not** disable the object if it gets too far off camera.
 * `detached`: the object will **not** follow the camera - it will be rendered in screen space.
 * `disposable`: will destroy the object automatically if it gets too far off camera.
+* `private`: private entities cannot be spawned via the level editor (they will be hidden).
 
 Example
 -------
