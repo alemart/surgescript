@@ -696,12 +696,13 @@ char* state2fun(const char* state)
 
 unsigned run_current_state(const surgescript_object_t* object)
 {
-    unsigned start = surgescript_util_gettickcount();
+    unsigned start = surgescript_util_gettickcount(), end;
     surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
     surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
     surgescript_program_call(object->current_state, object->renv, 0);
     surgescript_stack_pop(stack);
-    return surgescript_util_gettickcount() - start;
+    end = surgescript_util_gettickcount();
+    return end > start ? end - start : 0;
 }
 
 surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name)
