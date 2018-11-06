@@ -30,6 +30,7 @@
 
 /* private stuff */
 static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 static surgescript_var_t* fun_translate(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_rotate(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -63,9 +64,11 @@ static inline void worldposition2d(surgescript_object_t* object, double* world_x
 static inline void setworldposition2d(surgescript_object_t* object, double world_x, double world_y, int flags);
 static inline double worldangle2d(surgescript_object_t* object);
 static inline void setworldangle2d(surgescript_object_t* object, double angle);
+static inline void notify_change(surgescript_object_t* object);
 static const int T2SET_WORLDX = 0x1;
 static const int T2SET_WORLDY = 0x2;
 static const double RAD2DEG = 57.2957795131;
+static const char* ONCHANGE = "onTransformChange"; /* fun onTransformChange(transform): [optional] listener on the parent object */
 
 
 
@@ -76,6 +79,7 @@ static const double RAD2DEG = 57.2957795131;
 void surgescript_sslib_register_transform2d(surgescript_vm_t* vm)
 {
     surgescript_vm_bind(vm, "Transform2D", "state:main", fun_main, 0);
+    surgescript_vm_bind(vm, "Transform2D", "constructor", fun_constructor, 0);
 
     surgescript_vm_bind(vm, "Transform2D", "translate", fun_translate, 2);
     surgescript_vm_bind(vm, "Transform2D", "rotate", fun_rotate, 1);
@@ -115,6 +119,18 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
     return NULL;
 }
 
+/* constructor */
+surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    /* register target object for change notifications */
+    if(surgescript_object_has_function(target(object), ONCHANGE))
+        surgescript_object_set_userdata(object, target(object));
+    else
+        surgescript_object_set_userdata(object, NULL);
+
+    /* done */
+    return NULL;
+}
 
 /* rigid operations */
 surgescript_var_t* fun_translate(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
@@ -125,9 +141,11 @@ surgescript_var_t* fun_translate(surgescript_object_t* object, const surgescript
 
     surgescript_transform_translate2d(transform, tx, ty);
 
+    notify_change(object);
     return NULL;
 
 }
+
 surgescript_var_t* fun_rotate(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
@@ -135,6 +153,7 @@ surgescript_var_t* fun_rotate(surgescript_object_t* object, const surgescript_va
 
     surgescript_transform_rotate2d(transform, degrees);
 
+    notify_change(object);
     return NULL;
 }
 
@@ -174,6 +193,7 @@ surgescript_var_t* fun_setxpos(surgescript_object_t* object, const surgescript_v
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     transform->position.x = surgescript_var_get_number(param[0]);
+    notify_change(object);
     return NULL;
 }
 
@@ -181,6 +201,7 @@ surgescript_var_t* fun_setypos(surgescript_object_t* object, const surgescript_v
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     transform->position.y = surgescript_var_get_number(param[0]);
+    notify_change(object);
     return NULL;
 }
 
@@ -188,6 +209,7 @@ surgescript_var_t* fun_setangle(surgescript_object_t* object, const surgescript_
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     surgescript_transform_setrotation2d(transform, surgescript_var_get_number(param[0])); /* in degrees */
+    notify_change(object);
     return NULL;
 }
 
@@ -195,6 +217,7 @@ surgescript_var_t* fun_sethscale(surgescript_object_t* object, const surgescript
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     transform->scale.x = surgescript_var_get_number(param[0]);
+    notify_change(object);
     return NULL;
 }
 
@@ -202,6 +225,7 @@ surgescript_var_t* fun_setvscale(surgescript_object_t* object, const surgescript
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     transform->scale.y = surgescript_var_get_number(param[0]);
+    notify_change(object);
     return NULL;
 }
 
@@ -232,18 +256,21 @@ surgescript_var_t* fun_getworldangle(surgescript_object_t* object, const surgesc
 surgescript_var_t* fun_setworldx(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     setworldposition2d(target(object), surgescript_var_get_number(param[0]), 0.0, T2SET_WORLDX);
+    notify_change(object);
     return NULL;
 }
 
 surgescript_var_t* fun_setworldy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     setworldposition2d(target(object), 0.0, surgescript_var_get_number(param[0]), T2SET_WORLDY);
+    notify_change(object);
     return NULL;
 }
 
 surgescript_var_t* fun_setworldangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     setworldangle2d(target(object), surgescript_var_get_number(param[0])); /* in degrees */
+    notify_change(object);
     return NULL;
 }
 
@@ -420,4 +447,16 @@ void setworldangle2d(surgescript_object_t* object, double angle)
 
     /* update local angle */
     surgescript_transform_setrotation2d(transform, angle);
+}
+
+/* notify the target object of a transform change */
+void notify_change(surgescript_object_t* object)
+{
+    surgescript_object_t* notifiable_target = (surgescript_object_t*)surgescript_object_userdata(object);
+    if(notifiable_target != NULL && notifiable_target == target(object)) { /* safety check */
+        surgescript_var_t* transform_handle = surgescript_var_set_objecthandle(surgescript_var_create(), surgescript_object_handle(object));
+        const surgescript_var_t* p[] = { transform_handle };
+        surgescript_object_call_function(notifiable_target, ONCHANGE, p, 1, NULL);
+        surgescript_var_destroy(transform_handle);
+    }
 }

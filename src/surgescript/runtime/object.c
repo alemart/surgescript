@@ -222,6 +222,17 @@ bool surgescript_object_has_tag(const surgescript_object_t* object, const char* 
     return surgescript_tagsystem_has_tag(surgescript_objectmanager_tagsystem(manager), object->name, tag_name);
 }
 
+/*
+ * surgescript_object_has_function()
+ * Checks if the object has the specified function
+ */
+bool surgescript_object_has_function(const surgescript_object_t* object, const char* fun_name)
+{
+    surgescript_programpool_t* pool = surgescript_renv_programpool(object->renv);
+    return surgescript_programpool_exists(pool, object->name, fun_name);
+}
+
+
 
 
 
@@ -682,8 +693,6 @@ size_t surgescript_object_memspent(const surgescript_object_t* object)
 {
     return surgescript_heap_memspent(object->heap);
 }
-
-
 
 /* private stuff */
 char* state2fun(const char* state)

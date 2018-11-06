@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2017 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@ struct surgescript_objectmanager_t* surgescript_object_manager(const surgescript
 void* surgescript_object_userdata(const surgescript_object_t* object); /* custom user data (if any) */
 void surgescript_object_set_userdata(surgescript_object_t* object, void* data); /* set custom user data */
 bool surgescript_object_has_tag(const surgescript_object_t* object, const char* tag_name); /* is this object tagged tag_name? */
+bool surgescript_object_has_function(const surgescript_object_t* object, const char* fun_name); /* does the object have the specified function? */
 double surgescript_object_elapsed_time(const surgescript_object_t* object); /* elapsed time (in seconds) since last state change */
 double surgescript_object_timespent(const surgescript_object_t* object); /* time consumption at the last frame (in seconds) */
 size_t surgescript_object_memspent(const surgescript_object_t* object); /* memory consumption at the last frame (in bytes) */
