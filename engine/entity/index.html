@@ -785,6 +785,30 @@
 
 
   <li class="md-nav__item">
+    <a href="../player/" title="Player" class="md-nav__link">
+      Player
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../prefs/" title="Prefs" class="md-nav__link">
+      Prefs
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../sensor/" title="Sensor" class="md-nav__link">
       Sensor
     </a>
@@ -868,19 +892,20 @@
 <li><code>awake</code>: tells Open Surge to <strong>not</strong> disable the object if it gets too far off camera.</li>
 <li><code>detached</code>: the object will <strong>not</strong> follow the camera - it will be rendered in screen space.</li>
 <li><code>disposable</code>: will destroy the object automatically if it gets too far off camera.</li>
+<li><code>private</code>: private entities cannot be spawned via the level editor (they will be hidden).</li>
 </ul>
 <h2 id="example">Example</h2>
-<pre><code>// In the example below, MyExplosion (entity) has a Actor component
+<pre><code>// In the example below, MyExplosion (entity) has an Actor component
 // that gives it a visible form (a sprite) in world space.
 using SurgeEngine.Actor;
 
 object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;
 {
-    actor = Actor(&quot;SD_EXPLOSION&quot;);
+    actor = Actor(&quot;MyExplosion&quot;);
 
     state &quot;main&quot;
     {
-        if(actor.animFinished())
+        if(timeout(1))
             destroy();
     }
 }
