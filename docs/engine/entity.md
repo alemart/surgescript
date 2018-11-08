@@ -24,11 +24,11 @@ using SurgeEngine.Actor;
 
 object "MyExplosion" is "entity", "disposable"
 {
-    actor = Actor("SD_EXPLOSION");
+    actor = Actor("MyExplosion");
 
     state "main"
     {
-        if(actor.animFinished())
+        if(timeout(1))
             destroy();
     }
 }

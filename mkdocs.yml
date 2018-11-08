@@ -48,5 +48,6 @@ pages:
         - 'Input': 'engine/input.md'
         - 'Mouse': 'engine/mouse.md'
         - 'Player': 'engine/player.md'
+        - 'Prefs': 'engine/prefs.md'
         - 'Sensor': 'engine/sensor.md'
         - 'SurgeEngine': 'engine/surgeengine.md'
