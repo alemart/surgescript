@@ -67,7 +67,13 @@
     F( SSTOK_PUBLIC, "public" )                                                 \
     F( SSTOK_USING, "using" )                                                   \
     F( SSTOK_DO, "do" )                                                         \
+    F( SSTOK_SWITCH, "switch" )                                                 \
+    F( SSTOK_CASE, "case" )                                                     \
+    F( SSTOK_DEFAULT, "default" )                                               \
+    F( SSTOK_CONST, "const" )                                                   \
+    F( SSTOK_ASSERT, "assert" )                                                 \
     F( SSTOK_WAIT, "wait" )                                                     \
+    F( SSTOK_STATIC, "static" )                                                 \
     F( SSTOK_OF, "of" )                                                         \
     F( SSTOK_IS, "is" )                                                         \
     F( SSTOK_CALLER, "caller" )                                                 \
