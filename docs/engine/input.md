@@ -6,7 +6,7 @@ The Input component is used to read input from the user.
 Factory
 -------
 
-#### SurgeEngine.Input
+#### Input
 
 `SurgeEngine.Input(inputMap)`
 

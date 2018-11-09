@@ -44,6 +44,10 @@ pages:
     - 'SurgeEngine Reference':
         - 'Actor': 'engine/actor.md'
         - 'Camera': 'engine/camera.md'
+        - 'Collisions':
+            - 'Collider': 'engine/collider.md'
+            - 'CollisionBall': 'engine/collisionball.md'
+            - 'CollisionBox': 'engine/collisionbox.md'
         - 'Entity': 'engine/entity.md'
         - 'Input': 'engine/input.md'
         - 'Mouse': 'engine/mouse.md'

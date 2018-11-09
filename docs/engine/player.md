@@ -1,12 +1,12 @@
 Player
 ======
 
-The Player object is used to control a specific player/character. Player objects are tagged *player*.
+The Player object is used to control a specific player/character. Player objects are tagged *player*. That might be useful when dealing with collisions.
 
 Factory
 -------
 
-#### SurgeEngine.Player
+#### Player
 
 `SurgeEngine.Player(playerName | playerId)`
 
@@ -44,7 +44,7 @@ object "Collectible Bonus"
 }
 ```
 
-#### SurgeEngine.Player.active
+#### Player.active
 
 `SurgeEngine.Player.active`
 
@@ -69,7 +69,7 @@ object "Who am I"
 }
 ```
 
-#### SurgeEngine.Player.count
+#### Player.count
 
 `SurgeEngine.Player.count`
 

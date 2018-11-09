@@ -6,7 +6,7 @@ A Sensor is used to detect collisions with bricks (obstacle, cloud). Due to perf
 Factory
 -------
 
-#### SurgeEngine.Sensor
+#### Sensor
 
 `SurgeEngine.Sensor(x, y, width, height)`
 

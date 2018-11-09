@@ -6,7 +6,7 @@ The Actor component is used to associate a sprite to a target object. The target
 Factory
 -------
 
-#### SurgeEngine.Actor
+#### Actor
 
 `SurgeEngine.Actor(spriteName)`
 
