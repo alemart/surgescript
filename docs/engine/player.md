@@ -26,7 +26,8 @@ A Player object.
 using SurgeEngine.Player;
 
 // Gives Surge 1 collectible each second
-object "CollectibleGiver"
+// Just place it in your level
+object "CollectibleGiver" is "entity", "awake"
 {
     player = Player("Surge");
 
