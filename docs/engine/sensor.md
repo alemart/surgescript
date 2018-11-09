@@ -28,9 +28,9 @@ A Sensor with the specified parameters.
 using SurgeEngine.Actor;
 using SurgeEngine.Sensor;
 
-object "SensorExample" is "entity"
+object "SensorToy" is "entity"
 {
-    actor = Actor("SD_SURGE");
+    actor = Actor("SensorToy");
     sensor = Sensor(10, -50, 1, 50);
 
     state "main"

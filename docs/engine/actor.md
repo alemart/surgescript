@@ -26,8 +26,8 @@ using SurgeEngine.Actor;
 
 object "SurgeTest" is "entity"
 {
-    // spawns an Actor with the SD_SURGE sprite
-    actor = Actor("SD_SURGE");
+    // spawns an Actor with the SurgeTest sprite
+    actor = Actor("SurgeTest");
 
     // position the actor
     state "main"

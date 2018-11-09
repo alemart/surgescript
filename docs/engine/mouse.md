@@ -15,7 +15,7 @@ using SurgeEngine.Actor;
 
 object "MyCursor" is "entity", "detached"
 {
-    actor = Actor("SD_COLLECTIBLE");
+    actor = Actor("MyCursor");
 
     state "main"
     {
