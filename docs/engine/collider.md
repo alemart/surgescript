@@ -14,9 +14,9 @@ using SurgeEngine.Actor;
 using SurgeEngine.Player;
 using SurgeEngine.Collisions.CollisionBall;
 
-object "CollisionTest" is "entity"
+object "CollisionDoll" is "entity"
 {
-    actor = Actor("CollisionTest");
+    actor = Actor("CollisionDoll");
     collider = CollisionBall(25); // ball with radius = 25px
 
     // The player has a built-in collider

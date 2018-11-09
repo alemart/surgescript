@@ -9,9 +9,9 @@ A CollisionBox is a special type of [Collider](collider) that takes the shape of
 using SurgeEngine.Actor;
 using SurgeEngine.Collisions.CollisionBox;
 
-object "CollisionTest" is "entity"
+object "CollisionDoll" is "entity"
 {
-    actor = Actor("CollisionTest");
+    actor = Actor("CollisionDoll");
     collider = CollisionBox(32,64); // width = 32px, height = 64px
 
     state "main"

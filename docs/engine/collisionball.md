@@ -9,9 +9,9 @@ A CollisionBall is a special type of [Collider](collider) that takes the shape o
 using SurgeEngine.Actor;
 using SurgeEngine.Collisions.CollisionBall;
 
-object "CollisionTest" is "entity"
+object "CollisionDoll" is "entity"
 {
-    actor = Actor("CollisionTest");
+    actor = Actor("CollisionDoll");
     collider = CollisionBall(25); // radius = 25px
 
     state "main"

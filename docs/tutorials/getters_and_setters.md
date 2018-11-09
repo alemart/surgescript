@@ -35,6 +35,10 @@ Run this script and you'll see:
 
 ```
 meow!
+meow!
+meow!
+meow!
+...
 ```
 
 What if an external object could modify the sound of the animal? Trying to access `animal.sound` externally will trigger an error, unless you add the **public** keyword to your variable:
