@@ -3,8 +3,11 @@ Camera
 
 The Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.
 
-Example
--------
+> **HUD elements**
+>
+> Objects tagged as *"detached"* do not follow the camera. They are not in world space, but in screen space. This is useful for creating HUD elements.
+
+*Example*
 
 ```
 // Import the Camera object
@@ -28,12 +31,20 @@ object "Application"
 }
 ```
 
-**Note:** objects tagged as *"detached"* do not follow the camera. They are not in world space, but in screen space.
 
 
 
 Properties
 ----------
 
-* `xpos`: number. The x-position of the camera in world space.
-* `ypos`: number. The y-position of the camera in world space.
+#### xpos
+
+`xpos`: number.
+
+The x-position of the camera in world space.
+
+#### ypos
+
+`ypos`: number.
+
+The y-position of the camera in world space.

@@ -3,8 +3,8 @@ SurgeEngine
 
 The SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).
 
-Example
--------
+*Example*
+
 ```
 // Display Open Surge version
 using SurgeEngine;
@@ -26,4 +26,8 @@ object "Application"
 Properties
 ----------
 
-* `version`: string, read-only. Open Surge version.
+#### version
+
+`version`: string, read-only.
+
+Open Surge version.

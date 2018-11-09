@@ -79,36 +79,146 @@ Player count.
 
 The number of players in the level.
 
-Read-Only Properties
---------------------
+Properties
+----------
 
-* `name`: string. The name of the character.
-* `activity`: string. The current state / activity of the player. One of the following: *"stopped"*, *"walking"*, *"running"*, *"jumping"*, *"springing"*, *"rolling"*, *"charging"*, *"pushing"*, *"gettinghit"*, *"dying"*, *"braking"*, *"balancing"*, *"drowning"*, *"breathing"*, *"ducking"*, *"lookingup"*, *"waiting"*, *"winning"*.
-* `attacking`: boolean. Is the player attacking? (jumping, rolling, and so on)
-* `midair`: boolean. Is the player midair?
-* `secondsToDrown`: number. The number of seconds to drown, if underwater.
-* `direction`: number. It will be +1 if the player is facing right, or -1 if facing left.
-* `width`: number. The width of the player sprite, in pixels.
-* `height`: number. The height of the player sprite, in pixels.
-* `transform`: [Transform2D](../reference/transform2d) object. The transform of the Player.
-* `collider`: [Collider](collider) object. A collider associated with this Player.
+#### name
 
-Read-Write Properties
----------------------
+`name`: string, read-only.
 
-* `anim`: number. An integer value corresponding to the animation number.
-* `shield`: string. One of the following: *"none"*, *"shield"*, *"fire"*, *"thunder"*, *"water"*, *"acid"*, *"wind"*.
-* `invincible`: boolean. Used to make the player invincible. Defaults to `false`.
-* `turbo`: boolean. Turbo mode (increases player speed). Defaults to `false`.
-* `frozen`: boolean. Disable/enable player movement. Defaults to `false`.
-* `underwater`: boolean. Get underwater / out of water. Defaults to `false`.
-* `visible`: boolean. Should the player sprite be rendered? Defaults to `true`.
-* `collectibles`: number. The number of collectibles, an integer shared between all player objects.
-* `lives`: number. The number of lives, an integer shared between all player objects.
-* `score`: number. The score of the player, an integer value shared between all player objects.
-* `gsp`: number. Ground speed, in pixels per second.
-* `xsp`: number. X-speed, in pixels per second (useful in midair).
-* `ysp`: number. Y-speed, in pixels per second.
+The name of the character.
+
+#### activity
+
+`activity`: string, read-only.
+
+The current state / activity of the player. One of the following: *"stopped"*, *"walking"*, *"running"*, *"jumping"*, *"springing"*, *"rolling"*, *"charging"*, *"pushing"*, *"gettinghit"*, *"dying"*, *"braking"*, *"balancing"*, *"drowning"*, *"breathing"*, *"ducking"*, *"lookingup"*, *"waiting"*, *"winning"*.
+
+#### anim
+
+`anim`: number.
+
+An integer value corresponding to the animation number.
+
+#### attacking
+
+`attacking`: boolean, read-only.
+
+Is the player attacking? (jumping, rolling, and so on)
+
+#### midair
+
+`midair`: boolean, read-only.
+
+Is the player midair?
+
+#### secondsToDrown
+
+`secondsToDrown`: number, read-only.
+
+The number of seconds to drown, if underwater.
+
+#### direction
+
+`direction`: number, read-only.
+
+Direction will be +1 if the player is facing right, -1 if facing left.
+
+#### width
+
+`width`: number, read-only.
+
+The width of the player sprite, in pixels.
+
+#### height
+
+`height`: number, read-only.
+
+The height of the player sprite, in pixels.
+
+#### transform
+
+`transform`: [Transform2D](../reference/transform2d) object, read-only.
+
+The transform of the Player.
+
+#### collider
+
+`collider`: [Collider](collider) object, read-only.
+
+A collider associated with this Player.
+
+#### shield
+
+`shield`: string.
+
+One of the following: *"none"*, *"shield"*, *"fire"*, *"thunder"*, *"water"*, *"acid"*, *"wind"*.
+
+#### invincible
+
+`invincible`: boolean.
+
+Used to make the player invincible. Defaults to `false`.
+
+#### turbo
+
+`turbo`: boolean.
+
+Turbo mode (increases player speed). Defaults to `false`.
+
+#### frozen
+
+`frozen`: boolean.
+
+Disable/enable player movement. Defaults to `false`.
+
+#### underwater
+
+`underwater`: boolean.
+
+Get underwater / out of water. Defaults to `false`.
+
+#### visible
+
+`visible`: boolean.
+
+Should the player sprite be rendered? Defaults to `true`.
+
+#### collectibles
+
+`collectibles`: number.
+
+The number of collectibles, an integer shared between all player objects.
+
+#### lives
+
+`lives`: number.
+
+The number of lives, an integer shared between all player objects.
+
+#### score
+
+`score`: number.
+
+The score of the player, an integer value shared between all player objects.
+
+#### gsp
+
+`gsp`: number.
+
+Ground speed, in pixels per second.
+
+#### xsp
+
+`xsp`: number.
+
+Horizontal speed, in pixels per second (useful while midair).
+
+#### ysp
+
+`ysp`: number.
+
+Vertical speed, in pixels per second.
 
 
 Functions
@@ -123,6 +233,32 @@ Makes the player bounce after smashing a hazard. The trajectory of the movement 
 *Arguments*
 
 * `hazard`: [Actor](actor) object. The hazard.
+
+*Example*
+```
+using SurgeEngine.Player;
+using SurgeEngine.Actor;
+using SurgeEngine.Collisions.CollisionBox;
+
+object "ShieldBox" is "entity"
+{
+    actor = Actor("ShieldBox");
+    shieldCollider = CollisionBox(32,32);
+
+    state "main"
+    {
+        player = Player.active;
+        if(player.attacking) {
+            if(player.collider.collidesWith(shieldCollider)) {
+                if(player.midair)
+                    player.bounce(actor);
+                player.shield = "fire";
+                destroy();
+            }
+        }
+    }
+}
+```
 
 #### bounceBack
 

@@ -9,7 +9,7 @@ There are two main ways to test your scripts:
 Using Open Surge
 ----------------
 
-To test a script on Open Surge, place it on the *scripts/* folder and start the engine. Your test script must include an object called *Application*. Additionally, remove the script after you're done with the testing.
+To test a script on Open Surge, place it on the *scripts/* folder and start the engine. Your test script must include an object called *Application*. Please remove the script after you're done with the testing.
 
 As an example, save the following script to *scripts/hello.ss* and start the engine:
 ```
@@ -28,6 +28,8 @@ object "Application"
     }
 }
 ```
+
+Now let's begin our learning adventure: go to [Introduction to objects](objects).
 
 Using the standalone version
 ----------------------------
@@ -60,3 +62,5 @@ surgescript.exe hello.ss
 ```
 Hello, world!
 ```
+
+Now let's begin our learning adventure: go to [Introduction to objects](objects).

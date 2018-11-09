@@ -39,8 +39,18 @@ object "Application"
 Properties
 ----------
 
-* `xpos`: number, read-only. The x-position of the mouse cursor, in screen space.
-* `ypos`: number, read-only. The y-position of the mouse cursor, in screen space.
+#### xpos
+
+`xpos`: number, read-only.
+
+The x-position of the mouse cursor, in screen space.
+
+#### ypos
+
+`ypos`: number, read-only.
+
+The y-position of the mouse cursor, in screen space.
+
 
 Functions
 ---------

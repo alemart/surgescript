@@ -43,13 +43,23 @@ Spawns a new CollisionBall with the specified radius, in pixels.
 
 A new CollisionBall with the specified radius.
 
-Read-Only Properties
---------------------
+Properties
+----------
 
-* `centerX`: number. The x-coordinate of the center of the CollisionBall, in world space.
-* `centerY`: number. The y-coordinate of the center of the CollisionBall, in world space.
+#### centerX
 
-Read-Write Properties
----------------------
+`centerX`: number, read-only.
 
-* `radius`: number. The radius of the CollisionBall.
+The x-coordinate of the center of the CollisionBall, in world space.
+
+#### centerY
+
+`centerY`: number, read-only.
+
+The y-coordinate of the center of the CollisionBall, in world space.
+
+#### radius
+
+`radius`: number.
+
+The radius of the CollisionBall, in pixels.

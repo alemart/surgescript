@@ -44,16 +44,41 @@ Spawns a new CollisionBox with the specified dimensions, in pixels.
 
 A new CollisionBox with the specified dimensions.
 
-Read-Only Properties
---------------------
+Properties
+----------
 
-* `top`: number. The y-coordinate of top border of the CollisionBox, in world space.
-* `right`: number. The x-coordinate of right border of the CollisionBox, in world space.
-* `bottom`: number. The y-coordinate of bottom border of the CollisionBox, in world space.
-* `left`: number. The x-coordinate of left border of the CollisionBox, in world space.
+#### top
 
-Read-Write Properties
----------------------
+`top`: number, read-only.
 
-* `width`: number. The width of the CollisionBox, in pixels.
-* `height`: number. The height of the CollisionBox, in pixels.
+The y-coordinate of top border of the CollisionBox, in world space.
+
+#### right
+
+`right`: number, read-only.
+
+The x-coordinate of right border of the CollisionBox, in world space.
+
+#### bottom
+
+`bottom`: number, read-only.
+
+The y-coordinate of bottom border of the CollisionBox, in world space.
+
+#### left
+
+`left`: number, read-only.
+
+The x-coordinate of left border of the CollisionBox, in world space.
+
+#### width
+
+`width`: number.
+
+The width of the CollisionBox, in pixels.
+
+#### height
+
+`height`: number.
+
+The height of the CollisionBox, in pixels.
