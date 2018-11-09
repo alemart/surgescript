@@ -1500,7 +1500,8 @@
 <pre><code>using SurgeEngine.Player;
 
 // Gives Surge 1 collectible each second
-object &quot;CollectibleGiver&quot;
+// Just place it in your level
+object &quot;CollectibleGiver&quot; is &quot;entity&quot;, &quot;awake&quot;
 {
     player = Player(&quot;Surge&quot;);
 
@@ -1549,6 +1550,18 @@ object &quot;Who am I&quot;
 <h4 id="activity">activity</h4>
 <p><code>activity</code>: string, read-only.</p>
 <p>The current state / activity of the player. One of the following: <em>"stopped"</em>, <em>"walking"</em>, <em>"running"</em>, <em>"jumping"</em>, <em>"springing"</em>, <em>"rolling"</em>, <em>"charging"</em>, <em>"pushing"</em>, <em>"gettinghit"</em>, <em>"dying"</em>, <em>"braking"</em>, <em>"balancing"</em>, <em>"drowning"</em>, <em>"breathing"</em>, <em>"ducking"</em>, <em>"lookingup"</em>, <em>"waiting"</em>, <em>"winning"</em>.</p>
+<pre><code>using SurgeEngine.Player;
+
+object &quot;ActivityDebugger&quot; is &quot;awake&quot;, &quot;entity&quot;
+{
+    state &quot;main&quot;
+    {
+        player = Player.active;
+        Console.print(player.activity);
+    }
+}
+</code></pre>
+
 <h4 id="anim">anim</h4>
 <p><code>anim</code>: number.</p>
 <p>An integer value corresponding to the animation number.</p>
