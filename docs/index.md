@@ -10,8 +10,6 @@ SurgeScript is a scripting language for games. It is extremely useful for empowe
 
 [![Download](img/download.png)](download)
 
-**Are you benefiting from SurgeScript?** We ask you to support us, so we can continue to work on this project.
-
 [![Support us](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
 
 SurgeScript in a nutshell
