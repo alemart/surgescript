@@ -1,10 +1,11 @@
 Welcome to SurgeScript!
 =======================
 
+<img src="img/surge.png" align="right" width="256">
+
 Unleash your creativity!
 ------------------------
 
-<img src="img/opensurge.png" align="right">
 SurgeScript is a scripting language for games. It is extremely useful for empowering users to unleash their creativity and build their own content with ease, flexibility and power. It's such a joy to program in SurgeScript! You and your users will love it.
 
 [![Download](img/download.png)](download)
@@ -51,6 +52,6 @@ Other benefits include:
 
 These features come from the experience of the developer dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
-Who did this?
--------------
-SurgeScript was originally conceived by [Alexandre Martins](https://github.com/alemart), a computer scientist from Brazil. Many thanks to the Open Surge Community for the continued feedback.
+Who created this?
+-----------------
+SurgeScript was originally created by [Alexandre Martins](https://github.com/alemart), a computer scientist from Brazil. Many thanks to the Open Surge Community for the continued feedback.
