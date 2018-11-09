@@ -1500,17 +1500,17 @@
 <pre><code>using SurgeEngine.Player;
 
 // Gives Surge 1 collectible each second
-object &quot;Collectible Bonus&quot;
+object &quot;CollectibleGiver&quot;
 {
     player = Player(&quot;Surge&quot;);
 
     state &quot;main&quot;
     {
         if(timeout(1))
-            state = &quot;+1 collectible&quot;;
+            state = &quot;give collectible&quot;;
     }
 
-    state &quot;+1 collectible&quot;
+    state &quot;give collectible&quot;
     {
         player.collectibles = player.collectibles + 1;
         state = &quot;main&quot;;
