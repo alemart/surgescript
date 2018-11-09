@@ -795,12 +795,46 @@
     Tags
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entity_1" title="entity" class="md-nav__link">
+    entity
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#awake" title="awake" class="md-nav__link">
+    awake
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detached" title="detached" class="md-nav__link">
+    detached
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disposable" title="disposable" class="md-nav__link">
+    disposable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#private" title="private" class="md-nav__link">
+    private
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -917,12 +951,46 @@
     Tags
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entity_1" title="entity" class="md-nav__link">
+    entity
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#awake" title="awake" class="md-nav__link">
+    awake
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#detached" title="detached" class="md-nav__link">
+    detached
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disposable" title="disposable" class="md-nav__link">
+    disposable
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#private" title="private" class="md-nav__link">
+    private
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -946,16 +1014,13 @@
                 <h1 id="entity">Entity</h1>
 <p>Entity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are <strong>not</strong> entities. In Open Surge, all objects that are tagged <em>"entity"</em> are considered to be entities.</p>
 <p>Entites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.</p>
-<p><strong>Tip:</strong> during level design, entities may be placed in world space using the editor palette. The icon of the entity will be the first animation (animation 0) of the sprite that has the name of the entity.</p>
+<blockquote>
+<p><strong>Tip</strong></p>
+<p>During level design, entities may be placed in world space using the editor palette. The icon of the entity will be the first animation (animation 0) of the sprite that has the name of the entity.</p>
+</blockquote>
 <h2 id="tags">Tags</h2>
-<ul>
-<li><code>entity</code>: tells Open Surge that the object is an entity and should be treated as such.</li>
-<li><code>awake</code>: tells Open Surge to <strong>not</strong> disable the object if it gets too far off camera.</li>
-<li><code>detached</code>: the object will <strong>not</strong> follow the camera - it will be rendered in screen space.</li>
-<li><code>disposable</code>: will destroy the object automatically if it gets too far off camera.</li>
-<li><code>private</code>: private entities cannot be spawned via the level editor (they will be hidden).</li>
-</ul>
-<h2 id="example">Example</h2>
+<h4 id="entity_1">entity</h4>
+<p>Tells Open Surge that the object is an entity and should be treated as such.</p>
 <pre><code>// In the example below, MyExplosion (entity) has an Actor component
 // that gives it a visible form (a sprite) in world space.
 using SurgeEngine.Actor;
@@ -971,6 +1036,15 @@ object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;
     }
 }
 </code></pre>
+
+<h4 id="awake">awake</h4>
+<p>Tells Open Surge to <strong>not</strong> disable the object if it gets too far off camera.</p>
+<h4 id="detached">detached</h4>
+<p>The object will <strong>not</strong> follow the camera - it will be rendered in screen space.</p>
+<h4 id="disposable">disposable</h4>
+<p>Will destroy the object automatically if it gets too far off camera.</p>
+<h4 id="private">private</h4>
+<p>Private entities cannot be spawned via the level editor (they will be hidden).</p>
                 
                   
                 

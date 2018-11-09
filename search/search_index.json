@@ -52,17 +52,17 @@
         }, 
         {
             "location": "/tutorials/hello/", 
-            "text": "Hello, World!\n\n\nSurgeScript creates automatically an object called \nApplication\n. That object is defined by the user. Let's see how we can use that to make a simple program:\n\n\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        Application.exit();\n    }\n}\n\n\n\n\nIn SurgeScript, each object defines a state machine (more on that later). The initial state is called \nmain\n. In the code just presented, we display a \nHello, world!\n message and then exit the app.\n\n\nLet's go on and read \nIntroduction to objects\n. Or, alternatively, you may want to \ntest your scripts\n.", 
+            "text": "Hello, World!\n\n\nSurgeScript creates automatically an object called \nApplication\n. That object is defined by the user. Let's see how we can use that to make a simple program:\n\n\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        Application.exit();\n    }\n}\n\n\n\n\nIn SurgeScript, each object defines a state machine (more on that later). The initial state is called \nmain\n. In the code just presented, we display a \nHello, world!\n message and then exit the app.\n\n\nNow let's \ntest your scripts\n.", 
             "title": "Hello, World!"
         }, 
         {
             "location": "/tutorials/hello/#hello-world", 
-            "text": "SurgeScript creates automatically an object called  Application . That object is defined by the user. Let's see how we can use that to make a simple program:  object  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        Application.exit();\n    }\n}  In SurgeScript, each object defines a state machine (more on that later). The initial state is called  main . In the code just presented, we display a  Hello, world!  message and then exit the app.  Let's go on and read  Introduction to objects . Or, alternatively, you may want to  test your scripts .", 
+            "text": "SurgeScript creates automatically an object called  Application . That object is defined by the user. Let's see how we can use that to make a simple program:  object  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        Application.exit();\n    }\n}  In SurgeScript, each object defines a state machine (more on that later). The initial state is called  main . In the code just presented, we display a  Hello, world!  message and then exit the app.  Now let's  test your scripts .", 
             "title": "Hello, World!"
         }, 
         {
             "location": "/tutorials/testing/", 
-            "text": "Testing your scripts\n\n\nThere are two main ways to test your scripts:\n\n\n\n\nusing the \nOpen Surge\n game engine;\n\n\nusing the \nSurgeScript standalone\n runtime (i.e., the version without the game engine).\n\n\n\n\nUsing Open Surge\n\n\nTo test a script on Open Surge, place it on the \nscripts/\n folder and start the engine. Your test script must include an object called \nApplication\n. Additionally, remove the script after you're done with the testing.\n\n\nAs an example, save the following script to \nscripts/hello.ss\n and start the engine:\n\n\n// hello.ss: test script\n// Please remove this file after you're done\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        state = \nblank\n;\n    }\n\n    state \nblank\n\n    {\n    }\n}\n\n\n\n\nUsing the standalone version\n\n\nIf you've downloaded the standalone version of the language:\n\n\n\n\nFirst of all, save the following script to a file named \nhello.ss\n. For testing purposes, please place the file on the same directory as the surgescript executable.\n\n\n\n\n// hello.ss: test script\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        Application.exit();\n    }\n}\n\n\n\n\n\n\nThen, open up a Terminal and type:\n\n\n\n\ncd /path/to/surgescript\n./surgescript hello.ss\n\n\n\n\n\n\nIf you're using Microsoft Windows, open up a Command Prompt and type:\n\n\n\n\ncd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss\n\n\n\n\n\n\nYou should see the output of the script as a result:\n\n\n\n\nHello, world!", 
+            "text": "Testing your scripts\n\n\nThere are two main ways to test your scripts:\n\n\n\n\nusing the \nOpen Surge\n game engine;\n\n\nusing the \nSurgeScript standalone\n runtime (i.e., the version without the game engine).\n\n\n\n\nUsing Open Surge\n\n\nTo test a script on Open Surge, place it on the \nscripts/\n folder and start the engine. Your test script must include an object called \nApplication\n. Please remove the script after you're done with the testing.\n\n\nAs an example, save the following script to \nscripts/hello.ss\n and start the engine:\n\n\n// hello.ss: test script\n// Please remove this file after you're done\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        state = \nblank\n;\n    }\n\n    state \nblank\n\n    {\n    }\n}\n\n\n\n\nNow let's begin our learning adventure: go to \nIntroduction to objects\n.\n\n\nUsing the standalone version\n\n\nIf you've downloaded the standalone version of the language:\n\n\n\n\nFirst of all, save the following script to a file named \nhello.ss\n. For testing purposes, please place the file on the same directory as the surgescript executable.\n\n\n\n\n// hello.ss: test script\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(\nHello, world!\n);\n        Application.exit();\n    }\n}\n\n\n\n\n\n\nThen, open up a Terminal and type:\n\n\n\n\ncd /path/to/surgescript\n./surgescript hello.ss\n\n\n\n\n\n\nIf you're using Microsoft Windows, open up a Command Prompt and type:\n\n\n\n\ncd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss\n\n\n\n\n\n\nYou should see the output of the script as a result:\n\n\n\n\nHello, world!\n\n\n\n\nNow let's begin our learning adventure: go to \nIntroduction to objects\n.", 
             "title": "Testing your scripts"
         }, 
         {
@@ -72,12 +72,12 @@
         }, 
         {
             "location": "/tutorials/testing/#using-open-surge", 
-            "text": "To test a script on Open Surge, place it on the  scripts/  folder and start the engine. Your test script must include an object called  Application . Additionally, remove the script after you're done with the testing.  As an example, save the following script to  scripts/hello.ss  and start the engine:  // hello.ss: test script\n// Please remove this file after you're done\nobject  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        state =  blank ;\n    }\n\n    state  blank \n    {\n    }\n}", 
+            "text": "To test a script on Open Surge, place it on the  scripts/  folder and start the engine. Your test script must include an object called  Application . Please remove the script after you're done with the testing.  As an example, save the following script to  scripts/hello.ss  and start the engine:  // hello.ss: test script\n// Please remove this file after you're done\nobject  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        state =  blank ;\n    }\n\n    state  blank \n    {\n    }\n}  Now let's begin our learning adventure: go to  Introduction to objects .", 
             "title": "Using Open Surge"
         }, 
         {
             "location": "/tutorials/testing/#using-the-standalone-version", 
-            "text": "If you've downloaded the standalone version of the language:   First of all, save the following script to a file named  hello.ss . For testing purposes, please place the file on the same directory as the surgescript executable.   // hello.ss: test script\nobject  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        Application.exit();\n    }\n}   Then, open up a Terminal and type:   cd /path/to/surgescript\n./surgescript hello.ss   If you're using Microsoft Windows, open up a Command Prompt and type:   cd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss   You should see the output of the script as a result:   Hello, world!", 
+            "text": "If you've downloaded the standalone version of the language:   First of all, save the following script to a file named  hello.ss . For testing purposes, please place the file on the same directory as the surgescript executable.   // hello.ss: test script\nobject  Application \n{\n    state  main \n    {\n        Console.print( Hello, world! );\n        Application.exit();\n    }\n}   Then, open up a Terminal and type:   cd /path/to/surgescript\n./surgescript hello.ss   If you're using Microsoft Windows, open up a Command Prompt and type:   cd C:\\path\\to\\surgescript\nsurgescript.exe hello.ss   You should see the output of the script as a result:   Hello, world!  Now let's begin our learning adventure: go to  Introduction to objects .", 
             "title": "Using the standalone version"
         }, 
         {
@@ -1292,7 +1292,7 @@
         }, 
         {
             "location": "/engine/actor/", 
-            "text": "Actor\n\n\nThe Actor component is used to associate a sprite to a target object. The target object is required to be tagged as an \n\"entity\"\n.\n\n\nFactory\n\n\nActor\n\n\nSurgeEngine.Actor(spriteName)\n\n\nSpawns a new Actor component with the given sprite name.\n\n\nArguments\n\n\n\n\nspriteName\n: string. The name of the sprite (defined in the \nsprites/\n folder).\n\n\n\n\nReturns\n\n\nAn Actor component.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\n\nobject \nSurgeTest\n is \nentity\n\n{\n    // spawns an Actor with the SurgeTest sprite\n    actor = Actor(\nSurgeTest\n);\n\n    // position the actor\n    state \nmain\n\n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n    }\n}\n\nobject \nApplication\n\n{\n    surge = spawn(\nSurgeTest\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nanim\n: number. An integer value corresponding to the animation number. Defaults to 0.\n\n\nalpha\n: number. Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.\n\n\nentity\n: object. The entity associated with this component.\n\n\nhflip\n: boolean. Should the actor be flipped horizontally?\n\n\nvflip\n: boolean. Should the actor be flipped vertically?\n\n\nvisible\n: boolean. Should the actor be rendered?\n\n\nwidth\n: number. The width of the actor.\n\n\nheight\n: number. The height of the actor.\n\n\ntransform\n: \nTransform2D\n object. An alias to the Transform of the entity.\n\n\nzindex\n: number. The zindex of the actor. Objects with greater zindex are rendered in front of others. Defaults to 0.5.\n\n\n\n\nFunctions\n\n\nanimFinished\n\n\nanimFinished()\n\n\nChecks if the current animation has finished playing.\n\n\nReturns\n\n\nReturns \ntrue\n if the animation has finished playing.\n\n\nanimRepeats\n\n\nanimRepeats()\n\n\nChecks if the currently playing animation repeats itself.\n\n\nReturns\n\n\nReturns \ntrue\n if the currently playing animation repeats itself.\n\n\nanimFPS\n\n\nanimFPS()\n\n\nThe frames-per-second (FPS) rate of the current animation.\n\n\nReturns\n\n\nReturns the FPS rate of the current animation.", 
+            "text": "Actor\n\n\nThe Actor component is used to associate a sprite to a target object. The target object is required to be tagged as an \n\"entity\"\n.\n\n\nFactory\n\n\nActor\n\n\nSurgeEngine.Actor(spriteName)\n\n\nSpawns a new Actor component with the given sprite name.\n\n\nArguments\n\n\n\n\nspriteName\n: string. The name of the sprite (defined in the \nsprites/\n folder).\n\n\n\n\nReturns\n\n\nAn Actor component.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\n\nobject \nSurgeTest\n is \nentity\n\n{\n    // spawns an Actor with the SurgeTest sprite\n    actor = Actor(\nSurgeTest\n);\n\n    // position the actor\n    state \nmain\n\n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n    }\n}\n\nobject \nApplication\n\n{\n    surge = spawn(\nSurgeTest\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\nanim\n\n\nanim\n: number.\n\n\nAn integer value corresponding to the animation number. Defaults to 0.\n\n\nalpha\n\n\nalpha\n: number.\n\n\nOpacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.\n\n\nentity\n\n\nentity\n: object, read-only.\n\n\nThe entity associated with this component.\n\n\nhflip\n\n\nhflip\n: boolean.\n\n\nShould the actor be flipped horizontally? Defaults to \nfalse\n.\n\n\nvflip\n\n\nvflip\n: boolean.\n\n\nShould the actor be flipped vertically? Defaults to \nfalse\n.\n\n\nvisible\n\n\nvisible\n: boolean.\n\n\nShould the actor be rendered? Defaults to \ntrue\n.\n\n\nwidth\n\n\nwidth\n: number, read-only.\n\n\nThe width of the actor.\n\n\nheight\n\n\nheight\n: number, read-only.\n\n\nThe height of the actor.\n\n\ntransform\n\n\ntransform\n: \nTransform2D\n object.\n\n\nAn alias to the Transform of the entity.\n\n\nzindex\n\n\nzindex\n: number.\n\n\nObjects with greater zindex are rendered in front of others. Defaults to 0.5.\n\n\nFunctions\n\n\nanimFinished\n\n\nanimFinished()\n\n\nChecks if the current animation has finished playing.\n\n\nReturns\n\n\nReturns \ntrue\n if the animation has finished playing.\n\n\nanimRepeats\n\n\nanimRepeats()\n\n\nChecks if the currently playing animation repeats itself.\n\n\nReturns\n\n\nReturns \ntrue\n if the currently playing animation repeats itself.\n\n\nanimFPS\n\n\nanimFPS()\n\n\nThe frames-per-second (FPS) rate of the current animation.\n\n\nReturns\n\n\nReturns the FPS rate of the current animation.", 
             "title": "Actor"
         }, 
         {
@@ -1312,8 +1312,58 @@
         }, 
         {
             "location": "/engine/actor/#properties", 
-            "text": "anim : number. An integer value corresponding to the animation number. Defaults to 0.  alpha : number. Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.  entity : object. The entity associated with this component.  hflip : boolean. Should the actor be flipped horizontally?  vflip : boolean. Should the actor be flipped vertically?  visible : boolean. Should the actor be rendered?  width : number. The width of the actor.  height : number. The height of the actor.  transform :  Transform2D  object. An alias to the Transform of the entity.  zindex : number. The zindex of the actor. Objects with greater zindex are rendered in front of others. Defaults to 0.5.", 
+            "text": "", 
             "title": "Properties"
+        }, 
+        {
+            "location": "/engine/actor/#anim", 
+            "text": "anim : number.  An integer value corresponding to the animation number. Defaults to 0.", 
+            "title": "anim"
+        }, 
+        {
+            "location": "/engine/actor/#alpha", 
+            "text": "alpha : number.  Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.", 
+            "title": "alpha"
+        }, 
+        {
+            "location": "/engine/actor/#entity", 
+            "text": "entity : object, read-only.  The entity associated with this component.", 
+            "title": "entity"
+        }, 
+        {
+            "location": "/engine/actor/#hflip", 
+            "text": "hflip : boolean.  Should the actor be flipped horizontally? Defaults to  false .", 
+            "title": "hflip"
+        }, 
+        {
+            "location": "/engine/actor/#vflip", 
+            "text": "vflip : boolean.  Should the actor be flipped vertically? Defaults to  false .", 
+            "title": "vflip"
+        }, 
+        {
+            "location": "/engine/actor/#visible", 
+            "text": "visible : boolean.  Should the actor be rendered? Defaults to  true .", 
+            "title": "visible"
+        }, 
+        {
+            "location": "/engine/actor/#width", 
+            "text": "width : number, read-only.  The width of the actor.", 
+            "title": "width"
+        }, 
+        {
+            "location": "/engine/actor/#height", 
+            "text": "height : number, read-only.  The height of the actor.", 
+            "title": "height"
+        }, 
+        {
+            "location": "/engine/actor/#transform", 
+            "text": "transform :  Transform2D  object.  An alias to the Transform of the entity.", 
+            "title": "transform"
+        }, 
+        {
+            "location": "/engine/actor/#zindex", 
+            "text": "zindex : number.  Objects with greater zindex are rendered in front of others. Defaults to 0.5.", 
+            "title": "zindex"
         }, 
         {
             "location": "/engine/actor/#functions", 
@@ -1337,43 +1387,53 @@
         }, 
         {
             "location": "/engine/camera/", 
-            "text": "Camera\n\n\nThe Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.\n\n\nExample\n\n\n// Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera at every second\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        if(timeout(1))\n            state = \nprint\n;\n    }\n\n    state \nprint\n\n    {\n        Console.print(Camera.xpos + \n,\n + Camera.ypos);\n        state = \nmain\n;\n    }\n}\n\n\n\n\nNote:\n objects tagged as \n\"detached\"\n do not follow the camera. They are not in world space, but in screen space.\n\n\nProperties\n\n\n\n\nxpos\n: number. The x-position of the camera in world space.\n\n\nypos\n: number. The y-position of the camera in world space.", 
+            "text": "Camera\n\n\nThe Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.\n\n\n\n\nHUD elements\n\n\nObjects tagged as \n\"detached\"\n do not follow the camera. They are not in world space, but in screen space. This is useful for creating HUD elements.\n\n\n\n\nExample\n\n\n// Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera at every second\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        if(timeout(1))\n            state = \nprint\n;\n    }\n\n    state \nprint\n\n    {\n        Console.print(Camera.xpos + \n,\n + Camera.ypos);\n        state = \nmain\n;\n    }\n}\n\n\n\n\nProperties\n\n\nxpos\n\n\nxpos\n: number.\n\n\nThe x-position of the camera in world space.\n\n\nypos\n\n\nypos\n: number.\n\n\nThe y-position of the camera in world space.", 
             "title": "Camera"
         }, 
         {
             "location": "/engine/camera/#camera", 
-            "text": "The Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.", 
+            "text": "The Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.   HUD elements  Objects tagged as  \"detached\"  do not follow the camera. They are not in world space, but in screen space. This is useful for creating HUD elements.   Example  // Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera at every second\nobject  Application \n{\n    state  main \n    {\n        if(timeout(1))\n            state =  print ;\n    }\n\n    state  print \n    {\n        Console.print(Camera.xpos +  ,  + Camera.ypos);\n        state =  main ;\n    }\n}", 
             "title": "Camera"
         }, 
         {
-            "location": "/engine/camera/#example", 
-            "text": "// Import the Camera object\nusing SurgeEngine.Camera;\n\n// Reading the Camera status\n// This app prints the position of the camera at every second\nobject  Application \n{\n    state  main \n    {\n        if(timeout(1))\n            state =  print ;\n    }\n\n    state  print \n    {\n        Console.print(Camera.xpos +  ,  + Camera.ypos);\n        state =  main ;\n    }\n}  Note:  objects tagged as  \"detached\"  do not follow the camera. They are not in world space, but in screen space.", 
-            "title": "Example"
-        }, 
-        {
             "location": "/engine/camera/#properties", 
-            "text": "xpos : number. The x-position of the camera in world space.  ypos : number. The y-position of the camera in world space.", 
+            "text": "", 
             "title": "Properties"
         }, 
         {
+            "location": "/engine/camera/#xpos", 
+            "text": "xpos : number.  The x-position of the camera in world space.", 
+            "title": "xpos"
+        }, 
+        {
+            "location": "/engine/camera/#ypos", 
+            "text": "ypos : number.  The y-position of the camera in world space.", 
+            "title": "ypos"
+        }, 
+        {
             "location": "/engine/collider/", 
-            "text": "Collider\n\n\nA collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually placed on the hot spot of sprites, but that can be changed by altering their \nanchor\n.\n\n\nColliders must be spawned as children of \nentities\n (objects tagged as \n\"entity\"\n). To detect collisions, you may declare function \nonCollision()\n on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than geometric primitives.\n\n\nA collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as \nCollisionBox\n and \nCollisionBall\n. All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\nusing SurgeEngine.Player;\nusing SurgeEngine.Collisions.CollisionBall;\n\nobject \nCollisionTest\n is \nentity\n\n{\n    actor = Actor(\nCollisionTest\n);\n    collider = CollisionBall(25); // ball with radius = 25px\n\n    // The player has a built-in collider\n    // Let's make it visible for debugging\n    state \nmain\n\n    {\n        player = Player.active;\n        player.collider.visible = true;\n        collider.visible = true;\n    }\n\n    // Detect collisions between a collider that is a child\n    // of this object and any other collider in the game\n    fun onCollision(otherCollider)\n    {\n        // A collision has occurred.\n        Console.print(\nCollided with something\n);\n\n        // Collided with a player?\n        if(otherCollider.entity.hasTag(\nplayer\n)) {\n            player = otherCollider.entity;\n            Console.print(\nTouched \n + player.name);\n        }\n    }\n}\n\n\n\n\nRead-Only Properties\n\n\n\n\nentity\n: object. The \nEntity\n associated with this collider.\n\n\n\n\nRead-Write Properties\n\n\n\n\nvisible\n: boolean. Useful for debugging. The default value is \nfalse\n.\n\n\n\n\nFunctions\n\n\ncollidesWith\n\n\ncollidesWith(collider)\n\n\nChecks if this collider is colliding with some other collider.\n\n\nArguments\n\n\n\n\ncollider\n: \nCollider\n object. The other collider.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if there is a collision (the colliders overlap), or \nfalse\n otherwise.\n\n\ncontains\n\n\ncontains(x, y)\n\n\nChecks if the collider contains the point (\nx\n, \ny\n), given in world coordinates.\n\n\nArguments\n\n\n\n\nx\n: number. The x-coordinate of the point.\n\n\ny\n: number. The y-coordinate of the point.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the point is inside the collider, or \nfalse\n otherwise.\n\n\nsetAnchor\n\n\nsetAnchor(x, y)\n\n\nDefines the anchor of the collider to be (\nx\n, \ny\n), where these values are (usually) numbers between 0.0 and 1.0. Imagine a bounding box of the collider. Point (0.5, 0.5) is the default, representing its center. Point (0.0, 0.0) is the top-left and (1,0, 1.0), the bottom-right. The anchor of the collider will be aligned to the hot spot of the sprite of the entity.\n\n\nArguments\n\n\n\n\nx\n: number. Usually a value between 0.0 and 1.0.\n\n\ny\n: number. Usually a value between 0.0 and 1.0.", 
+            "text": "Collider\n\n\nA collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually centered on the hot spot of sprites, but that can be changed by altering their \nanchor\n.\n\n\nColliders must be spawned as children of \nentities\n. To detect collisions, you may implement function \nonCollision()\n on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than simple primitives.\n\n\nA collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as \nCollisionBox\n and \nCollisionBall\n. All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\nusing SurgeEngine.Player;\nusing SurgeEngine.Collisions.CollisionBall;\n\nobject \nCollisionTest\n is \nentity\n\n{\n    actor = Actor(\nCollisionTest\n);\n    collider = CollisionBall(25); // ball with radius = 25px\n\n    // The player has a built-in collider\n    // Let's make it visible for debugging\n    state \nmain\n\n    {\n        player = Player.active;\n        player.collider.visible = true;\n        collider.visible = true;\n    }\n\n    // Detect collisions between a collider that is a child\n    // of this object and any other collider in the game\n    fun onCollision(otherCollider)\n    {\n        // A collision has occurred.\n        Console.print(\nCollided with something\n);\n\n        // Collided with a player?\n        if(otherCollider.entity.hasTag(\nplayer\n)) {\n            player = otherCollider.entity;\n            Console.print(\nTouched \n + player.name);\n        }\n    }\n}\n\n\n\n\nProperties\n\n\nentity\n\n\nentity\n: object, read-only.\n\n\nThe \nEntity\n associated with this collider.\n\n\nvisible\n\n\nvisible\n: boolean.\n\n\nUseful for debugging. The default value is \nfalse\n.\n\n\nFunctions\n\n\ncollidesWith\n\n\ncollidesWith(collider)\n\n\nChecks if this collider is colliding with some other collider.\n\n\nArguments\n\n\n\n\ncollider\n: \nCollider\n object. The other collider.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if there is a collision (the colliders overlap), or \nfalse\n otherwise.\n\n\ncontains\n\n\ncontains(x, y)\n\n\nChecks if the collider contains the point (\nx\n, \ny\n), given in world coordinates.\n\n\nArguments\n\n\n\n\nx\n: number. The x-coordinate of the point.\n\n\ny\n: number. The y-coordinate of the point.\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the point is inside the collider, or \nfalse\n otherwise.\n\n\nsetAnchor\n\n\nsetAnchor(x, y)\n\n\nDefines the anchor of the collider to be (\nx\n, \ny\n), where these values are (usually) numbers between 0.0 and 1.0. Imagine a bounding box of the collider. Point (0.5, 0.5) is the default, representing its center. Point (0.0, 0.0) is the top-left and (1,0, 1.0), the bottom-right. The anchor of the collider will be aligned to the hot spot of the sprite of the entity.\n\n\nArguments\n\n\n\n\nx\n: number. Usually a value between 0.0 and 1.0.\n\n\ny\n: number. Usually a value between 0.0 and 1.0.", 
             "title": "Collider"
         }, 
         {
             "location": "/engine/collider/#collider", 
-            "text": "A collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually placed on the hot spot of sprites, but that can be changed by altering their  anchor .  Colliders must be spawned as children of  entities  (objects tagged as  \"entity\" ). To detect collisions, you may declare function  onCollision()  on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than geometric primitives.  A collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as  CollisionBox  and  CollisionBall . All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.  Example  using SurgeEngine.Actor;\nusing SurgeEngine.Player;\nusing SurgeEngine.Collisions.CollisionBall;\n\nobject  CollisionTest  is  entity \n{\n    actor = Actor( CollisionTest );\n    collider = CollisionBall(25); // ball with radius = 25px\n\n    // The player has a built-in collider\n    // Let's make it visible for debugging\n    state  main \n    {\n        player = Player.active;\n        player.collider.visible = true;\n        collider.visible = true;\n    }\n\n    // Detect collisions between a collider that is a child\n    // of this object and any other collider in the game\n    fun onCollision(otherCollider)\n    {\n        // A collision has occurred.\n        Console.print( Collided with something );\n\n        // Collided with a player?\n        if(otherCollider.entity.hasTag( player )) {\n            player = otherCollider.entity;\n            Console.print( Touched   + player.name);\n        }\n    }\n}", 
+            "text": "A collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually centered on the hot spot of sprites, but that can be changed by altering their  anchor .  Colliders must be spawned as children of  entities . To detect collisions, you may implement function  onCollision()  on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than simple primitives.  A collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as  CollisionBox  and  CollisionBall . All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.  Example  using SurgeEngine.Actor;\nusing SurgeEngine.Player;\nusing SurgeEngine.Collisions.CollisionBall;\n\nobject  CollisionTest  is  entity \n{\n    actor = Actor( CollisionTest );\n    collider = CollisionBall(25); // ball with radius = 25px\n\n    // The player has a built-in collider\n    // Let's make it visible for debugging\n    state  main \n    {\n        player = Player.active;\n        player.collider.visible = true;\n        collider.visible = true;\n    }\n\n    // Detect collisions between a collider that is a child\n    // of this object and any other collider in the game\n    fun onCollision(otherCollider)\n    {\n        // A collision has occurred.\n        Console.print( Collided with something );\n\n        // Collided with a player?\n        if(otherCollider.entity.hasTag( player )) {\n            player = otherCollider.entity;\n            Console.print( Touched   + player.name);\n        }\n    }\n}", 
             "title": "Collider"
         }, 
         {
-            "location": "/engine/collider/#read-only-properties", 
-            "text": "entity : object. The  Entity  associated with this collider.", 
-            "title": "Read-Only Properties"
+            "location": "/engine/collider/#properties", 
+            "text": "", 
+            "title": "Properties"
         }, 
         {
-            "location": "/engine/collider/#read-write-properties", 
-            "text": "visible : boolean. Useful for debugging. The default value is  false .", 
-            "title": "Read-Write Properties"
+            "location": "/engine/collider/#entity", 
+            "text": "entity : object, read-only.  The  Entity  associated with this collider.", 
+            "title": "entity"
+        }, 
+        {
+            "location": "/engine/collider/#visible", 
+            "text": "visible : boolean.  Useful for debugging. The default value is  false .", 
+            "title": "visible"
         }, 
         {
             "location": "/engine/collider/#functions", 
@@ -1397,7 +1457,7 @@
         }, 
         {
             "location": "/engine/collisionball/", 
-            "text": "CollisionBall\n\n\nA CollisionBall is a special type of \nCollider\n that takes the shape of a ball. In 2D space, this is a circle with a specific radius. All functions and properties of \nCollider\n apply to this.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\nusing SurgeEngine.Collisions.CollisionBall;\n\nobject \nCollisionTest\n is \nentity\n\n{\n    actor = Actor(\nCollisionTest\n);\n    collider = CollisionBall(25); // radius = 25px\n\n    state \nmain\n\n    {\n        collider.visible = true; // useful for debugging\n    }\n\n    fun onCollision(otherCollider)\n    {\n        Console.print(\nA collision has occurred.\n);\n    }\n}\n\n\n\n\nFactory\n\n\nCollisions.CollisionBall\n\n\nSurgeEngine.Collisions.CollisionBall(radius)\n\n\nSpawns a new CollisionBall with the specified radius, in pixels.\n\n\nArguments\n\n\n\n\nradius\n: number. The radius of the CollisionBall.\n\n\n\n\nReturns\n\n\nA new CollisionBall with the specified radius.\n\n\nRead-Only Properties\n\n\n\n\ncenterX\n: number. The x-coordinate of the center of the CollisionBall, in world space.\n\n\ncenterY\n: number. The y-coordinate of the center of the CollisionBall, in world space.\n\n\n\n\nRead-Write Properties\n\n\n\n\nradius\n: number. The radius of the CollisionBall.", 
+            "text": "CollisionBall\n\n\nA CollisionBall is a special type of \nCollider\n that takes the shape of a ball. In 2D space, this is a circle with a specific radius. All functions and properties of \nCollider\n apply to this.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\nusing SurgeEngine.Collisions.CollisionBall;\n\nobject \nCollisionTest\n is \nentity\n\n{\n    actor = Actor(\nCollisionTest\n);\n    collider = CollisionBall(25); // radius = 25px\n\n    state \nmain\n\n    {\n        collider.visible = true; // useful for debugging\n    }\n\n    fun onCollision(otherCollider)\n    {\n        Console.print(\nA collision has occurred.\n);\n    }\n}\n\n\n\n\nFactory\n\n\nCollisions.CollisionBall\n\n\nSurgeEngine.Collisions.CollisionBall(radius)\n\n\nSpawns a new CollisionBall with the specified radius, in pixels.\n\n\nArguments\n\n\n\n\nradius\n: number. The radius of the CollisionBall.\n\n\n\n\nReturns\n\n\nA new CollisionBall with the specified radius.\n\n\nProperties\n\n\ncenterX\n\n\ncenterX\n: number, read-only.\n\n\nThe x-coordinate of the center of the CollisionBall, in world space.\n\n\ncenterY\n\n\ncenterY\n: number, read-only.\n\n\nThe y-coordinate of the center of the CollisionBall, in world space.\n\n\nradius\n\n\nradius\n: number.\n\n\nThe radius of the CollisionBall, in pixels.", 
             "title": "CollisionBall"
         }, 
         {
@@ -1416,18 +1476,28 @@
             "title": "Collisions.CollisionBall"
         }, 
         {
-            "location": "/engine/collisionball/#read-only-properties", 
-            "text": "centerX : number. The x-coordinate of the center of the CollisionBall, in world space.  centerY : number. The y-coordinate of the center of the CollisionBall, in world space.", 
-            "title": "Read-Only Properties"
+            "location": "/engine/collisionball/#properties", 
+            "text": "", 
+            "title": "Properties"
         }, 
         {
-            "location": "/engine/collisionball/#read-write-properties", 
-            "text": "radius : number. The radius of the CollisionBall.", 
-            "title": "Read-Write Properties"
+            "location": "/engine/collisionball/#centerx", 
+            "text": "centerX : number, read-only.  The x-coordinate of the center of the CollisionBall, in world space.", 
+            "title": "centerX"
+        }, 
+        {
+            "location": "/engine/collisionball/#centery", 
+            "text": "centerY : number, read-only.  The y-coordinate of the center of the CollisionBall, in world space.", 
+            "title": "centerY"
+        }, 
+        {
+            "location": "/engine/collisionball/#radius", 
+            "text": "radius : number.  The radius of the CollisionBall, in pixels.", 
+            "title": "radius"
         }, 
         {
             "location": "/engine/collisionbox/", 
-            "text": "CollisionBox\n\n\nA CollisionBox is a special type of \nCollider\n that takes the shape of a box. In 2D space, this is a rectangle with a specific width and height. All functions and properties of \nCollider\n apply to this.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\nusing SurgeEngine.Collisions.CollisionBox;\n\nobject \nCollisionTest\n is \nentity\n\n{\n    actor = Actor(\nCollisionTest\n);\n    collider = CollisionBox(32,64); // width = 32px, height = 64px\n\n    state \nmain\n\n    {\n        collider.visible = true; // useful for debugging\n    }\n\n    fun onCollision(otherCollider)\n    {\n        Console.print(\nA collision has occurred.\n);\n    }\n}\n\n\n\n\nFactory\n\n\nCollisions.CollisionBox\n\n\nSurgeEngine.Collisions.CollisionBox(width, height)\n\n\nSpawns a new CollisionBox with the specified dimensions, in pixels.\n\n\nArguments\n\n\n\n\nwidth\n: number. The width of the CollisionBox.\n\n\nheight\n: number. The height of the CollisionBox.\n\n\n\n\nReturns\n\n\nA new CollisionBox with the specified dimensions.\n\n\nRead-Only Properties\n\n\n\n\ntop\n: number. The y-coordinate of top border of the CollisionBox, in world space.\n\n\nright\n: number. The x-coordinate of right border of the CollisionBox, in world space.\n\n\nbottom\n: number. The y-coordinate of bottom border of the CollisionBox, in world space.\n\n\nleft\n: number. The x-coordinate of left border of the CollisionBox, in world space.\n\n\n\n\nRead-Write Properties\n\n\n\n\nwidth\n: number. The width of the CollisionBox, in pixels.\n\n\nheight\n: number. The height of the CollisionBox, in pixels.", 
+            "text": "CollisionBox\n\n\nA CollisionBox is a special type of \nCollider\n that takes the shape of a box. In 2D space, this is a rectangle with a specific width and height. All functions and properties of \nCollider\n apply to this.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\nusing SurgeEngine.Collisions.CollisionBox;\n\nobject \nCollisionTest\n is \nentity\n\n{\n    actor = Actor(\nCollisionTest\n);\n    collider = CollisionBox(32,64); // width = 32px, height = 64px\n\n    state \nmain\n\n    {\n        collider.visible = true; // useful for debugging\n    }\n\n    fun onCollision(otherCollider)\n    {\n        Console.print(\nA collision has occurred.\n);\n    }\n}\n\n\n\n\nFactory\n\n\nCollisions.CollisionBox\n\n\nSurgeEngine.Collisions.CollisionBox(width, height)\n\n\nSpawns a new CollisionBox with the specified dimensions, in pixels.\n\n\nArguments\n\n\n\n\nwidth\n: number. The width of the CollisionBox.\n\n\nheight\n: number. The height of the CollisionBox.\n\n\n\n\nReturns\n\n\nA new CollisionBox with the specified dimensions.\n\n\nProperties\n\n\ntop\n\n\ntop\n: number, read-only.\n\n\nThe y-coordinate of top border of the CollisionBox, in world space.\n\n\nright\n\n\nright\n: number, read-only.\n\n\nThe x-coordinate of right border of the CollisionBox, in world space.\n\n\nbottom\n\n\nbottom\n: number, read-only.\n\n\nThe y-coordinate of bottom border of the CollisionBox, in world space.\n\n\nleft\n\n\nleft\n: number, read-only.\n\n\nThe x-coordinate of left border of the CollisionBox, in world space.\n\n\nwidth\n\n\nwidth\n: number.\n\n\nThe width of the CollisionBox, in pixels.\n\n\nheight\n\n\nheight\n: number.\n\n\nThe height of the CollisionBox, in pixels.", 
             "title": "CollisionBox"
         }, 
         {
@@ -1446,34 +1516,79 @@
             "title": "Collisions.CollisionBox"
         }, 
         {
-            "location": "/engine/collisionbox/#read-only-properties", 
-            "text": "top : number. The y-coordinate of top border of the CollisionBox, in world space.  right : number. The x-coordinate of right border of the CollisionBox, in world space.  bottom : number. The y-coordinate of bottom border of the CollisionBox, in world space.  left : number. The x-coordinate of left border of the CollisionBox, in world space.", 
-            "title": "Read-Only Properties"
+            "location": "/engine/collisionbox/#properties", 
+            "text": "", 
+            "title": "Properties"
         }, 
         {
-            "location": "/engine/collisionbox/#read-write-properties", 
-            "text": "width : number. The width of the CollisionBox, in pixels.  height : number. The height of the CollisionBox, in pixels.", 
-            "title": "Read-Write Properties"
+            "location": "/engine/collisionbox/#top", 
+            "text": "top : number, read-only.  The y-coordinate of top border of the CollisionBox, in world space.", 
+            "title": "top"
+        }, 
+        {
+            "location": "/engine/collisionbox/#right", 
+            "text": "right : number, read-only.  The x-coordinate of right border of the CollisionBox, in world space.", 
+            "title": "right"
+        }, 
+        {
+            "location": "/engine/collisionbox/#bottom", 
+            "text": "bottom : number, read-only.  The y-coordinate of bottom border of the CollisionBox, in world space.", 
+            "title": "bottom"
+        }, 
+        {
+            "location": "/engine/collisionbox/#left", 
+            "text": "left : number, read-only.  The x-coordinate of left border of the CollisionBox, in world space.", 
+            "title": "left"
+        }, 
+        {
+            "location": "/engine/collisionbox/#width", 
+            "text": "width : number.  The width of the CollisionBox, in pixels.", 
+            "title": "width"
+        }, 
+        {
+            "location": "/engine/collisionbox/#height", 
+            "text": "height : number.  The height of the CollisionBox, in pixels.", 
+            "title": "height"
         }, 
         {
             "location": "/engine/entity/", 
-            "text": "Entity\n\n\nEntity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are \nnot\n entities. In Open Surge, all objects that are tagged \n\"entity\"\n are considered to be entities.\n\n\nEntites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.\n\n\nTip:\n during level design, entities may be placed in world space using the editor palette. The icon of the entity will be the first animation (animation 0) of the sprite that has the name of the entity.\n\n\nTags\n\n\n\n\nentity\n: tells Open Surge that the object is an entity and should be treated as such.\n\n\nawake\n: tells Open Surge to \nnot\n disable the object if it gets too far off camera.\n\n\ndetached\n: the object will \nnot\n follow the camera - it will be rendered in screen space.\n\n\ndisposable\n: will destroy the object automatically if it gets too far off camera.\n\n\nprivate\n: private entities cannot be spawned via the level editor (they will be hidden).\n\n\n\n\nExample\n\n\n// In the example below, MyExplosion (entity) has an Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject \nMyExplosion\n is \nentity\n, \ndisposable\n\n{\n    actor = Actor(\nMyExplosion\n);\n\n    state \nmain\n\n    {\n        if(timeout(1))\n            destroy();\n    }\n}", 
+            "text": "Entity\n\n\nEntity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are \nnot\n entities. In Open Surge, all objects that are tagged \n\"entity\"\n are considered to be entities.\n\n\nEntites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.\n\n\n\n\nTip\n\n\nDuring level design, entities may be placed in world space using the editor palette. The icon of the entity will be the first animation (animation 0) of the sprite that has the name of the entity.\n\n\n\n\nTags\n\n\nentity\n\n\nTells Open Surge that the object is an entity and should be treated as such.\n\n\n// In the example below, MyExplosion (entity) has an Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject \nMyExplosion\n is \nentity\n, \ndisposable\n\n{\n    actor = Actor(\nMyExplosion\n);\n\n    state \nmain\n\n    {\n        if(timeout(1))\n            destroy();\n    }\n}\n\n\n\n\nawake\n\n\nTells Open Surge to \nnot\n disable the object if it gets too far off camera.\n\n\ndetached\n\n\nThe object will \nnot\n follow the camera - it will be rendered in screen space.\n\n\ndisposable\n\n\nWill destroy the object automatically if it gets too far off camera.\n\n\nprivate\n\n\nPrivate entities cannot be spawned via the level editor (they will be hidden).", 
             "title": "Entity"
         }, 
         {
             "location": "/engine/entity/#entity", 
-            "text": "Entity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are  not  entities. In Open Surge, all objects that are tagged  \"entity\"  are considered to be entities.  Entites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.  Tip:  during level design, entities may be placed in world space using the editor palette. The icon of the entity will be the first animation (animation 0) of the sprite that has the name of the entity.", 
+            "text": "Entity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are  not  entities. In Open Surge, all objects that are tagged  \"entity\"  are considered to be entities.  Entites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.   Tip  During level design, entities may be placed in world space using the editor palette. The icon of the entity will be the first animation (animation 0) of the sprite that has the name of the entity.", 
             "title": "Entity"
         }, 
         {
             "location": "/engine/entity/#tags", 
-            "text": "entity : tells Open Surge that the object is an entity and should be treated as such.  awake : tells Open Surge to  not  disable the object if it gets too far off camera.  detached : the object will  not  follow the camera - it will be rendered in screen space.  disposable : will destroy the object automatically if it gets too far off camera.  private : private entities cannot be spawned via the level editor (they will be hidden).", 
+            "text": "", 
             "title": "Tags"
         }, 
         {
-            "location": "/engine/entity/#example", 
-            "text": "// In the example below, MyExplosion (entity) has an Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject  MyExplosion  is  entity ,  disposable \n{\n    actor = Actor( MyExplosion );\n\n    state  main \n    {\n        if(timeout(1))\n            destroy();\n    }\n}", 
-            "title": "Example"
+            "location": "/engine/entity/#entity_1", 
+            "text": "Tells Open Surge that the object is an entity and should be treated as such.  // In the example below, MyExplosion (entity) has an Actor component\n// that gives it a visible form (a sprite) in world space.\nusing SurgeEngine.Actor;\n\nobject  MyExplosion  is  entity ,  disposable \n{\n    actor = Actor( MyExplosion );\n\n    state  main \n    {\n        if(timeout(1))\n            destroy();\n    }\n}", 
+            "title": "entity"
+        }, 
+        {
+            "location": "/engine/entity/#awake", 
+            "text": "Tells Open Surge to  not  disable the object if it gets too far off camera.", 
+            "title": "awake"
+        }, 
+        {
+            "location": "/engine/entity/#detached", 
+            "text": "The object will  not  follow the camera - it will be rendered in screen space.", 
+            "title": "detached"
+        }, 
+        {
+            "location": "/engine/entity/#disposable", 
+            "text": "Will destroy the object automatically if it gets too far off camera.", 
+            "title": "disposable"
+        }, 
+        {
+            "location": "/engine/entity/#private", 
+            "text": "Private entities cannot be spawned via the level editor (they will be hidden).", 
+            "title": "private"
         }, 
         {
             "location": "/engine/input/", 
@@ -1517,7 +1632,7 @@
         }, 
         {
             "location": "/engine/mouse/", 
-            "text": "Mouse\n\n\nThe Mouse object is used to read input from the mouse.\n\n\nExample\n\n\n// This example shows how to use the Collectible\n// sprite as a mouse cursor. Since MyCursor is\n// tagged as \ndetached\n, it will be rendered in\n// screen space (not world space).\nusing SurgeEngine.Mouse;\nusing SurgeEngine.Actor;\n\nobject \nMyCursor\n is \nentity\n, \ndetached\n\n{\n    actor = Actor(\nMyCursor\n);\n\n    state \nmain\n\n    {\n        actor.transform.xpos = Mouse.xpos;\n        actor.transform.ypos = Mouse.ypos;\n        if(Mouse.buttonPressed(0))\n            Console.print(\nleft click\n);\n    }\n}\n\nobject \nApplication\n\n{\n    mouseCursor = spawn(\nMyCursor\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nxpos\n: number, read-only. The x-position of the mouse cursor, in screen space.\n\n\nypos\n: number, read-only. The y-position of the mouse cursor, in screen space.\n\n\n\n\nFunctions\n\n\nbuttonDown\n\n\nbuttonDown(buttonId)\n\n\nChecks if a mouse button is currently being held down.\n\n\nArguments\n\n\n\n\nbuttonId\n: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button is being held down.\n\n\nbuttonPressed\n\n\nbuttonPressed(buttonId)\n\n\nChecks if a mouse button has just been pressed.\n\n\nArguments\n\n\n\n\nbuttonId\n: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button has just been pressed (i.e., a click has just occurred).\n\n\nbuttonReleased\n\n\nbuttonReleased(buttonId)\n\n\nChecks if a mouse button has just been released.\n\n\nArguments\n\n\n\n\nbuttonId\n: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button has just been released.", 
+            "text": "Mouse\n\n\nThe Mouse object is used to read input from the mouse.\n\n\nExample\n\n\n// This example shows how to use the Collectible\n// sprite as a mouse cursor. Since MyCursor is\n// tagged as \ndetached\n, it will be rendered in\n// screen space (not world space).\nusing SurgeEngine.Mouse;\nusing SurgeEngine.Actor;\n\nobject \nMyCursor\n is \nentity\n, \ndetached\n\n{\n    actor = Actor(\nMyCursor\n);\n\n    state \nmain\n\n    {\n        actor.transform.xpos = Mouse.xpos;\n        actor.transform.ypos = Mouse.ypos;\n        if(Mouse.buttonPressed(0))\n            Console.print(\nleft click\n);\n    }\n}\n\nobject \nApplication\n\n{\n    mouseCursor = spawn(\nMyCursor\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\nxpos\n\n\nxpos\n: number, read-only.\n\n\nThe x-position of the mouse cursor, in screen space.\n\n\nypos\n\n\nypos\n: number, read-only.\n\n\nThe y-position of the mouse cursor, in screen space.\n\n\nFunctions\n\n\nbuttonDown\n\n\nbuttonDown(buttonId)\n\n\nChecks if a mouse button is currently being held down.\n\n\nArguments\n\n\n\n\nbuttonId\n: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button is being held down.\n\n\nbuttonPressed\n\n\nbuttonPressed(buttonId)\n\n\nChecks if a mouse button has just been pressed.\n\n\nArguments\n\n\n\n\nbuttonId\n: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button has just been pressed (i.e., a click has just occurred).\n\n\nbuttonReleased\n\n\nbuttonReleased(buttonId)\n\n\nChecks if a mouse button has just been released.\n\n\nArguments\n\n\n\n\nbuttonId\n: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).\n\n\n\n\nReturns\n\n\nReturns \ntrue\n if the specified button has just been released.", 
             "title": "Mouse"
         }, 
         {
@@ -1532,8 +1647,18 @@
         }, 
         {
             "location": "/engine/mouse/#properties", 
-            "text": "xpos : number, read-only. The x-position of the mouse cursor, in screen space.  ypos : number, read-only. The y-position of the mouse cursor, in screen space.", 
+            "text": "", 
             "title": "Properties"
+        }, 
+        {
+            "location": "/engine/mouse/#xpos", 
+            "text": "xpos : number, read-only.  The x-position of the mouse cursor, in screen space.", 
+            "title": "xpos"
+        }, 
+        {
+            "location": "/engine/mouse/#ypos", 
+            "text": "ypos : number, read-only.  The y-position of the mouse cursor, in screen space.", 
+            "title": "ypos"
         }, 
         {
             "location": "/engine/mouse/#functions", 
@@ -1557,7 +1682,7 @@
         }, 
         {
             "location": "/engine/player/", 
-            "text": "Player\n\n\nThe Player object is used to control a specific player/character. Player objects are tagged \nplayer\n. That might be useful when dealing with collisions.\n\n\nFactory\n\n\nPlayer\n\n\nSurgeEngine.Player(playerName | playerId)\n\n\nGets the Player object associated with a certain character.\n\n\nArguments\n\n\n\n\nplayerName\n: string. The name of the character (defined in the \ncharacters/\n folder).\n\n\nplayerId\n: number. The ID of the character (as defined in the \n.lev\n file), an integer between \n0\n and \nPlayer.count - 1\n, inclusive.\n\n\n\n\nReturns\n\n\nA Player object.\n\n\nExample\n\n\nusing SurgeEngine.Player;\n\n// Gives Surge 1 collectible each second\nobject \nCollectible Bonus\n\n{\n    player = Player(\nSurge\n);\n\n    state \nmain\n\n    {\n        if(timeout(1))\n            state = \n+1 collectible\n;\n    }\n\n    state \n+1 collectible\n\n    {\n        player.collectibles = player.collectibles + 1;\n        state = \nmain\n;\n    }\n}\n\n\n\n\nPlayer.active\n\n\nSurgeEngine.Player.active\n\n\nThe active player, i.e., the one currently in focus.\n\n\nReturns\n\n\nA Player object.\n\n\nExample\n\n\nusing SurgeEngine.Player;\n\n// Tells the name of the active player\nobject \nWho am I\n\n{\n    state \nmain\n\n    {\n        Console.print(\nI am \n + Player.active.name);\n        destroy();\n    }\n}\n\n\n\n\nPlayer.count\n\n\nSurgeEngine.Player.count\n\n\nPlayer count.\n\n\nReturns\n\n\nThe number of players in the level.\n\n\nRead-Only Properties\n\n\n\n\nname\n: string. The name of the character.\n\n\nactivity\n: string. The current state / activity of the player. One of the following: \n\"stopped\"\n, \n\"walking\"\n, \n\"running\"\n, \n\"jumping\"\n, \n\"springing\"\n, \n\"rolling\"\n, \n\"charging\"\n, \n\"pushing\"\n, \n\"gettinghit\"\n, \n\"dying\"\n, \n\"braking\"\n, \n\"balancing\"\n, \n\"drowning\"\n, \n\"breathing\"\n, \n\"ducking\"\n, \n\"lookingup\"\n, \n\"waiting\"\n, \n\"winning\"\n.\n\n\nattacking\n: boolean. Is the player attacking? (jumping, rolling, and so on)\n\n\nmidair\n: boolean. Is the player midair?\n\n\nsecondsToDrown\n: number. The number of seconds to drown, if underwater.\n\n\ndirection\n: number. It will be +1 if the player is facing right, or -1 if facing left.\n\n\nwidth\n: number. The width of the player sprite, in pixels.\n\n\nheight\n: number. The height of the player sprite, in pixels.\n\n\ntransform\n: \nTransform2D\n object. The transform of the Player.\n\n\ncollider\n: \nCollider\n object. A collider associated with this Player.\n\n\n\n\nRead-Write Properties\n\n\n\n\nanim\n: number. An integer value corresponding to the animation number.\n\n\nshield\n: string. One of the following: \n\"none\"\n, \n\"shield\"\n, \n\"fire\"\n, \n\"thunder\"\n, \n\"water\"\n, \n\"acid\"\n, \n\"wind\"\n.\n\n\ninvincible\n: boolean. Used to make the player invincible. Defaults to \nfalse\n.\n\n\nturbo\n: boolean. Turbo mode (increases player speed). Defaults to \nfalse\n.\n\n\nfrozen\n: boolean. Disable/enable player movement. Defaults to \nfalse\n.\n\n\nunderwater\n: boolean. Get underwater / out of water. Defaults to \nfalse\n.\n\n\nvisible\n: boolean. Should the player sprite be rendered? Defaults to \ntrue\n.\n\n\ncollectibles\n: number. The number of collectibles, an integer shared between all player objects.\n\n\nlives\n: number. The number of lives, an integer shared between all player objects.\n\n\nscore\n: number. The score of the player, an integer value shared between all player objects.\n\n\ngsp\n: number. Ground speed, in pixels per second.\n\n\nxsp\n: number. X-speed, in pixels per second (useful in midair).\n\n\nysp\n: number. Y-speed, in pixels per second.\n\n\n\n\nFunctions\n\n\nbounce\n\n\nbounce(hazard | null)\n\n\nMakes the player bounce after smashing a hazard. The trajectory of the movement will be computed according to the position of the hazard. If no hazard is present, you may pass \nnull\n as the argument.\n\n\nArguments\n\n\n\n\nhazard\n: \nActor\n object. The hazard.\n\n\n\n\nbounceBack\n\n\nbounceBack(hazard)\n\n\nMakes the player bounce after smashing a hazard. If the player comes at the hazard from below, the player is thrown downwards. If not, the player is thrown upwards. The \nhazard\n parameter is mandatory.\n\n\nArguments\n\n\n\n\nhazard\n: \nActor\n object. The hazard.\n\n\n\n\nhit\n\n\nhit(hazard | null)\n\n\nMakes the player get hit. Call it whenever the player gets hit by a hazard. The hit movement will be calculated according to the position of the hazard. If no hazard is present, you may pass \nnull\n as the argument.\n\n\nArguments\n\n\n\n\nhazard\n: \nActor\n object. The hazard.\n\n\n\n\nkill\n\n\nkill()\n\n\nKills the player.\n\n\nbreathe\n\n\nbreathe()\n\n\nMakes the player breathe (underwater only).\n\n\nspringify\n\n\nspringify()\n\n\nActivates the \"springing\" activity.\n\n\nroll\n\n\nroll()\n\n\nMakes the player roll.\n\n\nfocus\n\n\nfocus()\n\n\nFocuses on the player. The focused player is controlled by the user. Only one player can have focus at any given time.\n\n\nhasFocus\n\n\nhasFocus()\n\n\nDoes the player have focus?\n\n\nReturns\n\n\nReturns \ntrue\n if the player has focus, \nfalse\n otherwise.", 
+            "text": "Player\n\n\nThe Player object is used to control a specific player/character. Player objects are tagged \nplayer\n. That might be useful when dealing with collisions.\n\n\nFactory\n\n\nPlayer\n\n\nSurgeEngine.Player(playerName | playerId)\n\n\nGets the Player object associated with a certain character.\n\n\nArguments\n\n\n\n\nplayerName\n: string. The name of the character (defined in the \ncharacters/\n folder).\n\n\nplayerId\n: number. The ID of the character (as defined in the \n.lev\n file), an integer between \n0\n and \nPlayer.count - 1\n, inclusive.\n\n\n\n\nReturns\n\n\nA Player object.\n\n\nExample\n\n\nusing SurgeEngine.Player;\n\n// Gives Surge 1 collectible each second\nobject \nCollectible Bonus\n\n{\n    player = Player(\nSurge\n);\n\n    state \nmain\n\n    {\n        if(timeout(1))\n            state = \n+1 collectible\n;\n    }\n\n    state \n+1 collectible\n\n    {\n        player.collectibles = player.collectibles + 1;\n        state = \nmain\n;\n    }\n}\n\n\n\n\nPlayer.active\n\n\nSurgeEngine.Player.active\n\n\nThe active player, i.e., the one currently in focus.\n\n\nReturns\n\n\nA Player object.\n\n\nExample\n\n\nusing SurgeEngine.Player;\n\n// Tells the name of the active player\nobject \nWho am I\n\n{\n    state \nmain\n\n    {\n        Console.print(\nI am \n + Player.active.name);\n        destroy();\n    }\n}\n\n\n\n\nPlayer.count\n\n\nSurgeEngine.Player.count\n\n\nPlayer count.\n\n\nReturns\n\n\nThe number of players in the level.\n\n\nProperties\n\n\nname\n\n\nname\n: string, read-only.\n\n\nThe name of the character.\n\n\nactivity\n\n\nactivity\n: string, read-only.\n\n\nThe current state / activity of the player. One of the following: \n\"stopped\"\n, \n\"walking\"\n, \n\"running\"\n, \n\"jumping\"\n, \n\"springing\"\n, \n\"rolling\"\n, \n\"charging\"\n, \n\"pushing\"\n, \n\"gettinghit\"\n, \n\"dying\"\n, \n\"braking\"\n, \n\"balancing\"\n, \n\"drowning\"\n, \n\"breathing\"\n, \n\"ducking\"\n, \n\"lookingup\"\n, \n\"waiting\"\n, \n\"winning\"\n.\n\n\nanim\n\n\nanim\n: number.\n\n\nAn integer value corresponding to the animation number.\n\n\nattacking\n\n\nattacking\n: boolean, read-only.\n\n\nIs the player attacking? (jumping, rolling, and so on)\n\n\nmidair\n\n\nmidair\n: boolean, read-only.\n\n\nIs the player midair?\n\n\nsecondsToDrown\n\n\nsecondsToDrown\n: number, read-only.\n\n\nThe number of seconds to drown, if underwater.\n\n\ndirection\n\n\ndirection\n: number, read-only.\n\n\nDirection will be +1 if the player is facing right, -1 if facing left.\n\n\nwidth\n\n\nwidth\n: number, read-only.\n\n\nThe width of the player sprite, in pixels.\n\n\nheight\n\n\nheight\n: number, read-only.\n\n\nThe height of the player sprite, in pixels.\n\n\ntransform\n\n\ntransform\n: \nTransform2D\n object, read-only.\n\n\nThe transform of the Player.\n\n\ncollider\n\n\ncollider\n: \nCollider\n object, read-only.\n\n\nA collider associated with this Player.\n\n\nshield\n\n\nshield\n: string.\n\n\nOne of the following: \n\"none\"\n, \n\"shield\"\n, \n\"fire\"\n, \n\"thunder\"\n, \n\"water\"\n, \n\"acid\"\n, \n\"wind\"\n.\n\n\ninvincible\n\n\ninvincible\n: boolean.\n\n\nUsed to make the player invincible. Defaults to \nfalse\n.\n\n\nturbo\n\n\nturbo\n: boolean.\n\n\nTurbo mode (increases player speed). Defaults to \nfalse\n.\n\n\nfrozen\n\n\nfrozen\n: boolean.\n\n\nDisable/enable player movement. Defaults to \nfalse\n.\n\n\nunderwater\n\n\nunderwater\n: boolean.\n\n\nGet underwater / out of water. Defaults to \nfalse\n.\n\n\nvisible\n\n\nvisible\n: boolean.\n\n\nShould the player sprite be rendered? Defaults to \ntrue\n.\n\n\ncollectibles\n\n\ncollectibles\n: number.\n\n\nThe number of collectibles, an integer shared between all player objects.\n\n\nlives\n\n\nlives\n: number.\n\n\nThe number of lives, an integer shared between all player objects.\n\n\nscore\n\n\nscore\n: number.\n\n\nThe score of the player, an integer value shared between all player objects.\n\n\ngsp\n\n\ngsp\n: number.\n\n\nGround speed, in pixels per second.\n\n\nxsp\n\n\nxsp\n: number.\n\n\nHorizontal speed, in pixels per second (useful while midair).\n\n\nysp\n\n\nysp\n: number.\n\n\nVertical speed, in pixels per second.\n\n\nFunctions\n\n\nbounce\n\n\nbounce(hazard | null)\n\n\nMakes the player bounce after smashing a hazard. The trajectory of the movement will be computed according to the position of the hazard. If no hazard is present, you may pass \nnull\n as the argument.\n\n\nArguments\n\n\n\n\nhazard\n: \nActor\n object. The hazard.\n\n\n\n\nExample\n\n\nusing SurgeEngine.Player;\nusing SurgeEngine.Actor;\nusing SurgeEngine.Collisions.CollisionBox;\n\nobject \nShieldBox\n is \nentity\n\n{\n    actor = Actor(\nShieldBox\n);\n    shieldCollider = CollisionBox(32,32);\n\n    state \nmain\n\n    {\n        player = Player.active;\n        if(player.attacking) {\n            if(player.collider.collidesWith(shieldCollider)) {\n                if(player.midair)\n                    player.bounce(actor);\n                player.shield = \nfire\n;\n                destroy();\n            }\n        }\n    }\n}\n\n\n\n\nbounceBack\n\n\nbounceBack(hazard)\n\n\nMakes the player bounce after smashing a hazard. If the player comes at the hazard from below, the player is thrown downwards. If not, the player is thrown upwards. The \nhazard\n parameter is mandatory.\n\n\nArguments\n\n\n\n\nhazard\n: \nActor\n object. The hazard.\n\n\n\n\nhit\n\n\nhit(hazard | null)\n\n\nMakes the player get hit. Call it whenever the player gets hit by a hazard. The hit movement will be calculated according to the position of the hazard. If no hazard is present, you may pass \nnull\n as the argument.\n\n\nArguments\n\n\n\n\nhazard\n: \nActor\n object. The hazard.\n\n\n\n\nkill\n\n\nkill()\n\n\nKills the player.\n\n\nbreathe\n\n\nbreathe()\n\n\nMakes the player breathe (underwater only).\n\n\nspringify\n\n\nspringify()\n\n\nActivates the \"springing\" activity.\n\n\nroll\n\n\nroll()\n\n\nMakes the player roll.\n\n\nfocus\n\n\nfocus()\n\n\nFocuses on the player. The focused player is controlled by the user. Only one player can have focus at any given time.\n\n\nhasFocus\n\n\nhasFocus()\n\n\nDoes the player have focus?\n\n\nReturns\n\n\nReturns \ntrue\n if the player has focus, \nfalse\n otherwise.", 
             "title": "Player"
         }, 
         {
@@ -1586,14 +1711,124 @@
             "title": "Player.count"
         }, 
         {
-            "location": "/engine/player/#read-only-properties", 
-            "text": "name : string. The name of the character.  activity : string. The current state / activity of the player. One of the following:  \"stopped\" ,  \"walking\" ,  \"running\" ,  \"jumping\" ,  \"springing\" ,  \"rolling\" ,  \"charging\" ,  \"pushing\" ,  \"gettinghit\" ,  \"dying\" ,  \"braking\" ,  \"balancing\" ,  \"drowning\" ,  \"breathing\" ,  \"ducking\" ,  \"lookingup\" ,  \"waiting\" ,  \"winning\" .  attacking : boolean. Is the player attacking? (jumping, rolling, and so on)  midair : boolean. Is the player midair?  secondsToDrown : number. The number of seconds to drown, if underwater.  direction : number. It will be +1 if the player is facing right, or -1 if facing left.  width : number. The width of the player sprite, in pixels.  height : number. The height of the player sprite, in pixels.  transform :  Transform2D  object. The transform of the Player.  collider :  Collider  object. A collider associated with this Player.", 
-            "title": "Read-Only Properties"
+            "location": "/engine/player/#properties", 
+            "text": "", 
+            "title": "Properties"
         }, 
         {
-            "location": "/engine/player/#read-write-properties", 
-            "text": "anim : number. An integer value corresponding to the animation number.  shield : string. One of the following:  \"none\" ,  \"shield\" ,  \"fire\" ,  \"thunder\" ,  \"water\" ,  \"acid\" ,  \"wind\" .  invincible : boolean. Used to make the player invincible. Defaults to  false .  turbo : boolean. Turbo mode (increases player speed). Defaults to  false .  frozen : boolean. Disable/enable player movement. Defaults to  false .  underwater : boolean. Get underwater / out of water. Defaults to  false .  visible : boolean. Should the player sprite be rendered? Defaults to  true .  collectibles : number. The number of collectibles, an integer shared between all player objects.  lives : number. The number of lives, an integer shared between all player objects.  score : number. The score of the player, an integer value shared between all player objects.  gsp : number. Ground speed, in pixels per second.  xsp : number. X-speed, in pixels per second (useful in midair).  ysp : number. Y-speed, in pixels per second.", 
-            "title": "Read-Write Properties"
+            "location": "/engine/player/#name", 
+            "text": "name : string, read-only.  The name of the character.", 
+            "title": "name"
+        }, 
+        {
+            "location": "/engine/player/#activity", 
+            "text": "activity : string, read-only.  The current state / activity of the player. One of the following:  \"stopped\" ,  \"walking\" ,  \"running\" ,  \"jumping\" ,  \"springing\" ,  \"rolling\" ,  \"charging\" ,  \"pushing\" ,  \"gettinghit\" ,  \"dying\" ,  \"braking\" ,  \"balancing\" ,  \"drowning\" ,  \"breathing\" ,  \"ducking\" ,  \"lookingup\" ,  \"waiting\" ,  \"winning\" .", 
+            "title": "activity"
+        }, 
+        {
+            "location": "/engine/player/#anim", 
+            "text": "anim : number.  An integer value corresponding to the animation number.", 
+            "title": "anim"
+        }, 
+        {
+            "location": "/engine/player/#attacking", 
+            "text": "attacking : boolean, read-only.  Is the player attacking? (jumping, rolling, and so on)", 
+            "title": "attacking"
+        }, 
+        {
+            "location": "/engine/player/#midair", 
+            "text": "midair : boolean, read-only.  Is the player midair?", 
+            "title": "midair"
+        }, 
+        {
+            "location": "/engine/player/#secondstodrown", 
+            "text": "secondsToDrown : number, read-only.  The number of seconds to drown, if underwater.", 
+            "title": "secondsToDrown"
+        }, 
+        {
+            "location": "/engine/player/#direction", 
+            "text": "direction : number, read-only.  Direction will be +1 if the player is facing right, -1 if facing left.", 
+            "title": "direction"
+        }, 
+        {
+            "location": "/engine/player/#width", 
+            "text": "width : number, read-only.  The width of the player sprite, in pixels.", 
+            "title": "width"
+        }, 
+        {
+            "location": "/engine/player/#height", 
+            "text": "height : number, read-only.  The height of the player sprite, in pixels.", 
+            "title": "height"
+        }, 
+        {
+            "location": "/engine/player/#transform", 
+            "text": "transform :  Transform2D  object, read-only.  The transform of the Player.", 
+            "title": "transform"
+        }, 
+        {
+            "location": "/engine/player/#collider", 
+            "text": "collider :  Collider  object, read-only.  A collider associated with this Player.", 
+            "title": "collider"
+        }, 
+        {
+            "location": "/engine/player/#shield", 
+            "text": "shield : string.  One of the following:  \"none\" ,  \"shield\" ,  \"fire\" ,  \"thunder\" ,  \"water\" ,  \"acid\" ,  \"wind\" .", 
+            "title": "shield"
+        }, 
+        {
+            "location": "/engine/player/#invincible", 
+            "text": "invincible : boolean.  Used to make the player invincible. Defaults to  false .", 
+            "title": "invincible"
+        }, 
+        {
+            "location": "/engine/player/#turbo", 
+            "text": "turbo : boolean.  Turbo mode (increases player speed). Defaults to  false .", 
+            "title": "turbo"
+        }, 
+        {
+            "location": "/engine/player/#frozen", 
+            "text": "frozen : boolean.  Disable/enable player movement. Defaults to  false .", 
+            "title": "frozen"
+        }, 
+        {
+            "location": "/engine/player/#underwater", 
+            "text": "underwater : boolean.  Get underwater / out of water. Defaults to  false .", 
+            "title": "underwater"
+        }, 
+        {
+            "location": "/engine/player/#visible", 
+            "text": "visible : boolean.  Should the player sprite be rendered? Defaults to  true .", 
+            "title": "visible"
+        }, 
+        {
+            "location": "/engine/player/#collectibles", 
+            "text": "collectibles : number.  The number of collectibles, an integer shared between all player objects.", 
+            "title": "collectibles"
+        }, 
+        {
+            "location": "/engine/player/#lives", 
+            "text": "lives : number.  The number of lives, an integer shared between all player objects.", 
+            "title": "lives"
+        }, 
+        {
+            "location": "/engine/player/#score", 
+            "text": "score : number.  The score of the player, an integer value shared between all player objects.", 
+            "title": "score"
+        }, 
+        {
+            "location": "/engine/player/#gsp", 
+            "text": "gsp : number.  Ground speed, in pixels per second.", 
+            "title": "gsp"
+        }, 
+        {
+            "location": "/engine/player/#xsp", 
+            "text": "xsp : number.  Horizontal speed, in pixels per second (useful while midair).", 
+            "title": "xsp"
+        }, 
+        {
+            "location": "/engine/player/#ysp", 
+            "text": "ysp : number.  Vertical speed, in pixels per second.", 
+            "title": "ysp"
         }, 
         {
             "location": "/engine/player/#functions", 
@@ -1602,7 +1837,7 @@
         }, 
         {
             "location": "/engine/player/#bounce", 
-            "text": "bounce(hazard | null)  Makes the player bounce after smashing a hazard. The trajectory of the movement will be computed according to the position of the hazard. If no hazard is present, you may pass  null  as the argument.  Arguments   hazard :  Actor  object. The hazard.", 
+            "text": "bounce(hazard | null)  Makes the player bounce after smashing a hazard. The trajectory of the movement will be computed according to the position of the hazard. If no hazard is present, you may pass  null  as the argument.  Arguments   hazard :  Actor  object. The hazard.   Example  using SurgeEngine.Player;\nusing SurgeEngine.Actor;\nusing SurgeEngine.Collisions.CollisionBox;\n\nobject  ShieldBox  is  entity \n{\n    actor = Actor( ShieldBox );\n    shieldCollider = CollisionBox(32,32);\n\n    state  main \n    {\n        player = Player.active;\n        if(player.attacking) {\n            if(player.collider.collidesWith(shieldCollider)) {\n                if(player.midair)\n                    player.bounce(actor);\n                player.shield =  fire ;\n                destroy();\n            }\n        }\n    }\n}", 
             "title": "bounce"
         }, 
         {
@@ -1692,12 +1927,12 @@
         }, 
         {
             "location": "/engine/sensor/", 
-            "text": "Sensor\n\n\nA Sensor is used to detect collisions with bricks (obstacle, cloud). Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.\n\n\nFactory\n\n\nSensor\n\n\nSurgeEngine.Sensor(x, y, width, height)\n\n\nSpawns a new Sensor with the specified dimensions and having its top-left corner located at position (\nx\n, \ny\n) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both \nwidth\n and \nheight\n must be positive integers, and at least one of them must be equal to 1.\n\n\nArguments\n\n\n\n\nx\n: number. The x-position of the top-left corner of the sensor, relative to the parent object.\n\n\ny\n: number. The y-position of the top-left corner of the sensor, relative to the parent object.\n\n\nwidth\n: number. The width of the sensor, in pixels. Must be a positive integer.\n\n\nheight\n: number. The height of the sensor, in pixels. Must be a positive integer.\n\n\n\n\nReturns\n\n\nA Sensor with the specified parameters.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\nusing SurgeEngine.Sensor;\n\nobject \nSensorToy\n is \nentity\n\n{\n    actor = Actor(\nSensorToy\n);\n    sensor = Sensor(10, -50, 1, 50);\n\n    state \nmain\n\n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n        sensor.visible = true;\n        if(sensor.status != 0)\n            Console.print(\nGot brick\n);\n    }\n}\n\nobject \nApplication\n\n{\n    example = spawn(\nSensorExample\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nvisible\n: boolean. Should the sensor be rendered? Useful for debugging. Defaults to \nfalse\n.\n\n\nstatus\n: number, read-only. The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).\n\n\n\n\nFunctions\n\n\nupdate\n\n\nupdate()\n\n\nThe sensor status is updated automatically once per frame. Use this function to update it manually. This is useful if you modify the position of the parent object and need the updated sensor status in the same frame (for example; you're working in a loop).", 
+            "text": "Sensor\n\n\nA Sensor is used to detect collisions with bricks (obstacle, cloud). Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\nusing SurgeEngine.Sensor;\n\nobject \nSensorToy\n is \nentity\n\n{\n    actor = Actor(\nSensorToy\n);\n    sensor = Sensor(10, -50, 1, 50);\n\n    state \nmain\n\n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n        sensor.visible = true;\n        if(sensor.status != 0)\n            Console.print(\nGot brick\n);\n    }\n}\n\nobject \nApplication\n\n{\n    example = spawn(\nSensorExample\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nFactory\n\n\nSensor\n\n\nSurgeEngine.Sensor(x, y, width, height)\n\n\nSpawns a new Sensor with the specified dimensions and having its top-left corner located at position (\nx\n, \ny\n) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both \nwidth\n and \nheight\n must be positive integers, and at least one of them must be equal to 1.\n\n\nArguments\n\n\n\n\nx\n: number. The x-position of the top-left corner of the sensor, relative to the parent object.\n\n\ny\n: number. The y-position of the top-left corner of the sensor, relative to the parent object.\n\n\nwidth\n: number. The width of the sensor, in pixels. Must be a positive integer.\n\n\nheight\n: number. The height of the sensor, in pixels. Must be a positive integer.\n\n\n\n\nReturns\n\n\nA Sensor with the specified parameters.\n\n\nProperties\n\n\nvisible\n\n\nvisible\n: boolean.\n\n\nShould the sensor be rendered? Useful for debugging. Defaults to \nfalse\n.\n\n\nstatus\n\n\nstatus\n: number, read-only.\n\n\nThe type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).\n\n\nFunctions\n\n\nupdate\n\n\nupdate()\n\n\nThe sensor status is updated automatically once per frame. Use this function to update it manually. This is useful if you modify the position of the parent object and need the updated sensor status in the same frame (for example; you're working in a loop).", 
             "title": "Sensor"
         }, 
         {
             "location": "/engine/sensor/#sensor", 
-            "text": "A Sensor is used to detect collisions with bricks (obstacle, cloud). Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.", 
+            "text": "A Sensor is used to detect collisions with bricks (obstacle, cloud). Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.  Example  using SurgeEngine.Actor;\nusing SurgeEngine.Sensor;\n\nobject  SensorToy  is  entity \n{\n    actor = Actor( SensorToy );\n    sensor = Sensor(10, -50, 1, 50);\n\n    state  main \n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n        sensor.visible = true;\n        if(sensor.status != 0)\n            Console.print( Got brick );\n    }\n}\n\nobject  Application \n{\n    example = spawn( SensorExample );\n\n    state  main \n    {\n    }\n}", 
             "title": "Sensor"
         }, 
         {
@@ -1707,13 +1942,23 @@
         }, 
         {
             "location": "/engine/sensor/#sensor_1", 
-            "text": "SurgeEngine.Sensor(x, y, width, height)  Spawns a new Sensor with the specified dimensions and having its top-left corner located at position ( x ,  y ) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both  width  and  height  must be positive integers, and at least one of them must be equal to 1.  Arguments   x : number. The x-position of the top-left corner of the sensor, relative to the parent object.  y : number. The y-position of the top-left corner of the sensor, relative to the parent object.  width : number. The width of the sensor, in pixels. Must be a positive integer.  height : number. The height of the sensor, in pixels. Must be a positive integer.   Returns  A Sensor with the specified parameters.  Example  using SurgeEngine.Actor;\nusing SurgeEngine.Sensor;\n\nobject  SensorToy  is  entity \n{\n    actor = Actor( SensorToy );\n    sensor = Sensor(10, -50, 1, 50);\n\n    state  main \n    {\n        actor.transform.xpos = 210;\n        actor.transform.ypos = 150;\n        sensor.visible = true;\n        if(sensor.status != 0)\n            Console.print( Got brick );\n    }\n}\n\nobject  Application \n{\n    example = spawn( SensorExample );\n\n    state  main \n    {\n    }\n}", 
+            "text": "SurgeEngine.Sensor(x, y, width, height)  Spawns a new Sensor with the specified dimensions and having its top-left corner located at position ( x ,  y ) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both  width  and  height  must be positive integers, and at least one of them must be equal to 1.  Arguments   x : number. The x-position of the top-left corner of the sensor, relative to the parent object.  y : number. The y-position of the top-left corner of the sensor, relative to the parent object.  width : number. The width of the sensor, in pixels. Must be a positive integer.  height : number. The height of the sensor, in pixels. Must be a positive integer.   Returns  A Sensor with the specified parameters.", 
             "title": "Sensor"
         }, 
         {
             "location": "/engine/sensor/#properties", 
-            "text": "visible : boolean. Should the sensor be rendered? Useful for debugging. Defaults to  false .  status : number, read-only. The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).", 
+            "text": "", 
             "title": "Properties"
+        }, 
+        {
+            "location": "/engine/sensor/#visible", 
+            "text": "visible : boolean.  Should the sensor be rendered? Useful for debugging. Defaults to  false .", 
+            "title": "visible"
+        }, 
+        {
+            "location": "/engine/sensor/#status", 
+            "text": "status : number, read-only.  The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).", 
+            "title": "status"
         }, 
         {
             "location": "/engine/sensor/#functions", 
@@ -1727,23 +1972,23 @@
         }, 
         {
             "location": "/engine/surgeengine/", 
-            "text": "SurgeEngine\n\n\nThe SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).\n\n\nExample\n\n\n// Display Open Surge version\nusing SurgeEngine;\n\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(SurgeEngine.version);\n        state = \nblank\n;\n    }\n\n    state \nblank\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\n\n\nversion\n: string, read-only. Open Surge version.", 
+            "text": "SurgeEngine\n\n\nThe SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).\n\n\nExample\n\n\n// Display Open Surge version\nusing SurgeEngine;\n\nobject \nApplication\n\n{\n    state \nmain\n\n    {\n        Console.print(SurgeEngine.version);\n        state = \nblank\n;\n    }\n\n    state \nblank\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\nversion\n\n\nversion\n: string, read-only.\n\n\nOpen Surge version.", 
             "title": "SurgeEngine"
         }, 
         {
             "location": "/engine/surgeengine/#surgeengine", 
-            "text": "The SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).", 
+            "text": "The SurgeEngine plugin is the interface between SurgeScript (scripting language) and Open Surge (game engine).  Example  // Display Open Surge version\nusing SurgeEngine;\n\nobject  Application \n{\n    state  main \n    {\n        Console.print(SurgeEngine.version);\n        state =  blank ;\n    }\n\n    state  blank \n    {\n    }\n}", 
             "title": "SurgeEngine"
         }, 
         {
-            "location": "/engine/surgeengine/#example", 
-            "text": "// Display Open Surge version\nusing SurgeEngine;\n\nobject  Application \n{\n    state  main \n    {\n        Console.print(SurgeEngine.version);\n        state =  blank ;\n    }\n\n    state  blank \n    {\n    }\n}", 
-            "title": "Example"
+            "location": "/engine/surgeengine/#properties", 
+            "text": "", 
+            "title": "Properties"
         }, 
         {
-            "location": "/engine/surgeengine/#properties", 
-            "text": "version : string, read-only. Open Surge version.", 
-            "title": "Properties"
+            "location": "/engine/surgeengine/#version", 
+            "text": "version : string, read-only.  Open Surge version.", 
+            "title": "version"
         }
     ]
 }

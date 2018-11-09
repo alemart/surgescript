@@ -719,16 +719,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#properties" title="Properties" class="md-nav__link">
     Properties
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xpos" title="xpos" class="md-nav__link">
+    xpos
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ypos" title="ypos" class="md-nav__link">
+    ypos
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -913,16 +926,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#properties" title="Properties" class="md-nav__link">
     Properties
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xpos" title="xpos" class="md-nav__link">
+    xpos
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ypos" title="ypos" class="md-nav__link">
+    ypos
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -945,7 +971,11 @@
                 
                 <h1 id="camera">Camera</h1>
 <p>The Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.</p>
-<h2 id="example">Example</h2>
+<blockquote>
+<p><strong>HUD elements</strong></p>
+<p>Objects tagged as <em>"detached"</em> do not follow the camera. They are not in world space, but in screen space. This is useful for creating HUD elements.</p>
+</blockquote>
+<p><em>Example</em></p>
 <pre><code>// Import the Camera object
 using SurgeEngine.Camera;
 
@@ -967,12 +997,13 @@ object &quot;Application&quot;
 }
 </code></pre>
 
-<p><strong>Note:</strong> objects tagged as <em>"detached"</em> do not follow the camera. They are not in world space, but in screen space.</p>
 <h2 id="properties">Properties</h2>
-<ul>
-<li><code>xpos</code>: number. The x-position of the camera in world space.</li>
-<li><code>ypos</code>: number. The y-position of the camera in world space.</li>
-</ul>
+<h4 id="xpos">xpos</h4>
+<p><code>xpos</code>: number.</p>
+<p>The x-position of the camera in world space.</p>
+<h4 id="ypos">ypos</h4>
+<p><code>ypos</code>: number.</p>
+<p>The y-position of the camera in world space.</p>
                 
                   
                 

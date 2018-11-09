@@ -752,16 +752,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#read-only-properties" title="Read-Only Properties" class="md-nav__link">
-    Read-Only Properties
+  <a href="#properties" title="Properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entity" title="entity" class="md-nav__link">
+    entity
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#read-write-properties" title="Read-Write Properties" class="md-nav__link">
-    Read-Write Properties
+        
+          <li class="md-nav__item">
+  <a href="#visible" title="visible" class="md-nav__link">
+    visible
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -949,16 +962,29 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#read-only-properties" title="Read-Only Properties" class="md-nav__link">
-    Read-Only Properties
+  <a href="#properties" title="Properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#entity" title="entity" class="md-nav__link">
+    entity
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#read-write-properties" title="Read-Write Properties" class="md-nav__link">
-    Read-Write Properties
+        
+          <li class="md-nav__item">
+  <a href="#visible" title="visible" class="md-nav__link">
+    visible
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1014,8 +1040,8 @@
                 
                 
                 <h1 id="collider">Collider</h1>
-<p>A collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually placed on the hot spot of sprites, but that can be changed by altering their <em>anchor</em>.</p>
-<p>Colliders must be spawned as children of <a href="../entity">entities</a> (objects tagged as <em>"entity"</em>). To detect collisions, you may declare function <code>onCollision()</code> on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than geometric primitives.</p>
+<p>A collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually centered on the hot spot of sprites, but that can be changed by altering their <em>anchor</em>.</p>
+<p>Colliders must be spawned as children of <a href="../entity">entities</a>. To detect collisions, you may implement function <code>onCollision()</code> on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than simple primitives.</p>
 <p>A collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as <a href="../collisionbox">CollisionBox</a> and <a href="../collisionball">CollisionBall</a>. All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.</p>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Actor;
@@ -1052,14 +1078,13 @@ object &quot;CollisionTest&quot; is &quot;entity&quot;
 }
 </code></pre>
 
-<h2 id="read-only-properties">Read-Only Properties</h2>
-<ul>
-<li><code>entity</code>: object. The <a href="../entity">Entity</a> associated with this collider.</li>
-</ul>
-<h2 id="read-write-properties">Read-Write Properties</h2>
-<ul>
-<li><code>visible</code>: boolean. Useful for debugging. The default value is <code>false</code>.</li>
-</ul>
+<h2 id="properties">Properties</h2>
+<h4 id="entity">entity</h4>
+<p><code>entity</code>: object, read-only.</p>
+<p>The <a href="../entity">Entity</a> associated with this collider.</p>
+<h4 id="visible">visible</h4>
+<p><code>visible</code>: boolean.</p>
+<p>Useful for debugging. The default value is <code>false</code>.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="collideswith">collidesWith</h4>
 <p><code>collidesWith(collider)</code></p>

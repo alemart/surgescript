@@ -875,6 +875,26 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visible" title="visible" class="md-nav__link">
+    visible
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status" title="status" class="md-nav__link">
+    status
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -970,6 +990,26 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#visible" title="visible" class="md-nav__link">
+    visible
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status" title="status" class="md-nav__link">
+    status
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1011,19 +1051,6 @@
                 
                 <h1 id="sensor">Sensor</h1>
 <p>A Sensor is used to detect collisions with bricks (obstacle, cloud). Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.</p>
-<h2 id="factory">Factory</h2>
-<h4 id="sensor_1">Sensor</h4>
-<p><code>SurgeEngine.Sensor(x, y, width, height)</code></p>
-<p>Spawns a new Sensor with the specified dimensions and having its top-left corner located at position (<em>x</em>, <em>y</em>) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both <em>width</em> and <em>height</em> must be positive integers, and at least one of them must be equal to 1.</p>
-<p><em>Arguments</em></p>
-<ul>
-<li><code>x</code>: number. The x-position of the top-left corner of the sensor, relative to the parent object.</li>
-<li><code>y</code>: number. The y-position of the top-left corner of the sensor, relative to the parent object.</li>
-<li><code>width</code>: number. The width of the sensor, in pixels. Must be a positive integer.</li>
-<li><code>height</code>: number. The height of the sensor, in pixels. Must be a positive integer.</li>
-</ul>
-<p><em>Returns</em></p>
-<p>A Sensor with the specified parameters.</p>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Actor;
 using SurgeEngine.Sensor;
@@ -1053,11 +1080,26 @@ object &quot;Application&quot;
 }
 </code></pre>
 
-<h2 id="properties">Properties</h2>
+<h2 id="factory">Factory</h2>
+<h4 id="sensor_1">Sensor</h4>
+<p><code>SurgeEngine.Sensor(x, y, width, height)</code></p>
+<p>Spawns a new Sensor with the specified dimensions and having its top-left corner located at position (<em>x</em>, <em>y</em>) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both <em>width</em> and <em>height</em> must be positive integers, and at least one of them must be equal to 1.</p>
+<p><em>Arguments</em></p>
 <ul>
-<li><code>visible</code>: boolean. Should the sensor be rendered? Useful for debugging. Defaults to <code>false</code>.</li>
-<li><code>status</code>: number, read-only. The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).</li>
+<li><code>x</code>: number. The x-position of the top-left corner of the sensor, relative to the parent object.</li>
+<li><code>y</code>: number. The y-position of the top-left corner of the sensor, relative to the parent object.</li>
+<li><code>width</code>: number. The width of the sensor, in pixels. Must be a positive integer.</li>
+<li><code>height</code>: number. The height of the sensor, in pixels. Must be a positive integer.</li>
 </ul>
+<p><em>Returns</em></p>
+<p>A Sensor with the specified parameters.</p>
+<h2 id="properties">Properties</h2>
+<h4 id="visible">visible</h4>
+<p><code>visible</code>: boolean.</p>
+<p>Should the sensor be rendered? Useful for debugging. Defaults to <code>false</code>.</p>
+<h4 id="status">status</h4>
+<p><code>status</code>: number, read-only.</p>
+<p>The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).</p>
 <h2 id="functions">Functions</h2>
 <h4 id="update">update</h4>
 <p><code>update()</code></p>
