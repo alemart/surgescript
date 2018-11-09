@@ -175,9 +175,9 @@ void surgescript_symtable_put_accessor_symbol(surgescript_symtable_t* symtable, 
 
 /*
  * surgescript_symtable_put_plugin_symbol()
- * Puts a symbol that is a reference to a plugin object
+ * Puts a symbol that is a reference to a plugin object.
  */
-void surgescript_symtable_put_plugin_symbol(surgescript_symtable_t* symtable, const char* path)
+void surgescript_symtable_put_plugin_symbol(surgescript_symtable_t* symtable, const char* path, const char* filename)
 {
     if(indexof_symbol(symtable, plugin_symbol(path)) < 0) {
         char* symname = pack_plugin_path(path);
@@ -185,7 +185,7 @@ void surgescript_symtable_put_plugin_symbol(surgescript_symtable_t* symtable, co
         ssarray_push(symtable->entry, entry);
     }
     else
-        ssfatal("Compile Error: found duplicate symbol \"%s\" when importing \"%s\".", plugin_symbol(path), path);
+        ssfatal("Compile Error: found duplicate symbol \"%s\" when importing \"%s\" in %s.", plugin_symbol(path), path, filename);
 }
 
 /*

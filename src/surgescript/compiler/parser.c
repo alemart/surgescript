@@ -583,7 +583,7 @@ void importlist(surgescript_parser_t* parser)
         /* import the path into the symbol table */
         if(ssarray_length(path) > 0) {
             path[ssarray_length(path) - 1] = 0;
-            surgescript_symtable_put_plugin_symbol(parser->base_table, path);
+            surgescript_symtable_put_plugin_symbol(parser->base_table, path, parser->filename);
         }
 
         /* release the path */
