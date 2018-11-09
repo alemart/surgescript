@@ -94,6 +94,19 @@ The name of the character.
 
 The current state / activity of the player. One of the following: *"stopped"*, *"walking"*, *"running"*, *"jumping"*, *"springing"*, *"rolling"*, *"charging"*, *"pushing"*, *"gettinghit"*, *"dying"*, *"braking"*, *"balancing"*, *"drowning"*, *"breathing"*, *"ducking"*, *"lookingup"*, *"waiting"*, *"winning"*.
 
+```
+using SurgeEngine.Player;
+
+object "ActivityDebugger" is "awake", "entity"
+{
+    state "main"
+    {
+        player = Player.active;
+        Console.print(player.activity);
+    }
+}
+```
+
 #### anim
 
 `anim`: number.

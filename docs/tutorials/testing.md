@@ -29,7 +29,7 @@ object "Application"
 }
 ```
 
-Now let's begin our learning adventure: go to [Introduction to objects](objects).
+To begin our learning adventure, let's go to [Introduction to objects](objects).
 
 Using the standalone version
 ----------------------------
@@ -63,4 +63,4 @@ surgescript.exe hello.ss
 Hello, world!
 ```
 
-Now let's begin our learning adventure: go to [Introduction to objects](objects).
+To begin our learning adventure, let's go to [Introduction to objects](objects).
