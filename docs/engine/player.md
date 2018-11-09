@@ -26,17 +26,17 @@ A Player object.
 using SurgeEngine.Player;
 
 // Gives Surge 1 collectible each second
-object "Collectible Bonus"
+object "CollectibleGiver"
 {
     player = Player("Surge");
 
     state "main"
     {
         if(timeout(1))
-            state = "+1 collectible";
+            state = "give collectible";
     }
 
-    state "+1 collectible"
+    state "give collectible"
     {
         player.collectibles = player.collectibles + 1;
         state = "main";
