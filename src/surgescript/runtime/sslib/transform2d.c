@@ -38,13 +38,13 @@ static surgescript_var_t* fun_rotate(surgescript_object_t* object, const surgesc
 static surgescript_var_t* fun_getxpos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getypos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_gethscale(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getvscale(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getscalex(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getscaley(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setxpos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setypos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_sethscale(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_setvscale(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setscalex(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setscaley(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 static surgescript_var_t* fun_getworldx(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getworldy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -90,10 +90,10 @@ void surgescript_sslib_register_transform2d(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Transform2D", "set_ypos", fun_setypos, 1);
     surgescript_vm_bind(vm, "Transform2D", "get_angle", fun_getangle, 0);
     surgescript_vm_bind(vm, "Transform2D", "set_angle", fun_setangle, 1);
-    surgescript_vm_bind(vm, "Transform2D", "get_hscale", fun_gethscale, 0);
-    surgescript_vm_bind(vm, "Transform2D", "set_hscale", fun_sethscale, 1);
-    surgescript_vm_bind(vm, "Transform2D", "get_vscale", fun_getvscale, 0);
-    surgescript_vm_bind(vm, "Transform2D", "set_vscale", fun_setvscale, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_scaleX", fun_getscalex, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_scaleX", fun_setscalex, 1);
+    surgescript_vm_bind(vm, "Transform2D", "get_scaleY", fun_getscaley, 0);
+    surgescript_vm_bind(vm, "Transform2D", "set_scaleY", fun_setscaley, 1);
 
     surgescript_vm_bind(vm, "Transform2D", "get_worldX", fun_getworldx, 0);
     surgescript_vm_bind(vm, "Transform2D", "set_worldX", fun_setworldx, 1);
@@ -177,13 +177,13 @@ surgescript_var_t* fun_getangle(surgescript_object_t* object, const surgescript_
     return surgescript_var_set_number(surgescript_var_create(), transform->rotation.z);
 }
 
-surgescript_var_t* fun_gethscale(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_getscalex(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     return surgescript_var_set_number(surgescript_var_create(), transform->scale.x);
 }
 
-surgescript_var_t* fun_getvscale(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_getscaley(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     return surgescript_var_set_number(surgescript_var_create(), transform->scale.y);
@@ -213,7 +213,7 @@ surgescript_var_t* fun_setangle(surgescript_object_t* object, const surgescript_
     return NULL;
 }
 
-surgescript_var_t* fun_sethscale(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_setscalex(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     transform->scale.x = surgescript_var_get_number(param[0]);
@@ -221,7 +221,7 @@ surgescript_var_t* fun_sethscale(surgescript_object_t* object, const surgescript
     return NULL;
 }
 
-surgescript_var_t* fun_setvscale(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_setscaley(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_transform_t* transform = surgescript_object_transform(target(object));
     transform->scale.y = surgescript_var_get_number(param[0]);

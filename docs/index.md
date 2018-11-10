@@ -6,7 +6,7 @@ Welcome to SurgeScript!
 Unleash your creativity!
 ------------------------
 
-SurgeScript is a scripting language for games. It is extremely useful for empowering users to unleash their creativity and build their own content with ease, flexibility and power. It's such a joy to program in SurgeScript! You will love it!
+SurgeScript is a scripting language for games. It empowers you to unleash your creativity and build your own interactive stuff with ease and power. It's such a joy to use SurgeScript! You will love it!
 
 [![Download](img/download.png)](download)
 

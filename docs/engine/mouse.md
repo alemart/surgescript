@@ -3,8 +3,8 @@ Mouse
 
 The Mouse object is used to read input from the mouse.
 
-Example
--------
+*Example*
+
 ```
 // This example shows how to use the Collectible
 // sprite as a mouse cursor. Since MyCursor is
