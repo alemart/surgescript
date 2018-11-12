@@ -51,8 +51,9 @@ pages:
             - 'CollisionBox': 'engine/collisionbox.md'
             - 'Sensor': 'engine/sensor.md'
         - 'Entity': 'engine/entity.md'
-        - 'Input': 'engine/input.md'
-        - 'Mouse': 'engine/mouse.md'
+        - 'Input':
+            - 'Input': 'engine/input.md'
+            - 'Mouse': 'engine/mouse.md'
         - 'Player': 'engine/player.md'
         - 'Prefs': 'engine/prefs.md'
         - 'SurgeEngine': 'engine/surgeengine.md'

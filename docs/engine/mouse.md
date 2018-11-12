@@ -10,8 +10,9 @@ The Mouse object is used to read input from the mouse.
 // sprite as a mouse cursor. Since MyCursor is
 // tagged as "detached", it will be rendered in
 // screen space (not world space).
-using SurgeEngine.Mouse;
+
 using SurgeEngine.Actor;
+using SurgeEngine.Input.Mouse;
 
 object "MyCursor" is "entity", "detached"
 {
@@ -21,7 +22,7 @@ object "MyCursor" is "entity", "detached"
     {
         actor.transform.xpos = Mouse.xpos;
         actor.transform.ypos = Mouse.ypos;
-        if(Mouse.buttonPressed(0))
+        if(Mouse.buttonPressed("left"))
             Console.print("left click");
     }
 }
@@ -57,13 +58,13 @@ Functions
 
 #### buttonDown
 
-`buttonDown(buttonId)`
+`buttonDown(buttonName)`
 
 Checks if a mouse button is currently being held down.
 
 *Arguments*
 
-* `buttonId`: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).
+* `buttonName`: string. One of the following: *"left"*, *"right"*, *"middle"*.
 
 *Returns*
 
@@ -71,13 +72,13 @@ Returns `true` if the specified button is being held down.
 
 #### buttonPressed
 
-`buttonPressed(buttonId)`
+`buttonPressed(buttonName)`
 
 Checks if a mouse button has just been pressed.
 
 *Arguments*
 
-* `buttonId`: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).
+* `buttonName`: string. One of the following: *"left"*, *"right"*, *"middle"*.
 
 *Returns*
 
@@ -85,13 +86,13 @@ Returns `true` if the specified button has just been pressed (i.e., a click has 
 
 #### buttonReleased
 
-`buttonReleased(buttonId)`
+`buttonReleased(buttonName)`
 
 Checks if a mouse button has just been released.
 
 *Arguments*
 
-* `buttonId`: number. One of the following: 0 (left button), 1 (right button) or 2 (middle button).
+* `buttonName`: string. One of the following: *"left"*, *"right"*, *"middle"*.
 
 *Returns*
 

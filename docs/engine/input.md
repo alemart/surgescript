@@ -8,13 +8,13 @@ Factory
 
 #### Input
 
-`SurgeEngine.Input(inputMap)`
+`SurgeEngine.Input(inputMap | null)`
 
 Spawns a new Input component with the given input map.
 
 *Arguments*
 
-* `inputMap`: string. The name of the input map (defaults to *"default"*).
+* `inputMap`: string | null. The name of the input map. If set to `null`, a default input map will be used.
 
 *Returns*
 
@@ -26,7 +26,7 @@ using SurgeEngine.Input;
 
 object "Application"
 {
-    input = Input("default");
+    input = Input(null);
 
     state "main"
     {
