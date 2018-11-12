@@ -15,20 +15,18 @@ object "SensorToy" is "entity"
 
     state "main"
     {
+        // actor.transform is a shortcut
+        // to the Transform of SensorToy
         actor.transform.xpos = 210;
         actor.transform.ypos = 150;
         sensor.visible = true;
+        state = "sense";
+    }
+
+    state "sense"
+    {
         if(sensor.status != 0)
             Console.print("Got brick");
-    }
-}
-
-object "Application"
-{
-    example = spawn("SensorExample");
-
-    state "main"
-    {
     }
 }
 ```
@@ -69,7 +67,7 @@ Should the sensor be rendered? Useful for debugging. Defaults to `false`.
 
 `status`: number, read-only.
 
-The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud).
+The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud). To detect if the sensor is colliding with something, check if its status is non-zero, i.e., `sensor.status != 0`.
 
 Functions
 ---------
