@@ -98,6 +98,8 @@ The current state / activity of the player. One of the following: *"stopped"*, *
 ```
 using SurgeEngine.Player;
 
+// Place this inside your level to see the
+// current activity of the active player
 object "ActivityDebugger" is "awake", "entity"
 {
     state "main"
@@ -112,7 +114,13 @@ object "ActivityDebugger" is "awake", "entity"
 
 `anim`: number.
 
-An integer value corresponding to the animation number.
+A shortcut to `animation.id`: an integer corresponding to the animation number.
+
+#### animation
+
+`animation`: [Animation](animation) object, read-only.
+
+Reference to the Animation object of the Player.
 
 #### attacking
 

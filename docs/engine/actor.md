@@ -56,7 +56,13 @@ Properties
 
 `anim`: number.
 
-An integer value corresponding to the animation number. Defaults to 0.
+A shortcut to `animation.id`: an integer corresponding to the animation number. Defaults to 0.
+
+#### animation
+
+`animation`: [Animation](animation) object, read-only.
+
+Reference to the Animation object of the Actor.
 
 #### alpha
 
@@ -111,37 +117,3 @@ An alias to the Transform of the entity.
 `zindex`: number.
 
 Objects with greater zindex are rendered in front of others. Defaults to 0.5.
-
-
-Functions
----------
-
-#### animFinished
-
-`animFinished()`
-
-Checks if the current animation has finished playing.
-
-*Returns*
-
-Returns `true` if the animation has finished playing.
-
-#### animRepeats
-
-`animRepeats()`
-
-Checks if the currently playing animation repeats itself.
-
-*Returns*
-
-Returns `true` if the currently playing animation repeats itself.
-
-#### animFPS
-
-`animFPS()`
-
-The frames-per-second (FPS) rate of the current animation.
-
-*Returns*
-
-Returns the FPS rate of the current animation.

@@ -43,6 +43,7 @@ pages:
         - 'System': 'reference/system.md'
     - 'SurgeEngine Reference':
         - 'Actor': 'engine/actor.md'
+        - 'Animation': 'engine/animation.md'
         - 'Camera': 'engine/camera.md'
         - 'Collisions':
             - 'Collider': 'engine/collider.md'
