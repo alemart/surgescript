@@ -25,14 +25,10 @@ object "MyCursor" is "entity", "detached"
         if(Mouse.buttonPressed("left"))
             Console.print("left click");
     }
-}
 
-object "Application"
-{
-    mouseCursor = spawn("MyCursor");
-
-    state "main"
+    fun constructor()
     {
+        actor.zindex = 1.0;
     }
 }
 ```
