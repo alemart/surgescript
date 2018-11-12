@@ -74,6 +74,7 @@
     F( SSTOK_ASSERT, "assert" )                                                 \
     F( SSTOK_WAIT, "wait" )                                                     \
     F( SSTOK_STATIC, "static" )                                                 \
+    F( SSTOK_SUPER, "super" )                                                   \
     F( SSTOK_OF, "of" )                                                         \
     F( SSTOK_IS, "is" )                                                         \
     F( SSTOK_CALLER, "caller" )                                                 \
