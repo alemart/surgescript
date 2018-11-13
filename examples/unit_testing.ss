@@ -87,6 +87,10 @@ object "SurgeScriptTest"
         test("Surge, Neon and Charge".replace("Gimacian", "") == "Surge, Neon and Charge") || fail(43);
         test("SurgeScript".toLowerCase() == "surgescript") || fail(44);
         test("SurgeScript".toUpperCase() == "SURGESCRIPT") || fail(45);
+        test("1" !== 1) || fail(46);
+        test("0" !== null) || fail(47);
+        test(null === null) || fail(48);
+        test(0 !== "0" && 0 == "0") || fail(49);
         end();
     }
 
@@ -179,6 +183,8 @@ object "SurgeScriptTest"
         test((d = spawn("Number"), d != null && d == findObject("Number"))) || fail(10);
         test(typeof null == "null") || fail(11);
         test(!this.equals(Application) && this.equals(this)) || fail(12);
+        test(null !== this) || fail(13);
+        test(null === this.child("foo")) || fail(14);
         end();
     }
 

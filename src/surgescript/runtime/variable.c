@@ -201,7 +201,7 @@ surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char
         var->string = ssstrdup("");
     }
     else {
-        char buf[128];
+        static char buf[128];
         surgescript_util_strncpy(buf, string, sizeof(buf));
         ssfatal("Runtime Error: string \"%s...\" is too large!", buf);
     }
@@ -215,6 +215,9 @@ surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char
  */
 surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsigned handle)
 {
+    if(!handle) /* the null handle */
+        return surgescript_var_set_null(var);
+
     RELEASE_DATA(var);
     var->type = SSVAR_OBJECTHANDLE;
     var->handle = handle;
