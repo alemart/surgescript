@@ -1,48 +1,48 @@
-Actor
-=====
+Text
+====
 
-The Actor component is used to associate a sprite to a target object. The target object is required to be tagged as an *"entity"*.
+The Text object allows you to display custom texts in the game. The parent object is required to be an [entity](entity).
 
 Factory
 -------
 
-#### Actor
+#### Text
 
-`SurgeEngine.Actor(spriteName)`
+`SurgeEngine.UI.Text(font | null)`
 
-Spawns a new Actor component with the given sprite name.
+Spawns a new Text object with the given font name. If `null` is provided as the font name, then a default font will be used.
 
 *Arguments*
 
-* `spriteName`: string. The name of the sprite (defined in the *sprites/* folder).
+* `font`: string. The name of a font (defined in the *fonts/* folder).
 
 *Returns*
 
-An Actor component.
+A Text object.
 
 *Example*
 ```
-using SurgeEngine.Actor;
+using SurgeEngine.UI.Text;
+using SurgeEngine.Transform2D;
+using SurgeEngine.Player;
 
-object "SurgeTest" is "entity"
+// Place this on your level to display
+// the name of the player
+object "PlayerName" is "entity", "awake"
 {
-    // spawns an Actor with the SurgeTest sprite
-    actor = Actor("SurgeTest");
-
-    // position the actor
-    state "main"
-    {
-        actor.transform.xpos = 210;
-        actor.transform.ypos = 150;
-    }
-}
-
-object "Application"
-{
-    surge = spawn("SurgeTest");
+    text = Text(null);
+    transform = Transform2D();
 
     state "main"
     {
+        // position the text
+        player = Player.active;
+        transform.worldX = player.transform.worldX;
+        transform.worldY = player.transform.worldY - 50;
+
+        // configure the text
+        text.align = "center";
+        text.text = player.name;
     }
 }
 ```
@@ -52,68 +52,44 @@ object "Application"
 Properties
 ----------
 
-#### anim
+#### text
 
-`anim`: number.
+`text`: string.
 
-A shortcut to `animation.id`: an integer corresponding to the animation number. Defaults to 0.
+The text to be displayed.
 
-#### animation
+#### font
 
-`animation`: [Animation](animation) object, read-only.
+`font`: string, read-only.
 
-Reference to the Animation object of the Actor.
+The name of the font in use.
 
-#### alpha
+#### align
 
-`alpha`: number.
+`align`: string.
 
-Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.
-
-#### entity
-
-`entity`: object, read-only.
-
-The entity associated with this component.
-
-#### hflip
-
-`hflip`: boolean.
-
-Should the actor be flipped horizontally? Defaults to `false`.
-
-#### vflip
-
-`vflip`: boolean.
-
-Should the actor be flipped vertically? Defaults to `false`.
+The alignment of the text. One of the following: *"left"*, *"center"*, *"right"*.
 
 #### visible
 
 `visible`: boolean.
 
-Should the actor be rendered? Defaults to `true`.
+Is the Text object visible?
 
 #### width
 
-`width`: number, read-only.
+`width`: number.
 
-The width of the actor.
-
-#### height
-
-`height`: number, read-only.
-
-The height of the actor.
-
-#### transform
-
-`transform`: [Transform2D](../reference/transform2d) object.
-
-An alias to the Transform of the entity.
+The (maximum) width of the text, in pixels. Setting this value will enable wordwrap.
 
 #### zindex
 
 `zindex`: number.
 
-Objects with greater zindex are rendered in front of others. Defaults to 0.5.
+The zindex of the Text object. Defaults to 0.5.
+
+#### transform
+
+`transform`: [Transform2D](../reference/transform2d) object, read-only.
+
+The Transform of the Text object.

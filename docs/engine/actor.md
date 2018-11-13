@@ -1,20 +1,20 @@
 Actor
 =====
 
-The Actor component is used to associate a sprite to a target object. The target object is required to be tagged as an *"entity"*.
+The Actor component is used to associate a sprite to a target object. The target object is required to be an [entity](entity). It's recommended to use only one actor per entity.
 
 Factory
 -------
 
 #### Actor
 
-`SurgeEngine.Actor(spriteName)`
+`SurgeEngine.Actor(sprite)`
 
 Spawns a new Actor component with the given sprite name.
 
 *Arguments*
 
-* `spriteName`: string. The name of the sprite (defined in the *sprites/* folder).
+* `sprite`: string. The name of the sprite (defined in the *sprites/* folder).
 
 *Returns*
 
