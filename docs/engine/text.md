@@ -23,7 +23,7 @@ A Text object.
 *Example*
 ```
 using SurgeEngine.UI.Text;
-using SurgeEngine.Transform2D;
+using SurgeEngine.Transform;
 using SurgeEngine.Player;
 
 // Place this on your level to display
@@ -31,7 +31,7 @@ using SurgeEngine.Player;
 object "PlayerName" is "entity", "awake"
 {
     text = Text(null);
-    transform = Transform2D();
+    transform = Transform();
 
     state "main"
     {
