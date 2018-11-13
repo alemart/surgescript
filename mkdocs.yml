@@ -57,3 +57,5 @@ pages:
         - 'Player': 'engine/player.md'
         - 'Prefs': 'engine/prefs.md'
         - 'SurgeEngine': 'engine/surgeengine.md'
+        - 'UI':
+            - 'Text': 'engine/text.md'
