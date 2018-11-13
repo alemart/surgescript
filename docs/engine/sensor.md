@@ -6,7 +6,7 @@ A Sensor is used to detect collisions with bricks (obstacle, cloud). Due to perf
 *Example*
 ```
 using SurgeEngine.Actor;
-using SurgeEngine.Sensor;
+using SurgeEngine.Collisions.Sensor;
 
 object "SensorToy" is "entity"
 {
@@ -38,7 +38,7 @@ Factory
 
 #### Sensor
 
-`SurgeEngine.Sensor(x, y, width, height)`
+`SurgeEngine.Collisions.Sensor(x, y, width, height)`
 
 Spawns a new Sensor with the specified dimensions and having its top-left corner located at position (*x*, *y*) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both *width* and *height* must be positive integers, and at least one of them must be equal to 1.
 
