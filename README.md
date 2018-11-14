@@ -1,7 +1,7 @@
 SurgeScript: a scripting language for games
 ===========================================
 
-<img src="docs/img/surge.png" alt="Surge" align="right" width="256">
+<img src="docs/img/surge.png" alt="Surge" align="right" width="384">
 
 Unleash your creativity!
 ------------------------
