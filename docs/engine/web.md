@@ -10,7 +10,7 @@ Functions
 
 `launchURL(url)`
 
-Launches a URL using the default web browser. It's mandatory to specify a protocol. The following protocols are currently supported: *http://*, *https://*, *mailto:*.
+Launches a URL using the default web browser. It's mandatory to specify a protocol. The following protocols are currently supported: *http://*, *https://*, *mailto:*
 
 *Arguments*
 
@@ -22,6 +22,8 @@ using SurgeEngine.Web;
 
 object "Application"
 {
+    // Remember to change the state
+    // after calling launchURL
     state "main"
     {
         Web.launchURL("http://opensurge2d.org");
