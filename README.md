@@ -1,25 +1,21 @@
 SurgeScript: a scripting language for games
 ===========================================
 
+<img src="docs/img/surge.png" alt="Surge" align="right" width="256">
+
 Unleash your creativity!
 ------------------------
 
-SurgeScript is a scripting language for games. It is extremely useful for empowering users to unleash their creativity and build their own content with ease, flexibility and power. It's such a joy to program in SurgeScript! You and your users will love it.
+SurgeScript is a scripting language for games. It empowers you to unleash your creativity and build your own interactive stuff with ease and power. It's such a joy to use SurgeScript! You will love it!
 
-<p align="center"><b>First-timer?</b></p>
-<p align="center">If this is your first time here,<br>please go to the <a href="https://alemart.github.io/surgescript">Welcome page</a>.</p>
-<p align="center"><a href="https://alemart.github.io/surgescript"><img src="docs/img/opensurge.png" alt="SurgeScript"></a></p>
+**First-time here?**<br>
+Please go to the [Welcome page](https://alemart.github.io/surgescript).
 
-Brought to you by [Alexandre Martins](https://github.com/alemart).
+**Where to get it?**<br>
+Get it on the [Download page](https://alemart.github.io/surgescript/download).
 
-Get SurgeScript
----------------
-
-Get SurgeScript on the [Download page](https://alemart.github.io/surgescript/download).
-
-Already using SurgeScript? Please support us, so we can continue to work on this project:
-
-[![Support us](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
+**Need help?**<br>
+Feel free to [contact the developer](https://github.com/alemart).
 
 The 15-second example
 ---------------------
@@ -61,7 +57,7 @@ SurgeScript is a scripting language for games.
 
 ##### Who created it?
 
-SurgeScript has been originally created by [Alexandre Martins](https://github.com/alemart), a computer scientist from Brazil. He has also created the Open Surge game engine, hence the name *SurgeScript*.
+SurgeScript has been originally created by [Alexandre Martins](https://github.com/alemart), a computer scientist from Brazil. He has also created the [Open Surge game engine](http://opensurge2d.org), hence the name *SurgeScript*.
 
 ##### How do I learn it?
 
@@ -71,7 +67,7 @@ Please read the [documentation](https://alemart.github.io/surgescript/). The dev
 
 Are you a game developer in pain? Are you a modder feeling confined?
 
-- Unleash your creativity! — build your own content with ease, flexibility and power!
+- Unleash your creativity! — build your own content with ease and power!
 
 Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. Its features include:
 
@@ -107,7 +103,7 @@ SurgeScript is available as a library.
 
 ##### How do I compile SurgeScript?
 
-If you're using Open Surge, you don't need to compile SurgeScript. It's compiled for you.
+If you're using [Open Surge](http://opensurge2d.org), you don't need to compile SurgeScript. It's compiled for you.
 
 If you want to compile SurgeScript by yourself, you'll need [CMake](https://cmake.org) and gcc.
 
@@ -143,7 +139,3 @@ mkdocs build
 ```
 
 The documentation will be available in the *site/* subdirectory.
-
-##### Need help?
-
-Feel free to [contact the developer](https://youtube.com/alemart88).

@@ -1,7 +1,7 @@
 Welcome to SurgeScript!
 =======================
 
-<img src="img/surge.png" align="right" width="256">
+<img src="img/surge.png" alt="Surge" align="right" width="256">
 
 Unleash your creativity!
 ------------------------
@@ -32,7 +32,7 @@ Why SurgeScript?
 
 Are you a game developer in pain? Are you a modder feeling confined?
 
-- Unleash your creativity! — build your own content with ease, flexibility and power!
+- Unleash your creativity! — build your own content with ease and power!
 
 Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. Its features include:
 
