@@ -59,3 +59,4 @@ pages:
         - 'SurgeEngine': 'engine/surgeengine.md'
         - 'UI':
             - 'Text': 'engine/text.md'
+        - 'Web': 'engine/web.md'
