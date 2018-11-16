@@ -52,6 +52,12 @@ Properties
 
 Will be `true` if the sound is playing.
 
+#### volume
+
+`volume`: number.
+
+The volume of the sound, a value between 0.0 and 1.0, inclusive (zero means silence).
+
 Functions
 ---------
 
