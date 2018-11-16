@@ -96,7 +96,7 @@ Functions
 
 `play()`
 
-Plays the music (once). To make it loop, check if `music.playing` is `false`.
+Plays the music (once). To make it loop, play it whenever `music.playing` is `false`.
 
 #### stop
 
