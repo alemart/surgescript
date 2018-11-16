@@ -13,7 +13,7 @@ fun function_name(param_1, param_2, param_3, ..., param_n)
 
 Functions may be associated to objects. Any function associated to an object may be used (called) by the object itself or by other objects. This means that functions are *public* (they are visible to the outside world).
 
-**Note:** in an object, functions should be defined after the states.
+**Note:** functions should be defined after the states.
 
 Return statement
 ----------------
