@@ -3,11 +3,13 @@ Music
 
 The Music object lets you play music. This is meant to handle background music; therefore, only one music can be played at a time.
 
+Unlike regular sounds, musics are streamed, (i.e., not loaded completely in the memory). Given the longer nature of musics, this improves memory usage and helps with the loading times.
+
 *Example*
 ```
 using SurgeEngine.Level;
 
-// Fade the music in a linear fashion ;)
+// Fades the music in a linear fashion ;)
 object "MyMusicFader"
 {
     public music = Level.music;
