@@ -91,6 +91,8 @@ object "SurgeScriptTest"
         test("0" !== null) || fail(47);
         test(null === null) || fail(48);
         test(0 !== "0" && 0 == "0") || fail(49);
+        test(state == "main") || fail(50);
+        test(state != null) || fail(51);
         end();
     }
 

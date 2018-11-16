@@ -770,9 +770,15 @@ void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         ssfree(identifier);
     }
     else if(optmatch(parser, SSTOK_STATE)) {
-        match_exactly(parser, SSTOK_ASSIGNOP, "=");
-        assignexpr(parser, context);
-        emit_setstate(context);
+        if(got_type(parser, SSTOK_ASSIGNOP)) {
+            match_exactly(parser, SSTOK_ASSIGNOP, "=");
+            assignexpr(parser, context);
+            emit_setstate(context);
+        }
+        else {
+            unmatch(parser);
+            conditionalexpr(parser, context);
+        }
     }
     else
         conditionalexpr(parser, context);
