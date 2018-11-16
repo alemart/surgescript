@@ -29,7 +29,9 @@ object "Application"
 }
 ```
 
-To begin our learning adventure, let's go to [Introduction to objects](objects).
+You should see the *Hello, world!* message as a result.
+
+Ready to proceed? Let's go to [Introduction to objects](objects)!
 
 Using the standalone version
 ----------------------------

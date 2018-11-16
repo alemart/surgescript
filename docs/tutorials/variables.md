@@ -19,7 +19,7 @@ Null|An empty value|null
 As an example, the script below features an object with 3 variables that may be accessed throughout the whole object:
 
 ```
-object "Surge"
+object "Application"
 {
     name = "Surge the Rabbit";
     age = 23;
@@ -67,7 +67,7 @@ Arrays have many interesting properties and operations that you can see in the [
 Dictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:
 
 ```
-object "Surge"
+object "Application"
 {
     // A dictionary that stores the weight (kg) of each character
     weight = {
@@ -131,7 +131,7 @@ Scoping
 Variables that are defined before any state or function are *object-level* variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are *local variables*. This means that their lifespan is restricted to their own locus of code.
 
 ```
-object "Surge"
+object "ScopeTest"
 {
     name = "Surge the Rabbit"; // object-level variable
 
