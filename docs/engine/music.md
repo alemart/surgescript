@@ -87,7 +87,7 @@ Will be `true` if the music is playing.
 
 `volume`: number.
 
-The volume of the music, a value between 0.0 and 1.0 (low to high).
+The volume of the music, a value between 0.0 and 1.0, inclusive (zero means silence).
 
 Functions
 ---------
