@@ -4,7 +4,7 @@ Testing your scripts
 There are two main ways to test your scripts:
 
 - using the [Open Surge](#using-open-surge) game engine;
-- using the [SurgeScript standalone](#using-the-standalone-version) runtime (i.e., the version without the game engine).
+- using the [SurgeScript standalone runtime](#using-the-standalone-version) (i.e., the version without a game engine).
 
 Using Open Surge
 ----------------
