@@ -62,4 +62,5 @@ pages:
         - 'SurgeEngine': 'engine/surgeengine.md'
         - 'UI':
             - 'Text': 'engine/text.md'
+        - 'Video': 'engine/video.md'
         - 'Web': 'engine/web.md'
