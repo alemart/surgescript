@@ -110,10 +110,4 @@ Stops the music. Once the music is stopped, it can only be played again from the
 
 `pause()`
 
-Pauses the music. A music that is paused can be resumed later.
-
-#### resume
-
-`resume()`
-
-Resumes a previously paused music.
+Pauses the music. A paused music can be resumed later with `play()`.

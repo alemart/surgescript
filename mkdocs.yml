@@ -46,6 +46,7 @@ pages:
         - 'Animation': 'engine/animation.md'
         - 'Audio':
             - 'Music': 'engine/music.md'
+            - 'Sound': 'engine/sound.md'
         - 'Camera': 'engine/camera.md'
         - 'Collisions':
             - 'Collider': 'engine/collider.md'
