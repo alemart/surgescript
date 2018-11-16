@@ -44,6 +44,8 @@ pages:
     - 'SurgeEngine Reference':
         - 'Actor': 'engine/actor.md'
         - 'Animation': 'engine/animation.md'
+        - 'Audio':
+            - 'Music': 'engine/music.md'
         - 'Camera': 'engine/camera.md'
         - 'Collisions':
             - 'Collider': 'engine/collider.md'
