@@ -6,9 +6,9 @@ The SurgeEngine plugin is the interface between SurgeScript (scripting language)
 *Example*
 
 ```
-// Display Open Surge version
 using SurgeEngine;
 
+// Open Surge version
 object "Application"
 {
     state "main"
