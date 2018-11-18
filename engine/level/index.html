@@ -1363,7 +1363,7 @@
                 
                 <h1 id="level">Level</h1>
 <p>Level routines. A level is a scene in the game, represented by a .lev file in the <em>levels/</em> folder.</p>
-<p>Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be deleted by the garbage collector. Sometimes, you may want to spawn <a href="../entity">entities</a> in your level, but keeping references to all of them may be inconvenient. If this is your case, you can <a href="#spawn">spawn them as children of the Level object</a>. It will keep references of the entities for you; therefore, they won't be garbage collected.</p>
+<p>Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be automatically deleted by the <a href="../../reference/gc">Garbage Collector</a>. Sometimes, you may want to spawn <a href="../entity">entities</a> in your level, but keeping references to all of them may be inconvenient. If this is your case, you can <a href="#spawn">spawn them as children of the Level object</a>. It will keep references of the entities for you; therefore, they won't be garbage collected.</p>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Level;
 using SurgeEngine.Player;
