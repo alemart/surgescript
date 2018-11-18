@@ -1,7 +1,7 @@
 Level
 =====
 
-Level routines.
+Level routines. A level is a scene in the game, represented by a .lev file in the *levels/* folder.
 
 Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be deleted by the garbage collector. Sometimes, you may want to spawn [entities](entity) in your level, but keeping references to all of them may be inconvenient. If this is your case, you can [spawn them as children of the Level object](#spawn). It will keep references of the entities for you; therefore, they won't be garbage collected.
 
@@ -186,22 +186,22 @@ Loads the specified level/quest.
 ```
 using SurgeEngine.Level;
 
-object "LevelChanger" is "entity"
+object "LevelLoader"
 {
-    state "main"
+    fun load(id)
     {
-        // ...
-    }
-
-    fun destructor()
-    {
-        Level.load("levels/my_level.lev");
+        if(id == "beach")
+            Level.load("levels/my_beach_level.lev");
+        else if(id == "forest")
+            Level.load("levels/my_forest_level.lev");
+        else
+            Console.print("Unrecognized level: " + id);
     }
 }
 ```
 
-#### loadNext
+#### finish
 
-`loadNext()`
+`finish()`
 
 Loads the next level in the current quest. This is the usual procedure after [clearing the level](#clear).
