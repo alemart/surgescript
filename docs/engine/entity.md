@@ -21,13 +21,13 @@ Tells Open Surge that the object is an entity and should be treated as such.
 // that gives it a visible form (a sprite) in world space.
 using SurgeEngine.Actor;
 
-object "MyExplosion" is "entity", "disposable"
+object "MyExplosion" is "entity", "private", "disposable"
 {
     actor = Actor("MyExplosion");
 
     state "main"
     {
-        if(timeout(1))
+        if(actor.animation.finished)
             destroy();
     }
 }

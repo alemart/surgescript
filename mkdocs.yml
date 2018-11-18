@@ -57,6 +57,7 @@ pages:
         - 'Input':
             - 'Input': 'engine/input.md'
             - 'Mouse': 'engine/mouse.md'
+        - 'Level': 'engine/level.md'
         - 'Player': 'engine/player.md'
         - 'Prefs': 'engine/prefs.md'
         - 'SurgeEngine': 'engine/surgeengine.md'
