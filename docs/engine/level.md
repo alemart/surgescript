@@ -79,6 +79,12 @@ object "Application"
 
 The act number (1, 2, 3...) of the current level.
 
+#### file
+
+`file`: string, read-only.
+
+The relative path of the .lev file of the current level.
+
 #### version
 
 `version`: string, read-only.
@@ -96,12 +102,6 @@ The author of the level, defined in the .lev file.
 `license`: string, read-only.
 
 The license of the level, defined in the .lev file.
-
-#### file
-
-`file`: string, read-only.
-
-The relative path of the .lev file of the current level.
 
 #### music
 
