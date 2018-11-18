@@ -3,7 +3,7 @@ Level
 
 Level routines. A level is a scene in the game, represented by a .lev file in the *levels/* folder.
 
-Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be deleted by the garbage collector. Sometimes, you may want to spawn [entities](entity) in your level, but keeping references to all of them may be inconvenient. If this is your case, you can [spawn them as children of the Level object](#spawn). It will keep references of the entities for you; therefore, they won't be garbage collected.
+Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be automatically deleted by the [Garbage Collector](../reference/gc). Sometimes, you may want to spawn [entities](entity) in your level, but keeping references to all of them may be inconvenient. If this is your case, you can [spawn them as children of the Level object](#spawn). It will keep references of the entities for you; therefore, they won't be garbage collected.
 
 *Example*
 ```
