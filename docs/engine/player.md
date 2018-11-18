@@ -200,6 +200,12 @@ Disable/enable player movement. Defaults to `false`.
 
 Get underwater / out of water. Defaults to `false`.
 
+#### layer
+
+`layer`: string.
+
+The current layer of the player. One of the following: *"green"*, *"yellow"*, *"default"*. This property tells you which bricks will be sensed, depending on their layer.
+
 #### visible
 
 `visible`: boolean.
