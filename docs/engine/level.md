@@ -138,12 +138,6 @@ Spawns an object as a child of Level. Such objects won't be garbage collected. P
 
 The spawned object.
 
-#### clear
-
-`clear()`
-
-Clears the level without actually changing it. Once the level is cleared, a *level cleared* animation is played. See also: [cleared](#cleared).
-
 #### restart
 
 `restart()`
@@ -199,6 +193,12 @@ object "LevelLoader"
     }
 }
 ```
+
+#### clear
+
+`clear()`
+
+Clears the level without actually changing it. Once the level is cleared, a *level cleared* animation is played. See also: [cleared](#cleared).
 
 #### finish
 
