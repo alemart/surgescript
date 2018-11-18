@@ -692,8 +692,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../camera/" title="Camera" class="md-nav__link">
-      Camera
+    <a href="../animation/" title="Animation" class="md-nav__link">
+      Animation
     </a>
   </li>
 
@@ -708,10 +708,70 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-3" type="checkbox" id="nav-5-3">
     
     <label class="md-nav__link" for="nav-5-3">
-      Collisions
+      Audio
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-5-3">
+        Audio
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../music/" title="Music" class="md-nav__link">
+      Music
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../sound/" title="Sound" class="md-nav__link">
+      Sound
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../camera/" title="Camera" class="md-nav__link">
+      Camera
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-5" type="checkbox" id="nav-5-5">
+    
+    <label class="md-nav__link" for="nav-5-5">
+      Collisions
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-5">
         Collisions
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -753,6 +813,18 @@
   </li>
 
         
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../sensor/" title="Sensor" class="md-nav__link">
+      Sensor
+    </a>
+  </li>
+
+        
       </ul>
     </nav>
   </li>
@@ -769,6 +841,27 @@
     </a>
   </li>
 
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-7" type="checkbox" id="nav-5-7" checked>
+    
+    <label class="md-nav__link" for="nav-5-7">
+      Input
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-7">
+        Input
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
         
           
           
@@ -879,6 +972,23 @@
   </li>
 
         
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../level/" title="Level" class="md-nav__link">
+      Level
+    </a>
+  </li>
+
+        
           
           
           
@@ -909,8 +1019,56 @@
 
 
   <li class="md-nav__item">
-    <a href="../sensor/" title="Sensor" class="md-nav__link">
-      Sensor
+    <a href="../surgeengine/" title="SurgeEngine" class="md-nav__link">
+      SurgeEngine
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12">
+    
+    <label class="md-nav__link" for="nav-5-12">
+      UI
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-12">
+        UI
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../text/" title="Text" class="md-nav__link">
+      Text
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../video/" title="Video" class="md-nav__link">
+      Video
     </a>
   </li>
 
@@ -921,8 +1079,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../surgeengine/" title="SurgeEngine" class="md-nav__link">
-      SurgeEngine
+    <a href="../web/" title="Web" class="md-nav__link">
+      Web
     </a>
   </li>
 
@@ -1027,11 +1185,11 @@
 <p>The Input component is used to read input from the user.</p>
 <h2 id="factory">Factory</h2>
 <h4 id="input_1">Input</h4>
-<p><code>SurgeEngine.Input(inputMap)</code></p>
+<p><code>SurgeEngine.Input(inputMap | null)</code></p>
 <p>Spawns a new Input component with the given input map.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>inputMap</code>: string. The name of the input map (defaults to <em>"default"</em>).</li>
+<li><code>inputMap</code>: string | null. The name of the input map. If set to <code>null</code>, a default input map will be used.</li>
 </ul>
 <p><em>Returns</em></p>
 <p>An Input component.</p>
@@ -1040,7 +1198,7 @@
 
 object &quot;Application&quot;
 {
-    input = Input(&quot;default&quot;);
+    input = Input(null);
 
     state &quot;main&quot;
     {
