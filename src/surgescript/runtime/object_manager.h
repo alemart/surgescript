@@ -72,5 +72,6 @@ const char** surgescript_objectmanager_builtin_objects(const surgescript_objectm
 /* utilities */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_array(surgescript_objectmanager_t* manager); /* handle to a new Array */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescript_objectmanager_t* manager); /* handle to a new Dictionary */
+surgescript_objecthandle_t surgescript_objectmanager_spawn_temp(surgescript_objectmanager_t* manager, const char* object_name); /* handle to a new child of Temp */
 
 #endif

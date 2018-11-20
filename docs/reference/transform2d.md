@@ -44,7 +44,7 @@ Local vertical scale (defaults to 1.0). *Since SurgeScript 0.5.3*.
 
 The x-position of the object in world coordinates.
 
-#### worldAngle
+#### worldY
 
 `worldY`: number.
 

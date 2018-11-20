@@ -476,6 +476,16 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescrip
 }
 
 /*
+ * surgescript_objectmanager_spawn_temp()
+ * Spawns an object on __Temp and return its handle
+ */
+surgescript_objecthandle_t surgescript_objectmanager_spawn_temp(surgescript_objectmanager_t* manager, const char* object_name)
+{
+    surgescript_objecthandle_t temp = surgescript_objectmanager_system_object(manager, "__Temp");
+    return surgescript_objectmanager_spawn(manager, temp, object_name, NULL);
+}
+
+/*
  * surgescript_objectmanager_install_plugin()
  * Installs a plugin. Call this before spawning the root object.
  */
