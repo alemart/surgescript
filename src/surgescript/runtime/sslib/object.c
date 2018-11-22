@@ -67,6 +67,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "Object", "get_parent", fun_parent, 0);
     surgescript_vm_bind(vm, "Object", "child", fun_child, 1);
+    surgescript_vm_bind(vm, "Object", "get_childCount", fun_childcount, 0);
     surgescript_vm_bind(vm, "Object", "findObject", fun_findobject, 1);
     surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
@@ -78,7 +79,6 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "get___name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "get___active", fun_getactive, 0);
     surgescript_vm_bind(vm, "Object", "set___active", fun_setactive, 1);
-    surgescript_vm_bind(vm, "Object", "get___childCount", fun_childcount, 0);
     surgescript_vm_bind(vm, "Object", "get___functions", fun_functions, 0);
     surgescript_vm_bind(vm, "Object", "get___children", fun_children, 0);
     surgescript_vm_bind(vm, "Object", "get___timespent", fun_timespent, 0);
@@ -97,12 +97,20 @@ surgescript_var_t* fun_parent(surgescript_object_t* object, const surgescript_va
     return surgescript_var_set_objecthandle(surgescript_var_create(), parent);
 }
 
-/* returns a handle to a child named param[0] (or a handle to null if not found) */
+/* returns a handle to a child named param[0] (or a handle to null if not found)
+ * it also accepts a child ID (integer between 0 and childCount - 1, inclusive) */
 surgescript_var_t* fun_child(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    const char* name = surgescript_var_fast_get_string(param[0]);
-    surgescript_objecthandle_t child = surgescript_object_child(object, name);
-    return surgescript_var_set_objecthandle(surgescript_var_create(), child);
+    if(surgescript_var_typecheck(param[0], surgescript_var_type2code("number")) == 0) {
+        int id = (int)surgescript_var_get_number(param[0]);
+        surgescript_objecthandle_t child = surgescript_object_nth_child(object, id);
+        return surgescript_var_set_objecthandle(surgescript_var_create(), child);
+    }
+    else {
+        const char* name = surgescript_var_fast_get_string(param[0]);
+        surgescript_objecthandle_t child = surgescript_object_child(object, name);
+        return surgescript_var_set_objecthandle(surgescript_var_create(), child);
+    }
 }
 
 /* number of children */

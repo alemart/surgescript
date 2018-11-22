@@ -7,10 +7,9 @@ Properties
 ----------
 
 * `parent`: object. Reference to the parent object.
+* `childCount`: number. The number of children of this object.
 * `__name`: string. The name of this object (string).
-* `__childCount`: number. The number of children of this object.
 * `__active`: boolean, read-write. Indicates whether this object is active\* or not.
-* `__children`: [Array](array.md). Reading this spawns a new array containing references to the children of this object.
 * `__functions`: [Array](array.md). The functions of this object represented as a collection of strings.
 * `__timespent`: number. The approximate time spent in this object in the last frame (in seconds).
 * `__memspent`: number. The current memory consumption of this object (in bytes). Not implemented.
@@ -45,17 +44,18 @@ Destroys the object.
 
 #### child
 
-`child(childName)`
+`child(childName | childId)`
 
-Looks for a child named `childName`.
+Looks for a child named `childName` (or matching `childId`).
 
 *Arguments*
 
 * `childName`: string. The name of the desired child.
+* `childId`: number. The id of the desired child, an integer between `0` and `childCount - 1`, inclusive.
 
 *Returns*
 
-A child of name `childName`, or `null` if there is no such object.
+The desired child`, or `null` if there is no such object.
 
 #### sibling
 

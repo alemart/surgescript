@@ -265,12 +265,8 @@ unsigned surgescript_object_nth_child(const surgescript_object_t* object, int in
 {
     if(index >= 0 && index < ssarray_length(object->child))
         return object->child[index];
-    else if(index >= 0)
-        ssfatal("Runtime Error: can't obtain child #%d of object 0x%X (\"%s\"): object has %d %s", index, object->handle, object->name, ssarray_length(object->child), ssarray_length(object->child) != 1 ? "children" : "child");
     else
-        ssfatal("Runtime Error: can't obtain child #%d of object 0x%X (\"%s\"): negative index", index, object->handle, object->name);
-
-    return 0;
+        return surgescript_objectmanager_null(surgescript_renv_objectmanager(object->renv));
 }
 
 /*
