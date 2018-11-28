@@ -160,7 +160,7 @@ The height of the player sprite, in pixels.
 
 #### transform
 
-`transform`: [Transform2D](../reference/transform2d) object, read-only.
+`transform`: [Transform](transform) object, read-only.
 
 The transform of the Player.
 

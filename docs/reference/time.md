@@ -3,32 +3,6 @@ Time
 
 Time utilities. This object is available simply by typing `Time`.
 
-Example
--------
-
-```
-// This object will be moved at a rate of 20 pixels per second
-object "MoveTest"
-{
-    // ...
-    transform = spawn("Transform2D");
-
-    state "main"
-    {
-        // CORRECT: this adds 20 pixels to transform.xpos at every second
-        transform.xpos += 20 * Time.delta;
-
-        // INCORRECT: this adds 30 pixels to transform.ypos at every FRAME
-        //transform.ypos += 30;
-
-        // since the framerate may vary across different systems, it's advisable
-        // to multiply the value by Time.delta to make the behavior consistent.
-
-        // ...
-    }
-}
-```
-
 Properties
 ----------
 

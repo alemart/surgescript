@@ -90,6 +90,6 @@ The zindex of the Text object. Defaults to 0.5.
 
 #### transform
 
-`transform`: [Transform2D](../reference/transform2d) object, read-only.
+`transform`: [Transform](transform) object, read-only.
 
 The Transform of the Text object.

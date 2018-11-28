@@ -61,7 +61,9 @@ pages:
         - 'Player': 'engine/player.md'
         - 'Prefs': 'engine/prefs.md'
         - 'SurgeEngine': 'engine/surgeengine.md'
+        - 'Transform': 'engine/transform.md'
         - 'UI':
             - 'Text': 'engine/text.md'
+        - 'Vector2': 'engine/vector2.md'
         - 'Video': 'engine/video.md'
         - 'Web': 'engine/web.md'

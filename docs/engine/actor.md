@@ -108,7 +108,7 @@ The height of the actor.
 
 #### transform
 
-`transform`: [Transform2D](../reference/transform2d) object.
+`transform`: [Transform](transform) object.
 
 An alias to the Transform of the entity.
 
