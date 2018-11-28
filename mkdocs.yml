@@ -37,7 +37,6 @@ pages:
         - 'Plugin': 'reference/plugin.md'
         - 'TagSystem': 'reference/tags.md'
         - 'Time': 'reference/time.md'
-        - 'Transform2D': 'reference/transform2d.md'
         - 'String': 'reference/string.md'
         - 'SurgeScript': 'reference/surgescript.md'
         - 'System': 'reference/system.md'
