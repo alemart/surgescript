@@ -606,18 +606,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/transform2d/" title="Transform2D" class="md-nav__link">
-      Transform2D
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/string/" title="String" class="md-nav__link">
       String
     </a>
@@ -942,18 +930,30 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../transform/" title="Transform" class="md-nav__link">
+      Transform
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13" checked>
     
-    <label class="md-nav__link" for="nav-5-12">
+    <label class="md-nav__link" for="nav-5-13">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-12">
+      <label class="md-nav__title" for="nav-5-13">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1086,6 +1086,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vector2/" title="Vector2" class="md-nav__link">
+      Vector2
+    </a>
   </li>
 
         
@@ -1241,7 +1253,7 @@
 <p>The Text object allows you to display custom texts in the game. The parent object is required to be an <a href="../entity">entity</a>.</p>
 <h2 id="factory">Factory</h2>
 <h4 id="text_1">Text</h4>
-<p><code>SurgeEngine.UI.Text(font | null)</code></p>
+<p><code>UI.Text(font | null)</code></p>
 <p>Spawns a new Text object with the given font name. If <code>null</code> is provided as the font name, then a default font will be used.</p>
 <p><em>Arguments</em></p>
 <ul>
@@ -1265,8 +1277,8 @@ object &quot;PlayerName&quot; is &quot;entity&quot;, &quot;awake&quot;
     {
         // position the text
         player = Player.active;
-        transform.worldX = player.transform.worldX;
-        transform.worldY = player.transform.worldY - 50;
+        transform.position = player.transform.position;
+        transform.move(0, -50);
 
         // configure the text
         text.align = &quot;center&quot;;
@@ -1295,7 +1307,7 @@ object &quot;PlayerName&quot; is &quot;entity&quot;, &quot;awake&quot;
 <p><code>zindex</code>: number.</p>
 <p>The zindex of the Text object. Defaults to 0.5.</p>
 <h4 id="transform">transform</h4>
-<p><code>transform</code>: <a href="../../reference/transform2d">Transform2D</a> object, read-only.</p>
+<p><code>transform</code>: <a href="../transform">Transform</a> object, read-only.</p>
 <p>The Transform of the Text object.</p>
                 
                   
@@ -1317,7 +1329,7 @@ object &quot;PlayerName&quot; is &quot;entity&quot;, &quot;awake&quot;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../surgeengine/" title="SurgeEngine" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../transform/" title="Transform" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1326,19 +1338,19 @@ object &quot;PlayerName&quot; is &quot;entity&quot;, &quot;awake&quot;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                SurgeEngine
+                Transform
               </span>
             </div>
           </a>
         
         
-          <a href="../video/" title="Video" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../vector2/" title="Vector2" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Video
+                Vector2
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

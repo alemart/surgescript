@@ -606,18 +606,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/transform2d/" title="Transform2D" class="md-nav__link">
-      Transform2D
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/string/" title="String" class="md-nav__link">
       String
     </a>
@@ -787,15 +775,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#xpos" title="xpos" class="md-nav__link">
-    xpos
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ypos" title="ypos" class="md-nav__link">
-    ypos
+  <a href="#position" title="position" class="md-nav__link">
+    position
   </a>
   
 </li>
@@ -1001,15 +982,27 @@
           
 
 
+  <li class="md-nav__item">
+    <a href="../transform/" title="Transform" class="md-nav__link">
+      Transform
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13">
     
-    <label class="md-nav__link" for="nav-5-12">
+    <label class="md-nav__link" for="nav-5-13">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-12">
+      <label class="md-nav__title" for="nav-5-13">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1029,6 +1022,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vector2/" title="Vector2" class="md-nav__link">
+      Vector2
+    </a>
   </li>
 
         
@@ -1090,15 +1095,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#xpos" title="xpos" class="md-nav__link">
-    xpos
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ypos" title="ypos" class="md-nav__link">
-    ypos
+  <a href="#position" title="position" class="md-nav__link">
+    position
   </a>
   
 </li>
@@ -1147,19 +1145,16 @@ object &quot;Application&quot;
 
     state &quot;print&quot;
     {
-        Console.print(Camera.xpos + &quot;,&quot; + Camera.ypos);
+        Console.print(Camera.position);
         state = &quot;main&quot;;
     }
 }
 </code></pre>
 
 <h2 id="properties">Properties</h2>
-<h4 id="xpos">xpos</h4>
-<p><code>xpos</code>: number.</p>
-<p>The x-position of the camera in world space.</p>
-<h4 id="ypos">ypos</h4>
-<p><code>ypos</code>: number.</p>
-<p>The y-position of the camera in world space.</p>
+<h4 id="position">position</h4>
+<p><code>position</code>: <a href="../vector2">Vector2</a> object.</p>
+<p>The position of the camera in world space.</p>
                 
                   
                 

@@ -606,18 +606,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/transform2d/" title="Transform2D" class="md-nav__link">
-      Transform2D
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/string/" title="String" class="md-nav__link">
       String
     </a>
@@ -793,13 +781,6 @@
           <li class="md-nav__item">
   <a href="#height" title="height" class="md-nav__link">
     height
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#transform" title="transform" class="md-nav__link">
-    transform
   </a>
   
 </li>
@@ -1084,15 +1065,27 @@
           
 
 
+  <li class="md-nav__item">
+    <a href="../transform/" title="Transform" class="md-nav__link">
+      Transform
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13">
     
-    <label class="md-nav__link" for="nav-5-12">
+    <label class="md-nav__link" for="nav-5-13">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-12">
+      <label class="md-nav__title" for="nav-5-13">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1112,6 +1105,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vector2/" title="Vector2" class="md-nav__link">
+      Vector2
+    </a>
   </li>
 
         
@@ -1256,13 +1261,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#transform" title="transform" class="md-nav__link">
-    transform
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#zindex" title="zindex" class="md-nav__link">
     zindex
   </a>
@@ -1295,7 +1293,7 @@
 <p>The Actor component is used to associate a sprite to a target object. The target object is required to be an <a href="../entity">entity</a>. It's recommended to use only one actor per entity.</p>
 <h2 id="factory">Factory</h2>
 <h4 id="actor_1">Actor</h4>
-<p><code>SurgeEngine.Actor(sprite)</code></p>
+<p><code>Actor(sprite)</code></p>
 <p>Spawns a new Actor component with the given sprite name.</p>
 <p><em>Arguments</em></p>
 <ul>
@@ -1310,18 +1308,6 @@ object &quot;SurgeTest&quot; is &quot;entity&quot;
 {
     // spawns an Actor with the SurgeTest sprite
     actor = Actor(&quot;SurgeTest&quot;);
-
-    // position the actor
-    state &quot;main&quot;
-    {
-        actor.transform.xpos = 210;
-        actor.transform.ypos = 150;
-    }
-}
-
-object &quot;Application&quot;
-{
-    surge = spawn(&quot;SurgeTest&quot;);
 
     state &quot;main&quot;
     {
@@ -1357,9 +1343,6 @@ object &quot;Application&quot;
 <h4 id="height">height</h4>
 <p><code>height</code>: number, read-only.</p>
 <p>The height of the actor.</p>
-<h4 id="transform">transform</h4>
-<p><code>transform</code>: <a href="../../reference/transform2d">Transform2D</a> object.</p>
-<p>An alias to the Transform of the entity.</p>
 <h4 id="zindex">zindex</h4>
 <p><code>zindex</code>: number.</p>
 <p>Objects with greater zindex are rendered in front of others. Defaults to 0.5.</p>

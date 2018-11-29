@@ -736,18 +736,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../transform2d/" title="Transform2D" class="md-nav__link">
-      Transform2D
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../string/" title="String" class="md-nav__link">
       String
     </a>
@@ -1071,15 +1059,27 @@
           
 
 
+  <li class="md-nav__item">
+    <a href="../../engine/transform/" title="Transform" class="md-nav__link">
+      Transform
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13">
     
-    <label class="md-nav__link" for="nav-5-12">
+    <label class="md-nav__link" for="nav-5-13">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-12">
+      <label class="md-nav__title" for="nav-5-13">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1099,6 +1099,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/vector2/" title="Vector2" class="md-nav__link">
+      Vector2
+    </a>
   </li>
 
         
@@ -1270,10 +1282,9 @@
 <h2 id="properties">Properties</h2>
 <ul>
 <li><code>parent</code>: object. Reference to the parent object.</li>
+<li><code>childCount</code>: number. The number of children of this object.</li>
 <li><code>__name</code>: string. The name of this object (string).</li>
-<li><code>__childCount</code>: number. The number of children of this object.</li>
 <li><code>__active</code>: boolean, read-write. Indicates whether this object is active* or not.</li>
-<li><code>__children</code>: <a href="../array/">Array</a>. Reading this spawns a new array containing references to the children of this object.</li>
 <li><code>__functions</code>: <a href="../array/">Array</a>. The functions of this object represented as a collection of strings.</li>
 <li><code>__timespent</code>: number. The approximate time spent in this object in the last frame (in seconds).</li>
 <li><code>__memspent</code>: number. The current memory consumption of this object (in bytes). Not implemented.</li>
@@ -1297,14 +1308,15 @@
 <p><code>destroy()</code></p>
 <p>Destroys the object.</p>
 <h4 id="child">child</h4>
-<p><code>child(childName)</code></p>
-<p>Looks for a child named <code>childName</code>.</p>
+<p><code>child(childName | childId)</code></p>
+<p>Looks for a child named <code>childName</code> (or matching <code>childId</code>).</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>childName</code>: string. The name of the desired child.</li>
+<li><code>childId</code>: number. The id of the desired child, an integer between <code>0</code> and <code>childCount - 1</code>, inclusive.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>A child of name <code>childName</code>, or <code>null</code> if there is no such object.</p>
+<p>The desired child<code>, or</code>null` if there is no such object.</p>
 <h4 id="sibling">sibling</h4>
 <p><code>sibling(siblingName)</code></p>
 <p>Looks for a sibling named <code>siblingName</code>. Two objects are siblings if they share the same parent.</p>

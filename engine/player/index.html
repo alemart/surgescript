@@ -606,18 +606,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/transform2d/" title="Transform2D" class="md-nav__link">
-      Transform2D
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/string/" title="String" class="md-nav__link">
       String
     </a>
@@ -1272,15 +1260,27 @@
           
 
 
+  <li class="md-nav__item">
+    <a href="../transform/" title="Transform" class="md-nav__link">
+      Transform
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13">
     
-    <label class="md-nav__link" for="nav-5-12">
+    <label class="md-nav__link" for="nav-5-13">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-12">
+      <label class="md-nav__title" for="nav-5-13">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1300,6 +1300,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vector2/" title="Vector2" class="md-nav__link">
+      Vector2
+    </a>
   </li>
 
         
@@ -1671,7 +1683,7 @@
 <p>The Player object is used to control a specific player/character. Player objects are tagged <em>player</em>. That might be useful when dealing with collisions.</p>
 <h2 id="factory">Factory</h2>
 <h4 id="player_1">Player</h4>
-<p><code>SurgeEngine.Player(playerName | playerId)</code></p>
+<p><code>Player(playerName | playerId)</code></p>
 <p>Gets the Player object associated with a certain character.</p>
 <p><em>Arguments</em></p>
 <ul>
@@ -1704,7 +1716,7 @@ object &quot;CollectibleGiver&quot; is &quot;entity&quot;, &quot;awake&quot;
 </code></pre>
 
 <h4 id="playeractive">Player.active</h4>
-<p><code>SurgeEngine.Player.active</code></p>
+<p><code>Player.active</code></p>
 <p>The active player, i.e., the one currently in focus.</p>
 <p><em>Returns</em></p>
 <p>A Player object.</p>
@@ -1723,7 +1735,7 @@ object &quot;Who am I&quot;
 </code></pre>
 
 <h4 id="playercount">Player.count</h4>
-<p><code>SurgeEngine.Player.count</code></p>
+<p><code>Player.count</code></p>
 <p>Player count.</p>
 <p><em>Returns</em></p>
 <p>The number of players in the level.</p>
@@ -1773,7 +1785,7 @@ object &quot;ActivityDebugger&quot; is &quot;awake&quot;, &quot;entity&quot;
 <p><code>height</code>: number, read-only.</p>
 <p>The height of the player sprite, in pixels.</p>
 <h4 id="transform">transform</h4>
-<p><code>transform</code>: <a href="../../reference/transform2d">Transform2D</a> object, read-only.</p>
+<p><code>transform</code>: <a href="../transform">Transform</a> object, read-only.</p>
 <p>The transform of the Player.</p>
 <h4 id="collider">collider</h4>
 <p><code>collider</code>: <a href="../collider">Collider</a> object, read-only.</p>

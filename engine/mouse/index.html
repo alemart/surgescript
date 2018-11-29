@@ -606,18 +606,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/transform2d/" title="Transform2D" class="md-nav__link">
-      Transform2D
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/string/" title="String" class="md-nav__link">
       String
     </a>
@@ -916,15 +904,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#xpos" title="xpos" class="md-nav__link">
-    xpos
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ypos" title="ypos" class="md-nav__link">
-    ypos
+  <a href="#position" title="position" class="md-nav__link">
+    position
   </a>
   
 </li>
@@ -1037,15 +1018,27 @@
           
 
 
+  <li class="md-nav__item">
+    <a href="../transform/" title="Transform" class="md-nav__link">
+      Transform
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13">
     
-    <label class="md-nav__link" for="nav-5-12">
+    <label class="md-nav__link" for="nav-5-13">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-12">
+      <label class="md-nav__title" for="nav-5-13">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1065,6 +1058,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vector2/" title="Vector2" class="md-nav__link">
+      Vector2
+    </a>
   </li>
 
         
@@ -1126,15 +1131,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#xpos" title="xpos" class="md-nav__link">
-    xpos
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#ypos" title="ypos" class="md-nav__link">
-    ypos
+  <a href="#position" title="position" class="md-nav__link">
+    position
   </a>
   
 </li>
@@ -1204,16 +1202,17 @@
 // screen space (not world space).
 
 using SurgeEngine.Actor;
+using SurgeEngine.Transform;
 using SurgeEngine.Input.Mouse;
 
 object &quot;MyCursor&quot; is &quot;entity&quot;, &quot;detached&quot;
 {
     actor = Actor(&quot;MyCursor&quot;);
+    transform = Transform();
 
     state &quot;main&quot;
     {
-        actor.transform.xpos = Mouse.xpos;
-        actor.transform.ypos = Mouse.ypos;
+        transform.position = Mouse.position;
         if(Mouse.buttonPressed(&quot;left&quot;))
             Console.print(&quot;left click&quot;);
     }
@@ -1226,12 +1225,9 @@ object &quot;MyCursor&quot; is &quot;entity&quot;, &quot;detached&quot;
 </code></pre>
 
 <h2 id="properties">Properties</h2>
-<h4 id="xpos">xpos</h4>
-<p><code>xpos</code>: number, read-only.</p>
-<p>The x-position of the mouse cursor, in screen space.</p>
-<h4 id="ypos">ypos</h4>
-<p><code>ypos</code>: number, read-only.</p>
-<p>The y-position of the mouse cursor, in screen space.</p>
+<h4 id="position">position</h4>
+<p><code>position</code>: <a href="../vector2">Vector2</a> object, read-only.</p>
+<p>The position of the mouse cursor, in screen space.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="buttondown">buttonDown</h4>
 <p><code>buttonDown(buttonName)</code></p>

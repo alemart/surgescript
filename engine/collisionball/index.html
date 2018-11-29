@@ -606,18 +606,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/transform2d/" title="Transform2D" class="md-nav__link">
-      Transform2D
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/string/" title="String" class="md-nav__link">
       String
     </a>
@@ -852,15 +840,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#centerx" title="centerX" class="md-nav__link">
-    centerX
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#centery" title="centerY" class="md-nav__link">
-    centerY
+  <a href="#center" title="center" class="md-nav__link">
+    center
   </a>
   
 </li>
@@ -1030,15 +1011,27 @@
           
 
 
+  <li class="md-nav__item">
+    <a href="../transform/" title="Transform" class="md-nav__link">
+      Transform
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13">
     
-    <label class="md-nav__link" for="nav-5-12">
+    <label class="md-nav__link" for="nav-5-13">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-12">
+      <label class="md-nav__title" for="nav-5-13">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1058,6 +1051,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vector2/" title="Vector2" class="md-nav__link">
+      Vector2
+    </a>
   </li>
 
         
@@ -1139,15 +1144,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#centerx" title="centerX" class="md-nav__link">
-    centerX
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#centery" title="centerY" class="md-nav__link">
-    centerY
+  <a href="#center" title="center" class="md-nav__link">
+    center
   </a>
   
 </li>
@@ -1206,7 +1204,7 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 
 <h2 id="factory">Factory</h2>
 <h4 id="collisionscollisionball">Collisions.CollisionBall</h4>
-<p><code>SurgeEngine.Collisions.CollisionBall(radius)</code></p>
+<p><code>Collisions.CollisionBall(radius)</code></p>
 <p>Spawns a new CollisionBall with the specified radius, in pixels.</p>
 <p><em>Arguments</em></p>
 <ul>
@@ -1215,12 +1213,9 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 <p><em>Returns</em></p>
 <p>A new CollisionBall with the specified radius.</p>
 <h2 id="properties">Properties</h2>
-<h4 id="centerx">centerX</h4>
-<p><code>centerX</code>: number, read-only.</p>
-<p>The x-coordinate of the center of the CollisionBall, in world space.</p>
-<h4 id="centery">centerY</h4>
-<p><code>centerY</code>: number, read-only.</p>
-<p>The y-coordinate of the center of the CollisionBall, in world space.</p>
+<h4 id="center">center</h4>
+<p><code>center</code>: <a href="../vector2">Vector2</a>, read-only.</p>
+<p>The center of the CollisionBall, in world space.</p>
 <h4 id="radius">radius</h4>
 <p><code>radius</code>: number.</p>
 <p>The radius of the CollisionBall, in pixels.</p>

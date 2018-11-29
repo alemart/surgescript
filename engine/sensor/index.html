@@ -606,18 +606,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/transform2d/" title="Transform2D" class="md-nav__link">
-      Transform2D
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/string/" title="String" class="md-nav__link">
       String
     </a>
@@ -1043,15 +1031,27 @@
           
 
 
+  <li class="md-nav__item">
+    <a href="../transform/" title="Transform" class="md-nav__link">
+      Transform
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13">
     
-    <label class="md-nav__link" for="nav-5-12">
+    <label class="md-nav__link" for="nav-5-13">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-12">
+      <label class="md-nav__title" for="nav-5-13">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1071,6 +1071,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../vector2/" title="Vector2" class="md-nav__link">
+      Vector2
+    </a>
   </li>
 
         
@@ -1220,25 +1232,20 @@ object &quot;SensorToy&quot; is &quot;entity&quot;
 
     state &quot;main&quot;
     {
-        // actor.transform is a shortcut
-        // to the Transform of SensorToy
-        actor.transform.xpos = 210;
-        actor.transform.ypos = 150;
-        sensor.visible = true;
-        state = &quot;sense&quot;;
-    }
-
-    state &quot;sense&quot;
-    {
         if(sensor.status != 0)
             Console.print(&quot;Got brick&quot;);
+    }
+
+    fun constructor()
+    {
+        sensor.visible = true;
     }
 }
 </code></pre>
 
 <h2 id="factory">Factory</h2>
 <h4 id="sensor_1">Sensor</h4>
-<p><code>SurgeEngine.Collisions.Sensor(x, y, width, height)</code></p>
+<p><code>Collisions.Sensor(x, y, width, height)</code></p>
 <p>Spawns a new Sensor with the specified dimensions and having its top-left corner located at position (<em>x</em>, <em>y</em>) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both <em>width</em> and <em>height</em> must be positive integers, and at least one of them must be equal to 1.</p>
 <p><em>Arguments</em></p>
 <ul>

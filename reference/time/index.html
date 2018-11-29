@@ -623,13 +623,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#properties" title="Properties" class="md-nav__link">
     Properties
   </a>
@@ -644,18 +637,6 @@
   
 </nav>
     
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../transform2d/" title="Transform2D" class="md-nav__link">
-      Transform2D
-    </a>
   </li>
 
         
@@ -988,15 +969,27 @@
           
 
 
+  <li class="md-nav__item">
+    <a href="../../engine/transform/" title="Transform" class="md-nav__link">
+      Transform
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-12" type="checkbox" id="nav-5-12">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13">
     
-    <label class="md-nav__link" for="nav-5-12">
+    <label class="md-nav__link" for="nav-5-13">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-12">
+      <label class="md-nav__title" for="nav-5-13">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1016,6 +1009,18 @@
         
       </ul>
     </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/vector2/" title="Vector2" class="md-nav__link">
+      Vector2
+    </a>
   </li>
 
         
@@ -1069,13 +1074,6 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#example" title="Example" class="md-nav__link">
-    Example
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#properties" title="Properties" class="md-nav__link">
     Properties
   </a>
@@ -1101,29 +1099,6 @@
                 
                 <h1 id="time">Time</h1>
 <p>Time utilities. This object is available simply by typing <code>Time</code>.</p>
-<h2 id="example">Example</h2>
-<pre><code>// This object will be moved at a rate of 20 pixels per second
-object &quot;MoveTest&quot;
-{
-    // ...
-    transform = spawn(&quot;Transform2D&quot;);
-
-    state &quot;main&quot;
-    {
-        // CORRECT: this adds 20 pixels to transform.xpos at every second
-        transform.xpos += 20 * Time.delta;
-
-        // INCORRECT: this adds 30 pixels to transform.ypos at every FRAME
-        //transform.ypos += 30;
-
-        // since the framerate may vary across different systems, it's advisable
-        // to multiply the value by Time.delta to make the behavior consistent.
-
-        // ...
-    }
-}
-</code></pre>
-
 <h2 id="properties">Properties</h2>
 <ul>
 <li><code>time</code>: number. The number of seconds since the application was started at the beginning of this frame.</li>
@@ -1169,13 +1144,13 @@ object &quot;MoveTest&quot;
           </a>
         
         
-          <a href="../transform2d/" title="Transform2D" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../string/" title="String" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Transform2D
+                String
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
