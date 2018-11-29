@@ -8,7 +8,7 @@ Factory
 
 #### Input
 
-`SurgeEngine.Input(inputMap | null)`
+`Input(inputMap | null)`
 
 Spawns a new Input component with the given input map.
 

@@ -25,26 +25,17 @@ object "Application"
 
     state "print"
     {
-        Console.print(Camera.xpos + "," + Camera.ypos);
+        Console.print(Camera.position);
         state = "main";
     }
 }
 ```
 
-
-
-
 Properties
 ----------
 
-#### xpos
+#### position
 
-`xpos`: number.
+`position`: [Vector2](vector2) object.
 
-The x-position of the camera in world space.
-
-#### ypos
-
-`ypos`: number.
-
-The y-position of the camera in world space.
+The position of the camera in world space.

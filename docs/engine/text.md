@@ -8,7 +8,7 @@ Factory
 
 #### Text
 
-`SurgeEngine.UI.Text(font | null)`
+`UI.Text(font | null)`
 
 Spawns a new Text object with the given font name. If `null` is provided as the font name, then a default font will be used.
 
@@ -37,8 +37,8 @@ object "PlayerName" is "entity", "awake"
     {
         // position the text
         player = Player.active;
-        transform.worldX = player.transform.worldX;
-        transform.worldY = player.transform.worldY - 50;
+        transform.position = player.transform.position;
+        transform.move(0, -50);
 
         // configure the text
         text.align = "center";

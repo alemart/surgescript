@@ -31,7 +31,7 @@ Factory
 
 #### Collisions.CollisionBall
 
-`SurgeEngine.Collisions.CollisionBall(radius)`
+`Collisions.CollisionBall(radius)`
 
 Spawns a new CollisionBall with the specified radius, in pixels.
 
@@ -46,17 +46,11 @@ A new CollisionBall with the specified radius.
 Properties
 ----------
 
-#### centerX
+#### center
 
-`centerX`: number, read-only.
+`center`: [Vector2](vector2), read-only.
 
-The x-coordinate of the center of the CollisionBall, in world space.
-
-#### centerY
-
-`centerY`: number, read-only.
-
-The y-coordinate of the center of the CollisionBall, in world space.
+The center of the CollisionBall, in world space.
 
 #### radius
 

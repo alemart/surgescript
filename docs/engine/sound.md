@@ -31,7 +31,7 @@ Factory
 
 #### Sound
 
-`SurgeEngine.Audio.Sound(path)`
+`Audio.Sound(path)`
 
 Creates a Sound object associated with a certain file.
 

@@ -47,7 +47,7 @@ Factory
 
 #### Music
 
-`SurgeEngine.Audio.Music(path)`
+`Audio.Music(path)`
 
 Creates a Music object associated with a certain file.
 

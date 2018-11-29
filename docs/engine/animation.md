@@ -65,14 +65,8 @@ The current frame of the animation: an integer between `0` and `frameCount - 1`,
 
 The number of frames of the current animation.
 
-#### hotspotX
+#### hotspot
 
-`hotspotX`: number, read-only.
+`hotspot`: [Vector2](vector2) object, read-only.
 
-The x-position of the hot spot of the current animation.
-
-#### hotspotY
-
-`hotspotY`: number, read-only.
-
-The y-position of the hot spot of the current animation.
+The position of the hot spot of the current animation.

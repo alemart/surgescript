@@ -8,7 +8,7 @@ Factory
 
 #### Actor
 
-`SurgeEngine.Actor(sprite)`
+`Actor(sprite)`
 
 Spawns a new Actor component with the given sprite name.
 
@@ -28,18 +28,6 @@ object "SurgeTest" is "entity"
 {
     // spawns an Actor with the SurgeTest sprite
     actor = Actor("SurgeTest");
-
-    // position the actor
-    state "main"
-    {
-        actor.transform.xpos = 210;
-        actor.transform.ypos = 150;
-    }
-}
-
-object "Application"
-{
-    surge = spawn("SurgeTest");
 
     state "main"
     {
@@ -105,12 +93,6 @@ The width of the actor.
 `height`: number, read-only.
 
 The height of the actor.
-
-#### transform
-
-`transform`: [Transform](transform) object.
-
-An alias to the Transform of the entity.
 
 #### zindex
 

@@ -39,8 +39,7 @@ object "MyExplosion" is "entity", "disposable", "private"
     {
         // set initial position
         player = Player.active;
-        actor.transform.worldX = player.transform.worldX;
-        actor.transform.worldY = player.transform.worldY;
+        actor.transform.position = player.transform.position;
     }
 }
 ```

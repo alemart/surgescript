@@ -12,7 +12,7 @@ using SurgeEngine.Collisions.CollisionBox;
 object "CollisionDoll" is "entity"
 {
     actor = Actor("CollisionDoll");
-    collider = CollisionBox(32,64); // width = 32px, height = 64px
+    collider = CollisionBox(32, 64); // width = 32px, height = 64px
 
     state "main"
     {
@@ -31,7 +31,7 @@ Factory
 
 #### Collisions.CollisionBox
 
-`SurgeEngine.Collisions.CollisionBox(width, height)`
+`Collisions.CollisionBox(width, height)`
 
 Spawns a new CollisionBox with the specified dimensions, in pixels.
 

@@ -8,7 +8,7 @@ Factory
 
 #### Player
 
-`SurgeEngine.Player(playerName | playerId)`
+`Player(playerName | playerId)`
 
 Gets the Player object associated with a certain character.
 
@@ -47,7 +47,7 @@ object "CollectibleGiver" is "entity", "awake"
 
 #### Player.active
 
-`SurgeEngine.Player.active`
+`Player.active`
 
 The active player, i.e., the one currently in focus.
 
@@ -72,7 +72,7 @@ object "Who am I"
 
 #### Player.count
 
-`SurgeEngine.Player.count`
+`Player.count`
 
 Player count.
 

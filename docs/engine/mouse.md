@@ -12,16 +12,17 @@ The Mouse object is used to read input from the mouse.
 // screen space (not world space).
 
 using SurgeEngine.Actor;
+using SurgeEngine.Transform;
 using SurgeEngine.Input.Mouse;
 
 object "MyCursor" is "entity", "detached"
 {
     actor = Actor("MyCursor");
+    transform = Transform();
 
     state "main"
     {
-        actor.transform.xpos = Mouse.xpos;
-        actor.transform.ypos = Mouse.ypos;
+        transform.position = Mouse.position;
         if(Mouse.buttonPressed("left"))
             Console.print("left click");
     }
@@ -36,18 +37,11 @@ object "MyCursor" is "entity", "detached"
 Properties
 ----------
 
-#### xpos
+#### position
 
-`xpos`: number, read-only.
+`position`: [Vector2](vector2) object, read-only.
 
-The x-position of the mouse cursor, in screen space.
-
-#### ypos
-
-`ypos`: number, read-only.
-
-The y-position of the mouse cursor, in screen space.
-
+The position of the mouse cursor, in screen space.
 
 Functions
 ---------

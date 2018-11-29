@@ -15,18 +15,13 @@ object "SensorToy" is "entity"
 
     state "main"
     {
-        // actor.transform is a shortcut
-        // to the Transform of SensorToy
-        actor.transform.xpos = 210;
-        actor.transform.ypos = 150;
-        sensor.visible = true;
-        state = "sense";
-    }
-
-    state "sense"
-    {
         if(sensor.status != 0)
             Console.print("Got brick");
+    }
+
+    fun constructor()
+    {
+        sensor.visible = true;
     }
 }
 ```
@@ -38,7 +33,7 @@ Factory
 
 #### Sensor
 
-`SurgeEngine.Collisions.Sensor(x, y, width, height)`
+`Collisions.Sensor(x, y, width, height)`
 
 Spawns a new Sensor with the specified dimensions and having its top-left corner located at position (*x*, *y*) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both *width* and *height* must be positive integers, and at least one of them must be equal to 1.
 
