@@ -68,7 +68,7 @@ void surgescript_object_release(surgescript_object_t* object);
 /* private stuff */
 #define MAIN_STATE "main"
 static char* state2fun(const char* state);
-static unsigned run_current_state(const surgescript_object_t* object);
+static uint64_t run_current_state(const surgescript_object_t* object);
 static surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
 static bool simple_traversal(surgescript_object_t* object, void* data);
@@ -712,9 +712,9 @@ char* state2fun(const char* state)
     return strcat(strcpy(fun_name, prefix), state);
 }
 
-unsigned run_current_state(const surgescript_object_t* object)
+uint64_t run_current_state(const surgescript_object_t* object)
 {
-    unsigned start = surgescript_util_gettickcount(), end;
+    uint64_t start = surgescript_util_gettickcount(), end;
     surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
     surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
     surgescript_program_call(object->current_state, object->renv, 0);
