@@ -43,12 +43,10 @@ A Vector2 object.
 ```
 using SurgeEngine.Vector2;
 using SurgeEngine.Player;
-using SurgeEngine.Actor;
 
 // This entity will lock the player on position (100, 100)
 object "PlayerLocker" is "entity", "awake"
 {
-    actor = Actor("PlayerLocker");
     pos = Vector2(100, 100);
 
     state "main"
@@ -201,7 +199,7 @@ Returns a number: the dot product between `this` and `v`.
 
 `normalized()`
 
-Returns a normalized copy of `this`: the new vector will have length 1.0.
+Returns a normalized copy of `this`: the new vector will have length one.
 
 *Returns*
 
@@ -219,7 +217,7 @@ Returns a unit vector pointing to `v` (from `this`).
 
 *Returns*
 
-Returns a Vector2 of length 1.0 corresponding to the result of the operation.
+Returns a Vector2 of length one corresponding to the result of the operation.
 
 #### distanceTo
 
@@ -239,13 +237,11 @@ Returns a number corresponding to the specified distance.
 ```
 using SurgeEngine.Transform;
 using SurgeEngine.Player;
-using SurgeEngine.Actor;
 
 // This entity will show the distance between
 // itself and the active player
 object "DistanceDebugger" is "entity", "awake"
 {
-    actor = Actor("DistanceDebugger");
     transform = Transform();
 
     state "main"
