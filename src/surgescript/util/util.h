@@ -65,6 +65,6 @@ char* surgescript_util_accessorfun(const char* prefix, const char* text); /* get
 
 unsigned surgescript_util_htob(unsigned x); /* host to big-endian */
 unsigned surgescript_util_btoh(unsigned x); /* big to host-endian */
-unsigned surgescript_util_gettickcount(); /* number of milliseconds since some arbitrary zero */
+uint64_t surgescript_util_gettickcount(); /* number of milliseconds since some arbitrary zero */
 
 #endif

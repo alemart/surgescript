@@ -274,15 +274,15 @@ char* surgescript_util_accessorfun(const char* prefix, const char* text)
  * Returns the number of milliseconds since some arbitrary zero
  * This is a system-specific routine
  */
-unsigned surgescript_util_gettickcount()
+uint64_t surgescript_util_gettickcount()
 {
 #ifndef _WIN32
     struct timeval now;
     gettimeofday(&now, NULL);
-    return (unsigned)((now.tv_sec * 1000) + (now.tv_usec / 1000));
+    return (uint64_t)(now.tv_sec * 1000) + (uint64_t)(now.tv_usec / 1000);
     /*return 1000 * clock() / CLOCKS_PER_SEC;*/ /* not very accurate */
 #else
-    return GetTickCount();
+    return GetTickCount64();
 #endif
 }
 

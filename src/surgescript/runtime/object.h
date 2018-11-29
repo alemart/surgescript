@@ -54,8 +54,8 @@ void surgescript_object_set_userdata(surgescript_object_t* object, void* data); 
 bool surgescript_object_has_tag(const surgescript_object_t* object, const char* tag_name); /* is this object tagged tag_name? */
 bool surgescript_object_has_function(const surgescript_object_t* object, const char* fun_name); /* does the object have the specified function? */
 double surgescript_object_elapsed_time(const surgescript_object_t* object); /* elapsed time (in seconds) since last state change */
-double surgescript_object_timespent(const surgescript_object_t* object); /* time consumption at the last frame (in seconds) */
-size_t surgescript_object_memspent(const surgescript_object_t* object); /* memory consumption at the last frame (in bytes) */
+double surgescript_object_timespent(const surgescript_object_t* object); /* average time consumption (in seconds) */
+size_t surgescript_object_memspent(const surgescript_object_t* object); /* memory consumption (in bytes) */
 
 /* object tree */
 unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer handle (in the object manager) */

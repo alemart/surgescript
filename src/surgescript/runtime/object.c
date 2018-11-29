@@ -52,8 +52,8 @@ struct surgescript_object_t
     bool is_active; /* can i run programs? */
     bool is_killed; /* am i scheduled to be destroyed? */
     bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
-    unsigned last_state_change; /* moment of the last state change */
-    unsigned time_spent; /* how much time did this object consume (at the last frame) */
+    uint64_t last_state_change; /* moment of the last state change */
+    uint64_t time_spent; /* how much time did this object consume since the last state change */
 
     /* local transform */
     surgescript_transform_t* transform;
@@ -105,10 +105,10 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->state_name = ssstrdup(MAIN_STATE);
     obj->current_state = get_state_program(obj, obj->state_name);
     obj->last_state_change = surgescript_util_gettickcount();
+    obj->time_spent = 0;
     obj->is_active = true;
     obj->is_killed = false;
     obj->is_reachable = false;
-    obj->time_spent = 0;
 
     obj->transform = NULL;
     obj->user_data = user_data;
@@ -304,14 +304,15 @@ unsigned surgescript_object_find_child(const surgescript_object_t* object, const
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
+    int i;
 
-    for(int i = 0; i < ssarray_length(object->child); i++) {
+    for(i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
         if(strcmp(name, child->name) == 0)
             return child->handle;
     }
 
-    for(int i = 0; i < ssarray_length(object->child); i++) {
+    for(i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
         unsigned handle = surgescript_object_find_child(child, name);
         if(handle != null_handle)
@@ -430,6 +431,7 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
     object->state_name = ssstrdup(state_name ? state_name : MAIN_STATE);
     object->current_state = get_state_program(object, object->state_name);
     object->last_state_change = surgescript_util_gettickcount();
+    object->time_spent = 0;
 }
 
 
@@ -598,13 +600,11 @@ bool surgescript_object_update(surgescript_object_t* object)
 
     /* update myself */
     if(object->is_active) {
-        object->time_spent = run_current_state(object);
+        object->time_spent += run_current_state(object);
         return true; /* success! */
     }
-    else {
-        object->time_spent = 0;
+    else
         return false; /* optimize; don't update my children */
-    }
 }
 
 /*
@@ -685,11 +685,13 @@ void surgescript_object_call_state(surgescript_object_t* object, const char* sta
 
 /*
  * surgescript_object_timespent()
- * Time consumption at the last frame (in seconds)
+ * Average time consumption in the current state (in seconds)
  */
 double surgescript_object_timespent(const surgescript_object_t* object)
 {
-    return object->time_spent * 0.001;
+    uint64_t now = surgescript_util_gettickcount();
+    uint64_t dt = now > object->last_state_change ? now - object->last_state_change : 1;
+    return (double)(object->time_spent * 0.001) / dt;
 }
 
 /*
