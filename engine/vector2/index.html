@@ -1485,12 +1485,10 @@ v = player.transform.position.translatedBy(5,0); // a vector
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Vector2;
 using SurgeEngine.Player;
-using SurgeEngine.Actor;
 
 // This entity will lock the player on position (100, 100)
 object &quot;PlayerLocker&quot; is &quot;entity&quot;, &quot;awake&quot;
 {
-    actor = Actor(&quot;PlayerLocker&quot;);
     pos = Vector2(100, 100);
 
     state &quot;main&quot;
@@ -1580,7 +1578,7 @@ zero = v.minus(v); // zero = (0,0)
 <p>Returns a number: the dot product between <code>this</code> and <code>v</code>.</p>
 <h4 id="normalized">normalized</h4>
 <p><code>normalized()</code></p>
-<p>Returns a normalized copy of <code>this</code>: the new vector will have length 1.0.</p>
+<p>Returns a normalized copy of <code>this</code>: the new vector will have length one.</p>
 <p><em>Returns</em></p>
 <p>Returns a Vector2 object corresponding to the result of the operation.</p>
 <h4 id="directionto">directionTo</h4>
@@ -1591,7 +1589,7 @@ zero = v.minus(v); // zero = (0,0)
 <li><code>v</code>: Vector2 object.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>Returns a Vector2 of length 1.0 corresponding to the result of the operation.</p>
+<p>Returns a Vector2 of length one corresponding to the result of the operation.</p>
 <h4 id="distanceto">distanceTo</h4>
 <p><code>distanceTo(v)</code></p>
 <p>Considering <code>this</code> and <code>v</code> as points in space, this function returns the distance between them.</p>
@@ -1604,13 +1602,11 @@ zero = v.minus(v); // zero = (0,0)
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Transform;
 using SurgeEngine.Player;
-using SurgeEngine.Actor;
 
 // This entity will show the distance between
 // itself and the active player
 object &quot;DistanceDebugger&quot; is &quot;entity&quot;, &quot;awake&quot;
 {
-    actor = Actor(&quot;DistanceDebugger&quot;);
     transform = Transform();
 
     state &quot;main&quot;
