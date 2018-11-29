@@ -44,6 +44,7 @@ struct surgescript_object_t
     unsigned handle; /* "this" pointer in the object manager */
     unsigned parent; /* handle to the parent in the object manager */
     SSARRAY(unsigned, child); /* handles to the children */
+    int depth; /* object depth */
 
     /* inner state */
     surgescript_program_t* current_state; /* current state */
@@ -99,6 +100,7 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
     obj->handle = handle; /* handle == parent implies I am a root */
     obj->parent = handle;
     ssarray_init(obj->child);
+    obj->depth = 0;
 
     obj->state_name = ssstrdup(MAIN_STATE);
     obj->current_state = get_state_program(obj, obj->state_name);
@@ -350,6 +352,7 @@ void surgescript_object_add_child(surgescript_object_t* object, unsigned child_h
     /* add it */
     ssarray_push(object->child, child->handle);
     child->parent = object->handle;
+    child->depth = 1 + object->depth;
 }
 
 /*
@@ -375,6 +378,14 @@ bool surgescript_object_remove_child(surgescript_object_t* object, unsigned chil
     return false;
 }
 
+/*
+ * surgescript_object_depth()
+ * The depth of the object in the object tree (the root has depth zero)
+ */
+int surgescript_object_depth(const surgescript_object_t* object)
+{
+    return object->depth;
+}
 
 
 

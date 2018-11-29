@@ -969,7 +969,7 @@ void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t contex
                 ssfree(identifier);
             }
             else if(got_type(parser, SSTOK_INCDECOP)) {
-                /* obj.property++ <=> obj.setProperty(obj.getProperty() + 1) */
+                /* obj.property++ <=> obj.set_property(obj.get_property() + 1) */
                 const char* op = surgescript_token_lexeme(parser->lookahead);
                 emit_setterincdec(context, identifier, op);
                 match(parser, SSTOK_INCDECOP);
@@ -977,7 +977,7 @@ void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t contex
                 break;
             }
             else if(got_type(parser, SSTOK_ASSIGNOP)) {
-                /* obj.property = value <=> obj.setProperty(value) */
+                /* obj.property = value <=> obj.set_property(value) */
                 char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
                 match(parser, SSTOK_ASSIGNOP);
                 emit_setter1(context, identifier);
@@ -988,7 +988,7 @@ void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t contex
                 break;
             }
             else {
-                /* obj.property <=> obj.getProperty() */
+                /* obj.property <=> obj.get_property() */
                 emit_getter(context, identifier);
                 lambdacall(parser, context);
                 dictgetexpr(parser, context);
