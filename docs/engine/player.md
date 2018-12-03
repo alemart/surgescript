@@ -146,18 +146,6 @@ The number of seconds to drown, if underwater.
 
 Direction will be +1 if the player is facing right, -1 if facing left.
 
-#### width
-
-`width`: number, read-only.
-
-The width of the player sprite, in pixels.
-
-#### height
-
-`height`: number, read-only.
-
-The height of the player sprite, in pixels.
-
 #### transform
 
 `transform`: [Transform](transform) object, read-only.
@@ -248,6 +236,23 @@ Horizontal speed, in pixels per second (useful while midair).
 
 Vertical speed, in pixels per second.
 
+#### angle
+
+`angle`: number.
+
+The angle of the player, in degrees. The same as `transform.angle`.
+
+#### width
+
+`width`: number, read-only.
+
+The width of the player sprite, in pixels.
+
+#### height
+
+`height`: number, read-only.
+
+The height of the player sprite, in pixels.
 
 Functions
 ---------
