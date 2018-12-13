@@ -81,7 +81,7 @@ Other benefits include:
 - C-like syntax, including plenty of features
 - Automatic garbage collection
 - Easy to extend via Plugins
-- It's free software
+- It's free and open source software
 
 These features come from the experience of the developer dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
