@@ -76,11 +76,11 @@ The alignment of the text. One of the following: *"left"*, *"center"*, *"right"*
 
 Is the Text object visible?
 
-#### width
+#### maxWidth
 
-`width`: number.
+`maxWidth`: number.
 
-The (maximum) width of the text, in pixels. Setting this value will enable wordwrap.
+The maximum width of the text, in pixels. Setting this value will enable wordwrap.
 
 #### zindex
 
@@ -88,8 +88,8 @@ The (maximum) width of the text, in pixels. Setting this value will enable wordw
 
 The zindex of the Text object. Defaults to 0.5.
 
-#### transform
+#### offset
 
-`transform`: [Transform](transform) object, read-only.
+`offset`: [Vector2](vector2) object.
 
-The Transform of the Text object.
+An *(x,y)* offset relative to the parent object. Defaults to zero.
