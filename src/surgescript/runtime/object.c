@@ -427,11 +427,13 @@ const char* surgescript_object_state(const surgescript_object_t *object)
  */
 void surgescript_object_set_state(surgescript_object_t* object, const char* state_name)
 {
-    ssfree(object->state_name);
-    object->state_name = ssstrdup(state_name ? state_name : MAIN_STATE);
-    object->current_state = get_state_program(object, object->state_name);
-    object->last_state_change = surgescript_util_gettickcount();
-    object->time_spent = 0;
+    if(strcmp(object->state_name, state_name) != 0) {
+        ssfree(object->state_name);
+        object->state_name = ssstrdup(state_name ? state_name : MAIN_STATE);
+        object->current_state = get_state_program(object, object->state_name);
+        object->last_state_change = surgescript_util_gettickcount();
+        object->time_spent = 0;
+    }
 }
 
 
