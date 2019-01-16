@@ -33,8 +33,10 @@ typedef struct surgescript_lexer_prevstate_t
 {
     const char* p;
     int line;
+    struct surgescript_lexer_prevstate_t* next_node;
 } surgescript_lexer_prevstate_t;
-static const surgescript_lexer_prevstate_t* prev_state(surgescript_lexer_t* lexer, const char* prev_p, int prev_line);
+static surgescript_lexer_prevstate_t* create_prev_state(surgescript_lexer_t* lexer, const char* prev_p, int prev_line);
+static surgescript_lexer_prevstate_t* destroy_prev_state(surgescript_lexer_prevstate_t* prev);
 
 /* lexer */
 #define BUFSIZE                     1024 /* size of the internal buffer */
@@ -44,7 +46,7 @@ struct surgescript_lexer_t
     int bufptr; /* auxiliary buffer ptr */
     const char* p; /* auxiliary pointer */
     int line; /* current line */
-    SSARRAY(surgescript_lexer_prevstate_t, prev); /* previous states */
+    surgescript_lexer_prevstate_t* prev_list; /* previous states */
 };
 
 /* keywords */
@@ -74,7 +76,7 @@ surgescript_lexer_t* surgescript_lexer_create()
     lexer->bufptr = 0;
     lexer->p = 0;
     lexer->line = 0;
-    ssarray_init(lexer->prev);
+    lexer->prev_list = NULL;
     return lexer;
 }
 
@@ -84,7 +86,8 @@ surgescript_lexer_t* surgescript_lexer_create()
  */
 surgescript_lexer_t* surgescript_lexer_destroy(surgescript_lexer_t* lexer)
 {
-    ssarray_release(lexer->prev);
+    for(surgescript_lexer_prevstate_t *it = lexer->prev_list, *next = NULL; next != NULL; it = destroy_prev_state(it))
+        next = it->next_node;
     return ssfree(lexer);
 }
 
@@ -106,7 +109,7 @@ void surgescript_lexer_set(surgescript_lexer_t* lexer, const char* code)
 surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
 {
     /* previous state */
-    const surgescript_lexer_prevstate_t* prev = prev_state(lexer, lexer->p, lexer->line);
+    const surgescript_lexer_prevstate_t* prev = create_prev_state(lexer, lexer->p, lexer->line);
 
     /* clear previous token (if any) */
     bufclear(lexer);
@@ -501,10 +504,16 @@ void skipspaces(surgescript_lexer_t* lexer)
 }
 
 /* creates a new prev_state struct */
-const surgescript_lexer_prevstate_t* prev_state(surgescript_lexer_t* lexer, const char* prev_p, int prev_line)
+surgescript_lexer_prevstate_t* create_prev_state(surgescript_lexer_t* lexer, const char* prev_p, int prev_line)
 {
-    surgescript_lexer_prevstate_t prev = { prev_p, prev_line };
-    int last = ssarray_length(lexer->prev);
-    ssarray_push(lexer->prev, prev);
-    return &(lexer->prev[last]);
+    surgescript_lexer_prevstate_t* prev = ssmalloc(sizeof *prev);
+    prev->p = prev_p;
+    prev->line = prev_line;
+    prev->next_node = lexer->prev_list;
+    return (lexer->prev_list = prev);
+}
+
+surgescript_lexer_prevstate_t* destroy_prev_state(surgescript_lexer_prevstate_t* prev)
+{
+    return ssfree(prev);
 }
