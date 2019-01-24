@@ -64,6 +64,12 @@ Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1
 
 The entity associated with this component.
 
+#### offset
+
+`offset`: [Vector2](vector2) object.
+
+An *(x,y)* offset relative to the parent object. Defaults to zero.
+
 #### hflip
 
 `hflip`: boolean.
