@@ -1247,7 +1247,7 @@
         }, 
         {
             "location": "/engine/actor/", 
-            "text": "Actor\n\n\nThe Actor component is used to associate a sprite to a target object. The target object is required to be an \nentity\n. It's recommended to use only one actor per entity.\n\n\nFactory\n\n\nActor\n\n\nActor(sprite)\n\n\nSpawns a new Actor component with the given sprite name.\n\n\nArguments\n\n\n\n\nsprite\n: string. The name of the sprite (defined in the \nsprites/\n folder).\n\n\n\n\nReturns\n\n\nAn Actor component.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\n\nobject \nSurgeTest\n is \nentity\n\n{\n    // spawns an Actor with the SurgeTest sprite\n    actor = Actor(\nSurgeTest\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\nanim\n\n\nanim\n: number.\n\n\nA shortcut to \nanimation.id\n: an integer corresponding to the animation number. Defaults to 0.\n\n\nanimation\n\n\nanimation\n: \nAnimation\n object, read-only.\n\n\nReference to the Animation object of the Actor.\n\n\nalpha\n\n\nalpha\n: number.\n\n\nOpacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.\n\n\nentity\n\n\nentity\n: object, read-only.\n\n\nThe entity associated with this component.\n\n\nhflip\n\n\nhflip\n: boolean.\n\n\nShould the actor be flipped horizontally? Defaults to \nfalse\n.\n\n\nvflip\n\n\nvflip\n: boolean.\n\n\nShould the actor be flipped vertically? Defaults to \nfalse\n.\n\n\nvisible\n\n\nvisible\n: boolean.\n\n\nShould the actor be rendered? Defaults to \ntrue\n.\n\n\nwidth\n\n\nwidth\n: number, read-only.\n\n\nThe width of the actor.\n\n\nheight\n\n\nheight\n: number, read-only.\n\n\nThe height of the actor.\n\n\nzindex\n\n\nzindex\n: number.\n\n\nObjects with greater zindex are rendered in front of others. Defaults to 0.5.", 
+            "text": "Actor\n\n\nThe Actor component is used to associate a sprite to a target object. The target object is required to be an \nentity\n. It's recommended to use only one actor per entity.\n\n\nFactory\n\n\nActor\n\n\nActor(sprite)\n\n\nSpawns a new Actor component with the given sprite name.\n\n\nArguments\n\n\n\n\nsprite\n: string. The name of the sprite (defined in the \nsprites/\n folder).\n\n\n\n\nReturns\n\n\nAn Actor component.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\n\nobject \nSurgeTest\n is \nentity\n\n{\n    // spawns an Actor with the SurgeTest sprite\n    actor = Actor(\nSurgeTest\n);\n\n    state \nmain\n\n    {\n    }\n}\n\n\n\n\nProperties\n\n\nanim\n\n\nanim\n: number.\n\n\nA shortcut to \nanimation.id\n: an integer corresponding to the animation number. Defaults to 0.\n\n\nanimation\n\n\nanimation\n: \nAnimation\n object, read-only.\n\n\nReference to the Animation object of the Actor.\n\n\nalpha\n\n\nalpha\n: number.\n\n\nOpacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.\n\n\nentity\n\n\nentity\n: object, read-only.\n\n\nThe entity associated with this component.\n\n\noffset\n\n\noffset\n: \nVector2\n object.\n\n\nAn \n(x,y)\n offset relative to the parent object. Defaults to zero.\n\n\nhflip\n\n\nhflip\n: boolean.\n\n\nShould the actor be flipped horizontally? Defaults to \nfalse\n.\n\n\nvflip\n\n\nvflip\n: boolean.\n\n\nShould the actor be flipped vertically? Defaults to \nfalse\n.\n\n\nvisible\n\n\nvisible\n: boolean.\n\n\nShould the actor be rendered? Defaults to \ntrue\n.\n\n\nwidth\n\n\nwidth\n: number, read-only.\n\n\nThe width of the actor.\n\n\nheight\n\n\nheight\n: number, read-only.\n\n\nThe height of the actor.\n\n\nzindex\n\n\nzindex\n: number.\n\n\nObjects with greater zindex are rendered in front of others. Defaults to 0.5.", 
             "title": "Actor"
         }, 
         {
@@ -1291,6 +1291,11 @@
             "title": "entity"
         }, 
         {
+            "location": "/engine/actor/#offset", 
+            "text": "offset :  Vector2  object.  An  (x,y)  offset relative to the parent object. Defaults to zero.", 
+            "title": "offset"
+        }, 
+        {
             "location": "/engine/actor/#hflip", 
             "text": "hflip : boolean.  Should the actor be flipped horizontally? Defaults to  false .", 
             "title": "hflip"
@@ -1322,7 +1327,7 @@
         }, 
         {
             "location": "/engine/animation/", 
-            "text": "Animation\n\n\nAnimation objects are used to gather data about specific animations. Although you can't spawn Animation objects directly, you can access them via other objects such as \nActor\n and \nPlayer\n.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\n\nobject \nMyExplosion\n is \nentity\n, \ndisposable\n, \nprivate\n\n{\n    actor = Actor(\nMyExplosion\n);\n\n    state \nmain\n\n    {\n        if(actor.animation.finished)\n            destroy();\n    }\n}\n\n\n\n\nProperties\n\n\nid\n\n\nid\n: number.\n\n\nThe number of the current animation, defined in a .spr file.\n\n\nsprite\n\n\nsprite\n: string, read-only.\n\n\nThe name of the sprite, defined in a .spr file.\n\n\nfps\n\n\nfps\n: number, read-only.\n\n\nFrames per second of the current animation.\n\n\nfinished\n\n\nfinished\n: boolean, read-only.\n\n\nWill be true if the current animation has finished playing.\n\n\nrepeats\n\n\nrepeats\n: boolean, read-only.\n\n\nDoes the current animation repeat itself?\n\n\nframe\n\n\nframe\n: number, read-only.\n\n\nThe current frame of the animation: an integer between \n0\n and \nframeCount - 1\n, inclusive.\n\n\nframeCount\n\n\nframeCount\n: number, read-only.\n\n\nThe number of frames of the current animation.\n\n\nhotspot\n\n\nhotspot\n: \nVector2\n object, read-only.\n\n\nThe position of the hot spot of the current animation.", 
+            "text": "Animation\n\n\nAnimation objects are used to gather data about specific animations. Although you can't spawn Animation objects directly, you can access them via other objects such as \nActor\n and \nPlayer\n.\n\n\nExample\n\n\nusing SurgeEngine.Actor;\n\nobject \nMyExplosion\n is \nentity\n, \ndisposable\n, \nprivate\n\n{\n    actor = Actor(\nMyExplosion\n);\n\n    state \nmain\n\n    {\n        if(actor.animation.finished)\n            destroy();\n    }\n}\n\n\n\n\nProperties\n\n\nid\n\n\nid\n: number.\n\n\nThe number of the current animation, defined in a .spr file.\n\n\nsprite\n\n\nsprite\n: string, read-only.\n\n\nThe name of the sprite, defined in a .spr file.\n\n\nfinished\n\n\nfinished\n: boolean, read-only.\n\n\nWill be true if the current animation has finished playing.\n\n\nhotspot\n\n\nhotspot\n: \nVector2\n object, read-only.\n\n\nThe position of the hot spot of the current animation.\n\n\nfps\n\n\nfps\n: number, read-only.\n\n\nFrames per second of the current animation.\n\n\nrepeats\n\n\nrepeats\n: boolean, read-only.\n\n\nDoes the current animation repeat itself?\n\n\nframe\n\n\nframe\n: number, read-only.\n\n\nThe current frame of the animation: an integer between \n0\n and \nframeCount - 1\n, inclusive.\n\n\nframeCount\n\n\nframeCount\n: number, read-only.\n\n\nThe number of frames of the current animation.\n\n\nspeedFactor\n\n\nspeedFactor\n: number.\n\n\nWhile the \nFPS\n rate controls the speed of the animation, the speed factor gives you an additional degree of control. This is a multiplier that defaults to 1.0, meaning that the animation will run using its normal speed. If it's set to 2.0, it will run using twice that speed. A value of 0.5 means half the speed, and so on.", 
             "title": "Animation"
         }, 
         {
@@ -1346,14 +1351,19 @@
             "title": "sprite"
         }, 
         {
-            "location": "/engine/animation/#fps", 
-            "text": "fps : number, read-only.  Frames per second of the current animation.", 
-            "title": "fps"
-        }, 
-        {
             "location": "/engine/animation/#finished", 
             "text": "finished : boolean, read-only.  Will be true if the current animation has finished playing.", 
             "title": "finished"
+        }, 
+        {
+            "location": "/engine/animation/#hotspot", 
+            "text": "hotspot :  Vector2  object, read-only.  The position of the hot spot of the current animation.", 
+            "title": "hotspot"
+        }, 
+        {
+            "location": "/engine/animation/#fps", 
+            "text": "fps : number, read-only.  Frames per second of the current animation.", 
+            "title": "fps"
         }, 
         {
             "location": "/engine/animation/#repeats", 
@@ -1371,9 +1381,9 @@
             "title": "frameCount"
         }, 
         {
-            "location": "/engine/animation/#hotspot", 
-            "text": "hotspot :  Vector2  object, read-only.  The position of the hot spot of the current animation.", 
-            "title": "hotspot"
+            "location": "/engine/animation/#speedfactor", 
+            "text": "speedFactor : number.  While the  FPS  rate controls the speed of the animation, the speed factor gives you an additional degree of control. This is a multiplier that defaults to 1.0, meaning that the animation will run using its normal speed. If it's set to 2.0, it will run using twice that speed. A value of 0.5 means half the speed, and so on.", 
+            "title": "speedFactor"
         }, 
         {
             "location": "/engine/music/", 

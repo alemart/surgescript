@@ -729,15 +729,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fps" title="fps" class="md-nav__link">
-    fps
+  <a href="#finished" title="finished" class="md-nav__link">
+    finished
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#finished" title="finished" class="md-nav__link">
-    finished
+  <a href="#hotspot" title="hotspot" class="md-nav__link">
+    hotspot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fps" title="fps" class="md-nav__link">
+    fps
   </a>
   
 </li>
@@ -764,8 +771,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hotspot" title="hotspot" class="md-nav__link">
-    hotspot
+  <a href="#speedfactor" title="speedFactor" class="md-nav__link">
+    speedFactor
   </a>
   
 </li>
@@ -1158,15 +1165,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fps" title="fps" class="md-nav__link">
-    fps
+  <a href="#finished" title="finished" class="md-nav__link">
+    finished
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#finished" title="finished" class="md-nav__link">
-    finished
+  <a href="#hotspot" title="hotspot" class="md-nav__link">
+    hotspot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fps" title="fps" class="md-nav__link">
+    fps
   </a>
   
 </li>
@@ -1193,8 +1207,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hotspot" title="hotspot" class="md-nav__link">
-    hotspot
+  <a href="#speedfactor" title="speedFactor" class="md-nav__link">
+    speedFactor
   </a>
   
 </li>
@@ -1245,12 +1259,15 @@ object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &q
 <h4 id="sprite">sprite</h4>
 <p><code>sprite</code>: string, read-only.</p>
 <p>The name of the sprite, defined in a .spr file.</p>
-<h4 id="fps">fps</h4>
-<p><code>fps</code>: number, read-only.</p>
-<p>Frames per second of the current animation.</p>
 <h4 id="finished">finished</h4>
 <p><code>finished</code>: boolean, read-only.</p>
 <p>Will be true if the current animation has finished playing.</p>
+<h4 id="hotspot">hotspot</h4>
+<p><code>hotspot</code>: <a href="../vector2">Vector2</a> object, read-only.</p>
+<p>The position of the hot spot of the current animation.</p>
+<h4 id="fps">fps</h4>
+<p><code>fps</code>: number, read-only.</p>
+<p>Frames per second of the current animation.</p>
 <h4 id="repeats">repeats</h4>
 <p><code>repeats</code>: boolean, read-only.</p>
 <p>Does the current animation repeat itself?</p>
@@ -1260,9 +1277,9 @@ object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &q
 <h4 id="framecount">frameCount</h4>
 <p><code>frameCount</code>: number, read-only.</p>
 <p>The number of frames of the current animation.</p>
-<h4 id="hotspot">hotspot</h4>
-<p><code>hotspot</code>: <a href="../vector2">Vector2</a> object, read-only.</p>
-<p>The position of the hot spot of the current animation.</p>
+<h4 id="speedfactor">speedFactor</h4>
+<p><code>speedFactor</code>: number.</p>
+<p>While the <a href="#fps">FPS</a> rate controls the speed of the animation, the speed factor gives you an additional degree of control. This is a multiplier that defaults to 1.0, meaning that the animation will run using its normal speed. If it's set to 2.0, it will run using twice that speed. A value of 0.5 means half the speed, and so on.</p>
                 
                   
                 
