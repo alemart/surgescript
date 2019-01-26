@@ -141,6 +141,12 @@ Adds a new element to the beginning of the Array.
 
 * `value`: any type. The element to be added to the Array.
 
+#### clear
+
+`clear()`
+
+Clears the array. It will no longer hold any elements and its length will be set to zero.
+
 #### indexOf
 
 `indexOf(value)`

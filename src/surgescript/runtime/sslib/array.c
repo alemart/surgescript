@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ static surgescript_var_t* fun_sort(surgescript_object_t* object, const surgescri
 static surgescript_var_t* fun_reverse(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_shuffle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_clear(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_iterator(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -88,6 +89,7 @@ void surgescript_sslib_register_array(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Array", "pop", fun_pop, 0);
     surgescript_vm_bind(vm, "Array", "shift", fun_shift, 0);
     surgescript_vm_bind(vm, "Array", "unshift", fun_unshift, 1);
+    surgescript_vm_bind(vm, "Array", "clear", fun_clear, 0);
     surgescript_vm_bind(vm, "Array", "sort", fun_sort, 1);
     surgescript_vm_bind(vm, "Array", "reverse", fun_reverse, 0);
     surgescript_vm_bind(vm, "Array", "shuffle", fun_shuffle, 0);
@@ -305,6 +307,21 @@ surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_v
     }
 
     return surgescript_var_set_number(surgescript_var_create(), -1);
+}
+
+/* clears the array */
+surgescript_var_t* fun_clear(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    int length = ARRAY_LENGTH(heap);
+
+    if(length > 0) {
+        for(int i = length - 1; i >= 0; i--)
+            surgescript_heap_free(heap, BASE_ADDR + i);
+        surgescript_var_set_number(surgescript_heap_at(heap, LENGTH_ADDR), 0);
+    }
+
+    return NULL;
 }
 
 /* returns an ArrayIterator of this array */
