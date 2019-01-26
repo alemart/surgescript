@@ -189,6 +189,7 @@ The string converted to upper case.
 `isNullOrEmpty(value)`
 
 This method of the `String` object can be used directly. It checks if the given `value` is either `null` or an empty string.
+*Available since SurgeScript 0.5.3*
 
 *Arguments*
 
