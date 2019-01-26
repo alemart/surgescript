@@ -58,6 +58,10 @@ surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsi
 int surgescript_var_typecode(const surgescript_var_t* var); /* the typecode */
 int surgescript_var_type2code(const char* type_name); /* typename -> typecode converter */
 int surgescript_var_typecheck(const surgescript_var_t* var, int code); /* returns zero iff var has the given type code */
+bool surgescript_var_is_string(const surgescript_var_t* var); /* is var a string? */
+bool surgescript_var_is_bool(const surgescript_var_t* var); /* is var a boolean? */
+bool surgescript_var_is_number(const surgescript_var_t* var); /* is var a number? */
+bool surgescript_var_is_objecthandle(const surgescript_var_t* var); /* is var a handle to an object? */
 surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescript_var_t* src); /* similar to strcpy */
 surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var); /* similar to strdup */
 char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t bufsize); /* copies var to buf and returns buf, converting var to string if necessary (similar to itoa / strncpy) */

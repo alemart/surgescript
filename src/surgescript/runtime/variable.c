@@ -414,6 +414,42 @@ int surgescript_var_typecheck(const surgescript_var_t* var, int code)
 }
 
 /*
+ * surgescript_var_is_string()
+ * Is this variable a string?
+ */
+bool surgescript_var_is_string(const surgescript_var_t* var)
+{
+    return var->type == SSVAR_STRING;
+}
+
+/*
+ * surgescript_var_is_bool()
+ * Is this variable a boolean?
+ */
+bool surgescript_var_is_bool(const surgescript_var_t* var)
+{
+    return var->type == SSVAR_BOOL;
+}
+
+/*
+ * surgescript_var_is_number()
+ * Is this variable a number?
+ */
+bool surgescript_var_is_number(const surgescript_var_t* var)
+{
+    return var->type == SSVAR_NUMBER;
+}
+
+/*
+ * surgescript_var_is_objecthandle()
+ * Is this variable a handle to an object?
+ */
+bool surgescript_var_is_objecthandle(const surgescript_var_t* var)
+{
+    return var->type == SSVAR_OBJECTHANDLE;
+}
+
+/*
  * surgescript_var_to_string()
  * Converts a variable of any primitive type to a string to be stored in a buffer of bufsize bytes
  */
