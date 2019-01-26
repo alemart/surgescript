@@ -1,7 +1,7 @@
 String
 ======
 
-Routines for strings. The String object is not supposed to be used directly. The functions below are available for primitive values of the string type.
+Routines for strings. The String object is not supposed to be used directly (generally speaking). The functions below are available for primitive values of the string type.
 
 Example:
 
@@ -183,3 +183,28 @@ Converts the string to upper case.
 *Returns*
 
 The string converted to upper case.
+
+#### isNullOrEmpty
+
+`isNullOrEmpty(value)`
+
+This method of the `String` object can be used directly. It checks if the given `value` is either `null` or an empty string.
+
+*Arguments*
+
+* `value`: string | null. The value to be tested.
+
+*Returns*
+
+Returns `true` if `value` is either `null` or an empty string.
+
+*Example*
+
+```
+name = "Surge";
+//name = "";
+//name = null;
+
+if(!String.isNullOrEmpty(name))
+    Console.print(name);
+```

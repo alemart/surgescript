@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ static surgescript_var_t* fun_concat(surgescript_object_t* object, const surgesc
 static surgescript_var_t* fun_replace(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tolowercase(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_touppercase(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_isnullorempty(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 
 /*
@@ -69,6 +70,7 @@ void surgescript_sslib_register_string(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "String", "replace", fun_replace, 3);
     surgescript_vm_bind(vm, "String", "toLowerCase", fun_tolowercase, 1);
     surgescript_vm_bind(vm, "String", "toUpperCase", fun_touppercase, 1);
+    surgescript_vm_bind(vm, "String", "isNullOrEmpty", fun_isnullorempty, 1);
 }
 
 
@@ -290,4 +292,13 @@ surgescript_var_t* fun_touppercase(surgescript_object_t* object, const surgescri
     surgescript_var_set_string(result, dst);
     ssfree(dst);
     return result;
+}
+
+/* returns true if the string is null or empty */
+surgescript_var_t* fun_isnullorempty(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_bool(surgescript_var_create(),
+        surgescript_var_is_null(param[0]) ||
+        (surgescript_var_is_string(param[0]) && ('\0' == *(surgescript_var_fast_get_string(param[0]))))
+    );
 }
