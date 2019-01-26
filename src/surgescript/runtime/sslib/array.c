@@ -382,7 +382,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
         ssarray_push(sb, ' ');
 
         /* write element */
-        if(!surgescript_var_typecheck(element, surgescript_var_type2code("object"))) {
+        if(surgescript_var_is_objecthandle(element)) {
             surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(element);
             surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
             if(strcmp(surgescript_object_name(object), "Array") != 0 && strcmp(surgescript_object_name(object), "Dictionary") != 0 && depth < 16) {
@@ -394,7 +394,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
                 WRITE_ELEMENT(element, false);
         }
         else
-            WRITE_ELEMENT(element, !surgescript_var_typecheck(element, surgescript_var_type2code("string")));
+            WRITE_ELEMENT(element, surgescript_var_is_string(element));
 
         /* add separator */
         ssarray_push(sb, i < length - 1 ? ',' : ' ');

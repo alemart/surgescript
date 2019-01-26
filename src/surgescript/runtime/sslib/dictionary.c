@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -362,7 +362,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 
             /* write value */
             surgescript_object_call_function(entry, "get_value", NULL, 0, tmp);
-            if(!surgescript_var_typecheck(tmp, surgescript_var_type2code("object"))) {
+            if(surgescript_var_is_objecthandle(tmp)) {
                 surgescript_objecthandle_t handle = surgescript_var_get_objecthandle(tmp);
                 surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
                 if(strcmp(surgescript_object_name(object), "Array") != 0 && strcmp(surgescript_object_name(object), "Dictionary") != 0) {
@@ -374,7 +374,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
                     WRITE_ELEMENT(tmp, false);
             }
             else
-                WRITE_ELEMENT(tmp, !surgescript_var_typecheck(tmp, surgescript_var_type2code("string")));
+                WRITE_ELEMENT(tmp, surgescript_var_is_string(tmp));
 
             /* add separator */
             if(!(surgescript_object_call_function(iterator, "hasNext", NULL, 0, tmp), surgescript_var_get_bool(tmp))) {

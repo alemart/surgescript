@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ surgescript_var_t* fun_parent(surgescript_object_t* object, const surgescript_va
  * it also accepts a child ID (integer between 0 and childCount - 1, inclusive) */
 surgescript_var_t* fun_child(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    if(surgescript_var_typecheck(param[0], surgescript_var_type2code("number")) == 0) {
+    if(surgescript_var_is_number(param[0])) {
         int id = (int)surgescript_var_get_number(param[0]);
         surgescript_objecthandle_t child = surgescript_object_nth_child(object, id);
         return surgescript_var_set_objecthandle(surgescript_var_create(), child);
@@ -179,7 +179,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 /* equals() method */
 surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    if(surgescript_var_typecode(param[0]) == surgescript_var_type2code("object")) {
+    if(surgescript_var_is_objecthandle(param[0])) {
         surgescript_objecthandle_t me = surgescript_object_handle(object);
         surgescript_objecthandle_t other = surgescript_var_get_objecthandle(param[0]);
         return surgescript_var_set_bool(surgescript_var_create(), me == other);

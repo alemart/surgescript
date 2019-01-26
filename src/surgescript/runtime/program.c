@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -646,7 +646,7 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
     surgescript_objecthandle_t object_handle = surgescript_var_get_objecthandle(callee);
 
     /* surgescript can also call programs on primitive types */
-    if(surgescript_var_typecheck(callee, surgescript_var_type2code("object")) != 0) /* callee is of a primitive type */
+    if(!surgescript_var_is_objecthandle(callee)) /* callee is of a primitive type */
         number_of_given_params++; /* object_handle points to the appropriate wrapper */
 
     /* finds the program */
