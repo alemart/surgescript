@@ -36,7 +36,7 @@
     
     
       
-        <title>Video - SurgeScript Documentation</title>
+        <title>Screen - SurgeScript Documentation</title>
       
     
     
@@ -70,7 +70,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#video" tabindex="1" class="md-skip">
+      <a href="#screen" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -96,7 +96,7 @@
                 SurgeScript Documentation
               </span>
               <span class="md-header-nav__topic">
-                Video
+                Screen
               </span>
             
           
@@ -993,6 +993,27 @@
   
 
 
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-15" type="checkbox" id="nav-5-15" checked>
+    
+    <label class="md-nav__link" for="nav-5-15">
+      Video
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-15">
+        Video
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+  
+
+
   <li class="md-nav__item md-nav__item--active">
     
     <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
@@ -1001,11 +1022,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="toc">
-        Video
+        Screen
       </label>
     
-    <a href="./" title="Video" class="md-nav__link md-nav__link--active">
-      Video
+    <a href="./" title="Screen" class="md-nav__link md-nav__link--active">
+      Screen
     </a>
     
       
@@ -1027,15 +1048,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#screenwidth" title="screenWidth" class="md-nav__link">
-    screenWidth
+  <a href="#width" title="width" class="md-nav__link">
+    width
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#screenheight" title="screenHeight" class="md-nav__link">
-    screenHeight
+  <a href="#height" title="height" class="md-nav__link">
+    height
   </a>
   
 </li>
@@ -1053,6 +1074,11 @@
   
 </nav>
     
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1102,15 +1128,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#screenwidth" title="screenWidth" class="md-nav__link">
-    screenWidth
+  <a href="#width" title="width" class="md-nav__link">
+    width
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#screenheight" title="screenHeight" class="md-nav__link">
-    screenHeight
+  <a href="#height" title="height" class="md-nav__link">
+    height
   </a>
   
 </li>
@@ -1137,29 +1163,35 @@
               
                 
                 
-                <h1 id="video">Video</h1>
-<p>Video settings.</p>
+                <h1 id="screen">Screen</h1>
+<p>Screen settings.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Video;
+<pre><code>// display the size of the screen
+using SurgeEngine.Video.Screen;
 
-// display the size of the screen
 object &quot;Application&quot;
 {
+    width = Screen.width;
+    height = Screen.height;
+
     state &quot;main&quot;
     {
-        width = Video.screenWidth;
-        height = Video.screenHeight;
         Console.print(width + &quot;x&quot; + height);
+        state = &quot;done&quot;;
+    }
+
+    state &quot;done&quot;
+    {
     }
 }
 </code></pre>
 
 <h2 id="properties">Properties</h2>
-<h4 id="screenwidth">screenWidth</h4>
-<p><code>screenWidth</code>: number, read-only.</p>
+<h4 id="width">width</h4>
+<p><code>width</code>: number, read-only.</p>
 <p>The width of the screen, in pixels.</p>
-<h4 id="screenheight">screenHeight</h4>
-<p><code>screenHeight</code>: number, read-only.</p>
+<h4 id="height">height</h4>
+<p><code>height</code>: number, read-only.</p>
 <p>The height of the screen, in pixels.</p>
                 
                   

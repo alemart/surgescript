@@ -719,6 +719,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#isnullorempty" title="isNullOrEmpty" class="md-nav__link">
+    isNullOrEmpty
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1112,10 +1119,34 @@
           
 
 
-  <li class="md-nav__item">
-    <a href="../../engine/video/" title="Video" class="md-nav__link">
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-15" type="checkbox" id="nav-5-15">
+    
+    <label class="md-nav__link" for="nav-5-15">
       Video
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-15">
+        Video
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/screen/" title="Screen" class="md-nav__link">
+      Screen
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1241,6 +1272,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#isnullorempty" title="isNullOrEmpty" class="md-nav__link">
+    isNullOrEmpty
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1264,7 +1302,7 @@
                 
                 
                 <h1 id="string">String</h1>
-<p>Routines for strings. The String object is not supposed to be used directly. The functions below are available for primitive values of the string type.</p>
+<p>Routines for strings. The String object is not supposed to be used directly (generally speaking). The functions below are available for primitive values of the string type.</p>
 <p>Example:</p>
 <pre><code>// Useful string routines
 x = &quot;SurgeScript&quot;.toLowerCase(); // &quot;surgescript&quot;
@@ -1382,6 +1420,24 @@ dst = src.replace(&quot;Surge&quot;, &quot;Gimacian&quot;);
 <p>Converts the string to upper case.</p>
 <p><em>Returns</em></p>
 <p>The string converted to upper case.</p>
+<h4 id="isnullorempty">isNullOrEmpty</h4>
+<p><code>isNullOrEmpty(value)</code></p>
+<p>This method of the <code>String</code> object can be used directly. It checks if the given <code>value</code> is either <code>null</code> or an empty string.
+<em>Available since SurgeScript 0.5.3</em></p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>value</code>: string | null. The value to be tested.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns <code>true</code> if <code>value</code> is either <code>null</code> or an empty string.</p>
+<p><em>Example</em></p>
+<pre><code>name = &quot;Surge&quot;;
+//name = &quot;&quot;;
+//name = null;
+
+if(!String.isNullOrEmpty(name))
+    Console.print(name);
+</code></pre>
                 
                   
                 

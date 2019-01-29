@@ -524,6 +524,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#clear" title="clear" class="md-nav__link">
+    clear
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#indexof" title="indexOf" class="md-nav__link">
     indexOf
   </a>
@@ -1126,10 +1133,34 @@
           
 
 
-  <li class="md-nav__item">
-    <a href="../../engine/video/" title="Video" class="md-nav__link">
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-15" type="checkbox" id="nav-5-15">
+    
+    <label class="md-nav__link" for="nav-5-15">
       Video
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-15">
+        Video
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/screen/" title="Screen" class="md-nav__link">
+      Screen
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1223,6 +1254,13 @@
           <li class="md-nav__item">
   <a href="#unshift" title="unshift" class="md-nav__link">
     unshift
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#clear" title="clear" class="md-nav__link">
+    clear
   </a>
   
 </li>
@@ -1393,6 +1431,10 @@ Console.print(characters); // [ &quot;Surge&quot;, &quot;Neon&quot;, &quot;Charg
 <ul>
 <li><code>value</code>: any type. The element to be added to the Array.</li>
 </ul>
+<h4 id="clear">clear</h4>
+<p><code>clear()</code></p>
+<p>Clears the array. It will no longer hold any elements and its length will be set to zero.
+<em>Available since SurgeScript 0.5.3</em></p>
 <h4 id="indexof">indexOf</h4>
 <p><code>indexOf(value)</code></p>
 <p>Search the Array for element <code>value</code> and return its position.</p>

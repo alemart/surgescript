@@ -951,6 +951,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#playerinitiallives" title="Player.initialLives" class="md-nav__link">
+    Player.initialLives
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1327,10 +1334,34 @@
           
 
 
-  <li class="md-nav__item">
-    <a href="../video/" title="Video" class="md-nav__link">
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-15" type="checkbox" id="nav-5-15">
+    
+    <label class="md-nav__link" for="nav-5-15">
       Video
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-15">
+        Video
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../screen/" title="Screen" class="md-nav__link">
+      Screen
     </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
         
@@ -1396,6 +1427,13 @@
           <li class="md-nav__item">
   <a href="#playercount" title="Player.count" class="md-nav__link">
     Player.count
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#playerinitiallives" title="Player.initialLives" class="md-nav__link">
+    Player.initialLives
   </a>
   
 </li>
@@ -1753,6 +1791,11 @@ object &quot;Who am I&quot;
 <p>Player count.</p>
 <p><em>Returns</em></p>
 <p>The number of players in the level.</p>
+<h4 id="playerinitiallives">Player.initialLives</h4>
+<p><code>Player.initialLives</code></p>
+<p>The initial number of lives set by the engine.</p>
+<p><em>Returns</em></p>
+<p>The initial number of lives.</p>
 <h2 id="properties">Properties</h2>
 <h4 id="name">name</h4>
 <p><code>name</code>: string, read-only.</p>
