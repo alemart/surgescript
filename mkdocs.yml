@@ -64,5 +64,6 @@ pages:
         - 'UI':
             - 'Text': 'engine/text.md'
         - 'Vector2': 'engine/vector2.md'
-        - 'Video': 'engine/video.md'
+        - 'Video':
+            - 'Screen': 'engine/screen.md'
         - 'Web': 'engine/web.md'

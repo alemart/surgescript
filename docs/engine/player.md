@@ -80,6 +80,16 @@ Player count.
 
 The number of players in the level.
 
+#### Player.initialLives
+
+`Player.initialLives`
+
+The initial number of lives set by the engine.
+
+*Returns*
+
+The initial number of lives.
+
 Properties
 ----------
 

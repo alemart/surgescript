@@ -1,20 +1,26 @@
-Video
-=====
+Screen
+======
 
-Video settings.
+Screen settings.
 
 *Example*
 ```
-using SurgeEngine.Video;
-
 // display the size of the screen
+using SurgeEngine.Video.Screen;
+
 object "Application"
 {
+    width = Screen.width;
+    height = Screen.height;
+
     state "main"
     {
-        width = Video.screenWidth;
-        height = Video.screenHeight;
         Console.print(width + "x" + height);
+        state = "done";
+    }
+
+    state "done"
+    {
     }
 }
 ```
@@ -22,14 +28,14 @@ object "Application"
 Properties
 ----------
 
-#### screenWidth
+#### width
 
-`screenWidth`: number, read-only.
+`width`: number, read-only.
 
 The width of the screen, in pixels.
 
-#### screenHeight
+#### height
 
-`screenHeight`: number, read-only.
+`height`: number, read-only.
 
 The height of the screen, in pixels.
