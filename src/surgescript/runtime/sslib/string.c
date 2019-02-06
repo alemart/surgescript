@@ -140,22 +140,23 @@ surgescript_var_t* fun_call(surgescript_object_t* object, const surgescript_var_
 surgescript_var_t* fun_getlength(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* str = surgescript_var_fast_get_string(param[0]);
-    size_t count = 0;
-    countCodePoints((uint8_t*)str, &count);
-    return surgescript_var_set_number(surgescript_var_create(), count);
+    return surgescript_var_set_number(surgescript_var_create(), u8_strlen(str));
 }
 
 /* character at */
 surgescript_var_t* fun_get(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char chr[5] = { 0, 0, 0, 0, 0 };
     const char* str = surgescript_var_fast_get_string(param[0]);
-    size_t index = surgescript_var_get_number(param[1]);
-    uint32_t widechar = codePointAt((uint8_t*)str, index);
+    int index = (int)surgescript_var_get_number(param[1]);
+    char chr[7] = { 0 };
 
-    if(widechar) /* valid utf-8 string (up to index) */
-        u8_wc_toutf8(chr, widechar); /* this does not put the ending '\0' */
-    
+    if(index >= 0 && index < u8_strlen(str)) {
+        size_t offset = u8_offset(str, index);
+        size_t seq_len = u8_seqlen(str + offset);
+        for(int i = 0; i < sizeof(chr) - 1 && seq_len--; i++)
+            chr[i] = str[offset + i];
+    }
+
     return surgescript_var_set_string(surgescript_var_create(), chr);
 }
 
@@ -181,16 +182,18 @@ surgescript_var_t* fun_indexof(surgescript_object_t* object, const surgescript_v
 /* returns a substring beginning at param[1] having length param[2] */
 surgescript_var_t* fun_substr(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    char* substr;
     const char* str = surgescript_var_fast_get_string(param[0]), *begin, *end;
     int start = surgescript_var_get_number(param[1]);
     int length = surgescript_var_get_number(param[2]);
     surgescript_var_t* var = surgescript_var_create();
-    size_t utf8len = 0;
+    size_t utf8len = u8_strlen(str);
+    char* substr;
 
     /* sanity check */
-    countCodePoints((uint8_t*)str, &utf8len);
-    start = ssclamp(start, 0, (int)utf8len);
+    if(start < 0)
+        start = (int)utf8len - (-start % (int)utf8len);
+    else if(start > (int)utf8len)
+        start = (int)utf8len;
     length = ssclamp(length, 0, (int)utf8len - start);
 
     /* extract the substring */

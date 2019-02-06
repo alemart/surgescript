@@ -63,7 +63,7 @@ object "SurgeScriptTest"
         test(2 + "3" == "23") || fail(19);
         test("2" + 3 == "23") || fail(20);
         test("test".substr(2, 0) == "") || fail(21);
-        test("test".substr(-1, 9999) == "test") || fail(22);
+        test("test".substr(-1, 9999) == "t") || fail(22);
         test("test".substr(-1, 1) == "t") || fail(23);
         test("rgba"[-1] == "") || fail(24);
         test("rgba"[4] == "") || fail(25);
@@ -93,6 +93,8 @@ object "SurgeScriptTest"
         test(0 !== "0" && 0 == "0") || fail(49);
         test(state == "main") || fail(50);
         test(state != null) || fail(51);
+        test("test".substr(4, 1) == "" && "test".substr(-1, 1) == "t") || fail(52);
+        test("test".substr(3, 50) == "t") || fail(53);
         end();
     }
 

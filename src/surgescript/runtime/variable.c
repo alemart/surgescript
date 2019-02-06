@@ -94,10 +94,11 @@ static surgescript_varbucket_t* varpool_currbucket = NULL;
 #endif
 
 /* helpers */
+static const int typecode[] = { 0, 'b', 'n', 's', 'o' };
 #define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
                                     (var)->string = ssfree((var)->string); /* this will clear all bits */
 static inline bool is_number(const char* str);
-static const int typecode[] = { 0, 'b', 'n', 's', 'o' };
+static inline void convert_to_ascii(char* str);
 
 /* -------------------------------
  * public methods
@@ -192,11 +193,13 @@ surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char
     static const int MAXLEN = 1048576 - 1; /* 1 MB */
 
     RELEASE_DATA(var);
-    if(string && strlen(string) <= MAXLEN) {
+    if(string != NULL && strlen(string) <= MAXLEN) {
         var->type = SSVAR_STRING;
-        var->string = IsUTF8((uint8_t*)string) ? ssstrdup(string) : str2utf8(string); /* ensures all strings are UTF-8 encoded */
+        var->string = ssstrdup(string);
+        if(!u8_isvalid(var->string, strlen(var->string)))
+            convert_to_ascii(var->string);
     }
-    else if(!string) {
+    else if(string == NULL) {
         var->type = SSVAR_STRING;
         var->string = ssstrdup("");
     }
@@ -671,6 +674,18 @@ bool is_number(const char* str)
     return true;
 }
 
+/* convert string to ascii */
+void convert_to_ascii(char* str)
+{
+    char *p, *q;
+
+    for(q = p = str; *p; p++) {
+        if(!(*p & 0x80))
+            *(q++) = *p;
+    }
+
+    *q = 0;
+}
 
 /* private var pool routines */
 #ifndef DISABLE_VARPOOL
