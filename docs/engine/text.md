@@ -76,6 +76,12 @@ The alignment of the text. One of the following: *"left"*, *"center"*, *"right"*
 
 Is the Text object visible?
 
+#### maxlength
+
+`maxlength`: number.
+
+The maximum number of characters to be displayed, ignoring *<color>* tags and spaces.
+
 #### maxWidth
 
 `maxWidth`: number.
