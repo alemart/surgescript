@@ -129,6 +129,18 @@ object "SurgeScriptTest"
         test(2 !== 3) || fail(26);
         test(1 === 1) || fail(27);
         test(1.equals(1) && !2.equals("2")) || fail(28);
+        test(5 % 3 == 2) || fail(29);
+        test(-5 % 3 == -2) || fail(30);
+        test(5 % -3 == 2) || fail(31);
+        test(-5 % -3 == -2) || fail(32);
+        test(0 % 1 == 0) || fail(33);
+        test(-0 % 1 == 0) || fail(34);
+        test((5 % 0).isNaN()) || fail(35);
+        test((5 % Math.NaN).isNaN()) || fail(36);
+        test((Math.infinity % 2).isNaN()) || fail(37);
+        test((-5 % Math.infinity).equals(-5)) || fail(38);
+        test(5 + 5 % 3 == 7) || fail(39);
+        test(5 + 5 % -3 * -2 == 1) || fail(40);
         end();
     }
 

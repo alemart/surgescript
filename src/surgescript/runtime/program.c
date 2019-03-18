@@ -519,6 +519,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 surgescript_var_set_number(t(a), -INFINITY * fast_sign1(surgescript_var_get_number(t(b))));
             break;
 
+        case SSOP_MOD:
+            surgescript_var_set_number(t(a), fmod(surgescript_var_get_number(t(a)), surgescript_var_get_number(t(b))));
+            break;
+
         case SSOP_NEG:
             surgescript_var_set_number(t(a), -surgescript_var_get_number(t(b)));
             break;

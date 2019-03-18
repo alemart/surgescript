@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,7 @@
     F( SSOP_SUB, "sub" )                                 /* t[a] -= t[b] */ \
     F( SSOP_MUL, "mul" )                                 /* t[a] *= t[b] */ \
     F( SSOP_DIV, "div" )                                 /* t[a] /= t[b] */ \
+    F( SSOP_MOD, "mod" )                                 /* t[a] %= t[b] */ \
     F( SSOP_NEG, "neg" )                                 /* t[a] = -t[b] */ \
     F( SSOP_LNOT, "lnot" )                               /* t[a] = !t[b] */ \
     F( SSOP_NOT, "not" )                                 /* t[a] = ~t[b] */ \

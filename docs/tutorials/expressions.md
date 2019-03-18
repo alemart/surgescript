@@ -37,6 +37,9 @@ Operator|Meaning
 - | Subtraction
 * | Multiplication
 / | Division
+% | Remainder
+
+The multiplication, division and remainder operators have precedence over the addition and the subtraction operators.
 
 Examples:
 
@@ -53,6 +56,8 @@ zero = 15 - 10 - 5;
 one = 15 - (10 + 4);
 twelve = (2 + 2) * 3;
 prime = -(-15 + 8);
+seven = 5 + 5 % 3;
+negativeTwo = -5 % 3;
 ```
 
 Comparison operators
@@ -144,11 +149,12 @@ Let's see what kind of assignment expressions we have:
 
 Expression|Translates to|Meaning
 ----------|-------------|-------
-`x = value`|`x = value`|Assigns *value* to x
-`x += value`|`x = x + value`|Adds *value* to x
-`x -= value`|`x = x - value`|Subtracts *value* from x
-`x *= value`|`x = x * value`|Multiplies x by *value*
-`x /= value`|`x = x / value`|Divides x by *value*
+`x = value`|`x = value`|Assigns `value` to `x`
+`x += value`|`x = x + value`|Adds `value` to `x`
+`x -= value`|`x = x - value`|Subtracts `value` from `x`
+`x *= value`|`x = x * value`|Multiplies `x` by `value`
+`x /= value`|`x = x / value`|Divides `x` by `value`
+`x %= value`|`x = x % value`|Sets `x` to the remainder of `x / value`
 
 Example:
 
@@ -156,6 +162,10 @@ Example:
 language = "Surge";
 language += "Script";
 // language now evaluates to "SurgeScript"
+
+number = 5;
+number += 2;
+// number now evaluates to 7
 ```
 
 Increment and decrement

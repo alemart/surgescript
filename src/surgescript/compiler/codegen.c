@@ -335,6 +335,11 @@ void emit_multiplicativeexpr2(surgescript_nodecontext_t context, const char* mul
             SSASM(SSOP_XCHG, T1, T0);
             break;
 
+        case '%':
+            SSASM(SSOP_MOD, T1, T0);
+            SSASM(SSOP_XCHG, T1, T0);
+            break;
+
         default:
             ssfatal("Compile Error: invalid multiplicative expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
             break;
@@ -466,6 +471,7 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
         case '-':
         case '*':
         case '/':
+        case '%':
             SSASM(SSOP_XCHG, T0, T3); /* t3 = value <assignexpr> */
             SSASM(SSOP_POP, T1); /* t1 = key <expr> */
             SSASM(SSOP_POP, T0); /* t0 = pointer */
@@ -504,8 +510,10 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
                 SSASM(SSOP_SUB, T0, T1); /* t0 = dict.get(<expr>) - <assignexpr> */
             else if(*assignop == '*')
                 SSASM(SSOP_MUL, T0, T1); /* t0 = dict.get(<expr>) * <assignexpr> */
-            else
+            else if(*assignop == '/')
                 SSASM(SSOP_DIV, T0, T1); /* t0 = dict.get(<expr>) / <assignexpr> */
+            else
+                SSASM(SSOP_MOD, T0, T1); /* t0 = dict.get(<expr>) % <assignexpr> */
 
             /* call set() */
             SSASM(SSOP_PUSH, T0);

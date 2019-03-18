@@ -256,6 +256,8 @@ If the fraction of `x` is 0.5, this function uses the [commercial rounding](http
 
 Modulus function. Used to get the remainder of a division.
 
+*Deprecated since SurgeScript 0.5.3. Use the remainder operator (%) instead, e.g.* `x % y`
+
 *Arguments*
 
 * `x`: number.
