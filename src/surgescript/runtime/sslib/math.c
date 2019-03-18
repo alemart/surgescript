@@ -82,7 +82,7 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "get_deg2rad", fun_getdeg2rad, 0);
     surgescript_vm_bind(vm, "Math", "get_rad2deg", fun_getrad2deg, 0);
     surgescript_vm_bind(vm, "Math", "get_infinity", fun_getinfinity, 0);
-    surgescript_vm_bind(vm, "Math", "get_nan", fun_getnan, 0);
+    surgescript_vm_bind(vm, "Math", "get_NaN", fun_getnan, 0);
     surgescript_vm_bind(vm, "Math", "random", fun_random, 0);
     surgescript_vm_bind(vm, "Math", "sin", fun_sin, 1);
     surgescript_vm_bind(vm, "Math", "cos", fun_cos, 1);
