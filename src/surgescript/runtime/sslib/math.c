@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ static surgescript_var_t* fun_getpi(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_getdeg2rad(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getrad2deg(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getinfinity(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getnan(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_random(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_sin(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_cos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -81,6 +82,7 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "get_deg2rad", fun_getdeg2rad, 0);
     surgescript_vm_bind(vm, "Math", "get_rad2deg", fun_getrad2deg, 0);
     surgescript_vm_bind(vm, "Math", "get_infinity", fun_getinfinity, 0);
+    surgescript_vm_bind(vm, "Math", "get_nan", fun_getnan, 0);
     surgescript_vm_bind(vm, "Math", "random", fun_random, 0);
     surgescript_vm_bind(vm, "Math", "sin", fun_sin, 1);
     surgescript_vm_bind(vm, "Math", "cos", fun_cos, 1);
@@ -161,6 +163,12 @@ surgescript_var_t* fun_getrad2deg(surgescript_object_t* object, const surgescrip
 surgescript_var_t* fun_getinfinity(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     return surgescript_var_set_number(surgescript_var_create(), INFINITY);
+}
+
+/* constant: a representation of NaN (Not-a-Number) */
+surgescript_var_t* fun_getnan(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_number(surgescript_var_create(), NAN);
 }
 
 /* random(): returns a random number between 0 (inclusive) and 1 (exclusive) */
