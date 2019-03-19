@@ -11,7 +11,7 @@ project(surgescript)
 # Sources
 set(
     SURGESCRIPT_SOURCES
-    src/surgescript/compiler/codegen.c
+    src/surgescript/compiler/asm.c
     src/surgescript/compiler/lexer.c
     src/surgescript/compiler/parser.c
     src/surgescript/compiler/symtable.c
@@ -54,7 +54,7 @@ set(
 # Headers
 set(
     SURGESCRIPT_HEADERS
-    src/surgescript/compiler/codegen.h
+    src/surgescript/compiler/asm.h
     src/surgescript/compiler/lexer.h
     src/surgescript/compiler/nodecontext.h
     src/surgescript/compiler/parser.h

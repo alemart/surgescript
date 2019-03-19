@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * compiler/codegen.h
+ * compiler/asm.h
  * SurgeScript Compiler: Code Generator
  */
 

@@ -30,7 +30,7 @@
 #include "token.h"
 #include "nodecontext.h"
 #include "symtable.h"
-#include "codegen.h"
+#include "asm.h"
 #include "../runtime/object.h"
 #include "../runtime/object_manager.h"
 #include "../runtime/tag_system.h"

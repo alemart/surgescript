@@ -15,13 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * compiler/codegen.c
+ * compiler/asm.c
  * SurgeScript Compiler: Code Generator
  */
 
 #include <ctype.h>
 #include <string.h>
-#include "codegen.h"
+#include "asm.h"
 #include "symtable.h"
 #include "../runtime/program.h"
 #include "../runtime/program_pool.h"
