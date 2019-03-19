@@ -106,40 +106,6 @@ object "TestObject"
 ```
 
 
-#### timeout
-
-`timeout(seconds)`
-
-Checks if the object has been on the same state for more than a given amount of `seconds`.
-
-*Arguments*
-
-* `seconds`: number. The number of seconds.
-
-*Returns*
-
-Returns `true` if the object has been on the current state for more than `seconds` seconds.
-
-*Example*
-
-```
-object "Time Test"
-{
-    state "main"
-    {
-        // Will wait for 2 seconds before changing the state
-        if(timeout(2.0))
-            state = "done";
-    }
-
-    state "done"
-    {
-        Console.print("Done!");
-        destroy();
-    }
-}
-```
-
 #### toString
 
 `toString()`
