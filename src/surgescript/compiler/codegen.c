@@ -702,6 +702,15 @@ void emit_dictdeclvalue(surgescript_nodecontext_t context)
     SSASM(SSOP_POPN, U(2));
 }
 
+void emit_timeout(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_SELF, T1);
+    SSASM(SSOP_PUSH, T1); /* this */
+    SSASM(SSOP_PUSH, T0); /* <expr> */
+    SSASM(SSOP_CALL, TEXT("__timeout"), U(1));
+    SSASM(SSOP_POPN, U(2));
+}
+
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope)
 {

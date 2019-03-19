@@ -74,7 +74,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "equals", fun_equals, 1);
     surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
-    surgescript_vm_bind(vm, "Object", "timeout", fun_timeout, 1);
+    surgescript_vm_bind(vm, "Object", "__timeout", fun_timeout, 1);
     surgescript_vm_bind(vm, "Object", "__invoke", fun_invoke, 2);
     surgescript_vm_bind(vm, "Object", "get___name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "get___active", fun_getactive, 0);

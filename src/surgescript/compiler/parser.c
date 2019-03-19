@@ -1002,6 +1002,14 @@ void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             emit_unarytype(context);
         }
     }
+    else if(optmatch(parser, SSTOK_TIMEOUT)) {
+        if(!is_state_context(context))
+            ssfatal("Compile Error: timeout can only be used inside a state (see %s:%d).", context.source_file, surgescript_token_linenumber(parser->previous));
+        match(parser, SSTOK_LPAREN);
+        expr(parser, context);
+        emit_timeout(context);
+        match(parser, SSTOK_RPAREN);
+    }
     else
         postfixexpr(parser, context);
 }
