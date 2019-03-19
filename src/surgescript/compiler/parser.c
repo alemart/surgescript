@@ -79,6 +79,7 @@ static void release_annotations(char** annotations);
 static void process_annotations(surgescript_parser_t* parser, char** annotations, const char* object_name);
 static surgescript_program_t* make_file_program(const char* source_file);
 static void pick_non_natives(const char* program_name, void* data);
+static void remove_object_definition(surgescript_programpool_t* pool, const char* object_name);
 
 /* non-terminals */
 static void importlist(surgescript_parser_t* parser);
@@ -495,6 +496,25 @@ void pick_non_natives(const char* program_name, void* data)
     }
 }
 
+/* removes a previously defined object */
+void remove_object_definition(surgescript_programpool_t* pool, const char* object_name)
+{
+    char** programs = NULL; int count = 0;
+    void* data[] = { pool, (void*)object_name, &count, &programs };
+
+    /* remove all programs (non-natives) */
+    surgescript_programpool_foreach_ex(pool, object_name, data, pick_non_natives);
+    if(programs != NULL) {
+        for(int i = 0; i < count; i++) {
+            surgescript_programpool_delete(pool, object_name, programs[i]);
+            ssfree(programs[i]);
+        }
+        ssfree(programs);
+    }
+    
+    /* FIXME: remove all tags of object_name (ps: how about tags added in C?) */
+}
+
 
 
 
@@ -530,21 +550,8 @@ void object(surgescript_parser_t* parser)
     /* validate */
     if(surgescript_programpool_exists(parser->program_pool, object_name, "state:main")) {
         if(parser->flags & SSPARSER_ALLOW_DUPLICATES) {
-            char** programs = NULL; int count = 0;
-            void* data[] = { parser->program_pool, object_name, &count, &programs };
-
             sslog("Warning: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
-            surgescript_programpool_foreach_ex(parser->program_pool, object_name, data, pick_non_natives);
-
-            if(programs != NULL) {
-                for(int i = 0; i < count; i++) {
-                    surgescript_programpool_delete(parser->program_pool, object_name, programs[i]);
-                    ssfree(programs[i]);
-                }
-                ssfree(programs);
-            }
-            
-            /* FIXME: remove all tags of object_name (ps: how about tags added in C?) */
+            remove_object_definition(parser->program_pool, object_name);
         }
         else
             ssfatal("Compile Error: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
