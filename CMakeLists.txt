@@ -100,7 +100,7 @@ if(WIN32 AND MINGW)
     if(NOT CMAKE_RC_COMPILER)
         set(CMAKE_RC_COMPILER windres)
     endif()
-    execute_process(COMMAND "${CMAKE_RC_COMPILER}" -O coff -o "${CMAKE_CURRENT_BINARY_DIR}/iconwin.res" -i "${CMAKE_SOURCE_DIR}/src/surgescript/util/iconwin.rc" -I "${CMAKE_SOURCE_DIR}")
+    execute_process(COMMAND "${CMAKE_RC_COMPILER}" -O coff -o "${CMAKE_CURRENT_BINARY_DIR}/iconwin.res" -i "${CMAKE_SOURCE_DIR}/src/surgescript/resources/iconwin.rc" -I "${CMAKE_SOURCE_DIR}")
     set_target_properties(surgescript.bin PROPERTIES LINK_FLAGS "\"${CMAKE_CURRENT_BINARY_DIR}/iconwin.res\"")
 endif()
 
