@@ -81,6 +81,7 @@ static void process_annotations(surgescript_parser_t* parser, char** annotations
 static surgescript_program_t* make_file_program(const char* source_file);
 static void pick_non_natives(const char* program_name, void* data);
 static void remove_object_definition(surgescript_programpool_t* pool, const char* object_name);
+static bool is_state_context(surgescript_nodecontext_t context);
 
 /* non-terminals */
 static void importlist(surgescript_parser_t* parser);
@@ -334,9 +335,9 @@ void unmatch(surgescript_parser_t* parser)
         parser->lookahead = surgescript_lexer_scan(parser->lexer);
     }
     else if(parser->previous)
-        ssfatal("Can\'t unmatch symbol \"%s\" on %s:%d.", surgescript_tokentype_name(surgescript_token_type(parser->previous)), parser->filename, surgescript_token_linenumber(parser->previous));
+        ssfatal("Parse Error: can\'t unmatch symbol \"%s\" on %s:%d.", surgescript_tokentype_name(surgescript_token_type(parser->previous)), parser->filename, surgescript_token_linenumber(parser->previous));
     else
-        ssfatal("Can\'t unmatch symbol on %s.", parser->filename);
+        ssfatal("Parse Error: can\'t unmatch symbol on %s.", parser->filename);
 }
 
 /* throw an error if the lookahead is not of the expected type */
@@ -449,6 +450,7 @@ void create_getter(surgescript_parser_t* parser, surgescript_nodecontext_t conte
     emit_vargetter(nodecontext(
         context.source_file,
         context.object_name,
+        getter_name,
         context.symtable, /* reuse the same table; no locals */
         getter
     ), identifier);
@@ -470,6 +472,7 @@ void create_setter(surgescript_parser_t* parser, surgescript_nodecontext_t conte
     emit_varsetter(nodecontext(
         context.source_file,
         context.object_name,
+        setter_name,
         context.symtable, /* reuse the same table; no locals */
         setter
     ), identifier);
@@ -525,6 +528,12 @@ void remove_object_definition(surgescript_programpool_t* pool, const char* objec
     /* FIXME: remove all tags of object_name (ps: how about tags added in C?) */
 }
 
+/* checks if program_name is encoding the name of a state */
+/* checks if the parsing context is of a state */
+bool is_state_context(surgescript_nodecontext_t context)
+{
+    return context.program_name != NULL && strncmp(context.program_name, "state:", 6) == 0;
+}
 
 
 
@@ -553,6 +562,7 @@ void object(surgescript_parser_t* parser)
         (object_name = ssstrdup(
             surgescript_token_lexeme(parser->lookahead)
         )),
+        NULL,
         surgescript_symtable_create(parser->base_table), /* symbol table */
         surgescript_program_create(0) /* object constructor */
     );
@@ -707,17 +717,18 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     const char* state_name = surgescript_token_lexeme(parser->lookahead);
     char* program_name = ssmalloc((1 + strlen(prefix) + strlen(state_name)) * sizeof(*program_name));
 
+    /* read state name & generate function name */
+    strcat(strcpy(program_name, prefix), state_name);
+    match(parser, SSTOK_STRING);
+
     /* create context */
     context = nodecontext(
         context.source_file,
         context.object_name,
+        program_name,
         surgescript_symtable_create(context.symtable), /* new symbol table for local variables */
         surgescript_program_create(0)
     );
-
-    /* read state name & generate function name */
-    strcat(strcpy(program_name, prefix), state_name);
-    match(parser, SSTOK_STRING);
 
     /* duplicate check */
     if(surgescript_programpool_shallowcheck(parser->program_pool, context.object_name, program_name))
@@ -773,6 +784,7 @@ void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     context = nodecontext(
         context.source_file,
         context.object_name,
+        program_name,
         surgescript_symtable_create(context.symtable), /* new symbol table for local variables */
         surgescript_program_create(num_arguments)
     );
@@ -1415,15 +1427,20 @@ void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     match(parser, SSTOK_RETURN);
+
     if(!optmatch(parser, SSTOK_SEMICOLON)) {
-        expr(parser, context);
-        match(parser, SSTOK_SEMICOLON);
-        emit_ret(context);
+        if(!is_state_context(context)) {
+            expr(parser, context);
+            match(parser, SSTOK_SEMICOLON);
+            emit_ret(context);
+            return;
+        }
+        else
+            ssfatal("Compile Error: found a non-empty return statement inside a state in %s:%d. Did you mean \"return;\"?", context.source_file, surgescript_token_linenumber(parser->previous));
     }
-    else {
-        emit_null(context);
-        emit_ret(context);
-    }
+
+    emit_null(context);
+    emit_ret(context);
 }
 
 /* misc */

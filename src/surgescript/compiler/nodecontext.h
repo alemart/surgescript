@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ typedef struct surgescript_nodecontext_t
 {
     const char* source_file;
     const char* object_name;
+    const char* program_name; /* may be NULL */
     struct surgescript_symtable_t* symtable;
     surgescript_program_t* program;
     surgescript_program_label_t loop_begin;
@@ -38,9 +39,9 @@ typedef struct surgescript_nodecontext_t
 } surgescript_nodecontext_t;
 
 /* node context constructor */
-static inline surgescript_nodecontext_t nodecontext(const char* source_file, const char* object_name, struct surgescript_symtable_t* symbol_table, surgescript_program_t* program)
+static inline surgescript_nodecontext_t nodecontext(const char* source_file, const char* object_name, const char* program_name, struct surgescript_symtable_t* symbol_table, surgescript_program_t* program)
 {
-    surgescript_nodecontext_t ctx = { source_file, object_name, symbol_table, program, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL };
+    surgescript_nodecontext_t ctx = { source_file, object_name, program_name, symbol_table, program, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL };
     return ctx;
 }
 
