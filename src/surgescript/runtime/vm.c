@@ -328,7 +328,7 @@ surgescript_object_t* surgescript_vm_find_object(surgescript_vm_t* vm, const cha
  */
 void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const char* fun_name, surgescript_program_cfunction_t cfun, int num_params)
 {
-    surgescript_program_t* cprogram = surgescript_cprogram_create(num_params, cfun);
+    surgescript_program_t* cprogram = surgescript_program_create_native(num_params, cfun);
     surgescript_programpool_replace(vm->program_pool, object_name, fun_name, cprogram);
 }
 

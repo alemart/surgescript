@@ -59,7 +59,8 @@ struct surgescript_programpool_metadata_t /* we'll store the list of program nam
 };
 
 static void insert_metadata(surgescript_programpool_t* pool, const char* object_name, const char* program_name);
-static void delete_metadata(surgescript_programpool_t* pool, const char* object_name);
+static void remove_metadata(surgescript_programpool_t* pool, const char* object_name, const char* program_name);
+static void remove_object_metadata(surgescript_programpool_t* pool, const char* object_name);
 static void clear_metadata(surgescript_programpool_t* pool);
 static void traverse_metadata(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*,void*));
 static void traverse_adapter(const char* program_name, void* callback);
@@ -240,6 +241,7 @@ bool surgescript_programpool_replace(surgescript_programpool_t* pool, const char
         return surgescript_programpool_put(pool, object_name, program_name, program); /* program doesn't exist yet */
 }
 
+
 /*
  * surgescript_programpool_purge()
  * Deletes all the programs of the specified object
@@ -248,10 +250,34 @@ void surgescript_programpool_purge(surgescript_programpool_t* pool, const char* 
 {
     void* data[] = { pool, (void*)object_name };
     surgescript_programpool_foreach_ex(pool, object_name, data, delete_program);
-    delete_metadata(pool, object_name);
+    remove_object_metadata(pool, object_name);
 }
 
 
+/*
+ * surgescript_programpool_delete()
+ * Deletes a programs from the specified object
+ */
+void surgescript_programpool_delete(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
+{
+    surgescript_programpool_hashpair_t* pair = NULL;
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    
+    /* find the program */
+    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
+    delete_signature(signature);
+
+    /* delete the program */
+    if(pair != NULL) {
+        HASH_DEL(pool->hash, pair);
+        delete_signature(pair->signature);
+        surgescript_program_destroy(pair->program);
+        ssfree(pair);
+    }
+
+    /* delete metadata */
+    remove_metadata(pool, object_name, program_name);
+}
 
 
 /* -------------------------------
@@ -277,11 +303,34 @@ void insert_metadata(surgescript_programpool_t* pool, const char* object_name, c
     ssarray_push(m->program_name, ssstrdup(program_name));
 }
 
-void delete_metadata(surgescript_programpool_t* pool, const char* object_name)
+void remove_metadata(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
     surgescript_programpool_metadata_t *m = NULL;
     HASH_FIND(hh, pool->meta, object_name, strlen(object_name), m);
 
+    if(m != NULL) {
+        int index = -1;
+
+        /* find the program */
+        for(int i = 0; i < ssarray_length(m->program_name) && index < 0; i++) {
+            if(strcmp(m->program_name[i], program_name) == 0)
+                index = i;
+        }
+
+        /* delete the program */
+        if(index >= 0) {
+            ssfree(m->program_name[index]);
+            ssarray_remove(m->program_name, index);
+        }
+    }
+}
+
+void remove_object_metadata(surgescript_programpool_t* pool, const char* object_name)
+{
+    surgescript_programpool_metadata_t *m = NULL;
+    HASH_FIND(hh, pool->meta, object_name, strlen(object_name), m);
+
+    /* delete all programs of object_name */
     if(m != NULL) {
         HASH_DEL(pool->meta, m);
         for(int i = 0; i < ssarray_length(m->program_name); i++)
@@ -296,6 +345,7 @@ void clear_metadata(surgescript_programpool_t* pool)
 {
     surgescript_programpool_metadata_t *it, *tmp;
 
+    /* delete all programs of all objects */
     HASH_ITER(hh, pool->meta, it, tmp) {
         HASH_DEL(pool->meta, it);
         for(int i = 0; i < ssarray_length(it->program_name); i++)

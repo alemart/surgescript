@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,15 +133,21 @@ typedef struct surgescript_parser_t surgescript_parser_t;
 struct surgescript_programpool_t;
 struct surgescript_tagsystem_t;
 
+/* parser flags (bitwise OR) */
+typedef enum surgescript_parser_flags_t {
+    SSPARSER_DEFAULTS = 0, /* default configuration */
+    SSPARSER_ALLOW_DUPLICATES = 1, /* allows duplicate objects */
+} surgescript_parser_flags_t;
+
 /* create & destroy */
 surgescript_parser_t* surgescript_parser_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system);
 surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser);
 
-/* parse a script */
-bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* absolute_path);
-bool surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_in_memory);
-
-/* foreach plugin object found in any parsed script, run fun(object_name, data) */
-void surgescript_parser_foreach_plugin(surgescript_parser_t* parser, void* data, void (*fun)(const char*,void*));
+/* operations */
+bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* absolute_path); /* parse a script file */
+bool surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_in_memory); /* parse a script (in memory) */
+void surgescript_parser_foreach_plugin(surgescript_parser_t* parser, void* data, void (*fun)(const char*,void*)); /* foreach plugin object found in any parsed script, run fun(object_name, data) */
+void surgescript_parser_set_flags(surgescript_parser_t* parser, surgescript_parser_flags_t flags); /* set parser options (flags) */
+surgescript_parser_flags_t surgescript_parser_get_flags(surgescript_parser_t* parser); /* get parser flags */
 
 #endif

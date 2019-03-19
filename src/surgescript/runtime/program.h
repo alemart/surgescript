@@ -83,7 +83,7 @@ static inline surgescript_program_operand_t surgescript_program_operand_i(int i)
 
 /* life-cycle: create, destroy & run */
 surgescript_program_t* surgescript_program_create(int arity); /* create a new program */
-surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_program_cfunction_t cfunction); /* a C-program must return a newly-allocated surgescript_var_t*, or NULL */
+surgescript_program_t* surgescript_program_create_native(int arity, surgescript_program_cfunction_t cfunction); /* a native C-program must return a newly-allocated surgescript_var_t*, or NULL */
 surgescript_program_t* surgescript_program_destroy(surgescript_program_t* program); /* called by the program pool */
 void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t* runtime_environment, int num_params); /* low-level program call; you'll need to push the stack parameters by yourself */
 
@@ -100,5 +100,6 @@ int surgescript_program_add_text(surgescript_program_t* program, const char* tex
 int surgescript_program_find_text(const surgescript_program_t* program, const char* text); /* finds the first index such that text[index] == text, or -1 if not found */
 int surgescript_program_text_count(const surgescript_program_t* program); /* how many string literals exist in the program? */
 void surgescript_program_dump(surgescript_program_t* program, FILE* fp); /* dump the program to a file */
+bool surgescript_program_is_native(const surgescript_program_t* program); /* is the program native (i.e., written in C)? */
 
 #endif

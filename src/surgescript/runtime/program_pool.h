@@ -40,6 +40,7 @@ bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const
 void surgescript_programpool_foreach(surgescript_programpool_t* pool, const char* object_name, void (*callback)(const char*)); /* for each program of object_name... */
 void surgescript_programpool_foreach_ex(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*, void*)); /* same as above with an added data parameter */
 bool surgescript_programpool_replace(surgescript_programpool_t* pool, const char* object_name, const char* program_name, struct surgescript_program_t* program); /* replaces a program */
+void surgescript_programpool_delete(surgescript_programpool_t* pool, const char* object_name, const char* program_name); /* deletes a programs from the specified object */
 void surgescript_programpool_purge(surgescript_programpool_t* pool, const char* object_name); /* deletes all programs from the specified object */
 
 #endif

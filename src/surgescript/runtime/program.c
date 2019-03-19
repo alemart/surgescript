@@ -112,11 +112,11 @@ surgescript_program_t* surgescript_program_create(int arity)
 }
 
 /*
- * surgescript_cprogram_create()
+ * surgescript_program_create_native()
  * Creates a program that encapsulates a C-function
  * Please note that this C-function must return a newly-allocated surgescript_var_t*, or NULL
  */
-surgescript_program_t* surgescript_cprogram_create(int arity, surgescript_program_cfunction_t cfunction)
+surgescript_program_t* surgescript_program_create_native(int arity, surgescript_program_cfunction_t cfunction)
 {
     surgescript_cprogram_t* cprogram = ssmalloc(sizeof *cprogram);
     cprogram->cfunction = cfunction;
@@ -310,6 +310,16 @@ void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t
         surgescript_object_t* owner = surgescript_renv_owner(runtime_environment);
         ssfatal("Runtime Error: internal program call - function of object \"%s\" expects %d parameters, but received %d.", surgescript_object_name(owner), program->arity, num_params);
     }
+}
+
+
+/*
+ * surgescript_program_is_native()
+ * Is the program native (i.e., written in C)?
+ */
+bool surgescript_program_is_native(const surgescript_program_t* program)
+{
+    return program->run == run_cprogram;
 }
 
 

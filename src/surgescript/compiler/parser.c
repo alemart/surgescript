@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,7 @@ struct surgescript_parser_t
     surgescript_tagsystem_t* tag_system; /* reference to the tag system */
     surgescript_symtable_t* base_table; /* valid symbols in the current file (code unit) */
     SSARRAY(char*, known_plugins); /* known plugins in all files (the names of the objects) */
+    surgescript_parser_flags_t flags;
 };
 
 /* helpers */
@@ -77,6 +78,7 @@ static void read_annotations(surgescript_parser_t* parser, char*** annotations);
 static void release_annotations(char** annotations);
 static void process_annotations(surgescript_parser_t* parser, char** annotations, const char* object_name);
 static surgescript_program_t* make_file_program(const char* source_file);
+static void pick_non_natives(const char* program_name, void* data);
 
 /* non-terminals */
 static void importlist(surgescript_parser_t* parser);
@@ -149,6 +151,7 @@ surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* progr
     parser->program_pool = program_pool;
     parser->tag_system = tag_system;
     parser->base_table = NULL;
+    parser->flags = SSPARSER_DEFAULTS;
     init_plugins_list(parser);
     setlocale(LC_NUMERIC, "C"); /* use '.' as the decimal separator on atof() */
     return parser;
@@ -244,6 +247,27 @@ void surgescript_parser_foreach_plugin(surgescript_parser_t* parser, void* data,
 {
     for(int i = 0; i < ssarray_length(parser->known_plugins); i++)
         fun(parser->known_plugins[i], data);
+}
+
+
+
+/*
+ * surgescript_parser_set_flags()
+ * Set parser options (flags)
+ */
+void surgescript_parser_set_flags(surgescript_parser_t* parser, surgescript_parser_flags_t flags)
+{
+    parser->flags = flags;
+}
+
+
+/*
+ * surgescript_parser_get_flags()
+ * Get parser flags
+ */
+surgescript_parser_flags_t surgescript_parser_get_flags(surgescript_parser_t* parser)
+{
+    return parser->flags;
 }
 
 
@@ -395,7 +419,7 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
     /* do we have a "main" state? */
     if(!surgescript_programpool_exists(parser->program_pool, context.object_name, "state:main")) {
         if(strcmp(context.object_name, "Application") != 0) {
-            surgescript_program_t* cprogram = surgescript_cprogram_create(0, empty_main);
+            surgescript_program_t* cprogram = surgescript_program_create_native(0, empty_main);
             surgescript_programpool_put(parser->program_pool, context.object_name, "state:main", cprogram);
             /*sslog("Object \"%s\" in \"%s\" has omitted its \"main\" state and will be disabled.", context.object_name, context.source_file);*/
         }
@@ -456,6 +480,20 @@ surgescript_program_t* make_file_program(const char* source_file)
     return program;
 }
 
+/* adds non-native programs to the programs[] vector */
+void pick_non_natives(const char* program_name, void* data)
+{
+    surgescript_programpool_t* pool = (surgescript_programpool_t*)(((void**)data)[0]);
+    const char* object_name = (const char*)(((void**)data)[1]);
+    int* count = (int*)(((void**)data)[2]);
+    char*** programs = (char***)(((void**)data)[3]);
+    const surgescript_program_t* existing_program = surgescript_programpool_get(pool, object_name, program_name);
+
+    if(existing_program != NULL && !surgescript_program_is_native(existing_program)) {
+        *programs = ssrealloc(*programs, (++(*count)) * sizeof(char*));
+        (*programs)[*count - 1] = ssstrdup(program_name);
+    }
+}
 
 
 
@@ -490,8 +528,27 @@ void object(surgescript_parser_t* parser)
     );
 
     /* validate */
-    if(surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))
-        ssfatal("Compile Error: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+    if(surgescript_programpool_exists(parser->program_pool, object_name, "state:main")) {
+        if(parser->flags & SSPARSER_ALLOW_DUPLICATES) {
+            char** programs = NULL; int count = 0;
+            void* data[] = { parser->program_pool, object_name, &count, &programs };
+
+            sslog("Warning: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            surgescript_programpool_foreach_ex(parser->program_pool, object_name, data, pick_non_natives);
+
+            if(programs != NULL) {
+                for(int i = 0; i < count; i++) {
+                    surgescript_programpool_delete(parser->program_pool, object_name, programs[i]);
+                    ssfree(programs[i]);
+                }
+                ssfree(programs);
+            }
+            
+            /* FIXME: remove all tags of object_name (ps: how about tags added in C?) */
+        }
+        else
+            ssfatal("Compile Error: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+    }
 
     /* read the object */
     match(parser, SSTOK_STRING);
