@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # SurgeScript
 # A scripting language for games
-# Copyright 2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+# Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
 # ------------------------------------------------------------------------------
 
 # Project info
@@ -94,6 +94,15 @@ add_executable(surgescript.bin src/main.c)
 target_link_libraries(surgescript.bin surgescript)
 target_include_directories(surgescript.bin PRIVATE src)
 set_target_properties(surgescript.bin PROPERTIES OUTPUT_NAME surgescript)
+
+# Windows icon
+if(WIN32 AND MINGW)
+    if(NOT CMAKE_RC_COMPILER)
+        set(CMAKE_RC_COMPILER windres)
+    endif()
+    execute_process(COMMAND "${CMAKE_RC_COMPILER}" -O coff -o "${CMAKE_CURRENT_BINARY_DIR}/iconwin.res" -i "${CMAKE_SOURCE_DIR}/src/surgescript/util/iconwin.rc" -I "${CMAKE_SOURCE_DIR}")
+    set_target_properties(surgescript.bin PROPERTIES LINK_FLAGS "\"${CMAKE_CURRENT_BINARY_DIR}/iconwin.res\"")
+endif()
 
 # Installation rules
 install(DIRECTORY src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
