@@ -711,6 +711,19 @@ void emit_timeout(surgescript_nodecontext_t context)
     SSASM(SSOP_POPN, U(2));
 }
 
+void emit_assert(surgescript_nodecontext_t context, int line)
+{
+    SSASM(SSOP_SELF, T1);
+    SSASM(SSOP_PUSH, T1); /* this */
+    SSASM(SSOP_PUSH, T0); /* <expr> */
+    SSASM(SSOP_MOVS, T0, TEXT(context.source_file));
+    SSASM(SSOP_PUSH, T0); /* file */
+    SSASM(SSOP_MOVF, T0, F(line));
+    SSASM(SSOP_PUSH, T0); /* line number */
+    SSASM(SSOP_CALL, TEXT("__assert"), U(3));
+    SSASM(SSOP_POPN, U(4));
+}
+
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope)
 {

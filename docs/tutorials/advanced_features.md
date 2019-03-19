@@ -24,6 +24,15 @@ fun set(key, value)
 
 Given an object `obj`, the expression `x = obj[key]` is equivalent to `x = obj.get(key)`. Similarly, `obj[key] = value` is equivalent to `obj.set(key, value)`.
 
+Assertions
+----------
+
+The `assert(condition)` statement specifies a `condition` that you expect to be true at a certain point in your code. If that condition turns out to be false, the code will be interrupted with an *assertion failed* error. Example:
+
+```
+assert(name == "Surge"); // will crash if name isn't "Surge"
+```
+
 Functors
 --------
 

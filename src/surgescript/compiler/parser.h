@@ -114,6 +114,7 @@
  *        |  <loopstmt>
  *        |  <jumpstmt>
  *        |  <retstmt>
+ *        |  <miscstmt>
  * <blockstmt> := { <stmtlist> }
  * <exprstmt> := ;
  *            |  <expr> ;
@@ -126,6 +127,7 @@
  *           |  return ;
  * <jumpstmt> := break ;
  *            |  continue ;
+ * <miscstmt> := assert ( <expr> ) ;
  *
  */
 

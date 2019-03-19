@@ -50,6 +50,7 @@ static surgescript_var_t* fun_getactive(surgescript_object_t* object, const surg
 static surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_invoke(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_file(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_assert(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* utilities */
 static void add_to_function_array(const char* fun_name, void* arr);
@@ -76,6 +77,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "__timeout", fun_timeout, 1);
     surgescript_vm_bind(vm, "Object", "__invoke", fun_invoke, 2);
+    surgescript_vm_bind(vm, "Object", "__assert", fun_assert, 3);
     surgescript_vm_bind(vm, "Object", "get___name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "get___active", fun_getactive, 0);
     surgescript_vm_bind(vm, "Object", "set___active", fun_setactive, 1);
@@ -343,6 +345,19 @@ surgescript_var_t* fun_invoke(surgescript_object_t* object, const surgescript_va
     return ret;
 }
 
+/* basic assertion */
+surgescript_var_t* fun_assert(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const char* object_name = surgescript_object_name(object);
+    bool assertion = surgescript_var_get_bool(param[0]);
+    const char* file = surgescript_var_fast_get_string(param[1]);
+    int line = surgescript_var_get_number(param[2]);
+
+    if(!assertion)
+        ssfatal("Assertion failed! Object: \"%s\". Location: %s:%d.", object_name, file, line);
+
+    return NULL;
+}
 
 
 

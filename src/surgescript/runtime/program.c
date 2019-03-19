@@ -19,7 +19,6 @@
  * SurgeScript program
  */
 
-#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>

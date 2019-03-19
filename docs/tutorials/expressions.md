@@ -223,17 +223,15 @@ this.destroy(); // destroys this object
 
 #### typeof
 
-The expression `typeof expr` (or `typeof(expr)`) is evaluated to a string informing the type of `expr`. Example:
+The expression `typeof(expr)` (or simply `typeof expr`), is evaluated to a string informing the type of `expr`. The possible types are: *number*, *string*, *boolean*, *null*, *object*. Example:
 
 ```
 t = typeof 5; // t will hold the string "number"
 ```
 
-The possible types are: *number*, *string*, *boolean*, *null*, *object*.
-
 #### timeout
 
-The expression `timeout(seconds)` is a handy feature of SurgeScript. It is evaluated to `true` if the object has been on the same state for the specified amount of time or more. It can only be used inside states.
+The expression `timeout(seconds)` is a handy feature of SurgeScript. It is evaluated to `true` if the object has been on the same state for the specified amount of time or more. It can only be used inside states. Example:
 
 ```
 object "Application"

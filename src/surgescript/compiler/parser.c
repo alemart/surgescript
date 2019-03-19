@@ -131,6 +131,7 @@ static void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t con
 static void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void miscstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 static void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -1309,6 +1310,10 @@ bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         jumpstmt(parser, context);
         return true;
     }
+    else if(got_type(parser, SSTOK_ASSERT)) {
+        miscstmt(parser, context);
+        return true;
+    }
     else if(has_token(parser) && !got_type(parser, SSTOK_RCURLY)) {
         exprstmt(parser, context);
         return true;
@@ -1449,6 +1454,17 @@ void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     emit_null(context);
     emit_ret(context);
+}
+
+void miscstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    if(optmatch(parser, SSTOK_ASSERT)) {
+        int line = surgescript_token_linenumber(parser->lookahead);
+        match(parser, SSTOK_LPAREN);
+        expr(parser, context);
+        emit_assert(context, line);
+        match(parser, SSTOK_RPAREN);
+    }
 }
 
 /* misc */
