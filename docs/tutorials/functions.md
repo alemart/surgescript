@@ -31,6 +31,8 @@ fun double(x)
 
 If no value is specified after the **return** keyword, the function will be stopped and its return value will be *null*. Additionally, if no **return** statement is found, then the return value will also be *null*.
 
+**Note**: an object state may also contain one or more **return** statements to stop the execution of its code. However, return values must not be specified in that context, since states do not return values.
+
 Simple example
 --------------
 
