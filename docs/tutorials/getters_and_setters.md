@@ -89,7 +89,7 @@ object "Application"
 
     state "main"
     {
-        //animal.sound = 'rrrrgh!!!'; // cannot be done
+        //animal.sound = 'rrrrgh!!!'; // will trigger an error
         animal.talk();
     }
 }
