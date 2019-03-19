@@ -59,6 +59,7 @@ struct surgescript_programpool_metadata_t /* we'll store the list of program nam
 };
 
 static void insert_metadata(surgescript_programpool_t* pool, const char* object_name, const char* program_name);
+static void delete_metadata(surgescript_programpool_t* pool, const char* object_name);
 static void clear_metadata(surgescript_programpool_t* pool);
 static void traverse_metadata(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*,void*));
 static void traverse_adapter(const char* program_name, void* callback);
@@ -80,6 +81,8 @@ struct surgescript_programpool_t
     surgescript_programpool_hashpair_t* hash;
     surgescript_programpool_metadata_t* meta;
 };
+
+static void delete_program(const char* program_name, void* data);
 
 
 
@@ -237,6 +240,17 @@ bool surgescript_programpool_replace(surgescript_programpool_t* pool, const char
         return surgescript_programpool_put(pool, object_name, program_name, program); /* program doesn't exist yet */
 }
 
+/*
+ * surgescript_programpool_purge()
+ * Deletes all the programs of the specified object
+ */
+void surgescript_programpool_purge(surgescript_programpool_t* pool, const char* object_name)
+{
+    void* data[] = { pool, (void*)object_name };
+    surgescript_programpool_foreach_ex(pool, object_name, data, delete_program);
+    delete_metadata(pool, object_name);
+}
+
 
 
 
@@ -261,6 +275,21 @@ void insert_metadata(surgescript_programpool_t* pool, const char* object_name, c
 
     /* no need to check for key uniqueness (it's checked before) */
     ssarray_push(m->program_name, ssstrdup(program_name));
+}
+
+void delete_metadata(surgescript_programpool_t* pool, const char* object_name)
+{
+    surgescript_programpool_metadata_t *m = NULL;
+    HASH_FIND(hh, pool->meta, object_name, strlen(object_name), m);
+
+    if(m != NULL) {
+        HASH_DEL(pool->meta, m);
+        for(int i = 0; i < ssarray_length(m->program_name); i++)
+            ssfree(m->program_name[i]);
+        ssarray_release(m->program_name);
+        ssfree(m->object_name);
+        ssfree(m);
+    }
 }
 
 void clear_metadata(surgescript_programpool_t* pool)
@@ -294,10 +323,30 @@ void traverse_adapter(const char* program_name, void* callback)
 }
 
 
+/* utilities */
+void delete_program(const char* program_name, void* data)
+{
+    surgescript_programpool_t* pool = (surgescript_programpool_t*)(((void**)data)[0]);
+    const char* object_name = (const char*)(((void**)data)[1]);
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    surgescript_programpool_hashpair_t* pair = NULL;
+
+    /* find the program */
+    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);   
+    delete_signature(signature);
+
+    /* delete the program */
+    if(pair != NULL) {
+        HASH_DEL(pool->hash, pair);
+        delete_signature(pair->signature);
+        surgescript_program_destroy(pair->program);
+        ssfree(pair);
+    }
+}
+
+
 /* function signature methods */
-
 #ifdef SURGESCRIPT_USE_FAST_SIGNATURES
-
 surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
 {
     /* uthash will compute a hash of this hash. Our app must enforce key uniqueness. */
@@ -311,9 +360,7 @@ void delete_signature(surgescript_programpool_signature_t signature)
 {
     ;
 }
-
 #else
-
 surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
 {
     size_t olen = strlen(object_name);
@@ -328,5 +375,4 @@ void delete_signature(surgescript_programpool_signature_t signature)
 {
     ssfree(signature);
 }
-
 #endif
