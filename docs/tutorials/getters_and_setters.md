@@ -55,7 +55,7 @@ object "Animal"
 }
 ```
 
-Now, external objects may modify (and read) the *sound* variable:
+Now, external objects may access (read and write) the *sound* variable:
 
 ```
 object "Application"
@@ -65,6 +65,31 @@ object "Application"
     state "main"
     {
         animal.sound = 'rrrrgh!!!';
+        animal.talk();
+    }
+}
+```
+
+Since SurgeScript 0.5.3, you may add the **readonly** specifier after the **public** keyword. Doing so disallows the modification of the variable by external objects:
+
+```
+object "Animal"
+{
+    public readonly sound = "meow!";
+
+    fun talk()
+    {
+        Console.print(sound);
+    }
+}
+
+object "Application"
+{
+    animal = spawn("Animal");
+
+    state "main"
+    {
+        //animal.sound = 'rrrrgh!!!'; // cannot be done
         animal.talk();
     }
 }

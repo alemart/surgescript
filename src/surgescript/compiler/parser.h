@@ -40,6 +40,7 @@
  * <vardecllist> := <vardecl> <vardecllist> | e
  * <vardecl> := identifier = <conditionalexpr> ;
  *            | public identifier = <conditionalexpr> ;
+ *            | public readonly identifier = <conditionalexpr> ;
  *
  * <statedecllist> := <statedecl> <statedecllist> | e
  * <statedecl> := state string { <stmtlist> }

@@ -78,6 +78,7 @@
     F( SSTOK_OF, "of" )                                                         \
     F( SSTOK_IS, "is" )                                                         \
     F( SSTOK_CALLER, "caller" )                                                 \
+    F( SSTOK_READONLY, "readonly" )                                             \
     F( SSTOK_ANNOTATION, "annotation")                                          \
     F( SSTOK_EMOTICON, "emoticon" )                                             \
     F( SSTOK_UNKNOWN, "<unknown>" )

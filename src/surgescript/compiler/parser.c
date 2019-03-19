@@ -67,7 +67,8 @@ static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t
 static void unexpected_symbol(surgescript_parser_t* parser);
 static void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static surgescript_var_t* empty_main(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
-static void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier);
+static void create_getter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier);
+static void create_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier);
 static void import_public_vars(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* object_name);
 static void make_accessor(const char* fun_name, void* symtable);
 static void init_plugins_list(surgescript_parser_t* parser);
@@ -438,13 +439,11 @@ surgescript_var_t* empty_main(surgescript_object_t* object, const surgescript_va
     return NULL;
 }
 
-/* we'll create a getter and a setter for the variable named identifier */
-void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier)
+/* create a getter for the variable named identifier */
+void create_getter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier)
 {
     char* getter_name = surgescript_util_accessorfun("get", identifier);
-    char* setter_name = surgescript_util_accessorfun("set", identifier);
     surgescript_program_t* getter = surgescript_program_create(0);
-    surgescript_program_t* setter = surgescript_program_create(1);
 
     /* create a getter */
     emit_vargetter(nodecontext(
@@ -453,6 +452,19 @@ void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecont
         context.symtable, /* reuse the same table; no locals */
         getter
     ), identifier);
+
+    /* register things */
+    surgescript_programpool_put(parser->program_pool, context.object_name, getter_name, getter);
+
+    /* done */
+    ssfree(getter_name);
+}
+
+/* create a setter for the variable named identifier */
+void create_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier)
+{
+    char* setter_name = surgescript_util_accessorfun("set", identifier);
+    surgescript_program_t* setter = surgescript_program_create(1);
 
     /* create a setter */
     emit_varsetter(nodecontext(
@@ -463,12 +475,10 @@ void create_getter_and_setter(surgescript_parser_t* parser, surgescript_nodecont
     ), identifier);
 
     /* register things */
-    surgescript_programpool_put(parser->program_pool, context.object_name, getter_name, getter);
     surgescript_programpool_put(parser->program_pool, context.object_name, setter_name, setter);
 
     /* done */
     ssfree(setter_name);
-    ssfree(getter_name);
 }
 
 /* makes a program that returns source_file */
@@ -664,6 +674,7 @@ void vardecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context
 void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     bool public_var = optmatch(parser, SSTOK_PUBLIC);
+    bool readonly_var = optmatch(parser, SSTOK_READONLY);
     char* id = ssstrdup(surgescript_token_lexeme(parser->lookahead));
 
     match(parser, SSTOK_IDENTIFIER);
@@ -672,8 +683,11 @@ void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     match(parser, SSTOK_SEMICOLON);
 
     emit_vardecl(context, id);
-    if(public_var)
-        create_getter_and_setter(parser, context, id);
+    if(public_var) {
+        create_getter(parser, context, id);
+        if(!readonly_var)
+            create_setter(parser, context, id);
+    }
 
     ssfree(id);
 }

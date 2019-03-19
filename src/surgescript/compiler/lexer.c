@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ struct surgescript_lexer_t
 };
 
 /* keywords */
-static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_FOREACH, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE, SSTOK_TYPEOF, SSTOK_PUBLIC, SSTOK_USING, SSTOK_DO, SSTOK_SWITCH, SSTOK_CASE, SSTOK_DEFAULT, SSTOK_CONST, SSTOK_ASSERT, SSTOK_WAIT, SSTOK_STATIC, SSTOK_SUPER, SSTOK_OF, SSTOK_IS, SSTOK_CALLER };
+static surgescript_tokentype_t keyword[] = { SSTOK_TRUE, SSTOK_FALSE, SSTOK_NULL, SSTOK_OBJECT, SSTOK_STATE, SSTOK_FUN, SSTOK_RETURN, SSTOK_THIS, SSTOK_IF, SSTOK_ELSE, SSTOK_WHILE, SSTOK_FOR, SSTOK_FOREACH, SSTOK_IN, SSTOK_BREAK, SSTOK_CONTINUE, SSTOK_TYPEOF, SSTOK_PUBLIC, SSTOK_USING, SSTOK_DO, SSTOK_SWITCH, SSTOK_CASE, SSTOK_DEFAULT, SSTOK_CONST, SSTOK_ASSERT, SSTOK_WAIT, SSTOK_STATIC, SSTOK_SUPER, SSTOK_OF, SSTOK_IS, SSTOK_CALLER, SSTOK_READONLY };
 static int indexof_keyword(const char* identifier);
 static inline void bufadd(surgescript_lexer_t* lexer, char c);
 static inline void bufclear(surgescript_lexer_t* lexer);
