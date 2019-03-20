@@ -67,7 +67,7 @@ object "Application"
 
     state "main"
     {
-        animal.sound = 'woof!';
+        animal.sound = "woof!";
         animal.speak();
     }
 }
@@ -92,7 +92,8 @@ object "Application"
 
     state "main"
     {
-        //animal.sound = 'woof!'; // will trigger an error
+        //animal.sound = "woof!"; // will trigger an error
+        //Console.print(animal.sound); // this is allowed
         animal.speak();
     }
 }
