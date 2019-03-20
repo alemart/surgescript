@@ -16,12 +16,43 @@ seven = Math.max(5, 7); // maximum of 5 and 7
 Properties
 ----------
 
-* `pi`: number. An approximation of pi (3.1415926535...)
-* `deg2rad`: number. A multiplier used to convert degrees to radians: equivalent to pi / 180.
-* `rad2deg`: number. A multiplier used to convert radians to degrees: equivalent to 180 / pi.
-* `epsilon`: number. The difference between 1 and the smallest floating point number that is greater than 1.
-* `infinity`: number. A floating point number representing positive infinity.
-* `NaN`: number. A numeric data type representing Not-a-Number (*since SurgeScript 0.5.3*).
+#### pi
+
+`pi`: number, read-only.
+
+An approximation of pi (3.1415926535...)
+
+#### deg2rad
+
+`deg2rad`: number, read-only.
+
+A multiplier used to convert degrees to radians: equivalent to pi / 180.
+
+#### rad2deg
+
+`rad2deg`: number, read-only.
+
+A multiplier used to convert radians to degrees: equivalent to 180 / pi.
+
+#### epsilon
+
+`epsilon`: number, read-only.
+
+The difference between 1 and the smallest floating point number that is greater than 1.
+
+#### infinity
+
+`infinity`: number, read-only.
+
+A floating point representation of positive infinity.
+
+#### NaN
+
+`NaN`: number, read-only.
+
+A numeric data type representing Not-a-Number.
+
+*Available since:* SurgeScript 0.5.3
 
 Functions
 ---------

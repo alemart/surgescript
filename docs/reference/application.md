@@ -6,7 +6,11 @@ Represents the Application. You do not need to instantiate it, as it is instanti
 Properties
 ----------
 
-* `args`: [Arguments](arguments) object. Use it to read command-line arguments.
+#### args
+
+`args`: [Arguments](arguments) object, read-only.
+
+Use this property to read the command line arguments.
 
 Functions
 ---------

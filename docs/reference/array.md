@@ -42,7 +42,11 @@ Number of characters: 3
 Properties
 ----------
 
-* `length`: number. The number of elements in the Array.
+#### length
+
+`length`: number, read-only.
+
+The number of elements in the Array.
 
 Functions
 ---------

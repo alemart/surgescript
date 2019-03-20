@@ -6,9 +6,23 @@ The root object. Used to gather data from the language and to access special obj
 Properties
 ----------
 
-* `tags` is a reference to the [Tag System](tags.md).
-* `gc` is a reference to the [Garbage Collector](gc.md).
-* `objectCount` is the total number of objects at this moment.
+#### tags
+
+`tags`: [Tag System](tags.md) object, read-only.
+
+A reference to the Tag System.
+
+#### gc
+
+`gc`: [Garbage Collector](gc.md) object, read-only.
+
+A reference to the Garbage Collector object.
+
+#### objectCount
+
+`objectCount`: number, read-only.
+
+The total number of objects at this moment.
 
 Functions
 ---------

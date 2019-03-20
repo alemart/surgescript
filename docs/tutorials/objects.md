@@ -65,4 +65,4 @@ object "Cosmic Door"
 
 Notice how the code just shown defines states and transitions between these states. Each state contains its own code.
 
-**Note:** once a state is active, its code will be repeated (at every frame) until the state changes or until the object is destroyed.
+**Note:** once a state is active, its code will be repeated (at every frame of the application) until the state changes or until the object is destroyed.

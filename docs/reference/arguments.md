@@ -21,8 +21,11 @@ Console.print(Application.args);
 Properties
 ----------
 
-* `length`: number. The number of command-line arguments, including the executable.
-* `__data`: [Array](array) object. Internal representation of the command-line arguments.
+#### length
+
+`length`: number, read-only.
+
+The number of command-line arguments, including the executable.
 
 Functions
 ---------

@@ -52,7 +52,11 @@ object "StringUtils"
 Properties
 ----------
 
-* `count`: number. The number of spawned plugins.
+#### count
+
+`count`: number, read-only.
+
+The number of plugins.
 
 Functions
 ---------
@@ -62,8 +66,6 @@ Functions
 `spawn(pluginName)`
 
 Spawns object `pluginName` as a plugin. This function is not to be used directly, as SurgeScript spawns the plugins automatically for you. SurgeScript recognizes an object as a plugin when you annotate it with `@Plugin`.
-
-*Available since:* SurgeScript 0.5.2
 
 *Arguments*
 
@@ -76,8 +78,6 @@ Spawns object `pluginName` as a plugin. This function is not to be used directly
 Gets a reference to the plugin named `pluginName`. The `[ ]` operator can be used instead of the `get()` function, as in `Plugin[pluginName]`.
 
 Rather than using this function, it's recommended to import the desired plugin using the `using myPlugin;` statement at the beginning of your code. Your plugin will be available as `myPlugin`.
-
-*Available since:* SurgeScript 0.5.2
 
 *Arguments*
 

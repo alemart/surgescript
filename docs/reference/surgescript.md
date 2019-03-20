@@ -22,4 +22,8 @@ object "Application"
 Properties
 ----------
 
-* `version`: string. Version number.
+#### version
+
+`version`: string, read-only.
+
+Version number of the SurgeScript runtime.

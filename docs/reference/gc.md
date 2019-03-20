@@ -6,8 +6,17 @@ SurgeScript features a Garbage Collector (GC) that automatically disposes object
 Properties
 ----------
 
-* `interval`: number, read-write. Every `interval` seconds, the garbage collector will be called automatically.
-* `objectCount`: number. How many objects were disposed when the garbage collector was last called.
+#### interval
+
+`interval`: number.
+
+Every `interval` seconds, the garbage collector will be called automatically.
+
+#### objectCount
+
+`objectCount`: number, read-only.
+
+How many objects were disposed when the garbage collector was last called.
 
 Functions
 ---------

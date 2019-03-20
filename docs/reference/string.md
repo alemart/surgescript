@@ -18,7 +18,11 @@ Please note that strings in SurgeScript are immutable. Once a string is set, its
 Properties
 ----------
 
-* `length`: number. The length of the string.
+#### length
+
+`length`: number, read-only.
+
+The length of the string.
 
 Functions
 ---------

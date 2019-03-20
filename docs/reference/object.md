@@ -6,18 +6,51 @@ In SurgeScript, all objects are also instances of `Object`. This means that the 
 Properties
 ----------
 
-* `parent`: object. Reference to the parent object.
-* `childCount`: number. The number of children of this object.
-* `__name`: string. The name of this object (string).
-* `__active`: boolean, read-write. Indicates whether this object is active\* or not.
-* `__functions`: [Array](array.md). The functions of this object represented as a collection of strings.
-* `__timespent`: number. The approximate time spent in this object in the last frame (in seconds).
-* `__memspent`: number. The current memory consumption of this object (in bytes). Not implemented.
-* `__file`: string. The source file of this object. Available since SurgeScript 0.5.3.
+#### parent
 
-> **Note:**
->
-> \* Objects are active by default. Whenever an object is set to be inactive, its state machine is paused. Additionally, the state machines of all its descendants are also paused.
+`parent`: object, read-only.
+
+Reference to the parent object.
+
+#### childCount
+
+`childCount`: number, read-only.
+
+The number of children of the object.
+
+#### __name
+
+`__name`: string, read-only.
+
+The name of the object.
+
+#### __active
+
+`__active`: boolean.
+
+Indicates whether the object is active or not.
+
+Objects are active by default. Whenever an object is set to be inactive, its state machine is paused. Additionally, the state machines of all its descendants are also paused.
+
+#### __functions
+
+`__functions`: [Array](array.md) object, read-only.
+
+The functions of this object represented as a collection of strings.
+
+#### __timespent
+
+`__timespent`: number, read-only.
+
+The approximate time spent in this object in the last frame (in seconds).
+
+#### __file
+
+`__file`: string, read-only.
+
+The source file of this object.
+
+*Available since:* SurgeScript 0.5.3
 
 Functions
 ---------
@@ -178,7 +211,7 @@ Returns the value returned by the invoked function.
 *Example*
 
 ```
-// The program below will return:
+// The program below will print:
 // 12
 // 12
 // true

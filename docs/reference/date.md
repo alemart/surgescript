@@ -33,14 +33,53 @@ object "Application"
 Properties
 ----------
 
-* `year`: number. The current year.
-* `month`: number. Month of the year (1-12).
-* `day`: number. Day of the month (1-31).
-* `hour`: number. Hours since midnight (0-23).
-* `minute`: number. Minutes after the hour (0-59).
-* `second`: number. Seconds after the minute (0-59).
-* `weekday`: number. Days since Sunday (0-6).
-* `unixtime`: number. Seconds since Jan 1st, 1970 00:00:00 UTC.
+#### year
+
+`year`: number, read-only.
+
+The current year.
+
+#### month
+
+`month`: number, read-only.
+
+Month of the year (1-12).
+
+#### day
+
+`day`: number.
+
+Day of the month (1-31).
+
+#### hour
+
+`hour`: number.
+
+Hours since midnight (0-23).
+
+#### minute
+
+`minute`: number.
+
+Minutes after the hour (0-59).
+
+#### second
+
+`second`: number.
+
+Seconds after the minute (0-59).
+
+#### weekday
+
+`weekday`: number.
+
+Days since Sunday (0-6).
+
+#### unixtime
+
+`unixtime`: number.
+
+Number of seconds since Jan 1st, 1970 00:00:00 UTC.
 
 Functions
 ---------

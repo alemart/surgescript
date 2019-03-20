@@ -6,7 +6,7 @@ Utility functions for dealing with object tags. This object is available at `Sys
 Functions
 ---------
 
-## list
+#### list
 
 `list()`
 
@@ -16,7 +16,7 @@ Lists all tags used in all objects.
 
 This function spawns a new Array object with all tags and returns it.
 
-## select
+#### select
 
 `select(tagName)`
 

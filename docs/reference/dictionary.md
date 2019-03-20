@@ -44,12 +44,16 @@ Gimacian: 70
 
 > **Note:**
 > 
-> Whenever you define a dictionary, you spawn a new object. One is advised to **NOT** define dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.
+> Whenever you define a dictionary, you spawn a new object. One is advised to **NOT** define dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame of the application, not just once.
 
 Properties
 ----------
 
-* `count`: integer number. The number of elements in the Dictionary.
+#### count
+
+`count`: number, read-only.
+
+The number of elements in the Dictionary.
 
 Functions
 ---------
