@@ -354,8 +354,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/getters_and_setters/" title="Getters & setters" class="md-nav__link">
-      Getters & setters
+    <a href="../../tutorials/properties/" title="Properties" class="md-nav__link">
+      Properties
     </a>
   </li>
 
@@ -366,8 +366,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../../tutorials/plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -440,8 +440,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../array/" title="Array" class="md-nav__link">
-      Array
+    <a href="../arguments/" title="Arguments" class="md-nav__link">
+      Arguments
     </a>
   </li>
 
@@ -452,8 +452,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../arguments/" title="Arguments" class="md-nav__link">
-      Arguments
+    <a href="../array/" title="Array" class="md-nav__link">
+      Array
     </a>
   </li>
 
@@ -524,6 +524,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -548,18 +560,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../iterator/" title="Iterator" class="md-nav__link">
-      Iterator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../object/" title="Object" class="md-nav__link">
       Object
     </a>
@@ -574,30 +574,6 @@
   <li class="md-nav__item">
     <a href="../plugin/" title="Plugin" class="md-nav__link">
       Plugin
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../tags/" title="TagSystem" class="md-nav__link">
-      TagSystem
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../time/" title="Time" class="md-nav__link">
-      Time
     </a>
   </li>
 
@@ -638,6 +614,19 @@
   <a href="#properties" title="Properties" class="md-nav__link">
     Properties
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#length" title="length" class="md-nav__link">
+    length
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -762,6 +751,30 @@
   <li class="md-nav__item">
     <a href="../system/" title="System" class="md-nav__link">
       System
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tags/" title="TagSystem" class="md-nav__link">
+      TagSystem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../time/" title="Time" class="md-nav__link">
+      Time
     </a>
   </li>
 
@@ -1192,6 +1205,19 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#length" title="length" class="md-nav__link">
+    length
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1313,9 +1339,9 @@ n = y.length; // 5
 
 <p>Please note that strings in SurgeScript are immutable. Once a string is set, its individual characters cannot be changed. If you need to modify the content of a string, reassign the variable to a new string.</p>
 <h2 id="properties">Properties</h2>
-<ul>
-<li><code>length</code>: number. The length of the string.</li>
-</ul>
+<h4 id="length">length</h4>
+<p><code>length</code>: number, read-only.</p>
+<p>The length of the string.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="valueof">valueOf</h4>
 <p><code>valueOf()</code></p>
@@ -1422,8 +1448,8 @@ dst = src.replace(&quot;Surge&quot;, &quot;Gimacian&quot;);
 <p>The string converted to upper case.</p>
 <h4 id="isnullorempty">isNullOrEmpty</h4>
 <p><code>isNullOrEmpty(value)</code></p>
-<p>This method of the <code>String</code> object can be used directly. It checks if the given <code>value</code> is either <code>null</code> or an empty string.
-<em>Available since SurgeScript 0.5.3</em></p>
+<p>This method of the <code>String</code> object can be used directly. It checks if the given <code>value</code> is either <code>null</code> or an empty string.</p>
+<p><em>Available since:</em> SurgeScript 0.5.3</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>value</code>: string | null. The value to be tested.</li>
@@ -1458,7 +1484,7 @@ if(!String.isNullOrEmpty(name))
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../time/" title="Time" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../plugin/" title="Plugin" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1467,7 +1493,7 @@ if(!String.isNullOrEmpty(name))
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Time
+                Plugin
               </span>
             </div>
           </a>

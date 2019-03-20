@@ -354,8 +354,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/getters_and_setters/" title="Getters & setters" class="md-nav__link">
-      Getters & setters
+    <a href="../../tutorials/properties/" title="Properties" class="md-nav__link">
+      Properties
     </a>
   </li>
 
@@ -366,8 +366,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../../tutorials/plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -440,8 +440,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../array/" title="Array" class="md-nav__link">
-      Array
+    <a href="../arguments/" title="Arguments" class="md-nav__link">
+      Arguments
     </a>
   </li>
 
@@ -452,8 +452,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../arguments/" title="Arguments" class="md-nav__link">
-      Arguments
+    <a href="../array/" title="Array" class="md-nav__link">
+      Array
     </a>
   </li>
 
@@ -543,6 +543,26 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interval" title="interval" class="md-nav__link">
+    interval
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objectcount" title="objectCount" class="md-nav__link">
+    objectCount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -582,6 +602,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -606,18 +638,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../iterator/" title="Iterator" class="md-nav__link">
-      Iterator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../object/" title="Object" class="md-nav__link">
       Object
     </a>
@@ -632,30 +652,6 @@
   <li class="md-nav__item">
     <a href="../plugin/" title="Plugin" class="md-nav__link">
       Plugin
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../tags/" title="TagSystem" class="md-nav__link">
-      TagSystem
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../time/" title="Time" class="md-nav__link">
-      Time
     </a>
   </li>
 
@@ -692,6 +688,30 @@
   <li class="md-nav__item">
     <a href="../system/" title="System" class="md-nav__link">
       System
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tags/" title="TagSystem" class="md-nav__link">
+      TagSystem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../time/" title="Time" class="md-nav__link">
+      Time
     </a>
   </li>
 
@@ -1122,6 +1142,26 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interval" title="interval" class="md-nav__link">
+    interval
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objectcount" title="objectCount" class="md-nav__link">
+    objectCount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1164,10 +1204,12 @@
                 <h1 id="gc">GC</h1>
 <p>SurgeScript features a Garbage Collector (GC) that automatically disposes objects that cannot be reached from the root (i.e., their references are lost). The Garbage Collector is available at <code>System.gc</code>. Generally, you do not need to modify any of its settings.</p>
 <h2 id="properties">Properties</h2>
-<ul>
-<li><code>interval</code>: number, read-write. Every <code>interval</code> seconds, the garbage collector will be called automatically.</li>
-<li><code>objectCount</code>: number. How many objects were disposed when the garbage collector was last called.</li>
-</ul>
+<h4 id="interval">interval</h4>
+<p><code>interval</code>: number.</p>
+<p>Every <code>interval</code> seconds, the garbage collector will be called automatically.</p>
+<h4 id="objectcount">objectCount</h4>
+<p><code>objectCount</code>: number, read-only.</p>
+<p>How many objects were disposed when the garbage collector was last called.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="collect">collect</h4>
 <p><code>collect()</code></p>
@@ -1207,13 +1249,13 @@
           </a>
         
         
-          <a href="../math/" title="Math" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../iterator/" title="Iterator" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Math
+                Iterator
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

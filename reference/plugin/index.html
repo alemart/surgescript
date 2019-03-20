@@ -354,8 +354,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/getters_and_setters/" title="Getters & setters" class="md-nav__link">
-      Getters & setters
+    <a href="../../tutorials/properties/" title="Properties" class="md-nav__link">
+      Properties
     </a>
   </li>
 
@@ -366,8 +366,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../../tutorials/plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -440,8 +440,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../array/" title="Array" class="md-nav__link">
-      Array
+    <a href="../arguments/" title="Arguments" class="md-nav__link">
+      Arguments
     </a>
   </li>
 
@@ -452,8 +452,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../arguments/" title="Arguments" class="md-nav__link">
-      Arguments
+    <a href="../array/" title="Array" class="md-nav__link">
+      Array
     </a>
   </li>
 
@@ -524,6 +524,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -538,18 +550,6 @@
   <li class="md-nav__item">
     <a href="../number/" title="Number" class="md-nav__link">
       Number
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../iterator/" title="Iterator" class="md-nav__link">
-      Iterator
     </a>
   </li>
 
@@ -603,6 +603,19 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#count" title="count" class="md-nav__link">
+    count
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -649,30 +662,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../tags/" title="TagSystem" class="md-nav__link">
-      TagSystem
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../time/" title="Time" class="md-nav__link">
-      Time
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../string/" title="String" class="md-nav__link">
       String
     </a>
@@ -699,6 +688,30 @@
   <li class="md-nav__item">
     <a href="../system/" title="System" class="md-nav__link">
       System
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tags/" title="TagSystem" class="md-nav__link">
+      TagSystem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../time/" title="Time" class="md-nav__link">
+      Time
     </a>
   </li>
 
@@ -1129,6 +1142,19 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#count" title="count" class="md-nav__link">
+    count
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1220,14 +1246,13 @@ object &quot;StringUtils&quot;
 
 <p><em>Available since:</em> SurgeScript 0.5.2</p>
 <h2 id="properties">Properties</h2>
-<ul>
-<li><code>count</code>: number. The number of spawned plugins.</li>
-</ul>
+<h4 id="count">count</h4>
+<p><code>count</code>: number, read-only.</p>
+<p>The number of plugins.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="spawn">spawn</h4>
 <p><code>spawn(pluginName)</code></p>
 <p>Spawns object <code>pluginName</code> as a plugin. This function is not to be used directly, as SurgeScript spawns the plugins automatically for you. SurgeScript recognizes an object as a plugin when you annotate it with <code>@Plugin</code>.</p>
-<p><em>Available since:</em> SurgeScript 0.5.2</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>pluginName</code>: string. The name of the object to be spawned as a plugin. It's not recommended to include special characters in the plugin name.</li>
@@ -1236,7 +1261,6 @@ object &quot;StringUtils&quot;
 <p><code>get(pluginName)</code></p>
 <p>Gets a reference to the plugin named <code>pluginName</code>. The <code>[ ]</code> operator can be used instead of the <code>get()</code> function, as in <code>Plugin[pluginName]</code>.</p>
 <p>Rather than using this function, it's recommended to import the desired plugin using the <code>using myPlugin;</code> statement at the beginning of your code. Your plugin will be available as <code>myPlugin</code>.</p>
-<p><em>Available since:</em> SurgeScript 0.5.2</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>pluginName</code>: string. The name of the plugin.</li>
@@ -1284,13 +1308,13 @@ c = (Plugin.StringUtils === StringUtils); // c is true
           </a>
         
         
-          <a href="../tags/" title="TagSystem" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../string/" title="String" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                TagSystem
+                String
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

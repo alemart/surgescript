@@ -354,8 +354,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/getters_and_setters/" title="Getters & setters" class="md-nav__link">
-      Getters & setters
+    <a href="../../tutorials/properties/" title="Properties" class="md-nav__link">
+      Properties
     </a>
   </li>
 
@@ -366,8 +366,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../../tutorials/plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -440,8 +440,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../array/" title="Array" class="md-nav__link">
-      Array
+    <a href="../arguments/" title="Arguments" class="md-nav__link">
+      Arguments
     </a>
   </li>
 
@@ -452,8 +452,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../arguments/" title="Arguments" class="md-nav__link">
-      Arguments
+    <a href="../array/" title="Array" class="md-nav__link">
+      Array
     </a>
   </li>
 
@@ -524,6 +524,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -548,18 +560,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../iterator/" title="Iterator" class="md-nav__link">
-      Iterator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../object/" title="Object" class="md-nav__link">
       Object
     </a>
@@ -574,30 +574,6 @@
   <li class="md-nav__item">
     <a href="../plugin/" title="Plugin" class="md-nav__link">
       Plugin
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../tags/" title="TagSystem" class="md-nav__link">
-      TagSystem
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../time/" title="Time" class="md-nav__link">
-      Time
     </a>
   </li>
 
@@ -663,6 +639,33 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tags" title="tags" class="md-nav__link">
+    tags
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gc" title="gc" class="md-nav__link">
+    gc
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objectcount" title="objectCount" class="md-nav__link">
+    objectCount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -700,6 +703,30 @@
   
 </nav>
     
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tags/" title="TagSystem" class="md-nav__link">
+      TagSystem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../time/" title="Time" class="md-nav__link">
+      Time
+    </a>
   </li>
 
         
@@ -1129,6 +1156,33 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tags" title="tags" class="md-nav__link">
+    tags
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gc" title="gc" class="md-nav__link">
+    gc
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#objectcount" title="objectCount" class="md-nav__link">
+    objectCount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1178,11 +1232,15 @@
                 <h1 id="system">System</h1>
 <p>The root object. Used to gather data from the language and to access special objects. It can be accessed by typing <code>System</code>.</p>
 <h2 id="properties">Properties</h2>
-<ul>
-<li><code>tags</code> is a reference to the <a href="../tags/">Tag System</a>.</li>
-<li><code>gc</code> is a reference to the <a href="../gc/">Garbage Collector</a>.</li>
-<li><code>objectCount</code> is the total number of objects at this moment.</li>
-</ul>
+<h4 id="tags">tags</h4>
+<p><code>tags</code>: <a href="../tags/">Tag System</a> object, read-only.</p>
+<p>A reference to the Tag System.</p>
+<h4 id="gc">gc</h4>
+<p><code>gc</code>: <a href="../gc/">Garbage Collector</a> object, read-only.</p>
+<p>A reference to the Garbage Collector object.</p>
+<h4 id="objectcount">objectCount</h4>
+<p><code>objectCount</code>: number, read-only.</p>
+<p>The total number of objects at this moment.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="exit">exit</h4>
 <p><code>exit()</code></p>
@@ -1225,13 +1283,13 @@
           </a>
         
         
-          <a href="../../engine/actor/" title="Actor" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../tags/" title="TagSystem" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Actor
+                TagSystem
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

@@ -36,7 +36,7 @@
     
     
       
-        <title>Getters & setters - SurgeScript Documentation</title>
+        <title>Properties - SurgeScript Documentation</title>
       
     
     
@@ -70,7 +70,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
     
-      <a href="#getters-and-setters" tabindex="1" class="md-skip">
+      <a href="#properties" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -96,7 +96,7 @@
                 SurgeScript Documentation
               </span>
               <span class="md-header-nav__topic">
-                Getters & setters
+                Properties
               </span>
             
           
@@ -364,9 +364,45 @@
       
     
     
-    <a href="./" title="Getters & setters" class="md-nav__link md-nav__link--active">
-      Getters & setters
+      <label class="md-nav__link md-nav__link--active" for="toc">
+        Properties
+      </label>
+    
+    <a href="./" title="Properties" class="md-nav__link md-nav__link--active">
+      Properties
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#defining-properties" title="Defining properties" class="md-nav__link">
+    Defining properties
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-getters-and-setters" title="Using getters and setters" class="md-nav__link">
+    Using getters and setters
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -377,8 +413,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -449,8 +485,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/array/" title="Array" class="md-nav__link">
-      Array
+    <a href="../../reference/arguments/" title="Arguments" class="md-nav__link">
+      Arguments
     </a>
   </li>
 
@@ -461,8 +497,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/arguments/" title="Arguments" class="md-nav__link">
-      Arguments
+    <a href="../../reference/array/" title="Array" class="md-nav__link">
+      Array
     </a>
   </li>
 
@@ -533,6 +569,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../reference/iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../reference/math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -557,18 +605,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/iterator/" title="Iterator" class="md-nav__link">
-      Iterator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/object/" title="Object" class="md-nav__link">
       Object
     </a>
@@ -583,30 +619,6 @@
   <li class="md-nav__item">
     <a href="../../reference/plugin/" title="Plugin" class="md-nav__link">
       Plugin
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../reference/tags/" title="TagSystem" class="md-nav__link">
-      TagSystem
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../reference/time/" title="Time" class="md-nav__link">
-      Time
     </a>
   </li>
 
@@ -643,6 +655,30 @@
   <li class="md-nav__item">
     <a href="../../reference/system/" title="System" class="md-nav__link">
       System
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/tags/" title="TagSystem" class="md-nav__link">
+      TagSystem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/time/" title="Time" class="md-nav__link">
+      Time
     </a>
   </li>
 
@@ -1065,6 +1101,29 @@
     
   
   
+    <label class="md-nav__title" for="toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#defining-properties" title="Defining properties" class="md-nav__link">
+    Defining properties
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-getters-and-setters" title="Using getters and setters" class="md-nav__link">
+    Using getters and setters
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1076,28 +1135,29 @@
               
                 
                 
-                <h1 id="getters-and-setters">Getters and setters</h1>
-<p>In SurgeScript, variables are private. This means that variables may only be accessed from the objects that defined them. However, SurgeScript features a <em>syntactic sugar</em> that allows objects to modify other objects' data in a way that looks like dealing with regular (public) variables.</p>
-<p>Suppose you have an object called <strong>Animal</strong> with a variable called <em>sound</em> and a function called <em>talk()</em>:</p>
+                <h1 id="properties">Properties</h1>
+<p>In SurgeScript, <a href="../variables">object-level variables</a> are private. This means that these variables can only be accessed from the objects that defined them. However, SurgeScript features a <em>syntactic sugar</em> that allows objects to read and/or modify other objects' data in a way that looks like dealing with regular (public) variables. We'll call these variables <strong>properties</strong>.</p>
+<h2 id="defining-properties">Defining properties</h2>
+<p>Suppose you have an object called <strong>Animal</strong> with a variable called <em>sound</em> and a function named <em>speak()</em>:</p>
 <pre><code>object &quot;Animal&quot;
 {
     sound = &quot;meow!&quot;;
 
-    fun talk()
+    fun speak()
     {
         Console.print(sound);
     }
 }
 </code></pre>
 
-<p>This object can only say <em>meow!</em> Let's see:</p>
+<p>This object can only speak <em>meow!</em> Let's see:</p>
 <pre><code>object &quot;Application&quot;
 {
     animal = spawn(&quot;Animal&quot;);
 
     state &quot;main&quot;
     {
-        animal.talk();
+        animal.speak();
     }
 }
 </code></pre>
@@ -1110,37 +1170,62 @@ meow!
 ...
 </code></pre>
 
-<p>What if an external object could modify the sound of the animal? Trying to access <code>animal.sound</code> externally will trigger an error, unless you add the <strong>public</strong> keyword to your variable:</p>
+<p>What if an external object could modify the sound of the animal? Trying to access <code>animal.sound</code> externally will trigger an error, unless you add the <strong>public</strong> specifier to your variable:</p>
 <pre><code>object &quot;Animal&quot;
 {
     public sound = &quot;meow!&quot;;
 
-    fun talk()
+    fun speak()
     {
         Console.print(sound);
     }
 }
 </code></pre>
 
-<p>Now, external objects may modify (and read) the <em>sound</em> variable:</p>
+<p>Now, external objects may access (read and write) the <em>sound</em> variable (or <strong>property</strong>):</p>
 <pre><code>object &quot;Application&quot;
 {
     animal = spawn(&quot;Animal&quot;);
 
     state &quot;main&quot;
     {
-        animal.sound = 'rrrrgh!!!';
-        animal.talk();
+        animal.sound = &quot;woof!&quot;;
+        animal.speak();
     }
 }
 </code></pre>
 
-<p>In reality, however, there are no public variables in SurgeScript. Behind the scenes, the language defines special functions called <strong>getters and setters</strong> that will perform the read/write logic for you. Rather than typing public, you may want to define the getters and the setters yourself:</p>
+<p>Since SurgeScript 0.5.3, you may add the <strong>readonly</strong> modifier after the <strong>public</strong> specifier. Doing so disallows the modification of the property by external objects:</p>
+<pre><code>object &quot;Animal&quot;
+{
+    public readonly sound = &quot;meow!&quot;;
+
+    fun speak()
+    {
+        Console.print(sound);
+    }
+}
+
+object &quot;Application&quot;
+{
+    animal = spawn(&quot;Animal&quot;);
+
+    state &quot;main&quot;
+    {
+        //animal.sound = &quot;woof!&quot;; // will trigger an error
+        //Console.print(animal.sound); // this is allowed
+        animal.speak();
+    }
+}
+</code></pre>
+
+<h2 id="using-getters-and-setters">Using getters and setters</h2>
+<p>In reality, however, there are no public variables in SurgeScript. Behind the scenes, the language defines special functions called <strong>getters</strong> and <strong>setters</strong> that will perform the read/write logic for you. Rather than using <strong>public</strong>, you may want to define the getters and the setters yourself:</p>
 <pre><code>object &quot;Animal&quot;
 {
     sound = &quot;meow!&quot;;
 
-    fun talk()
+    fun speak()
     {
         Console.print(sound);
     }
@@ -1157,8 +1242,8 @@ meow!
 }
 </code></pre>
 
-<p>This code is the same (semantically); it's just a bit longer.</p>
-<p>An advantage of defining getters and setters yourself is that you control how the data passes through the objects. You may want to validate the data before changing the internal variables of the objects, for example.</p>
+<p>This code is semantically the same; it's just a bit longer.</p>
+<p>An advantage of defining getters and setters by yourself is that you control how the data passes through the objects. You may want to validate the data before changing the internal variables of the objects, for example.</p>
                 
                   
                 
@@ -1194,13 +1279,13 @@ meow!
           </a>
         
         
-          <a href="../plugins/" title="Plugin system" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../plugins/" title="Plugins" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Plugin system
+                Plugins
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

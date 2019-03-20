@@ -401,8 +401,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../getters_and_setters/" title="Getters & setters" class="md-nav__link">
-      Getters & setters
+    <a href="../properties/" title="Properties" class="md-nav__link">
+      Properties
     </a>
   </li>
 
@@ -413,8 +413,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -485,8 +485,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/array/" title="Array" class="md-nav__link">
-      Array
+    <a href="../../reference/arguments/" title="Arguments" class="md-nav__link">
+      Arguments
     </a>
   </li>
 
@@ -497,8 +497,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/arguments/" title="Arguments" class="md-nav__link">
-      Arguments
+    <a href="../../reference/array/" title="Array" class="md-nav__link">
+      Array
     </a>
   </li>
 
@@ -569,6 +569,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../reference/iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../reference/math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -593,18 +605,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/iterator/" title="Iterator" class="md-nav__link">
-      Iterator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/object/" title="Object" class="md-nav__link">
       Object
     </a>
@@ -619,30 +619,6 @@
   <li class="md-nav__item">
     <a href="../../reference/plugin/" title="Plugin" class="md-nav__link">
       Plugin
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../reference/tags/" title="TagSystem" class="md-nav__link">
-      TagSystem
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../reference/time/" title="Time" class="md-nav__link">
-      Time
     </a>
   </li>
 
@@ -679,6 +655,30 @@
   <li class="md-nav__item">
     <a href="../../reference/system/" title="System" class="md-nav__link">
       System
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/tags/" title="TagSystem" class="md-nav__link">
+      TagSystem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/time/" title="Time" class="md-nav__link">
+      Time
     </a>
   </li>
 
@@ -1139,12 +1139,11 @@
 <p>In SurgeScript, objects are units of code and data. Each object define a finite state machine, a mathematical construct used to describe the behavior of in-game objects.</p>
 <blockquote>
 <p><strong>Did you know?</strong></p>
-<p>Almost all games implement what is called a game loop. In SurgeScript, the game loop is defined implicitly. State machines stand out as one of the key features of SurgeScript.</p>
+<p>Games implement what is called a game loop. In SurgeScript, the game loop is defined implicitly via state machines. State machines are one of the key features of SurgeScript.</p>
 </blockquote>
 <h2 id="state-machines">State machines</h2>
 <p>A finite state machine is a mathematical abstraction composed of a finite number of <strong>states</strong> and by <strong>transitions</strong> between these states. Only one state can be active at any given time (we'll call it the active state). There must be one <strong>initial state</strong> (i.e., the first one to be active). A transition is a change of the active state that is triggered when a certain condition is met.</p>
-<p>As a concrete example, suppose that you want to create a door in your game. You, the developer, may open or close the door at will.</p>
-<p>That is said to be an <em>informal</em> description of the problem. We need to transform it in something more rigorous. What is a door? We'll show one possible solution here.</p>
+<p>As a concrete example, suppose that you want to create a door in your game. You, the developer, may open or close the door at will. But what is a door? We have just given <em>informal</em> description of the problem. However, we need to transform it in something more rigorous. Example:</p>
 <p>A door is an object with two states (see the Figure below):</p>
 <ul>
 <li>Opened (initial state)</li>
@@ -1187,7 +1186,7 @@
 </code></pre>
 
 <p>Notice how the code just shown defines states and transitions between these states. Each state contains its own code.</p>
-<p><strong>Note:</strong> once a state is active, its code will be repeated (at every frame) until the state changes or until the object is destroyed.</p>
+<p><strong>Note:</strong> once a state is active, its code will be repeated (at every frame of the application) until the state changes or until the object is destroyed.</p>
                 
                   
                 

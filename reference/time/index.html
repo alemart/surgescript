@@ -354,8 +354,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/getters_and_setters/" title="Getters & setters" class="md-nav__link">
-      Getters & setters
+    <a href="../../tutorials/properties/" title="Properties" class="md-nav__link">
+      Properties
     </a>
   </li>
 
@@ -366,8 +366,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../../tutorials/plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -440,8 +440,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../array/" title="Array" class="md-nav__link">
-      Array
+    <a href="../arguments/" title="Arguments" class="md-nav__link">
+      Arguments
     </a>
   </li>
 
@@ -452,8 +452,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../arguments/" title="Arguments" class="md-nav__link">
-      Arguments
+    <a href="../array/" title="Array" class="md-nav__link">
+      Array
     </a>
   </li>
 
@@ -524,6 +524,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -548,18 +560,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../iterator/" title="Iterator" class="md-nav__link">
-      Iterator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../object/" title="Object" class="md-nav__link">
       Object
     </a>
@@ -574,6 +574,42 @@
   <li class="md-nav__item">
     <a href="../plugin/" title="Plugin" class="md-nav__link">
       Plugin
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../string/" title="String" class="md-nav__link">
+      String
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../surgescript/" title="SurgeScript" class="md-nav__link">
+      SurgeScript
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../system/" title="System" class="md-nav__link">
+      System
     </a>
   </li>
 
@@ -627,6 +663,33 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#time_1" title="time" class="md-nav__link">
+    time
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delta" title="delta" class="md-nav__link">
+    delta
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tickcount" title="tickCount" class="md-nav__link">
+    tickCount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
       
@@ -637,42 +700,6 @@
   
 </nav>
     
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../string/" title="String" class="md-nav__link">
-      String
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../surgescript/" title="SurgeScript" class="md-nav__link">
-      SurgeScript
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../system/" title="System" class="md-nav__link">
-      System
-    </a>
   </li>
 
         
@@ -1102,6 +1129,33 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#time_1" title="time" class="md-nav__link">
+    time
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delta" title="delta" class="md-nav__link">
+    delta
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tickcount" title="tickCount" class="md-nav__link">
+    tickCount
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
       
@@ -1124,14 +1178,18 @@
                 <h1 id="time">Time</h1>
 <p>Time utilities. This object is available simply by typing <code>Time</code>.</p>
 <h2 id="properties">Properties</h2>
-<ul>
-<li><code>time</code>: number. The number of seconds since the application was started at the beginning of this frame.</li>
-<li><code>delta</code>: number. The time, in second, taken to complete the last frame of the application. Use this value to make your application behave consistently regardless of the frame rate.</li>
-<li><code>tickCount</code>: number. The number of seconds since the application was started at the moment this property is evaluated*.</li>
-</ul>
+<h4 id="time_1">time</h4>
+<p><code>time</code>: number, read-only.</p>
+<p>The number of seconds since the application was started at the beginning of this frame.</p>
+<h4 id="delta">delta</h4>
+<p><code>delta</code>: number, read-only.</p>
+<p>The time, in seconds, taken to complete the last frame of the application. Use this value to make your application behave consistently regardless of the frame rate.</p>
+<h4 id="tickcount">tickCount</h4>
+<p><code>tickCount</code>: number, read-only.</p>
+<p>The number of seconds since the application was started at the moment this property is evaluated.</p>
 <blockquote>
 <p><strong>Note:</strong></p>
-<p>* Since <code>Time.tickCount</code> may return different values during the same frame of your application, it's generally advisable to use <code>Time.time</code> instead.</p>
+<p>Since <code>Time.tickCount</code> may return different values during the same frame of your application, it's generally advisable to use <code>Time.time</code> instead.</p>
 </blockquote>
                 
                   
@@ -1168,13 +1226,13 @@
           </a>
         
         
-          <a href="../string/" title="String" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../engine/actor/" title="Actor" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                String
+                Actor
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

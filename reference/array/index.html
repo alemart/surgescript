@@ -354,8 +354,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/getters_and_setters/" title="Getters & setters" class="md-nav__link">
-      Getters & setters
+    <a href="../../tutorials/properties/" title="Properties" class="md-nav__link">
+      Properties
     </a>
   </li>
 
@@ -366,8 +366,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../../tutorials/plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -438,6 +438,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../arguments/" title="Arguments" class="md-nav__link">
+      Arguments
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -470,6 +482,19 @@
   <a href="#properties" title="Properties" class="md-nav__link">
     Properties
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#length" title="length" class="md-nav__link">
+    length
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -594,18 +619,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../arguments/" title="Arguments" class="md-nav__link">
-      Arguments
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../boolean/" title="Boolean" class="md-nav__link">
       Boolean
     </a>
@@ -666,6 +679,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -690,18 +715,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../iterator/" title="Iterator" class="md-nav__link">
-      Iterator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../object/" title="Object" class="md-nav__link">
       Object
     </a>
@@ -716,30 +729,6 @@
   <li class="md-nav__item">
     <a href="../plugin/" title="Plugin" class="md-nav__link">
       Plugin
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../tags/" title="TagSystem" class="md-nav__link">
-      TagSystem
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../time/" title="Time" class="md-nav__link">
-      Time
     </a>
   </li>
 
@@ -776,6 +765,30 @@
   <li class="md-nav__item">
     <a href="../system/" title="System" class="md-nav__link">
       System
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tags/" title="TagSystem" class="md-nav__link">
+      TagSystem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../time/" title="Time" class="md-nav__link">
+      Time
     </a>
   </li>
 
@@ -1206,6 +1219,19 @@
     Properties
   </a>
   
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#length" title="length" class="md-nav__link">
+    length
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -1364,9 +1390,9 @@ Number of characters: 3
 <p>Whenever you define a array, you spawn a new object. One is advised to <strong>NOT</strong> define arrays within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.</p>
 </blockquote>
 <h2 id="properties">Properties</h2>
-<ul>
-<li><code>length</code>: number. The number of elements in the Array.</li>
-</ul>
+<h4 id="length">length</h4>
+<p><code>length</code>: number, read-only.</p>
+<p>The number of elements in the Array.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="get">get</h4>
 <p><code>get(index)</code></p>
@@ -1433,8 +1459,8 @@ Console.print(characters); // [ &quot;Surge&quot;, &quot;Neon&quot;, &quot;Charg
 </ul>
 <h4 id="clear">clear</h4>
 <p><code>clear()</code></p>
-<p>Clears the array. It will no longer hold any elements and its length will be set to zero.
-<em>Available since SurgeScript 0.5.3</em></p>
+<p>Clears the array. It will no longer hold any elements and its length will be set to zero.</p>
+<p><em>Available since:</em> SurgeScript 0.5.3</p>
 <h4 id="indexof">indexOf</h4>
 <p><code>indexOf(value)</code></p>
 <p>Search the Array for element <code>value</code> and return its position.</p>
@@ -1550,7 +1576,7 @@ object &quot;Sort.OrderByDesc&quot;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../application/" title="Application" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../arguments/" title="Arguments" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1559,19 +1585,19 @@ object &quot;Sort.OrderByDesc&quot;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Application
+                Arguments
               </span>
             </div>
           </a>
         
         
-          <a href="../arguments/" title="Arguments" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../boolean/" title="Boolean" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Arguments
+                Boolean
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

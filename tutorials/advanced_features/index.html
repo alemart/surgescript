@@ -356,8 +356,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../getters_and_setters/" title="Getters & setters" class="md-nav__link">
-      Getters & setters
+    <a href="../properties/" title="Properties" class="md-nav__link">
+      Properties
     </a>
   </li>
 
@@ -368,8 +368,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -409,6 +409,13 @@
         <li class="md-nav__item">
   <a href="#lookup-operator" title="Lookup operator" class="md-nav__link">
     Lookup operator
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#assertions" title="Assertions" class="md-nav__link">
+    Assertions
   </a>
   
 </li>
@@ -499,8 +506,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/array/" title="Array" class="md-nav__link">
-      Array
+    <a href="../../reference/arguments/" title="Arguments" class="md-nav__link">
+      Arguments
     </a>
   </li>
 
@@ -511,8 +518,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/arguments/" title="Arguments" class="md-nav__link">
-      Arguments
+    <a href="../../reference/array/" title="Array" class="md-nav__link">
+      Array
     </a>
   </li>
 
@@ -583,6 +590,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../reference/iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../reference/math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -607,18 +626,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/iterator/" title="Iterator" class="md-nav__link">
-      Iterator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/object/" title="Object" class="md-nav__link">
       Object
     </a>
@@ -633,30 +640,6 @@
   <li class="md-nav__item">
     <a href="../../reference/plugin/" title="Plugin" class="md-nav__link">
       Plugin
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../reference/tags/" title="TagSystem" class="md-nav__link">
-      TagSystem
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../reference/time/" title="Time" class="md-nav__link">
-      Time
     </a>
   </li>
 
@@ -693,6 +676,30 @@
   <li class="md-nav__item">
     <a href="../../reference/system/" title="System" class="md-nav__link">
       System
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/tags/" title="TagSystem" class="md-nav__link">
+      TagSystem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/time/" title="Time" class="md-nav__link">
+      Time
     </a>
   </li>
 
@@ -1126,6 +1133,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#assertions" title="Assertions" class="md-nav__link">
+    Assertions
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#functors" title="Functors" class="md-nav__link">
     Functors
   </a>
@@ -1180,6 +1194,11 @@ fun set(key, value)
 </code></pre>
 
 <p>Given an object <code>obj</code>, the expression <code>x = obj[key]</code> is equivalent to <code>x = obj.get(key)</code>. Similarly, <code>obj[key] = value</code> is equivalent to <code>obj.set(key, value)</code>.</p>
+<h2 id="assertions">Assertions</h2>
+<p>The <code>assert(condition)</code> statement specifies a <code>condition</code> that you expect to be true at a certain point in your code. If that condition turns out to be false, the code will be interrupted with an <em>assertion failed</em> error. Example:</p>
+<pre><code>assert(name == &quot;Surge&quot;); // will crash if name isn't &quot;Surge&quot;
+</code></pre>
+
 <h2 id="functors">Functors</h2>
 <p>In SurgeScript, objects can be made to behave like functions. We call these objects <em>functors</em> (or function objects). To make an object behave like a function, you have to overload the <em>( )</em> operator (also known as the <em>function operator</em>). This is done by defining function <em>call()</em> in your object:</p>
 <pre><code>fun call()
@@ -1356,7 +1375,7 @@ object &quot;EvenIterator&quot;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../plugins/" title="Plugin system" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../plugins/" title="Plugins" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1365,7 +1384,7 @@ object &quot;EvenIterator&quot;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Plugin system
+                Plugins
               </span>
             </div>
           </a>

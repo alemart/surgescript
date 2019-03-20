@@ -351,6 +351,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#this" title="this" class="md-nav__link">
+    this
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#typeof" title="typeof" class="md-nav__link">
     typeof
   </a>
@@ -358,8 +365,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#this" title="this" class="md-nav__link">
-    this
+  <a href="#timeout" title="timeout" class="md-nav__link">
+    timeout
   </a>
   
 </li>
@@ -470,8 +477,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../getters_and_setters/" title="Getters & setters" class="md-nav__link">
-      Getters & setters
+    <a href="../properties/" title="Properties" class="md-nav__link">
+      Properties
     </a>
   </li>
 
@@ -482,8 +489,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../plugins/" title="Plugin system" class="md-nav__link">
-      Plugin system
+    <a href="../plugins/" title="Plugins" class="md-nav__link">
+      Plugins
     </a>
   </li>
 
@@ -554,8 +561,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/array/" title="Array" class="md-nav__link">
-      Array
+    <a href="../../reference/arguments/" title="Arguments" class="md-nav__link">
+      Arguments
     </a>
   </li>
 
@@ -566,8 +573,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/arguments/" title="Arguments" class="md-nav__link">
-      Arguments
+    <a href="../../reference/array/" title="Array" class="md-nav__link">
+      Array
     </a>
   </li>
 
@@ -638,6 +645,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../reference/iterator/" title="Iterator" class="md-nav__link">
+      Iterator
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../reference/math/" title="Math" class="md-nav__link">
       Math
     </a>
@@ -662,18 +681,6 @@
 
 
   <li class="md-nav__item">
-    <a href="../../reference/iterator/" title="Iterator" class="md-nav__link">
-      Iterator
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
     <a href="../../reference/object/" title="Object" class="md-nav__link">
       Object
     </a>
@@ -688,30 +695,6 @@
   <li class="md-nav__item">
     <a href="../../reference/plugin/" title="Plugin" class="md-nav__link">
       Plugin
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../reference/tags/" title="TagSystem" class="md-nav__link">
-      TagSystem
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../../reference/time/" title="Time" class="md-nav__link">
-      Time
     </a>
   </li>
 
@@ -748,6 +731,30 @@
   <li class="md-nav__item">
     <a href="../../reference/system/" title="System" class="md-nav__link">
       System
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/tags/" title="TagSystem" class="md-nav__link">
+      TagSystem
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../reference/time/" title="Time" class="md-nav__link">
+      Time
     </a>
   </li>
 
@@ -1238,6 +1245,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#this" title="this" class="md-nav__link">
+    this
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#typeof" title="typeof" class="md-nav__link">
     typeof
   </a>
@@ -1245,8 +1259,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#this" title="this" class="md-nav__link">
-    this
+  <a href="#timeout" title="timeout" class="md-nav__link">
+    timeout
   </a>
   
 </li>
@@ -1320,8 +1334,13 @@ next = null;
 <td>/</td>
 <td>Division</td>
 </tr>
+<tr>
+<td>%</td>
+<td>Remainder</td>
+</tr>
 </tbody>
 </table>
+<p>The multiplication, division and remainder operators have precedence over the addition and the subtraction operators.</p>
 <p>Examples:</p>
 <pre><code>two = 1 + 1;
 ten = 5 * 2;
@@ -1335,6 +1354,8 @@ zero = 15 - 10 - 5;
 one = 15 - (10 + 4);
 twelve = (2 + 2) * 3;
 prime = -(-15 + 8);
+seven = 5 + 5 % 3;
+negativeTwo = -5 % 3;
 </code></pre>
 
 <h2 id="comparison-operators">Comparison operators</h2>
@@ -1475,27 +1496,32 @@ t = !x &amp;&amp; x; // evaluates to false
 <tr>
 <td><code>x = value</code></td>
 <td><code>x = value</code></td>
-<td>Assigns <em>value</em> to x</td>
+<td>Assigns <code>value</code> to <code>x</code></td>
 </tr>
 <tr>
 <td><code>x += value</code></td>
 <td><code>x = x + value</code></td>
-<td>Adds <em>value</em> to x</td>
+<td>Adds <code>value</code> to <code>x</code></td>
 </tr>
 <tr>
 <td><code>x -= value</code></td>
 <td><code>x = x - value</code></td>
-<td>Subtracts <em>value</em> from x</td>
+<td>Subtracts <code>value</code> from <code>x</code></td>
 </tr>
 <tr>
 <td><code>x *= value</code></td>
 <td><code>x = x * value</code></td>
-<td>Multiplies x by <em>value</em></td>
+<td>Multiplies <code>x</code> by <code>value</code></td>
 </tr>
 <tr>
 <td><code>x /= value</code></td>
 <td><code>x = x / value</code></td>
-<td>Divides x by <em>value</em></td>
+<td>Divides <code>x</code> by <code>value</code></td>
+</tr>
+<tr>
+<td><code>x %= value</code></td>
+<td><code>x = x % value</code></td>
+<td>Sets <code>x</code> to the remainder of <code>x / value</code></td>
 </tr>
 </tbody>
 </table>
@@ -1503,6 +1529,10 @@ t = !x &amp;&amp; x; // evaluates to false
 <pre><code>language = &quot;Surge&quot;;
 language += &quot;Script&quot;;
 // language now evaluates to &quot;SurgeScript&quot;
+
+number = 5;
+number += 2;
+// number now evaluates to 7
 </code></pre>
 
 <h2 id="increment-and-decrement">Increment and decrement</h2>
@@ -1555,15 +1585,33 @@ z = y--, --x; // z is 1
 </code></pre>
 
 <h2 id="other-expressions">Other expressions</h2>
-<h4 id="typeof">typeof</h4>
-<p>The expression <code>typeof expr</code> evaluates to a string informing the type of <code>expr</code>. Example:</p>
-<pre><code>t = typeof 5; // t will hold the string &quot;number&quot;
-</code></pre>
-
-<p>The possible types are: <em>number</em>, <em>string</em>, <em>boolean</em>, <em>null</em>, <em>object</em>.</p>
 <h4 id="this">this</h4>
 <p>The keyword <code>this</code> represents the object in which it appears. Example:</p>
 <pre><code>this.destroy(); // destroys this object
+</code></pre>
+
+<h4 id="typeof">typeof</h4>
+<p>The expression <code>typeof(expr)</code> (or simply <code>typeof expr</code>), is evaluated to a string informing the type of <code>expr</code>. The possible types are: <em>number</em>, <em>string</em>, <em>boolean</em>, <em>null</em>, <em>object</em>. Example:</p>
+<pre><code>t = typeof 5; // t will hold the string &quot;number&quot;
+</code></pre>
+
+<h4 id="timeout">timeout</h4>
+<p>The expression <code>timeout(seconds)</code> is a handy feature of SurgeScript. It is evaluated to <code>true</code> if the object has been on the same state for the specified amount of time or more. It can only be used inside states. Example:</p>
+<pre><code>object &quot;Application&quot;
+{
+    state &quot;main&quot;
+    {
+        if(timeout(2.0)) {
+            Console.print(&quot;2 seconds have passed&quot;);
+            state = &quot;done&quot;;
+        }
+    }
+
+    state &quot;done&quot;
+    {
+        Application.exit();
+    }
+}
 </code></pre>
                 
                   
