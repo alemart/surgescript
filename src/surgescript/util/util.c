@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ static void (*log_function)(const char* message) = my_log;
 static void (*fatal_function)(const char* message) = my_fatal;
 
 /* current version of SurgeScript */
-static const char* version_string = "0.5.3";
+static const char* version_string = "0.5.4";
 
 
 
