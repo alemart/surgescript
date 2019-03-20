@@ -1,3 +1,18 @@
+# 0.5.3 - March 20th, 2019
+
+* Introduced the remainder operator (%)
+* Introduced the 'caller' keyword
+* Introduced the 'readonly' keyword
+* Improved the 'timeout' feature
+* Added the 'assert' feature
+* Added Object.__file, Math.NaN
+* Added utility functions for Arrays and Strings
+* Removed Transform2D from the core lib
+* The parser now accepts option flags
+* Bugfixes and performance optimizations
+* Updated documentation
+* General improvements
+
 # 0.5.2 - May 31st, 2018
 
 * Introduced the Plugin system
