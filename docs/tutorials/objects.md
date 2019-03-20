@@ -5,16 +5,14 @@ In SurgeScript, objects are units of code and data. Each object define a finite 
 
 > **Did you know?**
 > 
-> Almost all games implement what is called a game loop. In SurgeScript, the game loop is defined implicitly. State machines stand out as one of the key features of SurgeScript.
+> Games implement what is called a game loop. In SurgeScript, the game loop is defined implicitly via state machines. State machines are one of the key features of SurgeScript.
 
 State machines
 --------------
 
 A finite state machine is a mathematical abstraction composed of a finite number of **states** and by **transitions** between these states. Only one state can be active at any given time (we'll call it the active state). There must be one **initial state** (i.e., the first one to be active). A transition is a change of the active state that is triggered when a certain condition is met.
 
-As a concrete example, suppose that you want to create a door in your game. You, the developer, may open or close the door at will.
-
-That is said to be an *informal* description of the problem. We need to transform it in something more rigorous. What is a door? We'll show one possible solution here.
+As a concrete example, suppose that you want to create a door in your game. You, the developer, may open or close the door at will. But what is a door? We have just given *informal* description of the problem. However, we need to transform it in something more rigorous. Example:
 
 A door is an object with two states (see the Figure below):
 
