@@ -32,8 +32,6 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getepsilon(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getpi(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getdeg2rad(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getrad2deg(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getinfinity(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getnan(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_random(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -44,6 +42,8 @@ static surgescript_var_t* fun_asin(surgescript_object_t* object, const surgescri
 static surgescript_var_t* fun_acos(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_atan(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_atan2(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_deg2rad(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_rad2deg(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_pow(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_sqrt(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_exp(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -79,8 +79,6 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "Math", "get_epsilon", fun_getepsilon, 0);
     surgescript_vm_bind(vm, "Math", "get_pi", fun_getpi, 0);
-    surgescript_vm_bind(vm, "Math", "get_deg2rad", fun_getdeg2rad, 0);
-    surgescript_vm_bind(vm, "Math", "get_rad2deg", fun_getrad2deg, 0);
     surgescript_vm_bind(vm, "Math", "get_infinity", fun_getinfinity, 0);
     surgescript_vm_bind(vm, "Math", "get_NaN", fun_getnan, 0);
     surgescript_vm_bind(vm, "Math", "random", fun_random, 0);
@@ -91,6 +89,8 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "acos", fun_acos, 1);
     surgescript_vm_bind(vm, "Math", "atan", fun_atan, 1);
     surgescript_vm_bind(vm, "Math", "atan2", fun_atan2, 2);
+    surgescript_vm_bind(vm, "Math", "deg2rad", fun_deg2rad, 1);
+    surgescript_vm_bind(vm, "Math", "rad2deg", fun_rad2deg, 1);
     surgescript_vm_bind(vm, "Math", "pow", fun_pow, 2);
     surgescript_vm_bind(vm, "Math", "sqrt", fun_sqrt, 1);
     surgescript_vm_bind(vm, "Math", "exp", fun_exp, 1);
@@ -145,18 +145,6 @@ surgescript_var_t* fun_getepsilon(surgescript_object_t* object, const surgescrip
 surgescript_var_t* fun_getpi(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     return surgescript_var_set_number(surgescript_var_create(), PI);
-}
-
-/* constant: convert degrees to radians */
-surgescript_var_t* fun_getdeg2rad(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    return surgescript_var_set_number(surgescript_var_create(), DEG2RAD);
-}
-
-/* constant: convert radians to degrees */
-surgescript_var_t* fun_getrad2deg(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    return surgescript_var_set_number(surgescript_var_create(), RAD2DEG);
 }
 
 /* constant: a representation of +Infinity */
@@ -219,6 +207,20 @@ surgescript_var_t* fun_atan2(surgescript_object_t* object, const surgescript_var
     double y = surgescript_var_get_number(param[0]);
     double x = surgescript_var_get_number(param[1]);
     return surgescript_var_set_number(surgescript_var_create(), atan2(y, x));
+}
+
+/* convert degrees to radians */
+surgescript_var_t* fun_deg2rad(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    double x = surgescript_var_get_number(param[0]);
+    return surgescript_var_set_number(surgescript_var_create(), x * DEG2RAD);
+}
+
+/* convert radians to degrees */
+surgescript_var_t* fun_rad2deg(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    double x = surgescript_var_get_number(param[0]);
+    return surgescript_var_set_number(surgescript_var_create(), x / DEG2RAD);
 }
 
 /* pow(base, exponent): returns the value of base raised to the power exponent */
