@@ -22,18 +22,6 @@ Properties
 
 An approximation of pi (3.1415926535...)
 
-#### deg2rad
-
-`deg2rad`: number, read-only.
-
-A multiplier used to convert degrees to radians: equivalent to pi / 180.
-
-#### rad2deg
-
-`rad2deg`: number, read-only.
-
-A multiplier used to convert radians to degrees: equivalent to 180 / pi.
-
 #### epsilon
 
 `epsilon`: number, read-only.
@@ -227,6 +215,38 @@ Function atan2.
 
 The angle, in radians, between the positive x-axis and the *(x, y)* vector.
 
+#### deg2rad
+
+`deg2rad(degrees)`
+
+Converts `degrees` to radians.
+
+*Available since:* SurgeScript 0.5.3
+
+*Arguments*
+
+* `degrees`: number.
+
+*Returns*
+
+The converted value.
+
+#### rad2deg
+
+`rad2deg(radians)`
+
+Converts `radians` to degrees.
+
+*Available since:* SurgeScript 0.5.3
+
+*Arguments*
+
+* `radians`: number.
+
+*Returns*
+
+The converted value.
+
 #### random
 
 `random()`
@@ -287,7 +307,7 @@ If the fraction of `x` is 0.5, this function uses the [commercial rounding](http
 
 Modulus function. Used to get the remainder of a division.
 
-*Deprecated since SurgeScript 0.5.3. Use the remainder operator (%) instead, e.g.* `x % y`
+*Deprecated since SurgeScript 0.5.3. Use the remainder operator (%) instead, e.g.* `x % y`.
 
 *Arguments*
 

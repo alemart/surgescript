@@ -150,7 +150,8 @@ Adds a new element to the beginning of the Array.
 `clear()`
 
 Clears the array. It will no longer hold any elements and its length will be set to zero.
-*Available since SurgeScript 0.5.3*
+
+*Available since:* SurgeScript 0.5.3
 
 #### indexOf
 
