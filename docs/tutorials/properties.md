@@ -20,7 +20,7 @@ object "Animal"
 }
 ```
 
-This object can only say *meow!* Let's see:
+This object can only speak *meow!* Let's see:
 
 ```
 object "Application"
