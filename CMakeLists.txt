@@ -40,7 +40,6 @@ set(
     src/surgescript/runtime/sslib/tags.c
     src/surgescript/runtime/sslib/temp.c
     src/surgescript/runtime/sslib/time.c
-    src/surgescript/runtime/sslib/transform2d.c
     src/surgescript/runtime/stack.c
     src/surgescript/runtime/tag_system.c
     src/surgescript/runtime/variable.c
