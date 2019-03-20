@@ -44,7 +44,7 @@ meow!
 ...
 ```
 
-What if an external object could modify the sound of the animal? Trying to access `animal.sound` externally will trigger an error, unless you add the **public** keyword to your variable:
+What if an external object could modify the sound of the animal? Trying to access `animal.sound` externally will trigger an error, unless you add the **public** specifier to your variable:
 
 ```
 object "Animal"
@@ -73,7 +73,7 @@ object "Application"
 }
 ```
 
-Since SurgeScript 0.5.3, you may add the **readonly** specifier after the **public** keyword. Doing so disallows the modification of the property by external objects:
+Since SurgeScript 0.5.3, you may add the **readonly** modifier after the **public** specifier. Doing so disallows the modification of the property by external objects:
 
 ```
 object "Animal"
