@@ -1307,12 +1307,16 @@ while(it.hasNext()) {
 
     state &quot;main&quot;
     {
-        // iterate through the collection
+        // iterate the collection
         foreach(number in evenNumbers)
             Console.print(number);
 
-        // exit the app
-        Application.exit();
+        // we're done!
+        state = &quot;done&quot;;
+    }
+
+    state &quot;done&quot;
+    {
     }
 }
 
