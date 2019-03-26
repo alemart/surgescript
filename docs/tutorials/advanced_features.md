@@ -164,12 +164,16 @@ object "Application"
 
     state "main"
     {
-        // iterate through the collection
+        // iterate the collection
         foreach(number in evenNumbers)
             Console.print(number);
 
-        // exit the app
-        Application.exit();
+        // we're done!
+        state = "done";
+    }
+
+    state "done"
+    {
     }
 }
 

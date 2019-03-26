@@ -246,7 +246,6 @@ object "Application"
 
     state "done"
     {
-        Application.exit();
     }
 }
 ```

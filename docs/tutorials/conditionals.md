@@ -46,9 +46,6 @@ object "Application"
             // variable age is not less than 18
             Console.print("adult");
         }
-
-        // we're done!
-        Application.exit();
     }
 }
 ```
@@ -70,7 +67,6 @@ object "Application"
     state "main"
     {
         Console.print(message);
-        Application.exit();
     }
 }
 ```

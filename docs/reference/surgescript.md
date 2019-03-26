@@ -12,7 +12,6 @@ object "Application"
 	state "main"
 	{
         Console.print(SurgeScript.version);
-		Application.exit();
 	}
 }
 ```

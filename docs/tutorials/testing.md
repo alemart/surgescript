@@ -20,10 +20,10 @@ object "Application"
     state "main"
     {
         Console.print("Hello, world!");
-        state = "blank";
+        state = "done";
     }
 
-    state "blank"
+    state "done"
     {
     }
 }
