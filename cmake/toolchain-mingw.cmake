@@ -5,8 +5,7 @@
 #
 #     mkdir build && cd build
 #     cmake .. \
-#         -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-mingw.cmake \
-#         -DCMAKE_INSTALL_PREFIX=/path/to/MINGDIR
+#         -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain-mingw.cmake
 #     make && sudo make install
 #
 # This is for cross-compiling only.
@@ -39,6 +38,9 @@ else()
     set(CMAKE_RC_COMPILER /usr/local/cross-tools/bin/i386-mingw32-windres)
     set(CMAKE_FIND_ROOT_PATH /usr/local/cross-tools)
 endif()
+
+# Install prefix
+set(CMAKE_INSTALL_PREFIX "${CMAKE_FIND_ROOT_PATH}" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
 
 # Other settings
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
