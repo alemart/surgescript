@@ -100,7 +100,7 @@ if(WIN32 AND MINGW)
         set(CMAKE_RC_COMPILER windres)
     endif()
     execute_process(COMMAND "${CMAKE_RC_COMPILER}" -O coff -o "${CMAKE_CURRENT_BINARY_DIR}/iconwin.res" -i "${CMAKE_SOURCE_DIR}/src/surgescript/resources/iconwin.rc" -I "${CMAKE_SOURCE_DIR}")
-    set_target_properties(surgescript.bin PROPERTIES LINK_FLAGS "\"${CMAKE_CURRENT_BINARY_DIR}/iconwin.res\"")
+    set_target_properties(surgescript.bin PROPERTIES LINK_FLAGS "-static-libgcc \"${CMAKE_CURRENT_BINARY_DIR}/iconwin.res\"")
 endif()
 
 # Installation rules
