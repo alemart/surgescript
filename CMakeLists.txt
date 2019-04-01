@@ -6,7 +6,8 @@
 
 # Project info
 cmake_minimum_required(VERSION 3.0.2)
-project(surgescript)
+project(surgescript LANGUAGES C)
+set(CMAKE_C_STANDARD 99)
 
 # Sources
 set(
