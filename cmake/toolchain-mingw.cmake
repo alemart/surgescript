@@ -40,7 +40,7 @@ else()
 endif()
 
 # Install prefix
-set(CMAKE_INSTALL_PREFIX "${CMAKE_FIND_ROOT_PATH}" CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
+set(CMAKE_INSTALL_PREFIX "${CMAKE_FIND_ROOT_PATH}" CACHE PATH "Install path prefix, prepended onto install directories.")
 
 # Other settings
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
