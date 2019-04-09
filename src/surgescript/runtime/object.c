@@ -129,6 +129,9 @@ surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(obj->renv);
     int i;
 
+    /* call destructor */
+    surgescript_object_release(obj);
+
     /* am I root? */
     if(obj->parent != obj->handle) {
         surgescript_object_t* parent = surgescript_objectmanager_get(manager, obj->parent);
@@ -147,14 +150,11 @@ surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
     if(obj->transform != NULL)
         surgescript_transform_destroy(obj->transform);
 
-    /* call destructor */
-    surgescript_object_release(obj);
-
     /* clear up some data */
-    ssfree(obj->name);
     surgescript_renv_destroy(obj->renv);
     surgescript_heap_destroy(obj->heap);
     ssfree(obj->state_name);
+    ssfree(obj->name);
     ssfree(obj);
 
     /* done! */
@@ -296,6 +296,7 @@ unsigned surgescript_object_child(const surgescript_object_t* object, const char
 
     return surgescript_objectmanager_null(manager);
 }
+
 /*
  * surgescript_object_find_child()
  * find 1st child (or grand-child, or grand-grand-child, and so on) whose name matches the parameter
@@ -435,7 +436,6 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
         object->time_spent = 0;
     }
 }
-
 
 /*
  * surgescript_object_elapsed_time()
