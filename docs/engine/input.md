@@ -12,6 +12,8 @@ Factory
 
 Spawns a new Input component with the given input map.
 
+**Note:** to read input from a specific character, prefer using [Player.input](player.md#input) instead.
+
 *Arguments*
 
 * `inputMap`: string | null. The name of the input map. If set to `null`, a default input map will be used.

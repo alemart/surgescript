@@ -128,9 +128,29 @@ A shortcut to `animation.id`: an integer corresponding to the animation number.
 
 #### animation
 
-`animation`: [Animation](animation) object, read-only.
+`animation`: [Animation](animation.md) object, read-only.
 
 Reference to the Animation object of the Player.
+
+#### input
+
+`input`: [Input](input.md) object, read-only.
+
+Reference to the Input object of the Player.
+
+*Example*
+```
+using SurgeEngine.Player;
+
+object "Application"
+{
+    state "main"
+    {
+        if(Player.active.input.buttonDown("right"))
+            Console.print("Player is holding right");
+    }
+}
+```
 
 #### attacking
 
@@ -238,7 +258,7 @@ The maximum speed the player can reach without items (i.e., running naturally), 
 
 `speed`: number.
 
-The speed of the player, in pixels per second. This will be mapped automatically to [gsp](#gsp) or [xsp](#xsp), depending whether the player is touching the ground or not.
+The speed of the player, in pixels per second. This will be mapped automatically to [gsp](#gsp) or [xsp](#xsp), depending on whether the player is touching the ground or not.
 
 #### gsp
 
