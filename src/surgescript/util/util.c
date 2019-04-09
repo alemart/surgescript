@@ -41,7 +41,7 @@ static void (*log_function)(const char* message) = my_log;
 static void (*fatal_function)(const char* message) = my_fatal;
 
 /* current version of SurgeScript */
-static const char* version_string = "0.5.4";
+static const char* version_string = "0.5.4-dev";
 
 
 
@@ -151,6 +151,8 @@ int surgescript_util_versioncode(const char* version)
             x = x * 10 + (*version - '0');
         else if(*version == '.')
             code = code * 100 + x, x = 0;
+        else
+            break;
     }
 
     return code * 100 + x;
