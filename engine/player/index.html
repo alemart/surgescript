@@ -1001,6 +1001,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#input" title="input" class="md-nav__link">
+    input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#attacking" title="attacking" class="md-nav__link">
     attacking
   </a>
@@ -1495,6 +1502,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#input" title="input" class="md-nav__link">
+    input
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#attacking" title="attacking" class="md-nav__link">
     attacking
   </a>
@@ -1850,8 +1864,24 @@ object &quot;ActivityDebugger&quot; is &quot;awake&quot;, &quot;entity&quot;
 <p><code>anim</code>: number.</p>
 <p>A shortcut to <code>animation.id</code>: an integer corresponding to the animation number.</p>
 <h4 id="animation">animation</h4>
-<p><code>animation</code>: <a href="animation">Animation</a> object, read-only.</p>
+<p><code>animation</code>: <a href="../animation/">Animation</a> object, read-only.</p>
 <p>Reference to the Animation object of the Player.</p>
+<h4 id="input">input</h4>
+<p><code>input</code>: <a href="../input/">Input</a> object, read-only.</p>
+<p>Reference to the Input object of the Player.</p>
+<p><em>Example</em></p>
+<pre><code>using SurgeEngine.Player;
+
+object &quot;Application&quot;
+{
+    state &quot;main&quot;
+    {
+        if(Player.active.input.buttonDown(&quot;right&quot;))
+            Console.print(&quot;Player is holding right&quot;);
+    }
+}
+</code></pre>
+
 <h4 id="attacking">attacking</h4>
 <p><code>attacking</code>: boolean, read-only.</p>
 <p>Is the player attacking? (jumping, rolling, and so on)</p>
@@ -1905,7 +1935,7 @@ object &quot;ActivityDebugger&quot; is &quot;awake&quot;, &quot;entity&quot;
 <p>The maximum speed the player can reach without items (i.e., running naturally), in pixels per second.</p>
 <h4 id="speed">speed</h4>
 <p><code>speed</code>: number.</p>
-<p>The speed of the player, in pixels per second. This will be mapped automatically to <a href="#gsp">gsp</a> or <a href="#xsp">xsp</a>, depending whether the player is touching the ground or not.</p>
+<p>The speed of the player, in pixels per second. This will be mapped automatically to <a href="#gsp">gsp</a> or <a href="#xsp">xsp</a>, depending on whether the player is touching the ground or not.</p>
 <h4 id="gsp">gsp</h4>
 <p><code>gsp</code>: number.</p>
 <p>Ground speed, in pixels per second. Prefer using <a href="#speed">speed</a> instead, since <code>gsp</code> is only meaningful if the player is touching the ground.</p>
