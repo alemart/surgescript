@@ -228,17 +228,29 @@ The number of lives, an integer shared between all player objects.
 
 The score of the player, an integer value shared between all player objects.
 
+#### topspeed
+
+`topspeed`: number, read-only.
+
+The maximum speed the player can reach without items (i.e., running naturally), in pixels per second.
+
+#### speed
+
+`speed`: number.
+
+The speed of the player, in pixels per second. This will be mapped automatically to [gsp](#gsp) or [xsp](#xsp), depending whether the player is touching the ground or not.
+
 #### gsp
 
 `gsp`: number.
 
-Ground speed, in pixels per second.
+Ground speed, in pixels per second. Prefer using [speed](#speed) instead, since `gsp` is only meaningful if the player is touching the ground.
 
 #### xsp
 
 `xsp`: number.
 
-Horizontal speed, in pixels per second (useful while midair).
+Horizontal speed, in pixels per second (useful while midair). Prefer using [speed](#speed) instead.
 
 #### ysp
 
