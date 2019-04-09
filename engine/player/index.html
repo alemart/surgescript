@@ -2,7 +2,7 @@
 
 
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="no-js">
   <head>
     
@@ -32,7 +32,7 @@
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
       <link rel="shortcut icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-0.17.3, mkdocs-material-2.7.1">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.1.1">
     
     
       
@@ -40,20 +40,25 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/application.78aab2dc.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.3020aac5.css">
+      
       
     
     
-      <script src="../../assets/javascripts/modernizr.1aa3b519.js"></script>
+      <script src="../../assets/javascripts/modernizr.01ccdecf.js"></script>
     
     
-      <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
       
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700|Roboto+Mono">
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
-      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+    
+      
     
     
   </head>
@@ -66,9 +71,9 @@
         
       </defs>
     </svg>
-    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="drawer" autocomplete="off">
-    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="search" autocomplete="off">
-    <label class="md-overlay" data-md-component="overlay" for="drawer"></label>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
       <a href="#player" tabindex="1" class="md-skip">
         Skip to content
@@ -86,33 +91,30 @@
         </a>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
-        <label class="md-icon md-icon--menu md-header-nav__button" for="drawer"></label>
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
       </div>
       <div class="md-flex__cell md-flex__cell--stretch">
         <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
           
-            
-              <span class="md-header-nav__topic">
-                SurgeScript Documentation
-              </span>
-              <span class="md-header-nav__topic">
-                Player
-              </span>
-            
+            <span class="md-header-nav__topic">
+              SurgeScript Documentation
+            </span>
+            <span class="md-header-nav__topic">
+              Player
+            </span>
           
         </div>
       </div>
       <div class="md-flex__cell md-flex__cell--shrink">
         
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
           
-            <label class="md-icon md-icon--search md-header-nav__button" for="search"></label>
-            
 <div class="md-search" data-md-component="search" role="dialog">
-  <label class="md-search__overlay" for="search"></label>
+  <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
-      <label class="md-icon md-search__icon" for="search"></label>
+      <label class="md-icon md-search__icon" for="__search"></label>
       <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
         &#xE5CD;
       </button>
@@ -129,7 +131,6 @@
     </div>
   </div>
 </div>
-          
         
       </div>
       
@@ -150,12 +151,12 @@
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
-  <label class="md-nav__title md-nav__title--site" for="drawer">
-    <span class="md-nav__button md-logo">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo">
       
         <i class="md-icon"></i>
       
-    </span>
+    </a>
     SurgeScript Documentation
   </label>
   
@@ -899,12 +900,12 @@
 
   <li class="md-nav__item md-nav__item--active">
     
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="toc">
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
     
       
     
     
-      <label class="md-nav__link md-nav__link--active" for="toc">
+      <label class="md-nav__link md-nav__link--active" for="__toc">
         Player
       </label>
     
@@ -919,7 +920,7 @@
     
   
   
-    <label class="md-nav__title" for="toc">Table of contents</label>
+    <label class="md-nav__title" for="__toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
@@ -1107,6 +1108,20 @@
           <li class="md-nav__item">
   <a href="#score" title="score" class="md-nav__link">
     score
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topspeed" title="topspeed" class="md-nav__link">
+    topspeed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#speed" title="speed" class="md-nav__link">
+    speed
   </a>
   
 </li>
@@ -1399,7 +1414,7 @@
     
   
   
-    <label class="md-nav__title" for="toc">Table of contents</label>
+    <label class="md-nav__title" for="__toc">Table of contents</label>
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
@@ -1587,6 +1602,20 @@
           <li class="md-nav__item">
   <a href="#score" title="score" class="md-nav__link">
     score
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#topspeed" title="topspeed" class="md-nav__link">
+    topspeed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#speed" title="speed" class="md-nav__link">
+    speed
   </a>
   
 </li>
@@ -1821,7 +1850,7 @@ object &quot;ActivityDebugger&quot; is &quot;awake&quot;, &quot;entity&quot;
 <p><code>anim</code>: number.</p>
 <p>A shortcut to <code>animation.id</code>: an integer corresponding to the animation number.</p>
 <h4 id="animation">animation</h4>
-<p><code>animation</code>: <a href="../animation">Animation</a> object, read-only.</p>
+<p><code>animation</code>: <a href="animation">Animation</a> object, read-only.</p>
 <p>Reference to the Animation object of the Player.</p>
 <h4 id="attacking">attacking</h4>
 <p><code>attacking</code>: boolean, read-only.</p>
@@ -1836,10 +1865,10 @@ object &quot;ActivityDebugger&quot; is &quot;awake&quot;, &quot;entity&quot;
 <p><code>direction</code>: number, read-only.</p>
 <p>Direction will be +1 if the player is facing right, -1 if facing left.</p>
 <h4 id="transform">transform</h4>
-<p><code>transform</code>: <a href="../transform">Transform</a> object, read-only.</p>
+<p><code>transform</code>: <a href="transform">Transform</a> object, read-only.</p>
 <p>The transform of the Player.</p>
 <h4 id="collider">collider</h4>
-<p><code>collider</code>: <a href="../collider">Collider</a> object, read-only.</p>
+<p><code>collider</code>: <a href="collider">Collider</a> object, read-only.</p>
 <p>A collider associated with this Player.</p>
 <h4 id="shield">shield</h4>
 <p><code>shield</code>: string.</p>
@@ -1871,12 +1900,18 @@ object &quot;ActivityDebugger&quot; is &quot;awake&quot;, &quot;entity&quot;
 <h4 id="score">score</h4>
 <p><code>score</code>: number.</p>
 <p>The score of the player, an integer value shared between all player objects.</p>
+<h4 id="topspeed">topspeed</h4>
+<p><code>topspeed</code>: number, read-only.</p>
+<p>The maximum speed the player can reach without items (i.e., running naturally), in pixels per second.</p>
+<h4 id="speed">speed</h4>
+<p><code>speed</code>: number.</p>
+<p>The speed of the player, in pixels per second. This will be mapped automatically to <a href="#gsp">gsp</a> or <a href="#xsp">xsp</a>, depending whether the player is touching the ground or not.</p>
 <h4 id="gsp">gsp</h4>
 <p><code>gsp</code>: number.</p>
-<p>Ground speed, in pixels per second.</p>
+<p>Ground speed, in pixels per second. Prefer using <a href="#speed">speed</a> instead, since <code>gsp</code> is only meaningful if the player is touching the ground.</p>
 <h4 id="xsp">xsp</h4>
 <p><code>xsp</code>: number.</p>
-<p>Horizontal speed, in pixels per second (useful while midair).</p>
+<p>Horizontal speed, in pixels per second (useful while midair). Prefer using <a href="#speed">speed</a> instead.</p>
 <h4 id="ysp">ysp</h4>
 <p><code>ysp</code>: number.</p>
 <p>Vertical speed, in pixels per second.</p>
@@ -1895,7 +1930,7 @@ object &quot;ActivityDebugger&quot; is &quot;awake&quot;, &quot;entity&quot;
 <p>Makes the player bounce after smashing a hazard. The trajectory of the movement will be computed according to the position of the hazard. If no hazard is present, you may pass <code>null</code> as the argument.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>hazard</code>: <a href="../actor">Actor</a> object. The hazard.</li>
+<li><code>hazard</code>: <a href="actor">Actor</a> object. The hazard.</li>
 </ul>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Player;
@@ -1927,14 +1962,14 @@ object &quot;ShieldBox&quot; is &quot;entity&quot;
 <p>Makes the player bounce after smashing a hazard. If the player comes at the hazard from below, the player is thrown downwards. If not, the player is thrown upwards. The <code>hazard</code> parameter is mandatory.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>hazard</code>: <a href="../actor">Actor</a> object. The hazard.</li>
+<li><code>hazard</code>: <a href="actor">Actor</a> object. The hazard.</li>
 </ul>
 <h4 id="hit">hit</h4>
 <p><code>hit(hazard | null)</code></p>
 <p>Makes the player get hit. Call it whenever the player gets hit by a hazard. The hit movement will be calculated according to the position of the hazard. If no hazard is present, you may pass <code>null</code> as the argument.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>hazard</code>: <a href="../actor">Actor</a> object. The hazard.</li>
+<li><code>hazard</code>: <a href="actor">Actor</a> object. The hazard.</li>
 </ul>
 <h4 id="kill">kill</h4>
 <p><code>kill()</code></p>
@@ -2013,13 +2048,11 @@ object &quot;ShieldBox&quot; is &quot;entity&quot;
       <div class="md-footer-copyright">
         
         powered by
-        <a href="http://www.mkdocs.org">MkDocs</a>
+        <a href="https://www.mkdocs.org">MkDocs</a>
         and
         <a href="https://squidfunk.github.io/mkdocs-material/">
           Material for MkDocs</a>
       </div>
-      
-        
       
     </div>
   </div>
@@ -2027,12 +2060,9 @@ object &quot;ShieldBox&quot; is &quot;entity&quot;
       
     </div>
     
-      <script src="../../assets/javascripts/application.8eb9be28.js"></script>
+      <script src="../../assets/javascripts/application.dc02f8ce.js"></script>
       
-      <script>app.initialize({version:"0.17.3",url:{base:"../.."}})</script>
-      
-    
-    
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
     
   </body>
