@@ -138,6 +138,21 @@ object "TestObject"
 }
 ```
 
+#### findAll
+
+`findAll(objectName)`
+
+Finds all descendants named `objectName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+
+*Available since:* SurgeScript 0.5.4
+
+*Arguments*
+
+* `objectName`: string. The name of the objects to be found.
+
+*Returns*
+
+A new array containing all the descendants named `objectName`. If no such descendants are found, an empty array is returned.
 
 #### toString
 

@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -321,6 +321,34 @@ unsigned surgescript_object_find_child(const surgescript_object_t* object, const
     }
 
     return null_handle;
+}
+
+/*
+ * surgescript_object_find_all()
+ * Finds all descendants named name, calling callback for each one.
+ * Returns the number of matching descendants.
+ * This might be slow, so it's recommended to cache the objects.
+ */
+int surgescript_object_find_all(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*))
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
+    int i, count = 0;
+
+    for(i = 0; i < ssarray_length(object->child); i++) {
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+        if(strcmp(name, child->name) == 0) {
+            ++count;
+            callback(child->handle, data);
+        }
+    }
+
+    for(i = 0; i < ssarray_length(object->child); i++) {
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+        count += surgescript_object_find_all(child, name, data, callback);
+    }
+
+    return count;
 }
 
 /*
