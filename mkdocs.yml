@@ -46,6 +46,7 @@ pages:
         - 'Audio':
             - 'Music': 'engine/music.md'
             - 'Sound': 'engine/sound.md'
+        - 'Brick': 'engine/brick.md'
         - 'Camera': 'engine/camera.md'
         - 'Collisions':
             - 'Collider': 'engine/collider.md'
