@@ -60,3 +60,44 @@ Functions
 If an entity\* that has been placed in the level via the editor gets too far off camera, it will be deactivated and repositioned back to its spawn point (i.e., the place where it was originally). Whenever that happens, the engine will call this function if it's available in your entity. You may want to use this to reset the entity back to its initial state.
 
 **Note\*:** entities tagged as awake or detached are not affected.
+
+*Example*
+```
+using SurgeEngine.UI.Text;
+
+// The object below is a simple counter that gets
+// reseted whenever it gets too far off camera.
+object "My Test Counter" is "entity"
+{
+    label = Text("default");
+    counter = 0;
+
+    state "main"
+    {
+        Console.print("Starting the counter...");
+        state = "wait";
+    }
+
+    state "wait"
+    {
+        label.text = counter;
+        if(timeout(1.0))
+            state = "increment";
+    }
+
+    state "increment"
+    {
+        counter++;
+        state = "wait";
+    }
+
+
+    // Without implementing function onReset() below,
+    // the counter would retain its state.
+    fun onReset()
+    {
+        counter = 0;
+        state = "main";
+    }
+}
+```
