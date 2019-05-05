@@ -15,7 +15,7 @@ object "Application"
         test.boolean();
         test.objects();
         test.system();
-        test.lambda();
+        test.functor();
         test.getset();
         test.array();
         test.dictionary();
@@ -226,9 +226,9 @@ object "SurgeScriptTest"
         end();
     }
 
-    fun lambda()
+    fun functor()
     {
-        begin("Lambdas");
+        begin("Function objects");
         test(this(5) == 5) || fail(1);
         test(this(this) == this) || fail(2);
         test(this(this)(5) == 5) || fail(3);
