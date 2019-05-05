@@ -693,6 +693,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#findall" title="findAll" class="md-nav__link">
+    findAll
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tostring" title="toString" class="md-nav__link">
     toString
   </a>
@@ -917,6 +924,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../engine/brick/" title="Brick" class="md-nav__link">
+      Brick
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../engine/camera/" title="Camera" class="md-nav__link">
       Camera
     </a>
@@ -930,13 +949,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-5" type="checkbox" id="nav-5-5">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-6" type="checkbox" id="nav-5-6">
     
-    <label class="md-nav__link" for="nav-5-5">
+    <label class="md-nav__link" for="nav-5-6">
       Collisions
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-5">
+      <label class="md-nav__title" for="nav-5-6">
         Collisions
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1014,13 +1033,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-7" type="checkbox" id="nav-5-7">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-8" type="checkbox" id="nav-5-8">
     
-    <label class="md-nav__link" for="nav-5-7">
+    <label class="md-nav__link" for="nav-5-8">
       Input
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-7">
+      <label class="md-nav__title" for="nav-5-8">
         Input
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1122,13 +1141,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-13" type="checkbox" id="nav-5-13">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-14" type="checkbox" id="nav-5-14">
     
-    <label class="md-nav__link" for="nav-5-13">
+    <label class="md-nav__link" for="nav-5-14">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-13">
+      <label class="md-nav__title" for="nav-5-14">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1170,13 +1189,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-15" type="checkbox" id="nav-5-15">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-16" type="checkbox" id="nav-5-16">
     
-    <label class="md-nav__link" for="nav-5-15">
+    <label class="md-nav__link" for="nav-5-16">
       Video
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-15">
+      <label class="md-nav__title" for="nav-5-16">
         Video
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1342,6 +1361,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#findall" title="findAll" class="md-nav__link">
+    findAll
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#tostring" title="toString" class="md-nav__link">
     toString
   </a>
@@ -1483,6 +1509,16 @@
 }
 </code></pre>
 
+<h4 id="findall">findAll</h4>
+<p><code>findAll(objectName)</code></p>
+<p>Finds all descendants named <code>objectName</code>. Since this function traverses the <a href="../tutorials/object_tree">object tree</a>, it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.</p>
+<p><em>Available since:</em> SurgeScript 0.5.4</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>objectName</code>: string. The name of the objects to be found.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>A new array containing all the descendants named <code>objectName</code>. If no such descendants are found, an empty array is returned.</p>
 <h4 id="tostring">toString</h4>
 <p><code>toString()</code></p>
 <p>Converts the object to a string. This function is designed to be overloaded by your own objects.</p>
