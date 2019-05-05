@@ -91,7 +91,6 @@ object "My Test Counter" is "entity"
         state = "wait";
     }
 
-
     // Without implementing function onReset() below,
     // the counter would retain its state.
     fun onReset()
