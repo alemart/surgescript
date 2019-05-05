@@ -49,3 +49,14 @@ Will destroy the object automatically if it gets too far off camera.
 
 Private entities cannot be spawned via the level editor (they will be hidden).
 
+
+Functions
+---------
+
+#### onReset
+
+`onReset()`
+
+If an entity\* that has been placed in the level via the editor gets too far off camera, it will be deactivated and repositioned back to its spawn point (i.e., the place where it was originally). Whenever that happens, the engine will call this function if it's available in your entity. You may want to use this to reset the entity back to its initial state.
+
+**Note\*:** entities tagged as awake or detached are not affected.
