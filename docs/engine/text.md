@@ -1,7 +1,7 @@
 Text
 ====
 
-The Text object allows you to display custom texts in the game. The parent object is required to be an [entity](entity).
+The Text object allows you to display custom texts in the game. The parent object is required to be an [entity](../entity).
 
 Factory
 -------

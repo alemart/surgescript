@@ -1,7 +1,7 @@
 Animation
 =========
 
-Animation objects are used to gather data about specific animations. Although you can't spawn Animation objects directly, you can access them via other objects such as [Actor](actor) and [Player](player).
+Animation objects are used to gather data about specific animations. Although you can't spawn Animation objects directly, you can access them via other objects such as [Actor](../actor) and [Player](../player).
 
 *Example*
 

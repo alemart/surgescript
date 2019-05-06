@@ -3,7 +3,7 @@ Transform
 
 Transform encapsulates a 2D Transform. It comes with functions for translating, rotating and scaling things - and it's very useful for games! Whenever you spawn a Transform on your object, you gain power to command its position, rotation and scale.
 
-The Transform component can only be spawned on [entities](entity). If an entity with a Transform component has any children, the transform of the children will be affected by the transform of their parent. Example: if you move an object, its children will be moved by the same amount.
+The Transform component can only be spawned on [entities](../entity). If an entity with a Transform component has any children, the transform of the children will be affected by the transform of their parent. Example: if you move an object, its children will be moved by the same amount.
 
 Factory
 -------
@@ -12,7 +12,7 @@ Factory
 
 `Transform()`
 
-Spawns a Transform on the object. The object is required to be an [entity](entity).
+Spawns a Transform on the object. The object is required to be an [entity](../entity).
 
 *Returns*
 
