@@ -15,8 +15,8 @@ object "SensorToy" is "entity"
 
     state "main"
     {
-        if(sensor.status != 0)
-            Console.print("Got brick");
+        if(sensor.status != null)
+            Console.print("Got a brick");
     }
 
     fun constructor()
@@ -60,15 +60,6 @@ Should the sensor be rendered? Useful for debugging. Defaults to `false`.
 
 #### status
 
-`status`: number, read-only.
+`status`: string | null, read-only.
 
-The type of the brick colliding with the sensor (0: no brick, 1: obstacle, 2: cloud). To detect if the sensor is colliding with something, check if its status is non-zero, i.e., `sensor.status != 0`.
-
-Functions
----------
-
-#### update
-
-`update()`
-
-The sensor status is updated automatically once per frame. Use this function to update it manually. This is useful if you modify the position of the parent object and need the updated sensor status in the same frame (for example; you're working in a loop).
+The type of the brick colliding with the sensor (either *"solid"* or *"cloud"*). If the sensor isn't colliding with a brick, its status will be `null`.
