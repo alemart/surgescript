@@ -108,7 +108,7 @@ A sibling of name `siblingName`, or `null` if there is no such object.
 
 `findObject(objectName)`
 
-Searches for a descendant (child, grand-child, and so on) named `objectName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Finds a descendant (child, grand-child, and so on) named `objectName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
 
 *Arguments*
 
@@ -138,9 +138,9 @@ object "TestObject"
 }
 ```
 
-#### findAll
+#### findObjects
 
-`findAll(objectName)`
+`findObjects(objectName)`
 
 Finds all descendants named `objectName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
 
@@ -153,6 +153,38 @@ Finds all descendants named `objectName`. Since this function traverses the [obj
 *Returns*
 
 A new array containing all the descendants named `objectName`. If no such descendants are found, an empty array is returned.
+
+#### findObjectWithTag
+
+`findObjectWithTag(tagName)`
+
+Finds a descendant tagged `tagName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+
+*Available since:* SurgeScript 0.5.4
+
+*Arguments*
+
+* `tagName`: string. The name of a tag.
+
+*Returns*
+
+A descendant tagged `tagName`, or `null` if there is no such object.
+
+#### findObjectsWithTag
+
+`findObjectsWithTag(tagName)`
+
+Finds all descendants tagged `tagName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+
+*Available since:* SurgeScript 0.5.4
+
+*Arguments*
+
+* `tagName`: string. The name of a tag.
+
+*Returns*
+
+A new array containing all the descendants tagged `tagName`. If no such descendants are found, an empty array is returned.
 
 #### toString
 
