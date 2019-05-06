@@ -68,6 +68,7 @@
     F( SSOP_MOD, "mod" )                                 /* t[a] %= t[b] */ \
     F( SSOP_NEG, "neg" )                                 /* t[a] = -t[b] */ \
     F( SSOP_LNOT, "lnot" )                               /* t[a] = !t[b] */ \
+    F( SSOP_LNOT2, "lnot2" )                            /* t[a] = !!t[b] */ \
     F( SSOP_NOT, "not" )                                 /* t[a] = ~t[b] */ \
     F( SSOP_AND, "and" )                           /* t[a] = t[a] & t[b] */ \
     F( SSOP_OR, "or" )                             /* t[a] = t[a] | t[b] */ \

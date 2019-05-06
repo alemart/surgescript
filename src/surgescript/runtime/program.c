@@ -540,6 +540,10 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             surgescript_var_set_bool(t(a), !surgescript_var_get_bool(t(b)));
             break;
 
+        case SSOP_LNOT2:
+            surgescript_var_set_bool(t(a), surgescript_var_get_bool(t(b)));
+            break;
+
         /* bitwise operations */
         case SSOP_NOT:
             surgescript_var_set_rawbits(t(a), ~surgescript_var_get_rawbits(t(b)));

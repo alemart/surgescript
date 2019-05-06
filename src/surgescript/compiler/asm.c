@@ -223,7 +223,7 @@ void emit_equalityexpr2(surgescript_nodecontext_t context, const char* equalityo
     }
     else if(strcmp(equalityop, "!=") == 0) {
         SSASM(SSOP_CMP, T1, T0);
-        SSASM(SSOP_MOV, T0, T2);
+        SSASM(SSOP_LNOT2, T0, T2);
     }
     else if(strcmp(equalityop, "===") == 0) {
         surgescript_program_label_t nope = NEWLABEL();
@@ -240,7 +240,7 @@ void emit_equalityexpr2(surgescript_nodecontext_t context, const char* equalityo
         SSASM(SSOP_TCMP, T1, T0);
         SSASM(SSOP_JNE, U(yep));
         SSASM(SSOP_CMP, T1, T0);
-        SSASM(SSOP_MOV, T0, T2);
+        SSASM(SSOP_LNOT2, T0, T2);
         SSASM(SSOP_JMP, U(done));
         LABEL(yep);
         SSASM(SSOP_MOVB, T0, B(true));
