@@ -19,6 +19,7 @@ object "On/Off Platform" is "entity"
     {
         if(timeout(2.0)) {
             brick.enabled = false;
+            actor.visible = false;
             state = "disabled";
         }
     }
@@ -27,6 +28,7 @@ object "On/Off Platform" is "entity"
     {
         if(timeout(2.0)) {
             brick.enabled = true;
+            actor.visible = true;
             state = "main";
         }
     }
