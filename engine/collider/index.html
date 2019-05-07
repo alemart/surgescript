@@ -10,7 +10,13 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="SurgeScript is a scripting language for games.">
       
+      
+        <link rel="canonical" href="https://docs.opensurge2d.org/engine/collider/">
+      
+      
+        <meta name="author" content="Alexandre Martins">
       
       
         <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -59,6 +65,31 @@
     
     
       
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-120511928-1", "opensurge2d.org")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -68,6 +99,25 @@
     <svg class="md-svg">
       <defs>
         
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
         
       </defs>
     </svg>
@@ -84,7 +134,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../.." title="SurgeScript Documentation" class="md-header-nav__button md-logo">
+        <a href="https://docs.opensurge2d.org/" title="SurgeScript Documentation" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -134,6 +184,28 @@
         
       </div>
       
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/alemart/surgescript/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+          </div>
+        </div>
+      
     </div>
   </nav>
 </header>
@@ -152,13 +224,33 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo">
+    <a href="https://docs.opensurge2d.org/" title="SurgeScript Documentation" class="md-nav__button md-logo">
       
         <i class="md-icon"></i>
       
     </a>
     SurgeScript Documentation
   </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/alemart/surgescript/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -1243,11 +1335,13 @@
             <article class="md-content__inner md-typeset">
               
                 
+                  <a href="https://github.com/alemart/surgescript/edit/master/docs/engine/collider.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
                 
                 <h1 id="collider">Collider</h1>
 <p>A collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually centered on the hot spot of sprites, but that can be changed by altering their <em>anchor</em>.</p>
-<p>Colliders must be spawned as children of <a href="entity">entities</a>. To detect collisions, you may implement function <code>onCollision()</code> on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than simple primitives.</p>
-<p>A collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as <a href="collisionbox">CollisionBox</a> and <a href="collisionball">CollisionBall</a>. All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.</p>
+<p>Colliders must be spawned as children of <a href="/engine/entity">entities</a>. To detect collisions, you may implement function <code>onCollision()</code> on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than simple primitives.</p>
+<p>A collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as <a href="/engine/collisionbox">CollisionBox</a> and <a href="/engine/collisionball">CollisionBall</a>. All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.</p>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Actor;
 using SurgeEngine.Player;
@@ -1286,7 +1380,7 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 <h2 id="properties">Properties</h2>
 <h4 id="entity">entity</h4>
 <p><code>entity</code>: object, read-only.</p>
-<p>The <a href="entity">Entity</a> associated with this collider.</p>
+<p>The <a href="/engine/entity">Entity</a> associated with this collider.</p>
 <h4 id="visible">visible</h4>
 <p><code>visible</code>: boolean.</p>
 <p>Useful for debugging. The default value is <code>false</code>.</p>
@@ -1296,7 +1390,7 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 <p>Checks if this collider is colliding with some other collider.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>collider</code>: <a href="collider">Collider</a> object. The other collider.</li>
+<li><code>collider</code>: <a href="/engine/collider">Collider</a> object. The other collider.</li>
 </ul>
 <p><em>Returns</em></p>
 <p>Returns <code>true</code> if there is a collision (the colliders overlap), or <code>false</code> otherwise.</p>
@@ -1373,6 +1467,10 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            SurgeScript is a scripting language for games. Copyright © 2016-2019 Alexandre Martins.
+          </div>
         
         powered by
         <a href="https://www.mkdocs.org">MkDocs</a>

@@ -10,7 +10,13 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
+        <meta name="description" content="SurgeScript is a scripting language for games.">
       
+      
+        <link rel="canonical" href="https://docs.opensurge2d.org/engine/player/">
+      
+      
+        <meta name="author" content="Alexandre Martins">
       
       
         <meta name="lang:clipboard.copy" content="Copy to clipboard">
@@ -59,6 +65,31 @@
     
     
       
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-120511928-1", "opensurge2d.org")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
     
     
   </head>
@@ -68,6 +99,25 @@
     <svg class="md-svg">
       <defs>
         
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448"
+    viewBox="0 0 416 448" id="__github">
+  <path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19-18.125
+        8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19 18.125-8.5
+        18.125 8.5 10.75 19 3.125 20.5zM320 304q0 10-3.125 20.5t-10.75
+        19-18.125 8.5-18.125-8.5-10.75-19-3.125-20.5 3.125-20.5 10.75-19
+        18.125-8.5 18.125 8.5 10.75 19 3.125 20.5zM360
+        304q0-30-17.25-51t-46.75-21q-10.25 0-48.75 5.25-17.75 2.75-39.25
+        2.75t-39.25-2.75q-38-5.25-48.75-5.25-29.5 0-46.75 21t-17.25 51q0 22 8
+        38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0
+        37.25-1.75t35-7.375 30.5-15 20.25-25.75 8-38.375zM416 260q0 51.75-15.25
+        82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5-41.75
+        1.125q-19.5 0-35.5-0.75t-36.875-3.125-38.125-7.5-34.25-12.875-30.25-20.25-21.5-28.75q-15.5-30.75-15.5-82.75
+        0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25
+        30.875q36.75-8.75 77.25-8.75 37 0 70 8 26.25-20.5
+        46.75-30.25t47.25-9.75q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34
+        99.5z" />
+</svg>
         
       </defs>
     </svg>
@@ -84,7 +134,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="../.." title="SurgeScript Documentation" class="md-header-nav__button md-logo">
+        <a href="https://docs.opensurge2d.org/" title="SurgeScript Documentation" class="md-header-nav__button md-logo">
           
             <i class="md-icon"></i>
           
@@ -134,6 +184,28 @@
         
       </div>
       
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/alemart/surgescript/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+          </div>
+        </div>
+      
     </div>
   </nav>
 </header>
@@ -152,13 +224,33 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo">
+    <a href="https://docs.opensurge2d.org/" title="SurgeScript Documentation" class="md-nav__button md-logo">
       
         <i class="md-icon"></i>
       
     </a>
     SurgeScript Documentation
   </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/alemart/surgescript/" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
   
   <ul class="md-nav__list" data-md-scrollfix>
     
@@ -1785,6 +1877,8 @@
             <article class="md-content__inner md-typeset">
               
                 
+                  <a href="https://github.com/alemart/surgescript/edit/master/docs/engine/player.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                
                 
                 <h1 id="player">Player</h1>
 <p>The Player object is used to control a specific player/character. Player objects are tagged <em>player</em>. That might be useful when dealing with collisions.</p>
@@ -1876,10 +1970,10 @@ object &quot;ActivityDebugger&quot; is &quot;awake&quot;, &quot;entity&quot;
 <p><code>anim</code>: number.</p>
 <p>A shortcut to <code>animation.id</code>: an integer corresponding to the animation number.</p>
 <h4 id="animation">animation</h4>
-<p><code>animation</code>: <a href="../animation/">Animation</a> object, read-only.</p>
+<p><code>animation</code>: <a href="/engine/animation">Animation</a> object, read-only.</p>
 <p>Reference to the Animation object of the Player.</p>
 <h4 id="input">input</h4>
-<p><code>input</code>: <a href="../input/">Input</a> object, read-only.</p>
+<p><code>input</code>: <a href="/engine/input">Input</a> object, read-only.</p>
 <p>Reference to the Input object of the Player.</p>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Player;
@@ -1907,10 +2001,10 @@ object &quot;Application&quot;
 <p><code>direction</code>: number, read-only.</p>
 <p>Direction will be +1 if the player is facing right, -1 if facing left.</p>
 <h4 id="transform">transform</h4>
-<p><code>transform</code>: <a href="transform">Transform</a> object, read-only.</p>
+<p><code>transform</code>: <a href="/engine/transform">Transform</a> object, read-only.</p>
 <p>The transform of the Player.</p>
 <h4 id="collider">collider</h4>
-<p><code>collider</code>: <a href="collider">Collider</a> object, read-only.</p>
+<p><code>collider</code>: <a href="/engine/collider">Collider</a> object, read-only.</p>
 <p>A collider associated with this Player.</p>
 <h4 id="shield">shield</h4>
 <p><code>shield</code>: string.</p>
@@ -1972,7 +2066,7 @@ object &quot;Application&quot;
 <p>Makes the player bounce after smashing a hazard. The trajectory of the movement will be computed according to the position of the hazard. If no hazard is present, you may pass <code>null</code> as the argument.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>hazard</code>: <a href="actor">Actor</a> object. The hazard.</li>
+<li><code>hazard</code>: <a href="/engine/actor">Actor</a> object. The hazard.</li>
 </ul>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Player;
@@ -2004,14 +2098,14 @@ object &quot;ShieldBox&quot; is &quot;entity&quot;
 <p>Makes the player bounce after smashing a hazard. If the player comes at the hazard from below, the player is thrown downwards. If not, the player is thrown upwards. The <code>hazard</code> parameter is mandatory.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>hazard</code>: <a href="actor">Actor</a> object. The hazard.</li>
+<li><code>hazard</code>: <a href="/engine/actor">Actor</a> object. The hazard.</li>
 </ul>
 <h4 id="hit">hit</h4>
 <p><code>hit(hazard | null)</code></p>
 <p>Makes the player get hit. Call it whenever the player gets hit by a hazard. The hit movement will be calculated according to the position of the hazard. If no hazard is present, you may pass <code>null</code> as the argument.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>hazard</code>: <a href="actor">Actor</a> object. The hazard.</li>
+<li><code>hazard</code>: <a href="/engine/actor">Actor</a> object. The hazard.</li>
 </ul>
 <h4 id="kill">kill</h4>
 <p><code>kill()</code></p>
@@ -2088,6 +2182,10 @@ object &quot;ShieldBox&quot; is &quot;entity&quot;
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-footer-copyright">
+        
+          <div class="md-footer-copyright__highlight">
+            SurgeScript is a scripting language for games. Copyright © 2016-2019 Alexandre Martins.
+          </div>
         
         powered by
         <a href="https://www.mkdocs.org">MkDocs</a>
