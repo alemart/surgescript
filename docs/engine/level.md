@@ -78,6 +78,12 @@ object "Application"
 
 The act number (1, 2, 3...) of the current level.
 
+#### cleared
+
+`cleared`: boolean, read-only.
+
+Checks if the current level has been cleared by the player. If this is `true`, a *level cleared* animation should be played. Although the engine provides a default animation, you may use this property to design your own. See also: [clear()](#clear).
+
 #### file
 
 `file`: string, read-only.
@@ -114,11 +120,11 @@ The music of the level.
 
 The y-coordinate, in world space, of the level water. Pixels not above this value are underwater.
 
-#### cleared
+#### background
 
-`cleared`: boolean, read-only.
+`background`: string.
 
-Checks if the current level has been cleared by the player. If this is `true`, a *level cleared* animation should be played. Although the engine provides a default animation, you may use this property to design your own. See also: [clear()](#clear).
+The path to the background file (.bg) currently in use. Use this property to change the background of the level.
 
 Functions
 ---------
