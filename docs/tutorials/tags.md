@@ -28,7 +28,7 @@ object "Car" is "vehicle"
 }
 ```
 
-We may check if an object has a particular tag with the **hasTag()** function (see the [Object reference](../reference/object#hastag) for more details):
+We may check if an object has a particular tag with the **hasTag()** function (see the [Object reference](/reference/object#hastag) for more details):
 
 ```
 object "Application"

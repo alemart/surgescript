@@ -97,7 +97,7 @@ n! = { n * (n-1)!    if n > 1
      { 1             otherwise
 ```
 
-One interesting example of recursion that arises in computer science is called the **binary search** algorithm. Given a sorted [Array](../reference/array), the binary search finds the position of a target value without having to inspect the whole collection. In the example below, *bsearch()* is a recursive function:
+One interesting example of recursion that arises in computer science is called the **binary search** algorithm. Given a sorted [Array](/reference/array), the binary search finds the position of a target value without having to inspect the whole collection. In the example below, *bsearch()* is a recursive function:
 
 ```
 object "BinarySearch"

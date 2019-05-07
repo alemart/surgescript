@@ -1,7 +1,7 @@
 Text
 ====
 
-The Text object allows you to display custom texts in the game. The parent object is required to be an [entity](../entity).
+The Text object allows you to display custom texts in the game. The parent object is required to be an [entity](/engine/entity).
 
 Factory
 -------
@@ -96,6 +96,6 @@ The zindex of the Text object. Defaults to 0.5.
 
 #### offset
 
-`offset`: [Vector2](vector2) object.
+`offset`: [Vector2](/engine/vector2) object.
 
 An *(x,y)* offset relative to the parent object. Defaults to zero.

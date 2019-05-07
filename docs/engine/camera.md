@@ -36,6 +36,6 @@ Properties
 
 #### position
 
-`position`: [Vector2](vector2) object.
+`position`: [Vector2](/engine/vector2) object.
 
 The position of the camera in world space.

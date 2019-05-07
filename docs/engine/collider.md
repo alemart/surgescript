@@ -3,9 +3,9 @@ Collider
 
 A collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually centered on the hot spot of sprites, but that can be changed by altering their *anchor*.
 
-Colliders must be spawned as children of [entities](../entity). To detect collisions, you may implement function `onCollision()` on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than simple primitives.
+Colliders must be spawned as children of [entities](/engine/entity). To detect collisions, you may implement function `onCollision()` on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than simple primitives.
 
-A collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as [CollisionBox](collisionbox) and [CollisionBall](collisionball). All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.
+A collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as [CollisionBox](/engine/collisionbox) and [CollisionBall](/engine/collisionball). All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.
 
 *Example*
 
@@ -52,7 +52,7 @@ Properties
 
 `entity`: object, read-only.
 
-The [Entity](entity) associated with this collider.
+The [Entity](/engine/entity) associated with this collider.
 
 #### visible
 
@@ -71,7 +71,7 @@ Checks if this collider is colliding with some other collider.
 
 *Arguments*
 
-* `collider`: [Collider](collider) object. The other collider.
+* `collider`: [Collider](/engine/collider) object. The other collider.
 
 *Returns*
 

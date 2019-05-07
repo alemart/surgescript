@@ -3,7 +3,7 @@ Level
 
 Level routines. A level is a scene in the game, represented by a .lev file in the *levels/* folder.
 
-Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be automatically deleted by the [Garbage Collector](../reference/gc). Sometimes, you may want to spawn [entities](entity) in your level, but keeping references to all of them may be inconvenient. If this is your case, you can [spawn them as children of the Level object](#spawn). It will keep references of the entities for you; therefore, they won't be garbage collected.
+Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be automatically deleted by the [Garbage Collector](/reference/gc). Sometimes, you may want to spawn [entities](/engine/entity) in your level, but keeping references to all of them may be inconvenient. If this is your case, you can [spawn them as children of the Level object](#spawn). It will keep references of the entities for you; therefore, they won't be garbage collected.
 
 *Example*
 ```
@@ -104,7 +104,7 @@ The license of the level, defined in the .lev file.
 
 #### music
 
-`music`: [Music](music) object, read-only.
+`music`: [Music](/engine/music) object, read-only.
 
 The music of the level.
 
@@ -127,7 +127,7 @@ Functions
 
 `spawn(objectName)`
 
-Spawns an object as a child of Level. Such objects won't be garbage collected. Please note that the spawned object is required to be an [entity](entity).
+Spawns an object as a child of Level. Such objects won't be garbage collected. Please note that the spawned object is required to be an [entity](/engine/entity).
 
 *Arguments*
 
@@ -167,7 +167,7 @@ Pauses the game.
 
 Loads the specified level/quest.
 
-* If you pass the path to a level (a .lev file in the *levels/* folder), the specified level will be loaded. The state of the current level (position of the [entities](entity) and so on) will be lost.
+* If you pass the path to a level (a .lev file in the *levels/* folder), the specified level will be loaded. The state of the current level (position of the [entities](/engine/entity) and so on) will be lost.
 
 * If you pass the path to a quest (a .qst file in the *quests/* folder), the specified quest will be loaded and, when it's completed, the engine will redirect the user back to the level he/she was before. This might be useful for creating bonuses, configuration screens, and so on.
 

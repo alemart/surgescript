@@ -3,7 +3,7 @@ Vector2
 
 Vector2 is a vector in 2D space. A vector is a mathematical object that has direction and length, usually represented by an arrow. A Vector2 can also be represented by a pair of *(x,y)* coordinates.
 
-In SurgeScript, vectors are immutable. Once created, you can't change their coordinates directly. In order to bring about change (say, in the position of an [entity](entity)), you need to create a new vector.
+In SurgeScript, vectors are immutable. Once created, you can't change their coordinates directly. In order to bring about change (say, in the position of an [entity](/engine/entity)), you need to create a new vector.
 
 Vector2 objects have been designed in such a way that their functions make them chainable. You can compose different vector operations using english-based terms, as in the example below:
 

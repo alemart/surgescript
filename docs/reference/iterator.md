@@ -3,7 +3,7 @@ Iterator
 
 In SurgeScript, Iterator is an abstract contract, or protocol, that define a set of functions that should be written in concrete implementations. If you're familiar with object oriented programming, Iterator is an interface. Iterators are used to traverse containers / collections / data structures and access its elements.
 
-Concrete implementations of Iterator include: `ArrayIterator` and `DictionaryIterator`. If you wish to [write your own iterators](../tutorials/advanced_features#iterators), you need to specify the [functions described below](#functions).
+Concrete implementations of Iterator include: `ArrayIterator` and `DictionaryIterator`. If you wish to [write your own iterators](/tutorials/advanced_features#iterators), you need to specify the [functions described below](#functions).
 
 The data structure that you wish to traverse should include an `iterator()` function that spawns the concrete implementation of the Iterator. Thus, the `parent` object of the Iterator will be the structure to be traversed.
 

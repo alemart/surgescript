@@ -1,7 +1,7 @@
 CollisionBall
 =============
 
-A CollisionBall is a special type of [Collider](collider) that takes the shape of a ball. In 2D space, this is a circle with a specific radius. All functions and properties of [Collider](collider) apply to this.
+A CollisionBall is a special type of [Collider](/engine/collider) that takes the shape of a ball. In 2D space, this is a circle with a specific radius. All functions and properties of [Collider](/engine/collider) apply to this.
 
 *Example*
 
@@ -48,7 +48,7 @@ Properties
 
 #### center
 
-`center`: [Vector2](vector2), read-only.
+`center`: [Vector2](/engine/vector2), read-only.
 
 The center of the CollisionBall, in world space.
 

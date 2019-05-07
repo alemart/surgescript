@@ -8,7 +8,7 @@ Properties
 
 #### args
 
-`args`: [Arguments](arguments) object, read-only.
+`args`: [Arguments](/reference/arguments) object, read-only.
 
 Use this property to read the command line arguments.
 

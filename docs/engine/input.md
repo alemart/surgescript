@@ -12,7 +12,7 @@ Factory
 
 Spawns a new Input component with the given input map.
 
-**Note:** to read input from a specific character, prefer using [Player.input](player.md#input) instead.
+**Note:** to read input from a specific character, prefer using [Player.input](/engine/player#input) instead.
 
 *Arguments*
 

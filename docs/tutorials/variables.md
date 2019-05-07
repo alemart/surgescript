@@ -60,7 +60,7 @@ object "Application"
 }
 ```
 
-Arrays have many interesting properties and operations that you can see in the [Language Reference](../reference/array.md).
+Arrays have many interesting properties and operations that you can see in the [Language Reference](/reference/array).
 
 #### Dictionaries
 
@@ -88,7 +88,7 @@ object "Application"
 }
 ```
 
-Dictionaries have many interesting properties and operations that you can see in the [Language Reference](../reference/dictionary.md).
+Dictionaries have many interesting properties and operations that you can see in the [Language Reference](/reference/dictionary).
 
 > **Cautionary note**
 > 
@@ -149,4 +149,4 @@ object "ScopeTest"
 }
 ```
 
-Furthermore, *object-level* variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are *private* to the objects). You need to define [functions](functions) or [getters and setters](properties) to accomplish that.
+Furthermore, *object-level* variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are *private* to the objects). You need to define [functions](/tutorials/functions) or [getters and setters](/tutorials/properties) to accomplish that.

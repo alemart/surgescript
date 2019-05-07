@@ -101,7 +101,7 @@ Please note: in the example above, objects spawned by the factory will be childr
 Iterators
 ---------
 
-As seen in the [loops](loops#foreach) section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function *iterator()*. If you have ever used Java, you'll find this to be familiar.
+As seen in the [loops](/tutorials/loops#foreach) section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function *iterator()*. If you have ever used Java, you'll find this to be familiar.
 
 ```
 object "MyCollection"

@@ -180,13 +180,13 @@ if(gimacian < 0)
 
 #### sort
 
-`sort(cmpFunc)`
+`sort(cmpFun)`
 
-Sorts the Array. If no comparison [functor](../tutorials/advanced_features#functors) is provided (`cmpFunc` is `null`), the Array will be sorted in ascending order.
+Sorts the Array. If no comparison [functor](/tutorials/advanced_features#functors) is provided (`cmpFun` is `null`), the Array will be sorted in ascending order.
 
 *Arguments*
 
-* `cmpFunc`: object | null. This [functor](../tutorials/advanced_features#functors) implements function `call(a, b)` that compares two array elements as described in the example below.
+* `cmpFun`: object | null. This [functor](/tutorials/advanced_features#functors) implements function `call(a, b)` that compares two array elements as described in the example below.
 
 *Returns*
 

@@ -1,7 +1,7 @@
 Animation
 =========
 
-Animation objects are used to gather data about specific animations. Although you can't spawn Animation objects directly, you can access them via other objects such as [Actor](../actor) and [Player](../player).
+Animation objects are used to gather data about specific animations. Although you can't spawn Animation objects directly, you can access them via other objects such as [Actor](/engine/actor) and [Player](/engine/player).
 
 *Example*
 
@@ -43,7 +43,7 @@ Will be true if the current animation has finished playing.
 
 #### hotspot
 
-`hotspot`: [Vector2](vector2) object, read-only.
+`hotspot`: [Vector2](/engine/vector2) object, read-only.
 
 The position of the hot spot of the current animation.
 

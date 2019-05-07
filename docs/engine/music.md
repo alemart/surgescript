@@ -3,7 +3,7 @@ Music
 
 The Music object lets you play music. This is meant to handle background music; therefore, only one music can be played at a time.
 
-Unlike regular [sounds](sound), musics are streamed, (i.e., not loaded completely in memory). Given the longer nature of musics, this improves memory usage and helps with the loading times.
+Unlike regular [sounds](/engine/sound), musics are streamed, (i.e., not loaded completely in memory). Given the longer nature of musics, this improves memory usage and helps with the loading times.
 
 *Example*
 ```

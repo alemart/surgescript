@@ -135,7 +135,7 @@ Gets a collection containing the keys of the Dictionary.
 
 *Returns*
 
-Returns a new [Array](array) containing the keys of the Dictionary.
+Returns a new [Array](/reference/array) containing the keys of the Dictionary.
 
 #### iterator
 

@@ -3,7 +3,7 @@ Transform
 
 Transform encapsulates a 2D Transform. It comes with functions for translating, rotating and scaling things - and it's very useful for games! Whenever you spawn a Transform on your object, you gain power to command its position, rotation and scale.
 
-The Transform component can only be spawned on [entities](../entity). If an entity with a Transform component has any children, the transform of the children will be affected by the transform of their parent. Example: if you move an object, its children will be moved by the same amount.
+The Transform component can only be spawned on [entities](/engine/entity). If an entity with a Transform component has any children, the transform of the children will be affected by the transform of their parent. Example: if you move an object, its children will be moved by the same amount.
 
 Factory
 -------
@@ -12,7 +12,7 @@ Factory
 
 `Transform()`
 
-Spawns a Transform on the object. The object is required to be an [entity](../entity).
+Spawns a Transform on the object. The object is required to be an [entity](/engine/entity).
 
 *Returns*
 
@@ -41,7 +41,7 @@ Properties
 
 #### position
 
-`position`: [Vector2](vector2) object.
+`position`: [Vector2](/engine/vector2) object.
 
 The position of the object in world coordinates.
 
@@ -83,7 +83,7 @@ Unless you need to read or to set the angle of the object to a pre-determined va
 
 #### localPosition
 
-`localPosition`: [Vector2](Vector2) object.
+`localPosition`: [Vector2](/engine/Vector2) object.
 
 The position of the object relative to the parent object.
 
@@ -99,7 +99,7 @@ Unless you need to read or to set the angle of the object to a pre-determined va
 
 #### localScale
 
-`localScale`: [Vector2](Vector2) object.
+`localScale`: [Vector2](/engine/vector2) object.
 
 The local scale of the entity.
 
@@ -153,7 +153,7 @@ Translates the object by a `delta` vector.
 
 *Arguments*
 
-* `delta`: [Vector2](vector2) object.
+* `delta`: [Vector2](/engine/vector2) object.
 
 #### rotate
 

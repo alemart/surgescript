@@ -31,7 +31,7 @@ object "Application"
 
 You should see the *Hello, world!* message as a result.
 
-Ready to proceed? Let's go to [Introduction to objects](objects)!
+Ready to proceed? Let's go to [Introduction to objects](/tutorials/objects)!
 
 Using the standalone version
 ----------------------------
@@ -65,4 +65,4 @@ surgescript.exe hello.ss
 Hello, world!
 ```
 
-To begin our learning adventure, let's go to [Introduction to objects](objects).
+To begin our learning adventure, let's go to [Introduction to objects](/tutorials/objects).

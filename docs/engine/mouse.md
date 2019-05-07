@@ -39,7 +39,7 @@ Properties
 
 #### position
 
-`position`: [Vector2](vector2) object, read-only.
+`position`: [Vector2](/engine/vector2) object, read-only.
 
 The position of the mouse cursor, in screen space.
 

@@ -5,7 +5,7 @@ In SurgeScript, objects have a hierarchical relationship. Suppose that object P 
 
 An object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (or a tree). The Figure below shows an example:
 
-![An object tree](../img/tree.png)
+![An object tree](/img/tree.png)
 
 In this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero.
 
@@ -75,7 +75,7 @@ object "Foo"
 Traversing the hierarchy
 ------------------------
 
-Relevant data about the object hierarchy can be obtained using the following properties and functions (read more on the [Object reference](../reference/object)):
+Relevant data about the object hierarchy can be obtained using the following properties and functions (read more on the [Object reference](/reference/object)):
 
 Function / property|Description
 -------------------|-----------

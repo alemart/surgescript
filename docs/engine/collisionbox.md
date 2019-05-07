@@ -1,7 +1,7 @@
 CollisionBox
 ============
 
-A CollisionBox is a special type of [Collider](collider) that takes the shape of a box. In 2D space, this is a rectangle with a specific width and height. All functions and properties of [Collider](collider) apply to this.
+A CollisionBox is a special type of [Collider](/engine/collider) that takes the shape of a box. In 2D space, this is a rectangle with a specific width and height. All functions and properties of [Collider](/engine/collider) apply to this.
 
 *Example*
 

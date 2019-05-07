@@ -1,7 +1,7 @@
 Sound
 =====
 
-The Sound object lets you play samples, which are short sounds like: jump, brake, select, hit, etc. Sounds are loaded entirely in the memory; therefore, this object is meant to be used only with samples. If you need to play longer things like music, consider using [Music](music) instead.
+The Sound object lets you play samples, which are short sounds like: jump, brake, select, hit, etc. Sounds are loaded entirely in the memory; therefore, this object is meant to be used only with samples. If you need to play longer things like music, consider using [Music](/engine/music) instead.
 
 *Example*
 ```

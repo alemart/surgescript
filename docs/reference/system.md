@@ -8,13 +8,13 @@ Properties
 
 #### tags
 
-`tags`: [Tag System](tags.md) object, read-only.
+`tags`: [Tag System](/reference/tags) object, read-only.
 
 A reference to the Tag System.
 
 #### gc
 
-`gc`: [Garbage Collector](gc.md) object, read-only.
+`gc`: [Garbage Collector](/reference/gc) object, read-only.
 
 A reference to the Garbage Collector object.
 

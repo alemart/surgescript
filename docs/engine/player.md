@@ -128,13 +128,13 @@ A shortcut to `animation.id`: an integer corresponding to the animation number.
 
 #### animation
 
-`animation`: [Animation](animation.md) object, read-only.
+`animation`: [Animation](/engine/animation) object, read-only.
 
 Reference to the Animation object of the Player.
 
 #### input
 
-`input`: [Input](input.md) object, read-only.
+`input`: [Input](/engine/input) object, read-only.
 
 Reference to the Input object of the Player.
 
@@ -178,13 +178,13 @@ Direction will be +1 if the player is facing right, -1 if facing left.
 
 #### transform
 
-`transform`: [Transform](transform) object, read-only.
+`transform`: [Transform](/engine/transform) object, read-only.
 
 The transform of the Player.
 
 #### collider
 
-`collider`: [Collider](collider) object, read-only.
+`collider`: [Collider](/engine/collider) object, read-only.
 
 A collider associated with this Player.
 
@@ -307,7 +307,7 @@ Makes the player bounce after smashing a hazard. The trajectory of the movement 
 
 *Arguments*
 
-* `hazard`: [Actor](actor) object. The hazard.
+* `hazard`: [Actor](/engine/actor) object. The hazard.
 
 *Example*
 ```
@@ -343,7 +343,7 @@ Makes the player bounce after smashing a hazard. If the player comes at the haza
 
 *Arguments*
 
-* `hazard`: [Actor](actor) object. The hazard.
+* `hazard`: [Actor](/engine/actor) object. The hazard.
 
 #### hit
 
@@ -353,7 +353,7 @@ Makes the player get hit. Call it whenever the player gets hit by a hazard. The 
 
 *Arguments*
 
-* `hazard`: [Actor](actor) object. The hazard.
+* `hazard`: [Actor](/engine/actor) object. The hazard.
 
 #### kill
 

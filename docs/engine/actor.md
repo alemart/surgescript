@@ -1,7 +1,7 @@
 Actor
 =====
 
-The Actor component is used to associate a sprite to a target object. The target object is required to be an [entity](entity). It's recommended to use only one actor per entity.
+The Actor component is used to associate a sprite to a target object. The target object is required to be an [entity](/engine/entity). It's recommended to use only one actor per entity.
 
 Factory
 -------
@@ -48,7 +48,7 @@ A shortcut to `animation.id`: an integer corresponding to the animation number. 
 
 #### animation
 
-`animation`: [Animation](animation) object, read-only.
+`animation`: [Animation](/engine/animation) object, read-only.
 
 Reference to the Animation object of the Actor.
 
@@ -66,7 +66,7 @@ The entity associated with this component.
 
 #### offset
 
-`offset`: [Vector2](vector2) object.
+`offset`: [Vector2](/engine/vector2) object.
 
 An *(x,y)* offset relative to the parent object. Defaults to zero.
 

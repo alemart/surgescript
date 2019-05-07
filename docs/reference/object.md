@@ -34,7 +34,7 @@ Objects are active by default. Whenever an object is set to be inactive, its sta
 
 #### __functions
 
-`__functions`: [Array](array.md) object, read-only.
+`__functions`: [Array](/reference/array) object, read-only.
 
 The functions of this object represented as a collection of strings.
 
@@ -108,7 +108,7 @@ A sibling of name `siblingName`, or `null` if there is no such object.
 
 `findObject(objectName)`
 
-Finds a descendant (child, grand-child, and so on) named `objectName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Finds a descendant (child, grand-child, and so on) named `objectName`. Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
 
 *Arguments*
 
@@ -142,7 +142,7 @@ object "TestObject"
 
 `findObjects(objectName)`
 
-Finds all descendants named `objectName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Finds all descendants named `objectName`. Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
 
 *Available since:* SurgeScript 0.5.4
 
@@ -158,7 +158,7 @@ A new array containing all the descendants named `objectName`. If no such descen
 
 `findObjectWithTag(tagName)`
 
-Finds a descendant tagged `tagName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Finds a descendant tagged `tagName`. Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
 
 *Available since:* SurgeScript 0.5.4
 
@@ -174,7 +174,7 @@ A descendant tagged `tagName`, or `null` if there is no such object.
 
 `findObjectsWithTag(tagName)`
 
-Finds all descendants tagged `tagName`. Since this function traverses the [object tree](../tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Finds all descendants tagged `tagName`. Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
 
 *Available since:* SurgeScript 0.5.4
 
@@ -249,7 +249,7 @@ Invokes function `functionName`, passing the parameters specified in `paramsArra
 *Arguments*
 
 * `functionName`: string. The name of the function to be called.
-* `paramsArray`: [Array](array.md). The parameters to be passed to the function.
+* `paramsArray`: [Array](/reference/array). The parameters to be passed to the function.
 
 *Returns*
 

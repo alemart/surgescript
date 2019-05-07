@@ -39,7 +39,7 @@ The number converted to a string.
 
 `equals(x)`
 
-Compares the number to another number `x`. Since this routine performs a comparison between floating point numbers, it's recommended to use [Math.approximately()](math#approximately) instead.
+Compares the number to another number `x`. This routine performs a comparison between floating point numbers. It's recommended to use [Math.approximately()](/reference/math#approximately) instead.
 
 *Arguments*
 
