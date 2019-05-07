@@ -503,17 +503,14 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             case SSVAR_BOOL:
                 return (int)(a->boolean) - (int)(b->boolean);
             case SSVAR_OBJECTHANDLE:
-                return a->handle != b->handle ? (a->handle > b->handle ? 1 : -1) : 0;
+                return (a->handle > b->handle) - (a->handle < b->handle);
             case SSVAR_STRING:
                 return strcmp(a->string, b->string);
             case SSVAR_NUMBER: {
-                double ma = fabs(a->number), mb = fabs(b->number);
-                if(a->number > b->number)
-                    return a->number - b->number <= FLT_EPSILON * ssmax(ma, mb) ? 0 : 1;
-                else if(a->number < b->number)
-                    return b->number - a->number <= FLT_EPSILON * ssmax(ma, mb) ? 0 : -1;
-                else
-                    return 0;
+                /* int arithmetic is correct in doubles */
+                /* encourage users to use approximatelyEqual() */
+                /* epsilon comparisons may cause underlying problems, e.g., with infinity */
+                return (a->number > b->number) - (a->number < b->number);
             }
             default:
                 return 0;

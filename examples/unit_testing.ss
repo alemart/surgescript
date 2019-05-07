@@ -149,6 +149,13 @@ object "SurgeScriptTest"
         test((1 !== null) === true) || fail(46);       
         test((1 != 2) === true) || fail(47);
         test((1 !== 2) === true) || fail(48);
+        test(1 < Math.infinity) || fail(49);
+        test(9999 <= Math.infinity) || fail(50);
+        test(-1 > -Math.infinity) || fail(51);
+        test(-9999 >= -Math.infinity) || fail(52);
+        test(Math.pi != Math.infinity) || fail(53);
+        test(1 < 2 * Math.infinity) || fail(54);
+        test(1 > -2 * Math.infinity) || fail(55);
         end();
     }
 
