@@ -100,3 +100,9 @@ object "My Test Counter" is "entity"
     }
 }
 ```
+
+#### onLeaveEditor
+
+`onLeaveEditor()`
+
+If declared, function `onLeaveEditor()` will be called whenever the player leaves the level editor and returns to the game. This might be useful to reconfigure your objects.
