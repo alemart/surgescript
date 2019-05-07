@@ -534,13 +534,7 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
         else if(a->type == SSVAR_NUMBER || b->type == SSVAR_NUMBER) {
             double x = surgescript_var_get_number(a);
             double y = surgescript_var_get_number(b);
-            double mx = fabs(x), my = fabs(y);
-            if(x > y)
-                return x - y <= FLT_EPSILON * ssmax(mx, my) ? 0 : 1;
-            else if(x < y)
-                return y - x <= FLT_EPSILON * ssmax(mx, my) ? 0 : -1;
-            else
-                return 0;
+            return (x > y) - (x < y);
         }
         else if(a->type == SSVAR_BOOL || b->type == SSVAR_BOOL) {
             bool x = surgescript_var_get_bool(a);
@@ -550,7 +544,7 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
         else if(a->type == SSVAR_OBJECTHANDLE || b->type == SSVAR_OBJECTHANDLE) {
             unsigned long x = surgescript_var_get_objecthandle(a);
             unsigned long y = surgescript_var_get_objecthandle(b);
-            return x != y ? (x > y ? 1 : -1) : 0;
+            return (x > y) - (x < y);
         }
         else
             return 0; /* this shouldn't happen */
