@@ -8,14 +8,14 @@ Unleash your creativity!
 
 SurgeScript is a scripting language for games. It lets you unleash your creativity and build your own amazing interactive content! It's such a joy to use SurgeScript! You will love it!
 
-[![Download](img/download.png)](download)
+[![Download](img/download.png)](/download)
 
 [![Support the project](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
 
 How do I learn SurgeScript?
 ---------------------------
 
-Check out the [SurgeScript Crash Course](tutorials/hello.md)! Also take a look on the [video tutorials](https://youtube.com/alemart88) and on the examples folder that comes with the software.
+Check out the [SurgeScript Crash Course](/tutorials/hello.md)! Also take a look on the [video tutorials](https://youtube.com/alemart88) and on the examples folder that comes with the software.
 
 SurgeScript in a nutshell
 -------------------------
@@ -27,7 +27,7 @@ SurgeScript is:
 * Object-oriented, dynamically typed and based on state machines
 * Free and open source software
 * Built in C, which is nearly universal
-* Named after a really charismatic character: Surge! - from [Open Surge](http://opensurge2d.org)
+* Named after a really charismatic character: [Surge](http://opensurge2d.org)!
 * The only programming language in the world that natively allows you to tag objects with emoticons ;)
 
 Why use SurgeScript?
