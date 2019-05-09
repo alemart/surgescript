@@ -68,7 +68,7 @@ The entity associated with this component.
 
 `offset`: [Vector2](/engine/vector2) object.
 
-An *(x,y)* offset relative to the parent object. Defaults to zero.
+A *(x,y)* offset relative to the parent object. Defaults to zero.
 
 #### hflip
 
