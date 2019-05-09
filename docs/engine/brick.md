@@ -75,3 +75,9 @@ The type of the Brick component specifies how it affects collisions. This value 
 `layer`: string.
 
 Should the Brick component be tied to a specific layer? If so, which layer? This value must be one of the following: *"green"*, *"yellow"*, *"default"*. Defaults to *"default"*.
+
+#### offset
+
+`offset`: [Vector2](/engine/vector2) object.
+
+A *(x,y)* offset relative to the parent object. Defaults to zero.
