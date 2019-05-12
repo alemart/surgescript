@@ -63,6 +63,7 @@ unsigned surgescript_object_parent(const surgescript_object_t* object); /* paren
 unsigned surgescript_object_nth_child(const surgescript_object_t* object, int index); /* n-th child */
 int surgescript_object_child_count(const surgescript_object_t* object); /* how many children there are? */
 unsigned surgescript_object_child(const surgescript_object_t* object, const char* name); /* gets a handle to the 1st child named name */
+int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* gets all the direct children named name */
 unsigned surgescript_object_find_child(const surgescript_object_t* object, const char* name); /* find 1st child (or grand-child...) whose name equals name */
 int surgescript_object_find_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* finds all descendants named name */
 unsigned surgescript_object_find_tagged_child(const surgescript_object_t* object, const char* tag_name); /* find 1st child (or grand-child...) whose name equals name */

@@ -88,7 +88,23 @@ Looks for a child named `childName` (or matching `childId`).
 
 *Returns*
 
-The desired child`, or `null` if there is no such object.
+The desired child, or `null` if there is no such object.
+
+#### children
+
+`children(childName)`
+
+Finds all children named `childName`. Since this function spawns a new array at each call, it's recommended to cache its return value.
+
+*Available since:* SurgeScript 0.5.4
+
+*Arguments*
+
+* `childName`: string. The name of the desired children.
+
+*Returns*
+
+A new array containing all children named `childName`. If no such children are found, an empty array is returned.
 
 #### sibling
 

@@ -298,6 +298,27 @@ unsigned surgescript_object_child(const surgescript_object_t* object, const char
 }
 
 /*
+ * surgescript_object_children()
+ * Gets the handles to all the direct children named name.
+ * Returns the number of direct children named name.
+ */
+int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*))
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    int count = 0;
+
+    for(int i = 0; i < ssarray_length(object->child); i++) {
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+        if(strcmp(name, child->name) == 0) {
+            ++count;
+            callback(child->handle, data);
+        }
+    }
+
+    return count;
+}
+
+/*
  * surgescript_object_find_child()
  * Find a descendant whose name matches the name parameter.
  * This might be slow, so it's recommended to cache the objects.
