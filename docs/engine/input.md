@@ -82,3 +82,13 @@ Checks if a button has just been released.
 *Returns*
 
 Returns `true` if the specified button has just been released.
+
+#### simulateButtonDown
+
+`simulateButtonDown(buttonName)`
+
+Changes the input object so that `buttonName` will be identified as being held down in the current frame.
+
+*Arguments*
+
+* `buttonName`: string. One of the following: *"up", "down", "left", "right", "fire1", "fire2", ..., "fire8"*.
