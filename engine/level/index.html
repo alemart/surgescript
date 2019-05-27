@@ -987,6 +987,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../lang/" title="Lang" class="md-nav__link">
+      Lang
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -1038,6 +1050,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cleared" title="cleared" class="md-nav__link">
+    cleared
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#file" title="file" class="md-nav__link">
     file
   </a>
@@ -1080,8 +1099,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cleared" title="cleared" class="md-nav__link">
-    cleared
+  <a href="#background" title="background" class="md-nav__link">
+    background
   </a>
   
 </li>
@@ -1226,13 +1245,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-14" type="checkbox" id="nav-5-14">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-15" type="checkbox" id="nav-5-15">
     
-    <label class="md-nav__link" for="nav-5-14">
+    <label class="md-nav__link" for="nav-5-15">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-14">
+      <label class="md-nav__title" for="nav-5-15">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1274,13 +1293,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-16" type="checkbox" id="nav-5-16">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-17" type="checkbox" id="nav-5-17">
     
-    <label class="md-nav__link" for="nav-5-16">
+    <label class="md-nav__link" for="nav-5-17">
       Video
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-16">
+      <label class="md-nav__title" for="nav-5-17">
         Video
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1363,6 +1382,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cleared" title="cleared" class="md-nav__link">
+    cleared
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#file" title="file" class="md-nav__link">
     file
   </a>
@@ -1405,8 +1431,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cleared" title="cleared" class="md-nav__link">
-    cleared
+  <a href="#background" title="background" class="md-nav__link">
+    background
   </a>
   
 </li>
@@ -1570,6 +1596,9 @@ object &quot;Application&quot;
 <h4 id="act">act</h4>
 <p><code>act</code>: number, read-only.</p>
 <p>The act number (1, 2, 3...) of the current level.</p>
+<h4 id="cleared">cleared</h4>
+<p><code>cleared</code>: boolean, read-only.</p>
+<p>Checks if the current level has been cleared by the player. If this is <code>true</code>, a <em>level cleared</em> animation should be played. Although the engine provides a default animation, you may use this property to design your own. See also: <a href="#clear">clear()</a>.</p>
 <h4 id="file">file</h4>
 <p><code>file</code>: string, read-only.</p>
 <p>The relative path of the .lev file of the current level.</p>
@@ -1588,9 +1617,9 @@ object &quot;Application&quot;
 <h4 id="waterlevel">waterlevel</h4>
 <p><code>waterlevel</code>: number.</p>
 <p>The y-coordinate, in world space, of the level water. Pixels not above this value are underwater.</p>
-<h4 id="cleared">cleared</h4>
-<p><code>cleared</code>: boolean, read-only.</p>
-<p>Checks if the current level has been cleared by the player. If this is <code>true</code>, a <em>level cleared</em> animation should be played. Although the engine provides a default animation, you may use this property to design your own. See also: <a href="#clear">clear()</a>.</p>
+<h4 id="background">background</h4>
+<p><code>background</code>: string.</p>
+<p>The path to the background file (.bg) currently in use. Use this property to change the background of the level.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="spawn">spawn</h4>
 <p><code>spawn(objectName)</code></p>
@@ -1671,7 +1700,7 @@ object &quot;LevelLoader&quot;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../mouse/" title="Mouse" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../lang/" title="Lang" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1680,7 +1709,7 @@ object &quot;LevelLoader&quot;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Mouse
+                Lang
               </span>
             </div>
           </a>
