@@ -15,7 +15,7 @@ SurgeScript is a scripting language for games. It lets you unleash your creativi
 How do I learn SurgeScript?
 ---------------------------
 
-Check out the [SurgeScript Crash Course](/tutorials/hello.md)! Also take a look on the [video tutorials](https://youtube.com/alemart88) and on the examples folder that comes with the software.
+Check out the [SurgeScript Crash Course](/tutorials/hello)! Also take a look on the [video tutorials](https://youtube.com/alemart88) and on the examples folder that comes with the software.
 
 SurgeScript in a nutshell
 -------------------------
