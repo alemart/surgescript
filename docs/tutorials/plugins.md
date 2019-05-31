@@ -10,7 +10,7 @@ Basic example
 
 Suppose you want to extend the language by adding new routines related to string manipulation. The routines you want will be used frequently throughout your project, and you'd like easy access to them. This makes it perfect for implementing them as a plugin.
 
-We'll define an object called `StringUtils` with a `reverse()` function that reverses a string. We make the object a plugin by annotating it with `@Plugin`. Please see in the example below:
+We'll define an object called `StringUtils` with a `reverse()` function that reverses a string. We make the object a plugin by annotating it with `@Plugin`. Take a look at the example below:
 
 ```
 // File: stringutils.ss
@@ -45,7 +45,7 @@ object "Application"
 }
 ```
 
-**Note:** it's recommended not to include any special characters in the name of your plugins, otherwise you may have trouble importing them.
+**Note:** it's recommended not to include any special characters in the name of your plugins.
 
 In the example above, `Application` and `StringUtils` are located in two separate files. If you want to test them using the SurgeScript command line utility, pass both files as parameters:
 

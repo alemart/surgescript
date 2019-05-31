@@ -42,7 +42,7 @@ Arrays are collections of values that you may access using a zero-based index. E
 ```
 object "Application"
 {
-    // The 'characters' array hold 3 strings
+    // The 'characters' array holds 3 strings
     characters = [ "Surge", "Neon", "Charge" ];
 
     state "main"
