@@ -69,5 +69,5 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 /* SurgeScript version */
 surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_string(surgescript_var_create(), SSVERSION);
+    return surgescript_var_set_string(surgescript_var_create(), surgescript_util_version());
 }

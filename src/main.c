@@ -80,7 +80,7 @@ surgescript_vm_t* make_vm(int argc, char** argv)
         }
         else if(strcmp(arg, "--version") == 0 || strcmp(arg, "-v") == 0) {
             /* display version */
-            printf("%s\n", SSVERSION);
+            printf("%s\n", surgescript_util_version());
             return NULL;
         }
         else if(strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
@@ -133,7 +133,7 @@ void show_help(const char* executable)
         "\t%s file.ss -- -x -y\tpasses custom arguments -x and -y to file.ss\n"
         "\n"
         "Full documentation at: <%s>\n",
-        SSVERSION,
+        surgescript_util_version(),
         executable,
         executable,
         executable,

@@ -80,6 +80,9 @@ surgescript_vm_t* surgescript_vm_create()
 {
     surgescript_vm_t* vm = ssmalloc(sizeof *vm);
 
+    /* SurgeScript info */
+    sslog("Using SurgeScript %s", surgescript_util_version());
+
     /* boot */
     sslog("Booting up the VM...");
     surgescript_var_init_pool();
