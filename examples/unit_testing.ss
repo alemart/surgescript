@@ -215,7 +215,10 @@ object "SurgeScriptTest"
         test(typeof null == "null") || fail(11);
         test(!this.equals(Application) && this.equals(this)) || fail(12);
         test(null !== this) || fail(13);
-        test(null === this.child("foo")) || fail(14);
+        test(null === this.child("foo") && null == this.child("foo")) || fail(14);
+        test(this != null) || fail(15);
+        test((this == null) === false) || fail(16);
+        test(null == null && null === null) || fail(17);
         end();
     }
 
