@@ -95,7 +95,7 @@ static surgescript_varbucket_t* varpool_currbucket = NULL;
 /* helpers */
 static const int typecode[] = { 0, 'b', 'n', 's', 'o' };
 #define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
-                                    (var)->string = ssfree((var)->string); /* this will clear all bits */
+                                    (var)->string = ssfree((var)->string);
 static inline bool is_number(const char* str);
 static inline void convert_to_ascii(char* str);
 
