@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,10 @@ enum surgescript_vartype_t {
     SSVAR_BOOL,
     SSVAR_NUMBER,
     SSVAR_STRING,
-    SSVAR_OBJECTHANDLE
+    SSVAR_OBJECTHANDLE,
+    SSVAR_RAW,
 };
+static const int typecode[] = { 0, 'b', 'n', 's', 'o', 'r' };
 
 /* the variable struct */
 struct surgescript_var_t
@@ -63,7 +65,7 @@ struct surgescript_var_t
 /* var pool */
 /*#define DISABLE_VARPOOL*/
 #ifndef DISABLE_VARPOOL
-#define VARPOOL_NUM_BUCKETS 937
+#define VARPOOL_NUM_BUCKETS 2730
 
 typedef struct surgescript_varpool_t surgescript_varpool_t;
 typedef struct surgescript_varbucket_t surgescript_varbucket_t;
@@ -93,9 +95,9 @@ static surgescript_varbucket_t* varpool_currbucket = NULL;
 #endif
 
 /* helpers */
-static const int typecode[] = { 0, 'b', 'n', 's', 'o' };
 #define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
-                                    (var)->string = ssfree((var)->string);
+                                    (var)->string = ssfree((var)->string); \
+                                (var)->raw = 0; /* must clear all bits */
 static inline bool is_number(const char* str);
 static inline void convert_to_ascii(char* str);
 
@@ -154,7 +156,7 @@ surgescript_var_t* surgescript_var_set_null(surgescript_var_t* var)
 {
     RELEASE_DATA(var);
     var->type = SSVAR_NULL;
-    var->raw = 0; /* clear up all bits */
+    var->raw = 0;
     return var;
 }
 
@@ -166,7 +168,6 @@ surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, bool boolean
 {
     RELEASE_DATA(var);
     var->type = SSVAR_BOOL;
-    var->raw = 0; /* must clear up all bits; see get_rawbits() below */
     var->boolean = boolean; /* stdbool.h guarantees: expands to 1 or 0 */
     return var;
 }
@@ -249,13 +250,15 @@ bool surgescript_var_get_bool(const surgescript_var_t* var)
         case SSVAR_BOOL:
             return var->boolean;
         case SSVAR_NUMBER:
-            return var->raw && fpclassify(var->number) != FP_ZERO;
+            return var->raw != 0 && fpclassify(var->number) != FP_ZERO;
         case SSVAR_STRING:
             return *(var->string) != 0;
         case SSVAR_NULL:
             return false;
         case SSVAR_OBJECTHANDLE:
             return var->handle != 0;
+        case SSVAR_RAW:
+            return var->raw != 0;
     }
 
     return false;
@@ -277,6 +280,8 @@ double surgescript_var_get_number(const surgescript_var_t* var)
         case SSVAR_NULL:
             return 0.0;
         case SSVAR_OBJECTHANDLE:
+            return NAN;
+        case SSVAR_RAW:
             return NAN;
     }
 
@@ -315,8 +320,8 @@ char* surgescript_var_get_string(const surgescript_var_t* var, const surgescript
             else
                 return ssstrdup("[object]");
         }
-        default:
-            return ssstrdup("");
+        case SSVAR_RAW:
+            return ssstrdup("<raw>");
     }
 }
 
@@ -336,7 +341,9 @@ unsigned surgescript_var_get_objecthandle(const surgescript_var_t* var)
             return surgescript_objectmanager_system_object(NULL, "String");
         case SSVAR_BOOL:
             return surgescript_objectmanager_system_object(NULL, "Boolean");
-        default:
+        case SSVAR_NULL:
+            return surgescript_objectmanager_null(NULL);
+        case SSVAR_RAW:
             return surgescript_objectmanager_null(NULL);
     }
 }
@@ -353,9 +360,11 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
 {
     RELEASE_DATA(dst);
     dst->type = src->type;
-    dst->raw = 0; /* must clear up all bits */
 
     switch(src->type) {
+        case SSVAR_NULL:
+            dst->raw = 0;
+            break;
         case SSVAR_BOOL:
             dst->boolean = src->boolean;
             break;
@@ -368,7 +377,7 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
         case SSVAR_OBJECTHANDLE:
             dst->handle = src->handle;
             break;
-        default:
+        case SSVAR_RAW:
             dst->raw = src->raw;
             break;
     }
@@ -474,6 +483,8 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
                 snprintf(tmp, sizeof(tmp), "%lf", var->number);
             return surgescript_util_strncpy(buf, tmp, bufsize);
         }
+        case SSVAR_RAW:
+            return surgescript_util_strncpy(buf, "<raw>", bufsize);
     }
 
     return buf;
@@ -499,6 +510,8 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
 {
     if(a->type == b->type) {
         switch(a->type) {
+            case SSVAR_NULL:
+                return 0;
             case SSVAR_BOOL:
                 return (int)(a->boolean) - (int)(b->boolean);
             case SSVAR_OBJECTHANDLE:
@@ -506,18 +519,20 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             case SSVAR_STRING:
                 return strcmp(a->string, b->string);
             case SSVAR_NUMBER: {
-                /* int arithmetic is correct in doubles */
                 /* encourage users to use approximatelyEqual() */
                 /* epsilon comparisons may cause underlying problems, e.g., with infinity */
                 return (a->number > b->number) - (a->number < b->number);
             }
-            default:
-                return 0;
+            case SSVAR_RAW:
+                return (a->raw > b->raw) - (a->raw < b->raw);
         }
     }
     else {
         if(a->type == SSVAR_NULL || b->type == SSVAR_NULL) {
             return (a->raw != 0) - (b->raw != 0);
+        }
+        else if(a->type == SSVAR_RAW || b->type == SSVAR_RAW) {
+            return (a->raw > b->raw) - (a->raw < b->raw);
         }
         else if(a->type == SSVAR_STRING || b->type == SSVAR_STRING) {
             char buf[128];
@@ -577,7 +592,7 @@ int64_t surgescript_var_get_rawbits(const surgescript_var_t* var)
 surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int64_t raw)
 {
     RELEASE_DATA(var);
-    var->type = SSVAR_NUMBER;
+    var->type = SSVAR_RAW;
     var->raw = raw;
     return var;
 }
