@@ -63,14 +63,13 @@ struct surgescript_var_t
 /* var pool */
 /*#define DISABLE_VARPOOL*/
 #ifndef DISABLE_VARPOOL
+#define VARPOOL_NUM_BUCKETS 937
 
 typedef struct surgescript_varpool_t surgescript_varpool_t;
 typedef struct surgescript_varbucket_t surgescript_varbucket_t;
 struct surgescript_varpool_t
 {
     /* a pool is a collection of buckets */
-    #define VARPOOL_NUM_BUCKETS 937
-
     struct surgescript_varbucket_t {
         union {
             /* the 1st element of the bucket (var) shares
