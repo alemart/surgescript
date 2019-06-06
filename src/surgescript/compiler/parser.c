@@ -690,7 +690,7 @@ void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     match(parser, SSTOK_IDENTIFIER);
     match_exactly(parser, SSTOK_ASSIGNOP, "=");
-    expr(parser, context);
+    conditionalexpr(parser, context);
     match(parser, SSTOK_SEMICOLON);
 
     emit_vardecl(context, id);
