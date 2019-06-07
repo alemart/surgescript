@@ -379,6 +379,12 @@ Activates the "springing" activity.
 
 Makes the player roll.
 
+#### hlock
+
+`hlock(seconds)`
+
+Locks the horizontal controls of the player for a few `seconds` (left and right input will be ignored during that time).
+
 #### focus
 
 `focus()`
