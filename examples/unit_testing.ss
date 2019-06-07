@@ -156,6 +156,8 @@ object "SurgeScriptTest"
         test(Math.pi != Math.infinity) || fail(53);
         test(1 < 2 * Math.infinity) || fail(54);
         test(1 > -2 * Math.infinity) || fail(55);
+        test((x=0)==0 && -0==(y=+0) && !((x+y)!=0)) || fail(56);
+        test((x=0)===0 && -0===(y=+0) && !((x+y)!==0)) || fail(57);
         end();
     }
 
