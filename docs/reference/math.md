@@ -409,7 +409,7 @@ Compares two floating point values. Since comparing two floating point numbers f
 
 *Returns*
 
-Returns `true` if `x` and `y` are *"approximately"* equal (they are within a small distance of `epsilon` of each other).
+Returns `true` if `x` and `y` are *"approximately"* equal.
 
 #### lerp
 
