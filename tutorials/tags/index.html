@@ -421,9 +421,52 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Tags
+      </label>
+    
     <a href="./" title="Tags" class="md-nav__link md-nav__link--active">
       Tags
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#syntax" title="Syntax" class="md-nav__link">
+    Syntax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-tags" title="Using tags" class="md-nav__link">
+    Using tags
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emoticons" title="Emoticons" class="md-nav__link">
+    Emoticons
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -1182,6 +1225,36 @@
     
   
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#syntax" title="Syntax" class="md-nav__link">
+    Syntax
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#using-tags" title="Using tags" class="md-nav__link">
+    Using tags
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#emoticons" title="Emoticons" class="md-nav__link">
+    Emoticons
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1197,6 +1270,7 @@
                 
                 <h1 id="tags">Tags</h1>
 <p>You may tag objects with as many tags as you want. Tags are a way of attributing categories to different objects.</p>
+<h2 id="syntax">Syntax</h2>
 <p>Tags should be placed right after the object name. Example:</p>
 <pre><code>object &quot;Horse&quot; is &quot;animal&quot;, &quot;vehicle&quot;
 {
@@ -1220,7 +1294,8 @@ object &quot;Car&quot; is &quot;vehicle&quot;
 }
 </code></pre>
 
-<p>We may check if an object has a particular tag with the <strong>hasTag()</strong> function (see the <a href="/reference/object#hastag">Object reference</a> for more details):</p>
+<h2 id="using-tags">Using tags</h2>
+<p>You may check if an object has a particular tag with the <code>hasTag()</code> function (see the <a href="/reference/object#hastag">Object reference</a> for more details):</p>
 <pre><code>object &quot;Application&quot;
 {
     horse = spawn(&quot;Horse&quot;);
@@ -1244,6 +1319,7 @@ object &quot;Car&quot; is &quot;vehicle&quot;
 }
 </code></pre>
 
+<h2 id="emoticons">Emoticons</h2>
 <p>You may also tag objects with emoticons. The syntax is as follows:</p>
 <pre><code>object &quot;Good Day&quot; is &quot;happy&quot;, &quot;sunny&quot; :)
 {

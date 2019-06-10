@@ -1294,7 +1294,7 @@
 <p>Functions may be associated to objects. Any function associated to an object may be used (called) by the object itself or by other objects. This means that functions are <em>public</em> (they are visible to the outside world).</p>
 <p><strong>Note:</strong> functions should be defined after the states.</p>
 <h2 id="return-statement">Return statement</h2>
-<p>Use the <strong>return</strong> statement to stop executing the function and to return some value to the caller. Example:</p>
+<p>Use the <code>return</code> statement to stop executing the function and to return some value to the caller. Example:</p>
 <pre><code>// This function will return the double of input parameter x
 fun double(x)
 {
@@ -1303,10 +1303,10 @@ fun double(x)
 }
 </code></pre>
 
-<p>If no value is specified after the <strong>return</strong> keyword, the function will be stopped and its return value will be <em>null</em>. Additionally, if no <strong>return</strong> statement is found, then the return value will also be <em>null</em>.</p>
-<p><strong>Note</strong>: an object state may also contain one or more <strong>return</strong> statements to stop the execution of its code. However, return values must not be specified in that context, since states do not return values.</p>
+<p>If no value is specified after the <code>return</code> keyword, the function will be stopped and its return value will be <code>null</code>. Additionally, if no <code>return</code> statement is found, then the return value will also be <code>null</code>.</p>
+<p><strong>Note</strong>: an object state may also contain one or more <code>return</code> statements to stop the execution of its code. However, return values must not be specified in that context, since states do not return values.</p>
 <h2 id="simple-example">Simple example</h2>
-<p>In the example below, we have an object called <strong>Calculator</strong> with two functions: <em>greet()</em> and <em>sum()</em>. <em>greet()</em> takes no input parameters and just greets the user. On the other hand, <em>sum()</em> takes two input parameters, <em>a</em> and <em>b</em>, and returns the sum <em>a</em> + <em>b</em>:</p>
+<p>In the example below, we have an object called <code>Calculator</code> with two functions: <code>greet()</code> and <code>sum()</code>. <code>greet()</code> takes no input parameters and just greets the user. On the other hand, <code>sum()</code> takes two input parameters, <code>a</code> and <code>b</code>, and returns the sum <code>a + b</code>:</p>
 <pre><code>object &quot;Calculator&quot;
 {
     fun greet()
@@ -1321,8 +1321,8 @@ fun double(x)
 }
 </code></pre>
 
-<p>In function <em>sum()</em>, variables <em>a</em> and <em>b</em> hold the input data and are only visible inside the function.</p>
-<p>Now, let's create a program that uses this <strong>Calculator</strong>. Remember that the functions defined above can be called by any object, including <strong>Application</strong>:</p>
+<p>In function <code>sum()</code>, variables <code>a</code> and <code>b</code> hold the input data and are only visible inside the function.</p>
+<p>Now, let's create a program that uses this <code>Calculator</code>. Remember that the functions defined above can be called by any object, including <code>Application</code>:</p>
 <pre><code>object &quot;Application&quot;
 {
     calculator = spawn(&quot;Calculator&quot;);
@@ -1347,14 +1347,14 @@ fun double(x)
 12
 </code></pre>
 
-<p>Notice that the <strong>Application</strong> does not need to know <em>how</em> the functions of the <strong>Calculator</strong> are implemented. It just needs to know <em>what</em> they do. This means that you may change the implementation of the <strong>Calculator</strong> without changing the <strong>Application</strong>, and the end-result will stay the same.</p>
+<p>Notice that the <code>Application</code> does not need to know <em>how</em> the functions of the <code>Calculator</code> are implemented. It just needs to know <em>what</em> they do. This means that you may change the implementation of the <code>Calculator</code> without changing the <code>Application</code>, and the end-result will stay the same.</p>
 <h2 id="recursive-functions">Recursive functions</h2>
-<p>In SurgeScript, a function is said to be <strong>recursive</strong> when it calls itself within its code. Recursion can be useful in many ways; namely, when you define a problem in terms of itself. In mathematics, the factorial of a non-negative integer number <em>n</em>, denoted as <em>n!</em>, is such an example:</p>
+<p>In SurgeScript, a function is said to be <strong>recursive</strong> when it calls itself within its code. Recursion can be useful in many ways; namely, when you define a problem in terms of itself. In mathematics, the factorial of a non-negative integer number <code>n</code>, denoted as <code>n!</code>, is such an example:</p>
 <pre><code>n! = { n * (n-1)!    if n &gt; 1
      { 1             otherwise
 </code></pre>
 
-<p>One interesting example of recursion that arises in computer science is called the <strong>binary search</strong> algorithm. Given a sorted <a href="/reference/array">Array</a>, the binary search finds the position of a target value without having to inspect the whole collection. In the example below, <em>bsearch()</em> is a recursive function:</p>
+<p>One interesting example of recursion that arises in computer science is called the <em>binary search</em> algorithm. Given a sorted <a href="/reference/array">Array</a>, the binary search finds the position of a target value without having to inspect the whole collection. In the example below, <code>bsearch()</code> is a recursive function:</p>
 <pre><code>object &quot;BinarySearch&quot;
 {
     // Given an array *sorted in ascending order*, find()
@@ -1385,10 +1385,10 @@ fun double(x)
 </code></pre>
 
 <p>Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is <code>n &lt;= 1</code> (the factorial is 1). In the binary search example, the base case is <code>start &gt; end</code>, meaning that the array is empty and the target value cannot be found, or <code>value == array[mid]</code>, meaning that the target value has been found at <code>mid</code>.</p>
-<p>As the sages say: <em>to understand recursion, you must first understand recursion</em>.</p>
+<p>...as the sages say: <em>to understand recursion, you must first understand recursion</em>.</p>
 <h2 id="constructors-and-destructors">Constructors and destructors</h2>
 <p>In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectively. It's not mandatory to define them, but it may be useful to do so (you may want to set up things in your constructors, for example). Neither may receive any arguments (see also: <a href="/tutorials/advanced_features#modifiers">modifier functions</a>).</p>
-<p>Let's take our <strong>Calculator</strong> again. In the following example, <em>constructor()</em> is called automatically whenever a <strong>Calculator</strong> object is created. Likewise, <em>destructor()</em> is called automatically when the object is destroyed.</p>
+<p>Let's take our <code>Calculator</code> again. In the following example, <code>constructor()</code> is called automatically whenever a <code>Calculator</code> object is created. Likewise, <code>destructor()</code> is called automatically when the object is destroyed.</p>
 <pre><code>object &quot;Calculator&quot;
 {
     fun constructor()
@@ -1413,14 +1413,14 @@ fun double(x)
 }
 </code></pre>
 
-<p>Now, if we run the <strong>Application</strong> of the previous section without any modification, the output of the program will be:</p>
+<p>Now, if we run the <code>Application</code> of the previous section without any modification, the output of the program will be:</p>
 <pre><code>Creating a Calculator...
 Hello! I am a Calculator!
 12
 Destroying a Calculator...
 </code></pre>
 
-<p>Please note that, for any object, its <em>constructor()</em> runs <em>before</em> its main state.</p>
+<p>Please note that, for any object, its <code>constructor()</code> runs <em>before</em> its main state.</p>
                 
                   
                 

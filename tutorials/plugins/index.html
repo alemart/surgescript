@@ -1300,7 +1300,7 @@ object &quot;Application&quot;
 <p>Although plugins are spawned before the <em>Application</em> object, for the time being they are spawned in no particular order. You may not access a plugin from within the constructor of another plugin, as of now there is no dependency resolver implemented. Use the <em>main</em> state.</p>
 </blockquote>
 <h2 id="package-example">Package example</h2>
-<p>You may use the Plugin system to create an independent package (or namespace) that aggregates many functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.</p>
+<p>You may use the Plugin system to create an independent package that aggregates many functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.</p>
 <p>Suppose that user <em>Parrot</em>, the owner of <em>ParrotSoft</em>, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called <code>ParrotSoft</code>. Since he implemented getters for each of his utilities (see the code below), his package provides easy access to all of them. Furthermore, he annotated his package with <code>@Plugin</code> (but <strong>not</strong> the individual utilities), so his package can be accessed anywhere.</p>
 <pre><code>// File: parrotsoft.ss
 

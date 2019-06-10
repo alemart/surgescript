@@ -1273,9 +1273,9 @@
 <p>An object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (or a tree). The Figure below shows an example:</p>
 <p><img alt="An object tree" src="/img/tree.png" /></p>
 <p>In this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero.</p>
-<p>In SurgeScript, the root of the hierarchy is a predefined object called <strong>System</strong>. Its parent is itself. All other objects are descendants of <strong>System</strong>.</p>
+<p>In SurgeScript, the root of the hierarchy is a predefined object called <code>System</code>. Its parent is itself. All other objects are descendants of <code>System</code>.</p>
 <h2 id="spawning-objects">Spawning objects</h2>
-<p>You can use <em>spawn()</em> to instantiate an object. Example:</p>
+<p>You can use <code>spawn()</code> to instantiate an object. Example:</p>
 <pre><code>object &quot;Parent&quot;
 {
     child = spawn(&quot;Child&quot;);
@@ -1293,7 +1293,7 @@ object &quot;Child&quot;
 }
 </code></pre>
 
-<p>Function <em>spawn()</em> may be invoked on objects other than the caller. In this case, the caller won't be the parent of the newly created object:</p>
+<p>Function <code>spawn()</code> may be invoked on objects other than the caller. In this case, the caller won't be the parent of the newly created object:</p>
 <pre><code>object &quot;Parent&quot;
 {
     child = spawn(&quot;Child&quot;);
@@ -1311,7 +1311,7 @@ object &quot;Child&quot;
 <p>If an object cannot be reached from the root (no reachable object has any references to it), it will be automatically destroyed by SurgeScript's built-in Garbage Collector.</p>
 </blockquote>
 <h2 id="destroying-objects">Destroying objects</h2>
-<p>Objects can be destroyed manually by calling <em>destroy()</em>. Whenever an object is destroyed, its children are destroyed as well.</p>
+<p>Objects can be destroyed manually by calling <code>destroy()</code>. Whenever an object is destroyed, its children are destroyed as well.</p>
 <pre><code>object &quot;Foo&quot;
 {
     state &quot;main&quot;
@@ -1333,30 +1333,30 @@ object &quot;Child&quot;
 </thead>
 <tbody>
 <tr>
-<td><em>obj.parent</em> (read-only)</td>
+<td><code>obj.parent</code> (read-only)</td>
 <td>The parent object</td>
 </tr>
 <tr>
-<td><em>obj.childCount</em> (read-only)</td>
+<td><code>obj.childCount</code> (read-only)</td>
 <td>Number of immediate children</td>
 </tr>
 <tr>
-<td><em>obj.child(name)</em></td>
-<td>Gets a child object named <em>name</em></td>
+<td><code>obj.child(name)</code></td>
+<td>Gets a child object named <code>name</code></td>
 </tr>
 <tr>
-<td><em>obj.findObject(name)</em></td>
-<td>Finds* a descendant named <em>name</em></td>
+<td><code>obj.findObject(name)</code></td>
+<td>Finds* a descendant named <code>name</code></td>
 </tr>
 <tr>
-<td><em>obj.sibling(name)</em></td>
-<td>Gets a sibling** named <em>name</em></td>
+<td><code>obj.sibling(name)</code></td>
+<td>Gets a sibling** named <code>name</code></td>
 </tr>
 </tbody>
 </table>
 <blockquote>
 <p><strong>Notes:</strong></p>
-<p>* findObject() may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.</p>
+<p>* <code>findObject()</code> may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.</p>
 <p>** We say that two distinct objects are siblings if they share the same parent.</p>
 </blockquote>
 <p>Example:</p>

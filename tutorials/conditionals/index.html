@@ -1270,14 +1270,14 @@
                 
                 <h1 id="conditionals">Conditionals</h1>
 <h2 id="introduction">Introduction</h2>
-<p>Conditionals are <em>if ... then ...</em> expressions. If a certain <code>condition</code> is <code>true</code>, execute a block of code. If not, don't execute it.</p>
+<p>Conditionals are <em>if ... then ...</em> statements. If a certain <code>condition</code> evaluates to <code>true</code>, execute a block of code. If not, don't execute it.</p>
 <pre><code>if(condition) {
     // this will be executed only if
     // the condition is true
 }
 </code></pre>
 
-<p>Alternatively, we may include an <em>else</em> statement followed by a block of code that will only be executed if the condition is <strong>not</strong> true:</p>
+<p>Alternatively, we may include an <code>else</code> statement followed by a block of code that will only be executed if the condition is <strong>not</strong> true:</p>
 <pre><code>if(condition) {
     // this will be executed only if
     // the condition is true
@@ -1289,7 +1289,7 @@ else {
 </code></pre>
 
 <h2 id="example">Example</h2>
-<p>The following example will print <em>underaged</em> if variable <em>age</em> is less than 18, or <em>adult</em> otherwise:</p>
+<p>The following example will print <em>underaged</em> if variable <code>age</code> is less than 18, or <em>adult</em> otherwise:</p>
 <pre><code>object &quot;Application&quot;
 {
     age = 23;
@@ -1310,7 +1310,7 @@ else {
 
 <h2 id="inline-conditionals">Inline conditionals</h2>
 <p>Just like other languages with C-based syntax, the expression <code>condition ? true_value : false_value</code> evaluates to <code>true_value</code> if <code>condition</code> is <code>true</code> and to <code>false_value</code> if <code>condition</code> is <code>false</code>.</p>
-<p>For example, the script below will print <em>underaged</em> if variable <em>age</em> is less than 18, or <em>adult</em> otherwise:</p>
+<p>For example, the script below will print <em>underaged</em> if variable <code>age</code> is less than 18, or <em>adult</em> otherwise:</p>
 <pre><code>object &quot;Application&quot;
 {
     age = 23;

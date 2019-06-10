@@ -1257,7 +1257,7 @@
                 <h1 id="properties">Properties</h1>
 <p>In SurgeScript, <a href="/tutorials/variables">object-level variables</a> are private. This means that these variables can only be accessed from the objects that defined them. However, SurgeScript features a <em>syntactic sugar</em> that allows objects to read and/or modify other objects' data in a way that looks like dealing with regular (public) variables. We'll call these "variables" <strong>properties</strong>.</p>
 <h2 id="defining-properties">Defining properties</h2>
-<p>Suppose you have an object called <strong>Animal</strong> with an object-level variable called <em>sound</em> and a function named <em>speak()</em>:</p>
+<p>Suppose you have an object called <code>Animal</code> with an object-level variable called <code>sound</code> and a function named <code>speak()</code>:</p>
 <pre><code>object &quot;Animal&quot;
 {
     sound = &quot;meow!&quot;;
@@ -1289,7 +1289,7 @@ meow!
 ...
 </code></pre>
 
-<p>What if an external object could modify the sound of the animal? Trying to access <code>animal.sound</code> externally will trigger an error, unless you add the <strong>public</strong> specifier to your variable:</p>
+<p>What if an external object could modify the sound of the animal? Trying to access <code>animal.sound</code> externally will trigger an error, unless you add the <code>public</code> specifier to your variable:</p>
 <pre><code>object &quot;Animal&quot;
 {
     public sound = &quot;meow!&quot;;
@@ -1301,7 +1301,7 @@ meow!
 }
 </code></pre>
 
-<p>Now, external objects may access (read and write) the <em>sound</em> variable (or <strong>property</strong>):</p>
+<p>Now, external objects may access (read and write) the <code>sound</code> variable (or <em>property</em>):</p>
 <pre><code>object &quot;Application&quot;
 {
     animal = spawn(&quot;Animal&quot;);
@@ -1314,7 +1314,7 @@ meow!
 }
 </code></pre>
 
-<p>Since SurgeScript 0.5.3, you may add the <strong>readonly</strong> modifier after the <strong>public</strong> specifier. Doing so disallows the modification of the property by external objects:</p>
+<p>Since SurgeScript 0.5.3, you may add the <code>readonly</code> modifier after the <code>public</code> specifier. Doing so disallows the modification of the property by external objects:</p>
 <pre><code>object &quot;Animal&quot;
 {
     public readonly sound = &quot;meow!&quot;;
@@ -1339,7 +1339,7 @@ object &quot;Application&quot;
 </code></pre>
 
 <h2 id="using-getters-and-setters">Using getters and setters</h2>
-<p>In reality, however, there are no public variables in SurgeScript. Behind the scenes, the language defines special functions called <strong>getters</strong> and <strong>setters</strong> that will perform the read/write logic for you. Rather than using <strong>public</strong>, you may want to define the getters and the setters yourself:</p>
+<p>In reality, however, there are no public variables in SurgeScript. Behind the scenes, the language defines special functions called <em>getters</em> and <em>setters</em> that will perform the read/write logic for you. Rather than using <code>public</code>, you may want to define the getters and the setters yourself:</p>
 <pre><code>object &quot;Animal&quot;
 {
     sound = &quot;meow!&quot;;
