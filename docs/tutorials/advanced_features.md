@@ -8,7 +8,7 @@ Lookup operator
 
 Some programming languages, such as C++, have a feature called *operator overloading*. It's a *syntactic sugar* that allows the programmer to attribute custom implementations to different operators.
 
-In SurgeScript, the *[ ]* operator (also called the *lookup operator*), used by Arrays and Dictionaries, is used to **get** and **set** values from/to the data structure. In fact, the *[ ]* operator can be used by any object, for any purpose. It is necessary to define, in your object, functions *get()* and *set()* with the following signature:
+In SurgeScript, the `[]` operator (also called the *lookup operator*), used by Arrays and Dictionaries, is used to **get** and **set** values from/to the data structure. In fact, the `[]` operator can be used with any object. It is necessary to define, in your object, functions `get()` and `set()` with the following signature:
 
 ```
 fun get(key)
@@ -24,6 +24,20 @@ fun set(key, value)
 
 Given an object `obj`, the expression `x = obj[key]` is equivalent to `x = obj.get(key)`. Similarly, `obj[key] = value` is equivalent to `obj.set(key, value)`.
 
+Functors
+--------
+
+In SurgeScript, objects can be made to behave like functions. We call these objects *functors* (or *function objects*). To make an object behave like a function, you have to overload the `()` operator (also known as the *function operator*). This is done by defining function `call()` in your object:
+
+```
+fun call()
+{
+    // custom implementation
+}
+```
+
+Function `call()` may take any number of parameters. Given an object `f`, the expression `y = f(x)` is equivalent to `y = f.call(x)`. Notice that, since `f` is an object, you may exchange its implementation during runtime.
+
 Assertions
 ----------
 
@@ -33,19 +47,61 @@ The `assert(condition)` statement specifies a `condition` that you expect to be 
 assert(name == "Surge"); // will crash if name isn't "Surge"
 ```
 
-Functors
---------
+Modifiers
+---------
 
-In SurgeScript, objects can be made to behave like functions. We call these objects *functors* (or function objects). To make an object behave like a function, you have to overload the *( )* operator (also known as the *function operator*). This is done by defining function *call()* in your object:
+In SurgeScript, a *modifier* (or *modifier function*) provides an elegant way of configuring objects. This is not a feature per se, but rather a way of doing things. Consider the object below - it simply displays a message at regular intervals:
 
 ```
-fun call()
+object "Parrot"
 {
-    // custom implementation
+    message = "I am a Parrot";
+
+    state "main"
+    {
+        if(timeout(1.0))
+            state = "print";
+    }
+
+    state "print"
+    {
+        Console.print(message);
+        state = "main";
+    }
+
+    // setMessage() is a modifier function
+    // A modifier always returns this
+    fun setMessage(newMessage)
+    {
+        message = newMessage;
+        return this;
+    }
 }
 ```
 
-Function *call()* may take any number of parameters. Given an object `f`, the expression `y = f(x)` is equivalent to `y = f.call(x)`. Notice that, since `f` is an object, you may exchange its implementation during runtime.
+Suppose that, in your Application, you would like to spawn that object and modify its message. One way of doing it would be making its internal variable `public` and changing its contents in the [constructor function](/tutorials/functions) of your Application. A more concise and elegant way of doing it would be calling function `setMessage()` just after you spawn the object:
+
+```
+object "Application"
+{
+    parrot = spawn("Parrot").setMessage("Hello!");
+
+    state "main"
+    {
+    }
+}
+```
+
+Take note that the modifier function does two things:
+
+* It modifies the internals of the object in some way
+* It always returns `this` (that is, the object itself)
+
+That being said, you may call such a function from your Application, just after `spawn()`, and you'll still have a reference to the spawned object. Moreover, since modifiers always return `this`, you may chain multiple modifiers into a single statement, making your code concise and your statement descriptive. Example:
+
+```
+parrot = spawn("Parrot").setMessage("Hello!").setInterval(2.0);
+```
 
 Factory
 -------
