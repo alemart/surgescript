@@ -152,12 +152,12 @@ object "Greeter"
 }
 ```
 
-Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might simply write `g = caller.spawn("Greeter")`. Keyword `caller` points to the object that called the function (or *null* if not applicable).
+Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might simply write `g = caller.spawn("Greeter")`. Keyword `caller` points to the object that called the function (or `null` if not applicable).
 
 Iterators
 ---------
 
-As seen in the [loops](/tutorials/loops#foreach) section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function *iterator()*. If you have ever used Java, you'll find this to be familiar.
+As seen in the [loops](/tutorials/loops#foreach) section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function `iterator()`. If you have ever used Java, you'll find this to be familiar.
 
 ```
 object "MyCollection"
@@ -170,7 +170,7 @@ object "MyCollection"
 }
 ```
 
-For each collection you define, you should also define its iterator object. The iterator object should implement functions *next()* and *hasNext()* (both take no arguments):
+For each collection you define, you should also define its iterator object. The iterator object should implement functions `next()` and `hasNext()` (both take no arguments):
 
 ```
 object "MyIterator"
