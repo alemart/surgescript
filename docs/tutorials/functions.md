@@ -136,7 +136,7 @@ As the sages say: *to understand recursion, you must first understand recursion*
 Constructors and destructors
 ----------------------------
 
-In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectively. It's not mandatory to define them, but it may be useful to do so (to set up things, for example). Neither may receive any arguments.
+In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectively. It's not mandatory to define them, but it may be useful to do so (you may want to set up things in your constructors, for example). Neither may receive any arguments (see also: [modifier functions](/tutorials/advanced_features#modifiers)).
 
 Let's take our **Calculator** again. In the following example, *constructor()* is called automatically whenever a **Calculator** object is created. Likewise, *destructor()* is called automatically when the object is destroyed.
 
