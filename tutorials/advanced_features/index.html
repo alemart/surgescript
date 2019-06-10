@@ -1433,9 +1433,9 @@ object &quot;Greeter&quot;
 }
 </code></pre>
 
-<p>Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might simply write <code>g = caller.spawn("Greeter")</code>. Keyword <code>caller</code> points to the object that called the function (or <em>null</em> if not applicable).</p>
+<p>Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might simply write <code>g = caller.spawn("Greeter")</code>. Keyword <code>caller</code> points to the object that called the function (or <code>null</code> if not applicable).</p>
 <h2 id="iterators">Iterators</h2>
-<p>As seen in the <a href="/tutorials/loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function <em>iterator()</em>. If you have ever used Java, you'll find this to be familiar.</p>
+<p>As seen in the <a href="/tutorials/loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function <code>iterator()</code>. If you have ever used Java, you'll find this to be familiar.</p>
 <pre><code>object &quot;MyCollection&quot;
 {
     fun iterator()
@@ -1446,7 +1446,7 @@ object &quot;Greeter&quot;
 }
 </code></pre>
 
-<p>For each collection you define, you should also define its iterator object. The iterator object should implement functions <em>next()</em> and <em>hasNext()</em> (both take no arguments):</p>
+<p>For each collection you define, you should also define its iterator object. The iterator object should implement functions <code>next()</code> and <code>hasNext()</code> (both take no arguments):</p>
 <pre><code>object &quot;MyIterator&quot;
 {
     fun next()
