@@ -3,6 +3,9 @@ Tags
 
 You may tag objects with as many tags as you want. Tags are a way of attributing categories to different objects.
 
+Syntax
+------
+
 Tags should be placed right after the object name. Example:
 
 ```
@@ -28,7 +31,10 @@ object "Car" is "vehicle"
 }
 ```
 
-We may check if an object has a particular tag with the **hasTag()** function (see the [Object reference](/reference/object#hastag) for more details):
+Using tags
+----------
+
+You may check if an object has a particular tag with the `hasTag()` function (see the [Object reference](/reference/object#hastag) for more details):
 
 ```
 object "Application"
@@ -53,6 +59,9 @@ object "Application"
     }
 }
 ```
+
+Emoticons
+---------
 
 You may also tag objects with emoticons. The syntax is as follows:
 

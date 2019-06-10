@@ -60,7 +60,7 @@ surgescript plugin.ss app.ss
 Package example
 ---------------
 
-You may use the Plugin system to create an independent package (or namespace) that aggregates many functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.
+You may use the Plugin system to create an independent package that aggregates many functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.
 
 Suppose that user *Parrot*, the owner of *ParrotSoft*, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called `ParrotSoft`. Since he implemented getters for each of his utilities (see the code below), his package provides easy access to all of them. Furthermore, he annotated his package with `@Plugin` (but **not** the individual utilities), so his package can be accessed anywhere.
 

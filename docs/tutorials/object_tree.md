@@ -9,12 +9,12 @@ An object may spawn many children. However, all objects have only one parent. Th
 
 In this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero.
 
-In SurgeScript, the root of the hierarchy is a predefined object called **System**. Its parent is itself. All other objects are descendants of **System**.
+In SurgeScript, the root of the hierarchy is a predefined object called `System`. Its parent is itself. All other objects are descendants of `System`.
 
 Spawning objects
 ----------------
 
-You can use *spawn()* to instantiate an object. Example:
+You can use `spawn()` to instantiate an object. Example:
 
 ```
 object "Parent"
@@ -34,7 +34,7 @@ object "Child"
 }
 ```
 
-Function *spawn()* may be invoked on objects other than the caller. In this case, the caller won't be the parent of the newly created object:
+Function `spawn()` may be invoked on objects other than the caller. In this case, the caller won't be the parent of the newly created object:
 
 ```
 object "Parent"
@@ -59,7 +59,7 @@ object "Parent"
 Destroying objects
 ------------------
 
-Objects can be destroyed manually by calling *destroy()*. Whenever an object is destroyed, its children are destroyed as well.
+Objects can be destroyed manually by calling `destroy()`. Whenever an object is destroyed, its children are destroyed as well.
 
 ```
 object "Foo"
@@ -79,15 +79,15 @@ Relevant data about the object hierarchy can be obtained using the following pro
 
 Function / property|Description
 -------------------|-----------
-*obj.parent* (read-only) | The parent object
-*obj.childCount* (read-only) | Number of immediate children
-*obj.child(name)* | Gets a child object named *name*
-*obj.findObject(name)* | Finds\* a descendant named *name*
-*obj.sibling(name)* | Gets a sibling\*\* named *name*
+`obj.parent` (read-only) | The parent object
+`obj.childCount` (read-only) | Number of immediate children
+`obj.child(name)` | Gets a child object named `name`
+`obj.findObject(name)` | Finds\* a descendant named `name`
+`obj.sibling(name)` | Gets a sibling\*\* named `name`
 
 > **Notes:**
 >
-> \* findObject() may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.
+> \* `findObject()` may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.
 >
 > \*\* We say that two distinct objects are siblings if they share the same parent.
 

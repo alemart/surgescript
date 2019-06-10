@@ -4,7 +4,7 @@ Conditionals
 Introduction
 ------------
 
-Conditionals are *if ... then ...* expressions. If a certain `condition` is `true`, execute a block of code. If not, don't execute it.
+Conditionals are *if ... then ...* statements. If a certain `condition` evaluates to `true`, execute a block of code. If not, don't execute it.
 
 ```
 if(condition) {
@@ -13,7 +13,7 @@ if(condition) {
 }
 ```
 
-Alternatively, we may include an *else* statement followed by a block of code that will only be executed if the condition is **not** true:
+Alternatively, we may include an `else` statement followed by a block of code that will only be executed if the condition is **not** true:
 
 ```
 if(condition) {
@@ -29,7 +29,7 @@ else {
 Example
 -------
 
-The following example will print *underaged* if variable *age* is less than 18, or *adult* otherwise:
+The following example will print *underaged* if variable `age` is less than 18, or *adult* otherwise:
 
 ```
 object "Application"
@@ -56,7 +56,7 @@ Inline conditionals
 
 Just like other languages with C-based syntax, the expression `condition ? true_value : false_value` evaluates to `true_value` if `condition` is `true` and to `false_value` if `condition` is `false`.
 
-For example, the script below will print *underaged* if variable *age* is less than 18, or *adult* otherwise:
+For example, the script below will print *underaged* if variable `age` is less than 18, or *adult* otherwise:
 
 ```
 object "Application"

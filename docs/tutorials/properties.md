@@ -6,7 +6,7 @@ In SurgeScript, [object-level variables](/tutorials/variables) are private. This
 Defining properties
 -------------------
 
-Suppose you have an object called **Animal** with an object-level variable called *sound* and a function named *speak()*:
+Suppose you have an object called `Animal` with an object-level variable called `sound` and a function named `speak()`:
 
 ```
 object "Animal"
@@ -44,7 +44,7 @@ meow!
 ...
 ```
 
-What if an external object could modify the sound of the animal? Trying to access `animal.sound` externally will trigger an error, unless you add the **public** specifier to your variable:
+What if an external object could modify the sound of the animal? Trying to access `animal.sound` externally will trigger an error, unless you add the `public` specifier to your variable:
 
 ```
 object "Animal"
@@ -58,7 +58,7 @@ object "Animal"
 }
 ```
 
-Now, external objects may access (read and write) the *sound* variable (or **property**):
+Now, external objects may access (read and write) the `sound` variable (or *property*):
 
 ```
 object "Application"
@@ -73,7 +73,7 @@ object "Application"
 }
 ```
 
-Since SurgeScript 0.5.3, you may add the **readonly** modifier after the **public** specifier. Doing so disallows the modification of the property by external objects:
+Since SurgeScript 0.5.3, you may add the `readonly` modifier after the `public` specifier. Doing so disallows the modification of the property by external objects:
 
 ```
 object "Animal"
@@ -102,7 +102,7 @@ object "Application"
 Using getters and setters
 -------------------------
 
-In reality, however, there are no public variables in SurgeScript. Behind the scenes, the language defines special functions called **getters** and **setters** that will perform the read/write logic for you. Rather than using **public**, you may want to define the getters and the setters yourself:
+In reality, however, there are no public variables in SurgeScript. Behind the scenes, the language defines special functions called *getters* and *setters* that will perform the read/write logic for you. Rather than using `public`, you may want to define the getters and the setters yourself:
 
 ```
 object "Animal"

@@ -58,7 +58,7 @@ for(i = 1; i <= 10; i++) {
 Foreach
 -------
 
-Foreach loops are used to iterate throughout collections (such as Arrays). Basically: for each element *x* in the collection, do something with *x*. The syntax is as follows:
+Foreach loops are used to iterate throughout collections (such as Arrays). Basically: for each element `x` in the collection, do something with `x`. The syntax is as follows:
 
 ```
 foreach(element in collection) {
