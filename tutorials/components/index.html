@@ -1255,9 +1255,9 @@
                 
                 
                 <h1 id="components">Components</h1>
-<p>Entity Component System (ECS) is a software pattern used in game development. The idea is that in-game objects (called <em>entities</em>) can be customized by adding or removing objects (called <em>components</em>) at runtime. Components add functionalities or behaviors to the entities to which they are attached to. In SurgeScript, both entities and components are objects - the difference is conceptual.</p>
+<p>Entity Component System (ECS) is a software pattern used in game development. The idea is that in-game objects (called <em>entities</em>) can be customized by adding or removing objects (called <em>components</em>) during runtime. Components add functionalities or behaviors to the entities to which they are attached to. In SurgeScript, both entities and components are objects - the difference is conceptual.</p>
 <p>As an example, consider an in-game object called <strong>Parrot</strong>. Objects by themselves are empty; they do nothing. However, an interesting behavior of parrots is that they are blabbers: they keep repeating the same thing over and over again. So, let's create an empty object <strong>Parrot</strong> and spawn on it the <strong>Blabber</strong> component:</p>
-<pre><code>object &quot;Parrot&quot;
+<pre><code>object &quot;Parrot&quot; is &quot;entity&quot;
 {
     blabber = spawn(&quot;Blabber&quot;);
 
@@ -1305,7 +1305,7 @@ Hello!
     }
 }
 
-object &quot;Parrot&quot;
+object &quot;Parrot&quot; is &quot;entity&quot;
 {
     blabber = spawn(&quot;Blabber&quot;);
     bomb = spawn(&quot;Time Bomb&quot;);

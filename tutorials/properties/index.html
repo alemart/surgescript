@@ -1255,9 +1255,9 @@
                 
                 
                 <h1 id="properties">Properties</h1>
-<p>In SurgeScript, <a href="/tutorials/variables">object-level variables</a> are private. This means that these variables can only be accessed from the objects that defined them. However, SurgeScript features a <em>syntactic sugar</em> that allows objects to read and/or modify other objects' data in a way that looks like dealing with regular (public) variables. We'll call these variables <strong>properties</strong>.</p>
+<p>In SurgeScript, <a href="/tutorials/variables">object-level variables</a> are private. This means that these variables can only be accessed from the objects that defined them. However, SurgeScript features a <em>syntactic sugar</em> that allows objects to read and/or modify other objects' data in a way that looks like dealing with regular (public) variables. We'll call these "variables" <strong>properties</strong>.</p>
 <h2 id="defining-properties">Defining properties</h2>
-<p>Suppose you have an object called <strong>Animal</strong> with a variable called <em>sound</em> and a function named <em>speak()</em>:</p>
+<p>Suppose you have an object called <strong>Animal</strong> with an object-level variable called <em>sound</em> and a function named <em>speak()</em>:</p>
 <pre><code>object &quot;Animal&quot;
 {
     sound = &quot;meow!&quot;;
