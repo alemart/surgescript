@@ -126,6 +126,12 @@ The y-coordinate, in world space, of the level water. Pixels not above this valu
 
 The path to the background file (.bg) currently in use. Use this property to change the background of the level.
 
+#### spawnpoint
+
+`spawnpoint`: [Vector2](/engine/vector2) object.
+
+The position where the player is placed when the level starts.
+
 Functions
 ---------
 

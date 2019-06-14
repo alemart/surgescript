@@ -164,11 +164,23 @@ Is the player attacking? (jumping, rolling, and so on)
 
 Is the player midair?
 
+#### blinking
+
+`blinking`: boolean, read-only.
+
+Is the player blinking? (happens just after getting hit)
+
 #### secondsToDrown
 
 `secondsToDrown`: number, read-only.
 
 The number of seconds to drown, if underwater.
+
+#### topspeed
+
+`topspeed`: number, read-only.
+
+The maximum speed the player can reach without items (i.e., running naturally), in pixels per second.
 
 #### direction
 
@@ -247,12 +259,6 @@ The number of lives, an integer shared between all player objects.
 `score`: number.
 
 The score of the player, an integer value shared between all player objects.
-
-#### topspeed
-
-`topspeed`: number, read-only.
-
-The maximum speed the player can reach without items (i.e., running naturally), in pixels per second.
 
 #### speed
 

@@ -41,6 +41,14 @@ object "CollisionDoll" is "entity"
             Console.print("Touched " + player.name);
         }
     }
+
+    // While onCollision() catches the moment a collision
+    // first occurs, onOverlap() is called every frame
+    // this collider collides with other collider
+    fun onOverlap(otherCollider)
+    {
+        // This function is optional.
+    }
 }
 ```
 
