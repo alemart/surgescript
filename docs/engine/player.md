@@ -204,7 +204,7 @@ A collider associated with this Player.
 
 `shield`: string.
 
-One of the following: *"none"*, *"shield"*, *"fire"*, *"thunder"*, *"water"*, *"acid"*, *"wind"*.
+One of the following: *"shield"*, *"fire"*, *"thunder"*, *"water"*, *"acid"*, *"wind"* or `null` (if there is no shield).
 
 #### invincible
 
