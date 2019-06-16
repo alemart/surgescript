@@ -3,7 +3,7 @@ Brick
 
 The Brick component is used to create brick-like objects, or bricks endowed with scripting capabilities. This allows you to create elevators, conditional barriers (e.g., doors), movable platforms with custom trajectories, and much more.
 
-The Brick component only affects collisions. The object that uses it is required to be an [entity](/engine/entity). **This component doesn't do any rendering.** Therefore, it's typically used in conjunction with the [Actor](/engine/actor) component.
+The Brick component only affects collisions. The object that uses it is required to be an [entity](/engine/entity). **This component won't do any rendering.** Therefore, it's typically used in conjunction with the [Actor](/engine/actor) component.
 
 *Example*
 ```
