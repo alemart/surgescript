@@ -110,3 +110,23 @@ Defines the anchor of the collider to be (`x`, `y`), where these values are (usu
 
 * `x`: number. Usually a value between 0.0 and 1.0.
 * `y`: number. Usually a value between 0.0 and 1.0.
+
+*Returns*
+
+Returns the collider itself.
+
+*Example*
+
+```
+// ...
+using SurgeEngine.Collisions.CollisionBox;
+
+object "CollisionTestObject" is "entity"
+{
+    // see that the following collision box
+    // has its anchor on pixel (16, 64)
+    collider = CollisionBox(32, 64).setAnchor(0.5, 1.0);
+
+    // ...
+}
+```
