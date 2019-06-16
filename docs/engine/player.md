@@ -170,6 +170,12 @@ Is the player midair?
 
 Is the player blinking? (happens just after getting hit)
 
+#### dying
+
+`dying`: boolean, read-only.
+
+Is the player dying or drowning?
+
 #### secondsToDrown
 
 `secondsToDrown`: number, read-only.
