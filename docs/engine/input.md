@@ -16,7 +16,7 @@ Spawns a new Input component with the given input map.
 
 *Arguments*
 
-* `inputMap`: string | null. The name of the input map. If set to `null`, a default input map will be used.
+* `inputMap`: string. The name of the input map. If set to `null`, a default input map will be used.
 
 *Returns*
 
