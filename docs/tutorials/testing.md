@@ -9,7 +9,7 @@ There are two main ways to test your scripts:
 Using Open Surge
 ----------------
 
-To test a script on Open Surge, place it on the *scripts/* folder and start the engine. Your test script must include an object called *Application*. Please remove the script after you're done with the testing.
+To test a script on Open Surge, place it on the *scripts/* folder and start the engine. Your test script must include an object called *Application*. Make sure to remove the script after you're done with the testing.
 
 As an example, save the following script to *scripts/hello.ss* and start the engine:
 ```
@@ -30,6 +30,8 @@ object "Application"
 ```
 
 You should see the *Hello, world!* message as a result.
+
+**Linux users:** when using a system-wide installation, you may place your scripts on *~/.local/share/opensurge2d/opensurge/scripts/* (i.e., *$XDG_DATA_HOME/opensurge2d/opensurge/scripts/*).
 
 Ready to proceed? Let's go to [Introduction to objects](/tutorials/objects)!
 
