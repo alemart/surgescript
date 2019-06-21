@@ -54,6 +54,7 @@ static surgescript_var_t* fun_ceil(surgescript_object_t* object, const surgescri
 static surgescript_var_t* fun_round(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_mod(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_sign(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_signum(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_abs(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_min(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_max(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -101,6 +102,7 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "round", fun_round, 1);
     surgescript_vm_bind(vm, "Math", "mod", fun_mod, 2);
     surgescript_vm_bind(vm, "Math", "sign", fun_sign, 1);
+    surgescript_vm_bind(vm, "Math", "signum", fun_signum, 1);
     surgescript_vm_bind(vm, "Math", "abs", fun_abs, 1);
     surgescript_vm_bind(vm, "Math", "min", fun_min, 2);
     surgescript_vm_bind(vm, "Math", "max", fun_max, 2);
@@ -287,6 +289,13 @@ surgescript_var_t* fun_sign(surgescript_object_t* object, const surgescript_var_
 {
     double x = surgescript_var_get_number(param[0]);
     return surgescript_var_set_number(surgescript_var_create(), (x >= 0.0) ? 1.0 : -1.0);
+}
+
+/* signum(x): returns +1 if x is positive, 0 if is x is zero, or -1 if x is negative */
+surgescript_var_t* fun_signum(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    double x = surgescript_var_get_number(param[0]);
+    return surgescript_var_set_number(surgescript_var_create(), (0.0 < x) - (x < 0.0));
 }
 
 /* abs(x): the absolute value of x */

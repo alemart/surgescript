@@ -322,7 +322,7 @@ The remainder of `x / y`.
 
 `sign(x)`
 
-The sign of `x`.
+The sign of `x`: 1 if `x` is non-negative, 0 otherwise.
 
 *Arguments*
 
@@ -331,6 +331,22 @@ The sign of `x`.
 *Returns*
 
 Returns 1 if `x` is positive or zero; or -1 if `x` is negative.
+
+#### signum
+
+`signum(x)`
+
+Function signum(`x`) returns 1 if `x` is positive, 0 if is `x` is zero, or -1 if `x` is negative.
+
+*Available since:* SurgeScript 0.5.4
+
+*Arguments*
+
+* `x`: number.
+
+*Returns*
+
+Returns 1 if `x` is positive, 0 if is `x` is zero, or -1 if `x` is negative.
 
 #### abs
 
