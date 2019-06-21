@@ -62,11 +62,17 @@ Properties
 
 The [Entity](/engine/entity) associated with this collider.
 
+#### enabled
+
+`enabled`: boolean.
+
+Is the collider enabled? A collider that is not enabled will not notify the parent object if a collision occurs. The default value is `true`, i.e., colliders are enabled by default.
+
 #### visible
 
 `visible`: boolean.
 
-Useful for debugging. The default value is `false`.
+Is the collider visible? This is useful for debugging. The default value is `false`.
 
 Functions
 ---------
