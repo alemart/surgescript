@@ -47,30 +47,6 @@ A new CollisionBox with the specified dimensions.
 Properties
 ----------
 
-#### top
-
-`top`: number, read-only.
-
-The y-coordinate of top border of the CollisionBox, in world space.
-
-#### right
-
-`right`: number, read-only.
-
-The x-coordinate of right border of the CollisionBox, in world space.
-
-#### bottom
-
-`bottom`: number, read-only.
-
-The y-coordinate of bottom border of the CollisionBox, in world space.
-
-#### left
-
-`left`: number, read-only.
-
-The x-coordinate of left border of the CollisionBox, in world space.
-
 #### width
 
 `width`: number.
@@ -82,3 +58,33 @@ The width of the CollisionBox, in pixels.
 `height`: number.
 
 The height of the CollisionBox, in pixels.
+
+#### center
+
+`center`: [Vector2](/engine/vector2), read-only.
+
+The center of the CollisionBox, in world space.
+
+#### top
+
+`top`: number, read-only.
+
+The y-coordinate of the top border of the CollisionBox, in world space.
+
+#### right
+
+`right`: number, read-only.
+
+The x-coordinate of the right border of the CollisionBox, in world space.
+
+#### bottom
+
+`bottom`: number, read-only.
+
+The y-coordinate of the bottom border of the CollisionBox, in world space.
+
+#### left
+
+`left`: number, read-only.
+
+The x-coordinate of the left border of the CollisionBox, in world space.
