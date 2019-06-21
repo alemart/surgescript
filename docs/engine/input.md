@@ -24,11 +24,13 @@ An Input component.
 
 *Example*
 ```
+using SurgeEngine.Player;
 using SurgeEngine.Input;
 
 object "Application"
 {
-    input = Input(null);
+    input = Player.active.input;         // this form is preferred (used in most cases)
+    //input = Input("custom input map"); // unless you need to read a custom input map
 
     state "main"
     {
