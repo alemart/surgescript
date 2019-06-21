@@ -397,6 +397,10 @@ Makes the player roll.
 
 Locks the horizontal controls of the player for a few `seconds` (left and right input will be ignored during that time).
 
+*Arguments*
+
+* `seconds`: number. Specify how long the horizontal controls of the player will stay locked.
+
 #### focus
 
 `focus()`
