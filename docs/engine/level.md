@@ -7,21 +7,28 @@ Whenever you spawn an object in SurgeScript, you should keep a reference to it, 
 
 *Example*
 ```
+using SurgeEngine.Actor;
 using SurgeEngine.Level;
-using SurgeEngine.Player;
+using SurgeEngine.Vector2;
 
 object "Application"
 {
     state "main"
     {
-        if(timeout(1))
-            state = "explode";
+        createExplosionAt(100, 200);
+        state = "wait";
     }
 
-    state "explode"
+    state "wait"
     {
-        Level.spawn("MyExplosion"); // no need to keep references
-        state = "main";
+        if(timeout(1.0))
+            state = "main";
+    }
+
+    fun createExplosionAt(x, y)
+    {
+        position = Vector2(x, y);
+        return Level.spawnEntity("MyExplosion", position); // no need to keep references
     }
 }
 
@@ -33,13 +40,6 @@ object "MyExplosion" is "entity", "disposable", "private"
     {
         if(actor.animation.finished)
             destroy()
-    }
-
-    fun constructor()
-    {
-        // set initial position
-        player = Player.active;
-        actor.transform.position = player.transform.position;
     }
 }
 ```
@@ -139,7 +139,7 @@ Functions
 
 `spawn(objectName)`
 
-Spawns an object as a child of Level. Such objects won't be garbage collected. Please note that the spawned object is required to be an [entity](/engine/entity).
+Spawns an object as a child of Level. Such objects won't be garbage collected.
 
 *Arguments*
 
@@ -148,6 +148,21 @@ Spawns an object as a child of Level. Such objects won't be garbage collected. P
 *Returns*
 
 The spawned object.
+
+#### spawnEntity
+
+`spawnEntity(objectName, position)`
+
+Spawns an [entity](/engine/entity) named `objectName` at a certain `position`. This works like [spawn](#spawn), but lets you position the entity as well.
+
+*Arguments*
+
+* `objectName`: string. The name of the entity to be spawned.
+* `position`: [Vector2](/engine/vector2) object. A position in world coordinates.
+
+*Returns*
+
+The spawned entity.
 
 #### restart
 
