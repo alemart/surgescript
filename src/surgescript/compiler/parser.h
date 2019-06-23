@@ -140,7 +140,8 @@ struct surgescript_tagsystem_t;
 /* parser flags (bitwise OR) */
 typedef enum surgescript_parser_flags_t {
     SSPARSER_DEFAULTS = 0, /* default configuration */
-    SSPARSER_ALLOW_DUPLICATES = 1, /* allows duplicate objects */
+    SSPARSER_ALLOW_DUPLICATES = 1, /* allow duplicate objects */
+    SSPARSER_SKIP_DUPLICATES = 2, /* skip duplicate objects */
 } surgescript_parser_flags_t;
 
 /* create & destroy */

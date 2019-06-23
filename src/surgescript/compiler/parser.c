@@ -81,7 +81,9 @@ static void process_annotations(surgescript_parser_t* parser, char** annotations
 static surgescript_program_t* make_file_program(const char* source_file);
 static void pick_non_natives(const char* program_name, void* data);
 static void remove_object_definition(surgescript_programpool_t* pool, const char* object_name);
+static bool forbid_duplicates(const surgescript_parser_t* parser, const char* object_name);
 static bool is_state_context(surgescript_nodecontext_t context);
+static char* randstr(char* buf, size_t size);
 
 /* non-terminals */
 static void importlist(surgescript_parser_t* parser);
@@ -529,6 +531,24 @@ void remove_object_definition(surgescript_programpool_t* pool, const char* objec
     /* FIXME: remove all tags of object_name (ps: how about tags added in C?) */
 }
 
+/* checks if duplicates of an object will be forbidden */
+bool forbid_duplicates(const surgescript_parser_t* parser, const char* object_name)
+{
+    const char** builtins = surgescript_objectmanager_builtin_objects(NULL);
+
+    for(; *builtins; builtins++) {
+        if(strcmp(*builtins, object_name) == 0)
+            return true;
+    }
+
+    /*for(int i = 0; i < ssarray_length(parser->known_plugins); i++) {
+        if(strcmp(parser->known_plugins[i], object_name) == 0)
+            return true;
+    }*/
+
+    return false;
+}
+
 /* checks if program_name is encoding the name of a state */
 /* checks if the parsing context is of a state */
 bool is_state_context(surgescript_nodecontext_t context)
@@ -536,6 +556,19 @@ bool is_state_context(surgescript_nodecontext_t context)
     return context.program_name != NULL && strncmp(context.program_name, "state:", 6) == 0;
 }
 
+/* generates a random string, filling at most size bytes */
+/* null character included. Returns buf */
+char* randstr(char* buf, size_t size)
+{
+    char alphabet[] = "0123456789abcdef", *ret = buf;
+    if(!size) return ret;
+    
+    while(size-- > 1)
+        *(buf++) = alphabet[rand() % 16];
+
+    *buf = 0;
+    return ret;
+}
 
 
 /* non-terminals of the grammar */
@@ -551,6 +584,7 @@ void object(surgescript_parser_t* parser)
     surgescript_nodecontext_t context;
     char** annotations;
     char* object_name;
+    bool duplicate = false;
 
     /* object name */
     read_annotations(parser, &annotations);
@@ -569,9 +603,15 @@ void object(surgescript_parser_t* parser)
     );
 
     /* validate */
-    if(surgescript_programpool_exists(parser->program_pool, object_name, "state:main")) {
-        if(parser->flags & SSPARSER_ALLOW_DUPLICATES) {
-            sslog("Warning: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+    if((duplicate = surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))) {
+        if(parser->flags & SSPARSER_SKIP_DUPLICATES) {
+            char buf[32] = { '.', 'd', 'u', 'p', '.' };
+            sslog("Warning: skipping duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            ssfree(object_name);
+            object_name = ssstrdup(randstr(buf + 5, sizeof(buf) - 5) - 5);
+        }
+        else if((parser->flags & SSPARSER_ALLOW_DUPLICATES) && !forbid_duplicates(parser, object_name)) {
+            sslog("Warning: reading duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
             remove_object_definition(parser->program_pool, object_name);
         }
         else
@@ -592,6 +632,8 @@ void object(surgescript_parser_t* parser)
         surgescript_programpool_put(parser->program_pool, object_name, "get___file", make_file_program(context.source_file));
 
     /* cleanup */
+    if(duplicate && (parser->flags & SSPARSER_SKIP_DUPLICATES))
+        remove_object_definition(parser->program_pool, object_name);
     surgescript_symtable_destroy(context.symtable);
     release_annotations(annotations);
     ssfree(object_name);

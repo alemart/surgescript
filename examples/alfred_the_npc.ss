@@ -71,14 +71,15 @@ object "Alfred"
 
 
     // say()
-    // Say something to the user
+    // Say something!
     fun say(message)
     {
         Console.print(message);
     }
 
     // ask()
-    // Asks a question on the console and returns "y" (yes), "n" (no) or "" (no answer)
+    // Asks a question on the console.
+    // Returns "y" (yes), "n" (no) or "" (no answer)
     fun ask(question)
     {
         Console.write(question);
