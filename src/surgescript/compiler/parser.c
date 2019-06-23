@@ -84,7 +84,7 @@ static void remove_object_definition(surgescript_programpool_t* pool, const char
 static bool forbid_duplicates(const surgescript_parser_t* parser, const char* object_name);
 static bool is_state_context(surgescript_nodecontext_t context);
 static char* randstr(char* buf, size_t size);
-static const int NAME_MAXLEN = 255; /* max length for names of objects, states, tags... */
+static bool is_valid_name(const char* name);
 
 /* non-terminals */
 static void importlist(surgescript_parser_t* parser);
@@ -571,6 +571,19 @@ char* randstr(char* buf, size_t size)
     return ret;
 }
 
+/* checks if the given string is a valid name for:
+ * objects, states, tags... */
+bool is_valid_name(const char* name)
+{
+    static const int NAME_MAXLEN = 255;
+    const char* p = name;
+
+    while(*p && isspace(*p))
+        p++;
+
+    return *p != 0 && strlen(name) < NAME_MAXLEN;
+}
+
 
 /* non-terminals of the grammar */
 
@@ -604,7 +617,7 @@ void object(surgescript_parser_t* parser)
     );
 
     /* validate */
-    if(!object_name[0] || strlen(object_name) > NAME_MAXLEN) {
+    if(!is_valid_name(object_name)) {
         ssfatal("Compile Error: invalid object name \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     }
     else if((duplicate = surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))) {
@@ -680,7 +693,7 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             const char* tag_name = surgescript_token_lexeme(parser->lookahead);
 
             /* validate */
-            if(!tag_name[0] || strlen(tag_name) > NAME_MAXLEN)
+            if(!is_valid_name(tag_name))
                 ssfatal("Compile Error: invalid tag name \"%s\" in object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
             /* okay, add tag */
@@ -772,7 +785,7 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     int fun_header = 0;
 
     /* validation */
-    if(!state_name[0] || strlen(state_name) > NAME_MAXLEN)
+    if(!is_valid_name(state_name))
         ssfatal("Compile Error: invalid state name \"%s\" in object \"%s\" at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* read state name & generate function name */
