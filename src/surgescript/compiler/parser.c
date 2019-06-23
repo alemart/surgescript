@@ -613,6 +613,7 @@ void object(surgescript_parser_t* parser)
             sslog("Warning: skipping duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
             ssfree(object_name);
             object_name = ssstrdup(randstr(buf + 5, sizeof(buf) - 5) - 5);
+            context.object_name = object_name;
         }
         else if((parser->flags & SSPARSER_ALLOW_DUPLICATES) && !forbid_duplicates(parser, object_name)) {
             sslog("Warning: reading duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
