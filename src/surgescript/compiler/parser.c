@@ -581,7 +581,7 @@ bool is_valid_name(const char* name)
     while(*p && isspace(*p))
         p++;
 
-    return *p != 0 && strlen(name) < NAME_MAXLEN;
+    return *p != 0 && strlen(name) <= NAME_MAXLEN;
 }
 
 
