@@ -84,6 +84,7 @@ static void remove_object_definition(surgescript_programpool_t* pool, const char
 static bool forbid_duplicates(const surgescript_parser_t* parser, const char* object_name);
 static bool is_state_context(surgescript_nodecontext_t context);
 static char* randstr(char* buf, size_t size);
+static const int NAME_MAXLEN = 255; /* max length for names of objects, states, tags... */
 
 /* non-terminals */
 static void importlist(surgescript_parser_t* parser);
@@ -603,7 +604,10 @@ void object(surgescript_parser_t* parser)
     );
 
     /* validate */
-    if((duplicate = surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))) {
+    if(!object_name[0] || strlen(object_name) > NAME_MAXLEN) {
+        ssfatal("Compile Error: invalid object name \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+    }
+    else if((duplicate = surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))) {
         if(parser->flags & SSPARSER_SKIP_DUPLICATES) {
             char buf[32] = { '.', 'd', 'u', 'p', '.' };
             sslog("Warning: skipping duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
@@ -672,8 +676,14 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
         /* read tags */
         while(got_type(parser, SSTOK_STRING)) {
-            const char* tag = surgescript_token_lexeme(parser->lookahead);
-            surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, tag);
+            const char* tag_name = surgescript_token_lexeme(parser->lookahead);
+
+            /* validate */
+            if(!tag_name[0] || strlen(tag_name) > NAME_MAXLEN)
+                ssfatal("Compile Error: invalid tag name \"%s\" in object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+
+            /* okay, add tag */
+            surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, tag_name);
             match(parser, SSTOK_STRING);
             if(optmatch(parser, SSTOK_COMMA))
                 expect(parser, SSTOK_STRING);
@@ -755,12 +765,17 @@ void statedecllist(surgescript_parser_t* parser, surgescript_nodecontext_t conte
 
 void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    int fun_header = 0;
     static const char prefix[] = "state:";
     const char* state_name = surgescript_token_lexeme(parser->lookahead);
-    char* program_name = ssmalloc((1 + strlen(prefix) + strlen(state_name)) * sizeof(*program_name));
+    char* program_name;
+    int fun_header = 0;
+
+    /* validation */
+    if(!state_name[0] || strlen(state_name) > NAME_MAXLEN)
+        ssfatal("Compile Error: invalid state name \"%s\" in object \"%s\" at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* read state name & generate function name */
+    program_name = ssmalloc((1 + strlen(prefix) + strlen(state_name)) * sizeof(*program_name));
     strcat(strcpy(program_name, prefix), state_name);
     match(parser, SSTOK_STRING);
 
