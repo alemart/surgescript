@@ -280,6 +280,20 @@ void surgescript_programpool_delete(surgescript_programpool_t* pool, const char*
 }
 
 
+
+/*
+ * surgescript_programpool_is_compiled()
+ * Is there any code for object_name?
+ */
+bool surgescript_programpool_is_compiled(surgescript_programpool_t* pool, const char* object_name)
+{
+    surgescript_programpool_metadata_t *m = NULL;
+    HASH_FIND_STR(pool->meta, object_name, m);
+    return (m != NULL) && (ssarray_length(m->program_name) > 0);
+}
+
+
+
 /* -------------------------------
  * private methods
  * ------------------------------- */
