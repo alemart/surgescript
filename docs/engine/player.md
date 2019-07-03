@@ -99,39 +99,6 @@ Properties
 
 The name of the character.
 
-#### activity
-
-`activity`: string, read-only.
-
-The current state / activity of the player. One of the following: *"stopped"*, *"walking"*, *"running"*, *"jumping"*, *"springing"*, *"rolling"*, *"charging"*, *"pushing"*, *"gettinghit"*, *"dying"*, *"braking"*, *"balancing"*, *"drowning"*, *"breathing"*, *"ducking"*, *"lookingup"*, *"waiting"*, *"winning"*.
-
-```
-using SurgeEngine.Player;
-
-// Place this inside your level to see the
-// current activity of the active player
-object "ActivityDebugger" is "awake", "entity"
-{
-    state "main"
-    {
-        player = Player.active;
-        Console.print(player.activity);
-    }
-}
-```
-
-#### anim
-
-`anim`: number.
-
-A shortcut to `animation.id`: an integer corresponding to the animation number.
-
-#### animation
-
-`animation`: [Animation](/engine/animation) object, read-only.
-
-Reference to the Animation object of the Player.
-
 #### input
 
 `input`: [Input](/engine/input) object, read-only.
@@ -152,6 +119,18 @@ object "Application"
 }
 ```
 
+#### anim
+
+`anim`: number.
+
+A shortcut to `animation.id`: an integer corresponding to the animation number.
+
+#### animation
+
+`animation`: [Animation](/engine/animation) object, read-only.
+
+Reference to the Animation object of the Player.
+
 #### attacking
 
 `attacking`: boolean, read-only.
@@ -164,6 +143,78 @@ Is the player attacking? (jumping, rolling, and so on)
 
 Is the player midair?
 
+#### stopped
+
+`stopped`: boolean, read-only.
+
+Is the player stopped?
+
+#### walking
+
+`walking`: boolean, read-only.
+
+Is the player walking?
+
+#### running
+
+`running`: boolean, read-only.
+
+Is the player running?
+
+#### jumping
+
+`jumping`: boolean, read-only.
+
+Is the player jumping?
+
+#### springing
+
+`springing`: boolean, read-only.
+
+Is the player playing the "springing" animation, displayed just after hitting a spring?
+
+#### braking
+
+`braking`: boolean, read-only.
+
+Is the player braking?
+
+#### balancing
+
+`balancing`: boolean, read-only.
+
+Is the player balancing on a ledge?
+
+#### waiting
+
+`waiting`: boolean, read-only.
+
+Is the player waiting? (happens after remaining stopped for a few seconds)
+
+#### rolling
+
+`rolling`: boolean, read-only.
+
+Is the player rolling?
+
+#### charging
+
+`charging`: boolean, read-only.
+
+Is the player charging a rolling movement?
+
+#### pushing
+
+`pushing`: boolean, read-only.
+
+Is the player pushing a wall?
+
+#### hit
+
+`hit`: boolean, read-only.
+
+Is the player getting hit (i.e., losing collectibles or a shield)?
+
 #### blinking
 
 `blinking`: boolean, read-only.
@@ -175,6 +226,37 @@ Is the player blinking? (happens just after getting hit)
 `dying`: boolean, read-only.
 
 Is the player dying or drowning?
+
+#### drowning
+
+`drowning`: boolean, read-only.
+
+Is the player drowning (i.e., dying underwater)?
+
+#### breathing
+
+`breathing`: boolean, read-only.
+
+Is the player breathing an air bubble underwater?
+
+#### crouchingDown
+
+`crouchingDown`: boolean, read-only.
+
+Is the player crouching down?
+
+#### lookingUp
+
+`lookingUp`: boolean, read-only.
+
+Is the player looking up?
+
+#### winning
+
+`winning`: boolean, read-only.
+
+Is the player displaying the "winning" animation (after clearing a level)?
+
 
 #### secondsToDrown
 
