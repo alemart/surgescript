@@ -344,7 +344,15 @@ void surgescript_vm_install_plugin(surgescript_vm_t* vm, const char* object_name
     surgescript_objectmanager_install_plugin(manager, object_name);
 }
 
-
+/*
+ * surgescript_vm_object_exists()
+ * Checks if an object with a certain name exists (i.e., has been compiled into this VM)
+ */
+bool surgescript_vm_object_exists(surgescript_vm_t* vm, const char* object_name)
+{
+    surgescript_programpool_t* pool = vm->program_pool;
+    return surgescript_programpool_exists(pool, object_name, "state:main");
+}
 
 
 /* ----- private ----- */
