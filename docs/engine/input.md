@@ -1,14 +1,30 @@
 Input
 =====
 
-The Input component is used to read input from the user.
+The Input object is used to read input from the user.
+
+*Example*
+```
+using SurgeEngine.Player;
+
+object "Application"
+{
+    player = Player.active;
+
+    state "main"
+    {
+        if(player.input.buttonDown("right"))
+            Console.print("User is holding right");
+    }
+}
+```
 
 Factory
 -------
 
 #### Input
 
-`Input(inputMap | null)`
+`Input(inputMap)`
 
 Spawns a new Input component with the given input map.
 
@@ -85,12 +101,13 @@ Checks if a button has just been released.
 
 Returns `true` if the specified button has just been released.
 
-#### simulateButtonDown
+#### simulateButton
 
-`simulateButtonDown(buttonName)`
+`simulateButton(buttonName, down)`
 
-Changes the input object so that `buttonName` will be identified as being held down in the current frame.
+Changes the input object so that `buttonName` will be identified as being held down, or not being held down, in the current frame.
 
 *Arguments*
 
 * `buttonName`: string. One of the following: *"up", "down", "left", "right", "fire1", "fire2", ..., "fire8"*.
+* `down`: boolean. Should the button be considered as being held down?
