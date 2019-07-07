@@ -128,9 +128,7 @@ surgescript_program_t* surgescript_program_create_native(int arity, surgescript_
  */
 surgescript_program_t* surgescript_program_destroy(surgescript_program_t* program)
 {
-    int j;
-
-    for(j = 0; j < ssarray_length(program->text); j++)
+    for(int j = 0; j < ssarray_length(program->text); j++)
         ssfree(program->text[j]);
 
     ssarray_release(program->text);
