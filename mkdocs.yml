@@ -53,6 +53,11 @@ nav:
         - 'Audio':
             - 'Music': 'engine/music.md'
             - 'Sound': 'engine/sound.md'
+        - 'Behavior':
+            - 'Behavior': 'engine/behavior.md'
+            - 'DirectionalMovement': 'engine/directional_movement.md'
+            - 'Enemy': 'engine/enemy.md'
+            - 'Platformer': 'engine/platformer.md'
         - 'Brick': 'engine/brick.md'
         - 'Camera': 'engine/camera.md'
         - 'Collisions':
