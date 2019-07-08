@@ -76,3 +76,9 @@ The number of frames of the current animation.
 `speedFactor`: number.
 
 While the [FPS](#fps) rate controls the speed of the animation, the speed factor gives you an additional degree of control. This is a multiplier that defaults to 1.0, meaning that the animation will run using its normal speed. If it's set to 2.0, it will run using twice that speed. A value of 0.5 means half the speed, and so on.
+
+#### sync
+
+`sync`: boolean.
+
+Is the current animation is synchronized? A synchronized animation is a repeating animation that displays the same frame across multiple sprites. Defaults to `false`.
