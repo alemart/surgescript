@@ -8,7 +8,7 @@ Factory
 
 #### Text
 
-`UI.Text(font | null)`
+`UI.Text(font)`
 
 Spawns a new Text object with the given font name. If `null` is provided as the font name, then a default font will be used.
 
@@ -30,7 +30,7 @@ using SurgeEngine.Player;
 // the name of the player
 object "PlayerName" is "entity", "awake"
 {
-    text = Text(null);
+    text = Text("GoodNeighbors");
     transform = Transform();
 
     state "main"
@@ -46,8 +46,6 @@ object "PlayerName" is "entity", "awake"
     }
 }
 ```
-
-
 
 Properties
 ----------
