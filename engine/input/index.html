@@ -832,6 +832,78 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
+    
+    <label class="md-nav__link" for="nav-5-4">
+      Behavior
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-4">
+        Behavior
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../behavior/" title="Behavior" class="md-nav__link">
+      Behavior
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../directional_movement/" title="DirectionalMovement" class="md-nav__link">
+      DirectionalMovement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../enemy/" title="Enemy" class="md-nav__link">
+      Enemy
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../platformer/" title="Platformer" class="md-nav__link">
+      Platformer
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
     <a href="../brick/" title="Brick" class="md-nav__link">
       Brick
@@ -858,13 +930,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-6" type="checkbox" id="nav-5-6">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-7" type="checkbox" id="nav-5-7">
     
-    <label class="md-nav__link" for="nav-5-6">
+    <label class="md-nav__link" for="nav-5-7">
       Collisions
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-6">
+      <label class="md-nav__title" for="nav-5-7">
         Collisions
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -944,13 +1016,13 @@
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-8" type="checkbox" id="nav-5-8" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-9" type="checkbox" id="nav-5-9" checked>
     
-    <label class="md-nav__link" for="nav-5-8">
+    <label class="md-nav__link" for="nav-5-9">
       Input
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-8">
+      <label class="md-nav__title" for="nav-5-9">
         Input
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1038,8 +1110,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#simulatebuttondown" title="simulateButtonDown" class="md-nav__link">
-    simulateButtonDown
+  <a href="#simulatebutton" title="simulateButton" class="md-nav__link">
+    simulateButton
   </a>
   
 </li>
@@ -1156,13 +1228,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-15" type="checkbox" id="nav-5-15">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-16" type="checkbox" id="nav-5-16">
     
-    <label class="md-nav__link" for="nav-5-15">
+    <label class="md-nav__link" for="nav-5-16">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-15">
+      <label class="md-nav__title" for="nav-5-16">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1204,13 +1276,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-17" type="checkbox" id="nav-5-17">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-18" type="checkbox" id="nav-5-18">
     
-    <label class="md-nav__link" for="nav-5-17">
+    <label class="md-nav__link" for="nav-5-18">
       Video
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-17">
+      <label class="md-nav__title" for="nav-5-18">
         Video
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1320,8 +1392,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#simulatebuttondown" title="simulateButtonDown" class="md-nav__link">
-    simulateButtonDown
+  <a href="#simulatebutton" title="simulateButton" class="md-nav__link">
+    simulateButton
   </a>
   
 </li>
@@ -1351,24 +1423,41 @@
                 
                 
                 <h1 id="input">Input</h1>
-<p>The Input component is used to read input from the user.</p>
+<p>The Input object is used to read input from the user.</p>
+<p><em>Example</em></p>
+<pre><code>using SurgeEngine.Player;
+
+object &quot;Application&quot;
+{
+    player = Player.active;
+
+    state &quot;main&quot;
+    {
+        if(player.input.buttonDown(&quot;right&quot;))
+            Console.print(&quot;User is holding right&quot;);
+    }
+}
+</code></pre>
+
 <h2 id="factory">Factory</h2>
 <h4 id="input_1">Input</h4>
-<p><code>Input(inputMap | null)</code></p>
+<p><code>Input(inputMap)</code></p>
 <p>Spawns a new Input component with the given input map.</p>
 <p><strong>Note:</strong> to read input from a specific character, prefer using <a href="/engine/player#input">Player.input</a> instead.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>inputMap</code>: string | null. The name of the input map. If set to <code>null</code>, a default input map will be used.</li>
+<li><code>inputMap</code>: string. The name of the input map. If set to <code>null</code>, a default input map will be used.</li>
 </ul>
 <p><em>Returns</em></p>
 <p>An Input component.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Input;
+<pre><code>using SurgeEngine.Player;
+using SurgeEngine.Input;
 
 object &quot;Application&quot;
 {
-    input = Input(null);
+    input = Player.active.input;         // this form is preferred (used in most cases)
+    //input = Input(&quot;custom input map&quot;); // unless you need to read a custom input map
 
     state &quot;main&quot;
     {
@@ -1406,12 +1495,13 @@ object &quot;Application&quot;
 </ul>
 <p><em>Returns</em></p>
 <p>Returns <code>true</code> if the specified button has just been released.</p>
-<h4 id="simulatebuttondown">simulateButtonDown</h4>
-<p><code>simulateButtonDown(buttonName)</code></p>
-<p>Changes the input object so that <code>buttonName</code> will be identified as being held down in the current frame.</p>
+<h4 id="simulatebutton">simulateButton</h4>
+<p><code>simulateButton(buttonName, down)</code></p>
+<p>Changes the input object so that <code>buttonName</code> will be identified as being held down, or not being held down, in the current frame.</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>buttonName</code>: string. One of the following: <em>"up", "down", "left", "right", "fire1", "fire2", ..., "fire8"</em>.</li>
+<li><code>down</code>: boolean. Should the button be considered as being held down?</li>
 </ul>
                 
                   

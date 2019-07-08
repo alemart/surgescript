@@ -13,7 +13,7 @@
         <meta name="description" content="SurgeScript is a scripting language for games.">
       
       
-        <link rel="canonical" href="https://docs.opensurge2d.org/engine/sensor/">
+        <link rel="canonical" href="https://docs.opensurge2d.org/engine/directional_movement/">
       
       
         <meta name="author" content="Alexandre Martins">
@@ -42,7 +42,7 @@
     
     
       
-        <title>Sensor - SurgeScript Documentation</title>
+        <title>DirectionalMovement - SurgeScript Documentation</title>
       
     
     
@@ -125,7 +125,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#sensor" tabindex="1" class="md-skip">
+      <a href="#directional-movement" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -150,7 +150,7 @@
               SurgeScript Documentation
             </span>
             <span class="md-header-nav__topic">
-              Sensor
+              DirectionalMovement
             </span>
           
         </div>
@@ -831,10 +831,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4" checked>
     
     <label class="md-nav__link" for="nav-5-4">
       Behavior
@@ -862,11 +864,96 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../directional_movement/" title="DirectionalMovement" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        DirectionalMovement
+      </label>
+    
+    <a href="./" title="DirectionalMovement" class="md-nav__link md-nav__link--active">
       DirectionalMovement
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#factory" title="Factory" class="md-nav__link">
+    Factory
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#behaviordirectionalmovement" title="Behavior.DirectionalMovement" class="md-nav__link">
+    Behavior.DirectionalMovement
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#properties" title="Properties" class="md-nav__link">
+    Properties
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#speed" title="speed" class="md-nav__link">
+    speed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#direction" title="direction" class="md-nav__link">
+    direction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#angle" title="angle" class="md-nav__link">
+    angle
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -927,12 +1014,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-7" type="checkbox" id="nav-5-7" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-7" type="checkbox" id="nav-5-7">
     
     <label class="md-nav__link" for="nav-5-7">
       Collisions
@@ -984,89 +1069,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Sensor
-      </label>
-    
-    <a href="./" title="Sensor" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../sensor/" title="Sensor" class="md-nav__link">
       Sensor
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#factory" title="Factory" class="md-nav__link">
-    Factory
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#sensor_1" title="Sensor" class="md-nav__link">
-    Sensor
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#properties" title="Properties" class="md-nav__link">
-    Properties
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#visible" title="visible" class="md-nav__link">
-    visible
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#status" title="status" class="md-nav__link">
-    status
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -1337,8 +1344,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#sensor_1" title="Sensor" class="md-nav__link">
-    Sensor
+  <a href="#behaviordirectionalmovement" title="Behavior.DirectionalMovement" class="md-nav__link">
+    Behavior.DirectionalMovement
   </a>
   
 </li>
@@ -1357,15 +1364,22 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#visible" title="visible" class="md-nav__link">
-    visible
+  <a href="#speed" title="speed" class="md-nav__link">
+    speed
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#status" title="status" class="md-nav__link">
-    status
+  <a href="#direction" title="direction" class="md-nav__link">
+    direction
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#angle" title="angle" class="md-nav__link">
+    angle
   </a>
   
 </li>
@@ -1391,53 +1405,75 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/alemart/surgescript/edit/master/docs/engine/sensor.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/alemart/surgescript/edit/master/docs/engine/directional_movement.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="sensor">Sensor</h1>
-<p>A Sensor is used to detect collisions with bricks (obstacle, cloud). Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.</p>
+                <h1 id="directional-movement">Directional Movement</h1>
+<p>The Directional Movement <a href="/engine/behavior">behavior</a> makes the associated <a href="/engine/entity">entity</a> perform a directional movement on the 2D plane. It features:</p>
+<ul>
+<li>A direction <a href="/engine/vector2">vector</a> that specifies the direction of the movement</li>
+<li>A movement speed, a scalar value given in pixels per second</li>
+</ul>
+<p>You may control the direction of the movement using a vector or an angle given in degrees. Additionally, you may control the speed of the movement by changing the speed property directly.</p>
+<p>Directional Movement is very versatile. You can use it to implement many types of baddies, flying objects, racing cars viewed from a top-down view, circular movements, and much more.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Actor;
-using SurgeEngine.Collisions.Sensor;
+<pre><code>//
+// The example below shows how to make an entity move to the
+// right of the screen at a rate of 60 pixels per second
+//
+using SurgeEngine.Actor;
+using SurgeEngine.Vector2;
+using SurgeEngine.Behavior.DirectionalMovement;
 
-object &quot;SensorToy&quot; is &quot;entity&quot;
+object &quot;Simple Ball&quot; is &quot;entity&quot;
 {
-    actor = Actor(&quot;SensorToy&quot;);
-    sensor = Sensor(10, -50, 1, 50);
+    actor = Actor(&quot;Simple Ball&quot;);
+    movement = DirectionalMovement();
 
     state &quot;main&quot;
     {
-        if(sensor.status != null)
-            Console.print(&quot;Got a brick&quot;);
-    }
-
-    fun constructor()
-    {
-        sensor.visible = true;
+        movement.direction = Vector2.right;
+        movement.speed = 60;
     }
 }
 </code></pre>
 
 <h2 id="factory">Factory</h2>
-<h4 id="sensor_1">Sensor</h4>
-<p><code>Collisions.Sensor(x, y, width, height)</code></p>
-<p>Spawns a new Sensor with the specified dimensions and having its top-left corner located at position (<em>x</em>, <em>y</em>) relative to the parent object. A Sensor is either a vertical or a horizontal bar that is 1-pixel thin. Both <em>width</em> and <em>height</em> must be positive integers, and at least one of them must be equal to 1.</p>
-<p><em>Arguments</em></p>
-<ul>
-<li><code>x</code>: number. The x-position of the top-left corner of the sensor, relative to the parent object.</li>
-<li><code>y</code>: number. The y-position of the top-left corner of the sensor, relative to the parent object.</li>
-<li><code>width</code>: number. The width of the sensor, in pixels. Must be a positive integer.</li>
-<li><code>height</code>: number. The height of the sensor, in pixels. Must be a positive integer.</li>
-</ul>
+<h4 id="behaviordirectionalmovement">Behavior.DirectionalMovement</h4>
+<p><code>DirectionalMovement()</code></p>
+<p>Spawns a DirectionalMovement.</p>
 <p><em>Returns</em></p>
-<p>A Sensor with the specified parameters.</p>
+<p>A DirectionalMovement object.</p>
 <h2 id="properties">Properties</h2>
-<h4 id="visible">visible</h4>
-<p><code>visible</code>: boolean.</p>
-<p>Should the sensor be rendered? Useful for debugging. Defaults to <code>false</code>.</p>
-<h4 id="status">status</h4>
-<p><code>status</code>: string | null, read-only.</p>
-<p>The type of the brick colliding with the sensor (either <em>"solid"</em> or <em>"cloud"</em>). If the sensor isn't colliding with a brick, its status will be <code>null</code>.</p>
+<h4 id="speed">speed</h4>
+<p><code>speed</code>: number.</p>
+<p>The speed of the movement, in pixels per second.</p>
+<h4 id="direction">direction</h4>
+<p><code>direction</code>: <a href="/engine/vector2">Vector2</a> object.</p>
+<p>The direction of the movement.</p>
+<h4 id="angle">angle</h4>
+<p><code>angle</code>: number.</p>
+<p>The counterclockwise angle of the direction vector, in degrees. 0 means right, 90 means up, etc.</p>
+<p><em>Example</em></p>
+<pre><code>//
+// In the example below, a circular movement is performed
+//
+using SurgeEngine.Actor;
+using SurgeEngine.Behavior.DirectionalMovement;
+
+object &quot;Simple Ball&quot; is &quot;entity&quot;
+{
+    actor = Actor(&quot;Simple Ball&quot;);
+    movement = DirectionalMovement();
+    angularSpeed = 360; // one full rotation per second
+
+    state &quot;main&quot;
+    {
+        movement.speed = 192;
+        movement.angle += angularSpeed * Time.delta;
+    }
+}
+</code></pre>
                 
                   
                 
@@ -1458,7 +1494,7 @@ object &quot;SensorToy&quot; is &quot;entity&quot;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../collisionbox/" title="CollisionBox" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../behavior/" title="Behavior" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1467,19 +1503,19 @@ object &quot;SensorToy&quot; is &quot;entity&quot;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                CollisionBox
+                Behavior
               </span>
             </div>
           </a>
         
         
-          <a href="../entity/" title="Entity" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../enemy/" title="Enemy" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Entity
+                Enemy
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

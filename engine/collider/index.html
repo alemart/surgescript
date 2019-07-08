@@ -832,6 +832,78 @@
           
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
+    
+    <label class="md-nav__link" for="nav-5-4">
+      Behavior
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-4">
+        Behavior
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../behavior/" title="Behavior" class="md-nav__link">
+      Behavior
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../directional_movement/" title="DirectionalMovement" class="md-nav__link">
+      DirectionalMovement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../enemy/" title="Enemy" class="md-nav__link">
+      Enemy
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../platformer/" title="Platformer" class="md-nav__link">
+      Platformer
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
     <a href="../brick/" title="Brick" class="md-nav__link">
       Brick
@@ -860,13 +932,13 @@
 
   <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-6" type="checkbox" id="nav-5-6" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-7" type="checkbox" id="nav-5-7" checked>
     
-    <label class="md-nav__link" for="nav-5-6">
+    <label class="md-nav__link" for="nav-5-7">
       Collisions
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-6">
+      <label class="md-nav__title" for="nav-5-7">
         Collisions
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -915,6 +987,13 @@
           <li class="md-nav__item">
   <a href="#entity" title="entity" class="md-nav__link">
     entity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enabled" title="enabled" class="md-nav__link">
+    enabled
   </a>
   
 </li>
@@ -1036,13 +1115,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-8" type="checkbox" id="nav-5-8">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-9" type="checkbox" id="nav-5-9">
     
-    <label class="md-nav__link" for="nav-5-8">
+    <label class="md-nav__link" for="nav-5-9">
       Input
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-8">
+      <label class="md-nav__title" for="nav-5-9">
         Input
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1156,13 +1235,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-15" type="checkbox" id="nav-5-15">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-16" type="checkbox" id="nav-5-16">
     
-    <label class="md-nav__link" for="nav-5-15">
+    <label class="md-nav__link" for="nav-5-16">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-15">
+      <label class="md-nav__title" for="nav-5-16">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1204,13 +1283,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-17" type="checkbox" id="nav-5-17">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-18" type="checkbox" id="nav-5-18">
     
-    <label class="md-nav__link" for="nav-5-17">
+    <label class="md-nav__link" for="nav-5-18">
       Video
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-17">
+      <label class="md-nav__title" for="nav-5-18">
         Video
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1281,6 +1360,13 @@
           <li class="md-nav__item">
   <a href="#entity" title="entity" class="md-nav__link">
     entity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enabled" title="enabled" class="md-nav__link">
+    enabled
   </a>
   
 </li>
@@ -1386,6 +1472,14 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
             Console.print(&quot;Touched &quot; + player.name);
         }
     }
+
+    // While onCollision() catches the moment a collision
+    // first occurs, onOverlap() is called every frame
+    // this collider collides with other collider
+    fun onOverlap(otherCollider)
+    {
+        // This function is optional.
+    }
 }
 </code></pre>
 
@@ -1393,9 +1487,12 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 <h4 id="entity">entity</h4>
 <p><code>entity</code>: object, read-only.</p>
 <p>The <a href="/engine/entity">Entity</a> associated with this collider.</p>
+<h4 id="enabled">enabled</h4>
+<p><code>enabled</code>: boolean.</p>
+<p>Is the collider enabled? A collider that is not enabled will not notify the parent object if a collision occurs. The default value is <code>true</code>, i.e., colliders are enabled by default.</p>
 <h4 id="visible">visible</h4>
 <p><code>visible</code>: boolean.</p>
-<p>Useful for debugging. The default value is <code>false</code>.</p>
+<p>Is the collider visible? This is useful for debugging. The default value is <code>false</code>.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="collideswith">collidesWith</h4>
 <p><code>collidesWith(collider)</code></p>
@@ -1424,6 +1521,21 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 <li><code>x</code>: number. Usually a value between 0.0 and 1.0.</li>
 <li><code>y</code>: number. Usually a value between 0.0 and 1.0.</li>
 </ul>
+<p><em>Returns</em></p>
+<p>Returns the collider itself.</p>
+<p><em>Example</em></p>
+<pre><code>// ...
+using SurgeEngine.Collisions.CollisionBox;
+
+object &quot;CollisionTestObject&quot; is &quot;entity&quot;
+{
+    // see that the following collision box
+    // has its anchor on pixel (16, 64)
+    collider = CollisionBox(32, 64).setAnchor(0.5, 1.0);
+
+    // ...
+}
+</code></pre>
                 
                   
                 
