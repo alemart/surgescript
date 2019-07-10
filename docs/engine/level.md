@@ -164,6 +164,55 @@ Spawns an [entity](/engine/entity) named `objectName` at a certain `position`. T
 
 The spawned entity.
 
+#### entity
+
+`entity(id)`
+
+[Entities](/engine/entity) placed on the level via the editor are automatically assigned an ID, a hexadecimal identification code. The purpose of the ID is to uniquely identify the entity in the level. This function returns the entity whose ID is `id`. It's recommended to cache the return value of this function. Do not call it every frame (better performance).
+
+*Arguments*
+
+* `id`: string. The ID of the entity to be retrieved.
+
+*Returns*
+
+The desired entity ([object](/reference/object)), or `null` if there is no entity associated with the given ID.
+
+*Example*
+
+```
+using SurgeEngine.Level;
+
+//
+// Level.entity() is very useful when creating startup objects, i.e.,
+// objects spawned when the level is initialized. You can use it to
+// tune the parameters of specific entities, call their functions, etc.
+//
+// The example below can be added to the startup list in the .lev file.
+//
+object "My Startup Object"
+{
+    state "main"
+    {
+        // setup the entity
+        item = Level.entity("ab65d8fe1ebd68de"); // first, we get the entity
+        if(item != null) {
+            Console.print(item.__name); // then we print the object name
+            //item.score = 100; // we can also change a property
+        }
+        else
+            Console.print("Entity not found");
+
+        // change the state
+        state = "done";
+    }
+
+    state "done"
+    {
+    }
+}
+```
+
 #### restart
 
 `restart()`
