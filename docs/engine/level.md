@@ -213,6 +213,62 @@ object "My Startup Object"
 }
 ```
 
+#### setup
+
+`setup(config)`
+
+Sets up the properties of a collection of level objects. This is a handy function typically used in a startup object of your level. Its purpose is to configure the properties of level objects. You may set the properties of groups of objects (given their names) and of individual entities alone (given their IDs).
+
+The target properties and their respective values should be specified in the `config` [Dictionary](/reference/dictionary), passed as a parameter. Each key of `config` should be either an object name or an entity ID. Each value of the dictionary should be another dictionary specifying the properties to be set and their respective values. If an object name is specified in a key of `config`, all level objects with that name will be affected. If an entity ID is provided, only that specific entity will be affected, if it exists.
+
+This function will search for all the specified objects in the level, so it's not supposed to be used in a loop (or in a repeating state). Furthermore, if one or more objects or properties do not exist, this function will fail silently. Therefore, make sure you type everything correctly.
+
+*Arguments*
+
+* `config`: [Dictionary](/reference/dictionary) object. The configuration as described.
+
+*Example*
+
+```
+using SurgeEngine.Level;
+
+//
+// This is supposed to be a startup object,
+// listed in the startup list of a .lev file
+//
+object "My Level Setup"
+{
+    state "main"
+    {
+        // setup properties
+        Level.setup({
+            "Elevator": {
+                "anim": 2
+            },
+            "Background Exchanger": {
+                "background": "themes/template.bg"
+            },
+            "5640353a6efd2901": {
+                "someProperty": 123,
+                "someOtherProperty": "hello"
+            },
+            "770ae26584229af2": {
+                "title": "Super!!",
+                "message": "Hey there! Feeling good today?",
+                "buttons": [ "Yes", "No" ]
+            }
+        });
+
+        // done
+        state = "done";
+    }
+
+    state "done"
+    {
+    }
+}
+```
+
 #### restart
 
 `restart()`
