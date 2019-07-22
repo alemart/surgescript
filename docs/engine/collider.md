@@ -93,18 +93,17 @@ Returns `true` if there is a collision (the colliders overlap), or `false` other
 
 #### contains
 
-`contains(x, y)`
+`contains(point)`
 
-Checks if the collider contains the point (`x`, `y`), given in world coordinates.
+Checks if the collider contains the given point, given in world coordinates.
 
 *Arguments*
 
-* `x`: number. The x-coordinate of the point.
-* `y`: number. The y-coordinate of the point.
+* `point`: [Vector2](/engine/vector2) object. The point to be tested.
 
 *Returns*
 
-Returns `true` if the point is inside the collider, or `false` otherwise.
+Returns `true` if the point is contained in the collider, or `false` otherwise.
 
 #### setAnchor
 
