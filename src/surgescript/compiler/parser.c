@@ -439,7 +439,7 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
 surgescript_var_t* empty_main(surgescript_object_t* object, const surgescript_var_t* param[], int num_params)
 {
     /* disable the object for optimization purposes?
-       what about the children? */
+       no! what about the children? */
     /*surgescript_object_set_active(object, false);*/
     return NULL;
 }
