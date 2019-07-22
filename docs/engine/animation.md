@@ -59,17 +59,17 @@ Frames per second of the current animation.
 
 Does the current animation repeat itself?
 
-#### frame
-
-`frame`: number, read-only.
-
-The current frame of the animation: an integer between `0` and `frameCount - 1`, inclusive.
-
 #### frameCount
 
 `frameCount`: number, read-only.
 
 The number of frames of the current animation.
+
+#### frame
+
+`frame`: number.
+
+The current frame of the animation: an integer between `0` and `frameCount - 1`, inclusive.
 
 #### speedFactor
 
