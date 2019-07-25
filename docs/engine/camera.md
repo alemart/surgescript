@@ -39,3 +39,31 @@ Properties
 `position`: [Vector2](/engine/vector2) object.
 
 The position of the camera in world space.
+
+#### locked
+
+`locked`: boolean, read-only.
+
+Is the camera locked to a certain area in space? Defaults to `false`.
+
+Functions
+---------
+
+#### lock
+
+`lock(left, top, right, bottom)`
+
+Locks the camera to a certain rectangular area in space. All coordinates are given in pixels and represent the boundaries of the rectangular area. They are such that `left` <= `right` and `top` <= `bottom`.
+
+*Arguments*
+
+* `left`: number. A x-coordinate in world space.
+* `top`: number. A y-coordinate in world space.
+* `right`: number. A x-coordinate in world space.
+* `bottom`: number. A y-coordinate in world space.
+
+#### unlock
+
+`unlock()`
+
+Unlocks the camera. If unlocked, the camera moves freely throughout the space.
