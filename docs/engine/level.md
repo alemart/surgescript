@@ -184,13 +184,13 @@ The desired entity ([object](/reference/object)), or `null` if there is no entit
 using SurgeEngine.Level;
 
 //
-// Level.entity() is very useful when creating startup objects, i.e.,
+// Level.entity() is very useful when creating setup objects, i.e.,
 // objects spawned when the level is initialized. You can use it to
 // tune the parameters of specific entities, call their functions, etc.
 //
 // The example below can be added to the startup list in the .lev file.
 //
-object "My Startup Object"
+object "My Setup Object"
 {
     state "main"
     {
@@ -238,9 +238,9 @@ using SurgeEngine.Level;
 //
 object "My Level Setup"
 {
-    state "main"
+    // setup properties
+    fun constructor()
     {
-        // setup properties
         Level.setup({
             "Elevator": {
                 "anim": 2
@@ -258,13 +258,6 @@ object "My Level Setup"
                 "buttons": [ "Yes", "No" ]
             }
         });
-
-        // done
-        state = "done";
-    }
-
-    state "done"
-    {
     }
 }
 ```

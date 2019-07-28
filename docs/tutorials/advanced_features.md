@@ -24,10 +24,10 @@ fun set(key, value)
 
 Given an object `obj`, the expression `x = obj[key]` is equivalent to `x = obj.get(key)`. Similarly, `obj[key] = value` is equivalent to `obj.set(key, value)`.
 
-Functors
---------
+Function objects
+----------------
 
-In SurgeScript, objects can be made to behave like functions. We call these objects *functors* (or *function objects*). To make an object behave like a function, you have to overload the `()` operator (also known as the *function operator*). This is done by defining function `call()` in your object:
+In SurgeScript, objects can be made to behave like functions. We call these objects *function objects* (or *functors*). To make an object behave like a function, you have to overload the `()` operator (also known as the *function operator*). This is done by defining function `call()` in your object:
 
 ```
 fun call()
