@@ -47,10 +47,10 @@ The `assert(condition)` statement specifies a `condition` that you expect to be 
 assert(name == "Surge"); // will crash if name isn't "Surge"
 ```
 
-Modifiers
----------
+Chaining
+--------
 
-In SurgeScript, a *modifier* (or *modifier function*) provides an elegant way of configuring objects. This is not a feature per se, but rather a way of doing things. Consider the object below - it simply displays a message at regular intervals:
+In SurgeScript, it's possible to configure objects in an elegant way using a technique called *chaining*. Consider the object below - it simply displays a message at regular intervals:
 
 ```
 object "Parrot"
@@ -69,8 +69,8 @@ object "Parrot"
         state = "main";
     }
 
-    // setMessage() is a modifier function
-    // A modifier always returns this
+    // Note that this function returns
+    // this, i.e., the object itself.
     fun setMessage(newMessage)
     {
         message = newMessage;
@@ -92,12 +92,12 @@ object "Application"
 }
 ```
 
-Take note that the modifier function does two things:
+Observe that the function we have defined does two things:
 
 * It modifies the internals of the object in some way
 * It always returns `this` (that is, the object itself)
 
-That being said, you may call such a function from your Application, just after `spawn()`, and you'll still have a reference to the spawned object. Moreover, since modifiers always return `this`, you may chain multiple modifiers into a single statement, making your code concise and your statement descriptive. Example:
+We call that function a *chainable function*. You may call such a function from your Application, just after `spawn()`, and you'll still have a reference to the spawned object. Moreover, since chainable functions always return `this`, you may chain multiple function calls into a single statement, making your code concise and your statement descriptive. Example:
 
 ```
 parrot = spawn("Parrot").setMessage("Hello!").setInterval(2.0);

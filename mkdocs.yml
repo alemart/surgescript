@@ -68,6 +68,11 @@ nav:
         - 'Entity': 'engine/entity.md'
         - 'Events':
             - 'Event': 'engine/event.md'
+            - 'EventList': 'engine/eventlist.md'
+            - 'EventChain': 'engine/eventchain.md'
+            - 'DelayedEvent': 'engine/delayedevent.md'
+            - 'EntityEvent': 'engine/entityevent.md'
+            - 'FunctionEvent': 'engine/functionevent.md'
         - 'Input':
             - 'Input': 'engine/input.md'
             - 'Mouse': 'engine/mouse.md'

@@ -136,7 +136,7 @@ Recursive functions must have at least one base case. A base case is a scenario 
 Constructors and destructors
 ----------------------------
 
-In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectively. It's not mandatory to define them, but it may be useful to do so (you may want to set up things in your constructors, for example). Neither may receive any arguments (see also: [modifier functions](/tutorials/advanced_features#modifiers)).
+In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectively. It's not mandatory to define them, but it may be useful to do so (you may want to set up things in your constructors, for example). Neither may receive any arguments (to set up objects with parameters, take a look at [chaining](/tutorials/advanced_features#chaining)).
 
 Let's take our `Calculator` again. In the following example, `constructor()` is called automatically whenever a `Calculator` object is created. Likewise, `destructor()` is called automatically when the object is destroyed.
 
@@ -174,4 +174,4 @@ Hello! I am a Calculator!
 Destroying a Calculator...
 ```
 
-Please note that, for any object, its `constructor()` runs *before* its main state.
+Note that, for any object, its `constructor()` runs *before* its main state.
