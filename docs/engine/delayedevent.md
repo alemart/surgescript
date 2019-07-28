@@ -14,11 +14,11 @@ Spawns a DelayedEvent.
 
 *Arguments*
 
-* `event`: [event](/engine/event) object. The event that will be delayed.
+* `event`: [event](/engine/event) object. The event to be delayed.
 
 *Returns*
 
-A new DelayedEvent that, when triggered, will trigger the specified event after some time has passed.
+A new DelayedEvent that, when triggered, will trigger the specified event after a delay.
 
 *Example*
 

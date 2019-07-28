@@ -7,21 +7,19 @@ Events let you seamlessly connect [entities](/engine/entity) and write cause and
 
 Events let you reuse your entities in multiple ways and for multiple purposes. You may design an entity and make it trigger an event, but you do not need to specify in advance what the event actually is. Rather, the concrete event (what must happen) will be configured in your [level setup](/engine/level/#setup).
 
-There are multiple types of events. In practice, you'll use specialized events such as [EntityEvent](/engine/entityevent) and [FunctionEvent](/engine/functionevent) when configuring your entities. *Event* is an empty event that does nothing when triggered, but should be used when designing your entities, as in the example below.
+There are multiple types of events. In practice, you'll use specialized events such as [EntityEvent](/engine/entityevent) and [FunctionEvent](/engine/functionevent) when configuring your entities. *Event* is an empty event that does nothing when triggered, but it should be used when designing your entities, as in the example below.
 
 *Example*
 
 ```
-// -----------------------------------------
+// -----------------------------------------------------------------------------
 // Using Events
 //
-// Note that cause and effect are split into
-// different scripts!
-// -----------------------------------------
+// Note that cause and effect are split into different scripts!
+// -----------------------------------------------------------------------------
 
-// This script contains an object that will
-// trigger an event whenever a certain button
-// (e.g., the jump button) is pressed.
+// This script contains an object that will trigger an event whenever a certain
+// button is pressed (e.g., the jump button).
 using SurgeEngine.Player;
 using SurgeEngine.Events.Event;
 
@@ -38,11 +36,10 @@ object "Button Detector" is "awake", "entity"
     }
 }
 
-// -----------------------------------------
+// -----------------------------------------------------------------------------
 
-// The code below is a different script
-// containing a level setup object. Make
-// sure to link it in your .lev file!
+// The code below is a different script containing a level setup object.
+// Make sure to link it in your .lev file!
 using SurgeEngine.Level;
 using SurgeEngine.Events.FunctionEvent;
 

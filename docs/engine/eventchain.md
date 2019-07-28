@@ -27,7 +27,7 @@ A new EventChain that triggers the specified events, one at a time. The first ti
 ```
 // This is a level setup object. Make sure to link it in your .lev file!
 using SurgeEngine.Level;
-using SurgeEngine.Events.EventList;
+using SurgeEngine.Events.EventChain;
 using SurgeEngine.Events.FunctionEvent;
 
 object "My Level Setup"
