@@ -93,6 +93,9 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
 {
     surgescript_object_t* obj = ssmalloc(sizeof *obj);
 
+    if(!object_exists(program_pool, name))
+        ssfatal("Runtime Error: can't spawn object \"%s\" - it doesn't exist!", name);
+
     obj->name = ssstrdup(name);
     obj->heap = surgescript_heap_create();
     obj->renv = surgescript_renv_create(obj, stack, obj->heap, program_pool, object_manager, NULL);
@@ -112,10 +115,6 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
 
     obj->transform = NULL;
     obj->user_data = user_data;
-
-    /* validation procedure */
-    if(!object_exists(program_pool, name))
-        ssfatal("Runtime Error: object \"%s\" doesn't exist", name);
 
     return obj;
 }

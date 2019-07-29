@@ -295,3 +295,19 @@ object "Application"
 	}
 }
 ```
+
+#### __arity
+
+`__arity(functionName)`
+
+Returns the number of arguments of function `functionName`, if it's defined. If it's not defined, zero will be returned.
+
+*Available since:* SurgeScript 0.5.4
+
+*Arguments*
+
+* `functionName`: string. The name of a function.
+
+*Returns*
+
+The number of arguments of the specified function, or zero if the function is not defined.

@@ -39,7 +39,7 @@ static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_hasfunction(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_findobject(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_findobjects(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_findobjectwithtag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -53,6 +53,7 @@ static surgescript_var_t* fun_childlist(surgescript_object_t* object, const surg
 static surgescript_var_t* fun_getactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_invoke(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_arity(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_file(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_assert(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -82,10 +83,11 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "sibling", fun_sibling, 1);
     surgescript_vm_bind(vm, "Object", "toString", fun_tostring, 0);
     surgescript_vm_bind(vm, "Object", "equals", fun_equals, 1);
-    surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfun, 1);
+    surgescript_vm_bind(vm, "Object", "hasFunction", fun_hasfunction, 1);
     surgescript_vm_bind(vm, "Object", "hasTag", fun_hastag, 1);
     surgescript_vm_bind(vm, "Object", "__timeout", fun_timeout, 1);
     surgescript_vm_bind(vm, "Object", "__invoke", fun_invoke, 2);
+    surgescript_vm_bind(vm, "Object", "__arity", fun_arity, 1);
     surgescript_vm_bind(vm, "Object", "__assert", fun_assert, 3);
     surgescript_vm_bind(vm, "Object", "get___name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "get___active", fun_getactive, 0);
@@ -247,7 +249,7 @@ surgescript_var_t* fun_name(surgescript_object_t* object, const surgescript_var_
 }
 
 /* does this object have a member function called param[0] ? */
-surgescript_var_t* fun_hasfun(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+surgescript_var_t* fun_hasfunction(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
     const char* object_name = surgescript_object_name(object);
@@ -393,6 +395,19 @@ surgescript_var_t* fun_invoke(surgescript_object_t* object, const surgescript_va
 
     ssfree(program_name);
     return ret;
+}
+
+/* the number of arguments of function name param[0], if it is defined (or 0 if not defined) */
+surgescript_var_t* fun_arity(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_programpool_t* pool = surgescript_objectmanager_programpool(manager);
+    const char* object_name = surgescript_object_name(object);
+    const char* program_name = surgescript_var_fast_get_string(param[0]);
+    surgescript_program_t* program = surgescript_programpool_get(pool, object_name, program_name);
+
+    int arity = program != NULL ? surgescript_program_arity(program) : 0;
+    return surgescript_var_set_number(surgescript_var_create(), arity);
 }
 
 /* basic assertion */
