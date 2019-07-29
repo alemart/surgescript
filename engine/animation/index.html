@@ -850,15 +850,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#frame" title="frame" class="md-nav__link">
-    frame
+  <a href="#framecount" title="frameCount" class="md-nav__link">
+    frameCount
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#framecount" title="frameCount" class="md-nav__link">
-    frameCount
+  <a href="#frame" title="frame" class="md-nav__link">
+    frame
   </a>
   
 </li>
@@ -1131,10 +1131,106 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-9" type="checkbox" id="nav-5-9">
     
     <label class="md-nav__link" for="nav-5-9">
-      Input
+      Events
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-5-9">
+        Events
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../event/" title="Event" class="md-nav__link">
+      Event
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../eventlist/" title="EventList" class="md-nav__link">
+      EventList
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../eventchain/" title="EventChain" class="md-nav__link">
+      EventChain
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../delayedevent/" title="DelayedEvent" class="md-nav__link">
+      DelayedEvent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../entityevent/" title="EntityEvent" class="md-nav__link">
+      EntityEvent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../functionevent/" title="FunctionEvent" class="md-nav__link">
+      FunctionEvent
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-10" type="checkbox" id="nav-5-10">
+    
+    <label class="md-nav__link" for="nav-5-10">
+      Input
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-10">
         Input
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1248,13 +1344,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-16" type="checkbox" id="nav-5-16">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-17" type="checkbox" id="nav-5-17">
     
-    <label class="md-nav__link" for="nav-5-16">
+    <label class="md-nav__link" for="nav-5-17">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-16">
+      <label class="md-nav__title" for="nav-5-17">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1296,13 +1392,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-18" type="checkbox" id="nav-5-18">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-19" type="checkbox" id="nav-5-19">
     
-    <label class="md-nav__link" for="nav-5-18">
+    <label class="md-nav__link" for="nav-5-19">
       Video
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-18">
+      <label class="md-nav__title" for="nav-5-19">
         Video
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1413,15 +1509,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#frame" title="frame" class="md-nav__link">
-    frame
+  <a href="#framecount" title="frameCount" class="md-nav__link">
+    frameCount
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#framecount" title="frameCount" class="md-nav__link">
-    frameCount
+  <a href="#frame" title="frame" class="md-nav__link">
+    frame
   </a>
   
 </li>
@@ -1500,12 +1596,12 @@ object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &q
 <h4 id="repeats">repeats</h4>
 <p><code>repeats</code>: boolean, read-only.</p>
 <p>Does the current animation repeat itself?</p>
-<h4 id="frame">frame</h4>
-<p><code>frame</code>: number, read-only.</p>
-<p>The current frame of the animation: an integer between <code>0</code> and <code>frameCount - 1</code>, inclusive.</p>
 <h4 id="framecount">frameCount</h4>
 <p><code>frameCount</code>: number, read-only.</p>
 <p>The number of frames of the current animation.</p>
+<h4 id="frame">frame</h4>
+<p><code>frame</code>: number.</p>
+<p>The current frame of the animation: an integer between <code>0</code> and <code>frameCount - 1</code>, inclusive.</p>
 <h4 id="speedfactor">speedFactor</h4>
 <p><code>speedFactor</code>: number.</p>
 <p>While the <a href="#fps">FPS</a> rate controls the speed of the animation, the speed factor gives you an additional degree of control. This is a multiplier that defaults to 1.0, meaning that the animation will run using its normal speed. If it's set to 2.0, it will run using twice that speed. A value of 0.5 means half the speed, and so on.</p>

@@ -1017,10 +1017,106 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-9" type="checkbox" id="nav-5-9">
     
     <label class="md-nav__link" for="nav-5-9">
-      Input
+      Events
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-5-9">
+        Events
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../event/" title="Event" class="md-nav__link">
+      Event
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../eventlist/" title="EventList" class="md-nav__link">
+      EventList
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../eventchain/" title="EventChain" class="md-nav__link">
+      EventChain
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../delayedevent/" title="DelayedEvent" class="md-nav__link">
+      DelayedEvent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../entityevent/" title="EntityEvent" class="md-nav__link">
+      EntityEvent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../functionevent/" title="FunctionEvent" class="md-nav__link">
+      FunctionEvent
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-10" type="checkbox" id="nav-5-10">
+    
+    <label class="md-nav__link" for="nav-5-10">
+      Input
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-10">
         Input
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1212,6 +1308,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#entity" title="entity" class="md-nav__link">
+    entity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup" title="setup" class="md-nav__link">
+    setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#restart" title="restart" class="md-nav__link">
     restart
   </a>
@@ -1331,13 +1441,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-16" type="checkbox" id="nav-5-16">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-17" type="checkbox" id="nav-5-17">
     
-    <label class="md-nav__link" for="nav-5-16">
+    <label class="md-nav__link" for="nav-5-17">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-16">
+      <label class="md-nav__title" for="nav-5-17">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1379,13 +1489,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-18" type="checkbox" id="nav-5-18">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-19" type="checkbox" id="nav-5-19">
     
-    <label class="md-nav__link" for="nav-5-18">
+    <label class="md-nav__link" for="nav-5-19">
       Video
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-18">
+      <label class="md-nav__title" for="nav-5-19">
         Video
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1553,6 +1663,20 @@
           <li class="md-nav__item">
   <a href="#spawnentity" title="spawnEntity" class="md-nav__link">
     spawnEntity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entity" title="entity" class="md-nav__link">
+    entity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setup" title="setup" class="md-nav__link">
+    setup
   </a>
   
 </li>
@@ -1743,6 +1867,90 @@ object &quot;Application&quot;
 </ul>
 <p><em>Returns</em></p>
 <p>The spawned entity.</p>
+<h4 id="entity">entity</h4>
+<p><code>entity(id)</code></p>
+<p><a href="/engine/entity">Entities</a> placed on the level via the editor are automatically assigned an ID, a hexadecimal identification code. The purpose of the ID is to uniquely identify the entity in the level. This function returns the entity whose ID is <code>id</code>. It's recommended to cache the return value of this function. Do not call it every frame (better performance).</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>id</code>: string. The ID of the entity to be retrieved.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>The desired entity (<a href="/reference/object">object</a>), or <code>null</code> if there is no entity associated with the given ID.</p>
+<p><em>Example</em></p>
+<pre><code>using SurgeEngine.Level;
+
+//
+// Level.entity() is very useful when creating setup objects, i.e.,
+// objects spawned when the level is initialized. You can use it to
+// tune the parameters of specific entities, call their functions, etc.
+//
+// The example below can be added to the startup list in the .lev file.
+//
+object &quot;My Setup Object&quot;
+{
+    state &quot;main&quot;
+    {
+        // setup the entity
+        item = Level.entity(&quot;ab65d8fe1ebd68de&quot;); // first, we get the entity
+        if(item != null) {
+            Console.print(item.__name); // then we print the object name
+            //item.score = 100; // we can also change a property
+        }
+        else
+            Console.print(&quot;Entity not found&quot;);
+
+        // change the state
+        state = &quot;done&quot;;
+    }
+
+    state &quot;done&quot;
+    {
+    }
+}
+</code></pre>
+
+<h4 id="setup">setup</h4>
+<p><code>setup(config)</code></p>
+<p>Sets up the properties of a collection of level objects. This is a handy function typically used in a startup object of your level. Its purpose is to configure the properties of level objects. You may set the properties of groups of objects (given their names) and of individual entities alone (given their IDs).</p>
+<p>The target properties and their respective values should be specified in the <code>config</code> <a href="/reference/dictionary">Dictionary</a>, passed as a parameter. Each key of <code>config</code> should be either an object name or an entity ID. Each value of the dictionary should be another dictionary specifying the properties to be set and their respective values. If an object name is specified in a key of <code>config</code>, all level objects with that name will be affected. If an entity ID is provided, only that specific entity will be affected, if it exists.</p>
+<p>This function will search for all the specified objects in the level, so it's not supposed to be used in a loop (or in a repeating state). Furthermore, if one or more objects or properties do not exist, this function will fail silently. Therefore, make sure you type everything correctly.</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>config</code>: <a href="/reference/dictionary">Dictionary</a> object. The configuration as described.</li>
+</ul>
+<p><em>Example</em></p>
+<pre><code>using SurgeEngine.Level;
+
+//
+// This is supposed to be a startup object,
+// listed in the startup list of a .lev file
+//
+object &quot;My Level Setup&quot;
+{
+    // setup properties
+    fun constructor()
+    {
+        Level.setup({
+            &quot;Elevator&quot;: {
+                &quot;anim&quot;: 2
+            },
+            &quot;Background Exchanger&quot;: {
+                &quot;background&quot;: &quot;themes/template.bg&quot;
+            },
+            &quot;5640353a6efd2901&quot;: {
+                &quot;someProperty&quot;: 123,
+                &quot;someOtherProperty&quot;: &quot;hello&quot;
+            },
+            &quot;770ae26584229af2&quot;: {
+                &quot;title&quot;: &quot;Super!!&quot;,
+                &quot;message&quot;: &quot;Hey there! Feeling good today?&quot;,
+                &quot;buttons&quot;: [ &quot;Yes&quot;, &quot;No&quot; ]
+            }
+        });
+    }
+}
+</code></pre>
+
 <h4 id="restart">restart</h4>
 <p><code>restart()</code></p>
 <p>Restarts the current level.</p>

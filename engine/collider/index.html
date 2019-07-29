@@ -1118,10 +1118,106 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-9" type="checkbox" id="nav-5-9">
     
     <label class="md-nav__link" for="nav-5-9">
-      Input
+      Events
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-5-9">
+        Events
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../event/" title="Event" class="md-nav__link">
+      Event
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../eventlist/" title="EventList" class="md-nav__link">
+      EventList
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../eventchain/" title="EventChain" class="md-nav__link">
+      EventChain
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../delayedevent/" title="DelayedEvent" class="md-nav__link">
+      DelayedEvent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../entityevent/" title="EntityEvent" class="md-nav__link">
+      EntityEvent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../functionevent/" title="FunctionEvent" class="md-nav__link">
+      FunctionEvent
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-10" type="checkbox" id="nav-5-10">
+    
+    <label class="md-nav__link" for="nav-5-10">
+      Input
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-10">
         Input
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1235,13 +1331,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-16" type="checkbox" id="nav-5-16">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-17" type="checkbox" id="nav-5-17">
     
-    <label class="md-nav__link" for="nav-5-16">
+    <label class="md-nav__link" for="nav-5-17">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-16">
+      <label class="md-nav__title" for="nav-5-17">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1283,13 +1379,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-18" type="checkbox" id="nav-5-18">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-19" type="checkbox" id="nav-5-19">
     
-    <label class="md-nav__link" for="nav-5-18">
+    <label class="md-nav__link" for="nav-5-19">
       Video
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-18">
+      <label class="md-nav__title" for="nav-5-19">
         Video
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1504,15 +1600,14 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 <p><em>Returns</em></p>
 <p>Returns <code>true</code> if there is a collision (the colliders overlap), or <code>false</code> otherwise.</p>
 <h4 id="contains">contains</h4>
-<p><code>contains(x, y)</code></p>
-<p>Checks if the collider contains the point (<code>x</code>, <code>y</code>), given in world coordinates.</p>
+<p><code>contains(point)</code></p>
+<p>Checks if the collider contains the given point, given in world coordinates.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>x</code>: number. The x-coordinate of the point.</li>
-<li><code>y</code>: number. The y-coordinate of the point.</li>
+<li><code>point</code>: <a href="/engine/vector2">Vector2</a> object. The point to be tested.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>Returns <code>true</code> if the point is inside the collider, or <code>false</code> otherwise.</p>
+<p>Returns <code>true</code> if the point is contained in the collider, or <code>false</code> otherwise.</p>
 <h4 id="setanchor">setAnchor</h4>
 <p><code>setAnchor(x, y)</code></p>
 <p>Defines the anchor of the collider to be (<code>x</code>, <code>y</code>), where these values are (usually) numbers between 0.0 and 1.0. Imagine a bounding box of the collider. Point (0.5, 0.5) is the default, representing its center. Point (0.0, 0.0) is the top-left and (1,0, 1.0), the bottom-right. The anchor of the collider will be aligned to the hot spot of the sprite of the entity.</p>

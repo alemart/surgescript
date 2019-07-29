@@ -13,7 +13,7 @@
         <meta name="description" content="SurgeScript is a scripting language for games.">
       
       
-        <link rel="canonical" href="https://docs.opensurge2d.org/engine/platformer/">
+        <link rel="canonical" href="https://docs.opensurge2d.org/engine/delayedevent/">
       
       
         <meta name="author" content="Alexandre Martins">
@@ -42,7 +42,7 @@
     
     
       
-        <title>Platformer - SurgeScript Documentation</title>
+        <title>DelayedEvent - SurgeScript Documentation</title>
       
     
     
@@ -125,7 +125,7 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
     
-      <a href="#platformer" tabindex="1" class="md-skip">
+      <a href="#delayedevent" tabindex="1" class="md-skip">
         Skip to content
       </a>
     
@@ -150,7 +150,7 @@
               SurgeScript Documentation
             </span>
             <span class="md-header-nav__topic">
-              Platformer
+              DelayedEvent
             </span>
           
         </div>
@@ -831,12 +831,10 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-4" type="checkbox" id="nav-5-4">
     
     <label class="md-nav__link" for="nav-5-4">
       Behavior
@@ -888,207 +886,11 @@
           
           
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Platformer
-      </label>
-    
-    <a href="./" title="Platformer" class="md-nav__link md-nav__link--active">
+  <li class="md-nav__item">
+    <a href="../platformer/" title="Platformer" class="md-nav__link">
       Platformer
     </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#factory" title="Factory" class="md-nav__link">
-    Factory
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#behaviorplatformer" title="Behavior.Platformer" class="md-nav__link">
-    Behavior.Platformer
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#properties" title="Properties" class="md-nav__link">
-    Properties
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#speed" title="speed" class="md-nav__link">
-    speed
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#gravity" title="gravity" class="md-nav__link">
-    gravity
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#jumpspeed" title="jumpSpeed" class="md-nav__link">
-    jumpSpeed
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#direction" title="direction" class="md-nav__link">
-    direction
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#walking" title="walking" class="md-nav__link">
-    walking
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#midair" title="midair" class="md-nav__link">
-    midair
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#leftwall" title="leftWall" class="md-nav__link">
-    leftWall
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rightwall" title="rightWall" class="md-nav__link">
-    rightWall
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#leftledge" title="leftLedge" class="md-nav__link">
-    leftLedge
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rightledge" title="rightLedge" class="md-nav__link">
-    rightLedge
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#functions" title="Functions" class="md-nav__link">
-    Functions
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#walk" title="walk" class="md-nav__link">
-    walk
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#walkleft" title="walkLeft" class="md-nav__link">
-    walkLeft
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#walkright" title="walkRight" class="md-nav__link">
-    walkRight
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stop" title="stop" class="md-nav__link">
-    stop
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#jump" title="jump" class="md-nav__link">
-    jump
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#forcejump" title="forceJump" class="md-nav__link">
-    forceJump
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#setsensorbox" title="setSensorBox" class="md-nav__link">
-    setSensorBox
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
   </li>
 
         
@@ -1209,10 +1011,12 @@
           
           
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-9" type="checkbox" id="nav-5-9">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-9" type="checkbox" id="nav-5-9" checked>
     
     <label class="md-nav__link" for="nav-5-9">
       Events
@@ -1264,11 +1068,89 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../delayedevent/" title="DelayedEvent" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        DelayedEvent
+      </label>
+    
+    <a href="./" title="DelayedEvent" class="md-nav__link md-nav__link--active">
       DelayedEvent
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#factory" title="Factory" class="md-nav__link">
+    Factory
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#eventsdelayedevent" title="Events.DelayedEvent" class="md-nav__link">
+    Events.DelayedEvent
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" title="Functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#willwait" title="willWait" class="md-nav__link">
+    willWait
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#call" title="call" class="md-nav__link">
+    call
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -1551,91 +1433,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#behaviorplatformer" title="Behavior.Platformer" class="md-nav__link">
-    Behavior.Platformer
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#properties" title="Properties" class="md-nav__link">
-    Properties
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#speed" title="speed" class="md-nav__link">
-    speed
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#gravity" title="gravity" class="md-nav__link">
-    gravity
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#jumpspeed" title="jumpSpeed" class="md-nav__link">
-    jumpSpeed
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#direction" title="direction" class="md-nav__link">
-    direction
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#walking" title="walking" class="md-nav__link">
-    walking
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#midair" title="midair" class="md-nav__link">
-    midair
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#leftwall" title="leftWall" class="md-nav__link">
-    leftWall
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rightwall" title="rightWall" class="md-nav__link">
-    rightWall
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#leftledge" title="leftLedge" class="md-nav__link">
-    leftLedge
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#rightledge" title="rightLedge" class="md-nav__link">
-    rightLedge
+  <a href="#eventsdelayedevent" title="Events.DelayedEvent" class="md-nav__link">
+    Events.DelayedEvent
   </a>
   
 </li>
@@ -1654,50 +1453,15 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#walk" title="walk" class="md-nav__link">
-    walk
+  <a href="#willwait" title="willWait" class="md-nav__link">
+    willWait
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#walkleft" title="walkLeft" class="md-nav__link">
-    walkLeft
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#walkright" title="walkRight" class="md-nav__link">
-    walkRight
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#stop" title="stop" class="md-nav__link">
-    stop
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#jump" title="jump" class="md-nav__link">
-    jump
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#forcejump" title="forceJump" class="md-nav__link">
-    forceJump
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#setsensorbox" title="setSensorBox" class="md-nav__link">
-    setSensorBox
+  <a href="#call" title="call" class="md-nav__link">
+    call
   </a>
   
 </li>
@@ -1723,142 +1487,60 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/alemart/surgescript/edit/master/docs/engine/platformer.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/alemart/surgescript/edit/master/docs/engine/delayedevent.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
-                <h1 id="platformer">Platformer</h1>
-<p>The Platformer <a href="/engine/behavior">behavior</a> makes the associated <a href="/engine/entity">entity</a> perform a simple platform movement (with gravity, etc). Used mostly by NPCs and baddies, this behavior is supposed to be lightweight for the CPU and is not designed to support 360°-physics.</p>
-<p><strong>Important:</strong> for best results, the hot spot of the entity should be placed on its feet.</p>
-<p><em>Example</em></p>
-<pre><code>//
-// In the example below, we create a dummy that
-// walks around the level (left and right)
-//
-using SurgeEngine.Actor;
-using SurgeEngine.Behavior.Enemy;
-using SurgeEngine.Behavior.Platformer;
-
-object &quot;My Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
-{
-    actor = Actor(&quot;My Baddie&quot;); // handles the graphics
-    enemy = Enemy(); // make it behave like a baddie
-    platformer = Platformer().walk(); // make it walk
-
-    state &quot;main&quot;
-    {
-        platformer.speed = 60; // 60 pixels per second
-    }
-}
-</code></pre>
-
+                <h1 id="delayedevent">DelayedEvent</h1>
+<p>A DelayedEvent is an <a href="/engine/event">event</a> that, when triggered, triggers another event after a specified time has passed.</p>
 <h2 id="factory">Factory</h2>
-<h4 id="behaviorplatformer">Behavior.Platformer</h4>
-<p><code>Platformer()</code></p>
-<p>Spawns a Platformer.</p>
-<p><em>Returns</em></p>
-<p>The behavior object.</p>
-<h2 id="properties">Properties</h2>
-<h4 id="speed">speed</h4>
-<p><code>speed</code>: number.</p>
-<p>Walking speed, in pixels per second.</p>
-<h4 id="gravity">gravity</h4>
-<p><code>gravity</code>: number.</p>
-<p>The acceleration of gravity, given in pixels per second squared. To maintain uniformity between your objects, you may keep the default value.</p>
-<h4 id="jumpspeed">jumpSpeed</h4>
-<p><code>jumpSpeed</code>: number.</p>
-<p>Jump speed, in pixels per second. The higher the value, the more intense the jump.</p>
-<h4 id="direction">direction</h4>
-<p><code>direction</code>: number, read-only.</p>
-<p>Direction will be +1 if the platformer is facing right or -1 is it's facing left.</p>
-<h4 id="walking">walking</h4>
-<p><code>walking</code>: boolean, read-only.</p>
-<p>Is the platformer walking?</p>
-<h4 id="midair">midair</h4>
-<p><code>midair</code>: boolean, read-only.</p>
-<p>Is the platformer midair?</p>
-<h4 id="leftwall">leftWall</h4>
-<p><code>leftWall</code>: boolean, read-only.</p>
-<p>Is the platformer touching a wall on its left side?</p>
-<h4 id="rightwall">rightWall</h4>
-<p><code>rightWall</code>: boolean, read-only.</p>
-<p>Is the platformer touching a wall on its right side?</p>
-<h4 id="leftledge">leftLedge</h4>
-<p><code>leftLedge</code>: boolean, read-only.</p>
-<p>Is the platformer standing on a ledge located on its left side?</p>
-<h4 id="rightledge">rightLedge</h4>
-<p><code>rightLedge</code>: boolean, read-only.</p>
-<p>Is the platformer standing on a ledge located on its right side?</p>
-<h2 id="functions">Functions</h2>
-<h4 id="walk">walk</h4>
-<p><code>walk()</code></p>
-<p>Enables automatic walking. The platformer will walk left and right automatically.</p>
-<p><em>Returns</em></p>
-<p>Returns the platformer itself.</p>
-<h4 id="walkleft">walkLeft</h4>
-<p><code>walkLeft()</code></p>
-<p>Makes the platformer walk to the left.</p>
-<p><em>Returns</em></p>
-<p>Returns the platformer itself.</p>
-<h4 id="walkright">walkRight</h4>
-<p><code>walkRight()</code></p>
-<p>Makes the platformer walk to the right.</p>
-<p><em>Returns</em></p>
-<p>Returns the platformer itself.</p>
-<h4 id="stop">stop</h4>
-<p><code>stop()</code></p>
-<p>Makes the platformer stop walking.</p>
-<p><em>Returns</em></p>
-<p>Returns the platformer itself.</p>
-<h4 id="jump">jump</h4>
-<p><code>jump()</code></p>
-<p>Makes the platformer jump. It will only jump if it's touching the ground.</p>
-<p><em>Returns</em></p>
-<p>Returns the platformer itself.</p>
-<p><em>Example</em></p>
-<pre><code>//
-// In the example below, we create a jumping
-// dummy that walks left and right
-//
-using SurgeEngine.Actor;
-using SurgeEngine.Behavior.Enemy;
-using SurgeEngine.Behavior.Platformer;
-
-object &quot;My Jumping Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
-{
-    actor = Actor(&quot;My Jumping Baddie&quot;); // handles the graphics
-    enemy = Enemy(); // make it behave like a baddie
-    platformer = Platformer().walk(); // make it walk
-
-    state &quot;main&quot;
-    {
-        platformer.speed = 60; // 60 pixels per second
-        if(timeout(3.0)) // jump every 3 seconds
-            state = &quot;jump&quot;;
-    }
-
-    state &quot;jump&quot;
-    {
-        platformer.jump();
-        state = &quot;main&quot;;
-    }
-}
-</code></pre>
-
-<h4 id="forcejump">forceJump</h4>
-<p><code>forceJump()</code></p>
-<p>Makes the platformer jump, regardless if it's touching the ground or not.</p>
-<p><em>Returns</em></p>
-<p>Returns the platformer itself.</p>
-<h4 id="setsensorbox">setSensorBox</h4>
-<p><code>setSensorBox(width, height)</code></p>
-<p>The platformer spawns invisible <a href="/engine/sensor">sensors</a> to detect collisions. Together, these sensors are thought to form a box which size is related to the size of the individual sensors. This function sets the size of this box. That size should be compatible with the size of the sprite and a size too small may break the platformer. The size of the sensor box is computed automatically, so normally you don't need to modify it.</p>
+<h4 id="eventsdelayedevent">Events.DelayedEvent</h4>
+<p><code>Events.DelayedEvent(event)</code></p>
+<p>Spawns a DelayedEvent.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>width</code>: number. The width of the box, in pixels.</li>
-<li><code>height</code>: number. The height of the box, in pixels.</li>
+<li><code>event</code>: <a href="/engine/event">event</a> object. The event to be delayed.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>Returns the platformer itself.</p>
+<p>A new DelayedEvent that, when triggered, will trigger the specified event after a delay.</p>
+<p><em>Example</em></p>
+<pre><code>// This is a level setup object. Make sure to link it in your .lev file!
+using SurgeEngine.Level;
+using SurgeEngine.Events.EventList;
+using SurgeEngine.Events.DelayedEvent;
+using SurgeEngine.Events.FunctionEvent;
+
+object &quot;My Level Setup&quot;
+{
+    fun constructor()
+    {
+        Level.setup({
+            &quot;Event Trigger 1&quot;: {
+                &quot;onTrigger&quot;: EventList([
+                    FunctionEvent(&quot;Print&quot;).withArgument(&quot;Hello!&quot;),
+                    DelayedEvent(
+                        FunctionEvent(&quot;Print&quot;).withArgument(&quot;This is...&quot;)
+                    ).willWait(2.0), // wait 2 seconds before triggering this
+                    DelayedEvent(
+                        FunctionEvent(&quot;Print&quot;).withArgument(&quot;SurgeScript!&quot;)
+                    ).willWait(4.0) // wait 4 seconds before triggering this
+                ])
+            }
+        });
+    }
+}
+</code></pre>
+
+<h2 id="functions">Functions</h2>
+<h4 id="willwait">willWait</h4>
+<p><code>willWait(seconds)</code></p>
+<p>Set the delay to trigger the event.</p>
+<p><em>Arguments</em></p>
+<p><code>seconds</code>: number. The delay, in seconds.</p>
+<p><em>Returns</em></p>
+<p>The DelayedEvent object.</p>
+<h4 id="call">call</h4>
+<p><code>call()</code></p>
+<p>Triggers the event.</p>
                 
                   
                 
@@ -1879,7 +1561,7 @@ object &quot;My Jumping Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../enemy/" title="Enemy" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../eventchain/" title="EventChain" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1888,19 +1570,19 @@ object &quot;My Jumping Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Enemy
+                EventChain
               </span>
             </div>
           </a>
         
         
-          <a href="../brick/" title="Brick" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../entityevent/" title="EntityEvent" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Brick
+                EntityEvent
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

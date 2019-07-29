@@ -507,8 +507,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#functors" title="Functors" class="md-nav__link">
-    Functors
+  <a href="#function-objects" title="Function objects" class="md-nav__link">
+    Function objects
   </a>
   
 </li>
@@ -521,8 +521,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#modifiers" title="Modifiers" class="md-nav__link">
-    Modifiers
+  <a href="#chaining" title="Chaining" class="md-nav__link">
+    Chaining
   </a>
   
 </li>
@@ -1090,10 +1090,106 @@
       <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-9" type="checkbox" id="nav-5-9">
     
     <label class="md-nav__link" for="nav-5-9">
-      Input
+      Events
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
       <label class="md-nav__title" for="nav-5-9">
+        Events
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/event/" title="Event" class="md-nav__link">
+      Event
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/eventlist/" title="EventList" class="md-nav__link">
+      EventList
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/eventchain/" title="EventChain" class="md-nav__link">
+      EventChain
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/delayedevent/" title="DelayedEvent" class="md-nav__link">
+      DelayedEvent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/entityevent/" title="EntityEvent" class="md-nav__link">
+      EntityEvent
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/functionevent/" title="FunctionEvent" class="md-nav__link">
+      FunctionEvent
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-10" type="checkbox" id="nav-5-10">
+    
+    <label class="md-nav__link" for="nav-5-10">
+      Input
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
+      <label class="md-nav__title" for="nav-5-10">
         Input
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1207,13 +1303,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-16" type="checkbox" id="nav-5-16">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-17" type="checkbox" id="nav-5-17">
     
-    <label class="md-nav__link" for="nav-5-16">
+    <label class="md-nav__link" for="nav-5-17">
       UI
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-16">
+      <label class="md-nav__title" for="nav-5-17">
         UI
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1255,13 +1351,13 @@
 
   <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-18" type="checkbox" id="nav-5-18">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-5-19" type="checkbox" id="nav-5-19">
     
-    <label class="md-nav__link" for="nav-5-18">
+    <label class="md-nav__link" for="nav-5-19">
       Video
     </label>
     <nav class="md-nav" data-md-component="collapsible" data-md-level="2">
-      <label class="md-nav__title" for="nav-5-18">
+      <label class="md-nav__title" for="nav-5-19">
         Video
       </label>
       <ul class="md-nav__list" data-md-scrollfix>
@@ -1329,8 +1425,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#functors" title="Functors" class="md-nav__link">
-    Functors
+  <a href="#function-objects" title="Function objects" class="md-nav__link">
+    Function objects
   </a>
   
 </li>
@@ -1343,8 +1439,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#modifiers" title="Modifiers" class="md-nav__link">
-    Modifiers
+  <a href="#chaining" title="Chaining" class="md-nav__link">
+    Chaining
   </a>
   
 </li>
@@ -1399,8 +1495,8 @@ fun set(key, value)
 </code></pre>
 
 <p>Given an object <code>obj</code>, the expression <code>x = obj[key]</code> is equivalent to <code>x = obj.get(key)</code>. Similarly, <code>obj[key] = value</code> is equivalent to <code>obj.set(key, value)</code>.</p>
-<h2 id="functors">Functors</h2>
-<p>In SurgeScript, objects can be made to behave like functions. We call these objects <em>functors</em> (or <em>function objects</em>). To make an object behave like a function, you have to overload the <code>()</code> operator (also known as the <em>function operator</em>). This is done by defining function <code>call()</code> in your object:</p>
+<h2 id="function-objects">Function objects</h2>
+<p>In SurgeScript, objects can be made to behave like functions. We call these objects <em>function objects</em> (or <em>functors</em>). To make an object behave like a function, you have to overload the <code>()</code> operator (also known as the <em>function operator</em>). This is done by defining function <code>call()</code> in your object:</p>
 <pre><code>fun call()
 {
     // custom implementation
@@ -1413,8 +1509,8 @@ fun set(key, value)
 <pre><code>assert(name == &quot;Surge&quot;); // will crash if name isn't &quot;Surge&quot;
 </code></pre>
 
-<h2 id="modifiers">Modifiers</h2>
-<p>In SurgeScript, a <em>modifier</em> (or <em>modifier function</em>) provides an elegant way of configuring objects. This is not a feature per se, but rather a way of doing things. Consider the object below - it simply displays a message at regular intervals:</p>
+<h2 id="chaining">Chaining</h2>
+<p>In SurgeScript, it's possible to configure objects in an elegant way using a technique called <em>chaining</em>. Consider the object below - it simply displays a message at regular intervals:</p>
 <pre><code>object &quot;Parrot&quot;
 {
     message = &quot;I am a Parrot&quot;;
@@ -1431,8 +1527,8 @@ fun set(key, value)
         state = &quot;main&quot;;
     }
 
-    // setMessage() is a modifier function
-    // A modifier always returns this
+    // Note that this function returns
+    // this, i.e., the object itself.
     fun setMessage(newMessage)
     {
         message = newMessage;
@@ -1452,12 +1548,12 @@ fun set(key, value)
 }
 </code></pre>
 
-<p>Take note that the modifier function does two things:</p>
+<p>Observe that the function we have defined does two things:</p>
 <ul>
 <li>It modifies the internals of the object in some way</li>
 <li>It always returns <code>this</code> (that is, the object itself)</li>
 </ul>
-<p>That being said, you may call such a function from your Application, just after <code>spawn()</code>, and you'll still have a reference to the spawned object. Moreover, since modifiers always return <code>this</code>, you may chain multiple modifiers into a single statement, making your code concise and your statement descriptive. Example:</p>
+<p>We call that function a <em>chainable function</em>. You may call such a function from your Application, just after <code>spawn()</code>, and you'll still have a reference to the spawned object. Moreover, since chainable functions always return <code>this</code>, you may chain multiple function calls into a single statement, making your code concise and your statement descriptive. Example:</p>
 <pre><code>parrot = spawn(&quot;Parrot&quot;).setMessage(&quot;Hello!&quot;).setInterval(2.0);
 </code></pre>
 
