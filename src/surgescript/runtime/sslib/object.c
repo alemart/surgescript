@@ -404,9 +404,10 @@ surgescript_var_t* fun_arity(surgescript_object_t* object, const surgescript_var
     surgescript_programpool_t* pool = surgescript_objectmanager_programpool(manager);
     const char* object_name = surgescript_object_name(object);
     const char* program_name = surgescript_var_fast_get_string(param[0]);
-    surgescript_program_t* program = surgescript_programpool_get(pool, object_name, program_name);
 
+    surgescript_program_t* program = surgescript_programpool_get(pool, object_name, program_name);
     int arity = program != NULL ? surgescript_program_arity(program) : 0;
+    
     return surgescript_var_set_number(surgescript_var_create(), arity);
 }
 
