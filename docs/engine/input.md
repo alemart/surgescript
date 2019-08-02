@@ -56,6 +56,16 @@ object "Application"
 }
 ```
 
+Properties
+----------
+
+#### enabled
+
+`enabled`: boolean.
+
+Whether the input object is enabled or not. A disabled object does not receive user input. The default value of this property is `true`.
+
+
 Functions
 ---------
 
