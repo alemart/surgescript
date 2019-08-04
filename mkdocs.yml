@@ -53,7 +53,7 @@ nav:
         - 'Audio':
             - 'Music': 'engine/music.md'
             - 'Sound': 'engine/sound.md'
-        - 'Behavior':
+        - 'Behaviors':
             - 'Behavior': 'engine/behavior.md'
             - 'DirectionalMovement': 'engine/directional_movement.md'
             - 'Enemy': 'engine/enemy.md'

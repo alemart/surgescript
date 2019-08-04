@@ -17,8 +17,8 @@ Although the Enemy object generates the described behavior, it is not a concrete
 // 2. Spawn an Actor for the graphics and an Enemy object for the behavior.
 //
 using SurgeEngine.Actor;
-using SurgeEngine.Behavior.Enemy;
-using SurgeEngine.Behavior.Platformer;
+using SurgeEngine.Behaviors.Enemy;
+using SurgeEngine.Behaviors.Platformer;
 
 object "My Baddie" is "entity", "enemy"
 {
@@ -38,7 +38,7 @@ Optionally, you may define functions `onEnemyAttack(player)` and `onEnemyDestroy
 Factory
 -------
 
-#### Behavior.Enemy
+#### Behaviors.Enemy
 
 `Enemy()`
 

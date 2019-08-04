@@ -13,8 +13,8 @@ The Platformer [behavior](/engine/behavior) makes the associated [entity](/engin
 // walks around the level (left and right)
 //
 using SurgeEngine.Actor;
-using SurgeEngine.Behavior.Enemy;
-using SurgeEngine.Behavior.Platformer;
+using SurgeEngine.Behaviors.Enemy;
+using SurgeEngine.Behaviors.Platformer;
 
 object "My Baddie" is "entity", "enemy"
 {
@@ -32,7 +32,7 @@ object "My Baddie" is "entity", "enemy"
 Factory
 -------
 
-#### Behavior.Platformer
+#### Behaviors.Platformer
 
 `Platformer()`
 
@@ -166,8 +166,8 @@ Returns the platformer itself.
 // dummy that walks left and right
 //
 using SurgeEngine.Actor;
-using SurgeEngine.Behavior.Enemy;
-using SurgeEngine.Behavior.Platformer;
+using SurgeEngine.Behaviors.Enemy;
+using SurgeEngine.Behaviors.Platformer;
 
 object "My Jumping Baddie" is "entity", "enemy"
 {

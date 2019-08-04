@@ -19,7 +19,7 @@ Directional Movement is very versatile. You can use it to implement many types o
 //
 using SurgeEngine.Actor;
 using SurgeEngine.Vector2;
-using SurgeEngine.Behavior.DirectionalMovement;
+using SurgeEngine.Behaviors.DirectionalMovement;
 
 object "Simple Ball" is "entity"
 {
@@ -37,7 +37,7 @@ object "Simple Ball" is "entity"
 Factory
 -------
 
-#### Behavior.DirectionalMovement
+#### Behaviors.DirectionalMovement
 
 `DirectionalMovement()`
 
@@ -75,7 +75,7 @@ The counterclockwise angle of the direction vector, in degrees. 0 means right, 9
 // In the example below, a circular movement is performed
 //
 using SurgeEngine.Actor;
-using SurgeEngine.Behavior.DirectionalMovement;
+using SurgeEngine.Behaviors.DirectionalMovement;
 
 object "Simple Ball" is "entity"
 {
