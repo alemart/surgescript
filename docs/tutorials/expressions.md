@@ -33,11 +33,11 @@ SurgeScript can perform basic arithmetic. The operators are as follows:
 
 Operator|Meaning
 --------|-------
-+ | Addition
-- | Subtraction
-* | Multiplication
-/ | Division
-% | Remainder
+`+` | Addition
+`-` | Subtraction
+`*` | Multiplication
+`/` | Division
+`%` | Remainder
 
 The multiplication, division and remainder operators have precedence over the addition and the subtraction operators.
 
@@ -67,14 +67,14 @@ Comparison operators compare two operands.
 
 Operator|Meaning
 --------|-------
-== | Equality operator
-!= | Inequality operator
-< | Less than
-<= | Less or equal
-\> | Greater than
-\>= | Greater or equal
-=== | Strong equality
-!== | Strong inequality
+`==` | Equality operator
+`!=` | Inequality operator
+`<` | Less than
+`<=` | Less or equal
+`\>` | Greater than
+`\>=` | Greater or equal
+`===` | Strong equality
+`!==` | Strong inequality
 
 Examples:
 
@@ -101,9 +101,9 @@ Logical operators involve booleans (*true* or *false* values). While the **not**
 
 Operator|Meaning
 --------|-------
-&& | and
-\|\| | or
-! | not
+`&&` | and
+`\|\|` | or
+`!` | not
 
 The table below summarizes the basic logical expressions:
 
@@ -223,7 +223,7 @@ this.destroy(); // destroys this object
 
 #### typeof
 
-The expression `typeof(expr)` (or simply `typeof expr`), is evaluated to a string informing the type of `expr`. The possible types are: *number*, *string*, *boolean*, *null*, *object*. Example:
+The expression `typeof(expr)` (or simply `typeof expr`), is evaluated to a string corresponding to the type of `expr`. The possible types are: *number*, *string*, *boolean*, *object* or *null*. Example:
 
 ```
 t = typeof 5; // t will hold the string "number"

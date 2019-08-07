@@ -157,7 +157,7 @@ Please note: in the example above, objects spawned by the factory will be childr
 Iterators
 ---------
 
-As seen in the [loops](/tutorials/loops#foreach) section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function `iterator()`. If you have ever used Java, you'll find this to be familiar.
+As seen in the [loops](/tutorials/loops#foreach) section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object that implements a specific protocol. You may implement your own collections by implementing function `iterator()`. If you have ever used Java, you'll find this to be familiar.
 
 ```
 object "MyCollection"
@@ -216,11 +216,11 @@ For the sake of completion, the following code demonstrates how to implement a c
 ```
 object "Application"
 {
-    evenNumbers = spawn("EvenNumbers");
+    evenNumbers = spawn("Even Numbers");
 
     state "main"
     {
-        // iterate the collection
+        // print all the numbers of the collection
         foreach(number in evenNumbers)
             Console.print(number);
 
@@ -233,15 +233,15 @@ object "Application"
     }
 }
 
-object "EvenNumbers"
+object "Even Numbers"
 {
     fun iterator()
     {
-        return spawn("EvenIterator");
+        return spawn("Even Numbers Iterator");
     }
 }
 
-object "EvenIterator"
+object "Even Numbers Iterator"
 {
     nextNumber = 0;
 

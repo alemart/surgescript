@@ -72,7 +72,7 @@ object "Application"
     // A dictionary that stores the weight (kg) of each character
     weight = {
         "Surge": 35,
-        "Neon": 20,
+        "Neon": 30,
         "Charge": 37.5,
         "Gimacian": 70
     };

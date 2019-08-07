@@ -126,6 +126,17 @@ object "Animal"
 }
 ```
 
-This code is semantically the same; it's just a bit longer.
+This code is semantically the same as setting `sound` to be `public`; this is just a bit longer.
 
-An advantage of defining getters and setters by yourself is that you control how the data passes through the objects. You may want to validate the data before changing the internal variables of the objects, for example.
+An advantage of defining getters and setters by yourself is that you control how the data passes through the objects. You may want to validate the data before changing the internal variables of the objects. Example:
+
+```
+// lives must not be a negative number
+fun set_lives(value)
+{
+    if(value >= 0)
+        lives = value;
+    else
+        lives = 0;
+}
+```

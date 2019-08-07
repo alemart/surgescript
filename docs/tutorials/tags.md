@@ -81,8 +81,8 @@ The following emoticons are available for your pleasure:
 
 Emoticon|Meaning
 --------|-------
-$_$ | Feelin' Rich
-<3 | Lovin' it
-:) | Happy
-:( | Sad
-:P | D'oh
+`$_$` | Feelin' Rich
+`<3` | Lovin' it
+`:)` | Happy
+`:(` | Sad
+`:P` | D'oh
