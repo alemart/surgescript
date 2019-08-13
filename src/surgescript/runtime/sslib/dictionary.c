@@ -236,6 +236,7 @@ surgescript_var_t* fun_clear(surgescript_object_t* object, const surgescript_var
     if(surgescript_objectmanager_exists(manager, bst)) {
         surgescript_object_t* node = surgescript_objectmanager_get(manager, bst);
         surgescript_object_kill(node);
+        surgescript_var_set_objecthandle(root, null_handle);
     }
 
     return NULL;
