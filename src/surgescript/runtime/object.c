@@ -726,12 +726,12 @@ bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callb
 /*
  * surgescript_object_traverse_tree_ex()
  * Traverses the object tree, calling the callback function for each object
- * If the callback returns false, the traversal doesn't go to the children
+ * If the callback returns false, the traversal doesn't visit the children
  * Accepts an extra data parameter
  */
 bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*))
 {
-    if(callback(object, data)) {
+    if(!object->is_killed && callback(object, data)) {
         surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
         for(int i = 0; i < ssarray_length(object->child); i++) {
             surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
