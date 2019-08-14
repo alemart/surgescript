@@ -106,6 +106,38 @@ Finds all children named `childName`. Since this function spawns a new array at 
 
 A new array containing all children named `childName`. If no such children are found, an empty array is returned.
 
+#### childWithTag
+
+`childWithTag(tagName)`
+
+Finds a child tagged `tagName`.
+
+*Available since:* SurgeScript 0.5.4
+
+*Arguments*
+
+* `tagName`: string. The name of a tag.
+
+*Returns*
+
+A child tagged `tagName`, or `null` if there is no such object.
+
+#### childrenWithTag
+
+`childrenWithTag(tagName)`
+
+Finds all children tagged `tagName`.
+
+*Available since:* SurgeScript 0.5.4
+
+*Arguments*
+
+* `tagName`: string. The name of a tag.
+
+*Returns*
+
+A new array containing all children tagged `tagName`. If there are no such children, an empty array is returned.
+
 #### sibling
 
 `sibling(siblingName)`
@@ -168,7 +200,7 @@ Finds all descendants named `objectName`. Since this function traverses the [obj
 
 *Returns*
 
-A new array containing all the descendants named `objectName`. If no such descendants are found, an empty array is returned.
+A new array containing all descendants named `objectName`. If no such descendants are found, an empty array is returned.
 
 #### findObjectWithTag
 
@@ -200,7 +232,7 @@ Finds all descendants tagged `tagName`. Since this function traverses the [objec
 
 *Returns*
 
-A new array containing all the descendants tagged `tagName`. If no such descendants are found, an empty array is returned.
+A new array containing all descendants tagged `tagName`. If no such descendants are found, an empty array is returned.
 
 #### toString
 
