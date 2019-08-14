@@ -158,7 +158,7 @@ surgescript_var_t* fun_children(surgescript_object_t* object, const surgescript_
 surgescript_var_t* fun_findobject(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* name = surgescript_var_fast_get_string(param[0]);
-    surgescript_objecthandle_t child = surgescript_object_find_child(object, name);
+    surgescript_objecthandle_t child = surgescript_object_find_descendant(object, name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 
@@ -169,7 +169,7 @@ surgescript_var_t* fun_findobjects(surgescript_object_t* object, const surgescri
     surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
     surgescript_objecthandle_t array_handle = surgescript_objectmanager_spawn_array(object_manager);
     surgescript_object_t* array = surgescript_objectmanager_get(object_manager, array_handle);
-    surgescript_object_find_children(object, name, array, add_to_descendants_array);
+    surgescript_object_find_descendants(object, name, array, add_to_descendants_array);
     return surgescript_var_set_objecthandle(surgescript_var_create(), array_handle);
 }
 
@@ -177,7 +177,7 @@ surgescript_var_t* fun_findobjects(surgescript_object_t* object, const surgescri
 surgescript_var_t* fun_findobjectwithtag(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* tag_name = surgescript_var_fast_get_string(param[0]);
-    surgescript_objecthandle_t child = surgescript_object_find_tagged_child(object, tag_name);
+    surgescript_objecthandle_t child = surgescript_object_find_tagged_descendant(object, tag_name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 
@@ -188,7 +188,7 @@ surgescript_var_t* fun_findobjectswithtag(surgescript_object_t* object, const su
     surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
     surgescript_objecthandle_t array_handle = surgescript_objectmanager_spawn_array(object_manager);
     surgescript_object_t* array = surgescript_objectmanager_get(object_manager, array_handle);
-    surgescript_object_find_tagged_children(object, tag_name, array, add_to_descendants_array);
+    surgescript_object_find_tagged_descendants(object, tag_name, array, add_to_descendants_array);
     return surgescript_var_set_objecthandle(surgescript_var_create(), array_handle);
 }
 

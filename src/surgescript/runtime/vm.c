@@ -320,7 +320,7 @@ surgescript_object_t* surgescript_vm_spawn_object(surgescript_vm_t* vm, surgescr
 surgescript_object_t* surgescript_vm_find_object(surgescript_vm_t* vm, const char* object_name)
 {
     const surgescript_object_t* root = surgescript_vm_root_object(vm);
-    surgescript_objecthandle_t handle = surgescript_object_find_child(root, object_name);
+    surgescript_objecthandle_t handle = surgescript_object_find_descendant(root, object_name);
     return surgescript_objectmanager_get(vm->object_manager, handle);
 }
 

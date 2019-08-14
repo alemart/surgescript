@@ -318,11 +318,11 @@ int surgescript_object_children(const surgescript_object_t* object, const char* 
 }
 
 /*
- * surgescript_object_find_child()
+ * surgescript_object_find_descendant()
  * Find a descendant whose name matches the name parameter.
  * This might be slow, so it's recommended to cache the objects.
  */
-unsigned surgescript_object_find_child(const surgescript_object_t* object, const char* name)
+unsigned surgescript_object_find_descendant(const surgescript_object_t* object, const char* name)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
@@ -336,7 +336,7 @@ unsigned surgescript_object_find_child(const surgescript_object_t* object, const
 
     for(i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        unsigned handle = surgescript_object_find_child(child, name);
+        unsigned handle = surgescript_object_find_descendant(child, name);
         if(handle != null_handle)
             return handle;
     }
@@ -345,12 +345,12 @@ unsigned surgescript_object_find_child(const surgescript_object_t* object, const
 }
 
 /*
- * surgescript_object_find_children()
+ * surgescript_object_find_descendants()
  * Finds all descendants named name, calling callback for each one.
  * Returns the number of matching descendants.
  * This might be slow, so it's recommended to cache the objects.
  */
-int surgescript_object_find_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*))
+int surgescript_object_find_descendants(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*))
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
@@ -366,18 +366,18 @@ int surgescript_object_find_children(const surgescript_object_t* object, const c
 
     for(i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        count += surgescript_object_find_children(child, name, data, callback);
+        count += surgescript_object_find_descendants(child, name, data, callback);
     }
 
     return count;
 }
 
 /*
- * surgescript_object_find_tagged_child()
+ * surgescript_object_find_tagged_descendant()
  * Find a descendant tagged tag_name.
  * This might be slow, so it's recommended to cache the objects.
  */
-unsigned surgescript_object_find_tagged_child(const surgescript_object_t* object, const char* tag_name)
+unsigned surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
@@ -391,7 +391,7 @@ unsigned surgescript_object_find_tagged_child(const surgescript_object_t* object
 
     for(i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        unsigned handle = surgescript_object_find_tagged_child(child, tag_name);
+        unsigned handle = surgescript_object_find_tagged_descendant(child, tag_name);
         if(handle != null_handle)
             return handle;
     }
@@ -400,12 +400,12 @@ unsigned surgescript_object_find_tagged_child(const surgescript_object_t* object
 }
 
 /*
- * surgescript_object_find_tagged_children()
+ * surgescript_object_find_tagged_descendants()
  * Finds all descendants tagged tag_name, calling callback for each one.
  * Returns the number of matching descendants.
  * This might be slow, so it's recommended to cache the objects.
  */
-int surgescript_object_find_tagged_children(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*))
+int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*))
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
@@ -421,7 +421,7 @@ int surgescript_object_find_tagged_children(const surgescript_object_t* object, 
 
     for(i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        count += surgescript_object_find_tagged_children(child, tag_name, data, callback);
+        count += surgescript_object_find_tagged_descendants(child, tag_name, data, callback);
     }
 
     return count;
