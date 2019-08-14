@@ -281,7 +281,7 @@ int surgescript_object_child_count(const surgescript_object_t* object)
 
 /*
  * surgescript_object_child()
- * gets a handle to the 1st child named name
+ * Gets a handle to a child named name
  */
 unsigned surgescript_object_child(const surgescript_object_t* object, const char* name)
 {
@@ -309,6 +309,44 @@ int surgescript_object_children(const surgescript_object_t* object, const char* 
     for(int i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
         if(strcmp(name, child->name) == 0) {
+            ++count;
+            callback(child->handle, data);
+        }
+    }
+
+    return count;
+}
+
+/*
+ * surgescript_object_tagged_child()
+ * Gets a handle to a child having the specified tag
+ */
+unsigned surgescript_object_tagged_child(const surgescript_object_t* object, const char* tag_name)
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+
+    for(int i = 0; i < ssarray_length(object->child); i++) {
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+        if(surgescript_object_has_tag(child, tag_name))
+            return child->handle;
+    }
+
+    return surgescript_objectmanager_null(manager);
+}
+
+/*
+ * surgescript_object_tagged_children()
+ * Gets the handles to all the direct children tagged tag_name.
+ * Returns the number of all such direct children.
+ */
+int surgescript_object_tagged_children(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*))
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    int count = 0;
+
+    for(int i = 0; i < ssarray_length(object->child); i++) {
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+        if(surgescript_object_has_tag(child, tag_name)) {
             ++count;
             callback(child->handle, data);
         }

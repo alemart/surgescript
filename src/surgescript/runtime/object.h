@@ -62,9 +62,11 @@ unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this
 unsigned surgescript_object_parent(const surgescript_object_t* object); /* parent object handle (in the object manager) */
 unsigned surgescript_object_nth_child(const surgescript_object_t* object, int index); /* n-th child */
 int surgescript_object_child_count(const surgescript_object_t* object); /* how many children there are? */
-unsigned surgescript_object_child(const surgescript_object_t* object, const char* name); /* gets a handle to the 1st child named name */
-int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* gets all the direct children named name */
-unsigned surgescript_object_find_descendant(const surgescript_object_t* object, const char* name); /* find 1st child (or grand-child...) whose name equals name */
+unsigned surgescript_object_child(const surgescript_object_t* object, const char* name); /* gets the handle to a child named name */
+int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* gets all direct children named name */
+unsigned surgescript_object_tagged_child(const surgescript_object_t* object, const char* tag_name); /* gets the handle to a child tagged tag_name */
+int surgescript_object_tagged_children(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*)); /* gets all direct children tagged tag_name */
+unsigned surgescript_object_find_descendant(const surgescript_object_t* object, const char* name); /* finds a child (or grand-child...) whose name equals name */
 int surgescript_object_find_descendants(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* finds all descendants named name */
 unsigned surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name); /* find 1st child (or grand-child...) tagged tag_name */
 int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*)); /* finds all descendants tagged tag_name */
