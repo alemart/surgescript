@@ -132,6 +132,12 @@ The path to the background file (.bg) currently in use. Use this property to cha
 
 The position where the player is placed when the level starts.
 
+#### next
+
+`next`: number.
+
+The number of the next level in the current quest: 1 means the first level of the quest, 2 means the second, and so on.
+
 Functions
 ---------
 
@@ -304,7 +310,7 @@ Loads the specified level/quest.
 ```
 using SurgeEngine.Level;
 
-object "LevelLoader"
+object "My Level Loader"
 {
     fun load(id)
     {
@@ -318,14 +324,14 @@ object "LevelLoader"
 }
 ```
 
+#### loadNext
+
+`loadNext()`
+
+Loads the next level in the current quest. This is the usual procedure after [clearing the level](#clear). See also: [next](#next).
+
 #### clear
 
 `clear()`
 
 Clears the level without actually changing it. Once the level is cleared, a *level cleared* animation is played. See also: [cleared](#cleared).
-
-#### finish
-
-`finish()`
-
-Loads the next level in the current quest. This is the usual procedure after [clearing the level](#clear).
