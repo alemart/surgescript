@@ -37,9 +37,9 @@ object "Benchmark"
     fun call(f)
     {
         Console.write("Computing " + f + " = ");
-        start = Time.tickCount;
+        start = Time.now;
         result = f();
-        elapsed = Time.tickCount - start;
+        elapsed = Time.now - start;
         Console.print(result + " \t\t done in " + elapsed + " seconds.");
         return elapsed;
     }

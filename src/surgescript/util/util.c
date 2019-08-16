@@ -282,7 +282,6 @@ uint64_t surgescript_util_gettickcount()
     struct timeval now;
     gettimeofday(&now, NULL);
     return ((uint64_t)now.tv_sec * 1000) + ((uint64_t)now.tv_usec / 1000);
-    /*return 1000 * clock() / CLOCKS_PER_SEC;*/ /* not very accurate */
 #else
     return GetTickCount(); /*GetTickCount64()*/
 #endif
