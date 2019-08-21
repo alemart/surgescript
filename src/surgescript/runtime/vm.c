@@ -191,8 +191,10 @@ void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
  */
 bool surgescript_vm_is_active(surgescript_vm_t* vm)
 {
-    surgescript_objecthandle_t root_handle = surgescript_objectmanager_root(vm->object_manager);
-    return surgescript_objectmanager_exists(vm->object_manager, root_handle);
+    surgescript_objectmanager_t* manager = vm->object_manager;
+    surgescript_objecthandle_t root_handle = surgescript_objectmanager_root(manager);
+    return surgescript_objectmanager_exists(manager, root_handle) &&
+           !surgescript_object_is_killed(surgescript_objectmanager_get(manager, root_handle));
 }
 
 /*
