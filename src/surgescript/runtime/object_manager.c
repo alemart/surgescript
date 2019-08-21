@@ -522,10 +522,8 @@ bool sweep_unreachables(surgescript_object_t* object)
     /* dispose the object */
     if(!surgescript_object_is_reachable(object)) {
         /*sslog("Garbage Collector: disposing \"%s\"...", surgescript_object_name(object));*/
-        if(!surgescript_object_is_killed(object)) {
-            surgescript_object_kill(object);
-            surgescript_object_manager(object)->garbage_count++;
-        }
+        surgescript_object_kill(object);
+        surgescript_object_manager(object)->garbage_count++;
     }
 
     /* reset the mark */
