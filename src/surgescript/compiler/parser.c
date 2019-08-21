@@ -1338,7 +1338,7 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             /* read value */
             assignexpr(parser, context);
             emit_dictdeclvalue(context);
-        } while(optmatch(parser, SSTOK_COMMA));
+        } while(optmatch(parser, SSTOK_COMMA) && !got_type(parser, SSTOK_RCURLY));
     }
     emit_dictdecl2(context);
 }
