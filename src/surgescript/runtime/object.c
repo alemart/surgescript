@@ -754,7 +754,7 @@ bool surgescript_object_update(surgescript_object_t* object)
 /*
  * surgescript_object_traverse_tree()
  * Traverses the object tree, calling the callback function for each object
- * If the callback returns false, the traversal doesn't go to the children
+ * If the callback returns false, the traversal doesn't visit the children
  */
 bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*))
 {
@@ -764,7 +764,7 @@ bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callb
 /*
  * surgescript_object_traverse_tree_ex()
  * Traverses the object tree, calling the callback function for each object
- * If the callback returns false, the traversal doesn't go to the children
+ * If the callback returns false, the traversal doesn't visit the children
  * Accepts an extra data parameter
  */
 bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*))

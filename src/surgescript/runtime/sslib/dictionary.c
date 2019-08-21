@@ -223,7 +223,7 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
     return NULL;
 }
 
-/* clear(): clears the whole Dictionary, so that it has no entries */
+/* clear(): clears the whole Dictionary, so that no entries are stored */
 surgescript_var_t* fun_clear(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_heap_t* heap = surgescript_object_heap(object);
