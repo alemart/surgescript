@@ -357,19 +357,31 @@ bool call_updater1(surgescript_object_t* object, void* updater)
 bool call_updater2(surgescript_object_t* object, void* updater)
 {
     surgescript_vm_updater_t* vm_updater = (surgescript_vm_updater_t*)updater;
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t handle = surgescript_object_handle(object);
     bool update_children = true;
+
     update_children = surgescript_object_update(object);
-    vm_updater->late_update(object, vm_updater->user_data);
+    if(surgescript_objectmanager_exists(manager, handle) && /* is the object still valid? */
+    surgescript_objectmanager_get(manager, handle) == object)
+        vm_updater->late_update(object, vm_updater->user_data);
+
     return update_children;
 }
 
 bool call_updater3(surgescript_object_t* object, void* updater)
 {
     surgescript_vm_updater_t* vm_updater = (surgescript_vm_updater_t*)updater;
+    surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t handle = surgescript_object_handle(object);
     bool update_children = true;
+
     vm_updater->user_update(object, vm_updater->user_data);
     update_children = surgescript_object_update(object);
-    vm_updater->late_update(object, vm_updater->user_data);
+    if(surgescript_objectmanager_exists(manager, handle) && /* is the object still valid? */
+    surgescript_objectmanager_get(manager, handle) == object)
+        vm_updater->late_update(object, vm_updater->user_data);
+
     return update_children;
 }
 
