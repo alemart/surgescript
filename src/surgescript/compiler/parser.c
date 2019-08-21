@@ -1316,7 +1316,7 @@ void arrayexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         do {
             assignexpr(parser, context);
             emit_arrayelement(context);
-        } while(optmatch(parser, SSTOK_COMMA));
+        } while(optmatch(parser, SSTOK_COMMA) && !got_type(parser, SSTOK_RBRACKET));
     }
     emit_arrayexpr2(context);
 }
