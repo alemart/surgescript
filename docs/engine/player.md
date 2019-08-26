@@ -315,7 +315,6 @@ Is the player looking up?
 
 Is the player displaying the "winning" animation (after clearing a level)?
 
-
 #### secondsToDrown
 
 `secondsToDrown`: number, read-only.
@@ -375,6 +374,12 @@ Disable/enable player movement. Defaults to `false`.
 `underwater`: boolean.
 
 Get underwater / out of water. Defaults to `false`.
+
+#### breathTime
+
+`breathTime`: number.
+
+The maximum number of seconds the player can remain underwater without breathing.
 
 #### layer
 
