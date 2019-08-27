@@ -51,12 +51,6 @@ Properties
 
 Walking speed, in pixels per second.
 
-#### gravity
-
-`gravity`: number.
-
-The acceleration of gravity, given in pixels per second squared. To maintain uniformity between your objects, you may keep the default value.
-
 #### jumpSpeed
 
 `jumpSpeed`: number.
