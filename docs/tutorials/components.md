@@ -92,4 +92,4 @@ In SurgeScript, components execute their own code and can be attached to entitie
 
 #### Composition over inheritance
 
-SurgeScript does not support inheritance, a feature found in other object-oriented languages. The usage of components is encouraged instead. SurgeScript favors composition over inheritance, allowing for greater flexibility when defining in-game objects.
+SurgeScript does not explicitly support inheritance, a feature found in other object-oriented languages. The usage of components is encouraged instead. SurgeScript favors composition over inheritance, allowing for greater flexibility when defining in-game objects.

@@ -73,7 +73,7 @@ object "Application"
         Console.print(result);
 
         // we're done!
-        //Application.exit();
+        Application.exit();
     }
 }
 ```

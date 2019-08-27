@@ -62,8 +62,8 @@ static surgescript_var_t* fun_assert(surgescript_object_t* object, const surgesc
 /* utilities */
 static void add_to_array(surgescript_objecthandle_t handle, void* arr);
 static void add_to_function_array(const char* fun_name, void* arr);
-static bool is_visible_function(const char* fun_name);
-static bool can_spawn_object(const char* object_name, surgescript_objectmanager_t* manager);
+static inline bool is_visible_function(const char* fun_name);
+static inline bool can_spawn_object(const char* object_name, surgescript_objectmanager_t* manager);
 
 
 /*
@@ -490,8 +490,9 @@ bool is_visible_function(const char* fun_name)
 /* can the desired object be spawned? */
 bool can_spawn_object(const char* object_name, surgescript_objectmanager_t* manager)
 {
-    return !(
+    /*return !(
         strcmp(object_name, "System") == 0 ||
         strcmp(object_name, "Application") == 0
-    );
+    );*/
+    return strcmp(object_name, "System") != 0;
 }
