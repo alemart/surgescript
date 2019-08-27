@@ -81,6 +81,12 @@ Is the platformer walking?
 
 Is the platformer midair?
 
+#### falling
+
+`falling`: boolean, read-only.
+
+Is the platformer falling down?
+
 #### leftWall
 
 `leftWall`: boolean, read-only.

@@ -114,6 +114,12 @@ The license of the level, defined in the .lev file.
 
 The music of the level.
 
+#### gravity
+
+`gravity`: number, read-only.
+
+A default value for the level gravity, in pixels per second squared.
+
 #### waterlevel
 
 `waterlevel`: number.
