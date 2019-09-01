@@ -1706,7 +1706,7 @@ void process_annotations(surgescript_parser_t* parser, char** annotations, const
     if(annotations != NULL) {
         while(*annotations != NULL) {
             const char* annotation = *annotations++;
-            if(strcmp(annotation, "@Plugin") == 0)
+            if(strcmp(annotation, "@Package") == 0 || strcmp(annotation, "@Plugin") == 0)
                 add_to_plugins_list(parser, object_name);
             else
                 ssfatal("Compile Error: unrecognized annotation \"%s\" around object \"%s\" in %s.", annotation, object_name, parser->filename);
