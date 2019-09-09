@@ -778,6 +778,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#childwithtag" title="childWithTag" class="md-nav__link">
+    childWithTag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#childrenwithtag" title="childrenWithTag" class="md-nav__link">
+    childrenWithTag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sibling" title="sibling" class="md-nav__link">
     sibling
   </a>
@@ -1654,6 +1668,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#childwithtag" title="childWithTag" class="md-nav__link">
+    childWithTag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#childrenwithtag" title="childrenWithTag" class="md-nav__link">
+    childrenWithTag
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#sibling" title="sibling" class="md-nav__link">
     sibling
   </a>
@@ -1813,6 +1841,26 @@
 </ul>
 <p><em>Returns</em></p>
 <p>A new array containing all children named <code>childName</code>. If no such children are found, an empty array is returned.</p>
+<h4 id="childwithtag">childWithTag</h4>
+<p><code>childWithTag(tagName)</code></p>
+<p>Finds a child tagged <code>tagName</code>.</p>
+<p><em>Available since:</em> SurgeScript 0.5.4</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>tagName</code>: string. The name of a tag.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>A child tagged <code>tagName</code>, or <code>null</code> if there is no such object.</p>
+<h4 id="childrenwithtag">childrenWithTag</h4>
+<p><code>childrenWithTag(tagName)</code></p>
+<p>Finds all children tagged <code>tagName</code>.</p>
+<p><em>Available since:</em> SurgeScript 0.5.4</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>tagName</code>: string. The name of a tag.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>A new array containing all children tagged <code>tagName</code>. If there are no such children, an empty array is returned.</p>
 <h4 id="sibling">sibling</h4>
 <p><code>sibling(siblingName)</code></p>
 <p>Looks for a sibling named <code>siblingName</code>. Two objects are siblings if they share the same parent.</p>
@@ -1858,7 +1906,7 @@
 <li><code>objectName</code>: string. The name of the objects to be found.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>A new array containing all the descendants named <code>objectName</code>. If no such descendants are found, an empty array is returned.</p>
+<p>A new array containing all descendants named <code>objectName</code>. If no such descendants are found, an empty array is returned.</p>
 <h4 id="findobjectwithtag">findObjectWithTag</h4>
 <p><code>findObjectWithTag(tagName)</code></p>
 <p>Finds a descendant tagged <code>tagName</code>. Since this function traverses the <a href="/tutorials/object_tree">object tree</a>, it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.</p>
@@ -1878,7 +1926,7 @@
 <li><code>tagName</code>: string. The name of a tag.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>A new array containing all the descendants tagged <code>tagName</code>. If no such descendants are found, an empty array is returned.</p>
+<p>A new array containing all descendants tagged <code>tagName</code>. If no such descendants are found, an empty array is returned.</p>
 <h4 id="tostring">toString</h4>
 <p><code>toString()</code></p>
 <p>Converts the object to a string. This function is designed to be overloaded by your own objects.</p>

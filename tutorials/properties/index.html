@@ -1529,8 +1529,17 @@ object &quot;Application&quot;
 }
 </code></pre>
 
-<p>This code is semantically the same; it's just a bit longer.</p>
-<p>An advantage of defining getters and setters by yourself is that you control how the data passes through the objects. You may want to validate the data before changing the internal variables of the objects, for example.</p>
+<p>This code is semantically the same as setting <code>sound</code> to be <code>public</code>; this is just a bit longer.</p>
+<p>An advantage of defining getters and setters by yourself is that you control how the data passes through the objects. You may want to validate the data before changing the internal variables of the objects. Example:</p>
+<pre><code>// lives must not be a negative number
+fun set_lives(value)
+{
+    if(value &gt;= 0)
+        lives = value;
+    else
+        lives = 0;
+}
+</code></pre>
                 
                   
                 

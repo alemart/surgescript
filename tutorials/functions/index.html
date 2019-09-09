@@ -1460,7 +1460,7 @@
 </code></pre>
 
 <p>Functions may be associated to objects. Any function associated to an object may be used (called) by the object itself or by other objects. This means that functions are <em>public</em> (they are visible to the outside world).</p>
-<p><strong>Note:</strong> functions should be defined after the states.</p>
+<p><strong>Note:</strong> functions must be defined after the states.</p>
 <h2 id="return-statement">Return statement</h2>
 <p>Use the <code>return</code> statement to stop executing the function and to return some value to the caller. Example:</p>
 <pre><code>// This function will return the double of input parameter x
@@ -1505,7 +1505,7 @@ fun double(x)
         Console.print(result);
 
         // we're done!
-        //Application.exit();
+        Application.exit();
     }
 }
 </code></pre>

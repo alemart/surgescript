@@ -1260,6 +1260,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#gravity" title="gravity" class="md-nav__link">
+    gravity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#waterlevel" title="waterlevel" class="md-nav__link">
     waterlevel
   </a>
@@ -1276,6 +1283,13 @@
           <li class="md-nav__item">
   <a href="#spawnpoint" title="spawnpoint" class="md-nav__link">
     spawnpoint
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#next" title="next" class="md-nav__link">
+    next
   </a>
   
 </li>
@@ -1357,15 +1371,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#clear" title="clear" class="md-nav__link">
-    clear
+  <a href="#loadnext" title="loadNext" class="md-nav__link">
+    loadNext
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#finish" title="finish" class="md-nav__link">
-    finish
+  <a href="#clear" title="clear" class="md-nav__link">
+    clear
   </a>
   
 </li>
@@ -1620,6 +1634,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#gravity" title="gravity" class="md-nav__link">
+    gravity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#waterlevel" title="waterlevel" class="md-nav__link">
     waterlevel
   </a>
@@ -1636,6 +1657,13 @@
           <li class="md-nav__item">
   <a href="#spawnpoint" title="spawnpoint" class="md-nav__link">
     spawnpoint
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#next" title="next" class="md-nav__link">
+    next
   </a>
   
 </li>
@@ -1717,15 +1745,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#clear" title="clear" class="md-nav__link">
-    clear
+  <a href="#loadnext" title="loadNext" class="md-nav__link">
+    loadNext
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#finish" title="finish" class="md-nav__link">
-    finish
+  <a href="#clear" title="clear" class="md-nav__link">
+    clear
   </a>
   
 </li>
@@ -1838,6 +1866,9 @@ object &quot;Application&quot;
 <h4 id="music">music</h4>
 <p><code>music</code>: <a href="/engine/music">Music</a> object, read-only.</p>
 <p>The music of the level.</p>
+<h4 id="gravity">gravity</h4>
+<p><code>gravity</code>: number, read-only.</p>
+<p>A default value for the level gravity, in pixels per second squared.</p>
 <h4 id="waterlevel">waterlevel</h4>
 <p><code>waterlevel</code>: number.</p>
 <p>The y-coordinate, in world space, of the level water. Pixels not above this value are underwater.</p>
@@ -1847,6 +1878,9 @@ object &quot;Application&quot;
 <h4 id="spawnpoint">spawnpoint</h4>
 <p><code>spawnpoint</code>: <a href="/engine/vector2">Vector2</a> object.</p>
 <p>The position where the player is placed when the level starts.</p>
+<h4 id="next">next</h4>
+<p><code>next</code>: number.</p>
+<p>The number of the next level in the current quest: 1 means the first level of the quest, 2 means the second, and so on.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="spawn">spawn</h4>
 <p><code>spawn(objectName)</code></p>
@@ -1981,7 +2015,7 @@ object &quot;My Level Setup&quot;
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Level;
 
-object &quot;LevelLoader&quot;
+object &quot;My Level Loader&quot;
 {
     fun load(id)
     {
@@ -1995,12 +2029,12 @@ object &quot;LevelLoader&quot;
 }
 </code></pre>
 
+<h4 id="loadnext">loadNext</h4>
+<p><code>loadNext()</code></p>
+<p>Loads the next level in the current quest. This is the usual procedure after <a href="#clear">clearing the level</a>. See also: <a href="#next">next</a>.</p>
 <h4 id="clear">clear</h4>
 <p><code>clear()</code></p>
 <p>Clears the level without actually changing it. Once the level is cleared, a <em>level cleared</em> animation is played. See also: <a href="#cleared">cleared</a>.</p>
-<h4 id="finish">finish</h4>
-<p><code>finish()</code></p>
-<p>Loads the next level in the current quest. This is the usual procedure after <a href="#clear">clearing the level</a>.</p>
                 
                   
                 

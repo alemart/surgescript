@@ -1603,7 +1603,7 @@ object &quot;Greeter&quot;
 
 <p>Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might simply write <code>g = caller.spawn("Greeter")</code>. Keyword <code>caller</code> points to the object that called the function (or <code>null</code> if not applicable).</p>
 <h2 id="iterators">Iterators</h2>
-<p>As seen in the <a href="/tutorials/loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object (but the opposite is not always true). You may implement your own collections by implementing function <code>iterator()</code>. If you have ever used Java, you'll find this to be familiar.</p>
+<p>As seen in the <a href="/tutorials/loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object that implements a specific protocol. You may implement your own collections by implementing function <code>iterator()</code>. If you have ever used Java, you'll find this to be familiar.</p>
 <pre><code>object &quot;MyCollection&quot;
 {
     fun iterator()
@@ -1652,11 +1652,11 @@ while(it.hasNext()) {
 <p>For the sake of completion, the following code demonstrates how to implement a custom collection that hold even numbers from 0 up to 20.</p>
 <pre><code>object &quot;Application&quot;
 {
-    evenNumbers = spawn(&quot;EvenNumbers&quot;);
+    evenNumbers = spawn(&quot;Even Numbers&quot;);
 
     state &quot;main&quot;
     {
-        // iterate the collection
+        // print all the numbers of the collection
         foreach(number in evenNumbers)
             Console.print(number);
 
@@ -1669,15 +1669,15 @@ while(it.hasNext()) {
     }
 }
 
-object &quot;EvenNumbers&quot;
+object &quot;Even Numbers&quot;
 {
     fun iterator()
     {
-        return spawn(&quot;EvenIterator&quot;);
+        return spawn(&quot;Even Numbers Iterator&quot;);
     }
 }
 
-object &quot;EvenIterator&quot;
+object &quot;Even Numbers Iterator&quot;
 {
     nextNumber = 0;
 
