@@ -4,7 +4,7 @@ Download SurgeScript
 There are two ways to get SurgeScript:
 
 - The first is to [get Open Surge](#open-surge). This is recommended for most users.
-- The second is to [get the standalone version](#standalone-version) of the language. This is useful if you're a developer and want to integrate SurgeScript into your own projects.
+- The second is to [get the standalone version](#standalone-version) of the language.
 
 Open Surge
 ----------
