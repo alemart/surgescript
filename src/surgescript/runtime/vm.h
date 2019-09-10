@@ -63,5 +63,6 @@ surgescript_object_t* surgescript_vm_spawn_object(surgescript_vm_t* vm, surgescr
 surgescript_object_t* surgescript_vm_find_object(surgescript_vm_t* vm, const char* object_name); /* finds an object */
 void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const char* fun_name, surgescript_program_cfunction_t cfun, int num_params); /* binds a C function to an object */
 void surgescript_vm_install_plugin(surgescript_vm_t* vm, const char* object_name); /* sets a certain object as a plugin */
+bool surgescript_vm_reset(surgescript_vm_t* vm); /* resets a VM, clearing up all its programs and objects */
 
 #endif

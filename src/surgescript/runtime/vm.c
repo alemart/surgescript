@@ -44,7 +44,7 @@ struct surgescript_vm_updater_t {
 /* VM command-line arguments */
 typedef struct surgescript_vmargs_t surgescript_vmargs_t;
 struct surgescript_vmargs_t {
-    char** data; /* NULL-terminated string; must be the 1st element */
+    char** data; /* this NULL-terminated array of strings must be the 1st element of the struct */
 };
 
 static surgescript_vmargs_t* surgescript_vmargs_create();
@@ -65,11 +65,13 @@ struct surgescript_vm_t
 };
 
 /* misc */
+static void create_vm_components(surgescript_vm_t* vm);
+static void destroy_vm_components(surgescript_vm_t* vm);
+static void setup_sslib(surgescript_vm_t* vm);
 static bool call_updater1(surgescript_object_t* object, void* updater);
 static bool call_updater2(surgescript_object_t* object, void* updater);
 static bool call_updater3(surgescript_object_t* object, void* updater);
 static void install_plugin(const char* object_name, void* data);
-
 
 
 /*
@@ -83,38 +85,11 @@ surgescript_vm_t* surgescript_vm_create()
     /* SurgeScript info */
     sslog("Using SurgeScript %s", surgescript_util_version());
 
-    /* boot */
-    sslog("Booting up the VM...");
-    surgescript_var_init_pool();
-
     /* set up the VM */
-    vm->start_time = 0.0;
-    vm->stack = surgescript_stack_create();
-    vm->program_pool = surgescript_programpool_create();
-    vm->tag_system = surgescript_tagsystem_create();
-    vm->args = surgescript_vmargs_create();
-    vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->tag_system, vm->stack, vm->args);
-    vm->parser = surgescript_parser_create(vm->program_pool, vm->tag_system);
-
-    /* load the SurgeScript library */
-    surgescript_sslib_register_object(vm);
-    surgescript_sslib_register_string(vm);
-    surgescript_sslib_register_number(vm);
-    surgescript_sslib_register_boolean(vm);
-    surgescript_sslib_register_temp(vm);
-    surgescript_sslib_register_gc(vm);
-    surgescript_sslib_register_array(vm);
-    surgescript_sslib_register_dictionary(vm);
-    surgescript_sslib_register_time(vm);
-    surgescript_sslib_register_date(vm);
-    surgescript_sslib_register_math(vm);
-    surgescript_sslib_register_console(vm);
-    surgescript_sslib_register_tagsystem(vm);
-    surgescript_sslib_register_plugin(vm);
-    surgescript_sslib_register_surgescript(vm);
-    surgescript_sslib_register_arguments(vm);
-    surgescript_sslib_register_application(vm);
-    surgescript_sslib_register_system(vm);
+    sslog("Creating the VM...");
+    surgescript_var_init_pool();
+    create_vm_components(vm);
+    setup_sslib(vm);
 
     /* done! */
     return vm;
@@ -127,14 +102,38 @@ surgescript_vm_t* surgescript_vm_create()
 surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
 {
     sslog("Shutting down the VM...");
-    surgescript_parser_destroy(vm->parser);
-    surgescript_objectmanager_destroy(vm->object_manager);
-    surgescript_vmargs_destroy(vm->args);
-    surgescript_tagsystem_destroy(vm->tag_system);
-    surgescript_programpool_destroy(vm->program_pool);
-    surgescript_stack_destroy(vm->stack);
+    destroy_vm_components(vm);
     surgescript_var_release_pool();
     return ssfree(vm);
+}
+
+/*
+ * surgescript_vm_reset()
+ * Resets a VM, clearing up all its programs and objects
+ */
+bool surgescript_vm_reset(surgescript_vm_t* vm)
+{
+    sslog("Will reset the VM...");
+
+    if(surgescript_vm_is_active(vm)) {
+        /* shut down */
+        sslog("Shutting down the VM...");
+        destroy_vm_components(vm);
+        surgescript_var_release_pool();
+
+        /* set up the VM again */
+        sslog("Starting the VM again...");
+        surgescript_var_init_pool();
+        create_vm_components(vm);
+        setup_sslib(vm);
+
+        /* done */
+        return true;
+    }
+    else {
+        sslog("Can't reset an inactive VM!");
+        return false;
+    }
 }
 
 /*
@@ -172,6 +171,10 @@ void surgescript_vm_launch(surgescript_vm_t* vm)
  */
 void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
 {
+    /* Already launched? */
+    if(surgescript_vm_is_active(vm))
+        return;
+
     /* SurgeScript uses UTF-8 */
     setlocale(LC_ALL, "en_US.UTF-8");
 
@@ -345,6 +348,52 @@ void surgescript_vm_install_plugin(surgescript_vm_t* vm, const char* object_name
 }
 
 /* ----- private ----- */
+
+/* creates the VM components */
+void create_vm_components(surgescript_vm_t* vm)
+{
+    vm->start_time = 0.0;
+    vm->stack = surgescript_stack_create();
+    vm->program_pool = surgescript_programpool_create();
+    vm->tag_system = surgescript_tagsystem_create();
+    vm->args = surgescript_vmargs_create();
+    vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->tag_system, vm->stack, vm->args);
+    vm->parser = surgescript_parser_create(vm->program_pool, vm->tag_system);
+}
+
+/* destroys the VM components */
+void destroy_vm_components(surgescript_vm_t* vm)
+{
+    surgescript_parser_destroy(vm->parser);
+    surgescript_objectmanager_destroy(vm->object_manager);
+    surgescript_vmargs_destroy(vm->args);
+    surgescript_tagsystem_destroy(vm->tag_system);
+    surgescript_programpool_destroy(vm->program_pool);
+    surgescript_stack_destroy(vm->stack);
+}
+
+/* load the SurgeScript library */
+void setup_sslib(surgescript_vm_t* vm)
+{
+    surgescript_sslib_register_object(vm);
+    surgescript_sslib_register_string(vm);
+    surgescript_sslib_register_number(vm);
+    surgescript_sslib_register_boolean(vm);
+    surgescript_sslib_register_temp(vm);
+    surgescript_sslib_register_gc(vm);
+    surgescript_sslib_register_array(vm);
+    surgescript_sslib_register_dictionary(vm);
+    surgescript_sslib_register_time(vm);
+    surgescript_sslib_register_date(vm);
+    surgescript_sslib_register_math(vm);
+    surgescript_sslib_register_console(vm);
+    surgescript_sslib_register_tagsystem(vm);
+    surgescript_sslib_register_plugin(vm);
+    surgescript_sslib_register_surgescript(vm);
+    surgescript_sslib_register_arguments(vm);
+    surgescript_sslib_register_application(vm);
+    surgescript_sslib_register_system(vm);
+}
 
 /* these auxiliary functions help traversing the object tree */
 bool call_updater1(surgescript_object_t* object, void* updater)
