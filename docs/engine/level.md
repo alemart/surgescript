@@ -120,17 +120,23 @@ The music of the level.
 
 A default value for the level gravity, in pixels per second squared.
 
-#### waterlevel
+#### bgtheme
 
-`waterlevel`: number.
+`bgtheme`: string, read-only.
 
-The y-coordinate, in world space, of the level water. Pixels not above this value are underwater.
+The path to the original background file (.bg), as declared in the .lev file.
 
 #### background
 
 `background`: string.
 
 The path to the background file (.bg) currently in use. Use this property to change the background of the level.
+
+#### waterlevel
+
+`waterlevel`: number.
+
+The y-coordinate, in world space, of the level water. Pixels not above this value are underwater.
 
 #### spawnpoint
 
