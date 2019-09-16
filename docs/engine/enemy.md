@@ -72,6 +72,16 @@ A collider associated with the enemy.
 Functions
 ---------
 
+#### getDestroyed
+
+`getDestroyed(player)`
+
+Destroys the enemy with an explosion, giving score to `player`.
+
+*Arguments*
+
+* `player`: [Player](/engine/player) object. The player who defeats the enemy.
+
 #### setBounds
 
 `setBounds(left, top, right, bottom)`
