@@ -502,9 +502,9 @@ Makes the player bounce after smashing a hazard. If the player comes at the haza
 
 * `hazard`: [Actor](/engine/actor) object. The hazard.
 
-#### hit
+#### getHit
 
-`hit(hazard | null)`
+`getHit(hazard | null)`
 
 Makes the player get hit. Call it whenever the player gets hit by a hazard. The hit movement will be calculated according to the position of the hazard. If no hazard is present, you may pass `null` as the argument.
 
