@@ -114,12 +114,6 @@ The license of the level, defined in the .lev file.
 
 The music of the level.
 
-#### gravity
-
-`gravity`: number, read-only.
-
-A default value for the level gravity, in pixels per second squared.
-
 #### bgtheme
 
 `bgtheme`: string, read-only.
@@ -143,6 +137,18 @@ The y-coordinate, in world space, of the level water. Pixels not above this valu
 `spawnpoint`: [Vector2](/engine/vector2) object.
 
 The position where the player is placed when the level starts.
+
+#### gravity
+
+`gravity`: number, read-only.
+
+A default value for the level gravity, in pixels per second squared.
+
+#### time
+
+`time`: number, read-only.
+
+Elapsed time in the level, given in seconds.
 
 #### next
 
