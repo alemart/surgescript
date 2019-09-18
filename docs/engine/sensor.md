@@ -1,7 +1,7 @@
 Sensor
 ======
 
-A Sensor is used to detect collisions with bricks (obstacle, cloud). Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.
+A Sensor is used to detect collisions with bricks. Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.
 
 *Example*
 ```
@@ -11,12 +11,12 @@ using SurgeEngine.Collisions.Sensor;
 object "SensorToy" is "entity"
 {
     actor = Actor("SensorToy");
-    sensor = Sensor(10, -50, 1, 50);
+    sensor = Sensor(0, -25, 1, 50); // a vertical sensor
 
     state "main"
     {
         if(sensor.status != null)
-            Console.print("Got a brick");
+            Console.print("Got a brick of type " + sensor.status);
     }
 
     fun constructor()
@@ -52,14 +52,20 @@ A Sensor with the specified parameters.
 Properties
 ----------
 
+#### status
+
+`status`: string | null, read-only.
+
+The type of the brick colliding with the sensor (either *"solid"* or *"cloud"*). If the sensor isn't colliding with a brick, or if it's disabled, its status will be `null`.
+
 #### visible
 
 `visible`: boolean.
 
 Should the sensor be rendered? Useful for debugging. Defaults to `false`.
 
-#### status
+#### enabled
 
-`status`: string | null, read-only.
+`enabled`: boolean.
 
-The type of the brick colliding with the sensor (either *"solid"* or *"cloud"*). If the sensor isn't colliding with a brick, its status will be `null`.
+Indicates whether the sensor is enabled or not. Defaults to `true`.
