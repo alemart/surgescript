@@ -459,8 +459,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../../tutorials/plugins/" title="Plugins" class="md-nav__link">
-      Plugins
+    <a href="../../tutorials/packages/" title="Packages" class="md-nav__link">
+      Packages
     </a>
   </li>
 
@@ -965,6 +965,13 @@
   
     <nav class="md-nav">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getdestroyed" title="getDestroyed" class="md-nav__link">
+    getDestroyed
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#setbounds" title="setBounds" class="md-nav__link">
@@ -1514,6 +1521,13 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#getdestroyed" title="getDestroyed" class="md-nav__link">
+    getDestroyed
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#setbounds" title="setBounds" class="md-nav__link">
     setBounds
   </a>
@@ -1591,6 +1605,13 @@ object &quot;My Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
 <p><code>collider</code>: <a href="/engine/collider">Collider</a> object, read-only.</p>
 <p>A collider associated with the enemy.</p>
 <h2 id="functions">Functions</h2>
+<h4 id="getdestroyed">getDestroyed</h4>
+<p><code>getDestroyed(player)</code></p>
+<p>Destroys the enemy with an explosion, giving score to <code>player</code>.</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>player</code>: <a href="/engine/player">Player</a> object. The player who defeats the enemy.</li>
+</ul>
 <h4 id="setbounds">setBounds</h4>
 <p><code>setBounds(left, top, right, bottom)</code></p>
 <p>Set the boundaries of the collider. All coordinates, given in pixels, are relative to the hot spot of the entity. These boundaries are computed automatically, but you may use this function if you need to adjust them.</p>
