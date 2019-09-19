@@ -156,6 +156,12 @@ Elapsed time in the level, given in seconds.
 
 The number of the next level in the current quest: 1 means the first level of the quest, 2 means the second, and so on.
 
+#### onUnload
+
+`onUnload`: object | null.
+
+Used to specify a [function object](/tutorials/advanced_features/#function-objects) to be called when the level is unloaded.
+
 Functions
 ---------
 
