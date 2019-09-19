@@ -102,7 +102,7 @@ Logical operators involve booleans (*true* or *false* values). While the **not**
 Operator|Meaning
 --------|-------
 `&&` | and
-`\|\|` | or
+`||` | or
 `!` | not
 
 The table below summarizes the basic logical expressions:
