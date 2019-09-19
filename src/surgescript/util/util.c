@@ -41,7 +41,7 @@ static void (*log_function)(const char* message) = my_log;
 static void (*fatal_function)(const char* message) = my_fatal;
 
 /* current version of SurgeScript */
-static const char* version_string = "0.5.4-dev";
+static const char* version_string = "0.5.4";
 
 
 
