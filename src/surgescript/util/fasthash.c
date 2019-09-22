@@ -97,8 +97,8 @@ fasthash_t* fasthash_destroy(fasthash_t* hashtable)
     }
     
     /* release the hash table */
-    free(hashtable->data);
-    free(hashtable);
+    ssfree(hashtable->data);
+    ssfree(hashtable);
 
     /* omit warnings */
     (void)fasthash_get;
