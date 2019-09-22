@@ -86,8 +86,15 @@ surgescript_lexer_t* surgescript_lexer_create()
  */
 surgescript_lexer_t* surgescript_lexer_destroy(surgescript_lexer_t* lexer)
 {
-    for(surgescript_lexer_prevstate_t *it = lexer->prev_list, *next = NULL; next != NULL; it = destroy_prev_state(it))
+    surgescript_lexer_prevstate_t *it = lexer->prev_list;
+    surgescript_lexer_prevstate_t *next = NULL;
+
+    while(it != NULL) {
         next = it->next_node;
+        destroy_prev_state(it);
+        it = next;
+    }
+    
     return ssfree(lexer);
 }
 
