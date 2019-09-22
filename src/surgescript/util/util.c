@@ -196,30 +196,6 @@ char* surgescript_util_strdup(const char* src, const char* location)
 }
 
 /*
- * surgescript_util_str2hash()
- * Converts a string to a 32-bit hash
- * This implements Jenkins' One-at-a-Time hash function
- */
-uint32_t surgescript_util_str2hash(const char* str)
-{
-    const unsigned char* p = (const unsigned char*)str;
-    uint32_t hash = 0;
-
-    if(p != NULL) {
-        while(*p) {
-            hash += *(p++);
-            hash += hash << 10;
-            hash ^= hash >> 6;
-        }
-        hash += hash << 3;
-        hash ^= hash >> 11;
-        hash += hash << 15;
-    }
-
-    return hash;
-}
-
-/*
  * surgescript_util_htob()
  * Convert a 32-bit number from host to big-endian notation
  */

@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,26 +28,26 @@
 #include "../util/ssarray.h"
 
 /* options */
-#define SURGESCRIPT_USE_FAST_SIGNATURES /* let it be fast! */
+#define PROGRAMPOOL_USE_XXH /* use a very fast hash function */
 
 /*
  * Each function in SurgeScript defines a function signature
  * that depends on the containing object and on the function name
  */
 
-#ifdef SURGESCRIPT_USE_FAST_SIGNATURES /* use fast 64-bit integers for function signatures */
 typedef uint64_t surgescript_programpool_signature_t;
-#define HASH_FIND_ITEM_BY_SIGNATURE(head, signature, item_ptr)     HASH_FIND(hh, (head), &(signature), sizeof(signature), (item_ptr))
-#define HASH_ADD_ITEM_WITH_SIGNATURE(head, signature, item_ptr)    HASH_ADD_KEYPTR(hh, (head), &(signature), sizeof(signature), (item_ptr))
-#else /* use strings for function signatures */
-typedef char* surgescript_programpool_signature_t;
-#define HASH_FIND_ITEM_BY_SIGNATURE(head, signature, item_ptr)     HASH_FIND(hh, (head), (signature), strlen(signature), (item_ptr))
-#define HASH_ADD_ITEM_WITH_SIGNATURE(head, signature, item_ptr)    HASH_ADD_KEYPTR(hh, (head), (signature), strlen(signature), (item_ptr))
+static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name); /* generates a function signature, given an object name and a program name */
+
+#if defined(PROGRAMPOOL_USE_XXH)
+#define XXH_INLINE_ALL
+#include "../util/xxhash.h"
+#else
+extern void hashlittle2(const void *key, size_t length, uint32_t* pc, uint32_t* pb);
 #endif
 
-static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name); /* generates a function signature, given an object name and a program name */
-static inline void delete_signature(surgescript_programpool_signature_t signature); /* deletes a signature */
-extern void hashlittle2(const void *key, size_t length, uint32_t* pc, uint32_t* pb);
+#define FASTHASH_INLINE
+#include "../util/fasthash.h"
+
 
 /* metadata */
 typedef struct surgescript_programpool_metadata_t surgescript_programpool_metadata_t;
@@ -72,17 +72,18 @@ struct surgescript_programpool_hashpair_t /* for each function signature, store 
 {
     surgescript_programpool_signature_t signature; /* key */
     surgescript_program_t* program; /* value */
-    UT_hash_handle hh;
 };
 
 
 /* program pool */
 struct surgescript_programpool_t
 {
-    surgescript_programpool_hashpair_t* hash;
+    fasthash_t* hash; /* a hash table of hashpair_t's */
     surgescript_programpool_metadata_t* meta;
 };
 
+/* misc */
+static void delete_pair(void* pair);
 static void delete_program(const char* program_name, void* data);
 
 
@@ -99,7 +100,7 @@ static void delete_program(const char* program_name, void* data);
 surgescript_programpool_t* surgescript_programpool_create()
 {
     surgescript_programpool_t* pool = ssmalloc(sizeof *pool);
-    pool->hash = NULL;
+    pool->hash = fasthash_create(delete_pair, 16);
     pool->meta = NULL;
     return pool;
 }
@@ -110,15 +111,7 @@ surgescript_programpool_t* surgescript_programpool_create()
  */
 surgescript_programpool_t* surgescript_programpool_destroy(surgescript_programpool_t* pool)
 {
-    surgescript_programpool_hashpair_t *it, *tmp;
-
-    HASH_ITER(hh, pool->hash, it, tmp) {
-        HASH_DEL(pool->hash, it);
-        delete_signature(it->signature);
-        surgescript_program_destroy(it->program);
-        ssfree(it);
-    }
-
+    fasthash_destroy(pool->hash);
     clear_metadata(pool);
     return ssfree(pool);
 }
@@ -138,12 +131,8 @@ bool surgescript_programpool_exists(surgescript_programpool_t* pool, const char*
  */
 bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
-    surgescript_programpool_hashpair_t* pair = NULL;
     surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
-
-    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
-    delete_signature(signature);
-
+    surgescript_programpool_hashpair_t* pair = fasthash_get(pool->hash, signature);
     return pair != NULL;
 }
 
@@ -157,7 +146,7 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
         surgescript_programpool_hashpair_t* pair = ssmalloc(sizeof *pair);
         pair->signature = generate_signature(object_name, program_name);
         pair->program = program;
-        HASH_ADD_ITEM_WITH_SIGNATURE(pool->hash, pair->signature, pair);
+        fasthash_put(pool->hash, pair->signature, pair);
         insert_metadata(pool, object_name, program_name);
         return true;
     }
@@ -175,19 +164,14 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
  */
 surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
-    surgescript_programpool_hashpair_t* pair = NULL;
     surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    surgescript_programpool_hashpair_t* pair = fasthash_get(pool->hash, signature); /* find the program */
     
-    /* find the program */
-    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
-    delete_signature(signature);
-
     /* if there is no such program */
     if(!pair) {
         /* try locating it in a common base for all objects */
         signature = generate_signature("Object", program_name);
-        HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
-        delete_signature(signature);
+        pair = fasthash_get(pool->hash, signature);
 
         /* really, the program doesn't exist */
         if(!pair)
@@ -224,13 +208,9 @@ void surgescript_programpool_foreach_ex(surgescript_programpool_t* pool, const c
  */
 bool surgescript_programpool_replace(surgescript_programpool_t* pool, const char* object_name, const char* program_name, surgescript_program_t* program)
 {
-    surgescript_programpool_hashpair_t* pair = NULL;
     surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    surgescript_programpool_hashpair_t* pair = fasthash_get(pool->hash, signature); /* find the program */
     
-    /* find the program */
-    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
-    delete_signature(signature);
-
     /* replace the program */
     if(pair != NULL) {
         surgescript_program_destroy(pair->program);
@@ -260,20 +240,10 @@ void surgescript_programpool_purge(surgescript_programpool_t* pool, const char* 
  */
 void surgescript_programpool_delete(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
-    surgescript_programpool_hashpair_t* pair = NULL;
     surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
     
-    /* find the program */
-    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);
-    delete_signature(signature);
-
     /* delete the program */
-    if(pair != NULL) {
-        HASH_DEL(pool->hash, pair);
-        delete_signature(pair->signature);
-        surgescript_program_destroy(pair->program);
-        ssfree(pair);
-    }
+    fasthash_delete(pool->hash, signature);
 
     /* delete metadata */
     remove_metadata(pool, object_name, program_name);
@@ -388,55 +358,42 @@ void traverse_adapter(const char* program_name, void* callback)
 
 
 /* utilities */
+void delete_pair(void* pair)
+{
+    surgescript_programpool_hashpair_t* p = (surgescript_programpool_hashpair_t*)pair;
+    surgescript_program_destroy(p->program);
+    ssfree(p);
+}
+
 void delete_program(const char* program_name, void* data)
 {
     surgescript_programpool_t* pool = (surgescript_programpool_t*)(((void**)data)[0]);
     const char* object_name = (const char*)(((void**)data)[1]);
     surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
-    surgescript_programpool_hashpair_t* pair = NULL;
-
-    /* find the program */
-    HASH_FIND_ITEM_BY_SIGNATURE(pool->hash, signature, pair);   
-    delete_signature(signature);
 
     /* delete the program */
-    if(pair != NULL) {
-        HASH_DEL(pool->hash, pair);
-        delete_signature(pair->signature);
-        surgescript_program_destroy(pair->program);
-        ssfree(pair);
-    }
+    fasthash_delete(pool->hash, signature);
 }
 
 
-/* function signature methods */
-#ifdef SURGESCRIPT_USE_FAST_SIGNATURES
+/* program signature generator: must be extremely fast */
 surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
 {
+#if defined(PROGRAMPOOL_USE_XXH)
+    /* Our app must enforce signature uniqueness */
+    char buf[2 * SS_NAMEMAX + 2] = { 0 };
+    uint32_t ha = 0, hb = 0;
+    size_t l1 = strlen(object_name), l2 = strlen(program_name);
+    memcpy(buf, object_name, l1);
+    memcpy(buf + l1 + 1, program_name, l2);
+    ha = XXH32(buf, l1 + 1, l1) + (uint8_t)program_name[0];
+    hb = XXH32(buf, l1 + l2 + 1, ha + (uint8_t)object_name[0]);
+    return (uint64_t)hb | (((uint64_t)ha) << 32); /* probably unique */
+#else
     /* uthash will compute a hash of this hash. Our app must enforce key uniqueness. */
     uint32_t pc = 0, pb = 0;
-    hashlittle2(object_name, strlen(object_name), &pc, &pb); /* strlen() is reasonably fast */
+    hashlittle2(object_name, strlen(object_name), &pc, &pb);
     hashlittle2(program_name, strlen(program_name), &pc, &pb);
     return (uint64_t)pc | (((uint64_t)pb) << 32);
-}
-
-void delete_signature(surgescript_programpool_signature_t signature)
-{
-    ;
-}
-#else
-surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
-{
-    size_t olen = strlen(object_name);
-    char* signature = ssmalloc((olen + strlen(program_name) + 2) * sizeof(*signature));
-    strcpy(signature, object_name);
-    signature[olen] = '\036';
-    strcpy(signature + olen + 1, program_name);
-    return signature;
-}
-
-void delete_signature(surgescript_programpool_signature_t signature)
-{
-    ssfree(signature);
-}
 #endif
+}

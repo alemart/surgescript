@@ -84,6 +84,7 @@ static void remove_object_definition(surgescript_programpool_t* pool, const char
 static bool forbid_duplicates(const surgescript_parser_t* parser, const char* object_name);
 static bool is_state_context(surgescript_nodecontext_t context);
 static char* randstr(char* buf, size_t size);
+static bool is_large_name(const char* name);
 static bool is_valid_name(const char* name);
 
 /* non-terminals */
@@ -571,17 +572,32 @@ char* randstr(char* buf, size_t size)
     return ret;
 }
 
+/* is the given [object|program|tag] name too large? */
+bool is_large_name(const char* name)
+{
+    return strlen(name) > SS_NAMEMAX;
+}
+
 /* checks if the given string is a valid name for:
  * objects, states, tags... */
 bool is_valid_name(const char* name)
 {
-    static const int NAME_MAXLEN = 255;
     const char* p = name;
 
+    /* check if it isn't blank */
     while(*p && isspace(*p))
         p++;
+    if(*p == 0)
+        return false;
 
-    return *p != 0 && strlen(name) <= NAME_MAXLEN;
+    /* check if there are non-printable characters */
+    for(; *p; p++) {
+        if(!isprint(*p))
+            return false;
+    }
+
+    /* now check the length */
+    return (p - name) <= SS_NAMEMAX;
 }
 
 
@@ -617,9 +633,10 @@ void object(surgescript_parser_t* parser)
     );
 
     /* validate */
-    if(!is_valid_name(object_name)) {
+    if(is_large_name(object_name))
+        ssfatal("Compile Error: object name \"%s\" is too large at %s:%d", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+    else if(!is_valid_name(object_name))
         ssfatal("Compile Error: invalid object name \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
-    }
     else if((duplicate = surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))) {
         if(parser->flags & SSPARSER_SKIP_DUPLICATES) {
             char buf[32] = { '.', 'd', 'u', 'p', '.' };
@@ -693,7 +710,9 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             const char* tag_name = surgescript_token_lexeme(parser->lookahead);
 
             /* validate */
-            if(!is_valid_name(tag_name))
+            if(is_large_name(tag_name))
+                ssfatal("Compile Error: tag name \"%s\" of object \"%s\" is too large at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+            else if(!is_valid_name(tag_name))
                 ssfatal("Compile Error: invalid tag name \"%s\" in object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
             /* okay, add tag */
@@ -784,14 +803,16 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     char* program_name;
     int fun_header = 0;
 
-    /* validation */
-    if(!is_valid_name(state_name))
-        ssfatal("Compile Error: invalid state name \"%s\" in object \"%s\" at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
-
     /* read state name & generate function name */
     program_name = ssmalloc((1 + strlen(prefix) + strlen(state_name)) * sizeof(*program_name));
     strcat(strcpy(program_name, prefix), state_name);
     match(parser, SSTOK_STRING);
+
+    /* validation */
+    if(is_large_name(program_name))
+        ssfatal("Compile Error: state name \"%s\" of object \"%s\" is too large at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+    if(!is_valid_name(program_name))
+        ssfatal("Compile Error: invalid state name \"%s\" in object \"%s\" at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* create context */
     context = nodecontext(
@@ -838,6 +859,12 @@ void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     /* duplicate check */
     if(surgescript_programpool_shallowcheck(parser->program_pool, context.object_name, program_name))
         ssfatal("Compile Error: duplicate function \"%s\" in object \"%s\" at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+
+    /* validity check */
+    if(is_large_name(program_name))
+        ssfatal("Compile Error: function name \"%s\" in object \"%s\" is too large at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+    else if(!is_valid_name(program_name))
+        ssfatal("Compile Error: invalid function name \"%s\" in object \"%s\" at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* read list of arguments */
     match(parser, SSTOK_IDENTIFIER);

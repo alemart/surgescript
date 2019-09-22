@@ -6,7 +6,7 @@
 
 object "Application"
 {
-    test = spawn("SurgeScriptTest");
+    test = spawn("SurgeScript Test");
 
     state "main"
     {
@@ -23,7 +23,7 @@ object "Application"
     }
 }
 
-object "SurgeScriptTest"
+object "SurgeScript Test" is "test"
 {
     public message = "Amazing!";
     value = null;
@@ -205,7 +205,7 @@ object "SurgeScriptTest"
     {
         begin("Object");
         test(typeof this == "object") || fail(1);
-        test(this.__name == "SurgeScriptTest") || fail(2);
+        test(this.__name == "SurgeScript Test") || fail(2);
         test(Application != null && Application.__name == "Application") || fail(3);
         test(this != Application) || fail(4);
         test(this.toString() == toString()) || fail(5);
@@ -221,6 +221,11 @@ object "SurgeScriptTest"
         test(this != null) || fail(15);
         test((this == null) === false) || fail(16);
         test(null == null && null === null) || fail(17);
+        test(!this.hasTag("noTag")) || fail(18);
+        test(this.hasTag("test")) || fail(19);
+        test(System.tags.select("test").indexOf(this.__name) >= 0) || fail(20);
+        test(System.tags.select("noTag").length == 0) || fail(21);
+        test(System.tags.list().indexOf("test") >= 0) || fail(22);
         end();
     }
 

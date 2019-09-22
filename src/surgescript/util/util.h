@@ -42,6 +42,9 @@
 #define ssfatal                     surgescript_util_fatal
 #define ssstrdup(str)               surgescript_util_strdup((str), __FILE__ ":" ssstr(__LINE__))
 
+/* constants */
+#define SS_NAMEMAX                  63 /* names can't be larger than this (computes hashes quickly) */
+
 /* public routines */
 const char* surgescript_util_version(); /* compiled version of SurgeScript */
 int surgescript_util_versioncode(const char* version); /* converts a version string to a comparable number */
@@ -56,7 +59,6 @@ void surgescript_util_set_error_functions(void (*log)(const char*), void (*fatal
 
 char* surgescript_util_strncpy(char* dst, const char* src, size_t n); /* strcpy */
 char* surgescript_util_strdup(const char* src, const char* location); /* strdup */
-uint32_t surgescript_util_str2hash(const char* str); /* converts a string to a 32-bit hash */
 const char* surgescript_util_basename(const char* path); /* basename */
 char* surgescript_util_accessorfun(const char* prefix, const char* text); /* getter/setter prefixing function */
 
