@@ -55,6 +55,7 @@ nav:
             - 'Sound': 'engine/sound.md'
         - 'Behaviors':
             - 'Behavior': 'engine/behavior.md'
+            - 'CircularMovement': 'engine/circular_movement.md'
             - 'DirectionalMovement': 'engine/directional_movement.md'
             - 'Enemy': 'engine/enemy.md'
             - 'Platformer': 'engine/platformer.md'
