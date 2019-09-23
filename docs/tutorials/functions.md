@@ -1,6 +1,9 @@
 Functions
 =========
 
+Introduction
+------------
+
 Functions are blocks of code that you can reuse throughout your program. They may receive input parameters and they always output something. The syntax is as follows:
 
 ```
@@ -100,9 +103,9 @@ n! = { n * (n-1)!    if n > 1
 One interesting example of recursion that arises in computer science is called the *binary search* algorithm. Given a sorted [Array](/reference/array), the binary search finds the position of a target value without having to inspect the whole collection. In the example below, `bsearch()` is a recursive function:
 
 ```
-object "BinarySearch"
+object "Binary Search"
 {
-    // Given an array *sorted in ascending order*, find()
+    // Given an array sorted in ascending order, find()
     // finds the position of the target value in the array.
     // It returns its index, or -1 if the target is not found.
     fun find(array, value)
@@ -131,7 +134,7 @@ object "BinarySearch"
 
 Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is `n <= 1` (the factorial is 1). In the binary search example, the base case is `start > end`, meaning that the array is empty and the target value cannot be found, or `value == array[mid]`, meaning that the target value has been found at `mid`.
 
-...as the sages say: *to understand recursion, you must first understand recursion*.
+A sage once said: *"to understand recursion, you must first understand recursion."*
 
 Constructors and destructors
 ----------------------------

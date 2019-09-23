@@ -1,6 +1,9 @@
 Packages
 ========
 
+Introduction
+------------
+
 Packages are objects that allow you to extend the functionalities of the language. Once declared, they can be imported anywhere in the code. They can also be easily shared with others, so everyone benefits.
 
 *Available since:* SurgeScript 0.5.2
@@ -8,7 +11,7 @@ Packages are objects that allow you to extend the functionalities of the languag
 Basic example
 -------------
 
-Suppose you want to extend the language by adding new routines related to string manipulation. The routines you want will be used frequently throughout your project, and you'd like easy access to them. This makes it perfect for implementing them as a package.
+Suppose you want to extend the language by adding new routines related to string manipulation. These routines will be used frequently throughout your project, and you'd like easy access to them. This makes it perfect for implementing them as a package.
 
 We'll define an object called `StringUtils` with a `reverse()` function that reverses a string. We make the object a package by annotating it with `@Package`. Take a look at the example below:
 
@@ -62,9 +65,9 @@ surgescript package.ss app.ss
 Package example
 ---------------
 
-You may use the Plugin system to create an independent package that aggregates many functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.
+Packages may aggregate many code units with different functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.
 
-Suppose that user *Parrot*, the owner of *ParrotSoft*, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called `ParrotSoft`. Since he implemented getters for each of his utilities (see the code below), his package provides easy access to all of them. Furthermore, he annotated his package with `@Package` (but **not** the individual utilities), so his package can be accessed anywhere.
+Suppose that user *Parrot*, the owner of *ParrotSoft*, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called `ParrotSoft`. Since he implemented [getters](/tutorials/properties) for each of his utilities, his package provides easy access to all of them. Furthermore, he annotated his package with `@Package` (but **not** the individual utilities), so his package can be accessed anywhere.
 
 ```
 // File: parrotsoft.ss
@@ -76,11 +79,9 @@ object "ParrotSoft"
     public readonly Complex = spawn("Parrot Complex");
     public readonly StringUtils = spawn("Parrot StringUtils");
 }
-
-// ...
 ```
 
-A user of the `ParrotSoft` package may import *Parrot*'s utilities simply by importing the package. Individual utilities may also be imported. The code below shows a usage example:
+A user of the `ParrotSoft` package may import *Parrot*'s utilities simply by importing the package. Individual utilities may also be imported. The code below shows an example:
 
 ```
 using ParrotSoft.Matrices.Matrix2;
@@ -99,4 +100,4 @@ object "Application"
 }
 ```
 
-In the example above, writing `Complex` is equivalent to writing `ParrotSoft.Complex`, since we imported this utility with `using ParrotSoft.Complex`. Notice that `ParrotSoft` implements a getter for `Complex`. Additionally, `ParrotSoft` has been annotated with `@Package`, but `Complex` has **not**. This means that the statement `using Complex` will **not** yield correct results - and it shouldn't, since `Complex` is a part of the `ParrotSoft` package that can only be accessed from it. Finally, since we haven't imported `StringUtils` explicitly, we type `ParrotSoft.StringUtils` to access it.
+In the example above, writing `Complex` is equivalent to writing `ParrotSoft.Complex`, since we imported this utility with `using ParrotSoft.Complex`. Notice that `ParrotSoft` implements a getter for `Complex`. Additionally, `ParrotSoft` has been annotated with `@Package`, but `Complex` has **not**. This means that the statement `using Complex` will **not** yield the expected result. Since `Complex` is a part of `ParrotSoft`, it can only be accessed from it. Finally, since we haven't imported `StringUtils` explicitly, we type `ParrotSoft.StringUtils` to access it.

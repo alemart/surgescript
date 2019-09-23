@@ -1,7 +1,7 @@
 Tags
 ====
 
-You may tag objects with as many tags as you want. Tags are a way of attributing categories to different objects.
+You may tag objects with as many tags as you want. Tags are a way of attributing categories to objects.
 
 Syntax
 ------

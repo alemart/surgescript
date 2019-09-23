@@ -1,13 +1,16 @@
 Object tree
 ===========
 
-In SurgeScript, objects have a hierarchical relationship. Suppose that object P spawns (or *instantiates*) object C. We say that object P is the *parent* of C. Similarly, object C is a *child* of P.
+Introduction
+------------
 
-An object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (or a tree). The Figure below shows an example:
+In SurgeScript, objects have a hierarchical relationship. Suppose that object P *spawns* (or *instantiates*) object C. We say that object P is the *parent* of C. Similarly, object C is a *child* of P.
+
+An object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (a tree). The Figure below shows an example:
 
 ![An object tree](/img/tree.png)
 
-In this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero.
+In this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero. Finally, GameItem1, GameItem2, Component A and Component B are all *descendants* of Level.
 
 In SurgeScript, the root of the hierarchy is a predefined object called `System`. Its parent is itself. All other objects are descendants of `System`.
 
@@ -75,21 +78,14 @@ object "Foo"
 Traversing the hierarchy
 ------------------------
 
-Relevant data about the object hierarchy can be obtained using the following properties and functions (read more on the [Object reference](/reference/object)):
+Relevant data about the object hierarchy can be obtained using the following properties and functions (find more on the [Object reference](/reference/object)):
 
 Function / property|Description
 -------------------|-----------
 `obj.parent` (read-only) | The parent object
 `obj.childCount` (read-only) | Number of immediate children
 `obj.child(name)` | Gets a child object named `name`
-`obj.findObject(name)` | Finds\* a descendant named `name`
-`obj.sibling(name)` | Gets a sibling\*\* named `name`
-
-> **Notes:**
->
-> \* `findObject()` may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.
->
-> \*\* We say that two distinct objects are siblings if they share the same parent.
+`obj.findObject(name)` | Finds a descendant named `name`
 
 Example:
 
@@ -101,7 +97,7 @@ object "Parent"
 
     state "main"
     {
-        Console.print("This object has " + childCount + " children.");
+        Console.print("This object has " + this.childCount + " children.");
         destroy();
     }
 }

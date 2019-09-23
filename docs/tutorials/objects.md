@@ -1,6 +1,9 @@
 Introduction to objects
 =======================
 
+Introduction
+------------
+
 In SurgeScript, objects are units of code and data. Each object defines a finite state machine, a mathematical construct used to describe the behavior of in-game objects.
 
 > **Did you know?**
@@ -10,7 +13,7 @@ In SurgeScript, objects are units of code and data. Each object defines a finite
 State machines
 --------------
 
-A finite state machine is a mathematical abstraction composed of a finite number of **states** and by **transitions** between these states. Only one state can be active at any given time (we'll call it the active state). There must be one **initial state** (i.e., the first one to be active). A transition is a change of the active state that is triggered when a certain condition is met.
+A finite state machine is a mathematical abstraction composed of a finite number of **states** and by **transitions** between these states. Only one state can be active at any given time (we'll call it the **active state**). There must be one **initial state** (i.e., the first one to be active). A transition is a change of the active state that is triggered when a certain condition is met.
 
 As a concrete example, suppose that you want to create a door in your game. You, the developer, may open or close the door at will. But what is a door? We have just given *informal* description of the problem. However, we need to transform it in something more rigorous. Example:
 

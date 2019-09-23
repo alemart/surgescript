@@ -8,7 +8,7 @@ Lookup operator
 
 Some programming languages, such as C++, have a feature called *operator overloading*. It's a *syntactic sugar* that allows the programmer to attribute custom implementations to different operators.
 
-In SurgeScript, the `[]` operator (also called the *lookup operator*), used by Arrays and Dictionaries, is used to **get** and **set** values from/to the data structure. In fact, the `[]` operator can be used with any object. It is necessary to define, in your object, functions `get()` and `set()` with the following signature:
+In SurgeScript, the `[]` operator (also called the *lookup operator*), used by [Arrays](/reference/array) and [Dictionaries](/reference/dictionary), is used to **get** and **set** values from/to the data structure. In fact, the `[]` operator can be used with any object. It is necessary to define, in your object, functions `get()` and `set()` with the following signature:
 
 ```
 fun get(key)
@@ -141,8 +141,8 @@ object "Greeting"
 object "Greeter"
 {
 	// Greeter is a factory. It spawns and configures
-	// a Greeting object for you. Being a plugin,
-	// Greeter can be used anywhere in the code.
+	// a Greeting object for you. As it is a package,
+	// it can be imported and used anywhere.
 	fun call(name)
 	{
 		g = spawn("Greeting");
@@ -152,7 +152,7 @@ object "Greeter"
 }
 ```
 
-Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might simply write `g = caller.spawn("Greeter")`. Keyword `caller` points to the object that called the function (or `null` if not applicable).
+In the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller, simply write `g = caller.spawn("Greeter")`. Know that `caller` points to the object that called the function (or `null` if not applicable).
 
 Iterators
 ---------

@@ -6,7 +6,7 @@ SurgeScript supports many kinds of expressions. Expressions may involve strings,
 Constants
 ---------
 
-Constants are types of expressions. They may be numbers, strings, booleans... You may attribute constant values to variables using the assignment operator (*=*):
+Constants are types of expressions. They may be numbers, strings, booleans... You may attribute constant values to variables using the assignment operator (`=`):
 
 ```
 // strings
@@ -71,8 +71,8 @@ Operator|Meaning
 `!=` | Inequality operator
 `<` | Less than
 `<=` | Less or equal
-`\>` | Greater than
-`\>=` | Greater or equal
+`>` | Greater than
+`>=` | Greater or equal
 `===` | Strong equality
 `!==` | Strong inequality
 
@@ -88,7 +88,7 @@ t = x >= 1; // t is true
 
 > **Pay attention!**
 >
-> Notice that the equality operator, used for comparing expressions for equality, is *==*. Pay attention! Don't confuse the equality operator (*==*) with the assignment operator (*=*). The expression `(x = 1)` always evaluates to 1, whereas `(x == 1)` is *true* only if x equals 1.
+> Notice that the equality operator, used for comparing expressions for equality, is `==`. Pay attention! Don't confuse the equality operator (`==`) with the assignment operator (`=`). The expression `(x = 1)` always evaluates to 1, whereas `(x == 1)` is `true` only if x equals 1.
 
 > **Strong equality**
 >
@@ -97,7 +97,7 @@ t = x >= 1; // t is true
 Logical operators
 -----------------
 
-Logical operators involve booleans (*true* or *false* values). While the **not** operator requires only one operand, operators **and** and **or** require two.
+Logical operators involve booleans (`true` or `false` values). While the **not** operator requires only one operand, operators **and** and **or** require two.
 
 Operator|Meaning
 --------|-------
@@ -109,9 +109,9 @@ The table below summarizes the basic logical expressions:
 
 Expression|Result
 ----------|------
-`a && b` |*true* only if both a and b are true
-`a || b` | *true* if either a or b are true (or both)
-`!a` | *true* if a is false, *false* if a is true
+`a && b` |`true` only if both a and b are true
+`a || b` | `true` if a is true, b is true, or both
+`!a` | `true` if a is false, `false` if a is true
 
 Notice that **not** has higher precedence than the other two operators. Examples:
 
@@ -123,10 +123,14 @@ w = (z && x) || true; // evaluates to true
 t = !x && x; // evaluates to false
 ```
 
+> **Short-circuit evaluation**
+>
+> SurgeScript performs short-circuit evaluation in **and** and **or** operations. This means that the second operator is not evaluated if the first alone is sufficient to determine the value of the operation. Example: in the expression `a || b`, expression `b` is not evaluated if `a` is evaluated to `true`. Similarly, in `a && b`, expression `b` is not evaluated if `a` is evaluated to `false`.
+
 Textual expressions
 -------------------
 
-You may concatenate strings with the *+* operator. Example:
+You may concatenate strings with the `+` operator. Example:
 
 ```
 message = "Surge" + " rocks!"; // evaluates to "Surge rocks!"
@@ -141,9 +145,9 @@ group = "Jackson " + 5; // evaluates to "Jackson 5"
 Assignment operators
 --------------------
 
-The attribution operator (*=*) may be used to attribute data to variables. However, there's more to that. The expression `variable = "data"` is itself evaluated to string *"data"*.
+The attribution operator (`=`) may be used to attribute data to variables. However, there's more to it. The expression `variable = "data"` is itself evaluated to string `"data"`.
 
-Likewise, the expression `variable = variable + 5` is evaluated to `variable + 5` and may be shortened to `variable += 5`.
+Likewise, the expression `variable = variable + 5` is evaluated to the new value of the variable and may be shortened to `variable += 5`.
 
 Let's see what kind of assignment expressions we have:
 
@@ -199,16 +203,6 @@ You may chain assignment operations:
 ```
 x = y = z = 1;
 ```
-
-Using commas will evaluate all expressions between then and return the right-most one:
-
-```
-x = 1; // x is 1
-y = x++, 2; // y is 2
-z = y--, --x; // z is 1
-// x, y and z end up equal to 1
-```
-
 
 Other expressions
 -----------------

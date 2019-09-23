@@ -9,7 +9,7 @@ There are two main ways to test your scripts:
 Using Open Surge
 ----------------
 
-To test a script on Open Surge, place it on the *scripts/* folder and start the engine. Your test script must include an object called *Application*. Make sure to remove the script after you're done with the testing.
+To test a script in Open Surge, place it on the *scripts/* folder and start the engine. Your test script must include an object called *Application*. Make sure to remove the script after you're done with the testing.
 
 As an example, save the following script to *scripts/hello.ss* and start the engine:
 ```
@@ -40,7 +40,7 @@ Using the standalone version
 
 If you've downloaded the standalone version of the language:
 
-- First of all, save the following script to a file named *hello.ss*. For testing purposes, please place the file on the same directory as the surgescript executable.
+- First of all, save the following script to a file named *hello.ss*. For testing purposes, you may place the file on the same directory as the surgescript executable.
 ```
 // hello.ss: test script
 object "Application"

@@ -1,20 +1,23 @@
 Variables
 =========
 
-Variables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object handle). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.
+Introduction
+------------
+
+Variables are used to store data. SurgeScript features five basic types: number, string, boolean, null and object. Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.
 
 Types
 -----
 
-### Primitive types
+### Basic types
 
 Type|Description|Examples
 ----|-----------|-------
-Number|A floating-point number|1, 2, 3, 3.14159
-String|Some text|"Hello, world!", 'single-quoted'
-Boolean|True or false|true, false
-Object|Reference to an object|Application, this, [ ]
-Null|An empty value|null
+Number|A floating-point number|`1`, `2`, `-3`, `3.14159`
+String|Some text|`"Hello, world!"`, `'single-quoted'`
+Boolean|True or false|`true`, `false`
+Object|Reference to an object|`Application`, `this`, `[ ]`
+Null|An empty value|`null`
 
 As an example, the script below features an object with 3 variables that may be accessed throughout the whole object:
 
@@ -104,7 +107,7 @@ object "Application"
     {
         // err is instantiated at every frame of the application,
         // thus memory is wasted with duplicate objects
-        err = [ "don't", "do", "this" ]; // WRONG!
+        err = [ "don't", "do", "this" ]; // AVOID!
     }
 }
 ```
@@ -128,10 +131,10 @@ When converting an object to a string, SurgeScript will implicitly call `object.
 
 Scoping
 -------
-Variables that are defined before any state or function are *object-level* variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are *local variables*. This means that their lifespan is restricted to their own locus of code.
+Variables that are defined before any state or function are *object-level* variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are *local variables*. This means that their accessibility and lifespan is restricted to their own locus of code.
 
 ```
-object "ScopeTest"
+object "Scope Test"
 {
     name = "Surge the Rabbit"; // object-level variable
 

@@ -1,6 +1,9 @@
 Properties
 ==========
 
+Introduction
+------------
+
 In SurgeScript, [object-level variables](/tutorials/variables) are private. This means that these variables can only be accessed from the objects that defined them. However, SurgeScript features a *syntactic sugar* that allows objects to read and/or modify other objects' data in a way that looks like dealing with regular (public) variables. We'll call these "variables" **properties**.
 
 Defining properties
