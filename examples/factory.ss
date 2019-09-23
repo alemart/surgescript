@@ -27,12 +27,12 @@ object "Greeting"
 	}
 }
 
-@Plugin
+@Package
 object "Greeter"
 {
 	// Greeter is a factory. It spawns and configures
-	// a Greeting object for you. Being a plugin,
-	// Greeter can be used anywhere in the code.
+	// a Greeting object for you. Being a package,
+	// Greeter can be imported and used anywhere.
 	fun call(name)
 	{
 		g = spawn("Greeting");

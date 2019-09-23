@@ -1,15 +1,13 @@
 //
-// custom_plugin.ss
-// Custom plugin example (how to extend the language)
-// Copyright 2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+// package.ss
+// Package example
+// Copyright 2018, 2019 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
-// Plugins are used to extend the language. You can
-// import them into your source file using the
-// "using" directive:
+// import the package
 using StringUtils;
 
-// An application that uses the imported plugin
+// An application that uses the imported package
 object "Application"
 {
     str = "alucard";
@@ -23,10 +21,8 @@ object "Application"
     }
 }
 
-// Plugins are objects annotated with "@Plugin"
-// that are spawned automatically. They can be
-// imported using the "using" keyword.
-@Plugin
+// Packages are annotated with "@Package"
+@Package
 object "StringUtils"
 {
     fun constructor()

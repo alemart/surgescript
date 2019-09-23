@@ -1,19 +1,15 @@
 Plugin
 ======
 
-SurgeScript features a plugin system that allows you to extend the functionalities of the language. Plugins are objects that can be accessed anywhere in the code. They can be imported using a `using` statement. Also, the plugin system can be accessed simply by typing `Plugin`.
+SurgeScript features a plugin system that allows you to extend the functionalities of the language. Known as plugins or [packages](/tutorials/packages), these objects can be imported and accessed anywhere in the code. They are imported using a `using` statement. The plugin system can be accessed simply by typing `Plugin`.
 
 Example:
 
 ```
 // File: app.ss
-
-// Plugins are used to extend the language. You can
-// import them into your source file using the
-// "using" statement:
+// An application that uses StringUtils, defined in another file
 using StringUtils;
 
-// An application that uses the imported plugin
 object "Application"
 {
     str = "alucard";
@@ -30,11 +26,9 @@ object "Application"
 
 ```
 // File: string_utils.ss
+// String utilities
 
-// Plugins are objects annotated with "@Plugin".
-// They are spawned automatically and can be
-// accessed anywhere in the code.
-@Plugin
+@Package
 object "StringUtils"
 {
     fun reverse(str)
@@ -63,33 +57,33 @@ Functions
 
 #### spawn
 
-`spawn(pluginName)`
+`spawn(objectName)`
 
-Spawns object `pluginName` as a plugin. This function is not to be used directly, as SurgeScript spawns the plugins automatically for you. SurgeScript recognizes an object as a plugin when you annotate it with `@Plugin`.
+Spawns an object called `objectName` as a plugin. This function is not to be used directly, as SurgeScript spawns the plugins automatically for you.
 
 *Arguments*
 
-* `pluginName`: string. The name of the object to be spawned as a plugin. It's not recommended to include special characters in the plugin name.
+* `objectName`: string. The name of the object to be spawned as a plugin. It's not recommended to include special characters in this name.
 
 #### get
 
-`get(pluginName)`
+`get(objectName)`
 
-Gets a reference to the plugin named `pluginName`. The `[ ]` operator can be used instead of the `get()` function, as in `Plugin[pluginName]`.
+Gets a reference to the plugin named `objectName`. The `[ ]` operator can be used instead of the `get()` function, as in `Plugin[objectName]`.
 
-Rather than using this function, it's recommended to import the desired plugin using the `using myPlugin;` statement at the beginning of your code. Your plugin will be available as `myPlugin`.
+Rather than using this function, it's recommended to import the desired object using the `using MyObject;` statement at the beginning of your code. Your object will be available as `MyObject`.
 
 *Arguments*
 
-* `pluginName`: string. The name of the plugin.
+* `objectName`: string. The name of the plugin.
 
 *Example*
 
 ```
 using StringUtils;
 
-...
+// ...
 
-b = (Plugin["StringUtils"] === StringUtils); // b is true
-c = (Plugin.StringUtils === StringUtils); // c is true
+assert(Plugin["StringUtils"] === StringUtils);
+assert(Plugin.StringUtils === StringUtils);
 ```
