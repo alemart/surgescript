@@ -45,7 +45,6 @@ set(
     src/surgescript/runtime/tag_system.c
     src/surgescript/runtime/variable.c
     src/surgescript/runtime/vm.c
-    src/surgescript/util/lookup3.c
     src/surgescript/util/transform.c
     src/surgescript/util/utf8.c
     src/surgescript/util/util.c

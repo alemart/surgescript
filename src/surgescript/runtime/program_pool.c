@@ -27,26 +27,19 @@
 #include "../util/util.h"
 #include "../util/ssarray.h"
 
-/* options */
-#define PROGRAMPOOL_USE_XXH /* use a very fast hash function */
+#define XXH_INLINE_ALL
+#include "../util/xxhash.h"
+
+#define FASTHASH_INLINE
+#include "../util/fasthash.h"
+
 
 /*
  * Each function in SurgeScript defines a function signature
  * that depends on the containing object and on the function name
  */
-
 typedef uint64_t surgescript_programpool_signature_t;
 static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name); /* generates a function signature, given an object name and a program name */
-
-#if defined(PROGRAMPOOL_USE_XXH)
-#define XXH_INLINE_ALL
-#include "../util/xxhash.h"
-#else
-extern void hashlittle2(const void *key, size_t length, uint32_t* pc, uint32_t* pb);
-#endif
-
-#define FASTHASH_INLINE
-#include "../util/fasthash.h"
 
 
 /* metadata */
@@ -379,7 +372,6 @@ void delete_program(const char* program_name, void* data)
 /* program signature generator: must be extremely fast */
 surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
 {
-#if defined(PROGRAMPOOL_USE_XXH)
     /* Our app must enforce signature uniqueness */
     char buf[2 * SS_NAMEMAX + 2] = { 0 };
     uint32_t ha = 0, hb = 0;
@@ -389,11 +381,4 @@ surgescript_programpool_signature_t generate_signature(const char* object_name, 
     ha = XXH32(buf, l1 + 1, l1) + (uint8_t)program_name[0];
     hb = XXH32(buf, l1 + l2 + 1, ha + (uint8_t)object_name[0]);
     return (uint64_t)hb | (((uint64_t)ha) << 32); /* probably unique */
-#else
-    /* uthash will compute a hash of this hash. Our app must enforce key uniqueness. */
-    uint32_t pc = 0, pb = 0;
-    hashlittle2(object_name, strlen(object_name), &pc, &pb);
-    hashlittle2(program_name, strlen(program_name), &pc, &pb);
-    return (uint64_t)pc | (((uint64_t)pb) << 32);
-#endif
 }
