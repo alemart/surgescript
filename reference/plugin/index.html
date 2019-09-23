@@ -1501,16 +1501,12 @@
                 
                 
                 <h1 id="plugin">Plugin</h1>
-<p>SurgeScript features a plugin system that allows you to extend the functionalities of the language. Plugins are objects that can be accessed anywhere in the code. They can be imported using a <code>using</code> statement. Also, the plugin system can be accessed simply by typing <code>Plugin</code>.</p>
+<p>SurgeScript features a plugin system that allows you to extend the functionalities of the language. Known as plugins or <a href="/tutorials/packages">packages</a>, these objects can be imported and accessed anywhere in the code. They are imported using a <code>using</code> statement. The plugin system can be accessed simply by typing <code>Plugin</code>.</p>
 <p>Example:</p>
 <pre><code>// File: app.ss
-
-// Plugins are used to extend the language. You can
-// import them into your source file using the
-// &quot;using&quot; statement:
+// An application that uses StringUtils, defined in another file
 using StringUtils;
 
-// An application that uses the imported plugin
 object &quot;Application&quot;
 {
     str = &quot;alucard&quot;;
@@ -1526,11 +1522,9 @@ object &quot;Application&quot;
 </code></pre>
 
 <pre><code>// File: string_utils.ss
+// String utilities
 
-// Plugins are objects annotated with &quot;@Plugin&quot;.
-// They are spawned automatically and can be
-// accessed anywhere in the code.
-@Plugin
+@Package
 object &quot;StringUtils&quot;
 {
     fun reverse(str)
@@ -1550,27 +1544,27 @@ object &quot;StringUtils&quot;
 <p>The number of plugins.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="spawn">spawn</h4>
-<p><code>spawn(pluginName)</code></p>
-<p>Spawns object <code>pluginName</code> as a plugin. This function is not to be used directly, as SurgeScript spawns the plugins automatically for you. SurgeScript recognizes an object as a plugin when you annotate it with <code>@Plugin</code>.</p>
+<p><code>spawn(objectName)</code></p>
+<p>Spawns an object called <code>objectName</code> as a plugin. This function is not to be used directly, as SurgeScript spawns the plugins automatically for you.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>pluginName</code>: string. The name of the object to be spawned as a plugin. It's not recommended to include special characters in the plugin name.</li>
+<li><code>objectName</code>: string. The name of the object to be spawned as a plugin. It's not recommended to include special characters in this name.</li>
 </ul>
 <h4 id="get">get</h4>
-<p><code>get(pluginName)</code></p>
-<p>Gets a reference to the plugin named <code>pluginName</code>. The <code>[ ]</code> operator can be used instead of the <code>get()</code> function, as in <code>Plugin[pluginName]</code>.</p>
-<p>Rather than using this function, it's recommended to import the desired plugin using the <code>using myPlugin;</code> statement at the beginning of your code. Your plugin will be available as <code>myPlugin</code>.</p>
+<p><code>get(objectName)</code></p>
+<p>Gets a reference to the plugin named <code>objectName</code>. The <code>[ ]</code> operator can be used instead of the <code>get()</code> function, as in <code>Plugin[objectName]</code>.</p>
+<p>Rather than using this function, it's recommended to import the desired object using the <code>using MyObject;</code> statement at the beginning of your code. Your object will be available as <code>MyObject</code>.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>pluginName</code>: string. The name of the plugin.</li>
+<li><code>objectName</code>: string. The name of the plugin.</li>
 </ul>
 <p><em>Example</em></p>
 <pre><code>using StringUtils;
 
-...
+// ...
 
-b = (Plugin[&quot;StringUtils&quot;] === StringUtils); // b is true
-c = (Plugin.StringUtils === StringUtils); // c is true
+assert(Plugin[&quot;StringUtils&quot;] === StringUtils);
+assert(Plugin.StringUtils === StringUtils);
 </code></pre>
                 
                   
