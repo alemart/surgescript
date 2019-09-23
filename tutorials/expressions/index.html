@@ -436,6 +436,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#commas" title="Commas" class="md-nav__link">
+    Commas
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#other-expressions" title="Other expressions" class="md-nav__link">
     Other expressions
   </a>
@@ -1534,6 +1541,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#commas" title="Commas" class="md-nav__link">
+    Commas
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#other-expressions" title="Other expressions" class="md-nav__link">
     Other expressions
   </a>
@@ -1878,6 +1892,14 @@ Console.print(x); // prints 1
 <h2 id="chained-expressions">Chained expressions</h2>
 <p>You may chain assignment operations:</p>
 <pre><code>x = y = z = 1;
+</code></pre>
+
+<h2 id="commas">Commas</h2>
+<p>The comma operator takes two operands. It first evaluates the first operand and then discards the result. Next, it evaluates the second operand and then returns this result. The comma is the operator with the lowest precedence.</p>
+<pre><code>c = (1, 2); // Results in c = 2
+a = 1, b = 2, c = 3; // Results in a = 1, b = 2 and c = 3
+d = (c++, a); // Results in c = 4, d = 1
+e = (++a, f = 2, 3); // Results in a = 2, e = 3, f = 2
 </code></pre>
 
 <h2 id="other-expressions">Other expressions</h2>
