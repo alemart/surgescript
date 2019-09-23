@@ -295,6 +295,7 @@ uint64_t surgescript_util_random64()
  */
 double surgescript_util_random()
 {
+    /* assuming IEEE-754 */
     uint64_t x = surgescript_util_random64();
     x = (x >> 12) | UINT64_C(0x3FF0000000000000); /* sign bit = 0; exponent = 1023 */
     return *((double*)&x) - 1.0;
