@@ -6,9 +6,9 @@ The Directional Movement [behavior](/engine/behavior) makes the associated [enti
 * A direction [vector](/engine/vector2) that specifies the direction of the movement
 * A movement speed, a scalar value given in pixels per second
 
-You may control the direction of the movement using a vector or an angle given in degrees. Additionally, you may control the speed of the movement by changing the speed property directly.
+You may control the direction of the movement using the [direction vector](#direction) or an [angle](#angle) given in degrees. Additionally, you may control the [speed](#speed) of the movement simply by changing its value.
 
-Directional Movement is very versatile. You can use it to implement many types of baddies, flying objects, racing cars viewed from a top-down view, circular movements, and much more.
+Directional Movement is very versatile. You can use it to implement many things: different types of baddies, flying objects, racing cars viewed from a top-down view, simple projectiles, and much more.
 
 *Example*
 
@@ -67,26 +67,3 @@ The direction of the movement.
 `angle`: number.
 
 The counterclockwise angle of the direction vector, in degrees. 0 means right, 90 means up, etc.
-
-*Example*
-
-```
-//
-// In the example below, a circular movement is performed
-//
-using SurgeEngine.Actor;
-using SurgeEngine.Behaviors.DirectionalMovement;
-
-object "Simple Ball" is "entity"
-{
-    actor = Actor("Simple Ball");
-    movement = DirectionalMovement();
-    angularSpeed = 360; // one full rotation per second
-
-    state "main"
-    {
-        movement.speed = 192;
-        movement.angle += angularSpeed * Time.delta;
-    }
-}
-```

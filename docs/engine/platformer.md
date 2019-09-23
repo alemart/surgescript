@@ -18,13 +18,14 @@ using SurgeEngine.Behaviors.Platformer;
 
 object "My Baddie" is "entity", "enemy"
 {
-    actor = Actor("My Baddie"); // handles the graphics
+    actor = Actor("My Baddie"); // give it graphics
     enemy = Enemy(); // make it behave like a baddie
-    platformer = Platformer().walk(); // make it walk
+    platformer = Platformer(); // give it a platform movement
 
     state "main"
     {
         platformer.speed = 60; // 60 pixels per second
+        platformer.walk(); // make it walk
     }
 }
 ```
@@ -68,6 +69,18 @@ Direction will be +1 if the platformer is facing right or -1 is it's facing left
 `walking`: boolean, read-only.
 
 Is the platformer walking?
+
+#### walkingLeft
+
+`walkingLeft`: boolean, read-only.
+
+Is the platformer walking to the left?
+
+#### walkingRight
+
+`walkingRight`: boolean, read-only.
+
+Is the platformer walking to the right?
 
 #### midair
 
