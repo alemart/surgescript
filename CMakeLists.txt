@@ -48,6 +48,7 @@ set(
     src/surgescript/util/transform.c
     src/surgescript/util/utf8.c
     src/surgescript/util/util.c
+    src/surgescript/util/xoroshiro128plus.c
 )
 
 # Headers

@@ -164,7 +164,7 @@ surgescript_var_t* fun_getnan(surgescript_object_t* object, const surgescript_va
 /* random(): returns a random number between 0 (inclusive) and 1 (exclusive) */
 surgescript_var_t* fun_random(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    return surgescript_var_set_number(surgescript_var_create(), rand() / ((double)RAND_MAX + 1.0));
+    return surgescript_var_set_number(surgescript_var_create(), surgescript_util_random());
 }
 
 /* sin(x): sine of x, x in radians */

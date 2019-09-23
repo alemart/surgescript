@@ -263,6 +263,42 @@ uint64_t surgescript_util_gettickcount()
 #endif
 }
 
+/*
+ * surgescript_util_srand()
+ * Sets the seed of the pseudo-random number generator
+ */
+void surgescript_util_srand(uint64_t seed)
+{
+    /* using splitmix64 to seed the generator */
+    extern uint64_t* xor_seed;
+    for(int i = 0; i <= 1; i++) {
+        uint64_t x = (seed += UINT64_C(0x9e3779b97f4a7c15));
+        x = (x ^ (x >> 30)) * UINT64_C(0xbf58476d1ce4e5b9);
+        x = (x ^ (x >> 27)) * UINT64_C(0x94d049bb133111eb);
+        xor_seed[i] = x ^ (x >> 31);
+    }
+}
+
+/*
+ * surgescript_util_random64()
+ * Generates a pseudo-random 64-bit unsigned integer
+ */
+uint64_t surgescript_util_random64()
+{
+    extern uint64_t (*xor_next)(void);
+    return xor_next();
+}
+
+/*
+ * surgescript_util_random()
+ * Generates a pseudo-random double in the [0,1) range
+ */
+double surgescript_util_random()
+{
+    uint64_t x = surgescript_util_random64();
+    x = (x >> 12) | UINT64_C(0x3FF0000000000000); /* sign bit = 0; exponent = 1023 */
+    return *((double*)&x) - 1.0;
+}
 
 /* -------------------------------
  * private methods

@@ -20,6 +20,7 @@
  */
 
 #include <locale.h>
+#include <time.h>
 #include "vm.h"
 #include "stack.h"
 #include "variable.h"
@@ -177,6 +178,9 @@ void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
 
     /* SurgeScript uses UTF-8 */
     setlocale(LC_ALL, "en_US.UTF-8");
+
+    /* Setup the pseudo-number generator */
+    surgescript_util_srand(time(NULL));
 
     /* Setup the command line arguments */
     surgescript_vmargs_configure(vm->args, argc, argv);

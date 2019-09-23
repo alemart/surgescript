@@ -66,4 +66,8 @@ unsigned surgescript_util_htob(unsigned x); /* host to big-endian */
 unsigned surgescript_util_btoh(unsigned x); /* big to host-endian */
 uint64_t surgescript_util_gettickcount(); /* number of milliseconds since some arbitrary zero */
 
+void surgescript_util_srand(uint64_t seed); /* sets the seed of the pseudo-random number generator */
+uint64_t surgescript_util_random64(); /* generates a pseudo-random 64-bit unsigned integer */
+double surgescript_util_random(); /* generates a pseudo-random double in the [0,1) range */
+
 #endif

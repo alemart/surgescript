@@ -566,7 +566,7 @@ char* randstr(char* buf, size_t size)
     if(!size) return ret;
     
     while(size-- > 1)
-        *(buf++) = alphabet[rand() % 16];
+        *(buf++) = alphabet[surgescript_util_random64() % 16];
 
     *buf = 0;
     return ret;

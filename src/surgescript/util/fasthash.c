@@ -44,7 +44,7 @@ struct fasthash_t
 {
     size_t length;
     size_t capacity;
-    uint32_t cap_mask; /* capacity - 1 */
+    uint64_t cap_mask; /* capacity - 1 */
     fasthash_entry_t* data;
     void (*destructor)(void*); /* element destructor */
 };
@@ -52,7 +52,7 @@ struct fasthash_t
 /* static data */
 static const unsigned SPARSITY = 4; /* 1 / load_factor */
 static fasthash_entry_t BLANK_ENTRY = { 0, BLANK, NULL };
-static inline uint32_t hash(uint64_t x, uint32_t m);
+static inline uint64_t hash(uint64_t x, uint64_t m);
 static inline void grow(fasthash_t* hashtable);
 static void empty_destructor(void* data);
 
@@ -256,11 +256,13 @@ void grow(fasthash_t* hashtable)
         hashtable->data[i] = BLANK_ENTRY;
 }
 
-uint32_t hash(uint64_t x, uint32_t m)
+uint64_t hash(uint64_t x, uint64_t m)
 {
+    /* splitmix64 */
+    x += UINT64_C(0x9e3779b97f4a7c15);
 	x = (x ^ (x >> 30)) * UINT64_C(0xbf58476d1ce4e5b9);
 	x = (x ^ (x >> 27)) * UINT64_C(0x94d049bb133111eb);
-	return (uint32_t)(x ^ (x >> 31)) & m; /* m = 2^k - 1 */
+	return (x ^ (x >> 31)) & m; /* m = 2^k - 1 */
 }
 
 void empty_destructor(void* data)

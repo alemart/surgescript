@@ -286,7 +286,7 @@ surgescript_var_t* fun_shuffle(surgescript_object_t* object, const surgescript_v
 
     for(int i = length; i > 0; i--) {
         surgescript_var_t* a = surgescript_heap_at(heap, BASE_ADDR + (i - 1));
-        surgescript_var_t* b = surgescript_heap_at(heap, BASE_ADDR + (rand() % i));
+        surgescript_var_t* b = surgescript_heap_at(heap, BASE_ADDR + (surgescript_util_random64() % i));
         surgescript_var_swap(a, b);
     }
 
