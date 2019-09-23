@@ -864,6 +864,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../circular_movement/" title="CircularMovement" class="md-nav__link">
+      CircularMovement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -1510,8 +1522,8 @@
 <li>A direction <a href="/engine/vector2">vector</a> that specifies the direction of the movement</li>
 <li>A movement speed, a scalar value given in pixels per second</li>
 </ul>
-<p>You may control the direction of the movement using a vector or an angle given in degrees. Additionally, you may control the speed of the movement by changing the speed property directly.</p>
-<p>Directional Movement is very versatile. You can use it to implement many types of baddies, flying objects, racing cars viewed from a top-down view, circular movements, and much more.</p>
+<p>You may control the direction of the movement using the <a href="#direction">direction vector</a> or an <a href="#angle">angle</a> given in degrees. Additionally, you may control the <a href="#speed">speed</a> of the movement simply by changing its value.</p>
+<p>Directional Movement is very versatile. You can use it to implement many things: different types of baddies, flying objects, racing cars viewed from a top-down view, simple projectiles, and much more.</p>
 <p><em>Example</em></p>
 <pre><code>//
 // The example below shows how to make an entity move to the
@@ -1550,26 +1562,6 @@ object &quot;Simple Ball&quot; is &quot;entity&quot;
 <h4 id="angle">angle</h4>
 <p><code>angle</code>: number.</p>
 <p>The counterclockwise angle of the direction vector, in degrees. 0 means right, 90 means up, etc.</p>
-<p><em>Example</em></p>
-<pre><code>//
-// In the example below, a circular movement is performed
-//
-using SurgeEngine.Actor;
-using SurgeEngine.Behaviors.DirectionalMovement;
-
-object &quot;Simple Ball&quot; is &quot;entity&quot;
-{
-    actor = Actor(&quot;Simple Ball&quot;);
-    movement = DirectionalMovement();
-    angularSpeed = 360; // one full rotation per second
-
-    state &quot;main&quot;
-    {
-        movement.speed = 192;
-        movement.angle += angularSpeed * Time.delta;
-    }
-}
-</code></pre>
                 
                   
                 
@@ -1590,7 +1582,7 @@ object &quot;Simple Ball&quot; is &quot;entity&quot;
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../behavior/" title="Behavior" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../circular_movement/" title="CircularMovement" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1599,7 +1591,7 @@ object &quot;Simple Ball&quot; is &quot;entity&quot;
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Behavior
+                CircularMovement
               </span>
             </div>
           </a>

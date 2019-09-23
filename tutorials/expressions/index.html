@@ -985,6 +985,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../engine/circular_movement/" title="CircularMovement" class="md-nav__link">
+      CircularMovement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../engine/directional_movement/" title="DirectionalMovement" class="md-nav__link">
       DirectionalMovement
     </a>
@@ -1577,7 +1589,7 @@
                 <h1 id="expressions">Expressions</h1>
 <p>SurgeScript supports many kinds of expressions. Expressions may involve strings, numbers or booleans. Let's study each case:</p>
 <h2 id="constants">Constants</h2>
-<p>Constants are types of expressions. They may be numbers, strings, booleans... You may attribute constant values to variables using the assignment operator (<em>=</em>):</p>
+<p>Constants are types of expressions. They may be numbers, strings, booleans... You may attribute constant values to variables using the assignment operator (<code>=</code>):</p>
 <pre><code>// strings
 name = &quot;Surge&quot;; // variable name receives string &quot;Surge&quot;
 message = &quot;Surge's home&quot;;
@@ -1672,11 +1684,11 @@ negativeTwo = -5 % 3;
 <td>Less or equal</td>
 </tr>
 <tr>
-<td><code>\&gt;</code></td>
+<td><code>&gt;</code></td>
 <td>Greater than</td>
 </tr>
 <tr>
-<td><code>\&gt;=</code></td>
+<td><code>&gt;=</code></td>
 <td>Greater or equal</td>
 </tr>
 <tr>
@@ -1699,12 +1711,12 @@ t = x &gt;= 1; // t is true
 
 <blockquote>
 <p><strong>Pay attention!</strong></p>
-<p>Notice that the equality operator, used for comparing expressions for equality, is <em>==</em>. Pay attention! Don't confuse the equality operator (<em>==</em>) with the assignment operator (<em>=</em>). The expression <code>(x = 1)</code> always evaluates to 1, whereas <code>(x == 1)</code> is <em>true</em> only if x equals 1.</p>
+<p>Notice that the equality operator, used for comparing expressions for equality, is <code>==</code>. Pay attention! Don't confuse the equality operator (<code>==</code>) with the assignment operator (<code>=</code>). The expression <code>(x = 1)</code> always evaluates to 1, whereas <code>(x == 1)</code> is <code>true</code> only if x equals 1.</p>
 <p><strong>Strong equality</strong></p>
 <p>Unlike their counterparts, strong equality/inequality operators compare not only the content of the operands, but also their type. While <code>"1" == 1</code> evalutes to <code>true</code>, <code>"1" === 1</code> does not.</p>
 </blockquote>
 <h2 id="logical-operators">Logical operators</h2>
-<p>Logical operators involve booleans (<em>true</em> or <em>false</em> values). While the <strong>not</strong> operator requires only one operand, operators <strong>and</strong> and <strong>or</strong> require two.</p>
+<p>Logical operators involve booleans (<code>true</code> or <code>false</code> values). While the <strong>not</strong> operator requires only one operand, operators <strong>and</strong> and <strong>or</strong> require two.</p>
 <table>
 <thead>
 <tr>
@@ -1738,15 +1750,15 @@ t = x &gt;= 1; // t is true
 <tbody>
 <tr>
 <td><code>a &amp;&amp; b</code></td>
-<td><em>true</em> only if both a and b are true</td>
+<td><code>true</code> only if both a and b are true</td>
 </tr>
 <tr>
 <td><code>a || b</code></td>
-<td><em>true</em> if either a or b are true (or both)</td>
+<td><code>true</code> if a is true, b is true, or both</td>
 </tr>
 <tr>
 <td><code>!a</code></td>
-<td><em>true</em> if a is false, <em>false</em> if a is true</td>
+<td><code>true</code> if a is false, <code>false</code> if a is true</td>
 </tr>
 </tbody>
 </table>
@@ -1758,8 +1770,12 @@ w = (z &amp;&amp; x) || true; // evaluates to true
 t = !x &amp;&amp; x; // evaluates to false
 </code></pre>
 
+<blockquote>
+<p><strong>Short-circuit evaluation</strong></p>
+<p>SurgeScript performs short-circuit evaluation in <strong>and</strong> and <strong>or</strong> operations. This means that the second operator is not evaluated if the first alone is sufficient to determine the value of the operation. Example: in the expression <code>a || b</code>, expression <code>b</code> is not evaluated if <code>a</code> is evaluated to <code>true</code>. Similarly, in <code>a &amp;&amp; b</code>, expression <code>b</code> is not evaluated if <code>a</code> is evaluated to <code>false</code>.</p>
+</blockquote>
 <h2 id="textual-expressions">Textual expressions</h2>
-<p>You may concatenate strings with the <em>+</em> operator. Example:</p>
+<p>You may concatenate strings with the <code>+</code> operator. Example:</p>
 <pre><code>message = &quot;Surge&quot; + &quot; rocks!&quot;; // evaluates to &quot;Surge rocks!&quot;
 </code></pre>
 
@@ -1768,8 +1784,8 @@ t = !x &amp;&amp; x; // evaluates to false
 </code></pre>
 
 <h2 id="assignment-operators">Assignment operators</h2>
-<p>The attribution operator (<em>=</em>) may be used to attribute data to variables. However, there's more to that. The expression <code>variable = "data"</code> is itself evaluated to string <em>"data"</em>.</p>
-<p>Likewise, the expression <code>variable = variable + 5</code> is evaluated to <code>variable + 5</code> and may be shortened to <code>variable += 5</code>.</p>
+<p>The attribution operator (<code>=</code>) may be used to attribute data to variables. However, there's more to it. The expression <code>variable = "data"</code> is itself evaluated to string <code>"data"</code>.</p>
+<p>Likewise, the expression <code>variable = variable + 5</code> is evaluated to the new value of the variable and may be shortened to <code>variable += 5</code>.</p>
 <p>Let's see what kind of assignment expressions we have:</p>
 <table>
 <thead>
@@ -1862,13 +1878,6 @@ Console.print(x); // prints 1
 <h2 id="chained-expressions">Chained expressions</h2>
 <p>You may chain assignment operations:</p>
 <pre><code>x = y = z = 1;
-</code></pre>
-
-<p>Using commas will evaluate all expressions between then and return the right-most one:</p>
-<pre><code>x = 1; // x is 1
-y = x++, 2; // y is 2
-z = y--, --x; // z is 1
-// x, y and z end up equal to 1
 </code></pre>
 
 <h2 id="other-expressions">Other expressions</h2>

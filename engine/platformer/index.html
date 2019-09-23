@@ -866,6 +866,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../circular_movement/" title="CircularMovement" class="md-nav__link">
+      CircularMovement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../directional_movement/" title="DirectionalMovement" class="md-nav__link">
       DirectionalMovement
     </a>
@@ -968,6 +980,20 @@
           <li class="md-nav__item">
   <a href="#walking" title="walking" class="md-nav__link">
     walking
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#walkingleft" title="walkingLeft" class="md-nav__link">
+    walkingLeft
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#walkingright" title="walkingRight" class="md-nav__link">
+    walkingRight
   </a>
   
 </li>
@@ -1599,6 +1625,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#walkingleft" title="walkingLeft" class="md-nav__link">
+    walkingLeft
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#walkingright" title="walkingRight" class="md-nav__link">
+    walkingRight
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#midair" title="midair" class="md-nav__link">
     midair
   </a>
@@ -1740,13 +1780,14 @@ using SurgeEngine.Behaviors.Platformer;
 
 object &quot;My Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
 {
-    actor = Actor(&quot;My Baddie&quot;); // handles the graphics
+    actor = Actor(&quot;My Baddie&quot;); // give it graphics
     enemy = Enemy(); // make it behave like a baddie
-    platformer = Platformer().walk(); // make it walk
+    platformer = Platformer(); // give it a platform movement
 
     state &quot;main&quot;
     {
         platformer.speed = 60; // 60 pixels per second
+        platformer.walk(); // make it walk
     }
 }
 </code></pre>
@@ -1770,6 +1811,12 @@ object &quot;My Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
 <h4 id="walking">walking</h4>
 <p><code>walking</code>: boolean, read-only.</p>
 <p>Is the platformer walking?</p>
+<h4 id="walkingleft">walkingLeft</h4>
+<p><code>walkingLeft</code>: boolean, read-only.</p>
+<p>Is the platformer walking to the left?</p>
+<h4 id="walkingright">walkingRight</h4>
+<p><code>walkingRight</code>: boolean, read-only.</p>
+<p>Is the platformer walking to the right?</p>
 <h4 id="midair">midair</h4>
 <p><code>midair</code>: boolean, read-only.</p>
 <p>Is the platformer midair?</p>

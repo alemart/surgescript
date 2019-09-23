@@ -416,6 +416,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#return-statement" title="Return statement" class="md-nav__link">
     Return statement
   </a>
@@ -923,6 +930,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../engine/circular_movement/" title="CircularMovement" class="md-nav__link">
+      CircularMovement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../engine/directional_movement/" title="DirectionalMovement" class="md-nav__link">
       DirectionalMovement
     </a>
@@ -1404,6 +1423,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#return-statement" title="Return statement" class="md-nav__link">
     Return statement
   </a>
@@ -1451,6 +1477,7 @@
                 
                 
                 <h1 id="functions">Functions</h1>
+<h2 id="introduction">Introduction</h2>
 <p>Functions are blocks of code that you can reuse throughout your program. They may receive input parameters and they always output something. The syntax is as follows:</p>
 <pre><code>fun function_name(param_1, param_2, param_3, ..., param_n)
 {
@@ -1523,9 +1550,9 @@ fun double(x)
 </code></pre>
 
 <p>One interesting example of recursion that arises in computer science is called the <em>binary search</em> algorithm. Given a sorted <a href="/reference/array">Array</a>, the binary search finds the position of a target value without having to inspect the whole collection. In the example below, <code>bsearch()</code> is a recursive function:</p>
-<pre><code>object &quot;BinarySearch&quot;
+<pre><code>object &quot;Binary Search&quot;
 {
-    // Given an array *sorted in ascending order*, find()
+    // Given an array sorted in ascending order, find()
     // finds the position of the target value in the array.
     // It returns its index, or -1 if the target is not found.
     fun find(array, value)
@@ -1553,7 +1580,7 @@ fun double(x)
 </code></pre>
 
 <p>Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is <code>n &lt;= 1</code> (the factorial is 1). In the binary search example, the base case is <code>start &gt; end</code>, meaning that the array is empty and the target value cannot be found, or <code>value == array[mid]</code>, meaning that the target value has been found at <code>mid</code>.</p>
-<p>...as the sages say: <em>to understand recursion, you must first understand recursion</em>.</p>
+<p>A sage once said: <em>"to understand recursion, you must first understand recursion."</em></p>
 <h2 id="constructors-and-destructors">Constructors and destructors</h2>
 <p>In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectively. It's not mandatory to define them, but it may be useful to do so (you may want to set up things in your constructors, for example). Neither may receive any arguments (to set up objects with parameters, take a look at <a href="/tutorials/advanced_features#chaining">chaining</a>).</p>
 <p>Let's take our <code>Calculator</code> again. In the following example, <code>constructor()</code> is called automatically whenever a <code>Calculator</code> object is created. Likewise, <code>destructor()</code> is called automatically when the object is destroyed.</p>

@@ -452,6 +452,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#spawning-objects" title="Spawning objects" class="md-nav__link">
     Spawning objects
   </a>
@@ -906,6 +913,18 @@
   <li class="md-nav__item">
     <a href="../../engine/behavior/" title="Behavior" class="md-nav__link">
       Behavior
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/circular_movement/" title="CircularMovement" class="md-nav__link">
+      CircularMovement
     </a>
   </li>
 
@@ -1397,6 +1416,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#spawning-objects" title="Spawning objects" class="md-nav__link">
     Spawning objects
   </a>
@@ -1437,10 +1463,11 @@
                 
                 
                 <h1 id="object-tree">Object tree</h1>
-<p>In SurgeScript, objects have a hierarchical relationship. Suppose that object P spawns (or <em>instantiates</em>) object C. We say that object P is the <em>parent</em> of C. Similarly, object C is a <em>child</em> of P.</p>
-<p>An object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (or a tree). The Figure below shows an example:</p>
+<h2 id="introduction">Introduction</h2>
+<p>In SurgeScript, objects have a hierarchical relationship. Suppose that object P <em>spawns</em> (or <em>instantiates</em>) object C. We say that object P is the <em>parent</em> of C. Similarly, object C is a <em>child</em> of P.</p>
+<p>An object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (a tree). The Figure below shows an example:</p>
 <p><img alt="An object tree" src="/img/tree.png" /></p>
-<p>In this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero.</p>
+<p>In this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero. Finally, GameItem1, GameItem2, Component A and Component B are all <em>descendants</em> of Level.</p>
 <p>In SurgeScript, the root of the hierarchy is a predefined object called <code>System</code>. Its parent is itself. All other objects are descendants of <code>System</code>.</p>
 <h2 id="spawning-objects">Spawning objects</h2>
 <p>You can use <code>spawn()</code> to instantiate an object. Example:</p>
@@ -1491,7 +1518,7 @@ object &quot;Child&quot;
 </code></pre>
 
 <h2 id="traversing-the-hierarchy">Traversing the hierarchy</h2>
-<p>Relevant data about the object hierarchy can be obtained using the following properties and functions (read more on the <a href="/reference/object">Object reference</a>):</p>
+<p>Relevant data about the object hierarchy can be obtained using the following properties and functions (find more on the <a href="/reference/object">Object reference</a>):</p>
 <table>
 <thead>
 <tr>
@@ -1514,19 +1541,10 @@ object &quot;Child&quot;
 </tr>
 <tr>
 <td><code>obj.findObject(name)</code></td>
-<td>Finds* a descendant named <code>name</code></td>
-</tr>
-<tr>
-<td><code>obj.sibling(name)</code></td>
-<td>Gets a sibling** named <code>name</code></td>
+<td>Finds a descendant named <code>name</code></td>
 </tr>
 </tbody>
 </table>
-<blockquote>
-<p><strong>Notes:</strong></p>
-<p>* <code>findObject()</code> may be slow, as it performs a deep search within the object tree. One is encouraged to cache the result of this function (for example, in the object constructor) and to avoid using it in states or loops.</p>
-<p>** We say that two distinct objects are siblings if they share the same parent.</p>
-</blockquote>
 <p>Example:</p>
 <pre><code>object &quot;Parent&quot;
 {
@@ -1535,7 +1553,7 @@ object &quot;Child&quot;
 
     state &quot;main&quot;
     {
-        Console.print(&quot;This object has &quot; + childCount + &quot; children.&quot;);
+        Console.print(&quot;This object has &quot; + this.childCount + &quot; children.&quot;);
         destroy();
     }
 }

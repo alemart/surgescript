@@ -488,6 +488,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#basic-example" title="Basic example" class="md-nav__link">
     Basic example
   </a>
@@ -899,6 +906,18 @@
   <li class="md-nav__item">
     <a href="../../engine/behavior/" title="Behavior" class="md-nav__link">
       Behavior
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../engine/circular_movement/" title="CircularMovement" class="md-nav__link">
+      CircularMovement
     </a>
   </li>
 
@@ -1390,6 +1409,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#basic-example" title="Basic example" class="md-nav__link">
     Basic example
   </a>
@@ -1423,10 +1449,11 @@
                 
                 
                 <h1 id="packages">Packages</h1>
+<h2 id="introduction">Introduction</h2>
 <p>Packages are objects that allow you to extend the functionalities of the language. Once declared, they can be imported anywhere in the code. They can also be easily shared with others, so everyone benefits.</p>
 <p><em>Available since:</em> SurgeScript 0.5.2</p>
 <h2 id="basic-example">Basic example</h2>
-<p>Suppose you want to extend the language by adding new routines related to string manipulation. The routines you want will be used frequently throughout your project, and you'd like easy access to them. This makes it perfect for implementing them as a package.</p>
+<p>Suppose you want to extend the language by adding new routines related to string manipulation. These routines will be used frequently throughout your project, and you'd like easy access to them. This makes it perfect for implementing them as a package.</p>
 <p>We'll define an object called <code>StringUtils</code> with a <code>reverse()</code> function that reverses a string. We make the object a package by annotating it with <code>@Package</code>. Take a look at the example below:</p>
 <pre><code>// File: stringutils.ss
 
@@ -1469,8 +1496,8 @@ object &quot;Application&quot;
 </blockquote>
 <p><strong>Note:</strong> before SurgeScript 0.5.4, you would annotate the object with <code>@Plugin</code> instead.</p>
 <h2 id="package-example">Package example</h2>
-<p>You may use the Plugin system to create an independent package that aggregates many functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.</p>
-<p>Suppose that user <em>Parrot</em>, the owner of <em>ParrotSoft</em>, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called <code>ParrotSoft</code>. Since he implemented getters for each of his utilities (see the code below), his package provides easy access to all of them. Furthermore, he annotated his package with <code>@Package</code> (but <strong>not</strong> the individual utilities), so his package can be accessed anywhere.</p>
+<p>Packages may aggregate many code units with different functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.</p>
+<p>Suppose that user <em>Parrot</em>, the owner of <em>ParrotSoft</em>, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called <code>ParrotSoft</code>. Since he implemented <a href="/tutorials/properties">getters</a> for each of his utilities, his package provides easy access to all of them. Furthermore, he annotated his package with <code>@Package</code> (but <strong>not</strong> the individual utilities), so his package can be accessed anywhere.</p>
 <pre><code>// File: parrotsoft.ss
 
 @Package
@@ -1480,11 +1507,9 @@ object &quot;ParrotSoft&quot;
     public readonly Complex = spawn(&quot;Parrot Complex&quot;);
     public readonly StringUtils = spawn(&quot;Parrot StringUtils&quot;);
 }
-
-// ...
 </code></pre>
 
-<p>A user of the <code>ParrotSoft</code> package may import <em>Parrot</em>'s utilities simply by importing the package. Individual utilities may also be imported. The code below shows a usage example:</p>
+<p>A user of the <code>ParrotSoft</code> package may import <em>Parrot</em>'s utilities simply by importing the package. Individual utilities may also be imported. The code below shows an example:</p>
 <pre><code>using ParrotSoft.Matrices.Matrix2;
 using ParrotSoft.Complex;
 using ParrotSoft;
@@ -1501,7 +1526,7 @@ object &quot;Application&quot;
 }
 </code></pre>
 
-<p>In the example above, writing <code>Complex</code> is equivalent to writing <code>ParrotSoft.Complex</code>, since we imported this utility with <code>using ParrotSoft.Complex</code>. Notice that <code>ParrotSoft</code> implements a getter for <code>Complex</code>. Additionally, <code>ParrotSoft</code> has been annotated with <code>@Package</code>, but <code>Complex</code> has <strong>not</strong>. This means that the statement <code>using Complex</code> will <strong>not</strong> yield correct results - and it shouldn't, since <code>Complex</code> is a part of the <code>ParrotSoft</code> package that can only be accessed from it. Finally, since we haven't imported <code>StringUtils</code> explicitly, we type <code>ParrotSoft.StringUtils</code> to access it.</p>
+<p>In the example above, writing <code>Complex</code> is equivalent to writing <code>ParrotSoft.Complex</code>, since we imported this utility with <code>using ParrotSoft.Complex</code>. Notice that <code>ParrotSoft</code> implements a getter for <code>Complex</code>. Additionally, <code>ParrotSoft</code> has been annotated with <code>@Package</code>, but <code>Complex</code> has <strong>not</strong>. This means that the statement <code>using Complex</code> will <strong>not</strong> yield the expected result. Since <code>Complex</code> is a part of <code>ParrotSoft</code>, it can only be accessed from it. Finally, since we haven't imported <code>StringUtils</code> explicitly, we type <code>ParrotSoft.StringUtils</code> to access it.</p>
                 
                   
                 

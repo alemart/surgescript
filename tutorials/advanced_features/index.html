@@ -937,6 +937,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../engine/circular_movement/" title="CircularMovement" class="md-nav__link">
+      CircularMovement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../engine/directional_movement/" title="DirectionalMovement" class="md-nav__link">
       DirectionalMovement
     </a>
@@ -1482,7 +1494,7 @@
 <p>This section describes advanced features of SurgeScript.</p>
 <h2 id="lookup-operator">Lookup operator</h2>
 <p>Some programming languages, such as C++, have a feature called <em>operator overloading</em>. It's a <em>syntactic sugar</em> that allows the programmer to attribute custom implementations to different operators.</p>
-<p>In SurgeScript, the <code>[]</code> operator (also called the <em>lookup operator</em>), used by Arrays and Dictionaries, is used to <strong>get</strong> and <strong>set</strong> values from/to the data structure. In fact, the <code>[]</code> operator can be used with any object. It is necessary to define, in your object, functions <code>get()</code> and <code>set()</code> with the following signature:</p>
+<p>In SurgeScript, the <code>[]</code> operator (also called the <em>lookup operator</em>), used by <a href="/reference/array">Arrays</a> and <a href="/reference/dictionary">Dictionaries</a>, is used to <strong>get</strong> and <strong>set</strong> values from/to the data structure. In fact, the <code>[]</code> operator can be used with any object. It is necessary to define, in your object, functions <code>get()</code> and <code>set()</code> with the following signature:</p>
 <pre><code>fun get(key)
 {
     // custom implementation
@@ -1590,8 +1602,8 @@ object &quot;Greeting&quot;
 object &quot;Greeter&quot;
 {
     // Greeter is a factory. It spawns and configures
-    // a Greeting object for you. Being a plugin,
-    // Greeter can be used anywhere in the code.
+    // a Greeting object for you. As it is a package,
+    // it can be imported and used anywhere.
     fun call(name)
     {
         g = spawn(&quot;Greeting&quot;);
@@ -1601,7 +1613,7 @@ object &quot;Greeter&quot;
 }
 </code></pre>
 
-<p>Please note: in the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller object, then you might simply write <code>g = caller.spawn("Greeter")</code>. Keyword <code>caller</code> points to the object that called the function (or <code>null</code> if not applicable).</p>
+<p>In the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller, simply write <code>g = caller.spawn("Greeter")</code>. Know that <code>caller</code> points to the object that called the function (or <code>null</code> if not applicable).</p>
 <h2 id="iterators">Iterators</h2>
 <p>As seen in the <a href="/tutorials/loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object that implements a specific protocol. You may implement your own collections by implementing function <code>iterator()</code>. If you have ever used Java, you'll find this to be familiar.</p>
 <pre><code>object &quot;MyCollection&quot;

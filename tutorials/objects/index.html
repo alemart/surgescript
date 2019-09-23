@@ -356,6 +356,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#state-machines" title="State machines" class="md-nav__link">
     State machines
   </a>
@@ -909,6 +916,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../engine/circular_movement/" title="CircularMovement" class="md-nav__link">
+      CircularMovement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../engine/directional_movement/" title="DirectionalMovement" class="md-nav__link">
       DirectionalMovement
     </a>
@@ -1390,6 +1409,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#state-machines" title="State machines" class="md-nav__link">
     State machines
   </a>
@@ -1423,13 +1449,14 @@
                 
                 
                 <h1 id="introduction-to-objects">Introduction to objects</h1>
+<h2 id="introduction">Introduction</h2>
 <p>In SurgeScript, objects are units of code and data. Each object defines a finite state machine, a mathematical construct used to describe the behavior of in-game objects.</p>
 <blockquote>
 <p><strong>Did you know?</strong></p>
 <p>Games implement what is called a game loop. In SurgeScript, the game loop is defined implicitly via state machines. State machines are one of the key features of SurgeScript.</p>
 </blockquote>
 <h2 id="state-machines">State machines</h2>
-<p>A finite state machine is a mathematical abstraction composed of a finite number of <strong>states</strong> and by <strong>transitions</strong> between these states. Only one state can be active at any given time (we'll call it the active state). There must be one <strong>initial state</strong> (i.e., the first one to be active). A transition is a change of the active state that is triggered when a certain condition is met.</p>
+<p>A finite state machine is a mathematical abstraction composed of a finite number of <strong>states</strong> and by <strong>transitions</strong> between these states. Only one state can be active at any given time (we'll call it the <strong>active state</strong>). There must be one <strong>initial state</strong> (i.e., the first one to be active). A transition is a change of the active state that is triggered when a certain condition is met.</p>
 <p>As a concrete example, suppose that you want to create a door in your game. You, the developer, may open or close the door at will. But what is a door? We have just given <em>informal</em> description of the problem. However, we need to transform it in something more rigorous. Example:</p>
 <p>A door is an object with two states (see the Figure below):</p>
 <ul>

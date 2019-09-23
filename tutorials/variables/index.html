@@ -368,6 +368,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#types" title="Types" class="md-nav__link">
     Types
   </a>
@@ -376,8 +383,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#primitive-types" title="Primitive types" class="md-nav__link">
-    Primitive types
+  <a href="#basic-types" title="Basic types" class="md-nav__link">
+    Basic types
   </a>
   
 </li>
@@ -956,6 +963,18 @@
 
 
   <li class="md-nav__item">
+    <a href="../../engine/circular_movement/" title="CircularMovement" class="md-nav__link">
+      CircularMovement
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
     <a href="../../engine/directional_movement/" title="DirectionalMovement" class="md-nav__link">
       DirectionalMovement
     </a>
@@ -1437,6 +1456,13 @@
     <ul class="md-nav__list" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#introduction" title="Introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#types" title="Types" class="md-nav__link">
     Types
   </a>
@@ -1445,8 +1471,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#primitive-types" title="Primitive types" class="md-nav__link">
-    Primitive types
+  <a href="#basic-types" title="Basic types" class="md-nav__link">
+    Basic types
   </a>
   
 </li>
@@ -1517,9 +1543,10 @@
                 
                 
                 <h1 id="variables">Variables</h1>
-<p>Variables are used to store data. SurgeScript features five primitive types (number, string, boolean, null and object handle). Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.</p>
+<h2 id="introduction">Introduction</h2>
+<p>Variables are used to store data. SurgeScript features five basic types: number, string, boolean, null and object. Variables can also point to more complex data structures (such as arrays and dictionaries), but these are always objects.</p>
 <h2 id="types">Types</h2>
-<h3 id="primitive-types">Primitive types</h3>
+<h3 id="basic-types">Basic types</h3>
 <table>
 <thead>
 <tr>
@@ -1532,27 +1559,27 @@
 <tr>
 <td>Number</td>
 <td>A floating-point number</td>
-<td>1, 2, 3, 3.14159</td>
+<td><code>1</code>, <code>2</code>, <code>-3</code>, <code>3.14159</code></td>
 </tr>
 <tr>
 <td>String</td>
 <td>Some text</td>
-<td>"Hello, world!", 'single-quoted'</td>
+<td><code>"Hello, world!"</code>, <code>'single-quoted'</code></td>
 </tr>
 <tr>
 <td>Boolean</td>
 <td>True or false</td>
-<td>true, false</td>
+<td><code>true</code>, <code>false</code></td>
 </tr>
 <tr>
 <td>Object</td>
 <td>Reference to an object</td>
-<td>Application, this, [ ]</td>
+<td><code>Application</code>, <code>this</code>, <code>[ ]</code></td>
 </tr>
 <tr>
 <td>Null</td>
 <td>An empty value</td>
-<td>null</td>
+<td><code>null</code></td>
 </tr>
 </tbody>
 </table>
@@ -1632,7 +1659,7 @@
     {
         // err is instantiated at every frame of the application,
         // thus memory is wasted with duplicate objects
-        err = [ &quot;don't&quot;, &quot;do&quot;, &quot;this&quot; ]; // WRONG!
+        err = [ &quot;don't&quot;, &quot;do&quot;, &quot;this&quot; ]; // AVOID!
     }
 }
 </code></pre>
@@ -1650,8 +1677,8 @@ str = String(val); // str is &quot;123&quot;
 
 <p>When converting an object to a string, SurgeScript will implicitly call <code>object.toString()</code>.</p>
 <h2 id="scoping">Scoping</h2>
-<p>Variables that are defined before any state or function are <em>object-level</em> variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are <em>local variables</em>. This means that their lifespan is restricted to their own locus of code.</p>
-<pre><code>object &quot;ScopeTest&quot;
+<p>Variables that are defined before any state or function are <em>object-level</em> variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are <em>local variables</em>. This means that their accessibility and lifespan is restricted to their own locus of code.</p>
+<pre><code>object &quot;Scope Test&quot;
 {
     name = &quot;Surge the Rabbit&quot;; // object-level variable
 
