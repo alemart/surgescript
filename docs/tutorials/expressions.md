@@ -204,6 +204,19 @@ You may chain assignment operations:
 x = y = z = 1;
 ```
 
+Commas
+------
+
+The comma operator takes two operands. It first evaluates the first operand and then discards the result. Next, it evaluates the second operand and then returns this result. The comma is the operator with the lowest precedence.
+
+```
+c = (1, 2); // Results in c = 2
+a = 1, b = 2, c = 3; // Results in a = 1, b = 2 and c = 3
+d = (c++, a); // Results in c = 4, d = 1
+e = (++a, f = 2, 3); // Results in a = 2, e = 3, f = 2
+```
+
+
 Other expressions
 -----------------
 

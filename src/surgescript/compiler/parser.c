@@ -912,9 +912,9 @@ void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 /* expressions (their return value is stored in t[0]) */
 void expr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    /*do {*/
+    do {
         assignexpr(parser, context);
-    /*} while(optmatch(parser, SSTOK_COMMA));*/ /* FIXME: commas */
+    } while(optmatch(parser, SSTOK_COMMA));
 }
 
 void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
