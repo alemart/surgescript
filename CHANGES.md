@@ -1,3 +1,15 @@
+# 0.5.4 - September 23rd, 2019
+
+* Performance optimizations
+* Improved the built-in pseudo-random number generator
+* Introduced the @Package annotation
+* Trailing commas are now accepted when declaring Arrays & Dictionaries
+* Added tree traversal routines: Object.findObjects() and similar others
+* Added Object.__arity(), Math.signum(), Time.now
+* New option flags for the parser
+* Updated the documentation
+* Bugfixes and general improvements
+
 # 0.5.3 - March 20th, 2019
 
 * Introduced the remainder operator (%)
