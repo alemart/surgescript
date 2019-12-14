@@ -1,16 +1,14 @@
 Welcome to SurgeScript!
 =======================
 
-<img src="img/surge.png" alt="Surge" align="right" width="256">
+<img src="img/surge.png" alt="Surge" align="right" width="384">
 
 Unleash your creativity!
 ------------------------
 
-SurgeScript is a scripting language for games. It lets you unleash your creativity and build your own amazing interactive content! It's such a joy to use SurgeScript! You will love it!
+SurgeScript is a scripting language for games. Use it to unleash your creativity and build your own amazing interactive content! It's such a joy to use SurgeScript! You will love it!
 
-[![Download](img/download.png)](/download)
-
-[![Support the project](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3WAZYYTB22KFG)
+[![Download](img/download.png)](/download) [![Donate to the project](img/donate.png)](http://opensurge2d.org/contribute)
 
 How do I learn SurgeScript?
 ---------------------------
@@ -25,10 +23,10 @@ SurgeScript is:
 * A scripting language for games
 * Easy for beginners, powerful for experts
 * Object-oriented, dynamically typed and based on state machines
-* Free and open source software
+* Free and open-source software
 * Built in C, which is nearly universal
-* Named after a really charismatic character: [Surge](http://opensurge2d.org)!
-* The only programming language in the world that natively allows you to tag objects with emoticons ;)
+* Named after a really charismatic character: [Surge the Rabbit](http://opensurge2d.org)!
+* A programming language that lets you tag objects with emoticons ;)
 
 Why use SurgeScript?
 --------------------
@@ -46,7 +44,7 @@ Other benefits include:
 - C-like syntax, including plenty of features
 - Automatic garbage collection
 - Easy to extend via Plugins
-- It's free and open source software
+- It's free and open-source software
 
 These features come from the experience of the developer dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
