@@ -979,8 +979,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#getdestroyed" title="getDestroyed" class="md-nav__link">
-    getDestroyed
+  <a href="#kill" title="kill" class="md-nav__link">
+    kill
   </a>
   
 </li>
@@ -1533,8 +1533,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#getdestroyed" title="getDestroyed" class="md-nav__link">
-    getDestroyed
+  <a href="#kill" title="kill" class="md-nav__link">
+    kill
   </a>
   
 </li>
@@ -1599,7 +1599,7 @@ object &quot;My Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
 }
 </code></pre>
 
-<p>Optionally, you may define functions <code>onEnemyAttack(player)</code> and <code>onEnemyDestroy(player)</code> on your entity if you want to catch the events: the enemy has attacked a player and the enemy has been destroyed by the player, respectively.</p>
+<p>Optionally, you may define functions <code>onEnemyAttack(player)</code> and <code>onEnemyDestroy(player)</code> in your entity if you want to catch the events: the enemy has attacked a player and the enemy has been destroyed by the player, respectively.</p>
 <h2 id="factory">Factory</h2>
 <h4 id="behaviorsenemy">Behaviors.Enemy</h4>
 <p><code>Enemy()</code></p>
@@ -1617,13 +1617,14 @@ object &quot;My Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
 <p><code>collider</code>: <a href="/engine/collider">Collider</a> object, read-only.</p>
 <p>A collider associated with the enemy.</p>
 <h2 id="functions">Functions</h2>
-<h4 id="getdestroyed">getDestroyed</h4>
-<p><code>getDestroyed(player)</code></p>
+<h4 id="kill">kill</h4>
+<p><code>kill(player)</code></p>
 <p>Destroys the enemy with an explosion, giving score to <code>player</code>.</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>player</code>: <a href="/engine/player">Player</a> object. The player who defeats the enemy.</li>
 </ul>
+<p><em>Available since:</em> Open Surge 0.5.0.3. In previous versions, this function was called <code>getDestroyed</code>.</p>
 <h4 id="setbounds">setBounds</h4>
 <p><code>setBounds(left, top, right, bottom)</code></p>
 <p>Set the boundaries of the collider. All coordinates, given in pixels, are relative to the hot spot of the entity. These boundaries are computed automatically, but you may use this function if you need to adjust them.</p>

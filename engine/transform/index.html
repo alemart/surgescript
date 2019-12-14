@@ -1332,8 +1332,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#move" title="move" class="md-nav__link">
-    move
+  <a href="#translateby" title="translateBy" class="md-nav__link">
+    translateBy
   </a>
   
 </li>
@@ -1573,8 +1573,8 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#move" title="move" class="md-nav__link">
-    move
+  <a href="#translateby" title="translateBy" class="md-nav__link">
+    translateBy
   </a>
   
 </li>
@@ -1637,10 +1637,10 @@
 <pre><code>using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 
-object &quot;MyLevelObject&quot; is &quot;entity&quot;
+object &quot;My Level Object&quot; is &quot;entity&quot;
 {
     public transform = Transform();
-    actor = Actor(&quot;MyLevelObject&quot;);
+    actor = Actor(&quot;My Level Object&quot;);
 
     state &quot;main&quot;
     {
@@ -1654,16 +1654,16 @@ object &quot;MyLevelObject&quot; is &quot;entity&quot;
 <h4 id="position">position</h4>
 <p><code>position</code>: <a href="/engine/vector2">Vector2</a> object.</p>
 <p>The position of the object in world coordinates.</p>
-<p>Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use <a href="#move">move</a> instead.</p>
+<p>Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use <a href="#translateBy">translateBy</a> instead.</p>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Actor;
 using SurgeEngine.Player;
 using SurgeEngine.Transform;
 
-object &quot;MyLevelObject&quot; is &quot;entity&quot;
+object &quot;My Level Object&quot; is &quot;entity&quot;
 {
     public transform = Transform();
-    actor = Actor(&quot;MyLevelObject&quot;);
+    actor = Actor(&quot;My Level Object&quot;);
 
     state &quot;main&quot;
     {
@@ -1687,7 +1687,7 @@ object &quot;MyLevelObject&quot; is &quot;entity&quot;
 <h4 id="localposition">localPosition</h4>
 <p><code>localPosition</code>: <a href="/engine/Vector2">Vector2</a> object.</p>
 <p>The position of the object relative to the parent object.</p>
-<p>Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use <a href="#move">move</a> instead.</p>
+<p>Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use <a href="#translateBy">translateBy</a> instead.</p>
 <h4 id="localangle">localAngle</h4>
 <p><code>localAngle</code>: number.</p>
 <p>The angle, in degrees, relative to the angle of the parent object.</p>
@@ -1696,32 +1696,32 @@ object &quot;MyLevelObject&quot; is &quot;entity&quot;
 <p><code>localScale</code>: <a href="/engine/vector2">Vector2</a> object.</p>
 <p>The local scale of the entity.</p>
 <h2 id="functions">Functions</h2>
-<h4 id="move">move</h4>
-<p><code>move(dx, dy)</code></p>
-<p>Moves the object by (<code>dx</code>, <code>dy</code>).</p>
+<h4 id="translateby">translateBy</h4>
+<p><code>translateBy(dx, dy)</code></p>
+<p>Translates (moves) the object by (<code>dx</code>, <code>dy</code>).</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>dx</code>: number. The amount to move the object in the x-axis.</li>
-<li><code>dy</code>: number. The amount to move the object in the y-axis.</li>
+<li><code>dx</code>: number. Specifies how much to move the object in the x-axis.</li>
+<li><code>dy</code>: number. Specifies how much to move the object in the y-axis.</li>
 </ul>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 
-object &quot;MyLevelObject&quot; is &quot;entity&quot;
+object &quot;My Level Object&quot; is &quot;entity&quot;
 {
     public transform = Transform();
-    actor = Actor(&quot;MyLevelObject&quot;);
+    actor = Actor(&quot;My Level Object&quot;);
 
     state &quot;main&quot;
     {
         // move the entity at a speed of
         // 50 pixels/second, to the right
-        transform.move(50 * Time.delta, 0);
+        transform.translateBy(50 * Time.delta, 0);
 
         // the command below would move it
         // at a speed of 30 pixels per FRAME
-        //transform.move(30, 0); // don't do this
+        //transform.translateBy(30, 0); // don't do this
 
         // since the framerate may vary across
         // different systems, it's advisable
@@ -1731,6 +1731,7 @@ object &quot;MyLevelObject&quot; is &quot;entity&quot;
 }
 </code></pre>
 
+<p><em>Available since:</em> Open Surge 0.5.0.3. In previous versions, this function was called <code>move</code>.</p>
 <h4 id="translate">translate</h4>
 <p><code>translate(delta)</code></p>
 <p>Translates the object by a <code>delta</code> vector.</p>
@@ -1743,16 +1744,16 @@ object &quot;MyLevelObject&quot; is &quot;entity&quot;
 <p>Rotates the object by <code>deg</code> degrees.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>deg</code>: number.</li>
+<li><code>deg</code>: number. An angle in degrees.</li>
 </ul>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 
-object &quot;MyLevelObject&quot; is &quot;entity&quot;
+object &quot;My Level Object&quot; is &quot;entity&quot;
 {
     public transform = Transform();
-    actor = Actor(&quot;MyLevelObject&quot;);
+    actor = Actor(&quot;My Level Object&quot;);
 
     state &quot;main&quot;
     {
@@ -1775,10 +1776,10 @@ object &quot;MyLevelObject&quot; is &quot;entity&quot;
 using SurgeEngine.Player;
 using SurgeEngine.Transform;
 
-object &quot;MyLevelObject&quot; is &quot;entity&quot;
+object &quot;My Level Object&quot; is &quot;entity&quot;
 {
     public transform = Transform();
-    actor = Actor(&quot;MyLevelObject&quot;);
+    actor = Actor(&quot;My Level Object&quot;);
 
     state &quot;main&quot;
     {
