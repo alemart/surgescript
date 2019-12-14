@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@
 
 #ifndef _SURGESCRIPT_TRANSFORM_H
 #define _SURGESCRIPT_TRANSFORM_H
+
+#include <stdbool.h>
 
 /* transform type */
 typedef struct surgescript_transform_t surgescript_transform_t;
@@ -63,5 +65,9 @@ void surgescript_transform_apply2dinverse(const surgescript_transform_t* t, floa
 
 /* 3D operations */
 /* TODO */
+
+/* global operations */
+void surgescript_transform_use_inverted_y(bool inverted); /* set it to true if your y-axis grows downwards */
+bool surgescript_transform_is_using_inverted_y(); /* defaults to false (i.e., y-axis grows upwards) */
 
 #endif

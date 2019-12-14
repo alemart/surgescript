@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ static surgescript_transform_t identity = {
     },
     .scale = { .x = 1.0f, .y = 1.0f, .z = 1.0f }
 };
+static float y_axis = 1.0f;
 
 /*
  * surgescript_transform_create()
@@ -142,8 +143,10 @@ void surgescript_transform_scale2d(surgescript_transform_t* t, float sx, float s
 void surgescript_transform_apply2d(const surgescript_transform_t* t, float* x, float* y)
 {
     float ox = *x, oy = *y; /* original values of (x,y) */
-    *x = t->scale.x * t->rotation.cz * ox - t->scale.y * t->rotation.sz * oy + t->position.x;
-    *y = t->scale.x * t->rotation.sz * ox + t->scale.y * t->rotation.cz * oy + t->position.y;
+    float cz = t->rotation.cz, sz = t->rotation.sz * y_axis;
+
+    *x = t->scale.x * cz * ox - t->scale.y * sz * oy + t->position.x;
+    *y = t->scale.x * sz * ox + t->scale.y * cz * oy + t->position.y;
 }
 
 /*
@@ -154,8 +157,29 @@ void surgescript_transform_apply2dinverse(const surgescript_transform_t* t, floa
 {
     float sx = (fpclassify(t->scale.x) != FP_ZERO) ? 1.0f / t->scale.x : INFINITY;
     float sy = (fpclassify(t->scale.y) != FP_ZERO) ? 1.0f / t->scale.y : INFINITY;
-    float tx = t->position.x, ty = t->position.y, cz = t->rotation.cz, sz = t->rotation.sz;
+    float tx = t->position.x, ty = t->position.y;
+    float cz = t->rotation.cz, sz = t->rotation.sz * y_axis;
     float ox = *x, oy = *y; /* original values of (x,y) */
+
     *x = isfinite(sx) ? sx * cz * ox + sx * sz * oy - sx * cz * tx - sx * sz * ty : 0.0f;
     *y = isfinite(sy) ? -sy * sz * ox + sy * cz * oy + sy * sz * tx - sy * cz * ty : 0.0f;
+}
+
+/*
+ * surgescript_transform_use_inverted_y()
+ * Inverts the direction of the y-axis (i.e., set it to "down") if called with true,
+ * or reverts it back to normal (i.e., "up") if called with false
+ */
+void surgescript_transform_use_inverted_y(bool inverted)
+{
+    y_axis = inverted ? -1.0f : 1.0f;
+}
+
+/*
+ * surgescript_transform_is_using_inverted_y()
+ * Checks if the y-axis has been inverted (defaults to false)
+ */
+bool surgescript_transform_is_using_inverted_y()
+{
+    return y_axis < 0.0f;
 }
