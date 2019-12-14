@@ -112,6 +112,8 @@ Functions
 
 Translates (moves) the object by (`dx`, `dy`).
 
+*Available since:* Open Surge 0.5.0.3. In previous versions, this function was called `move`.
+
 *Arguments*
 
 * `dx`: number. Specifies how much to move the object in the x-axis.
@@ -144,8 +146,6 @@ object "My Level Object" is "entity"
     }
 }
 ```
-
-*Available since:* Open Surge 0.5.0.3. In previous versions, this function was called `move`.
 
 #### translate
 
