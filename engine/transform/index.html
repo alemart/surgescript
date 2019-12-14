@@ -1318,6 +1318,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#right" title="right" class="md-nav__link">
+    right
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#up" title="up" class="md-nav__link">
+    up
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1559,6 +1573,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#right" title="right" class="md-nav__link">
+    right
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#up" title="up" class="md-nav__link">
+    up
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1685,7 +1713,7 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
 <p>The angle, in degrees, specifying the rotation of the object.</p>
 <p>Unless you need to read or to set the angle of the object to a pre-determined value, consider using <a href="#rotate">rotate</a> instead.</p>
 <h4 id="localposition">localPosition</h4>
-<p><code>localPosition</code>: <a href="/engine/Vector2">Vector2</a> object.</p>
+<p><code>localPosition</code>: <a href="/engine/vector2">Vector2</a> object.</p>
 <p>The position of the object relative to the parent object.</p>
 <p>Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use <a href="#translateBy">translateBy</a> instead.</p>
 <h4 id="localangle">localAngle</h4>
@@ -1694,12 +1722,20 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
 <p>Unless you need to read or to set the angle of the object to a pre-determined value, consider using <a href="#rotate">rotate</a> instead.</p>
 <h4 id="localscale">localScale</h4>
 <p><code>localScale</code>: <a href="/engine/vector2">Vector2</a> object.</p>
-<p>The local scale of the entity.</p>
+<p>The local scale of the entity. A value of 1.0 in both axes means the default size. A value of 2.0, twice the default size, and so on.</p>
+<h4 id="right">right</h4>
+<p><code>right</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
+<p>The right axis of the transform in world space. Unlike <a href="/engine/vector2#vector2right">Vector2.right</a>, this property considers the rotation of the transform.</p>
+<p><em>Available since:</em> Open Surge 0.5.0.3.</p>
+<h4 id="up">up</h4>
+<p><code>up</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
+<p>The up axis of the transform in world space. Unlike <a href="/engine/vector2#vector2up">Vector2.up</a>, this property considers the rotation of the transform.</p>
+<p><em>Available since:</em> Open Surge 0.5.0.3.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="translateby">translateBy</h4>
 <p><code>translateBy(dx, dy)</code></p>
 <p>Translates (moves) the object by (<code>dx</code>, <code>dy</code>).</p>
-<p><em>Available since:</em> Open Surge 0.5.0.3. In previous versions, this function was called <code>move</code>.</p>
+<p><em>Available since:</em> Open Surge 0.5.0.3. See the note below.</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>dx</code>: number. Specifies how much to move the object in the x-axis.</li>
@@ -1732,6 +1768,7 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
 }
 </code></pre>
 
+<p><em>Note:</em> in versions prior to 0.5.0.3, this function was called <code>move</code>.</p>
 <h4 id="translate">translate</h4>
 <p><code>translate(delta)</code></p>
 <p>Translates the object by a <code>delta</code> vector.</p>
@@ -1765,11 +1802,12 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
 </code></pre>
 
 <h4 id="lookat">lookAt</h4>
-<p><code>lookAt(transform)</code></p>
-<p>Use this function to make your object look at some point in space.</p>
+<p><code>lookAt(position)</code></p>
+<p>Rotates the transform so that its <a href="#right">right</a> vector points at the given position. Use this function to make your object look at some point in world space.</p>
+<p><em>Available since:</em> Open Surge 0.5.0.3. See the note below.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>transform</code>: Transform object.</li>
+<li><code>position</code>: <a href="/engine/vector2">Vector2</a> object. A point in world space.</li>
 </ul>
 <p><em>Example</em></p>
 <pre><code>using SurgeEngine.Actor;
@@ -1784,10 +1822,12 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
     state &quot;main&quot;
     {
         player = Player.active;
-        transform.lookAt(player.transform);
+        transform.lookAt(player.transform.position);
     }
 }
 </code></pre>
+
+<p><em>Note:</em> in versions prior to 0.5.0.3, this function accepted a Transform parameter.</p>
                 
                   
                 
