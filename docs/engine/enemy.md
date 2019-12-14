@@ -33,7 +33,7 @@ object "My Baddie" is "entity", "enemy"
 }
 ```
 
-Optionally, you may define functions `onEnemyAttack(player)` and `onEnemyDestroy(player)` on your entity if you want to catch the events: the enemy has attacked a player and the enemy has been destroyed by the player, respectively.
+Optionally, you may define functions `onEnemyAttack(player)` and `onEnemyDestroy(player)` in your entity if you want to catch the events: the enemy has attacked a player and the enemy has been destroyed by the player, respectively.
 
 Factory
 -------
@@ -72,15 +72,17 @@ A collider associated with the enemy.
 Functions
 ---------
 
-#### getDestroyed
+#### kill
 
-`getDestroyed(player)`
+`kill(player)`
 
 Destroys the enemy with an explosion, giving score to `player`.
 
 *Arguments*
 
 * `player`: [Player](/engine/player) object. The player who defeats the enemy.
+
+*Available since:* Open Surge 0.5.0.3. In previous versions, this function was called `getDestroyed`.
 
 #### setBounds
 

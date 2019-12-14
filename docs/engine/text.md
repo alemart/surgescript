@@ -38,7 +38,7 @@ object "PlayerName" is "entity", "awake"
         // position the text
         player = Player.active;
         transform.position = player.transform.position;
-        transform.move(0, -50);
+        transform.translateBy(0, -50);
 
         // configure the text
         text.align = "center";

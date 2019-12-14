@@ -35,6 +35,14 @@ The number of the current animation, defined in a .spr file.
 
 The name of the sprite, defined in a .spr file.
 
+#### exists
+
+`exists`: boolean, read-only.
+
+Will be true if the current animation exists, i.e., if its sprite and its animation number have been defined in a .spr file.
+
+*Available since:* Open Surge 0.5.0.3.
+
 #### finished
 
 `finished`: boolean, read-only.

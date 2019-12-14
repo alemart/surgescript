@@ -23,10 +23,10 @@ A Transform object.
 using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 
-object "MyLevelObject" is "entity"
+object "My Level Object" is "entity"
 {
     public transform = Transform();
-    actor = Actor("MyLevelObject");
+    actor = Actor("My Level Object");
 
     state "main"
     {
@@ -45,7 +45,7 @@ Properties
 
 The position of the object in world coordinates.
 
-Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use [move](#move) instead.
+Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use [translateBy](#translateBy) instead.
 
 *Example*
 ```
@@ -53,10 +53,10 @@ using SurgeEngine.Actor;
 using SurgeEngine.Player;
 using SurgeEngine.Transform;
 
-object "MyLevelObject" is "entity"
+object "My Level Object" is "entity"
 {
     public transform = Transform();
-    actor = Actor("MyLevelObject");
+    actor = Actor("My Level Object");
 
     state "main"
     {
@@ -87,7 +87,7 @@ Unless you need to read or to set the angle of the object to a pre-determined va
 
 The position of the object relative to the parent object.
 
-Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use [move](#move) instead.
+Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use [translateBy](#translateBy) instead.
 
 #### localAngle
 
@@ -106,36 +106,36 @@ The local scale of the entity.
 Functions
 ---------
 
-#### move
+#### translateBy
 
-`move(dx, dy)`
+`translateBy(dx, dy)`
 
-Moves the object by (`dx`, `dy`).
+Translates (moves) the object by (`dx`, `dy`).
 
 *Arguments*
 
-* `dx`: number. The amount to move the object in the x-axis.
-* `dy`: number. The amount to move the object in the y-axis.
+* `dx`: number. Specifies how much to move the object in the x-axis.
+* `dy`: number. Specifies how much to move the object in the y-axis.
 
 *Example*
 ```
 using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 
-object "MyLevelObject" is "entity"
+object "My Level Object" is "entity"
 {
     public transform = Transform();
-    actor = Actor("MyLevelObject");
+    actor = Actor("My Level Object");
 
     state "main"
     {
         // move the entity at a speed of
         // 50 pixels/second, to the right
-        transform.move(50 * Time.delta, 0);
+        transform.translateBy(50 * Time.delta, 0);
 
         // the command below would move it
         // at a speed of 30 pixels per FRAME
-        //transform.move(30, 0); // don't do this
+        //transform.translateBy(30, 0); // don't do this
 
         // since the framerate may vary across
         // different systems, it's advisable
@@ -144,6 +144,8 @@ object "MyLevelObject" is "entity"
     }
 }
 ```
+
+*Available since:* Open Surge 0.5.0.3. In previous versions, this function was called `move`.
 
 #### translate
 
@@ -163,17 +165,17 @@ Rotates the object by `deg` degrees.
 
 *Arguments*
 
-* `deg`: number.
+* `deg`: number. An angle in degrees.
 
 *Example*
 ```
 using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 
-object "MyLevelObject" is "entity"
+object "My Level Object" is "entity"
 {
     public transform = Transform();
-    actor = Actor("MyLevelObject");
+    actor = Actor("My Level Object");
 
     state "main"
     {
@@ -200,10 +202,10 @@ using SurgeEngine.Actor;
 using SurgeEngine.Player;
 using SurgeEngine.Transform;
 
-object "MyLevelObject" is "entity"
+object "My Level Object" is "entity"
 {
     public transform = Transform();
-    actor = Actor("MyLevelObject");
+    actor = Actor("My Level Object");
 
     state "main"
     {
