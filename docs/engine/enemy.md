@@ -78,11 +78,13 @@ Functions
 
 Destroys the enemy with an explosion, giving score to `player`.
 
-*Available since:* Open Surge 0.5.0.3. In previous versions, this function was called `getDestroyed`.
+*Available since:* Open Surge 0.5.0.3. See the note below.
 
 *Arguments*
 
 * `player`: [Player](/engine/player) object. The player who defeats the enemy.
+
+*Note:* in versions prior to 0.5.0.3, this function was called `getDestroyed`.
 
 #### setBounds
 
