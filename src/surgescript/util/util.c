@@ -142,20 +142,21 @@ const char* surgescript_util_version()
 int surgescript_util_versioncode(const char* version)
 {
     int code = 0, x = 0;
+    int limit = 3; /* ignore patch version, i.e., code("a.b.c") == code("a.b.c.d") */
 
     if(!version)
         version = surgescript_util_version();
 
-    for(; *version; version++) {
+    for(; limit; version++) {
         if(isdigit(*version))
             x = x * 10 + (*version - '0');
         else if(*version == '.')
-            code = code * 100 + x, x = 0;
-        else
-            break;
+            code = code * 100 + x, x = 0, --limit;
+        else if(*version == '\0')
+            code = code * 100 + x, x = 0, limit = 0;
     }
 
-    return code * 100 + x;
+    return code;
 }
 
 /*
