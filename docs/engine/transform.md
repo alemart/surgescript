@@ -83,7 +83,7 @@ Unless you need to read or to set the angle of the object to a pre-determined va
 
 #### localPosition
 
-`localPosition`: [Vector2](/engine/Vector2) object.
+`localPosition`: [Vector2](/engine/vector2) object.
 
 The position of the object relative to the parent object.
 
@@ -101,7 +101,23 @@ Unless you need to read or to set the angle of the object to a pre-determined va
 
 `localScale`: [Vector2](/engine/vector2) object.
 
-The local scale of the entity.
+The local scale of the entity. A value of 1.0 in both axes means the default size. A value of 2.0, twice the default size, and so on.
+
+#### right
+
+`right`: [Vector2](/engine/vector2) object, read-only.
+
+The right axis of the transform in world space. Unlike [Vector2.right](/engine/vector2#vector2right), this property considers the rotation of the transform.
+
+*Available since:* Open Surge 0.5.0.3.
+
+#### up
+
+`up`: [Vector2](/engine/vector2) object, read-only.
+
+The up axis of the transform in world space. Unlike [Vector2.up](/engine/vector2#vector2up), this property considers the rotation of the transform.
+
+*Available since:* Open Surge 0.5.0.3.
 
 Functions
 ---------
@@ -188,13 +204,15 @@ object "My Level Object" is "entity"
 
 #### lookAt
 
-`lookAt(transform)`
+`lookAt(position)`
 
-Use this function to make your object look at some point in space.
+Rotates the transform so that its [right](#right) vector points at the given position. Use this function to make your object look at some point in world space.
+
+*Available since:* Open Surge 0.5.0.3. See the note below.
 
 *Arguments*
 
-* `transform`: Transform object.
+* `position`: [Vector2](/engine/vector2) object. A point in world space.
 
 *Example*
 ```
@@ -210,7 +228,9 @@ object "My Level Object" is "entity"
     state "main"
     {
         player = Player.active;
-        transform.lookAt(player.transform);
+        transform.lookAt(player.transform.position);
     }
 }
 ```
+
+*Note:* in versions prior to 0.5.0.3, this function accepted a Transform parameter.
