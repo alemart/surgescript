@@ -101,13 +101,21 @@ Unless you need to read or to set the angle of the object to a pre-determined va
 
 `localScale`: [Vector2](/engine/vector2) object.
 
-The local scale of the entity. A value of 1.0 in both axes means the default size. A value of 2.0, twice the default size, and so on.
+The local scale of the object. A value of 1.0 in both axes means the default size. A value of 2.0, twice the default size, and so on.
+
+#### lossyScale
+
+`lossyScale`: [Vector2](/engine/vector2) object, read-only.
+
+An approximation of the world scale of the object. It's not very accurate (the parent transform may be rotated and scaled), but it's useful.
+
+*Available since:* Open Surge 0.5.0.3.
 
 #### right
 
 `right`: [Vector2](/engine/vector2) object, read-only.
 
-The right axis of the transform in world space. Unlike [Vector2.right](/engine/vector2#vector2right), this property considers the rotation of the transform.
+The right vector of the transform in world space. Unlike [Vector2.right](/engine/vector2#vector2right), this property considers the rotation of the transform.
 
 *Available since:* Open Surge 0.5.0.3.
 
@@ -115,7 +123,7 @@ The right axis of the transform in world space. Unlike [Vector2.right](/engine/v
 
 `up`: [Vector2](/engine/vector2) object, read-only.
 
-The up axis of the transform in world space. Unlike [Vector2.up](/engine/vector2#vector2up), this property considers the rotation of the transform.
+The up vector of the transform in world space. Unlike [Vector2.up](/engine/vector2#vector2up), this property considers the rotation of the transform.
 
 *Available since:* Open Surge 0.5.0.3.
 

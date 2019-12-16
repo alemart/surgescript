@@ -27,7 +27,8 @@
 /* transform type */
 typedef struct surgescript_transform_t surgescript_transform_t;
 
-/* A Transform holds position, rotation and scale */
+/* A Transform holds position, rotation and scale
+   (use the API below to change the values) */
 struct surgescript_transform_t
 {
     /* we'll make this transform struct public */
@@ -37,13 +38,22 @@ struct surgescript_transform_t
     
     struct {
         float x, y, z; /* euler angles in degrees */
-        float sx, cx, sy, cy, sz, cz; /* cached sin & cos of each component */
     } rotation; /* note: use the API to rotate */
     
     struct {
         float x, y, z; /* scale multipliers */
     } scale;
+
+
+
+    /* internal data */
+    struct {
+        float sx, cx, sy, cy, sz, cz; /* cached sin & cos of each component of the rotation */
+    } _;
 };
+
+/* forward declarations */
+struct surgescript_object_t;
 
 /* public API */
 surgescript_transform_t* surgescript_transform_create(); /* creates a new identity transform */
@@ -66,7 +76,17 @@ void surgescript_transform_apply2dinverse(const surgescript_transform_t* t, floa
 /* 3D operations */
 /* TODO */
 
-/* global operations */
+/* object utilities (considers the object tree) */
+void surgescript_transform_util_worldposition2d(const struct surgescript_object_t* object, float* x, float* y); /* get 2D world position */
+void surgescript_transform_util_setworldposition2d(struct surgescript_object_t* object, float x, float y); /* set 2D world position */
+float surgescript_transform_util_worldangle2d(const struct surgescript_object_t* object); /* get 2D world angle */
+void surgescript_transform_util_setworldangle2d(struct surgescript_object_t* object, float degrees); /* set 2D world angle */
+void surgescript_transform_util_lookat2d(struct surgescript_object_t* object, float x, float y); /* rotates the right vector of the object transform so that is points at world position (x,y) */
+void surgescript_transform_util_right2d(const struct surgescript_object_t* object, float* x, float* y); /* get the right vector of the transform */
+void surgescript_transform_util_up2d(const struct surgescript_object_t* object, float* x, float* y); /* get the up vector of the transform */
+void surgescript_transform_util_lossyscale2d(const struct surgescript_object_t* object, float* x, float* y); /* an approximation of the 2D world scale */
+
+/* global settings */
 void surgescript_transform_use_inverted_y(bool inverted); /* set it to true if your y-axis grows downwards */
 bool surgescript_transform_is_using_inverted_y(); /* defaults to false (i.e., y-axis grows upwards) */
 

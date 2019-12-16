@@ -669,7 +669,8 @@ surgescript_transform_t* surgescript_object_transform(surgescript_object_t* obje
 
 /*
  * surgescript_object_transform_changed()
- * true if the transform of this object has ever been changed
+ * Returns true if the transform of this object has ever been changed
+ * If this returns false, its transform is the identity transform
  */
 bool surgescript_object_transform_changed(const surgescript_object_t* object)
 {
