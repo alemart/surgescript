@@ -141,8 +141,9 @@ const char* surgescript_util_version()
  */
 int surgescript_util_versioncode(const char* version)
 {
+    static const int p[] = { 1, 100, 10000, 1000000 }; /* 100^i, up to i = limit-1 */
+    int limit = 4; /* read up to 4 numbers */
     int code = 0, x = 0;
-    int limit = 3; /* ignore patch version, i.e., code("a.b.c") == code("a.b.c.d") */
 
     if(!version)
         version = surgescript_util_version();
@@ -153,7 +154,7 @@ int surgescript_util_versioncode(const char* version)
         else if(*version == '.')
             code = code * 100 + x, x = 0, --limit;
         else if(*version == '\0')
-            code = code * 100 + x, x = 0, limit = 0;
+            code = (code * 100 + x) * p[--limit], x = 0, limit = 0;
     }
 
     return code;
