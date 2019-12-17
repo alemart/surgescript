@@ -65,7 +65,7 @@ The unit up vector.
 
 *Returns*
 
-Returns the unit up vector.
+Returns the (0,-1) vector. In Open Surge, the y-axis grows downwards.
 
 #### Vector2.right
 
@@ -75,7 +75,7 @@ The unit right vector.
 
 *Returns*
 
-Returns the unit right vector.
+Returns the (1,0) vector. In Open Surge, the x-axis grows to the right.
 
 #### Vector2.down
 
@@ -85,7 +85,7 @@ The unit down vector.
 
 *Returns*
 
-Returns the unit down vector.
+Returns the (0,1) vector. In Open Surge, the y-axis grows downwards.
 
 #### Vector2.left
 
@@ -95,13 +95,13 @@ The unit left vector.
 
 *Returns*
 
-Returns the unit left vector.
+Returns the (-1,0) vector. In Open Surge, the x-axis grows to the right.
 
 #### Vector2.zero
 
 `Vector2.zero`
 
-The (0,0) vector.
+The zero vector.
 
 *Returns*
 
@@ -282,7 +282,7 @@ v = one.translatedBy(4,5); // (5,6)
 
 `rotatedBy(deg)`
 
-Returns a copy of `this` rotated by `deg` degrees.
+Returns a copy of `this` rotated counterclockwise by `deg` degrees.
 
 *Arguments*
 
@@ -303,6 +303,8 @@ using SurgeEngine.Vector2;
 // (relative to the positive x-axis)
 v = Vector2.right.rotatedBy(45);
 ```
+
+*Note:* in Open Surge, the y-axis grows downwards. As an example, [Vector2.right](#vector2right) (1,0) rotated counterclockwise by 90 degrees will be the same as [Vector2.up](#vector2up) (0,-1). In addition, to rotate a Vector2 by `deg` degrees clockwise you may rotate it by `-deg` degrees counterclockwise.
 
 #### scaledBy
 
