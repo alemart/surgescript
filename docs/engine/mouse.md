@@ -74,6 +74,34 @@ Checks if a mouse button has just been pressed.
 
 Returns `true` if the specified button has just been pressed (i.e., a click has just occurred).
 
+*Example*
+```
+using SurgeEngine.Input.Mouse;
+using SurgeEngine.Collisions.CollisionBall;
+using SurgeEngine.Transform;
+using SurgeEngine.Camera;
+
+// Use the mouse cursor to click on any entity that has a collider.
+// Setup: simply place this object in the level.
+object "Entity Picker" is "awake", "entity"
+{
+    transform = Transform();
+    collider = CollisionBall(8);
+
+    state "main"
+    {
+        transform.position = Camera.screenToWorld(Mouse.position);
+        collider.visible = true;
+    }
+
+    fun onOverlap(otherCollider)
+    {
+        if(Mouse.buttonPressed("left"))
+            Console.print("Clicked on " + otherCollider.entity.__name);
+    }
+}
+```
+
 #### buttonReleased
 
 `buttonReleased(buttonName)`

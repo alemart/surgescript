@@ -14,8 +14,8 @@ The Camera object can be used to control what content (in world space) is render
 using SurgeEngine.Camera;
 
 // Reading the Camera status
-// This app prints the position of the camera at every second
-object "Application"
+// This object prints the position of the camera at every second
+object "Camera Status" is "awake", "entity"
 {
     state "main"
     {
@@ -67,3 +67,35 @@ Locks the camera to a certain rectangular area in space. All coordinates are giv
 `unlock()`
 
 Unlocks the camera. If unlocked, the camera moves freely throughout the space.
+
+#### worldToScreen
+
+`worldToScreen(position)`
+
+Converts `position` from world coordinates to screen coordinates. Screen coordinates are given in pixels. (0,0) is the top-left of the screen and ([Screen.width](/engine/screen#width),[Screen.height](/engine/screen#height)) is the bottom-right.
+
+*Available since:* Open Surge 0.5.0.3
+
+*Arguments*
+
+* `position`: [Vector2](/engine/vector2) object. The position to be converted.
+
+*Returns*
+
+Returns a [Vector2](/engine/vector2) object corresponding to the converted coordinates.
+
+#### screenToWorld
+
+`screenToWorld(position)`
+
+Converts `position` from screen coordinates to world coordinates. Screen coordinates are given in pixels. (0,0) is the top-left of the screen and ([Screen.width](/engine/screen#width),[Screen.height](/engine/screen#height)) is the bottom-right.
+
+*Available since:* Open Surge 0.5.0.3
+
+*Arguments*
+
+* `position`: [Vector2](/engine/vector2) object. The position to be converted.
+
+*Returns*
+
+Returns a [Vector2](/engine/vector2) object corresponding to the converted coordinates.
