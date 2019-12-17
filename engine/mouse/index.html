@@ -1570,6 +1570,33 @@ object &quot;MyCursor&quot; is &quot;entity&quot;, &quot;detached&quot;
 </ul>
 <p><em>Returns</em></p>
 <p>Returns <code>true</code> if the specified button has just been pressed (i.e., a click has just occurred).</p>
+<p><em>Example</em></p>
+<pre><code>using SurgeEngine.Input.Mouse;
+using SurgeEngine.Collisions.CollisionBall;
+using SurgeEngine.Transform;
+using SurgeEngine.Camera;
+
+// Use the mouse cursor to click on any entity that has a collider.
+// Setup: simply place this object in the level.
+object &quot;Entity Picker&quot; is &quot;awake&quot;, &quot;entity&quot;
+{
+    transform = Transform();
+    collider = CollisionBall(8);
+
+    state &quot;main&quot;
+    {
+        transform.position = Camera.screenToWorld(Mouse.position);
+        collider.visible = true;
+    }
+
+    fun onOverlap(otherCollider)
+    {
+        if(Mouse.buttonPressed(&quot;left&quot;))
+            Console.print(&quot;Clicked on &quot; + otherCollider.entity.__name);
+    }
+}
+</code></pre>
+
 <h4 id="buttonreleased">buttonReleased</h4>
 <p><code>buttonReleased(buttonName)</code></p>
 <p>Checks if a mouse button has just been released.</p>

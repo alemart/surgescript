@@ -900,6 +900,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#lerpangle" title="lerpAngle" class="md-nav__link">
+    lerpAngle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deltaangle" title="deltaAngle" class="md-nav__link">
+    deltaAngle
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1882,6 +1896,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#lerpangle" title="lerpAngle" class="md-nav__link">
+    lerpAngle
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#deltaangle" title="deltaAngle" class="md-nav__link">
+    deltaAngle
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2190,8 +2218,7 @@ seven = Math.max(5, 7); // maximum of 5 and 7
 </ul>
 <p><em>Returns</em></p>
 <p>Returns the linear interpolation between <code>a</code> and <code>b</code> by <code>t</code>.</p>
-<p>Value <code>t</code> is clamped automatically to range <em>[0, 1]</em>.</p>
-<p>As an example, note that <code>lerp</code>:</p>
+<p>Value <code>t</code> is clamped automatically to the <em>[0, 1]</em> range. As an example, note that <code>lerp</code>:</p>
 <ul>
 <li>returns <code>a</code> if <code>t</code> is <em>0</em></li>
 <li>returns <code>b</code> if <code>t</code> is <em>1</em></li>
@@ -2207,8 +2234,31 @@ seven = Math.max(5, 7); // maximum of 5 and 7
 <li><code>t</code>: number. A value between 0 and 1.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>Returns an interpolated value between <code>a</code> and <code>b</code> by <code>t</code>, in a similar way to <code>lerp</code>. Unlike the linear <code>lerp</code>, <code>smoothstep</code> is smooth at the limits. This is useful to create smooth transitions and animations.</p>
-<p>Value <code>t</code> is clamped automatically to range <em>[0, 1]</em>.</p>
+<p>Returns an interpolated value between <code>a</code> and <code>b</code> by <code>t</code>. Unlike <a href="#lerp">lerp</a>, <code>smoothstep</code> is smooth at the limits. This is useful to create smooth transitions and animations.</p>
+<p>Value <code>t</code> is clamped automatically to the <em>[0, 1]</em> range.</p>
+<h4 id="lerpangle">lerpAngle</h4>
+<p><code>lerpAngle(alpha, beta, t)</code></p>
+<p>Linear interpolation of angles <code>alpha</code> and <code>beta</code> given in degrees. Unlike <a href="#lerp">lerp</a>, <code>lerpAngle</code> can interpolate angles when they wrap around 360 degrees.</p>
+<p><em>Available since:</em> SurgeScript 0.5.4.1</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>alpha</code>: number. A value in degrees.</li>
+<li><code>beta</code>: number. A value in degrees.</li>
+<li><code>t</code>: number. A value between 0 and 1.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns the linear interpolation between angles <code>alpha</code> and <code>beta</code>, given in degrees, by <code>t</code>.</p>
+<h4 id="deltaangle">deltaAngle</h4>
+<p><code>deltaAngle(alpha, beta)</code></p>
+<p>The shortest difference between angles <code>alpha</code> and <code>beta</code> given in degrees.</p>
+<p><em>Available since:</em> SurgeScript 0.5.4.1</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>alpha</code>: number. A value in degrees.</li>
+<li><code>beta</code>: number. A value in degrees.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns, in degrees, the shortest difference between the angles.</p>
                 
                   
                 

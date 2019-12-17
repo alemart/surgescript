@@ -1319,6 +1319,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#lossyscale" title="lossyScale" class="md-nav__link">
+    lossyScale
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#right" title="right" class="md-nav__link">
     right
   </a>
@@ -1574,6 +1581,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#lossyscale" title="lossyScale" class="md-nav__link">
+    lossyScale
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#right" title="right" class="md-nav__link">
     right
   </a>
@@ -1722,15 +1736,19 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
 <p>Unless you need to read or to set the angle of the object to a pre-determined value, consider using <a href="#rotate">rotate</a> instead.</p>
 <h4 id="localscale">localScale</h4>
 <p><code>localScale</code>: <a href="/engine/vector2">Vector2</a> object.</p>
-<p>The local scale of the entity. A value of 1.0 in both axes means the default size. A value of 2.0, twice the default size, and so on.</p>
+<p>The local scale of the object. A value of 1.0 in both axes means the default size. A value of 2.0, twice the default size, and so on.</p>
+<h4 id="lossyscale">lossyScale</h4>
+<p><code>lossyScale</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
+<p>An approximation of the world scale of the object. It's not very accurate (the parent transform may be rotated and scaled), but it's useful.</p>
+<p><em>Available since:</em> Open Surge 0.5.0.3</p>
 <h4 id="right">right</h4>
 <p><code>right</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
-<p>The right axis of the transform in world space. Unlike <a href="/engine/vector2#vector2right">Vector2.right</a>, this property considers the rotation of the transform.</p>
-<p><em>Available since:</em> Open Surge 0.5.0.3.</p>
+<p>The right vector of the transform in world space. Unlike <a href="/engine/vector2#vector2right">Vector2.right</a>, this property considers the rotation of the transform.</p>
+<p><em>Available since:</em> Open Surge 0.5.0.3</p>
 <h4 id="up">up</h4>
 <p><code>up</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
-<p>The up axis of the transform in world space. Unlike <a href="/engine/vector2#vector2up">Vector2.up</a>, this property considers the rotation of the transform.</p>
-<p><em>Available since:</em> Open Surge 0.5.0.3.</p>
+<p>The up vector of the transform in world space. Unlike <a href="/engine/vector2#vector2up">Vector2.up</a>, this property considers the rotation of the transform.</p>
+<p><em>Available since:</em> Open Surge 0.5.0.3</p>
 <h2 id="functions">Functions</h2>
 <h4 id="translateby">translateBy</h4>
 <p><code>translateBy(dx, dy)</code></p>

@@ -1004,6 +1004,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#worldtoscreen" title="worldToScreen" class="md-nav__link">
+    worldToScreen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screentoworld" title="screenToWorld" class="md-nav__link">
+    screenToWorld
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1490,6 +1504,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#worldtoscreen" title="worldToScreen" class="md-nav__link">
+    worldToScreen
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screentoworld" title="screenToWorld" class="md-nav__link">
+    screenToWorld
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1525,8 +1553,8 @@
 using SurgeEngine.Camera;
 
 // Reading the Camera status
-// This app prints the position of the camera at every second
-object &quot;Application&quot;
+// This object prints the position of the camera at every second
+object &quot;Camera Status&quot; is &quot;awake&quot;, &quot;entity&quot;
 {
     state &quot;main&quot;
     {
@@ -1563,6 +1591,26 @@ object &quot;Application&quot;
 <h4 id="unlock">unlock</h4>
 <p><code>unlock()</code></p>
 <p>Unlocks the camera. If unlocked, the camera moves freely throughout the space.</p>
+<h4 id="worldtoscreen">worldToScreen</h4>
+<p><code>worldToScreen(position)</code></p>
+<p>Converts <code>position</code> from world coordinates to screen coordinates. Screen coordinates are given in pixels. (0,0) is the top-left of the screen and (<a href="/engine/screen#width">Screen.width</a>,<a href="/engine/screen#height">Screen.height</a>) is the bottom-right.</p>
+<p><em>Available since:</em> Open Surge 0.5.0.3</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>position</code>: <a href="/engine/vector2">Vector2</a> object. The position to be converted.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns a <a href="/engine/vector2">Vector2</a> object corresponding to the converted coordinates.</p>
+<h4 id="screentoworld">screenToWorld</h4>
+<p><code>screenToWorld(position)</code></p>
+<p>Converts <code>position</code> from screen coordinates to world coordinates. Screen coordinates are given in pixels. (0,0) is the top-left of the screen and (<a href="/engine/screen#width">Screen.width</a>,<a href="/engine/screen#height">Screen.height</a>) is the bottom-right.</p>
+<p><em>Available since:</em> Open Surge 0.5.0.3</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>position</code>: <a href="/engine/vector2">Vector2</a> object. The position to be converted.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns a <a href="/engine/vector2">Vector2</a> object corresponding to the converted coordinates.</p>
                 
                   
                 
