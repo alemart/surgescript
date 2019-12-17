@@ -62,8 +62,11 @@ static surgescript_var_t* fun_clamp(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_approximately(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_lerp(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_smoothstep(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_lerpangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_deltaangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
-/* constants */
+/* utilities */
+static inline double clamp01(double t);
 static const double EPSILON = DBL_EPSILON;
 static const double PI = 3.14159265358979323846;
 static const double RAD2DEG = 57.29577951308232087684;
@@ -110,6 +113,8 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "approximately", fun_approximately, 2);
     surgescript_vm_bind(vm, "Math", "lerp", fun_lerp, 3);
     surgescript_vm_bind(vm, "Math", "smoothstep", fun_smoothstep, 3);
+    surgescript_vm_bind(vm, "Math", "lerpAngle", fun_lerpangle, 3);
+    surgescript_vm_bind(vm, "Math", "deltaAngle", fun_deltaangle, 2);
 }
 
 
@@ -353,25 +358,61 @@ surgescript_var_t* fun_lerp(surgescript_object_t* object, const surgescript_var_
 {
     double a = surgescript_var_get_number(param[0]);
     double b = surgescript_var_get_number(param[1]);
-    double t = surgescript_var_get_number(param[2]);
-
-    /* t = clamp01(t) */
-    t += (t > 1.0) * (1.0 - t) - (t < 0.0) * t;
+    double t = clamp01(surgescript_var_get_number(param[2]));
 
     /* When t = 0, returns a. When t = 1, returns b. When t = 0.5, returns (a+b) / 2 */
     return surgescript_var_set_number(surgescript_var_create(), (b - a) * t + a);
 }
 
-
-/* smoothstep(a,b,t): interpolates smoothly between a and b by t, where t is clamped to [0,1]. Similar to lerp. Good for fading & animations. */
+/* smoothstep(a,b,t): interpolates smoothly between a and b by t, where t is clamped to [0,1].
+   Similar to lerp. Good for fading & animations. */
 surgescript_var_t* fun_smoothstep(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     double a = surgescript_var_get_number(param[0]);
     double b = surgescript_var_get_number(param[1]);
-    double t = surgescript_var_get_number(param[2]);
+    double t = clamp01(surgescript_var_get_number(param[2]));
 
-    t += (t > 1.0) * (1.0 - t) - (t < 0.0) * t;
+    /* smoothstep */
     t = (t * t) * (3.0 - 2.0 * t);
 
     return surgescript_var_set_number(surgescript_var_create(), (b - a) * t + a);
+}
+
+/* lerpAngle(alpha,beta,t): linear interpolation between angles alpha and beta by t, where
+   t is clamped to the range [0,1]. Alpha and beta are given in degrees, and so is the result */
+surgescript_var_t* fun_lerpangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    double alpha = surgescript_var_get_number(param[0]) * DEG2RAD;
+    double beta = surgescript_var_get_number(param[1]) * DEG2RAD;
+    double t = clamp01(surgescript_var_get_number(param[2]));
+    double vx, vy;
+
+    /* we'll lerp the unit vectors corresponding to alpha and beta */
+    vx = cos(alpha);
+    vy = sin(alpha);
+    vx = (cos(beta) - vx) * t + vx;
+    vy = (sin(beta) - vy) * t + vy;
+
+    /* return the interpolated angle in degrees */
+    return surgescript_var_set_number(surgescript_var_create(), fmod(atan2(vy, vx) * RAD2DEG, 360.0));
+}
+
+/* deltaAngle(a,b): the shortest difference between two angles given in degrees */
+surgescript_var_t* fun_deltaangle(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    double alpha = surgescript_var_get_number(param[0]) * DEG2RAD;
+    double beta = surgescript_var_get_number(param[1]) * DEG2RAD;
+    double cos_delta = cos(alpha) * cos(beta) + sin(alpha) * sin(beta); /* cos(alpha - beta) */
+
+    /* return the shortest difference in degrees */
+    return surgescript_var_set_number(surgescript_var_create(), acos(cos_delta) * RAD2DEG);
+}
+
+
+/* ----- utilities ----- */
+
+/* clamps t to the [0,1] range */
+double clamp01(double t)
+{
+    return t + (t > 1.0) * (1.0 - t) - (t < 0.0) * t;
 }
