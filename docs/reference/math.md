@@ -443,9 +443,7 @@ Linear interpolation.
 
 Returns the linear interpolation between `a` and `b` by `t`.
 
-Value `t` is clamped automatically to range *[0, 1]*.
-
-As an example, note that `lerp`:
+Value `t` is clamped automatically to the *[0, 1]* range. As an example, note that `lerp`:
 
 * returns `a` if `t` is *0*
 * returns `b` if `t` is *1*
@@ -465,6 +463,41 @@ Interpolation smoothing at the limits.
 
 *Returns*
 
-Returns an interpolated value between `a` and `b` by `t`, in a similar way to `lerp`. Unlike the linear `lerp`, `smoothstep` is smooth at the limits. This is useful to create smooth transitions and animations.
+Returns an interpolated value between `a` and `b` by `t`. Unlike [lerp](#lerp), `smoothstep` is smooth at the limits. This is useful to create smooth transitions and animations.
 
-Value `t` is clamped automatically to range *[0, 1]*.
+Value `t` is clamped automatically to the *[0, 1]* range.
+
+#### lerpAngle
+
+`lerpAngle(alpha, beta, t)`
+
+Linear interpolation of angles `alpha` and `beta` given in degrees. Unlike [lerp](#lerp), `lerpAngle` can interpolate angles when they wrap around 360 degrees.
+
+*Available since:* SurgeScript 0.5.4.1
+
+*Arguments*
+
+* `alpha`: number. A value in degrees.
+* `beta`: number. A value in degrees.
+* `t`: number. A value between 0 and 1.
+
+*Returns*
+
+Returns the linear interpolation between angles `alpha` and `beta`, given in degrees, by `t`.
+
+#### deltaAngle
+
+`deltaAngle(alpha, beta)`
+
+The shortest difference between angles `alpha` and `beta` given in degrees.
+
+*Available since:* SurgeScript 0.5.4.1
+
+*Arguments*
+
+* `alpha`: number. A value in degrees.
+* `beta`: number. A value in degrees.
+
+*Returns*
+
+Returns, in degrees, the shortest difference between the angles.

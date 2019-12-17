@@ -109,7 +109,7 @@ The local scale of the object. A value of 1.0 in both axes means the default siz
 
 An approximation of the world scale of the object. It's not very accurate (the parent transform may be rotated and scaled), but it's useful.
 
-*Available since:* Open Surge 0.5.0.3.
+*Available since:* Open Surge 0.5.0.3
 
 #### right
 
@@ -117,7 +117,7 @@ An approximation of the world scale of the object. It's not very accurate (the p
 
 The right vector of the transform in world space. Unlike [Vector2.right](/engine/vector2#vector2right), this property considers the rotation of the transform.
 
-*Available since:* Open Surge 0.5.0.3.
+*Available since:* Open Surge 0.5.0.3
 
 #### up
 
@@ -125,7 +125,7 @@ The right vector of the transform in world space. Unlike [Vector2.right](/engine
 
 The up vector of the transform in world space. Unlike [Vector2.up](/engine/vector2#vector2up), this property considers the rotation of the transform.
 
-*Available since:* Open Surge 0.5.0.3.
+*Available since:* Open Surge 0.5.0.3
 
 Functions
 ---------
