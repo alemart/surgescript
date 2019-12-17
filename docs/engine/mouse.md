@@ -6,18 +6,18 @@ The Mouse object is used to read input from the mouse.
 *Example*
 
 ```
-// This example shows how to use the Collectible
-// sprite as a mouse cursor. Since MyCursor is
-// tagged as "detached", it will be rendered in
-// screen space (not world space).
+// This example shows how to use a sprite
+// as a mouse cursor. Since My Cursor is
+// tagged "detached", it will be rendered
+// in screen space, not in world space.
 
 using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 using SurgeEngine.Input.Mouse;
 
-object "MyCursor" is "entity", "detached"
+object "My Cursor" is "entity", "detached"
 {
-    actor = Actor("MyCursor");
+    actor = Actor("My Cursor");
     transform = Transform();
 
     state "main"
