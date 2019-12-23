@@ -62,6 +62,14 @@ The text to be displayed.
 
 The name of the font in use.
 
+#### size
+
+`size`: [Vector2](/engine/vector2) object.
+
+The size, in pixels, of the rendered text.
+
+*Available since:* Open Surge 0.5.0.3
+
 #### align
 
 `align`: string.
@@ -74,11 +82,13 @@ The alignment of the text. One of the following: *"left"*, *"center"*, *"right"*
 
 Is the Text object visible?
 
-#### maxlength
+#### maxLength
 
-`maxlength`: number.
+`maxLength`: number.
 
 The maximum number of characters to be displayed, ignoring *<color>* tags and spaces.
+
+*Available since:* Open Surge 0.5.0.3
 
 #### maxWidth
 
