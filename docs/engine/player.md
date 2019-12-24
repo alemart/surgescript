@@ -375,6 +375,14 @@ Disable/enable player movement. Defaults to `false`.
 
 Get underwater / out of water. Defaults to `false`.
 
+#### aggressive
+
+`aggressive`: boolean.
+
+If set to `true`, the [attacking](#attacking) flag will be `true` and the player will be able to hit the baddies just by touching them, regardless if he/she is jumping or not. Defaults to `false`.
+
+*Available since:* Open Surge 0.5.0.3
+
 #### breathTime
 
 `breathTime`: number.
