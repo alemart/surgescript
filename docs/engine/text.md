@@ -68,7 +68,7 @@ The name of the font in use.
 
 The size, in pixels, of the rendered text.
 
-*Available since:* Open Surge 0.5.0.3
+*Available since:* Open Surge 0.5.1
 
 #### align
 
@@ -88,7 +88,7 @@ Is the Text object visible?
 
 The maximum number of characters to be displayed, ignoring *<color>* tags and spaces.
 
-*Available since:* Open Surge 0.5.0.3
+*Available since:* Open Surge 0.5.1
 
 #### maxWidth
 

@@ -41,7 +41,7 @@ The name of the sprite, defined in a .spr file.
 
 Will be true if the current animation exists, i.e., if its sprite and its animation number have been defined in a .spr file.
 
-*Available since:* Open Surge 0.5.0.3
+*Available since:* Open Surge 0.5.1
 
 #### finished
 

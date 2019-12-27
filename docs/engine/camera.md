@@ -74,7 +74,7 @@ Unlocks the camera. If unlocked, the camera moves freely throughout the space.
 
 Converts `position` from world space to screen space. Screen coordinates are given in pixels. (0,0) is the top-left of the screen and ([Screen.width](/engine/screen#width),[Screen.height](/engine/screen#height)) is the bottom-right.
 
-*Available since:* Open Surge 0.5.0.3
+*Available since:* Open Surge 0.5.1
 
 *Arguments*
 
@@ -90,7 +90,7 @@ Returns a [Vector2](/engine/vector2) object corresponding to the converted coord
 
 Converts `position` from screen space to world space. Screen coordinates are given in pixels. (0,0) is the top-left of the screen and ([Screen.width](/engine/screen#width),[Screen.height](/engine/screen#height)) is the bottom-right.
 
-*Available since:* Open Surge 0.5.0.3
+*Available since:* Open Surge 0.5.1
 
 *Arguments*
 

@@ -78,7 +78,7 @@ Functions
 
 Destroys the enemy with an explosion, giving score to `player`.
 
-*Available since:* Open Surge 0.5.0.3. See the note below.
+*Available since:* Open Surge 0.5.1. See the note below.
 
 *Arguments*
 

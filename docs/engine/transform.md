@@ -109,7 +109,7 @@ The local scale of the object. A value of 1.0 in both axes means the default siz
 
 An approximation of the world scale of the object. It's not very accurate (the parent transform may be rotated and scaled), but it's useful.
 
-*Available since:* Open Surge 0.5.0.3
+*Available since:* Open Surge 0.5.1
 
 #### right
 
@@ -117,7 +117,7 @@ An approximation of the world scale of the object. It's not very accurate (the p
 
 The right vector of the transform in world space. Unlike [Vector2.right](/engine/vector2#vector2right), this property considers the rotation of the transform.
 
-*Available since:* Open Surge 0.5.0.3
+*Available since:* Open Surge 0.5.1
 
 #### up
 
@@ -125,7 +125,7 @@ The right vector of the transform in world space. Unlike [Vector2.right](/engine
 
 The up vector of the transform in world space. Unlike [Vector2.up](/engine/vector2#vector2up), this property considers the rotation of the transform.
 
-*Available since:* Open Surge 0.5.0.3
+*Available since:* Open Surge 0.5.1
 
 Functions
 ---------
@@ -136,7 +136,7 @@ Functions
 
 Translates (moves) the object by (`dx`, `dy`).
 
-*Available since:* Open Surge 0.5.0.3. See the note below.
+*Available since:* Open Surge 0.5.1. See the note below.
 
 *Arguments*
 
@@ -218,7 +218,7 @@ object "My Level Object" is "entity"
 
 Rotates the transform so that its [right](#right) vector points at the given position. Use this function to make your object look at some point in world space.
 
-*Available since:* Open Surge 0.5.0.3. See the note below.
+*Available since:* Open Surge 0.5.1. See the note below.
 
 *Arguments*
 
