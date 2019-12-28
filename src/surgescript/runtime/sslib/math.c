@@ -293,7 +293,7 @@ surgescript_var_t* fun_mod(surgescript_object_t* object, const surgescript_var_t
 surgescript_var_t* fun_sign(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     double x = surgescript_var_get_number(param[0]);
-    return surgescript_var_set_number(surgescript_var_create(), (x >= 0.0) ? 1.0 : -1.0);
+    return surgescript_var_set_number(surgescript_var_create(), copysign(1.0, x));
 }
 
 /* signum(x): returns +1 if x is positive, 0 if is x is zero, or -1 if x is negative */
