@@ -68,7 +68,7 @@ Checks if a mouse button has just been pressed.
 
 *Arguments*
 
-* `buttonName`: string. One of the following: *"left"*, *"right"*, *"middle"*.
+* `buttonName`: string. One of the following: *"left"*, *"right"*, *"middle"*, *"wheelUp"*, *"wheelDown"*.
 
 *Returns*
 
@@ -82,7 +82,7 @@ using SurgeEngine.Transform;
 using SurgeEngine.Camera;
 
 // Use the mouse cursor to click on any entity that has a collider.
-// Setup: simply place this object in the level.
+// Setup: simply place this object on the level.
 object "Entity Picker" is "awake", "entity"
 {
     transform = Transform();
@@ -101,6 +101,8 @@ object "Entity Picker" is "awake", "entity"
     }
 }
 ```
+
+*Note:* options *"wheelUp"* and *"wheelDown"* are available since Open Surge 0.5.1.
 
 #### buttonReleased
 
