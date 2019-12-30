@@ -171,7 +171,7 @@ object "My Level Object" is "entity"
 }
 ```
 
-*Note:* in versions prior to 0.5.0.3, this function was called `move`.
+*Note:* in versions prior to 0.5.1, this function was called `move`.
 
 #### translate
 
@@ -243,4 +243,4 @@ object "My Level Object" is "entity"
 }
 ```
 
-*Note:* in versions prior to 0.5.0.3, this function accepted a Transform parameter.
+*Note:* in versions prior to 0.5.1, this function accepted a Transform parameter.

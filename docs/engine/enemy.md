@@ -84,7 +84,7 @@ Destroys the enemy with an explosion, giving score to `player`.
 
 * `player`: [Player](/engine/player) object. The player who defeats the enemy.
 
-*Note:* in versions prior to 0.5.0.3, this function was called `getDestroyed`.
+*Note:* in versions prior to 0.5.1, this function was called `getDestroyed`.
 
 #### setBounds
 
