@@ -43,6 +43,22 @@ Properties
 
 The position of the mouse cursor, in screen space.
 
+#### scrollUp
+
+`scrollUp`: boolean, read-only.
+
+Will be `true` at the frame the user scrolls up using the mouse wheel.
+
+*Available since:* Open Surge 0.5.1
+
+#### scrollDown
+
+`scrollDown`: boolean, read-only.
+
+Will be `true` at the frame the user scrolls down using the mouse wheel.
+
+*Available since:* Open Surge 0.5.1
+
 Functions
 ---------
 
@@ -68,7 +84,7 @@ Checks if a mouse button has just been pressed.
 
 *Arguments*
 
-* `buttonName`: string. One of the following: *"left"*, *"right"*, *"middle"*, *"wheelUp"*, *"wheelDown"*.
+* `buttonName`: string. One of the following: *"left"*, *"right"*, *"middle"*.
 
 *Returns*
 
@@ -101,8 +117,6 @@ object "Entity Picker" is "awake", "entity"
     }
 }
 ```
-
-*Note:* options *"wheelUp"* and *"wheelDown"* are available since Open Surge 0.5.1.
 
 #### buttonReleased
 
