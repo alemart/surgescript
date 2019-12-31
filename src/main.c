@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,11 @@
 #include <string.h>
 #include <stdio.h>
 
-const char* url = "https://github.com/alemart/surgescript";
-surgescript_vm_t* make_vm(int argc, char** argv);
-void print_to_stdout(const char* message);
-void print_to_stderr(const char* message);
-void discard_message(const char* message);
-void show_help(const char* executable);
+static surgescript_vm_t* make_vm(int argc, char** argv);
+static void print_to_stdout(const char* message);
+static void print_to_stderr(const char* message);
+static void discard_message(const char* message);
+static void show_help(const char* executable);
 
 /*
  * main()
@@ -117,7 +116,10 @@ surgescript_vm_t* make_vm(int argc, char** argv)
 void show_help(const char* executable)
 {
     printf(
-        "SurgeScript %s by Alexandre Martins\n"
+        "SurgeScript version %s\n"
+        "Copyright (C) %s Alexandre Martins\n"
+        "%s\n"
+        "\n"
         "Usage: %s [OPTIONS] <script>...\n"
         "Compiles and executes the given script(s).\n"
         "\n"
@@ -134,12 +136,14 @@ void show_help(const char* executable)
         "\n"
         "Full documentation at: <%s>\n",
         surgescript_util_version(),
+        surgescript_util_year(),
+        surgescript_util_website(),
         executable,
         executable,
         executable,
         executable,
         executable,
-        url
+        surgescript_util_website()
     );
 }
 

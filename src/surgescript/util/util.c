@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,8 +40,10 @@ static void my_fatal(const char* message);
 static void (*log_function)(const char* message) = my_log;
 static void (*fatal_function)(const char* message) = my_fatal;
 
-/* current version of SurgeScript */
-static const char* version_string = "0.5.4.1";
+/* project info */
+static const char* version_string = "0.5.4.1"; /* current version of SurgeScript */
+static const char* year_string = "2016-2020";
+static const char* website = "https://github.com/alemart/surgescript";
 
 
 
@@ -125,15 +127,6 @@ void surgescript_util_fatal(const char* fmt, ...)
 }
 
 /*
- * surgescript_util_version()
- * Returns the current version of SurgeScript
- */
-const char* surgescript_util_version()
-{
-    return version_string;
-}
-
-/*
  * surgescript_util_versioncode()
  * Converts a SurgeScript version string to a comparable number
  * Note: if you pass NULL to version, it returns a comparable
@@ -158,6 +151,33 @@ int surgescript_util_versioncode(const char* version)
     }
 
     return code;
+}
+
+/*
+ * surgescript_util_version()
+ * Returns the current version of SurgeScript
+ */
+const char* surgescript_util_version()
+{
+    return version_string;
+}
+
+/*
+ * surgescript_util_year()
+ * Returns a year string of the SurgeScript runtime
+ */
+const char* surgescript_util_year()
+{
+    return year_string;
+}
+
+/*
+ * surgescript_util_website()
+ * Returns a string of the project website
+ */
+const char* surgescript_util_website()
+{
+    return website;
 }
 
 /*
