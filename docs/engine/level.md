@@ -158,7 +158,7 @@ The number of the next level in the current quest: 1 means the first level of th
 
 #### onUnload
 
-`onUnload`: object | null.
+`onUnload`: object | `null`.
 
 Used to specify a [function object](/tutorials/advanced_features/#function-objects) to be called when the level is unloaded.
 

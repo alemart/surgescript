@@ -198,7 +198,7 @@ This method of the `String` object can be used directly. It checks if the given 
 
 *Arguments*
 
-* `value`: string | null. The value to be tested.
+* `value`: string | `null`. The value to be tested.
 
 *Returns*
 

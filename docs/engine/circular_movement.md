@@ -77,9 +77,9 @@ Specifies the scale of the movement in both X and Y axes. It is used to distort 
 
 #### center
 
-`center`: [Vector2](/engine/vector2) object | null.
+`center`: [Vector2](/engine/vector2) object | `null`.
 
-If not null, forces the center of the movement to be at a particular position in world space. Defaults to `null`.
+If not `null`, forces the center of the movement to be at a particular position in world space. Defaults to `null`.
 
 #### phaseOffset
 

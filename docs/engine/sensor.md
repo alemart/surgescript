@@ -54,7 +54,7 @@ Properties
 
 #### status
 
-`status`: string | null, read-only.
+`status`: string | `null`, read-only.
 
 The type of the brick colliding with the sensor (either *"solid"* or *"cloud"*). If the sensor isn't colliding with a brick, or if it's disabled, its status will be `null`.
 
