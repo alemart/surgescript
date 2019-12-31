@@ -124,7 +124,7 @@ void show_help(const char* executable)
         "Compiles and executes the given script(s).\n"
         "\n"
         "Options:\n"
-        "\t-v, --version\t\t\tshows the version of the scripting engine\n"
+        "\t-v, --version\t\t\tshows the version of SurgeScript\n"
         "\t-D, --debug\t\t\tprints debugging information\n"
         "\t-h, --help\t\t\tshows this message\n"
         "\n"
