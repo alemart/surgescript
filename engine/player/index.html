@@ -1514,6 +1514,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#aggressive" title="aggressive" class="md-nav__link">
+    aggressive
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#breathtime" title="breathTime" class="md-nav__link">
     breathTime
   </a>
@@ -2155,6 +2162,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#aggressive" title="aggressive" class="md-nav__link">
+    aggressive
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#breathtime" title="breathTime" class="md-nav__link">
     breathTime
   </a>
@@ -2365,7 +2379,7 @@
 // When you are stopped, hold up and press jump to charge.
 // Release up after 0.5 second and you'll gain a nice boost!
 //
-object &quot;Super Peel Out&quot;
+object &quot;Super Peel Out&quot; is &quot;companion&quot;
 {
     charge = Sound(&quot;samples/charge.wav&quot;);
     release = Sound(&quot;samples/release.wav&quot;);
@@ -2591,6 +2605,10 @@ object &quot;Application&quot;
 <h4 id="underwater">underwater</h4>
 <p><code>underwater</code>: boolean.</p>
 <p>Get underwater / out of water. Defaults to <code>false</code>.</p>
+<h4 id="aggressive">aggressive</h4>
+<p><code>aggressive</code>: boolean.</p>
+<p>If set to <code>true</code>, the <a href="#attacking">attacking</a> flag will be <code>true</code> and the player will be able to hit the baddies just by touching them, regardless if he/she is jumping or not. Defaults to <code>false</code>.</p>
+<p><em>Available since:</em> Open Surge 0.5.1</p>
 <h4 id="breathtime">breathTime</h4>
 <p><code>breathTime</code>: number.</p>
 <p>The maximum number of seconds the player can remain underwater without breathing.</p>
