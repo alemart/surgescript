@@ -1,3 +1,10 @@
+# 0.5.4.1 - December 31st, 2019
+
+* Included Transform utilities
+* Updated the documentation
+* Added Math.lerpAngle(), Math.deltaAngle()
+* General improvements
+
 # 0.5.4 - September 23rd, 2019
 
 * Performance optimizations
