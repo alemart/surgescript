@@ -27,8 +27,9 @@
 #include <time.h>
 #include "util.h"
 
-#ifdef _WIN32
+#if defined(_WIN32)
 #include <windows.h>
+#include <wchar.h>
 #else
 #include <sys/time.h>
 #endif
@@ -41,7 +42,7 @@ static void (*log_function)(const char* message) = my_log;
 static void (*fatal_function)(const char* message) = my_fatal;
 
 /* project info */
-static const char* version_string = "0.5.4.1"; /* current version of SurgeScript */
+static const char* version_string = "0.5.4.2"; /* current version of SurgeScript */
 static const char* year_string = "2016-2020";
 static const char* website = "https://github.com/alemart/surgescript";
 
@@ -321,6 +322,39 @@ double surgescript_util_random()
     uint64_t x = surgescript_util_random64();
     x = (x >> 12) | UINT64_C(0x3FF0000000000000); /* sign bit = 0; exponent = 1023 */
     return *((double*)&x) - 1.0;
+}
+
+/*
+ * surgescript_util_fopen_utf8()
+ * fopen() with UTF-8 support for filenames
+ */
+FILE* surgescript_util_fopen_utf8(const char* filepath, const char* mode)
+{
+#if defined(_WIN32)
+    FILE* fp;
+    int wpath_size = MultiByteToWideChar(CP_UTF8, 0, filepath, -1, NULL, 0);
+    int wmode_size = MultiByteToWideChar(CP_UTF8, 0, mode, -1, NULL, 0);
+
+    if(wpath_size > 0 && wmode_size > 0) {
+        wchar_t* wpath = ssmalloc(wpath_size * sizeof(*wpath));
+        wchar_t* wmode = ssmalloc(wmode_size * sizeof(*wmode));
+
+        MultiByteToWideChar(CP_UTF8, 0, filepath, -1, wpath, wpath_size);
+        MultiByteToWideChar(CP_UTF8, 0, mode, -1, wmode, wmode_size);
+        fp = _wfopen(wpath, wmode);
+
+        ssfree(wmode);
+        ssfree(wpath);
+    }
+    else {
+        surgescript_util_log("%s(\"%s\", \"%s\") ERROR %d", __func__, filepath, mode, GetLastError());
+        fp = fopen(filepath, mode);
+    }
+
+    return fp;
+#else
+    return fopen(filepath, mode);
+#endif
 }
 
 /* -------------------------------

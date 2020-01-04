@@ -22,6 +22,7 @@
 #ifndef _SURGESCRIPT_UTIL_H
 #define _SURGESCRIPT_UTIL_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -71,5 +72,7 @@ uint64_t surgescript_util_gettickcount(); /* number of milliseconds since some a
 void surgescript_util_srand(uint64_t seed); /* sets the seed of the pseudo-random number generator */
 uint64_t surgescript_util_random64(); /* generates a pseudo-random 64-bit unsigned integer */
 double surgescript_util_random(); /* generates a pseudo-random double in the [0,1) range */
+
+FILE* surgescript_util_fopen_utf8(const char* filepath, const char* mode); /* fopen() with UTF-8 support for filenames */
 
 #endif

@@ -189,7 +189,7 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser)
  */
 bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* absolute_path)
 {
-    FILE* fp = fopen(absolute_path, "rb"); /* use binary mode, so offsets don't get messed up */
+    FILE* fp = surgescript_util_fopen_utf8(absolute_path, "rb"); /* use binary mode, so offsets don't get messed up */
     if(fp) {
         static size_t BUFSIZE = 1024;
         char* data = NULL;
