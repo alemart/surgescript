@@ -1,3 +1,7 @@
+# 0.5.4.2 - January 5th, 2020
+
+* Added support for UTF-8 filenames on Windows
+
 # 0.5.4.1 - December 31st, 2019
 
 * Included Transform utilities
