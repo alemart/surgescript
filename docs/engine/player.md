@@ -17,7 +17,7 @@ using SurgeEngine.Audio.Sound;
 // When you are stopped, hold up and press jump to charge.
 // Release up after 0.5 second and you'll gain a nice boost!
 //
-object "Super Peel Out" is "companion"
+object "My Peel Out" is "companion"
 {
     charge = Sound("samples/charge.wav");
     release = Sound("samples/release.wav");
@@ -84,7 +84,7 @@ using SurgeEngine.Player;
 
 // Gives Surge 1 collectible each second
 // Just place it in your level
-object "CollectibleGiver" is "entity", "awake"
+object "Collectible Giver" is "entity", "awake"
 {
     player = Player("Surge");
 
@@ -347,7 +347,7 @@ A collider associated with this Player.
 
 #### shield
 
-`shield`: string.
+`shield`: string | `null`.
 
 One of the following: *"shield"*, *"fire"*, *"thunder"*, *"water"*, *"acid"*, *"wind"* or `null` (if there is no shield).
 
@@ -480,9 +480,9 @@ using SurgeEngine.Player;
 using SurgeEngine.Actor;
 using SurgeEngine.Collisions.CollisionBox;
 
-object "ShieldBox" is "entity"
+object "Shield Box" is "entity"
 {
-    actor = Actor("ShieldBox");
+    actor = Actor("Shield Box");
     shieldCollider = CollisionBox(32,32);
 
     state "main"

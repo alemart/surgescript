@@ -21,6 +21,8 @@ v = player.transform.position.translatedBy(5,0); // a vector
 ...
 ```
 
+*Note:* In Open Surge, the x-axis grows to the right of the screen and the y-axis grows downwards, as in many other 2D games and software.
+
 Factory
 -------
 
@@ -65,7 +67,7 @@ The unit up vector.
 
 *Returns*
 
-Returns the (0,-1) vector. In Open Surge, the y-axis grows downwards.
+Returns the up vector of length 1.
 
 #### Vector2.right
 
@@ -75,7 +77,7 @@ The unit right vector.
 
 *Returns*
 
-Returns the (1,0) vector. In Open Surge, the x-axis grows to the right.
+Returns the right vector of length 1.
 
 #### Vector2.down
 
@@ -85,7 +87,7 @@ The unit down vector.
 
 *Returns*
 
-Returns the (0,1) vector. In Open Surge, the y-axis grows downwards.
+Returns the down vector of length 1.
 
 #### Vector2.left
 
@@ -95,7 +97,7 @@ The unit left vector.
 
 *Returns*
 
-Returns the (-1,0) vector. In Open Surge, the x-axis grows to the right.
+Returns the left vector of length 1.
 
 #### Vector2.zero
 
