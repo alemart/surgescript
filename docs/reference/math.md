@@ -322,7 +322,7 @@ The remainder of `x / y`.
 
 `sign(x)`
 
-The sign of `x`: 1 if `x` is non-negative, 0 otherwise.
+The sign of `x`: 1 if `x` is non-negative, -1 otherwise.
 
 *Arguments*
 
@@ -375,7 +375,7 @@ The minimum of two values.
 
 *Returns*
 
-Returns the smallest of two values: `x` and `y`.
+Returns the minimum of `x` and `y`.
 
 #### max
 
@@ -390,7 +390,7 @@ The maximum of two values.
 
 *Returns*
 
-Returns the largest of two values: `x` and `y`.
+Returns the maximum of `x` and `y`.
 
 #### clamp
 
