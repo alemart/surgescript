@@ -1,7 +1,7 @@
 EventChain
 ==========
 
-An EventChain is an [event](/engine/event) that triggers other events, sequentially, as in a chain of events.
+An EventChain is an [event](/engine/event) that triggers other events sequentially, as in a chain of events.
 
 Factory
 -------
@@ -25,6 +25,7 @@ A new EventChain that triggers the specified events, one at a time. The first ti
 *Example*
 
 ```
+// EventChain example
 // This is a level setup object. Make sure to link it in your .lev file!
 using SurgeEngine.Level;
 using SurgeEngine.Events.EventChain;
@@ -61,6 +62,32 @@ Make the EventChain loop. When the last event of the chain is triggered, the nex
 *Returns*
 
 The EventChain object.
+
+*Example*
+
+```
+// Triggering Alternating Events
+// This is a level setup object. Make sure to link it in your .lev file!
+using SurgeEngine.Level;
+using SurgeEngine.Events.EventChain;
+using SurgeEngine.Events.FunctionEvent;
+
+object "My Level Setup - Alternating Events"
+{
+    fun constructor()
+    {
+        Level.setup({
+            "Switch": {
+                "sticky": false,
+                "onActivate": EventChain([
+                    FunctionEvent("Print").withArgument("Triggered Event A"),
+                    FunctionEvent("Print").withArgument("Triggered Event B")
+                ]).willLoop()
+            }
+        });
+    }
+}
+```
 
 #### call
 
