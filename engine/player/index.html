@@ -2379,7 +2379,7 @@
 // When you are stopped, hold up and press jump to charge.
 // Release up after 0.5 second and you'll gain a nice boost!
 //
-object &quot;Super Peel Out&quot; is &quot;companion&quot;
+object &quot;My Peel Out&quot; is &quot;companion&quot;
 {
     charge = Sound(&quot;samples/charge.wav&quot;);
     release = Sound(&quot;samples/release.wav&quot;);
@@ -2438,7 +2438,7 @@ object &quot;Super Peel Out&quot; is &quot;companion&quot;
 
 // Gives Surge 1 collectible each second
 // Just place it in your level
-object &quot;CollectibleGiver&quot; is &quot;entity&quot;, &quot;awake&quot;
+object &quot;Collectible Giver&quot; is &quot;entity&quot;, &quot;awake&quot;
 {
     player = Player(&quot;Surge&quot;);
 
@@ -2591,7 +2591,7 @@ object &quot;Application&quot;
 <p><code>collider</code>: <a href="/engine/collider">Collider</a> object, read-only.</p>
 <p>A collider associated with this Player.</p>
 <h4 id="shield">shield</h4>
-<p><code>shield</code>: string.</p>
+<p><code>shield</code>: string | <code>null</code>.</p>
 <p>One of the following: <em>"shield"</em>, <em>"fire"</em>, <em>"thunder"</em>, <em>"water"</em>, <em>"acid"</em>, <em>"wind"</em> or <code>null</code> (if there is no shield).</p>
 <h4 id="invincible">invincible</h4>
 <p><code>invincible</code>: boolean.</p>
@@ -2661,9 +2661,9 @@ object &quot;Application&quot;
 using SurgeEngine.Actor;
 using SurgeEngine.Collisions.CollisionBox;
 
-object &quot;ShieldBox&quot; is &quot;entity&quot;
+object &quot;Shield Box&quot; is &quot;entity&quot;
 {
-    actor = Actor(&quot;ShieldBox&quot;);
+    actor = Actor(&quot;Shield Box&quot;);
     shieldCollider = CollisionBox(32,32);
 
     state &quot;main&quot;

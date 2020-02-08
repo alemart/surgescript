@@ -1503,7 +1503,7 @@
                 
                 
                 <h1 id="eventchain">EventChain</h1>
-<p>An EventChain is an <a href="/engine/event">event</a> that triggers other events, sequentially, as in a chain of events.</p>
+<p>An EventChain is an <a href="/engine/event">event</a> that triggers other events sequentially, as in a chain of events.</p>
 <h2 id="factory">Factory</h2>
 <h4 id="eventseventchain">Events.EventChain</h4>
 <p><code>Events.EventChain(chain)</code></p>
@@ -1516,7 +1516,8 @@
 <p>A new EventChain that triggers the specified events, one at a time. The first time the EventChain is triggered, the first event of the <code>chain</code> will be triggered. The second time the EventChain is triggered, the second event of the <code>chain</code> will be triggered, and so on.</p>
 <p><strong>Note:</strong> if the EventChain ever triggers its last event, from that moment onwards it will always trigger its last event (unless you make it loop).</p>
 <p><em>Example</em></p>
-<pre><code>// This is a level setup object. Make sure to link it in your .lev file!
+<pre><code>// EventChain example
+// This is a level setup object. Make sure to link it in your .lev file!
 using SurgeEngine.Level;
 using SurgeEngine.Events.EventChain;
 using SurgeEngine.Events.FunctionEvent;
@@ -1546,6 +1547,30 @@ object &quot;My Level Setup&quot;
 <p>Make the EventChain loop. When the last event of the chain is triggered, the next event to be triggered will be the first one.</p>
 <p><em>Returns</em></p>
 <p>The EventChain object.</p>
+<p><em>Example</em></p>
+<pre><code>// Triggering Alternating Events
+// This is a level setup object. Make sure to link it in your .lev file!
+using SurgeEngine.Level;
+using SurgeEngine.Events.EventChain;
+using SurgeEngine.Events.FunctionEvent;
+
+object &quot;My Level Setup - Alternating Events&quot;
+{
+    fun constructor()
+    {
+        Level.setup({
+            &quot;Switch&quot;: {
+                &quot;sticky&quot;: false,
+                &quot;onActivate&quot;: EventChain([
+                    FunctionEvent(&quot;Print&quot;).withArgument(&quot;Triggered Event A&quot;),
+                    FunctionEvent(&quot;Print&quot;).withArgument(&quot;Triggered Event B&quot;)
+                ]).willLoop()
+            }
+        });
+    }
+}
+</code></pre>
+
 <h4 id="call">call</h4>
 <p><code>call()</code></p>
 <p>Triggers the event.</p>
