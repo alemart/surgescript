@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,10 @@
 #ifndef _SURGESCRIPT_H
 #define _SURGESCRIPT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "surgescript/runtime/vm.h"
 #include "surgescript/runtime/program.h"
 #include "surgescript/runtime/object.h"
@@ -31,8 +35,13 @@
 #include "surgescript/runtime/heap.h"
 #include "surgescript/runtime/stack.h"
 #include "surgescript/runtime/variable.h"
+#include "surgescript/compiler/parser.h"
 #include "surgescript/util/transform.h"
 #include "surgescript/util/ssarray.h"
 #include "surgescript/util/util.h"
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
