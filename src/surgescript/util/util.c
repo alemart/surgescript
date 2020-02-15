@@ -42,7 +42,7 @@ static void (*log_function)(const char* message) = my_log;
 static void (*fatal_function)(const char* message) = my_fatal;
 
 /* project info */
-static const char* version_string = "0.5.5"; /* current version of SurgeScript */
+static const char* version_string = "0.5.4.3"; /* current version of SurgeScript */
 static const char* year_string = "2016-2020";
 static const char* website = "https://github.com/alemart/surgescript";
 
