@@ -1,0 +1,13 @@
+/* Project info */
+const char SURGESCRIPT_AUTHORS[] = "Alexandre Martins";
+const char SURGESCRIPT_YEARS[] = "2016-2020";
+const char SURGESCRIPT_WEBSITE[] = "https://github.com/alemart/surgescript";
+
+/* compiled version of SurgeScript */
+#cmakedefine PROJECT_VERSION "@PROJECT_VERSION@"
+
+#if defined(PROJECT_VERSION)
+const char SURGESCRIPT_VERSION[] = PROJECT_VERSION;
+#else
+#error "Undefined PROJECT_VERSION (major.minor.patch.tweak)"
+#endif

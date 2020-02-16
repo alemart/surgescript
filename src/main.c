@@ -117,7 +117,7 @@ void show_help(const char* executable)
 {
     printf(
         "SurgeScript version %s\n"
-        "Copyright (C) %s Alexandre Martins\n"
+        "Copyright (C) %s %s\n"
         "%s\n"
         "\n"
         "Usage: %s [OPTIONS] <script>...\n"
@@ -137,6 +137,7 @@ void show_help(const char* executable)
         "Full documentation at: <%s>\n",
         surgescript_util_version(),
         surgescript_util_year(),
+        surgescript_util_authors(),
         surgescript_util_website(),
         executable,
         executable,

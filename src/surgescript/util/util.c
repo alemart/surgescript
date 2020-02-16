@@ -41,11 +41,6 @@ static void my_fatal(const char* message);
 static void (*log_function)(const char* message) = my_log;
 static void (*fatal_function)(const char* message) = my_fatal;
 
-/* project info */
-static const char* version_string = "0.5.4.3"; /* current version of SurgeScript */
-static const char* year_string = "2016-2020";
-static const char* website = "https://github.com/alemart/surgescript";
-
 
 
 /* -------------------------------
@@ -160,7 +155,8 @@ int surgescript_util_versioncode(const char* version)
  */
 const char* surgescript_util_version()
 {
-    return version_string;
+    extern const char SURGESCRIPT_VERSION[];
+    return SURGESCRIPT_VERSION;
 }
 
 /*
@@ -169,7 +165,8 @@ const char* surgescript_util_version()
  */
 const char* surgescript_util_year()
 {
-    return year_string;
+    extern const char SURGESCRIPT_YEARS[];
+    return SURGESCRIPT_YEARS;
 }
 
 /*
@@ -178,7 +175,18 @@ const char* surgescript_util_year()
  */
 const char* surgescript_util_website()
 {
-    return website;
+    extern const char SURGESCRIPT_WEBSITE[];
+    return SURGESCRIPT_WEBSITE;
+}
+
+/*
+ * surgescript_util_authors()
+ * Author string
+ */
+const char* surgescript_util_authors()
+{
+    extern const char SURGESCRIPT_AUTHORS[];
+    return SURGESCRIPT_AUTHORS;
 }
 
 /*
