@@ -57,28 +57,23 @@ SurgeScript is a scripting language for games. It lets you unleash your creativi
 
 Go to the [SurgeScript Crash Course](https://alemart.github.io/surgescript/)! Also take a look on the [video tutorials](https://youtube.com/alemart88) and on the [examples](examples).
 
-##### Who created SurgeScript?
-
-SurgeScript has been created by [Alexandre Martins](https://github.com/alemart), a computer scientist from Brazil. He has also created the [Open Surge game engine](http://opensurge2d.org), hence the name SurgeScript.
-
 ##### Why use SurgeScript?
 
 Unlike other programming languages, SurgeScript has been designed with the specific needs of games in mind. Its features include:
 
-- The state-machine pattern: objects are state machines
+- The state-machine pattern: objects are state machines, making it easy to create in-game entities
 - The composition approach: you may design complex objects and behaviors by means of composition
 - The hierarchy system: objects have a parent and may have children, in a tree-like structure
 - The game loop: it's defined implicitly
+- Automatic garbage collection, object tagging and more!
 
-Other benefits include:
+SurgeScript is meant to be used in games and in interactive applications. It's easy to integrate it into existing code, it's easy to extend, it features a C-like syntax, and it's free and open-source software.
 
-- Small footprint, easy to integrate
-- C-like syntax, including plenty of features
-- Automatic garbage collection
-- Easy to extend via Plugins
-- It's free and open-source software
+SurgeScript has been designed based on the experience of its developer dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
 
-These features come from the experience of the developer dealing with game engines, applications related to computer graphics and so on. Some of the best practices have been incorporated into the language itself, making things really easy for developers and modders.
+##### Who created SurgeScript?
+
+SurgeScript has been created by [Alexandre Martins](https://github.com/alemart), a computer scientist from Brazil. He has also created the [Open Surge game engine](http://opensurge2d.org), hence the name SurgeScript.
 
 ##### How do I compile SurgeScript?
 
