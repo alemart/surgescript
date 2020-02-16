@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Alexandre Martins -->
+<component type="console-application">
+  <id>org.opensurge2d.SurgeScript</id>
+  <name>SurgeScript</name>
+  <developer_name>Alexandre Martins</developer_name>
+  <update_contact>alemartf_at_gmail.com</update_contact>
+  <metadata_license>MIT</metadata_license>
+  <project_license>Apache-2.0</project_license>
+  <summary>A scripting language for games</summary>
+  <description>
+    <p>SurgeScript is a scripting language for games. Use it to unleash your creativity and build your own amazing interactive content! It's such a joy to use SurgeScript! Its features include:</p>
+    <ul>
+      <li>The state-machine pattern: objects are state machines, making it easy to create in-game entities</li>
+      <li>The composition approach: you may design complex objects and behaviors by means of composition</li>
+      <li>The hierarchy system: objects have a parent and may have children, in a tree-like structure</li>
+      <li>The game loop: it's defined implicitly</li>
+      <li>Automatic garbage collection, object tagging and more!</li>
+    </ul>
+    <p>SurgeScript is meant to be used in games and in interactive applications. It's easy to integrate it into existing code, it's easy to extend, it features a C-like syntax, and it's free and open-source software.</p>
+  </description>
+  <url type="homepage">https://github.com/alemart/surgescript</url>
+  <url type="donation">http://opensurge2d.org/contribute</url>
+  <url type="bugtracker">https://github.com/alemart/surgescript/issues</url>
+  <categories>
+    <category>Game</category>
+    <category>Development</category>
+  </categories>
+  <icon type="local">@ICON_FILEPATH@</icon>
+  <provides>
+    <binary>surgescript</binary>
+  </provides>
+</component>
