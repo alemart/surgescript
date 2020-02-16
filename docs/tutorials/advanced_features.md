@@ -160,7 +160,8 @@ Iterators
 As seen in the [loops](/tutorials/loops#foreach) section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object that implements a specific protocol. You may implement your own collections by implementing function `iterator()`. If you have ever used Java, you'll find this to be familiar.
 
 ```
-object "MyCollection"
+// Iterable collections should be tagged "iterable"
+object "MyCollection" is "iterable"
 {
     fun iterator()
     {
@@ -170,10 +171,11 @@ object "MyCollection"
 }
 ```
 
-For each collection you define, you should also define its iterator object. The iterator object should implement functions `next()` and `hasNext()` (both take no arguments):
+For each collection you define, you must define its iterator object. The iterator object must implement functions `next()` and `hasNext()` (both take no arguments):
 
 ```
-object "MyIterator"
+// Iterators should be tagged "iterator"
+object "MyIterator" is "iterator"
 {
     fun next()
     {
@@ -233,7 +235,7 @@ object "Application"
     }
 }
 
-object "Even Numbers"
+object "Even Numbers" is "iterable"
 {
     fun iterator()
     {
@@ -241,7 +243,7 @@ object "Even Numbers"
     }
 }
 
-object "Even Numbers Iterator"
+object "Even Numbers Iterator" is "iterator"
 {
     nextNumber = 0;
 

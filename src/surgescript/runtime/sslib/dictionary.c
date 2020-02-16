@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@
 #include "../heap.h"
 #include "../object.h"
 #include "../object_manager.h"
+#include "../tag_system.h"
 #include "../../util/ssarray.h"
 #include "../../util/util.h"
 
@@ -95,6 +96,12 @@ static surgescript_var_t* dictentry(surgescript_object_t* entry, const surgescri
  */
 void surgescript_sslib_register_dictionary(surgescript_vm_t* vm)
 {
+    /* tags */
+    surgescript_tagsystem_t* tag_system = surgescript_vm_tagsystem(vm);
+    surgescript_tagsystem_add_tag(tag_system, "Dictionary", "iterable");
+    surgescript_tagsystem_add_tag(tag_system, "DictionaryIterator", "iterator");
+
+    /* methods */
     surgescript_vm_bind(vm, "Dictionary", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Dictionary", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "Dictionary", "get_count", fun_getcount, 0);

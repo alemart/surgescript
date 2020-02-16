@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,10 @@
 
 #include <string.h>
 #include "../vm.h"
-#include "../object_manager.h"
 #include "../heap.h"
 #include "../object.h"
+#include "../object_manager.h"
+#include "../tag_system.h"
 #include "../../util/ssarray.h"
 #include "../../util/util.h"
 
@@ -79,6 +80,12 @@ static const surgescript_heapptr_t IT_COUNTER_ADDR = 1;
  */
 void surgescript_sslib_register_array(surgescript_vm_t* vm)
 {
+    /* tags */
+    surgescript_tagsystem_t* tag_system = surgescript_vm_tagsystem(vm);
+    surgescript_tagsystem_add_tag(tag_system, "Array", "iterable");
+    surgescript_tagsystem_add_tag(tag_system, "ArrayIterator", "iterator");
+
+    /* methods */
     surgescript_vm_bind(vm, "Array", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Array", "destructor", fun_destructor, 0);
     surgescript_vm_bind(vm, "Array", "state:main", fun_main, 0);
