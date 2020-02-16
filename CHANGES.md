@@ -1,15 +1,17 @@
-# 0.5.4.2 - January 5th, 2020
+# Release Notes
+
+## 0.5.4.2 - January 5th, 2020
 
 * Added support for UTF-8 filenames on Windows
 
-# 0.5.4.1 - December 31st, 2019
+## 0.5.4.1 - December 31st, 2019
 
 * Included Transform utilities
 * Updated the documentation
 * Added Math.lerpAngle(), Math.deltaAngle()
 * General improvements
 
-# 0.5.4 - September 23rd, 2019
+## 0.5.4 - September 23rd, 2019
 
 * Performance optimizations
 * Improved the built-in pseudo-random number generator
@@ -21,7 +23,7 @@
 * Updated the documentation
 * Bugfixes and general improvements
 
-# 0.5.3 - March 20th, 2019
+## 0.5.3 - March 20th, 2019
 
 * Introduced the remainder operator (%)
 * Introduced the 'caller' keyword
@@ -36,7 +38,7 @@
 * Updated documentation
 * General improvements
 
-# 0.5.2 - May 31st, 2018
+## 0.5.2 - May 31st, 2018
 
 * Introduced the Plugin system
 * Introduced the Date object for date and time routines
@@ -46,7 +48,7 @@
 * Updated the naming convention of getters/setters
 * Bugfixes and general improvements
 
-# 0.5.1 - May 5th, 2018
+## 0.5.1 - May 5th, 2018
 
 * SurgeScript now compiles as a static library
 * Introduced the <surgescript.h> header for ease of use
@@ -54,6 +56,6 @@
 * Improved documentation
 * Small improvements to the language
 
-# 0.5.0 - April 15th, 2018
+## 0.5.0 - April 15th, 2018
 
 * Initial release
