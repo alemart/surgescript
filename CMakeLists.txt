@@ -15,6 +15,7 @@ set(CMAKE_C_STANDARD 99)
 
 # User options
 if(UNIX)
+    set(PKGCONFIG_PATH "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" CACHE PATH "Destination folder of the pkg-config (.pc) file")
     set(METAINFO_PATH "/usr/share/metainfo" CACHE PATH "Where to store the metainfo file when installing")
     set(ICON_PATH "/usr/share/pixmaps" CACHE PATH "Where to store the icon file when installing")
     file(TO_CMAKE_PATH "${ICON_PATH}/surgescript.png" ICON_FILEPATH)
@@ -94,7 +95,7 @@ set(
 )
 
 # Generate files from templates
-set(SURGESCRIPT_TEMPLATES info.c surgescript.appdata.xml)
+set(SURGESCRIPT_TEMPLATES info.c surgescript.pc surgescript.appdata.xml)
 foreach(SURGESCRIPT_TEMPLATE ${SURGESCRIPT_TEMPLATES})
     configure_file(src/surgescript/misc/${SURGESCRIPT_TEMPLATE}.in ${SURGESCRIPT_TEMPLATE} @ONLY)
 endforeach()
@@ -128,8 +129,9 @@ install(DIRECTORY src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(TARGETS surgescript DESTINATION lib)
 install(TARGETS surgescript.bin DESTINATION bin)
 
-# *nix icon & metainfo
+# *nix metadata & icon
 if(UNIX)
-  install(FILES src/surgescript/misc/surgescript.png DESTINATION "${ICON_PATH}")
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/surgescript.pc DESTINATION "${PKGCONFIG_PATH}")
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/surgescript.appdata.xml DESTINATION "${METAINFO_PATH}")
+  install(FILES src/surgescript/misc/surgescript.png DESTINATION "${ICON_PATH}")
 endif()
