@@ -1,13 +1,24 @@
 # ------------------------------------------------------------------------------
 # SurgeScript
 # A scripting language for games
-# Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
+# Copyright 2016-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
 # ------------------------------------------------------------------------------
 
 # Project info
-cmake_minimum_required(VERSION 3.0.2)
-project(surgescript LANGUAGES C)
+cmake_minimum_required(VERSION 3.2)
+project(
+    surgescript
+    VERSION 0.5.4.3
+    LANGUAGES C
+)
 set(CMAKE_C_STANDARD 99)
+
+# User options
+if(UNIX)
+    set(METAINFO_PATH "/usr/share/metainfo" CACHE PATH "Where to store the metainfo file when installing")
+    set(ICON_PATH "/usr/share/pixmaps" CACHE PATH "Where to store the icon file when installing")
+    file(TO_CMAKE_PATH "${ICON_PATH}/surgescript.png" ICON_FILEPATH)
+endif()
 
 # Sources
 set(
@@ -49,6 +60,7 @@ set(
     src/surgescript/util/utf8.c
     src/surgescript/util/util.c
     src/surgescript/util/xoroshiro128plus.c
+    ${CMAKE_CURRENT_BINARY_DIR}/info.c
 )
 
 # Headers
@@ -81,6 +93,12 @@ set(
     src/surgescript.h
 )
 
+# Generate files from templates
+set(SURGESCRIPT_TEMPLATES info.c surgescript.appdata.xml)
+foreach(SURGESCRIPT_TEMPLATE ${SURGESCRIPT_TEMPLATES})
+    configure_file(src/surgescript/misc/${SURGESCRIPT_TEMPLATE}.in ${SURGESCRIPT_TEMPLATE} @ONLY)
+endforeach()
+
 # Output folder
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
@@ -101,7 +119,7 @@ if(WIN32 AND MINGW)
     if(NOT CMAKE_RC_COMPILER)
         set(CMAKE_RC_COMPILER windres)
     endif()
-    execute_process(COMMAND "${CMAKE_RC_COMPILER}" -O coff -o "${CMAKE_CURRENT_BINARY_DIR}/iconwin.res" -i "${CMAKE_SOURCE_DIR}/src/surgescript/resources/iconwin.rc" -I "${CMAKE_SOURCE_DIR}")
+    execute_process(COMMAND "${CMAKE_RC_COMPILER}" -O coff -o "${CMAKE_CURRENT_BINARY_DIR}/iconwin.res" -i "${CMAKE_SOURCE_DIR}/src/surgescript/misc/iconwin.rc" -I "${CMAKE_SOURCE_DIR}")
     set_target_properties(surgescript.bin PROPERTIES LINK_FLAGS "-static-libgcc \"${CMAKE_CURRENT_BINARY_DIR}/iconwin.res\"")
 endif()
 
@@ -109,3 +127,9 @@ endif()
 install(DIRECTORY src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(TARGETS surgescript DESTINATION lib)
 install(TARGETS surgescript.bin DESTINATION bin)
+
+# *nix icon & metainfo
+if(UNIX)
+  install(FILES src/surgescript/misc/surgescript.png DESTINATION "${ICON_PATH}")
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/surgescript.appdata.xml DESTINATION "${METAINFO_PATH}")
+endif()
