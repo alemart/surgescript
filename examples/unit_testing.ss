@@ -1,7 +1,7 @@
 //
 // unit_testing.ss
 // A Unit Testing Script for SurgeScript
-// Copyright (C) 2017-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright (C) 2017-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"
@@ -226,6 +226,7 @@ object "SurgeScript Test" is "test"
         test(System.tags.select("test").indexOf(this.__name) >= 0) || fail(20);
         test(System.tags.select("noTag").length == 0) || fail(21);
         test(System.tags.list().indexOf("test") >= 0) || fail(22);
+        test(Application.args.hasTag("iterable")) || fail(23);
         end();
     }
 
@@ -340,6 +341,8 @@ object "SurgeScript Test" is "test"
         test([1,2,3,4,5].shuffle().sort(null).toString() == [4,2,5,3,1].shuffle().sort(null).toString()) || fail(23);
         test([1,2,3,4,5].shuffle().toString().length == [1,2,3,4,5].shuffle().toString().length) || fail(24);
         test([1,2,3,4,5].shuffle().length == 5) || fail(25);
+        test([].hasTag("iterable")) || fail(26);
+        test([].iterator().hasTag("iterator")) || fail(27);
         end();
     }
 
@@ -438,6 +441,9 @@ object "SurgeScript Test" is "test"
         test(dict["a"] + dict["b"] + dict["c"] == 3) || fail(29);
         for(keys = "", it = dict.iterator(); it.hasNext(); keys += it.next().key);
         test(keys == "abc") || fail(30);
+
+        test({}.hasTag("iterable")) || fail(31);
+        test({}.iterator().hasTag("iterator")) || fail(32);
 
         end();
     }
