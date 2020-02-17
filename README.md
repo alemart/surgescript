@@ -73,9 +73,7 @@ SurgeScript has been created by [Alexandre Martins](https://github.com/alemart),
 
 If you're using [Open Surge](http://opensurge2d.org), you don't need to compile SurgeScript. It's compiled for you.
 
-If you want to compile SurgeScript by yourself, you'll need a C compiler and [CMake](https://cmake.org).
-
-First of all, get the source code and extract the package. Next, compile SurgeScript as follows:
+If you want to compile SurgeScript by yourself, you need a C compiler and [CMake](https://cmake.org). First of all, get the source code and extract the package. Next, compile SurgeScript as follows:
 
 ```
 cd /path/to/sources
@@ -84,17 +82,25 @@ cmake ..
 make
 ```
 
-A **surgescript** executable will be available in the project folder for testing scripts. Additionally, SurgeScript will also be compiled as a library. To perform a system-wide install, run:
+A *surgescript* executable will be available in the project folder. Additionally, SurgeScript will also be compiled as a library (*libsurgescript*). To perform a system-wide installation, run:
 
 ```
 sudo make install
 ```
 
-**Linux users:** the installation directory defaults to */usr*. You may change it by calling `cmake .. -DCMAKE_INSTALL_PREFIX=/path/to/install` before `make`.
+To test a script:
+
+```
+surgescript examples/hello.ss
+```
+
+**Note:** use *ccmake* or *cmake-gui* to play around with different options for compiling SurgeScript.
+
+**\*nix users:** the installation directory defaults to */usr*. You may change it by calling `cmake .. -DCMAKE_INSTALL_PREFIX=/path/to/install` before `make`.
 
 ##### How do I build the documentation?
 
-You'll need [mkdocs](http://www.mkdocs.org). After you get the sources, go to the project folder and run:
+You need [mkdocs](http://www.mkdocs.org). After extracting the sources, go to the project folder and run:
 
 ```
 mkdocs build
@@ -104,17 +110,15 @@ The documentation will be available in the *site/* subdirectory.
 
 ##### How do I embed SurgeScript into my project?
 
-SurgeScript is available as a library. If you're a C/C++ developer, you may embed SurgeScript into your project by studying file *main.c* (located in *src/*). The steps are as follows:
+SurgeScript is available as a library. If you're a C/C++ developer, you may embed SurgeScript into your project by studying file *src/main.c*. The steps are as follows:
 
 1. Create a SurgeScript Virtual Machine (VM).
-2. Insert the scripts you want into the VM (let it compile the scripts).
+2. Compile the scripts you want.
 3. Launch the VM.
 4. In your game loop, update the VM.
 5. Once you're done, release the VM.
 
-You need to `#include <surgescript.h>` in your code and link your project with `-lsurgescript`.
-
-Additionally, you may call C/C++ code from SurgeScript via *binding*. Explore *src/surgescript/runtime/sslib/* for more information.
+You need to `#include <surgescript.h>` in your code and link your project with `-lsurgescript`. Additionally, you may call C/C++ code from SurgeScript via *binding*. Explore *src/surgescript/runtime/sslib/* for more information.
 
 **Tip:** to print the command-line options required to link your project with SurgeScript, run:
 
@@ -122,7 +126,7 @@ Additionally, you may call C/C++ code from SurgeScript via *binding*. Explore *s
 pkg-config --cflags --libs surgescript
 ```
 
-If you prefer static linkage, run:
+If you prefer static linking, run:
 
 ```
 pkg-config --cflags --libs --static surgescript-static
