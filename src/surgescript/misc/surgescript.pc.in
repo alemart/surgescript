@@ -2,10 +2,12 @@ prefix=@CMAKE_INSTALL_PREFIX@
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
+version=@PROJECT_VERSION@
+suffix=@LIB_LINKAGE@
 
 Name: surgescript
 Description: A scripting language for games
-Version: @PROJECT_VERSION@
-Cflags: -I${includedir}
-Libs: -L${libdir} -lsurgescript
+Version: ${version}
+Libs: -L${libdir} -lsurgescript${suffix}
 Libs.private: -lm
+Cflags: -I${includedir}
