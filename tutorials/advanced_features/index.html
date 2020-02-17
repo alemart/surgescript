@@ -1616,7 +1616,8 @@ object &quot;Greeter&quot;
 <p>In the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller, simply write <code>g = caller.spawn("Greeter")</code>. Know that <code>caller</code> points to the object that called the function (or <code>null</code> if not applicable).</p>
 <h2 id="iterators">Iterators</h2>
 <p>As seen in the <a href="/tutorials/loops#foreach">loops</a> section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object that implements a specific protocol. You may implement your own collections by implementing function <code>iterator()</code>. If you have ever used Java, you'll find this to be familiar.</p>
-<pre><code>object &quot;MyCollection&quot;
+<pre><code>// Iterable collections should be tagged &quot;iterable&quot;
+object &quot;MyCollection&quot; is &quot;iterable&quot;
 {
     fun iterator()
     {
@@ -1626,8 +1627,9 @@ object &quot;Greeter&quot;
 }
 </code></pre>
 
-<p>For each collection you define, you should also define its iterator object. The iterator object should implement functions <code>next()</code> and <code>hasNext()</code> (both take no arguments):</p>
-<pre><code>object &quot;MyIterator&quot;
+<p>For each collection you define, you must define its iterator object. The iterator object must implement functions <code>next()</code> and <code>hasNext()</code> (both take no arguments):</p>
+<pre><code>// Iterators should be tagged &quot;iterator&quot;
+object &quot;MyIterator&quot; is &quot;iterator&quot;
 {
     fun next()
     {
@@ -1681,7 +1683,7 @@ while(it.hasNext()) {
     }
 }
 
-object &quot;Even Numbers&quot;
+object &quot;Even Numbers&quot; is &quot;iterable&quot;
 {
     fun iterator()
     {
@@ -1689,7 +1691,7 @@ object &quot;Even Numbers&quot;
     }
 }
 
-object &quot;Even Numbers Iterator&quot;
+object &quot;Even Numbers Iterator&quot; is &quot;iterator&quot;
 {
     nextNumber = 0;
 
