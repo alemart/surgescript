@@ -1,5 +1,13 @@
 # Release Notes
 
+## 0.5.4.3 - February 16th, 2020
+
+* SurgeScript is now available as a shared library
+* Added pkg-config files to make it easy to link a program to libsurgescript
+* Improved interoperability with C++
+* Included AppStream metadata for Linux and for the free software ecosystem
+* Built-in iterables and iterators are now tagged "iterable" and "iterator", respectively
+
 ## 0.5.4.2 - January 5th, 2020
 
 * Added support for UTF-8 filenames on Windows
