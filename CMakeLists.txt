@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.2)
 project(
     surgescript
-    VERSION 0.5.4.3
+    VERSION 0.5.4.4
     LANGUAGES C
 )
 
@@ -26,7 +26,8 @@ endif()
 option(WANT_SHARED "Build SurgeScript as a shared library" ON)
 option(WANT_STATIC "Build SurgeScript as a static library" ON)
 option(WANT_EXECUTABLE "Build the surgescript executable" ON)
-set(PKGCONFIG_PATH "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" CACHE PATH "Destination folder of the pkg-config (.pc) file")
+set(LIB_SUFFIX "" CACHE STRING "Suffix to append to 'lib' directories, e.g., '64'") # libs must be installed to "lib64" in some systems
+set(PKGCONFIG_PATH "${CMAKE_INSTALL_PREFIX}/lib${LIB_SUFFIX}/pkgconfig" CACHE PATH "Destination folder of the pkg-config (.pc) file")
 if(UNIX)
     set(METAINFO_PATH "/usr/share/metainfo" CACHE PATH "Destination folder of the metainfo file")
     set(ICON_PATH "/usr/share/pixmaps" CACHE PATH "Destination folder of the icon file")
@@ -121,8 +122,8 @@ function(generate_pc_file LINKAGE)
     if(LINKAGE STREQUAL "static")
         set(LIB_LINKAGE "-static")
     endif()
-    configure_file(src/surgescript/misc/surgescript.pc.in surgescript${LIB_LINKAGE}.pc @ONLY)
-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/surgescript${LIB_LINKAGE}.pc DESTINATION "${PKGCONFIG_PATH}")
+    configure_file(src/surgescript/misc/surgescript.pc.in "${LIBRARY_OUTPUT_PATH}/surgescript${LIB_LINKAGE}.pc" @ONLY)
+    install(FILES "${LIBRARY_OUTPUT_PATH}/surgescript${LIB_LINKAGE}.pc" DESTINATION "${PKGCONFIG_PATH}")
 endfunction()
 
 generate_file("info.c")
@@ -139,7 +140,7 @@ if(WANT_SHARED)
     add_library(surgescript SHARED ${SURGESCRIPT_SOURCES} ${SURGESCRIPT_HEADERS})
     target_link_libraries(surgescript m)
     set_target_properties(surgescript PROPERTIES VERSION ${PROJECT_VERSION})
-    install(TARGETS surgescript DESTINATION lib)
+    install(TARGETS surgescript DESTINATION "lib${LIB_SUFFIX}")
 endif()
 
 if(WANT_STATIC)
@@ -148,7 +149,7 @@ if(WANT_STATIC)
     add_library(surgescript-static STATIC ${SURGESCRIPT_SOURCES} ${SURGESCRIPT_HEADERS})
     target_link_libraries(surgescript-static m)
     set_target_properties(surgescript-static PROPERTIES VERSION ${PROJECT_VERSION})
-    install(TARGETS surgescript-static DESTINATION lib)
+    install(TARGETS surgescript-static DESTINATION "lib${LIB_SUFFIX}")
 endif()
 
 install(DIRECTORY src/ DESTINATION include FILES_MATCHING PATTERN "*.h") # installing the headers
