@@ -249,8 +249,11 @@ object "Even Numbers" is "iterable"
         return spawn("Even Numbers Iterator").upTo(lastNumber);
     }
 
-    fun upTo(num) // this is a chainable function
+    fun upTo(num)
     {
+        // upTo() is a chainable function that
+        // is NOT part of the iterator protocol
+        // (but it's useful for this example)
         lastNumber = Number(num);
         return this;
     }
@@ -275,7 +278,10 @@ object "Even Numbers Iterator" is "iterator"
 
     fun upTo(num)
     {
-        lastNumber = num;
+        // upTo() is a chainable function that
+        // is NOT part of the iterator protocol
+        // (but it's useful for this example)
+        lastNumber = Number(num);
         return this;
     }
 }
