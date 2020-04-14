@@ -157,31 +157,36 @@ In the example above, objects spawned by the factory will be children of the fac
 Iterators
 ---------
 
-As seen in the [loops](/tutorials/loops#foreach) section, the foreach loop may be used to iterate through a collection. In SurgeScript, a collection is an object that implements a specific protocol. You may implement your own collections by implementing function `iterator()`. If you have ever used Java, you'll find this to be familiar.
+As seen in the [loops](/tutorials/loops#foreach) section, the foreach loop may be used to iterate through an iterable collection. In SurgeScript, an iterable collection is an object that implements the iterator protocol described below.
+
+You may implement your own iterable collections by tagging them as `"iterable"` and implementing function `iterator()`. If you have ever used Java, you'll find this to be familiar.
 
 ```
-// Iterable collections should be tagged "iterable"
+// Iterable collections are tagged "iterable"
+// and implement function iterator()
 object "MyCollection" is "iterable"
 {
     fun iterator()
     {
         // function iterator() takes no arguments and 
-        // should return a new iterator object
+        // returns a new iterator object
     }
 }
 ```
 
-For each collection you define, you must define its iterator object. The iterator object must implement functions `next()` and `hasNext()` (both take no arguments):
+For each iterable collection you define, you must define its iterator object. The iterator object must be tagged `"iterator"` and implement functions `next()` and `hasNext()` (both take no arguments):
 
 ```
-// Iterators should be tagged "iterator"
+// Iterators are tagged "iterator" and
+// implement functions next() and hasNext()
 object "MyIterator" is "iterator"
 {
     fun next()
     {
         // returns the next element of the collection
         // and advances the iteration pointer
-        // the collection is usually the parent object
+        // the iterable collection is usually the parent
+        // object, i.e., collection = parent
     }
 
     function hasNext()
@@ -192,7 +197,7 @@ object "MyIterator" is "iterator"
 }
 ```
 
-You may iterate through a collection using the following code:
+You may iterate over an iterable collection using the following code:
 
 ```
 it = collection.iterator();
@@ -213,16 +218,16 @@ foreach(x in collection) {
 }
 ```
 
-For the sake of completion, the following code demonstrates how to implement a custom collection that hold even numbers from 0 up to 20.
+For the sake of completion, the following code demonstrates how to implement a custom iterable collection that hold even numbers from 0 up to 20 without having to store them explicitly in memory:
 
 ```
 object "Application"
 {
-    evenNumbers = spawn("Even Numbers");
+    evenNumbers = spawn("Even Numbers").upTo(20);
 
     state "main"
     {
-        // print all the numbers of the collection
+        // print all the numbers of the iterable collection
         foreach(number in evenNumbers)
             Console.print(number);
 
@@ -237,15 +242,24 @@ object "Application"
 
 object "Even Numbers" is "iterable"
 {
+    lastNumber = 0;
+
     fun iterator()
     {
-        return spawn("Even Numbers Iterator");
+        return spawn("Even Numbers Iterator").upTo(lastNumber);
+    }
+
+    fun upTo(num) // this is a chainable function
+    {
+        lastNumber = Number(num);
+        return this;
     }
 }
 
 object "Even Numbers Iterator" is "iterator"
 {
     nextNumber = 0;
+    lastNumber = 0;
 
     fun next()
     {
@@ -256,7 +270,13 @@ object "Even Numbers Iterator" is "iterator"
 
     fun hasNext()
     {
-        return nextNumber <= 20;
+        return nextNumber <= lastNumber;
+    }
+
+    fun upTo(num)
+    {
+        lastNumber = num;
+        return this;
     }
 }
 ```

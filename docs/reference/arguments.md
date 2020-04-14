@@ -107,7 +107,7 @@ Spawns an iterator.
 
 *Returns*
 
-An iterator to loop through the command-line arguments.
+An iterator to iterate over the command-line arguments.
 
 #### toString
 

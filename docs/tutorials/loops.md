@@ -58,7 +58,7 @@ for(i = 1; i <= 10; i++) {
 Foreach
 -------
 
-Foreach loops are used to iterate throughout collections (such as Arrays). Basically: for each element `x` in the collection, do something with `x`. The syntax is as follows:
+Foreach loops are used to iterate throughout iterable collections (such as [Arrays](/reference/array) and [Dictionaries](/reference/dictionary)). Basically: for each element `x` in the iterable collection, do something with `x`. The syntax is as follows:
 
 ```
 foreach(element in collection) {
@@ -75,3 +75,17 @@ foreach(x in collection) {
     Console.print(x);
 }
 ```
+
+The example below iterates over a [Dictionary](/reference/dictionary):
+
+```
+dictionary = { "a": 1, "b": 2, "c": 3 };
+foreach(entry in dictionary) {
+    Console.print(entry.key);
+    Console.print(entry.value);
+}
+```
+
+> **Implementing your own iterable collections**
+>
+> The foreach loop can be used with any iterable collections, not only [Arrays](/reference/array) and [Dictionaries](/reference/dictionary). You may even [implement your own!](/tutorials/advanced_features#iterators)
