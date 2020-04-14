@@ -232,11 +232,7 @@ object "Application"
             Console.print(number);
 
         // we're done!
-        state = "done";
-    }
-
-    state "done"
-    {
+        exit();
     }
 }
 
@@ -301,4 +297,12 @@ The result of this code is:
 16
 18
 20
+```
+
+**CHALLENGE:** can you write an iterable collection called *Fibonacci Sequence* containing the first *N* [Fibonacci numbers](https://en.wikipedia.org/wiki/Fibonacci_number) without storing them all explicitly in memory? It should be used as follows:
+```
+// Desired output (for N=10): 0 1 1 2 3 5 8 13 21 34
+sequence = spawn("Fibonacci Sequence").ofLength(10);
+foreach(number in sequence)
+    Console.print(number);
 ```
