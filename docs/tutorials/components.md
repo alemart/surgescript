@@ -72,7 +72,7 @@ object "Parrot" is "entity"
 }
 ```
 
-Now, here's the result:
+Now, here's the output:
 
 ```
 Hello!

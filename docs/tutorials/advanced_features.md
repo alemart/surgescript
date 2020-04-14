@@ -283,7 +283,7 @@ object "Even Numbers Iterator" is "iterator"
 }
 ```
 
-The result of this code is:
+The output of this code is:
 
 ```
 0
