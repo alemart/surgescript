@@ -1,5 +1,10 @@
 # Release Notes
 
+## 0.5.4.4 - April 16th, 2020
+
+* Added LIB_SUFFIX compilation option
+* Updated docs
+
 ## 0.5.4.3 - February 16th, 2020
 
 * SurgeScript is now available as a shared library
