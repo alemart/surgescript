@@ -22,11 +22,13 @@ Session.vim
 *~
 
 # mine
-*.o
-*.a
-libsurgescript.a
-surgescript.exe
 surgescript
+*.a
+*.so
+*.so.*
+*.dll
+*.exe
+*.pc
 site/
 build/
 private/
