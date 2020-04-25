@@ -8,9 +8,10 @@
 cmake_minimum_required(VERSION 3.2)
 project(
     surgescript
-    VERSION 0.5.4.4
+    VERSION 0.5.5
     LANGUAGES C
 )
+set(LIB_SOVERSION 0.5.5)
 
 # Default config
 set(CMAKE_C_STANDARD 99)
@@ -139,7 +140,7 @@ if(WANT_SHARED)
     generate_pc_file("shared")
     add_library(surgescript SHARED ${SURGESCRIPT_SOURCES} ${SURGESCRIPT_HEADERS})
     target_link_libraries(surgescript m)
-    set_target_properties(surgescript PROPERTIES VERSION ${PROJECT_VERSION})
+    set_target_properties(surgescript PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${LIB_SOVERSION})
     install(TARGETS surgescript DESTINATION "lib${LIB_SUFFIX}")
 endif()
 
