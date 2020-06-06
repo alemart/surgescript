@@ -1087,6 +1087,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#showsensorbox" class="md-nav__link">
+    showSensorBox
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hidesensorbox" class="md-nav__link">
+    hideSensorBox
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1727,6 +1741,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#showsensorbox" class="md-nav__link">
+    showSensorBox
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hidesensorbox" class="md-nav__link">
+    hideSensorBox
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1889,6 +1917,30 @@ object &quot;My Jumping Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
 <li><code>width</code>: number. The width of the box, in pixels.</li>
 <li><code>height</code>: number. The height of the box, in pixels.</li>
 </ul>
+<p><em>Returns</em></p>
+<p>Returns the platformer itself.</p>
+<h4 id="showsensorbox">showSensorBox</h4>
+<p><code>showSensorBox()</code></p>
+<p>Displays the internal sensors of the platformer, which are invisible by default. For debugging only.</p>
+<p><em>Available since:</em> Open Surge 0.5.2</p>
+<p><em>Returns</em></p>
+<p>Returns the platformer itself.</p>
+<p><em>Example</em></p>
+<pre><code>using SurgeEngine.Actor;
+using SurgeEngine.Behaviors.Platformer;
+
+object &quot;Testing Stuff&quot; is &quot;entity&quot;
+{
+    actor = Actor(&quot;Testing Stuff&quot;);
+    platformer = Platformer().showSensorBox();
+    // ...
+}
+</code></pre>
+
+<h4 id="hidesensorbox">hideSensorBox</h4>
+<p><code>hideSensorBox()</code></p>
+<p>Hides the internal sensors of the platformer. This is the default.</p>
+<p><em>Available since:</em> Open Surge 0.5.2</p>
 <p><em>Returns</em></p>
 <p>Returns the platformer itself.</p>
                 
