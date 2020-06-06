@@ -228,9 +228,9 @@ The platformer spawns invisible [sensors](/engine/sensor) to detect collisions. 
 
 Returns the platformer itself.
 
-#### showSensorBox
+#### showSensors
 
-`showSensorBox()`
+`showSensors()`
 
 Displays the internal sensors of the platformer, which are invisible by default. For debugging only.
 
@@ -249,14 +249,14 @@ using SurgeEngine.Behaviors.Platformer;
 object "Testing Stuff" is "entity"
 {
     actor = Actor("Testing Stuff");
-    platformer = Platformer().showSensorBox();
+    platformer = Platformer().showSensors();
     // ...
 }
 ```
 
-#### hideSensorBox
+#### hideSensors
 
-`hideSensorBox()`
+`hideSensors()`
 
 Hides the internal sensors of the platformer. This is the default.
 
