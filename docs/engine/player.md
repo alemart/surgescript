@@ -449,6 +449,14 @@ Vertical speed, in pixels per second.
 
 The angle of the player, in degrees. The same as `transform.angle`.
 
+#### slope
+
+`slope`: number, read-only.
+
+The angle detected by the physics system, in degrees. Unlike [angle](#angle), slope is read-only and does not feature any smoothing for visual aesthetics. Its purpose is to be a helper for physics calculations.
+
+*Available since:* Open Surge 0.5.2
+
 #### width
 
 `width`: number, read-only.
