@@ -134,7 +134,7 @@ void show_help(const char* executable)
         "    %s --debug test.ss           compiles and runs test.ss with debugging information\n"
         "    %s file.ss -- -x -y          passes custom arguments -x and -y to file.ss\n"
         "\n"
-        "Full documentation at: <%s>\n",
+        "Full documentation available at: <%s>\n",
         surgescript_util_version(),
         surgescript_util_year(),
         surgescript_util_authors(),
