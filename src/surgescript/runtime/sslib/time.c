@@ -68,7 +68,7 @@ surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescri
     ssassert(START_ADDR == surgescript_heap_malloc(heap));
 
     surgescript_var_set_number(surgescript_heap_at(heap, TIME_ADDR), 0.0);
-    surgescript_var_set_number(surgescript_heap_at(heap, DELTA_ADDR), 0.016);
+    surgescript_var_set_number(surgescript_heap_at(heap, DELTA_ADDR), 0.01667);
     surgescript_var_set_number(surgescript_heap_at(heap, START_ADDR), surgescript_util_gettickcount() * 0.001);
 
     return NULL;

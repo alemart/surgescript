@@ -836,7 +836,7 @@ double surgescript_object_timespent(const surgescript_object_t* object)
 {
     uint64_t now = surgescript_util_gettickcount();
     uint64_t dt = now > object->last_state_change ? now - object->last_state_change : 1;
-    return (double)(object->time_spent * 0.001) / dt;
+    return ((double)(object->time_spent) * 0.001) / ((double)dt);
 }
 
 /*
