@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019, 2021 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,7 +79,6 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "children", fun_children, 1);
     surgescript_vm_bind(vm, "Object", "childWithTag", fun_childwithtag, 1);
     surgescript_vm_bind(vm, "Object", "childrenWithTag", fun_childrenwithtag, 1);
-    surgescript_vm_bind(vm, "Object", "get_childCount", fun_childcount, 0);
     surgescript_vm_bind(vm, "Object", "findObject", fun_findobject, 1);
     surgescript_vm_bind(vm, "Object", "findObjects", fun_findobjects, 1);
     surgescript_vm_bind(vm, "Object", "findObjectWithTag", fun_findobjectwithtag, 1);
@@ -101,6 +100,8 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "get___timespent", fun_timespent, 0);
     surgescript_vm_bind(vm, "Object", "get___memspent", fun_memspent, 0);
     surgescript_vm_bind(vm, "Object", "get___file", fun_file, 0);
+    surgescript_vm_bind(vm, "Object", "get___childCount", fun_childcount, 0);
+    surgescript_vm_bind(vm, "Object", "get_childCount", fun_childcount, 0); /* obsolete since 0.5.5 */
 }
 
 

@@ -12,12 +12,6 @@ Properties
 
 Reference to the parent object.
 
-#### childCount
-
-`childCount`: number, read-only.
-
-The number of children of the object.
-
 #### __name
 
 `__name`: string, read-only.
@@ -42,7 +36,7 @@ The functions of this object represented as a collection of strings.
 
 `__timespent`: number, read-only.
 
-The approximate time spent in this object in the last frame (in seconds).
+The approximate time spent in the current state (in seconds).
 
 #### __file
 
@@ -51,6 +45,29 @@ The approximate time spent in this object in the last frame (in seconds).
 The source file of this object.
 
 *Available since:* SurgeScript 0.5.3
+
+#### __children
+
+`__children`: [Array](/reference/array) object, read-only.
+
+The children of this object.
+
+*Available since:* SurgeScript 0.5.4
+
+*Returns*
+
+A new array featuring all the children of this object. If there are no children, an empty array is returned.
+
+#### __childCount
+
+`__childCount`: number, read-only.
+
+The number of children of the object.
+
+*Available since:* SurgeScript 0.5.5
+
+*Note:* prior to SurgeScript 0.5.5, you would use `object.childCount` instead. That form is now obsolete.
+
 
 Functions
 ---------

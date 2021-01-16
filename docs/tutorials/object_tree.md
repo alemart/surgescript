@@ -83,9 +83,9 @@ Relevant data about the object hierarchy can be obtained using the following pro
 Function / property|Description
 -------------------|-----------
 `obj.parent` (read-only) | The parent object
-`obj.childCount` (read-only) | Number of immediate children
 `obj.child(name)` | Gets a child object named `name`
 `obj.findObject(name)` | Finds a descendant named `name`
+`obj.__childCount` (read-only) | Number of immediate children
 
 Example:
 
@@ -97,7 +97,7 @@ object "Parent"
 
     state "main"
     {
-        Console.print("This object has " + this.childCount + " children.");
+        Console.print("This object has " + this.__childCount + " children.");
         destroy();
     }
 }
