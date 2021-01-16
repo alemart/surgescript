@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2021 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,7 @@
 #endif
 
 /* private stuff */
-static void mem_crash(const char* location);
+static void mem_crash(const char* file, int line);
 static void my_log(const char* message);
 static void my_fatal(const char* message);
 static void (*log_function)(const char* message) = my_log;
@@ -51,12 +51,12 @@ static void (*fatal_function)(const char* message) = my_fatal;
  * surgescript_util_malloc()
  * Memory allocation routine
  */
-void* surgescript_util_malloc(size_t bytes, const char* location)
+void* surgescript_util_malloc(size_t bytes, const char* file, int line)
 {
     void *m = malloc(bytes);
 
     if(m == NULL)
-        mem_crash(location);
+        mem_crash(file, line);
 
     return m;
 }
@@ -65,12 +65,12 @@ void* surgescript_util_malloc(size_t bytes, const char* location)
  * surgescript_util_realloc()
  * Memory reallocation routine
  */
-void* surgescript_util_realloc(void* ptr, size_t bytes, const char* location)
+void* surgescript_util_realloc(void* ptr, size_t bytes, const char* file, int line)
 {
     void *m = realloc(ptr, bytes);
 
     if(m == NULL)
-        mem_crash(location);
+        mem_crash(file, line);
 
     return m;
 }
@@ -81,7 +81,7 @@ void* surgescript_util_realloc(void* ptr, size_t bytes, const char* location)
  */
 void* surgescript_util_free(void* ptr)
 {
-    if(ptr)
+    if(ptr != NULL)
         free(ptr);
 
     return NULL;
@@ -220,9 +220,9 @@ char* surgescript_util_strncpy(char* dst, const char* src, size_t n)
  * surgescript_util_strdup()
  * Copies a string into another, allocating the required memory
  */
-char* surgescript_util_strdup(const char* src, const char* location)
+char* surgescript_util_strdup(const char* src, const char* file, int line)
 {
-    char* str = surgescript_util_malloc(sizeof(char) * (1 + strlen(src)), location);
+    char* str = surgescript_util_malloc(sizeof(char) * (1 + strlen(src)), file, line);
     return strcpy(str, src);
 }
 
@@ -378,10 +378,13 @@ void my_fatal(const char* message)
     fprintf(stderr, "%s\n", message);
 }
 
-void mem_crash(const char* location) /* out of memory error */
+void mem_crash(const char* file, int line) /* out of memory error */
 {
-    static char buf[128] = "Out of memory in ";
-    surgescript_util_strncpy(buf + 17, location, sizeof(buf) - 17);
+    static char buf[1024] = "Out of memory in ";
+    static const int prefix_len = 17;
+
+    snprintf(buf + prefix_len, sizeof(buf) - prefix_len, "%s:%d", file, line);
     fatal_function(buf);
+
     exit(1); /* just in case */
 }
