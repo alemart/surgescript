@@ -1,6 +1,6 @@
 /* Project info */
 const char SURGESCRIPT_AUTHORS[] = "Alexandre Martins";
-const char SURGESCRIPT_YEARS[] = "2016-2020";
+const char SURGESCRIPT_YEARS[] = "2016-2021";
 const char SURGESCRIPT_WEBSITE[] = "https://github.com/alemart/surgescript";
 
 /* compiled version of SurgeScript */

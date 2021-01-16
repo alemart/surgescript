@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # SurgeScript
 # A scripting language for games
-# Copyright 2016-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
+# Copyright 2016-2021 Alexandre Martins <alemartf(at)gmail(dot)com>
 # ------------------------------------------------------------------------------
 
 # Project info
