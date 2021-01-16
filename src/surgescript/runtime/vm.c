@@ -195,7 +195,7 @@ void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
 
 /*
  * surgescript_vm_is_active()
- * Is the VM active?
+ * Is the VM active? (i.e., turned ON)
  */
 bool surgescript_vm_is_active(surgescript_vm_t* vm)
 {
@@ -292,7 +292,7 @@ surgescript_parser_t* surgescript_vm_parser(const surgescript_vm_t* vm)
  * surgescript_vm_args()
  * Gets the command-line arguments
  */
-surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm)
+const surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm)
 {
     return vm->args;
 }
@@ -301,7 +301,7 @@ surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm)
  * surgescript_vm_time()
  * Gets the VM time
  */
-surgescript_vmtime_t* surgescript_vm_time(const surgescript_vm_t* vm)
+const surgescript_vmtime_t* surgescript_vm_time(const surgescript_vm_t* vm)
 {
     return vm->time;
 }

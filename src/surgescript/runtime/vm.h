@@ -45,10 +45,11 @@ bool surgescript_vm_compile(surgescript_vm_t* vm, const char* absolute_path); /*
 bool surgescript_vm_compile_code_in_memory(surgescript_vm_t* vm, const char* code); /* compiles the given code */
 
 /* VM lifecycle */
-bool surgescript_vm_is_active(surgescript_vm_t* vm); /* is the vm active? */
+bool surgescript_vm_is_active(surgescript_vm_t* vm); /* is the vm active? (i.e., turned on) */
 void surgescript_vm_launch(surgescript_vm_t* vm); /* boots up the vm */
 void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv); /* boots up the vm with command line arguments */
 void surgescript_vm_terminate(surgescript_vm_t* vm); /* terminates the vm */
+bool surgescript_vm_reset(surgescript_vm_t* vm); /* resets the VM, clearing up all its programs and objects */
 bool surgescript_vm_update(surgescript_vm_t* vm); /* updates the vm */
 bool surgescript_vm_update_ex(surgescript_vm_t* vm, void* user_data, void (*user_update)(surgescript_object_t*,void*), void (*late_update)(surgescript_object_t*,void*)); /* updates the vm and allows more callbacks */
 
@@ -57,8 +58,8 @@ struct surgescript_programpool_t* surgescript_vm_programpool(const surgescript_v
 struct surgescript_tagsystem_t* surgescript_vm_tagsystem(const surgescript_vm_t* vm); /* gets the tag system */
 struct surgescript_objectmanager_t* surgescript_vm_objectmanager(const surgescript_vm_t* vm); /* gets the object manager */
 struct surgescript_parser_t* surgescript_vm_parser(const surgescript_vm_t* vm); /* gets the parser */
-struct surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm); /* gets the command-line arguments */
-struct surgescript_vmtime_t* surgescript_vm_time(const surgescript_vm_t* vm); /* gets the VM time */
+const struct surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm); /* gets the command-line arguments */
+const struct surgescript_vmtime_t* surgescript_vm_time(const surgescript_vm_t* vm); /* gets the VM time */
 
 /* utilities */
 surgescript_object_t* surgescript_vm_root_object(surgescript_vm_t* vm); /* root object */
@@ -66,6 +67,5 @@ surgescript_object_t* surgescript_vm_spawn_object(surgescript_vm_t* vm, surgescr
 surgescript_object_t* surgescript_vm_find_object(surgescript_vm_t* vm, const char* object_name); /* finds an object */
 void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const char* fun_name, surgescript_program_cfunction_t cfun, int num_params); /* binds a C function to an object */
 void surgescript_vm_install_plugin(surgescript_vm_t* vm, const char* object_name); /* sets a certain object as a plugin */
-bool surgescript_vm_reset(surgescript_vm_t* vm); /* resets a VM, clearing up all its programs and objects */
 
 #endif
