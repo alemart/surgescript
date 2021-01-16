@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2018, 2021 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@
 #include "object.h"
 #include "program_pool.h"
 #include "tag_system.h"
+#include "vm_time.h"
 #include "stack.h"
 #include "heap.h"
 #include "variable.h"
@@ -43,6 +44,7 @@ struct surgescript_objectmanager_t
     surgescript_stack_t* stack; /* reference to the stack */
     surgescript_tagsystem_t* tag_system; /* tag system */
     surgescript_vmargs_t* args; /* VM command-line arguments (NULL-terminated array) */
+    const surgescript_vmtime_t* vmtime; /* VM time */
     SSARRAY(surgescript_objecthandle_t, objects_to_be_scanned); /* garbage collection */
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
@@ -80,7 +82,7 @@ static const char* SYSTEM_OBJECTS[] = {
 }; /* this must be a NULL-terminated array */
 
 /* object methods acessible by me */
-extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, struct surgescript_objectmanager_t* object_manager, struct surgescript_programpool_t* program_pool, struct surgescript_stack_t* stack, void* user_data); /* creates a new blank object */
+extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data); /* creates a new blank object */
 extern surgescript_object_t* surgescript_object_destroy(surgescript_object_t* object); /* destroys an object */
 
 /* the life-cycle of the objects is handled by me */
@@ -111,7 +113,7 @@ static inline surgescript_object_t* plugin_object(const surgescript_objectmanage
  * surgescript_objectmanager_create()
  * Creates a new object manager
  */
-surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_programpool_t* program_pool, surgescript_tagsystem_t* tag_system, surgescript_stack_t* stack, surgescript_vmargs_t* args)
+surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_programpool_t* program_pool, surgescript_tagsystem_t* tag_system, surgescript_stack_t* stack, surgescript_vmargs_t* args, const surgescript_vmtime_t* vmtime)
 {
     surgescript_objectmanager_t* manager = ssmalloc(sizeof *manager);
 
@@ -123,6 +125,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     manager->tag_system = tag_system;
     manager->stack = stack;
     manager->args = args;
+    manager->vmtime = vmtime;
     manager->handle_ptr = ROOT_HANDLE;
 
     ssarray_init(manager->objects_to_be_scanned);
@@ -162,7 +165,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectman
 {
     surgescript_objecthandle_t handle = new_handle(manager);
     surgescript_object_t *parent_object = surgescript_objectmanager_get(manager, parent);
-    surgescript_object_t *object = surgescript_object_create(object_name, handle, manager, manager->program_pool, manager->stack, user_data);
+    surgescript_object_t *object = surgescript_object_create(object_name, handle, manager, manager->program_pool, manager->stack, manager->vmtime, user_data);
 
     /* store the object */
     if(handle >= ssarray_length(manager->data) && handle > ROOT_HANDLE) {
@@ -204,7 +207,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_obje
         char** data[] = { (char**)SYSTEM_OBJECTS, plugins };
 
         /* spawn the root object */
-        surgescript_object_t *object = surgescript_object_create(ROOT_OBJECT, ROOT_HANDLE, manager, manager->program_pool, manager->stack, data);
+        surgescript_object_t *object = surgescript_object_create(ROOT_OBJECT, ROOT_HANDLE, manager, manager->program_pool, manager->stack, manager->vmtime, data);
         ssarray_push(manager->data, object);
         manager->count++;
 

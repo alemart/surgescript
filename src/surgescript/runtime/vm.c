@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2018, 2021 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@
 #include "program_pool.h"
 #include "tag_system.h"
 #include "object_manager.h"
+#include "vm_time.h"
 #include "sslib/sslib.h"
 #include "../compiler/parser.h"
 #include "../util/util.h"
@@ -62,7 +63,7 @@ struct surgescript_vm_t
     surgescript_objectmanager_t* object_manager;
     surgescript_parser_t* parser;
     surgescript_vmargs_t* args;
-    double start_time;
+    surgescript_vmtime_t* time;
 };
 
 /* misc */
@@ -208,13 +209,7 @@ bool surgescript_vm_is_active(surgescript_vm_t* vm)
  */
 bool surgescript_vm_update(surgescript_vm_t* vm)
 {
-    if(surgescript_vm_is_active(vm)) {
-        surgescript_object_t* root = surgescript_vm_root_object(vm);
-        surgescript_object_traverse_tree(root, surgescript_object_update);
-        return surgescript_vm_is_active(vm);
-    }
-    else
-        return false;
+    return surgescript_vm_update_ex(vm, NULL, NULL, NULL);
 }
 
 /*
@@ -226,6 +221,9 @@ bool surgescript_vm_update_ex(surgescript_vm_t* vm, void* user_data, void (*user
     if(surgescript_vm_is_active(vm)) {
         surgescript_object_t* root = surgescript_vm_root_object(vm);
         surgescript_vm_updater_t updater = { user_data, user_update, late_update };
+
+        /* update time */
+        surgescript_vmtime_update(vm->time);
 
         /* update */
         if(user_update != NULL && late_update != NULL)
@@ -300,6 +298,15 @@ surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm)
 }
 
 /*
+ * surgescript_vm_time()
+ * Gets the VM time
+ */
+surgescript_vmtime_t* surgescript_vm_time(const surgescript_vm_t* vm)
+{
+    return vm->time;
+}
+
+/*
  * surgescript_vm_root_object()
  * Gets the root object
  */
@@ -356,12 +363,12 @@ void surgescript_vm_install_plugin(surgescript_vm_t* vm, const char* object_name
 /* creates the VM components */
 void create_vm_components(surgescript_vm_t* vm)
 {
-    vm->start_time = 0.0;
     vm->stack = surgescript_stack_create();
     vm->program_pool = surgescript_programpool_create();
     vm->tag_system = surgescript_tagsystem_create();
     vm->args = surgescript_vmargs_create();
-    vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->tag_system, vm->stack, vm->args);
+    vm->time = surgescript_vmtime_create();
+    vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->tag_system, vm->stack, vm->args, vm->time);
     vm->parser = surgescript_parser_create(vm->program_pool, vm->tag_system);
 }
 
@@ -370,6 +377,7 @@ void destroy_vm_components(surgescript_vm_t* vm)
 {
     surgescript_parser_destroy(vm->parser);
     surgescript_objectmanager_destroy(vm->object_manager);
+    surgescript_vmtime_destroy(vm->time);
     surgescript_vmargs_destroy(vm->args);
     surgescript_tagsystem_destroy(vm->tag_system);
     surgescript_programpool_destroy(vm->program_pool);

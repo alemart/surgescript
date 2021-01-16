@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018  Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2018, 2021  Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,17 +22,19 @@
 #ifndef _SURGESCRIPT_RUNTIME_VM_H
 #define _SURGESCRIPT_RUNTIME_VM_H
 
+#include <stdint.h>
 #include <stdbool.h>
 #include "program.h"
 #include "object.h"
 
 /* types */
 typedef struct surgescript_vm_t surgescript_vm_t;
-struct surgescript_vmargs_t;
 struct surgescript_parser_t;
 struct surgescript_programpool_t;
-struct surgescript_tagsystem_t;
 struct surgescript_objectmanager_t;
+struct surgescript_tagsystem_t;
+struct surgescript_vmargs_t;
+struct surgescript_vmtime_t;
 
 /* api */
 surgescript_vm_t* surgescript_vm_create();
@@ -56,6 +58,7 @@ struct surgescript_tagsystem_t* surgescript_vm_tagsystem(const surgescript_vm_t*
 struct surgescript_objectmanager_t* surgescript_vm_objectmanager(const surgescript_vm_t* vm); /* gets the object manager */
 struct surgescript_parser_t* surgescript_vm_parser(const surgescript_vm_t* vm); /* gets the parser */
 struct surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm); /* gets the command-line arguments */
+struct surgescript_vmtime_t* surgescript_vm_time(const surgescript_vm_t* vm); /* gets the VM time */
 
 /* utilities */
 surgescript_object_t* surgescript_vm_root_object(surgescript_vm_t* vm); /* root object */

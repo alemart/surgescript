@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2019, 2021 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@
 #include "heap.h"
 #include "stack.h"
 #include "renv.h"
+#include "vm_time.h"
 #include "../util/transform.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
@@ -52,6 +53,9 @@ struct surgescript_object_t
     bool is_active; /* can i run programs? */
     bool is_killed; /* am i scheduled to be destroyed? */
     bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
+
+    /* internal timer */
+    const surgescript_vmtime_t* vmtime; /* VM time */
     uint64_t last_state_change; /* moment of the last state change */
     uint64_t time_spent; /* how much time did this object consume since the last state change */
 
@@ -89,7 +93,7 @@ static bool simple_traversal(surgescript_object_t* object, void* data);
  * surgescript_object_create()
  * Creates a new blank object
  */
-surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, void* user_data)
+surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data)
 {
     surgescript_object_t* obj = ssmalloc(sizeof *obj);
 
@@ -107,11 +111,13 @@ surgescript_object_t* surgescript_object_create(const char* name, unsigned handl
 
     obj->state_name = ssstrdup(MAIN_STATE);
     obj->current_state = get_state_program(obj, obj->state_name);
-    obj->last_state_change = surgescript_util_gettickcount();
-    obj->time_spent = 0;
     obj->is_active = true;
     obj->is_killed = false;
     obj->is_reachable = false;
+
+    obj->vmtime = vmtime;
+    obj->last_state_change = surgescript_vmtime_time(obj->vmtime);
+    obj->time_spent = 0;
 
     obj->transform = NULL;
     obj->user_data = user_data;
@@ -574,7 +580,7 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
         ssfree(object->state_name);
         object->state_name = ssstrdup(state_name ? state_name : MAIN_STATE);
         object->current_state = get_state_program(object, object->state_name);
-        object->last_state_change = surgescript_util_gettickcount();
+        object->last_state_change = surgescript_vmtime_time(object->vmtime);
         object->time_spent = 0;
     }
 }
@@ -585,7 +591,7 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
  */
 double surgescript_object_elapsed_time(const surgescript_object_t* object)
 {
-    return (surgescript_util_gettickcount() - object->last_state_change) * 0.001;
+    return (surgescript_vmtime_time(object->vmtime) - object->last_state_change) * 0.001;
 }
 
 /*

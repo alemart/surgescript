@@ -76,6 +76,7 @@ set(
     src/surgescript/runtime/tag_system.c
     src/surgescript/runtime/variable.c
     src/surgescript/runtime/vm.c
+    src/surgescript/runtime/vm_time.c
     src/surgescript/util/transform.c
     src/surgescript/util/utf8.c
     src/surgescript/util/util.c
@@ -104,6 +105,7 @@ set(
     src/surgescript/runtime/tag_system.h
     src/surgescript/runtime/variable.h
     src/surgescript/runtime/vm.h
+    src/surgescript/runtime/vm_time.h
     src/surgescript/util/fasthash.h
     src/surgescript/util/ssarray.h
     src/surgescript/util/transform.h

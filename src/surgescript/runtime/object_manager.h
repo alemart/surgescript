@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2018 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2018, 2021 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,12 +34,13 @@ struct surgescript_programpool_t;
 struct surgescript_stack_t;
 struct surgescript_tagsystem_t;
 struct surgescript_vmargs_t;
+struct surgescript_vmtime_t;
 
 
 /* public methods */
 
 /* life-cycle */
-surgescript_objectmanager_t* surgescript_objectmanager_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system, struct surgescript_stack_t* stack, struct surgescript_vmargs_t* args);
+surgescript_objectmanager_t* surgescript_objectmanager_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system, struct surgescript_stack_t* stack, struct surgescript_vmargs_t* args, const struct surgescript_vmtime_t* vmtime);
 surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objectmanager_t* manager);
 
 /* operations */
