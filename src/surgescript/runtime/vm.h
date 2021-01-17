@@ -52,6 +52,9 @@ void surgescript_vm_terminate(surgescript_vm_t* vm); /* terminates the vm */
 bool surgescript_vm_reset(surgescript_vm_t* vm); /* resets the VM, clearing up all its programs and objects */
 bool surgescript_vm_update(surgescript_vm_t* vm); /* updates the vm */
 bool surgescript_vm_update_ex(surgescript_vm_t* vm, void* user_data, void (*user_update)(surgescript_object_t*,void*), void (*late_update)(surgescript_object_t*,void*)); /* updates the vm and allows more callbacks */
+void surgescript_vm_pause(surgescript_vm_t* vm); /* pause the VM */
+void surgescript_vm_resume(surgescript_vm_t* vm); /* resume a paused VM */
+bool surgescript_vm_is_paused(const surgescript_vm_t* vm); /* is the VM paused? */
 
 /* VM components */
 struct surgescript_programpool_t* surgescript_vm_programpool(const surgescript_vm_t* vm); /* gets the program pool */

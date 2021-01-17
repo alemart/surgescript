@@ -64,12 +64,12 @@ struct surgescript_vm_t
     surgescript_parser_t* parser;
     surgescript_vmargs_t* args;
     surgescript_vmtime_t* time;
+    bool is_paused;
 };
 
 /* misc */
-static void create_vm_components(surgescript_vm_t* vm);
-static void destroy_vm_components(surgescript_vm_t* vm);
-static void setup_sslib(surgescript_vm_t* vm);
+static void init_vm(surgescript_vm_t* vm);
+static void release_vm(surgescript_vm_t* vm);
 static bool call_updater1(surgescript_object_t* object, void* updater);
 static bool call_updater2(surgescript_object_t* object, void* updater);
 static bool call_updater3(surgescript_object_t* object, void* updater);
@@ -90,8 +90,7 @@ surgescript_vm_t* surgescript_vm_create()
     /* set up the VM */
     sslog("Creating the VM...");
     surgescript_var_init_pool();
-    create_vm_components(vm);
-    setup_sslib(vm);
+    init_vm(vm);
 
     /* done! */
     return vm;
@@ -104,7 +103,7 @@ surgescript_vm_t* surgescript_vm_create()
 surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
 {
     sslog("Shutting down the VM...");
-    destroy_vm_components(vm);
+    release_vm(vm);
     surgescript_var_release_pool();
     return ssfree(vm);
 }
@@ -120,14 +119,13 @@ bool surgescript_vm_reset(surgescript_vm_t* vm)
     if(surgescript_vm_is_active(vm)) {
         /* shut down */
         sslog("Shutting down the VM...");
-        destroy_vm_components(vm);
+        release_vm(vm);
         surgescript_var_release_pool();
 
         /* set up the VM again */
         sslog("Starting the VM again...");
         surgescript_var_init_pool();
-        create_vm_components(vm);
-        setup_sslib(vm);
+        init_vm(vm);
 
         /* done */
         return true;
@@ -205,7 +203,7 @@ bool surgescript_vm_is_active(surgescript_vm_t* vm)
 
 /*
  * surgescript_vm_update()
- * Updates the VM
+ * Updates the VM. Returns true if the VM is active after this update cycle
  */
 bool surgescript_vm_update(surgescript_vm_t* vm)
 {
@@ -214,11 +212,12 @@ bool surgescript_vm_update(surgescript_vm_t* vm)
 
 /*
  * surgescript_vm_update_ex()
- * Updates the VM, allowing user-defined callbacks as well
+ * Updates the VM, allowing user-defined callbacks as well.
+ * Returns true if the VM is active after this update cycle
  */
 bool surgescript_vm_update_ex(surgescript_vm_t* vm, void* user_data, void (*user_update)(surgescript_object_t*,void*), void (*late_update)(surgescript_object_t*,void*))
 {
-    if(surgescript_vm_is_active(vm)) {
+    if(surgescript_vm_is_active(vm) && !vm->is_paused) {
         surgescript_object_t* root = surgescript_vm_root_object(vm);
         surgescript_vm_updater_t updater = { user_data, user_update, late_update };
 
@@ -238,18 +237,59 @@ bool surgescript_vm_update_ex(surgescript_vm_t* vm, void* user_data, void (*user
         /* done! */
         return surgescript_vm_is_active(vm);
     }
-    else
-        return false;
+    else {
+        /* return true if the VM is still on */
+        return surgescript_vm_is_active(vm);
+    }
 }
 
 /*
  * surgescript_vm_terminate()
- * terminates the vm
+ * Terminates the vm
  */
 void surgescript_vm_terminate(surgescript_vm_t* vm)
 {
     surgescript_object_t* root = surgescript_vm_root_object(vm);
     surgescript_object_kill(root);
+}
+
+/*
+ * surgescript_vm_pause()
+ * Pauses the VM, so that surgescript_vm_update_ex() does not update any objects
+ */
+void surgescript_vm_pause(surgescript_vm_t* vm)
+{
+    /* nothing to do */
+    if(vm->is_paused)
+        return;
+
+    /* pause the VM */
+    surgescript_vmtime_pause(vm->time);
+    vm->is_paused = true;
+}
+
+/*
+ * surgescript_vm_resume()
+ * Resumes a paused VM
+ */
+void surgescript_vm_resume(surgescript_vm_t* vm)
+{
+    /* nothing to do */
+    if(!vm->is_paused)
+        return;
+
+    /* pause the VM */
+    surgescript_vmtime_resume(vm->time);
+    vm->is_paused = false;
+}
+
+/*
+ * surgescript_vm_is_paused()
+ * Is the VM paused?
+ */
+bool surgescript_vm_is_paused(const surgescript_vm_t* vm)
+{
+    return vm->is_paused;
 }
 
 /*
@@ -360,9 +400,12 @@ void surgescript_vm_install_plugin(surgescript_vm_t* vm, const char* object_name
 
 /* ----- private ----- */
 
-/* creates the VM components */
-void create_vm_components(surgescript_vm_t* vm)
+/* initializes the VM */
+void init_vm(surgescript_vm_t* vm)
 {
+    vm->is_paused = false;
+
+    /* create the VM components */
     vm->stack = surgescript_stack_create();
     vm->program_pool = surgescript_programpool_create();
     vm->tag_system = surgescript_tagsystem_create();
@@ -370,23 +413,8 @@ void create_vm_components(surgescript_vm_t* vm)
     vm->time = surgescript_vmtime_create();
     vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->tag_system, vm->stack, vm->args, vm->time);
     vm->parser = surgescript_parser_create(vm->program_pool, vm->tag_system);
-}
 
-/* destroys the VM components */
-void destroy_vm_components(surgescript_vm_t* vm)
-{
-    surgescript_parser_destroy(vm->parser);
-    surgescript_objectmanager_destroy(vm->object_manager);
-    surgescript_vmtime_destroy(vm->time);
-    surgescript_vmargs_destroy(vm->args);
-    surgescript_tagsystem_destroy(vm->tag_system);
-    surgescript_programpool_destroy(vm->program_pool);
-    surgescript_stack_destroy(vm->stack);
-}
-
-/* load the SurgeScript library */
-void setup_sslib(surgescript_vm_t* vm)
-{
+    /* load the SurgeScript standard library */
     surgescript_sslib_register_object(vm);
     surgescript_sslib_register_string(vm);
     surgescript_sslib_register_number(vm);
@@ -405,6 +433,19 @@ void setup_sslib(surgescript_vm_t* vm)
     surgescript_sslib_register_arguments(vm);
     surgescript_sslib_register_application(vm);
     surgescript_sslib_register_system(vm);
+}
+
+/* releases the VM */
+void release_vm(surgescript_vm_t* vm)
+{
+    /* destroy the VM components */
+    surgescript_parser_destroy(vm->parser);
+    surgescript_objectmanager_destroy(vm->object_manager);
+    surgescript_vmtime_destroy(vm->time);
+    surgescript_vmargs_destroy(vm->args);
+    surgescript_tagsystem_destroy(vm->tag_system);
+    surgescript_programpool_destroy(vm->program_pool);
+    surgescript_stack_destroy(vm->stack);
 }
 
 /* these auxiliary functions help traversing the object tree */
