@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2020 Alexandre Martins -->
 <component type="console-application">
   <id>org.opensurge2d.SurgeScript</id>
   <name>SurgeScript</name>
   <developer_name>Alexandre Martins</developer_name>
   <update_contact>alemartf_at_gmail.com</update_contact>
-  <metadata_license>MIT</metadata_license>
+  <metadata_license>Apache-2.0</metadata_license>
   <project_license>Apache-2.0</project_license>
   <summary>A scripting language for games</summary>
   <description>
