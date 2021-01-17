@@ -1,10 +1,12 @@
 /* SurgeScript info */
-const char SURGESCRIPT_AUTHORS[] = "Alexandre Martins";
-const char SURGESCRIPT_WEBSITE[] = "https://github.com/alemart/surgescript";
-const char SURGESCRIPT_VERSION[] = "@PROJECT_VERSION@"; /* compiled version of SurgeScript */
-const char SURGESCRIPT_YEARS[]   = "@PROJECT_YEARS@";
+#include "../util/version.h"
 
 #cmakedefine PROJECT_YEARS "@PROJECT_YEARS@"
 #if !defined(PROJECT_YEARS)
 #error Undefined PROJECT_YEARS
 #endif
+
+const char SURGESCRIPT_AUTHORS[] = "Alexandre Martins";
+const char SURGESCRIPT_WEBSITE[] = "https://github.com/alemart/surgescript";
+const char SURGESCRIPT_VERSION[] = SURGESCRIPT_VERSION_STR;
+const char SURGESCRIPT_YEARS[]   = PROJECT_YEARS;
