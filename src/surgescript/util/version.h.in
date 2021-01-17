@@ -50,4 +50,8 @@
     SURGESCRIPT_VERSION_CODE((x), (y), (z), (w)) \
 )
 
+/* Check if the current version of SurgeScript is x.y.z.w or newer */
+#define SURGESCRIPT_VERSION_IS_AT_LEAST(x, y, z, w) \
+    (SURGESCRIPT_VERSION_COMPARE((x), (y), (z), (w)) >= 0)
+
 #endif
