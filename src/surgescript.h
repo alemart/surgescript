@@ -40,6 +40,7 @@ extern "C" {
 #include "surgescript/util/transform.h"
 #include "surgescript/util/ssarray.h"
 #include "surgescript/util/util.h"
+#include "surgescript/util/version.h"
 
 #ifdef __cplusplus
 }
