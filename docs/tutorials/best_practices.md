@@ -5,7 +5,7 @@ Best Practices
 - Follow the golden rule: objects should **not** mess with each others' internals!
     - Objects should **not** change others' internal variables or states directly (not allowed!)
     - Objects should define [functions](/tutorials/functions) that can be operated upon by the external world (API)
-- Use a consistent style, e.g.,
+- Use a consistent coding style. Suggestion:
     - Use *camelCase* names for both variables and functions.
     - Use *4 spaces* when indenting your code.
 - Combine related [packages](/tutorials/packages) into a single one: don't pollute the global namespace.

@@ -8,7 +8,7 @@ Lookup operator
 
 Some programming languages, such as C++, have a feature called *operator overloading*. It's a *syntactic sugar* that allows the programmer to attribute custom implementations to different operators.
 
-In SurgeScript, the `[]` operator (also called the *lookup operator*), used by [Arrays](/reference/array) and [Dictionaries](/reference/dictionary), is used to **get** and **set** values from/to the data structure. In fact, the `[]` operator can be used with any object. It is necessary to define, in your object, functions `get()` and `set()` with the following signature:
+In SurgeScript, the `[]` operator (also called the *lookup operator*), used by [Arrays](/reference/array) and [Dictionaries](/reference/dictionary), is used to **get** and **set** values from/to the data structure. In fact, the `[]` operator can be used with any object. It is necessary to define, in your object, functions named `get()` and `set()` with the following signature:
 
 ```
 fun get(key)

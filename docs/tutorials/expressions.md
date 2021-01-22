@@ -109,9 +109,9 @@ The table below summarizes the basic logical expressions:
 
 Expression|Result
 ----------|------
-`a && b` |`true` only if both a and b are true
-`a || b` | `true` if a is true or b is true
-`!a` | `true` if a is false, `false` if a is true
+`a && b` |`true` only if both `a` and `b` are true
+`a || b` | `true` if `a` is true or `b` is true
+`!a` | `true` if `a` is false, `false` if `a` is true
 
 Notice that **not** has higher precedence than the other two operators. Examples:
 
