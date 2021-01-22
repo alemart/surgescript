@@ -1,5 +1,13 @@
 # Release Notes
 
+## 0.5.5 - January 22nd, 2020
+
+* Added the ability to pause the SurgeScript VM
+* Added utility macros for checking the SurgeScript version at compile time
+* Introduced a dedicated module for keeping track of time
+* Renamed Object.childCount to Object.__childCount
+* Updated docs
+
 ## 0.5.4.4 - April 16th, 2020
 
 * Added LIB_SUFFIX compilation option
