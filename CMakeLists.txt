@@ -35,7 +35,6 @@ if(UNIX)
 endif()
 
 # Output folder
-set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR})
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
@@ -80,7 +79,7 @@ set(
     src/surgescript/util/utf8.c
     src/surgescript/util/util.c
     src/surgescript/util/xoroshiro128plus.c
-    ${CMAKE_CURRENT_BINARY_DIR}/src/surgescript/misc/info.c
+    ${CMAKE_BINARY_DIR}/src/surgescript/misc/info.c
 )
 
 # Headers
@@ -116,7 +115,7 @@ set(
 
 # Generate files from templates
 function(generate_file TEMPLATE)
-    configure_file(src/surgescript/${TEMPLATE}.in src/surgescript/${TEMPLATE} @ONLY)
+    configure_file(src/surgescript/${TEMPLATE}.in "${CMAKE_BINARY_DIR}/src/surgescript/${TEMPLATE}" @ONLY)
 endfunction()
 
 function(generate_pc_file LINKAGE)
@@ -157,7 +156,7 @@ endif()
 
 # Install headers
 install(DIRECTORY src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/src/" DESTINATION include FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY "${CMAKE_BINARY_DIR}/src/" DESTINATION include FILES_MATCHING PATTERN "*.h")
 
 # Build the executable
 if(WANT_EXECUTABLE)
@@ -170,7 +169,7 @@ if(WANT_EXECUTABLE)
     # Create the executable
     message(STATUS "Will build surgescript")
     add_executable(surgescript.bin src/main.c)
-    include_directories("${CMAKE_CURRENT_BINARY_DIR}/src")
+    include_directories("${CMAKE_BINARY_DIR}/src")
     target_link_libraries(surgescript.bin ${LIBSURGESCRIPT})
     target_include_directories(surgescript.bin PRIVATE src)
     set_target_properties(surgescript.bin PROPERTIES OUTPUT_NAME surgescript)
@@ -180,15 +179,15 @@ if(WANT_EXECUTABLE)
         if(NOT CMAKE_RC_COMPILER)
             set(CMAKE_RC_COMPILER windres)
         endif()
-        execute_process(COMMAND "${CMAKE_RC_COMPILER}" -O coff -o "${CMAKE_CURRENT_BINARY_DIR}/iconwin.res" -i "${CMAKE_SOURCE_DIR}/src/surgescript/misc/iconwin.rc" -I "${CMAKE_SOURCE_DIR}")
-        set_target_properties(surgescript.bin PROPERTIES LINK_FLAGS "-static-libgcc \"${CMAKE_CURRENT_BINARY_DIR}/iconwin.res\"")
+        execute_process(COMMAND "${CMAKE_RC_COMPILER}" -O coff -o "${CMAKE_BINARY_DIR}/iconwin.res" -i "${CMAKE_SOURCE_DIR}/src/surgescript/misc/iconwin.rc" -I "${CMAKE_SOURCE_DIR}")
+        set_target_properties(surgescript.bin PROPERTIES LINK_FLAGS "-static-libgcc \"${CMAKE_BINARY_DIR}/iconwin.res\"")
     endif()
 
     # *nix metadata & icon
     if(UNIX)
         file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}/${ICON_PATH}/surgescript.png" ICON_FILEPATH)
         generate_file("misc/surgescript.appdata.xml")
-        install(FILES "${CMAKE_CURRENT_BINARY_DIR}/src/surgescript/misc/surgescript.appdata.xml" DESTINATION "${CMAKE_INSTALL_PREFIX}/${METAINFO_PATH}")
+        install(FILES "${CMAKE_BINARY_DIR}/src/surgescript/misc/surgescript.appdata.xml" DESTINATION "${CMAKE_INSTALL_PREFIX}/${METAINFO_PATH}")
         install(FILES src/surgescript/misc/surgescript.png DESTINATION "${CMAKE_INSTALL_PREFIX}/${ICON_PATH}")
     endif()
 
