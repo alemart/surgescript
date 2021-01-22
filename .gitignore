@@ -22,14 +22,7 @@ Session.vim
 *~
 
 # mine
-surgescript
-*.a
-*.so
-*.so.*
-*.dll
-*.exe
-*.pc
-site/
+docs_html/
 build/
 private/
 CMakeFiles/
