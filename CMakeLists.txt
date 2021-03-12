@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.2)
 project(
     surgescript
-    VERSION 0.5.5
+    VERSION 0.5.5.1
     LANGUAGES C
 )
 set(PROJECT_YEARS "2016-2021")
