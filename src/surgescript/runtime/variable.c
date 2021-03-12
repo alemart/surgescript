@@ -299,15 +299,19 @@ char* surgescript_var_get_string(const surgescript_var_t* var, const surgescript
     switch(var->type) {
         case SSVAR_NULL:
             return ssstrdup("null");
+
         case SSVAR_BOOL:
             return ssstrdup(var->boolean ? "true" : "false");
+
         case SSVAR_STRING:
             return ssstrdup(var->string);
+
         case SSVAR_NUMBER: {
             char buf[32];
             surgescript_var_to_string(var, buf, sizeof(buf));
             return ssstrdup(buf);
         }
+
         case SSVAR_OBJECTHANDLE: {
             if(manager != NULL) {
                 surgescript_object_t* obj = surgescript_objectmanager_get(manager, var->handle);
@@ -320,8 +324,12 @@ char* surgescript_var_get_string(const surgescript_var_t* var, const surgescript
             else
                 return ssstrdup("[object]");
         }
+
         case SSVAR_RAW:
             return ssstrdup("<raw>");
+
+        default:
+            return ssstrdup("<unknown>");
     }
 }
 
@@ -335,15 +343,17 @@ unsigned surgescript_var_get_objecthandle(const surgescript_var_t* var)
     switch(var->type) {
         case SSVAR_OBJECTHANDLE:
             return var->handle;
+
         case SSVAR_NUMBER:
             return surgescript_objectmanager_system_object(NULL, "Number");
+
         case SSVAR_STRING:
             return surgescript_objectmanager_system_object(NULL, "String");
+
         case SSVAR_BOOL:
             return surgescript_objectmanager_system_object(NULL, "Boolean");
-        case SSVAR_NULL:
-            return surgescript_objectmanager_null(NULL);
-        case SSVAR_RAW:
+
+        default:
             return surgescript_objectmanager_null(NULL);
     }
 }
@@ -560,9 +570,10 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             unsigned long y = surgescript_var_get_objecthandle(b);
             return (x > y) - (x < y);
         }
-        else
-            return 0; /* this shouldn't happen */
     }
+
+    /* this shouldn't happen */
+    return 0;
 }
 
 /*
