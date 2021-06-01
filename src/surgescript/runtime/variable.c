@@ -759,6 +759,10 @@ surgescript_varbucket_t* allocate_bucket()
 /* Deallocates a bucket (must be fast) */
 void free_bucket(surgescript_varbucket_t* bucket)
 {
+    /* can't free if not in use */
+    ssassert(bucket->in_use);
+
+    /* put the bucket back in the pool */
     bucket->in_use = false;
     bucket->next = varpool_currbucket;
     varpool_currbucket = bucket;
