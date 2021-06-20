@@ -821,6 +821,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#anchor" class="md-nav__link">
+    anchor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#fps" class="md-nav__link">
     fps
   </a>
@@ -1529,6 +1536,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#anchor" class="md-nav__link">
+    anchor
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#fps" class="md-nav__link">
     fps
   </a>
@@ -1624,7 +1638,11 @@ object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &q
 <p>Will be <code>true</code> if the current animation has finished playing.</p>
 <h4 id="hotspot">hotspot</h4>
 <p><code>hotspot</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
-<p>The position of the hot spot of the current animation.</p>
+<p>The hot spot of the current animation. Coordinates are given in pixels.</p>
+<h4 id="anchor">anchor</h4>
+<p><code>anchor</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
+<p>The hot spot of the current animation normalized to [0,1] x [0,1].</p>
+<p><em>Available since:</em> Open Surge 0.6.0</p>
 <h4 id="fps">fps</h4>
 <p><code>fps</code>: number, read-only.</p>
 <p>Frames per second of the current animation.</p>

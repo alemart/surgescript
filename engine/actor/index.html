@@ -808,22 +808,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#alpha" class="md-nav__link">
-    alpha
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#entity" class="md-nav__link">
     entity
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#offset" class="md-nav__link">
-    offset
   </a>
   
 </li>
@@ -845,6 +831,34 @@
           <li class="md-nav__item">
   <a href="#visible" class="md-nav__link">
     visible
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alpha" class="md-nav__link">
+    alpha
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offset" class="md-nav__link">
+    offset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hotspot" class="md-nav__link">
+    hotspot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anchor" class="md-nav__link">
+    anchor
   </a>
   
 </li>
@@ -1548,22 +1562,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#alpha" class="md-nav__link">
-    alpha
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#entity" class="md-nav__link">
     entity
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#offset" class="md-nav__link">
-    offset
   </a>
   
 </li>
@@ -1585,6 +1585,34 @@
           <li class="md-nav__item">
   <a href="#visible" class="md-nav__link">
     visible
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#alpha" class="md-nav__link">
+    alpha
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#offset" class="md-nav__link">
+    offset
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hotspot" class="md-nav__link">
+    hotspot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anchor" class="md-nav__link">
+    anchor
   </a>
   
 </li>
@@ -1664,15 +1692,9 @@ object &quot;SurgeTest&quot; is &quot;entity&quot;
 <h4 id="animation">animation</h4>
 <p><code>animation</code>: <a href="/engine/animation">Animation</a> object, read-only.</p>
 <p>Reference to the Animation object of the Actor.</p>
-<h4 id="alpha">alpha</h4>
-<p><code>alpha</code>: number.</p>
-<p>Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.</p>
 <h4 id="entity">entity</h4>
 <p><code>entity</code>: object, read-only.</p>
 <p>The entity associated with this component.</p>
-<h4 id="offset">offset</h4>
-<p><code>offset</code>: <a href="/engine/vector2">Vector2</a> object.</p>
-<p>A <em>(x,y)</em> offset relative to the parent object. Defaults to zero.</p>
 <h4 id="hflip">hflip</h4>
 <p><code>hflip</code>: boolean.</p>
 <p>Should the actor be flipped horizontally? Defaults to <code>false</code>.</p>
@@ -1682,6 +1704,20 @@ object &quot;SurgeTest&quot; is &quot;entity&quot;
 <h4 id="visible">visible</h4>
 <p><code>visible</code>: boolean.</p>
 <p>Should the actor be rendered? Defaults to <code>true</code>.</p>
+<h4 id="alpha">alpha</h4>
+<p><code>alpha</code>: number.</p>
+<p>Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.</p>
+<h4 id="offset">offset</h4>
+<p><code>offset</code>: <a href="/engine/vector2">Vector2</a> object.</p>
+<p>A <em>(x,y)</em> offset relative to the parent object. Defaults to zero.</p>
+<h4 id="hotspot">hotspot</h4>
+<p><code>hotspot</code>: <a href="/engine/vector2">Vector2</a> object.</p>
+<p>A shortcut to <code>animation.hotspot</code>: the hot spot of the current animation. Coordinates are given in pixels. In versions prior to 0.6.0, you may get the hot spot from the <a href="/engine/animation">Animation</a> object.</p>
+<p><em>Available since:</em> Open Surge 0.6.0</p>
+<h4 id="anchor">anchor</h4>
+<p><code>hotspot</code>: <a href="/engine/vector2">Vector2</a> object.</p>
+<p>A shortcut to <code>animation.anchor</code>: the hot spot of the current animation normalized to [0,1] x [0,1].</p>
+<p><em>Available since:</em> Open Surge 0.6.0</p>
 <h4 id="width">width</h4>
 <p><code>width</code>: number, read-only.</p>
 <p>The width of the actor.</p>
