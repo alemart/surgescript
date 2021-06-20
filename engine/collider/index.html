@@ -1006,6 +1006,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#anchor" class="md-nav__link">
+    anchor
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1494,6 +1501,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#anchor" class="md-nav__link">
+    anchor
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1606,6 +1620,10 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 <h4 id="visible">visible</h4>
 <p><code>visible</code>: boolean.</p>
 <p>Is the collider visible? This is useful for debugging. The default value is <code>false</code>.</p>
+<h4 id="anchor">anchor</h4>
+<p><code>anchor</code>: <a href="/engine/vector2">Vector2</a> object.</p>
+<p>The anchor of the collider. See also: <a href="#setanchor">setAnchor</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.0</p>
 <h2 id="functions">Functions</h2>
 <h4 id="collideswith">collidesWith</h4>
 <p><code>collidesWith(collider)</code></p>
@@ -1627,7 +1645,7 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 <p>Returns <code>true</code> if the point is contained in the collider, or <code>false</code> otherwise.</p>
 <h4 id="setanchor">setAnchor</h4>
 <p><code>setAnchor(x, y)</code></p>
-<p>Defines the anchor of the collider to be (<code>x</code>, <code>y</code>), where these values are (usually) numbers between 0.0 and 1.0. Imagine a bounding box of the collider. Point (0.5, 0.5) is the default, representing its center. Point (0.0, 0.0) is the top-left and (1,0, 1.0), the bottom-right. The anchor of the collider will be aligned to the hot spot of the sprite of the entity.</p>
+<p>Defines the anchor of the collider to be (<code>x</code>, <code>y</code>), where these values are (usually) numbers between 0.0 and 1.0. Imagine a bounding box of the collider. Point (0.5, 0.5) is the default, representing its center. Point (0.0, 0.0) is the top-left and (1,0, 1.0), the bottom-right. The anchor of the collider will be aligned to the hot spot of the sprite of the entity. See also: <a href="#anchor">anchor</a>.</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>x</code>: number. Usually a value between 0.0 and 1.0.</li>
