@@ -74,6 +74,14 @@ Is the collider enabled? A collider that is not enabled will not notify the pare
 
 Is the collider visible? This is useful for debugging. The default value is `false`.
 
+#### anchor
+
+`anchor`: [Vector2](/engine/vector2) object.
+
+The anchor of the collider. See also: [setAnchor](#setanchor).
+
+*Available since:* Open Surge 0.6.0
+
 Functions
 ---------
 
@@ -109,7 +117,7 @@ Returns `true` if the point is contained in the collider, or `false` otherwise.
 
 `setAnchor(x, y)`
 
-Defines the anchor of the collider to be (`x`, `y`), where these values are (usually) numbers between 0.0 and 1.0. Imagine a bounding box of the collider. Point (0.5, 0.5) is the default, representing its center. Point (0.0, 0.0) is the top-left and (1,0, 1.0), the bottom-right. The anchor of the collider will be aligned to the hot spot of the sprite of the entity.
+Defines the anchor of the collider to be (`x`, `y`), where these values are (usually) numbers between 0.0 and 1.0. Imagine a bounding box of the collider. Point (0.5, 0.5) is the default, representing its center. Point (0.0, 0.0) is the top-left and (1,0, 1.0), the bottom-right. The anchor of the collider will be aligned to the hot spot of the sprite of the entity. See also: [anchor](#anchor).
 
 *Arguments*
 
