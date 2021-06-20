@@ -53,7 +53,15 @@ Will be `true` if the current animation has finished playing.
 
 `hotspot`: [Vector2](/engine/vector2) object, read-only.
 
-The position of the hot spot of the current animation.
+The hot spot of the current animation. Coordinates are given in pixels.
+
+#### anchor
+
+`anchor`: [Vector2](/engine/vector2) object, read-only.
+
+The hot spot of the current animation normalized to [0,1] x [0,1].
+
+*Available since:* Open Surge 0.6.0
 
 #### fps
 

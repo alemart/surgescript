@@ -52,23 +52,11 @@ A shortcut to `animation.id`: an integer corresponding to the animation number. 
 
 Reference to the Animation object of the Actor.
 
-#### alpha
-
-`alpha`: number.
-
-Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.
-
 #### entity
 
 `entity`: object, read-only.
 
 The entity associated with this component.
-
-#### offset
-
-`offset`: [Vector2](/engine/vector2) object.
-
-A *(x,y)* offset relative to the parent object. Defaults to zero.
 
 #### hflip
 
@@ -87,6 +75,34 @@ Should the actor be flipped vertically? Defaults to `false`.
 `visible`: boolean.
 
 Should the actor be rendered? Defaults to `true`.
+
+#### alpha
+
+`alpha`: number.
+
+Opacity value, ranging from zero (0% opaque) to one (100% opaque). Defaults to 1.0.
+
+#### offset
+
+`offset`: [Vector2](/engine/vector2) object.
+
+A *(x,y)* offset relative to the parent object. Defaults to zero.
+
+#### hotspot
+
+`hotspot`: [Vector2](/engine/vector2) object.
+
+A shortcut to `animation.hotspot`: the hot spot of the current animation. Coordinates are given in pixels. In versions prior to 0.6.0, you may get the hot spot from the [Animation](/engine/animation) object.
+
+*Available since:* Open Surge 0.6.0
+
+#### anchor
+
+`hotspot`: [Vector2](/engine/vector2) object.
+
+A shortcut to `animation.anchor`: the hot spot of the current animation normalized to [0,1] x [0,1].
+
+*Available since:* Open Surge 0.6.0
 
 #### width
 
