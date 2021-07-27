@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2021 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -518,12 +518,8 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_DIV:
-            if(fast_notzero(surgescript_var_get_number(t(b))))
-                surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) / surgescript_var_get_number(t(b)));
-            else if(fast_sign(surgescript_var_get_number(t(a))) >= 0)
-                surgescript_var_set_number(t(a), INFINITY * fast_sign1(surgescript_var_get_number(t(b))));
-            else
-                surgescript_var_set_number(t(a), -INFINITY * fast_sign1(surgescript_var_get_number(t(b))));
+            /* division by zero should follow the IEEE-754 */
+            surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) / surgescript_var_get_number(t(b)));
             break;
 
         case SSOP_MOD:
@@ -590,48 +586,42 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
                 *ip = a.u;
                 return;
             }
-            else
-                break;
+            break;
 
         case SSOP_JNE:
             if(surgescript_var_get_rawbits(_t[2])) {
                 *ip = a.u;
                 return;
             }
-            else
-                break;
+            break;
 
         case SSOP_JL:
             if(surgescript_var_get_rawbits(_t[2]) < 0) {
                 *ip = a.u;
                 return;
             }
-            else
-                break;
+            break;
 
         case SSOP_JG:
             if(surgescript_var_get_rawbits(_t[2]) > 0) {
                 *ip = a.u;
                 return;
             }
-            else
-                break;
+            break;
 
         case SSOP_JLE:
             if(surgescript_var_get_rawbits(_t[2]) <= 0) {
                 *ip = a.u;
                 return;
             }
-            else
-                break;
+            break;
 
         case SSOP_JGE:
             if(surgescript_var_get_rawbits(_t[2]) >= 0) {
                 *ip = a.u;
                 return;
             }
-            else
-                break;
+            break;
 
         /* function calls */
         case SSOP_CALL:
