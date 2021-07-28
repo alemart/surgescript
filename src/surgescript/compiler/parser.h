@@ -77,7 +77,7 @@
  *             |  ! <unaryexpr>
  *             |  typeof <unaryexpr> | typeof ( <expr> )
  *             |  ++ identifier | -- identifier
- *             |  timeout ( <expr> )
+ *             |  timeout ( <assignexpr> )
  *             |  <postfixexpr>
  * <postfixexpr> := identifier ++ | identifier --
  *               |  <funcallexpr> <postfixexpr1>
