@@ -15,6 +15,12 @@ object "Application"
     {
         Prefs["counter"] += 1;
         Console.print("counter: " + Prefs["counter"]);
+
+        state = "idle";
+    }
+
+    state "idle"
+    {
     }
 
     fun constructor()
