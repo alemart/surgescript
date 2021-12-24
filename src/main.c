@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2021 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ static void print_to_stdout(const char* message);
 static void print_to_stderr(const char* message);
 static void discard_message(const char* message);
 static void show_help(const char* executable);
+static char* read_from_stdin();
 
 /*
  * main()
@@ -35,22 +36,16 @@ static void show_help(const char* executable);
  */
 int main(int argc, char* argv[])
 {
-    if(argc > 1) {
-        /* create the VM and compile the input file(s) */
-        surgescript_vm_t* vm = make_vm(argc, argv);
-        if(vm != NULL) {
-            /* run the VM */
-            while(surgescript_vm_update(vm)) {
-                ;
-            }
-
-            /* destroy the VM */
-            surgescript_vm_destroy(vm);
+    /* create the VM and compile the input file(s) */
+    surgescript_vm_t* vm = make_vm(argc, argv);
+    if(vm != NULL) {
+        /* run the VM */
+        while(surgescript_vm_update(vm)) {
+            ;
         }
-    }
-    else {
-        /* print usage */
-        show_help(surgescript_util_basename(argv[0]));
+
+        /* destroy the VM */
+        surgescript_vm_destroy(vm);
     }
 
     /* done! */
@@ -87,7 +82,12 @@ surgescript_vm_t* make_vm(int argc, char** argv)
             show_help(surgescript_util_basename(argv[0]));
             return NULL;
         }
+        else if(strcmp(arg, "--") == 0) {
+            /* user-specific command line arguments */
+            break;
+        }
         else {
+            /* unrecognized option */
             printf("Unrecognized option: '%s'.\nType '%s --help' for more information.\n", arg, surgescript_util_basename(argv[0]));
             return NULL;
         }
@@ -97,13 +97,30 @@ surgescript_vm_t* make_vm(int argc, char** argv)
     vm = surgescript_vm_create();
 
     /* compile the scripts */
-    for(; i < argc && strcmp(argv[i], "--") != 0; i++) {
-        const char* file = argv[i];
-        surgescript_vm_compile(vm, file);
+    if(i < argc && strcmp(argv[i], "--") != 0) {
+        /* read files */
+        for(; i < argc && strcmp(argv[i], "--") != 0; i++) {
+            const char* file = argv[i];
+            surgescript_vm_compile(vm, file);
+        }
+    }
+    else {
+        /* read from stdin */
+        char* code = read_from_stdin();
+        surgescript_vm_compile_code_in_memory(vm, code);
+        ssfree(code);
     }
 
     /* launch the VM */
-    surgescript_vm_launch_ex(vm, argc, argv);
+    if(i < argc && strcmp(argv[i], "--") == 0) {
+        /* launch with user-specific command line arguments */
+        ++i;
+        surgescript_vm_launch_ex(vm, argc - i, (char**)(argv + i));
+    }
+    else {
+        /* launch without user-specific command line arguments */
+        surgescript_vm_launch(vm);
+    }
 
     /* done! */
     return vm;
@@ -173,4 +190,26 @@ void print_to_stderr(const char* message)
 void discard_message(const char* message)
 {
     ;
+}
+
+/**
+ * read_from_stdin()
+ * Read data from stdin and store it in a string
+ */
+char* read_from_stdin()
+{
+    static size_t BUFSIZE = 1024;
+    char* data = NULL;
+    size_t read_chars = 0, data_size = 0;
+
+    /* read to data[] */
+    do {
+        data_size += BUFSIZE;
+        data = ssrealloc(data, data_size + 1);
+        read_chars += fread(data + read_chars, sizeof(char), BUFSIZE, stdin);
+        data[read_chars] = '\0';
+    } while(read_chars == data_size);
+
+    /* done! */
+    return data;
 }
