@@ -198,7 +198,7 @@ void discard_message(const char* message)
  */
 char* read_from_stdin()
 {
-    static size_t BUFSIZE = 1024;
+    const size_t BUFSIZE = 1024;
     char* data = NULL;
     size_t read_chars = 0, data_size = 0;
 
