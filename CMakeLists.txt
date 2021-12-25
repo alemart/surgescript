@@ -14,7 +14,7 @@ project(
 set(PROJECT_YEARS "2016-2021")
 
 # Default config
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build: Debug | Release | MinSizeRel | RelWithDebInfo" FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
@@ -26,7 +26,8 @@ endif()
 # User options
 option(WANT_SHARED "Build SurgeScript as a shared library" ON)
 option(WANT_STATIC "Build SurgeScript as a static library" ON)
-option(WANT_EXECUTABLE "Build the surgescript executable" ON)
+option(WANT_EXECUTABLE "Build the SurgeScript CLI" ON)
+option(WANT_EXECUTABLE_MULTITHREAD "Enable multithreading on the SurgeScript CLI" ON)
 set(LIB_SUFFIX "" CACHE STRING "Suffix to append to 'lib' directories, e.g., '64'") # libs must be installed to "lib64" in some systems
 set(PKGCONFIG_PATH "lib${LIB_SUFFIX}/pkgconfig" CACHE PATH "Destination folder of the pkg-config (.pc) file")
 if(UNIX)
@@ -158,7 +159,7 @@ endif()
 install(DIRECTORY src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY "${CMAKE_BINARY_DIR}/src/" DESTINATION include FILES_MATCHING PATTERN "*.h")
 
-# Build the executable
+# Build the SurgeScript CLI
 if(WANT_EXECUTABLE)
     # Set the appropriate lib
     set(LIBSURGESCRIPT "surgescript")
@@ -166,11 +167,21 @@ if(WANT_EXECUTABLE)
         set(LIBSURGESCRIPT "surgescript-static")
     endif()
 
+    # Use multithreading?
+    set(LIBTHREAD "")
+    set(ENABLE_THREADS 0)
+    if(WANT_EXECUTABLE_MULTITHREAD)
+        # hmmmm...
+        set(LIBTHREAD "pthread")
+        set(ENABLE_THREADS 1)
+    endif()
+
     # Create the executable
-    message(STATUS "Will build surgescript")
+    message(STATUS "Will build the SurgeScript CLI")
     add_executable(surgescript.bin src/main.c)
     include_directories("${CMAKE_BINARY_DIR}/src")
-    target_link_libraries(surgescript.bin ${LIBSURGESCRIPT})
+    target_compile_definitions(surgescript.bin PUBLIC ENABLE_THREADS=${ENABLE_THREADS})
+    target_link_libraries(surgescript.bin ${LIBSURGESCRIPT} ${LIBTHREAD})
     target_include_directories(surgescript.bin PRIVATE src)
     set_target_properties(surgescript.bin PROPERTIES OUTPUT_NAME surgescript)
 

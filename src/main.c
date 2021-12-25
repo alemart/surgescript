@@ -16,19 +16,34 @@
  * limitations under the License.
  *
  * runtime/main.c
- * SurgeScript Runtime Engine entry point
+ * SurgeScript CLI
  */
 
 #include <surgescript.h>
 #include <string.h>
 #include <stdio.h>
 
-static surgescript_vm_t* make_vm(int argc, char** argv);
+/* multithread support */
+#if ENABLE_THREADS
+# if !__STDC_NO_THREADS__
+#  include <threads.h>
+# else
+#  error "Can't compile the SurgeScript CLI: threads.h is not found on this environment. Please change the environment or disable multithreading."
+# endif
+#endif
+
+static surgescript_vm_t* make_vm(int argc, char** argv, uint64_t* time_limit);
+static void run_vm(surgescript_vm_t* vm, uint64_t time_limit);
+static void destroy_vm(surgescript_vm_t* vm);
 static void print_to_stdout(const char* message);
 static void print_to_stderr(const char* message);
 static void discard_message(const char* message);
 static void show_help(const char* executable);
 static char* read_from_stdin();
+static int main_loop(void* arg);
+
+/* default time limit, given in milliseconds */
+#define DEFAULT_TIME_LIMIT 30000
 
 /*
  * main()
@@ -36,20 +51,103 @@ static char* read_from_stdin();
  */
 int main(int argc, char* argv[])
 {
-    /* create the VM and compile the input file(s) */
-    surgescript_vm_t* vm = make_vm(argc, argv);
+    uint64_t time_limit = DEFAULT_TIME_LIMIT;
+
+    /* Create the VM and compile the input file(s) */
+    surgescript_vm_t* vm = make_vm(argc, argv, &time_limit);
+
+    /* got a VM? */
     if(vm != NULL) {
         /* run the VM */
-        while(surgescript_vm_update(vm)) {
-            ;
-        }
+        run_vm(vm, time_limit);
 
         /* destroy the VM */
-        surgescript_vm_destroy(vm);
+        destroy_vm(vm);
     }
 
     /* done! */
     return 0;
+}
+
+/**
+ * run_vm()
+ * Run the VM with a time limit
+ */
+void run_vm(surgescript_vm_t* vm, uint64_t time_limit)
+{
+    uint64_t start_time = surgescript_util_gettickcount();
+    #define show_time_limit_error() \
+        fprintf(stderr, "Time limit of %.1lf seconds exceeded.\n", (double)time_limit * 0.001)
+
+#if !ENABLE_THREADS
+
+    /* main loop */
+    while(surgescript_vm_update(vm)) {
+
+        /* time limit */
+        if(time_limit > 0 && surgescript_util_gettickcount() > start_time + time_limit) {
+            show_time_limit_error();
+            break;
+        }
+
+    }
+
+#else
+
+    /* run the SurgeScript VM on a separate thread */
+    thrd_t thread;
+    thrd_create(&thread, main_loop, vm);
+
+    /* handle the time limit, if it's been set */
+    if(time_limit > 0) {
+        while(surgescript_vm_is_active(vm)) {
+            if(surgescript_util_gettickcount() > start_time + time_limit) {
+                show_time_limit_error();
+                exit(1); /* TODO we should kill the other thread instead */
+            }
+
+            thrd_yield();
+        }
+    }
+
+    /* wait for the other thread to complete */
+    thrd_join(thread, NULL);
+
+#endif
+
+}
+
+/**
+ * destroy_vm()
+ * Destroy a SurgeScript VM
+ */
+void destroy_vm(surgescript_vm_t* vm)
+{
+    surgescript_vm_destroy(vm);
+}
+
+/**
+ * main_loop()
+ * Game loop for multithreaded execution
+ */
+int main_loop(void* arg)
+{
+#if !ENABLE_THREADS
+
+    (void)arg;
+    return 0;
+
+#else
+
+    surgescript_vm_t* vm = (surgescript_vm_t*)arg;
+
+    while(surgescript_vm_update(vm)) {
+        thrd_yield();
+    }
+
+    return 0;
+
+#endif
 }
 
 /*
@@ -57,7 +155,7 @@ int main(int argc, char* argv[])
  * Parses the command line arguments and creates a VM
  * with the compiled scripts
  */
-surgescript_vm_t* make_vm(int argc, char** argv)
+surgescript_vm_t* make_vm(int argc, char** argv, uint64_t* time_limit)
 {
     surgescript_vm_t* vm = NULL;
     int i;
@@ -81,6 +179,13 @@ surgescript_vm_t* make_vm(int argc, char** argv)
             /* show help */
             show_help(surgescript_util_basename(argv[0]));
             return NULL;
+        }
+        else if(strcmp(arg, "--timelimit") == 0 || strcmp(arg, "-t") == 0) {
+            /* set time limit (maximum execution time) */
+            if(++i < argc && time_limit != NULL) {
+                double seconds = atof(argv[i]);
+                *time_limit = (seconds > 0.0) ? (uint64_t)(seconds * 1000.0) : 0;
+            }
         }
         else if(strcmp(arg, "--") == 0) {
             /* user-specific command line arguments */
@@ -143,6 +248,7 @@ void show_help(const char* executable)
         "Options:\n"
         "    -v, --version                         shows the version of SurgeScript\n"
         "    -D, --debug                           prints debugging information\n"
+        "    -t, --timelimit                       sets a maximum execution time, in seconds (0 = no limit)\n"
         "    -h, --help                            shows this message\n"
         "\n"
         "Examples:\n"
@@ -150,12 +256,14 @@ void show_help(const char* executable)
         "    %s file1.ss file2.ss         compiles and executes file1.ss and file2.ss\n"
         "    %s --debug test.ss           compiles and runs test.ss with debugging information\n"
         "    %s file.ss -- -x -y          passes custom arguments -x and -y to file.ss\n"
+        "    %s -t 5                      runs a script read from stdin, with a time limit of 5 seconds\n"
         "\n"
         "Full documentation available at: <%s>\n",
         surgescript_util_version(),
         surgescript_util_year(),
         surgescript_util_authors(),
         surgescript_util_website(),
+        executable,
         executable,
         executable,
         executable,
