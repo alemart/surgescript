@@ -205,9 +205,13 @@ object "My Jumping Baddie" is "entity", "enemy"
 
 #### forceJump
 
-`forceJump()`
+`forceJump(speed)`
 
 Makes the platformer jump, regardless if it's touching the ground or not.
+
+*Arguments*
+
+* `speed`: number. Jump speed in pixels per second.
 
 *Returns*
 
