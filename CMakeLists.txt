@@ -185,6 +185,11 @@ if(WANT_EXECUTABLE)
     target_include_directories(surgescript.bin PRIVATE src)
     set_target_properties(surgescript.bin PROPERTIES OUTPUT_NAME surgescript)
 
+    # WebAssembly
+    if(EMSCRIPTEN)
+        target_link_options(surgescript.bin PRIVATE -Os --closure 1 -sMODULARIZE=1 -sMALLOC="emmalloc" -sEXPORTED_FUNCTIONS=["_main"]) # Reduce output size
+    endif()
+
     # Windows icon
     if(WIN32 AND MINGW)
         if(NOT CMAKE_RC_COMPILER)
