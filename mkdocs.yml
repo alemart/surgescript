@@ -6,7 +6,7 @@ site_dir: 'docs_html/'
 copyright: 'SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.'
 google_analytics: ['UA-120511928-1', 'opensurge2d.org']
 repo_url: 'https://github.com/alemart/surgescript'
-strict: true
+strict: false
 theme:
     name: 'material'
 nav:
