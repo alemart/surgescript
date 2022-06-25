@@ -30,6 +30,7 @@ option(WANT_EXECUTABLE "Build the SurgeScript CLI" ON)
 option(WANT_EXECUTABLE_MULTITHREAD "Enable multithreading on the SurgeScript CLI" ON)
 set(LIB_SUFFIX "" CACHE STRING "Suffix to append to 'lib' directories, e.g., '64'") # libs must be installed to "lib64" in some systems
 set(PKGCONFIG_PATH "lib${LIB_SUFFIX}/pkgconfig" CACHE PATH "Destination folder of the pkg-config (.pc) file")
+set(INCLUDE_PATH "include" CACHE PATH "Destination for the header files")
 if(UNIX)
     set(METAINFO_PATH "share/metainfo" CACHE PATH "Destination folder of the metainfo file")
     set(ICON_PATH "share/pixmaps" CACHE PATH "Destination folder of the icon file")
@@ -156,8 +157,8 @@ if(WANT_STATIC)
 endif()
 
 # Install headers
-install(DIRECTORY src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY "${CMAKE_BINARY_DIR}/src/" DESTINATION include FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY src/ DESTINATION ${INCLUDE_PATH} FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY "${CMAKE_BINARY_DIR}/src/" DESTINATION ${INCLUDE_PATH} FILES_MATCHING PATTERN "*.h")
 
 # Build the SurgeScript CLI
 if(WANT_EXECUTABLE)
