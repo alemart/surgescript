@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # SurgeScript
 # A scripting language for games
-# Copyright 2016-2021 Alexandre Martins <alemartf(at)gmail(dot)com>
+# Copyright 2016-2022 Alexandre Martins <alemartf(at)gmail(dot)com>
 # ------------------------------------------------------------------------------
 
 # Project info
@@ -11,7 +11,8 @@ project(
     VERSION 0.5.5.1
     LANGUAGES C
 )
-set(PROJECT_YEARS "2016-2021")
+include(GNUInstallDirs)
+set(PROJECT_YEARS "2016-2022")
 
 # Default config
 set(CMAKE_C_STANDARD 11)
@@ -19,25 +20,17 @@ if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build: Debug | Release | MinSizeRel | RelWithDebInfo" FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
-if(UNIX AND CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-  set(CMAKE_INSTALL_PREFIX "/usr" CACHE PATH "Install path prefix (prepended onto install directories)" FORCE)
-endif()
 
 # User options
 option(WANT_SHARED "Build SurgeScript as a shared library" ON)
 option(WANT_STATIC "Build SurgeScript as a static library" ON)
 option(WANT_EXECUTABLE "Build the SurgeScript CLI" ON)
 option(WANT_EXECUTABLE_MULTITHREAD "Enable multithreading on the SurgeScript CLI" ON)
-set(LIB_SUFFIX "" CACHE STRING "Suffix to append to 'lib' directories, e.g., '64'") # libs must be installed to "lib64" in some systems
-set(PKGCONFIG_PATH "lib${LIB_SUFFIX}/pkgconfig" CACHE PATH "Destination folder of the pkg-config (.pc) file")
+set(PKGCONFIG_PATH "pkgconfig" CACHE PATH "Destination folder of the pkg-config (.pc) file")
 if(UNIX)
-    set(METAINFO_PATH "share/metainfo" CACHE PATH "Destination folder of the metainfo file")
-    set(ICON_PATH "share/pixmaps" CACHE PATH "Destination folder of the icon file")
+    set(METAINFO_PATH "metainfo" CACHE PATH "Destination folder of the metainfo file")
+    set(ICON_PATH "pixmaps" CACHE PATH "Destination folder of the icon file")
 endif()
-
-# Output folder
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
-set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 # Sources
 set(
@@ -114,6 +107,9 @@ set(
     src/surgescript.h
 )
 
+# Output folder
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
+
 # Generate files from templates
 function(generate_file TEMPLATE)
     configure_file(src/surgescript/${TEMPLATE}.in "${CMAKE_BINARY_DIR}/src/surgescript/${TEMPLATE}" @ONLY)
@@ -125,7 +121,7 @@ function(generate_pc_file LINKAGE)
         set(LIB_LINKAGE "-static")
     endif()
     configure_file(src/surgescript/misc/surgescript.pc.in "${LIBRARY_OUTPUT_PATH}/surgescript${LIB_LINKAGE}.pc" @ONLY)
-    install(FILES "${LIBRARY_OUTPUT_PATH}/surgescript${LIB_LINKAGE}.pc" DESTINATION "${CMAKE_INSTALL_PREFIX}/${PKGCONFIG_PATH}")
+    install(FILES "${LIBRARY_OUTPUT_PATH}/surgescript${LIB_LINKAGE}.pc" DESTINATION "${CMAKE_INSTALL_LIBDIR}/${PKGCONFIG_PATH}")
 endfunction()
 
 generate_file("misc/info.c")
@@ -143,7 +139,7 @@ if(WANT_SHARED)
     add_library(surgescript SHARED ${SURGESCRIPT_SOURCES} ${SURGESCRIPT_HEADERS})
     target_link_libraries(surgescript m)
     set_target_properties(surgescript PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${LIB_SOVERSION})
-    install(TARGETS surgescript DESTINATION "lib${LIB_SUFFIX}")
+    install(TARGETS surgescript DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 endif()
 
 if(WANT_STATIC)
@@ -152,12 +148,12 @@ if(WANT_STATIC)
     add_library(surgescript-static STATIC ${SURGESCRIPT_SOURCES} ${SURGESCRIPT_HEADERS})
     target_link_libraries(surgescript-static m)
     set_target_properties(surgescript-static PROPERTIES VERSION ${PROJECT_VERSION})
-    install(TARGETS surgescript-static DESTINATION "lib${LIB_SUFFIX}")
+    install(TARGETS surgescript-static DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 endif()
 
 # Install headers
-install(DIRECTORY src/ DESTINATION include FILES_MATCHING PATTERN "*.h")
-install(DIRECTORY "${CMAKE_BINARY_DIR}/src/" DESTINATION include FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY src/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" FILES_MATCHING PATTERN "*.h")
+install(DIRECTORY "${CMAKE_BINARY_DIR}/src/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" FILES_MATCHING PATTERN "*.h")
 
 # Build the SurgeScript CLI
 if(WANT_EXECUTABLE)
@@ -201,12 +197,12 @@ if(WANT_EXECUTABLE)
 
     # *nix metadata & icon
     if(UNIX)
-        file(TO_CMAKE_PATH "${CMAKE_INSTALL_PREFIX}/${ICON_PATH}/surgescript.png" ICON_FILEPATH)
+        file(TO_CMAKE_PATH "${CMAKE_INSTALL_DATADIR}/${ICON_PATH}/surgescript.png" ICON_FILEPATH)
         generate_file("misc/surgescript.appdata.xml")
-        install(FILES "${CMAKE_BINARY_DIR}/src/surgescript/misc/surgescript.appdata.xml" DESTINATION "${CMAKE_INSTALL_PREFIX}/${METAINFO_PATH}")
-        install(FILES src/surgescript/misc/surgescript.png DESTINATION "${CMAKE_INSTALL_PREFIX}/${ICON_PATH}")
+        install(FILES "${CMAKE_BINARY_DIR}/src/surgescript/misc/surgescript.appdata.xml" DESTINATION "${CMAKE_INSTALL_DATADIR}/${METAINFO_PATH}")
+        install(FILES src/surgescript/misc/surgescript.png DESTINATION "${CMAKE_INSTALL_DATADIR}/${ICON_PATH}")
     endif()
 
     # Installing the executable
-    install(TARGETS surgescript.bin DESTINATION bin)
+    install(TARGETS surgescript.bin DESTINATION "${CMAKE_INSTALL_BINDIR}")
 endif()
