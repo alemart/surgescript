@@ -62,7 +62,7 @@ Jump speed, in pixels per second. The higher the value, the more intense the jum
 
 `gravityMultiplier`: number.
 
-A multiplier that affects the acceleration of gravity. When set to 1.0, the Platformer will subject to the default [level gravity](/engine/level#gravity). When set to 2.0 (0.5), the Platformer will be subject to twice (half) the level gravity, and so on. Zero means no gravity. Defaults to 1.0.
+A multiplier used to modify how the Platformer is affected by gravity. When set to 1.0, the Platformer will subject to the [default acceleration of gravity](/engine/level#gravity). When set to 2.0 (0.5), the Platformer will be subject to twice (half) the default gravity, and so on. Zero means no gravity. Defaults to 1.0.
 
 *Available since:* Open Surge 0.6.0
 
