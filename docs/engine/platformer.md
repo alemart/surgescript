@@ -58,6 +58,14 @@ Walking speed, in pixels per second.
 
 Jump speed, in pixels per second. The higher the value, the more intense the jump.
 
+#### gravityMultiplier
+
+`gravityMultiplier`: number.
+
+A multiplier that affects the acceleration of gravity. When set to 1.0, the Platformer will subject to the default [level gravity](/engine/level#gravity). When set to 2.0 (0.5), the Platformer will be subject to twice (half) the level gravity, and so on. Zero means no gravity. Defaults to 1.0.
+
+*Available since:* Open Surge 0.6.0
+
 #### direction
 
 `direction`: number, read-only.

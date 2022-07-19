@@ -142,7 +142,7 @@ The position where the player is placed when the level starts.
 
 `gravity`: number, read-only.
 
-A default value for the level gravity, in pixels per second squared.
+The acceleration of gravity, measured in pixels per second squared.
 
 #### time
 
