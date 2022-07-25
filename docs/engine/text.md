@@ -64,7 +64,7 @@ The name of the font in use.
 
 #### size
 
-`size`: [Vector2](/engine/vector2) object.
+`size`: [Vector2](/engine/vector2) object, read-only.
 
 The size, in pixels, of the rendered text.
 
