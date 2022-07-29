@@ -49,17 +49,27 @@ Will be `true` if the current animation exists, i.e., if its sprite and its anim
 
 Will be `true` if the current animation has finished playing.
 
-#### hotspot
-
-`hotspot`: [Vector2](/engine/vector2) object, read-only.
-
-The hot spot of the current animation. Coordinates are given in pixels.
-
 #### anchor
 
 `anchor`: [Vector2](/engine/vector2) object, read-only.
 
 The hot spot of the current animation normalized to [0,1] x [0,1].
+
+*Available since:* Open Surge 0.6.0
+
+#### hotSpot
+
+`hotSpot`: [Vector2](/engine/vector2) object, read-only.
+
+The hot spot of the current animation. Coordinates are given in pixels.
+
+*Note:* prior to Open Surge 0.6.0, this property was called `hotspot`.
+
+#### actionSpot
+
+`hotSpot`: [Vector2](/engine/vector2) object, read-only.
+
+The action spot of the current animation. Coordinates are given in pixels. If the sprite is flipped, the action spot is automatically flipped relative to the center of the animation frame.
 
 *Available since:* Open Surge 0.6.0
 
