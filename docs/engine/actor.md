@@ -92,7 +92,7 @@ A *(x,y)* offset relative to the parent object. Defaults to zero.
 
 `anchor`: [Vector2](/engine/vector2) object.
 
-A shortcut to `animation.anchor`: the hot spot of the current animation normalized to [0,1] x [0,1].
+A shortcut to `animation.anchor`: the hot spot of the [current animation](#animation) normalized to [0,1] x [0,1].
 
 *Available since:* Open Surge 0.6.0
 
@@ -100,7 +100,7 @@ A shortcut to `animation.anchor`: the hot spot of the current animation normaliz
 
 `hotSpot`: [Vector2](/engine/vector2) object.
 
-A shortcut to `animation.hotSpot`: the hot spot of the current animation. Coordinates are given in pixels. In versions prior to 0.6.0, you may get the hot spot from the [Animation](/engine/animation) object.
+A shortcut to `animation.hotSpot`: the hot spot of the [current animation](#animation). Coordinates are given in pixels. In versions prior to 0.6.0, you may get the hot spot using the [Animation](/engine/animation#hotspot) object.
 
 *Available since:* Open Surge 0.6.0
 
@@ -108,7 +108,7 @@ A shortcut to `animation.hotSpot`: the hot spot of the current animation. Coordi
 
 `actionSpot`: [Vector2](/engine/vector2) object.
 
-A shortcut to `animation.actionSpot`: the action spot spot of the current animation. Coordinates are given in pixels. If the sprite is flipped, the action spot is automatically flipped relative to the center of the animation frame.
+A shortcut to `animation.actionSpot`: the action spot spot of the [current animation](#animation). Coordinates are given in pixels. If the sprite is flipped, the action spot is automatically flipped relative to the [hot spot](/engine/animation#hotspot) of the current animation.
 
 *Available since:* Open Surge 0.6.0
 

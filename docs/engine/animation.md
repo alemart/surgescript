@@ -27,7 +27,7 @@ Properties
 
 `id`: number.
 
-The number of the current animation, defined in a .spr file.
+The number of the animation, defined in a .spr file.
 
 #### sprite
 
@@ -39,7 +39,7 @@ The name of the sprite, defined in a .spr file.
 
 `exists`: boolean, read-only.
 
-Will be `true` if the current animation exists, i.e., if its sprite and its animation number have been defined in a .spr file.
+Will be `true` if the animation exists, i.e., if its sprite and its animation number have been defined in a .spr file.
 
 *Available since:* Open Surge 0.5.1
 
@@ -47,13 +47,13 @@ Will be `true` if the current animation exists, i.e., if its sprite and its anim
 
 `finished`: boolean, read-only.
 
-Will be `true` if the current animation has finished playing.
+Will be `true` if the animation has finished playing.
 
 #### anchor
 
 `anchor`: [Vector2](/engine/vector2) object, read-only.
 
-The hot spot of the current animation normalized to [0,1] x [0,1].
+The hot spot of the animation normalized to [0,1] x [0,1].
 
 *Available since:* Open Surge 0.6.0
 
@@ -61,7 +61,7 @@ The hot spot of the current animation normalized to [0,1] x [0,1].
 
 `hotSpot`: [Vector2](/engine/vector2) object, read-only.
 
-The hot spot of the current animation. Coordinates are given in pixels.
+The hot spot of the animation. Coordinates are given in pixels.
 
 *Note:* prior to Open Surge 0.6.0, this property was called `hotspot`.
 
@@ -69,7 +69,7 @@ The hot spot of the current animation. Coordinates are given in pixels.
 
 `hotSpot`: [Vector2](/engine/vector2) object, read-only.
 
-The action spot of the current animation. Coordinates are given in pixels. If the sprite is flipped, the action spot is automatically flipped relative to the center of the animation frame.
+The action spot of the animation. Coordinates are given in pixels. If the sprite is flipped, the action spot is automatically flipped relative to the [hot spot](#hotspot) of the animation.
 
 *Available since:* Open Surge 0.6.0
 
@@ -77,19 +77,19 @@ The action spot of the current animation. Coordinates are given in pixels. If th
 
 `fps`: number, read-only.
 
-Frames per second of the current animation.
+Frames per second of the animation.
 
 #### repeats
 
 `repeats`: boolean, read-only.
 
-Does the current animation repeat itself?
+Does the animation repeat itself?
 
 #### frameCount
 
 `frameCount`: number, read-only.
 
-The number of frames of the current animation.
+The number of frames of the animation.
 
 #### frame
 
@@ -107,4 +107,4 @@ While the [FPS](#fps) rate controls the speed of the animation, the speed factor
 
 `sync`: boolean.
 
-Is the current animation is synchronized? A synchronized animation is a repeating animation that displays the same frame across multiple sprites. Defaults to `false`.
+Is the animation is synchronized? A synchronized animation is a repeating animation that displays the same frame across multiple sprites. Defaults to `false`.
