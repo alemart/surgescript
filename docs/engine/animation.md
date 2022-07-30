@@ -67,9 +67,17 @@ The hot spot of the animation. Coordinates are given in pixels.
 
 #### actionSpot
 
-`hotSpot`: [Vector2](/engine/vector2) object, read-only.
+`actionSpot`: [Vector2](/engine/vector2) object, read-only.
 
 The action spot of the animation. Coordinates are given in pixels. If the sprite is flipped, the action spot is automatically flipped relative to the [hot spot](#hotspot) of the animation.
+
+*Available since:* Open Surge 0.6.0
+
+#### actionOffset
+
+`actionOffset`: [Vector2](/engine/vector2) object, read-only.
+
+When this vector is added to the position of the sprite, you'll get the position of the [action spot](#actionspot).
 
 *Available since:* Open Surge 0.6.0
 

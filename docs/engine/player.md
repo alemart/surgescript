@@ -177,17 +177,49 @@ object "Application"
 }
 ```
 
-#### anim
-
-`anim`: number.
-
-A shortcut to `animation.id`: an integer corresponding to the animation number.
-
 #### animation
 
 `animation`: [Animation](/engine/animation) object, read-only.
 
 Reference to the Animation object of the Player.
+
+#### anim
+
+`anim`: number.
+
+A shortcut to `animation.id`: an integer corresponding to the animation number. See also: [Animation](/engine/animation), [id](/engine/animation#id).
+
+#### anchor
+
+`anchor`: [Vector2](/engine/vector2) object.
+
+A shortcut to `animation.anchor`. See also: [anchor](/engine/animation#anchor).
+
+*Available since:* Open Surge 0.6.0
+
+#### hotSpot
+
+`hotSpot`: [Vector2](/engine/vector2) object.
+
+A shortcut to `animation.hotSpot`. See also: [hot spot](/engine/animation#hotspot).
+
+*Available since:* Open Surge 0.6.0. In versions prior to 0.6.0, you may get the hot spot using the [Animation](/engine/animation#hotspot) object.
+
+#### actionSpot
+
+`actionSpot`: [Vector2](/engine/vector2) object.
+
+A shortcut to `animation.actionSpot`. See also: [action spot](/engine/animation#actionspot).
+
+*Available since:* Open Surge 0.6.0
+
+#### actionOffset
+
+`actionOffset`: [Vector2](/engine/vector2) object, read-only.
+
+A shortcut to `animation.actionOffset`. See also: [action offset](/engine/animation#actionoffset).
+
+*Available since:* Open Surge 0.6.0
 
 #### attacking
 
