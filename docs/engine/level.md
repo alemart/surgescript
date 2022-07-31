@@ -146,9 +146,11 @@ The acceleration of gravity, measured in pixels per second squared.
 
 #### time
 
-`time`: number, read-only.
+`time`: number.
 
 Elapsed time in the level, given in seconds.
+
+*Note:* this property is writable since Open Surge 0.6.0.
 
 #### next
 
