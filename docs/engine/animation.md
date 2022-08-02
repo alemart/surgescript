@@ -77,7 +77,7 @@ The action spot of the animation. Coordinates are given in pixels. If the sprite
 
 `actionOffset`: [Vector2](/engine/vector2) object, read-only.
 
-When this vector is added to the position of the sprite, you'll get the position of the [action spot](#actionspot).
+When this vector is added to the position of the sprite, you'll get the position of the [action spot](#actionspot). This is suitable to be used with [transform.localPosition](/engine/transform#localposition).
 
 *Available since:* Open Surge 0.6.0
 
