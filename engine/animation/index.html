@@ -894,15 +894,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hotspot" class="md-nav__link">
-    hotspot
+  <a href="#anchor" class="md-nav__link">
+    anchor
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#anchor" class="md-nav__link">
-    anchor
+  <a href="#hotspot" class="md-nav__link">
+    hotSpot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionspot" class="md-nav__link">
+    actionSpot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionoffset" class="md-nav__link">
+    actionOffset
   </a>
   
 </li>
@@ -1711,15 +1725,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hotspot" class="md-nav__link">
-    hotspot
+  <a href="#anchor" class="md-nav__link">
+    anchor
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#anchor" class="md-nav__link">
-    anchor
+  <a href="#hotspot" class="md-nav__link">
+    hotSpot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionspot" class="md-nav__link">
+    actionSpot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionoffset" class="md-nav__link">
+    actionOffset
   </a>
   
 </li>
@@ -1808,33 +1836,42 @@ object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &q
 <h2 id="properties">Properties</h2>
 <h4 id="id">id</h4>
 <p><code>id</code>: number.</p>
-<p>The number of the current animation, defined in a .spr file.</p>
+<p>The number of the animation, defined in a .spr file.</p>
 <h4 id="sprite">sprite</h4>
 <p><code>sprite</code>: string, read-only.</p>
 <p>The name of the sprite, defined in a .spr file.</p>
 <h4 id="exists">exists</h4>
 <p><code>exists</code>: boolean, read-only.</p>
-<p>Will be <code>true</code> if the current animation exists, i.e., if its sprite and its animation number have been defined in a .spr file.</p>
+<p>Will be <code>true</code> if the animation exists, i.e., if its sprite and its animation number have been defined in a .spr file.</p>
 <p><em>Available since:</em> Open Surge 0.5.1</p>
 <h4 id="finished">finished</h4>
 <p><code>finished</code>: boolean, read-only.</p>
-<p>Will be <code>true</code> if the current animation has finished playing.</p>
-<h4 id="hotspot">hotspot</h4>
-<p><code>hotspot</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
-<p>The hot spot of the current animation. Coordinates are given in pixels.</p>
+<p>Will be <code>true</code> if the animation has finished playing.</p>
 <h4 id="anchor">anchor</h4>
 <p><code>anchor</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
-<p>The hot spot of the current animation normalized to [0,1] x [0,1].</p>
+<p>The hot spot of the animation normalized to [0,1] x [0,1].</p>
+<p><em>Available since:</em> Open Surge 0.6.0</p>
+<h4 id="hotspot">hotSpot</h4>
+<p><code>hotSpot</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
+<p>The hot spot of the animation. Coordinates are given in pixels.</p>
+<p><em>Note:</em> prior to Open Surge 0.6.0, this property was called <code>hotspot</code>.</p>
+<h4 id="actionspot">actionSpot</h4>
+<p><code>actionSpot</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
+<p>The action spot of the animation. Coordinates are given in pixels. If the sprite is flipped, the action spot is automatically flipped relative to the <a href="#hotspot">hot spot</a> of the animation.</p>
+<p><em>Available since:</em> Open Surge 0.6.0</p>
+<h4 id="actionoffset">actionOffset</h4>
+<p><code>actionOffset</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
+<p>When this vector is added to the position of the sprite, you'll get the position of the <a href="#actionspot">action spot</a>.</p>
 <p><em>Available since:</em> Open Surge 0.6.0</p>
 <h4 id="fps">fps</h4>
 <p><code>fps</code>: number, read-only.</p>
-<p>Frames per second of the current animation.</p>
+<p>Frames per second of the animation.</p>
 <h4 id="repeats">repeats</h4>
 <p><code>repeats</code>: boolean, read-only.</p>
-<p>Does the current animation repeat itself?</p>
+<p>Does the animation repeat itself?</p>
 <h4 id="framecount">frameCount</h4>
 <p><code>frameCount</code>: number, read-only.</p>
-<p>The number of frames of the current animation.</p>
+<p>The number of frames of the animation.</p>
 <h4 id="frame">frame</h4>
 <p><code>frame</code>: number.</p>
 <p>The current frame of the animation: an integer between <code>0</code> and <code>frameCount - 1</code>, inclusive.</p>
@@ -1843,7 +1880,7 @@ object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &q
 <p>While the <a href="#fps">FPS</a> rate controls the speed of the animation, the speed factor gives you an additional degree of control. This is a multiplier that defaults to 1.0, meaning that the animation will run using its normal speed. If it's set to 2.0, it will run using twice that speed. A value of 0.5 means half the speed, and so on.</p>
 <h4 id="sync">sync</h4>
 <p><code>sync</code>: boolean.</p>
-<p>Is the current animation is synchronized? A synchronized animation is a repeating animation that displays the same frame across multiple sprites. Defaults to <code>false</code>.</p>
+<p>Is the animation is synchronized? A synchronized animation is a repeating animation that displays the same frame across multiple sprites. Defaults to <code>false</code>.</p>
 
               
             </article>

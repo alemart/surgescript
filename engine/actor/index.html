@@ -928,15 +928,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hotspot" class="md-nav__link">
-    hotspot
+  <a href="#anchor" class="md-nav__link">
+    anchor
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#anchor" class="md-nav__link">
-    anchor
+  <a href="#hotspot" class="md-nav__link">
+    hotSpot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionspot" class="md-nav__link">
+    actionSpot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionoffset" class="md-nav__link">
+    actionOffset
   </a>
   
 </li>
@@ -1786,15 +1800,29 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#hotspot" class="md-nav__link">
-    hotspot
+  <a href="#anchor" class="md-nav__link">
+    anchor
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#anchor" class="md-nav__link">
-    anchor
+  <a href="#hotspot" class="md-nav__link">
+    hotSpot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionspot" class="md-nav__link">
+    actionSpot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#actionoffset" class="md-nav__link">
+    actionOffset
   </a>
   
 </li>
@@ -1893,13 +1921,21 @@ object &quot;SurgeTest&quot; is &quot;entity&quot;
 <h4 id="offset">offset</h4>
 <p><code>offset</code>: <a href="/engine/vector2">Vector2</a> object.</p>
 <p>A <em>(x,y)</em> offset relative to the parent object. Defaults to zero.</p>
-<h4 id="hotspot">hotspot</h4>
-<p><code>hotspot</code>: <a href="/engine/vector2">Vector2</a> object.</p>
-<p>A shortcut to <code>animation.hotspot</code>: the hot spot of the current animation. Coordinates are given in pixels. In versions prior to 0.6.0, you may get the hot spot from the <a href="/engine/animation">Animation</a> object.</p>
-<p><em>Available since:</em> Open Surge 0.6.0</p>
 <h4 id="anchor">anchor</h4>
-<p><code>hotspot</code>: <a href="/engine/vector2">Vector2</a> object.</p>
-<p>A shortcut to <code>animation.anchor</code>: the hot spot of the current animation normalized to [0,1] x [0,1].</p>
+<p><code>anchor</code>: <a href="/engine/vector2">Vector2</a> object.</p>
+<p>A shortcut to <code>animation.anchor</code>. See also: <a href="/engine/animation#anchor">anchor</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.0</p>
+<h4 id="hotspot">hotSpot</h4>
+<p><code>hotSpot</code>: <a href="/engine/vector2">Vector2</a> object.</p>
+<p>A shortcut to <code>animation.hotSpot</code>. See also: <a href="/engine/animation#hotspot">hot spot</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.0. In versions prior to 0.6.0, you may get the hot spot using the <a href="/engine/animation#hotspot">Animation</a> object.</p>
+<h4 id="actionspot">actionSpot</h4>
+<p><code>actionSpot</code>: <a href="/engine/vector2">Vector2</a> object.</p>
+<p>A shortcut to <code>animation.actionSpot</code>. See also: <a href="/engine/animation#actionspot">action spot</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.0</p>
+<h4 id="actionoffset">actionOffset</h4>
+<p><code>actionOffset</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
+<p>A shortcut to <code>animation.actionOffset</code>. See also: <a href="/engine/animation#actionoffset">action offset</a>.</p>
 <p><em>Available since:</em> Open Surge 0.6.0</p>
 <h4 id="width">width</h4>
 <p><code>width</code>: number, read-only.</p>

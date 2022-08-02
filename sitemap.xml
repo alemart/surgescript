@@ -2,352 +2,352 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://docs.opensurge2d.org/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/download/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/actor/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/animation/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/behavior/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/brick/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/camera/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/circular_movement/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/collider/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/collisionball/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/collisionbox/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/delayedevent/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/directional_movement/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/enemy/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/entity/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/entityevent/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/event/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/eventchain/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/eventlist/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/functionevent/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/input/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/lang/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/level/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/mouse/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/music/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/platformer/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/player/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/prefs/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/screen/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/sensor/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/sound/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/surgeengine/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/text/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/transform/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/vector2/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/engine/web/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/application/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/arguments/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/array/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/boolean/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/console/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/date/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/dictionary/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/gc/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/iterator/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/math/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/number/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/object/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/plugin/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/string/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/surgescript/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/system/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/tags/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/reference/time/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/advanced_features/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/best_practices/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/comments/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/components/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/conditionals/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/expressions/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/functions/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/hello/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/loops/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/object_tree/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/objects/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/packages/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/properties/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/tags/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/testing/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
          <loc>https://docs.opensurge2d.org/tutorials/variables/</loc>
-         <lastmod>2022-07-19</lastmod>
+         <lastmod>2022-08-02</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
