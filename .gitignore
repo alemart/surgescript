@@ -9,6 +9,11 @@
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# msvc
+.vs/
+out/
+CMakeSettings.json
+
 # vim
 # swap
 [._]*.s[a-v][a-z]
