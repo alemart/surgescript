@@ -12,6 +12,7 @@ project(
     LANGUAGES C
 )
 include(GNUInstallDirs)
+include(CheckLibraryExists)
 set(PROJECT_YEARS "2016-2022")
 
 # Default config
@@ -31,6 +32,9 @@ if(UNIX)
     set(METAINFO_PATH "metainfo" CACHE PATH "Destination folder of the metainfo file")
     set(ICON_PATH "pixmaps" CACHE PATH "Destination folder of the icon file")
 endif()
+
+# Library search
+CHECK_LIBRARY_EXISTS(m sqrt "${CMAKE_SYSTEM_LIBRARY_PATH}" SURGESCRIPT_libm_EXISTS)
 
 # Sources
 set(
@@ -137,7 +141,7 @@ if(WANT_SHARED)
     message(STATUS "Will build libsurgescript")
     generate_pc_file("shared")
     add_library(surgescript SHARED ${SURGESCRIPT_SOURCES} ${SURGESCRIPT_HEADERS})
-    if (NOT WIN32)
+    if (SURGESCRIPT_libm_EXISTS)
         target_link_libraries(surgescript m)
     endif()
     set_target_properties(surgescript PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${LIB_SOVERSION})
@@ -148,7 +152,7 @@ if(WANT_STATIC)
     message(STATUS "Will build libsurgescript-static")
     generate_pc_file("static")
     add_library(surgescript-static STATIC ${SURGESCRIPT_SOURCES} ${SURGESCRIPT_HEADERS})
-    if (NOT WIN32)
+    if (SURGESCRIPT_libm_EXISTS)
         target_link_libraries(surgescript-static m)
     endif ()
     set_target_properties(surgescript-static PROPERTIES VERSION ${PROJECT_VERSION})
