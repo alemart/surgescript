@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.2)
 project(
     surgescript
-    VERSION 0.5.5.1
+    VERSION 0.5.6
     LANGUAGES C
 )
 include(GNUInstallDirs)
@@ -165,6 +165,8 @@ install(DIRECTORY "${CMAKE_BINARY_DIR}/src/" DESTINATION "${CMAKE_INSTALL_INCLUD
 
 # Build the SurgeScript CLI
 if(WANT_EXECUTABLE)
+    message(STATUS "Will build the SurgeScript CLI")
+
     # Set the appropriate lib
     set(LIBSURGESCRIPT "surgescript")
     if(WANT_STATIC AND (NOT WANT_SHARED OR WIN32))
@@ -175,13 +177,14 @@ if(WANT_EXECUTABLE)
     set(LIBTHREAD "")
     set(ENABLE_THREADS 0)
     if(WANT_EXECUTABLE_MULTITHREAD)
+        message(STATUS "Will use multithreading on the SurgeScript CLI")
+
         # hmmmm...
         set(LIBTHREAD "pthread")
         set(ENABLE_THREADS 1)
     endif()
 
     # Create the executable
-    message(STATUS "Will build the SurgeScript CLI")
     add_executable(surgescript.bin src/main.c)
     include_directories("${CMAKE_BINARY_DIR}/src")
     target_compile_definitions(surgescript.bin PUBLIC ENABLE_THREADS=${ENABLE_THREADS})
