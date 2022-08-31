@@ -1,6 +1,14 @@
 # Release Notes
 
-## 0.5.5 - January 22nd, 2020
+## 0.5.6 - September 1st, 2022
+
+* Improved the SurgeScript CLI with a time limit option, the ability to run scripts from stdin and optional multithreading support
+* Added Visual Studio support (Cody Licorish)
+* Added Emscripten support
+* Updated docs
+* General improvements
+
+## 0.5.5 - January 22nd, 2021
 
 * Added the ability to pause the SurgeScript VM
 * Added utility macros for checking the SurgeScript version at compile time
