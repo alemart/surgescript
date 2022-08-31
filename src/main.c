@@ -1,7 +1,7 @@
 /*
  * SurgeScript
  * A scripting language for games
- * Copyright 2016-2021 Alexandre Martins <alemartf(at)gmail(dot)com>
+ * Copyright 2016-2022 Alexandre Martins <alemartf(at)gmail(dot)com>
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@
 
 /* multithread support */
 #if ENABLE_THREADS
-# if !__STDC_NO_THREADS__
+# if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_THREADS__)
 #  include <threads.h>
 # else
 #  error "Can't compile the SurgeScript CLI: threads.h is not found on this environment. Please change the environment or disable multithreading."
@@ -193,7 +193,7 @@ surgescript_vm_t* make_vm(int argc, char** argv, uint64_t* time_limit)
         }
         else {
             /* unrecognized option */
-            printf("Unrecognized option: '%s'.\nType '%s --help' for more information.\n", arg, surgescript_util_basename(argv[0]));
+            fprintf(stderr, "Unrecognized option: '%s'.\nType '%s --help' for more information.\n", arg, surgescript_util_basename(argv[0]));
             return NULL;
         }
     }
@@ -210,6 +210,8 @@ surgescript_vm_t* make_vm(int argc, char** argv, uint64_t* time_limit)
         }
     }
     else {
+        fprintf(stderr, "Reading from stdin... Run '%s -h' for help.\n", surgescript_util_basename(argv[0]));
+
         /* read from stdin */
         char* code = read_from_stdin();
         surgescript_vm_compile_code_in_memory(vm, code);
