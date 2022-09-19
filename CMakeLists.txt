@@ -145,7 +145,6 @@ if(WANT_SHARED)
         target_link_libraries(surgescript m)
     endif()
     set_target_properties(surgescript PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${LIB_SOVERSION})
-    install(TARGETS surgescript DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 endif()
 
 if(WANT_STATIC)
@@ -156,12 +155,20 @@ if(WANT_STATIC)
         target_link_libraries(surgescript-static m)
     endif ()
     set_target_properties(surgescript-static PROPERTIES VERSION ${PROJECT_VERSION})
-    install(TARGETS surgescript-static DESTINATION "${CMAKE_INSTALL_LIBDIR}")
 endif()
 
-# Install headers
+# Install the headers
 install(DIRECTORY src/ DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" FILES_MATCHING PATTERN "*.h")
 install(DIRECTORY "${CMAKE_BINARY_DIR}/src/" DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}" FILES_MATCHING PATTERN "*.h")
+
+# Install the library
+if(WANT_SHARED)
+    install(TARGETS surgescript DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+endif()
+
+if(WANT_STATIC)
+    install(TARGETS surgescript-static DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+endif()
 
 # Build the SurgeScript CLI
 if(WANT_EXECUTABLE)
@@ -177,11 +184,19 @@ if(WANT_EXECUTABLE)
     set(LIBTHREAD "")
     set(ENABLE_THREADS 0)
     if(WANT_EXECUTABLE_MULTITHREAD)
-        message(STATUS "Will use multithreading on the SurgeScript CLI")
 
-        # hmmmm...
-        set(LIBTHREAD "pthread")
-        set(ENABLE_THREADS 1)
+        # Header search
+        find_path(THREADS_H NAMES "threads.h" PATHS "${CMAKE_INCLUDE_PATH}")
+        if(NOT THREADS_H)
+            message(WARNING "Can't find threads.h. Will not use multithreading on the SurgeScript CLI")
+        else()
+            message(STATUS "Will use multithreading on the SurgeScript CLI")
+            set(ENABLE_THREADS 1)
+
+            # hmmmm...
+            set(LIBTHREAD "pthread")
+        endif()
+
     endif()
 
     # Create the executable
