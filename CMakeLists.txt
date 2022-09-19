@@ -131,6 +131,13 @@ endfunction()
 generate_file("misc/info.c")
 generate_file("util/version.h")
 
+# Use relative paths in __FILE__
+function(drop_compilation_paths TARGET)
+    if(NOT MSVC)
+        target_compile_options(${TARGET} PUBLIC "-ffile-prefix-map=${CMAKE_SOURCE_DIR}=.")
+    endif()
+endfunction()
+
 # Build the library
 if(NOT WANT_SHARED AND NOT WANT_STATIC)
     message(FATAL_ERROR "Options WANT_SHARED and WANT_STATIC are both set to OFF. Nothing to do.")
@@ -145,6 +152,7 @@ if(WANT_SHARED)
         target_link_libraries(surgescript m)
     endif()
     set_target_properties(surgescript PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${LIB_SOVERSION})
+    drop_compilation_paths(surgescript)
 endif()
 
 if(WANT_STATIC)
@@ -155,6 +163,7 @@ if(WANT_STATIC)
         target_link_libraries(surgescript-static m)
     endif ()
     set_target_properties(surgescript-static PROPERTIES VERSION ${PROJECT_VERSION})
+    drop_compilation_paths(surgescript-static)
 endif()
 
 # Install the headers
@@ -206,6 +215,7 @@ if(WANT_EXECUTABLE)
     target_link_libraries(surgescript.bin ${LIBSURGESCRIPT} ${LIBTHREAD})
     target_include_directories(surgescript.bin PRIVATE src)
     set_target_properties(surgescript.bin PROPERTIES OUTPUT_NAME surgescript)
+    drop_compilation_paths(surgescript.bin)
 
     # WebAssembly
     if(EMSCRIPTEN)
