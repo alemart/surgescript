@@ -1,6 +1,5 @@
 #!/bin/bash
 # This utility packs the Windows build of SurgeScript
-# Copyright 2016-2021 Alexandre Martins
 
 UNIX2DOS="todos" #"unix2dos"
 SOURCE_FOLDER="../../.."

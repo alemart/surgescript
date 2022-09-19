@@ -1,7 +1,7 @@
 //
 // unit_testing.ss
 // A Unit Testing Script for SurgeScript
-// Copyright (C) 2017-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"

@@ -1,7 +1,7 @@
 //
 // package.ss
 // Package example
-// Copyright 2018, 2019 Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2018-2019 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 // import the package
