@@ -1,5 +1,9 @@
 # Release Notes
 
+## 0.5.6.1 - September 22nd, 2022
+
+* Tweaks to the build system
+
 ## 0.5.6 - September 1st, 2022
 
 * Improved the SurgeScript CLI with a time limit option, the ability to run scripts from stdin and optional multithreading support
