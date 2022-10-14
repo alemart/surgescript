@@ -149,8 +149,7 @@ surgescript_parser_t* surgescript_parser_create(struct surgescript_programpool_t
 surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser);
 
 /* operations */
-bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* absolute_path); /* parse a script file */
-bool surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_in_memory); /* parse a script (in memory) */
+bool surgescript_parser_parse(surgescript_parser_t* parser, const char* code_in_memory, const char* filename); /* parse a script in memory with an optional filename */
 void surgescript_parser_foreach_plugin(surgescript_parser_t* parser, void* data, void (*fun)(const char*,void*)); /* foreach plugin object found in any parsed script, run fun(object_name, data) */
 void surgescript_parser_set_flags(surgescript_parser_t* parser, surgescript_parser_flags_t flags); /* set parser options (flags) */
 surgescript_parser_flags_t surgescript_parser_get_flags(surgescript_parser_t* parser); /* get parser flags */

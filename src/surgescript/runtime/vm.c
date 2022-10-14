@@ -19,7 +19,8 @@
  * SurgeScript Virtual Machine - Runtime Engine
  */
 
-#include <locale.h>
+#include <string.h>
+#include <errno.h>
 #include <time.h>
 #include "vm.h"
 #include "stack.h"
@@ -143,17 +144,53 @@ bool surgescript_vm_reset(surgescript_vm_t* vm)
  */
 bool surgescript_vm_compile(surgescript_vm_t* vm, const char* absolute_path)
 {
-    return surgescript_parser_parsefile(vm->parser, absolute_path);
+    const size_t BUFSIZE = 1024;
+    size_t read_chars = 0, data_size = 0;
+    char* data = NULL;
+
+    /* open the file in binary mode, so that offsets don't get messed up */
+    FILE* fp = surgescript_util_fopen_utf8(absolute_path, "rb");
+    if(!fp) {
+        ssfatal("Can't read file \"%s\": %s", absolute_path, strerror(errno));
+        return false;
+    }
+
+    /* read file to data[] */
+    sslog("Reading file %s...", absolute_path);
+    do {
+        data_size += BUFSIZE * sizeof(char);
+        data = ssrealloc(data, data_size + 1);
+        read_chars += fread(data + read_chars, sizeof(char), BUFSIZE, fp);
+        data[read_chars] = '\0';
+    } while(read_chars == data_size);
+    fclose(fp);
+
+    /* parse it */
+    bool success = surgescript_parser_parse(vm->parser, data, absolute_path);
+
+    /* done! */
+    ssfree(data);
+    return success;
 }
 
 /*
  * surgescript_vm_compile_code_in_memory()
- * Compiles the given code, stored in memory
+ * Compiles the given code stored in memory
  * Returns true on success; false otherwise
  */
 bool surgescript_vm_compile_code_in_memory(surgescript_vm_t* vm, const char* code)
 {
-    return surgescript_parser_parsemem(vm->parser, code);
+    return surgescript_parser_parse(vm->parser, code, NULL);
+}
+
+/*
+ * surgescript_vm_compile_virtual_file()
+ * Compiles the given code stored in memory and specify a virtual filename or filepath
+ * Returns true on success; false otherwise
+ */
+bool surgescript_vm_compile_virtual_file(surgescript_vm_t* vm, const char* code, const char* filename)
+{
+    return surgescript_parser_parse(vm->parser, code, filename);
 }
 
 /*
@@ -174,9 +211,6 @@ void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
     /* Already launched? */
     if(surgescript_vm_is_active(vm))
         return;
-
-    /* SurgeScript uses UTF-8 */
-    setlocale(LC_ALL, "en_US.UTF-8");
 
     /* Setup the pseudo-number generator */
     surgescript_util_srand(time(NULL));

@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#include <errno.h>
 #include <ctype.h>
 #include "parser.h"
 #include "lexer.h"
@@ -189,36 +188,7 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser)
  */
 bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* absolute_path)
 {
-    FILE* fp = surgescript_util_fopen_utf8(absolute_path, "rb"); /* use binary mode, so offsets don't get messed up */
-    if(fp) {
-        const size_t BUFSIZE = 1024;
-        char* data = NULL;
-        size_t read_chars = 0, data_size = 0;
 
-        /* read file to data[] */
-        sslog("Reading file %s...", absolute_path);
-        do {
-            data_size += BUFSIZE;
-            data = ssrealloc(data, data_size + 1);
-            read_chars += fread(data + read_chars, sizeof(char), BUFSIZE, fp);
-            data[read_chars] = '\0';
-        } while(read_chars == data_size);
-        fclose(fp);
-
-        /* parse it */
-        ssfree(parser->filename);
-        parser->filename = ssstrdup(surgescript_util_basename(absolute_path));
-        surgescript_lexer_set(parser->lexer, data);
-        parse(parser);
-
-        /* done! */
-        ssfree(data);
-        return true;
-    }
-    else {
-        ssfatal("Parse Error: can't read file \"%s\": %s", absolute_path, strerror(errno));
-        return false;
-    }
 }
 
 /*
@@ -233,6 +203,24 @@ bool surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_
     parse(parser);
     return true;
 }
+
+
+
+/*
+ * surgescript_parser_parse()
+ * Parse a script stored in memory
+ * You may pass NULL to the (optional) filename if the script doesn't belong to a (possibly virtual) file
+ */
+bool surgescript_parser_parse(surgescript_parser_t* parser, const char* code_in_memory, const char* filename)
+{
+    ssfree(parser->filename);
+    parser->filename = ssstrdup(filename != NULL ? filename : "<memory>");
+    surgescript_lexer_set(parser->lexer, code_in_memory);
+    parse(parser);
+    return true;
+}
+
+
 
 /*
  * surgescript_parser_filename()

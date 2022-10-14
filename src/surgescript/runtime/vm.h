@@ -43,6 +43,7 @@ surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm);
 /* SurgeScript Compiler */
 bool surgescript_vm_compile(surgescript_vm_t* vm, const char* absolute_path); /* compiles a file */
 bool surgescript_vm_compile_code_in_memory(surgescript_vm_t* vm, const char* code); /* compiles the given code */
+bool surgescript_vm_compile_virtual_file(surgescript_vm_t* vm, const char* code, const char* filename); /* compiles the given code specifying a virtual filename */
 
 /* VM lifecycle */
 bool surgescript_vm_is_active(surgescript_vm_t* vm); /* is the vm active? (i.e., turned on) */
