@@ -20,6 +20,7 @@
  */
 
 #include <surgescript.h>
+#include <locale.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -52,6 +53,9 @@ static int main_loop(void* arg);
 int main(int argc, char* argv[])
 {
     uint64_t time_limit = DEFAULT_TIME_LIMIT;
+
+    /* SurgeScript uses UTF-8 */
+    setlocale(LC_ALL, "en_US.UTF-8");
 
     /* Create the VM and compile the input file(s) */
     surgescript_vm_t* vm = make_vm(argc, argv, &time_limit);
