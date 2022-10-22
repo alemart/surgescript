@@ -341,7 +341,7 @@ void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* pro
 
     /* generate the bytecode to access the plugin */
     surgescript_program_add_line(program, SSOP_MOVO, SSOPu(0), SSOPu(plugin_object));
-    while(next = strchr(tok, '.')) {
+    while((next = strchr(tok, '.')) != NULL) {
         *next = 0;
         surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
         surgescript_program_add_line(program, SSOP_CALL, SSOPu(
