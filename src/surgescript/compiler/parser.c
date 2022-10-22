@@ -182,29 +182,6 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser)
     return ssfree(parser);
 }
 
-/*
- * surgescript_parser_parsefile()
- * Parse a script file; returns false on error
- */
-bool surgescript_parser_parsefile(surgescript_parser_t* parser, const char* absolute_path)
-{
-
-}
-
-/*
- * surgescript_parser_parsemem()
- * Parse a script stored in memory
- */
-bool surgescript_parser_parsemem(surgescript_parser_t* parser, const char* code_in_memory)
-{
-    ssfree(parser->filename);
-    parser->filename = ssstrdup("<memory>");
-    surgescript_lexer_set(parser->lexer, code_in_memory);
-    parse(parser);
-    return true;
-}
-
-
 
 /*
  * surgescript_parser_parse()
