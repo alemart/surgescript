@@ -42,6 +42,7 @@
 #define sslog                       surgescript_util_log
 #define ssfatal                     surgescript_util_fatal
 #define ssstrdup(str)               surgescript_util_strdup((str), __FILE__, __LINE__)
+#define ssatof(str)                 surgescript_util_strtod((str), NULL)
 
 /* constants */
 #define SS_NAMEMAX                  63 /* names can't be larger than this (computes hashes quickly) */
@@ -63,16 +64,18 @@ void surgescript_util_set_error_functions(void (*log)(const char*), void (*fatal
 
 char* surgescript_util_strncpy(char* dst, const char* src, size_t n); /* strcpy */
 char* surgescript_util_strdup(const char* src, const char* file, int line); /* strdup */
+double surgescript_util_strtod(const char* str, char** endptr); /* convert a string to a floating-point number in a locale-independent manner */
 const char* surgescript_util_basename(const char* path); /* basename */
 char* surgescript_util_accessorfun(const char* prefix, const char* text); /* getter/setter prefixing function */
 
 unsigned surgescript_util_htob(unsigned x); /* host to big-endian */
 unsigned surgescript_util_btoh(unsigned x); /* big to host-endian */
-uint64_t surgescript_util_gettickcount(); /* number of milliseconds since some arbitrary zero */
 
 void surgescript_util_srand(uint64_t seed); /* sets the seed of the pseudo-random number generator */
 uint64_t surgescript_util_random64(); /* generates a pseudo-random 64-bit unsigned integer */
 double surgescript_util_random(); /* generates a pseudo-random double in the [0,1) range */
+
+uint64_t surgescript_util_gettickcount(); /* number of milliseconds since some arbitrary zero */
 
 FILE* surgescript_util_fopen_utf8(const char* filepath, const char* mode); /* fopen() with UTF-8 support for filenames */
 

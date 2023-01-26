@@ -160,7 +160,6 @@ surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* progr
     parser->base_table = NULL;
     parser->flags = SSPARSER_DEFAULTS;
     init_plugins_list(parser);
-    setlocale(LC_NUMERIC, "C"); /* use '.' as the decimal separator on atof() */
     return parser;
 }
 
@@ -1291,7 +1290,7 @@ void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             break;
 
         case SSTOK_NUMBER:
-            emit_number(context, atof(surgescript_token_lexeme(token)));
+            emit_number(context, ssatof(surgescript_token_lexeme(token)));
             match(parser, surgescript_token_type(token));
             break;
 
@@ -1585,13 +1584,13 @@ void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         match(parser, SSTOK_ADDITIVEOP);
         if(got_type(parser, SSTOK_NUMBER)) {
             token = parser->lookahead;
-            value = atof(surgescript_token_lexeme(token));
+            value = ssatof(surgescript_token_lexeme(token));
             emit_number(context, plus ? value : -value);
         }
         match(parser, SSTOK_NUMBER);
     }
     else if(got_type(parser, SSTOK_NUMBER)) {
-        emit_number(context, atof(surgescript_token_lexeme(token)));
+        emit_number(context, ssatof(surgescript_token_lexeme(token)));
         match(parser, SSTOK_NUMBER);
     }
     else

@@ -19,13 +19,18 @@
  * SurgeScript utilities
  */
 
+#define _GNU_SOURCE /* required for strtod_l() ? */
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
-#include "util.h"
+#include <locale.h>
+
+#if defined(__APPLE__) || defined(__FreeBSD__) || defined(__EMSCRIPTEN__) || defined(__IBMCPP__)
+#include <xlocale.h>
+#endif
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -33,6 +38,8 @@
 #else
 #include <sys/time.h>
 #endif
+
+#include "util.h"
 
 /* private stuff */
 static void mem_crash(const char* file, int line);
@@ -224,6 +231,61 @@ char* surgescript_util_strdup(const char* src, const char* file, int line)
 {
     char* str = surgescript_util_malloc(sizeof(char) * (1 + strlen(src)), file, line);
     return strcpy(str, src);
+}
+
+/*
+ * surgescript_util_strtod()
+ * Convert a string to a floating-point number in a locale-independent manner
+ * This works just like strtod() from libc
+ */
+double surgescript_util_strtod(const char* str, char** endptr)
+{
+    double x;
+
+#if defined(__GLIBC__)
+
+    locale_t loc = newlocale(LC_NUMERIC, "C", (locale_t)0);
+    x = strtod_l(str, endptr, loc);
+    freelocale(loc);
+
+#elif defined(_MSC_VER)
+
+    _locale_t loc = _create_locale(LC_NUMERIC, "C");
+    x = _strtod_l(str, endptr, loc);
+    _free_locale(loc);
+
+#else
+
+    /* this routine assumes that the decimal point is always
+       a single character, regardless of the current locale */
+    const char* dec = localeconv()->decimal_point;
+
+    if(*dec == '.') {
+
+        /* '.' is already the decimal point, as expected by SurgeScript */
+        x = strtod(str, endptr);
+
+    }
+    else {
+        #define SS_STRTOD_TOKENSIZE 127
+        char buf[1 + SS_STRTOD_TOKENSIZE];
+
+        /* copy str to buf */
+        strncpy(buf, str, sizeof(buf) - 1);
+        buf[sizeof(buf) - 1] = '\0';
+
+        /* replace '.' by the decimal point of the current locale */
+        char* p = strchr(buf, '.');
+        if(p != NULL)
+            *p = *dec;
+
+        /* convert the modified string to a floating-point number */
+        x = strtod(buf, endptr);
+    }
+
+#endif
+
+    return x;
 }
 
 /*

@@ -26,6 +26,7 @@
 #include <limits.h>
 #include <float.h>
 #include <ctype.h>
+#include <locale.h>
 #include "variable.h"
 #include "object.h"
 #include "object_manager.h"
@@ -100,6 +101,7 @@ static surgescript_varbucket_t* varpool_currbucket = NULL;
                                 (var)->raw = 0; /* must clear all bits */
 static inline bool is_number(const char* str);
 static inline void convert_to_ascii(char* str);
+static inline void convert_decimal_point(char* str);
 
 /* -------------------------------
  * public methods
@@ -276,7 +278,7 @@ double surgescript_var_get_number(const surgescript_var_t* var)
         case SSVAR_BOOL:
             return var->boolean ? 1.0 : 0.0;
         case SSVAR_STRING:
-            return is_number(var->string) ? atof(var->string) : NAN;
+            return is_number(var->string) ? ssatof(var->string) : NAN;
         case SSVAR_NULL:
             return 0.0;
         case SSVAR_OBJECTHANDLE:
@@ -487,10 +489,15 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
             return surgescript_util_strncpy(buf, "[object]", bufsize);
         case SSVAR_NUMBER: {
             char tmp[32];
-            if(var->number == ceil(var->number)) /* integer check */
+
+            if(var->number == ceil(var->number)) { /* integer check */
                 snprintf(tmp, sizeof(tmp), "%.0lf", var->number);
-            else
+            }
+            else {
                 snprintf(tmp, sizeof(tmp), "%lf", var->number);
+                convert_decimal_point(tmp);
+            }
+
             return surgescript_util_strncpy(buf, tmp, bufsize);
         }
         case SSVAR_RAW:
@@ -701,6 +708,23 @@ void convert_to_ascii(char* str)
     }
 
     *q = 0;
+}
+
+/* convert a locale-specific decimal point to '.' */
+void convert_decimal_point(char* str)
+{
+    /* this routine assumes that the decimal point is always
+       a single character, regardless of the current locale */
+    const char* dec = localeconv()->decimal_point;
+
+    /* no need to convert */
+    if(*dec == '.')
+        return;
+
+    /* replace the decimal point of the current locale by '.' */
+    char* p = strchr(str, *dec);
+    if(p != NULL)
+        *p = '.';
 }
 
 /* private var pool routines */
