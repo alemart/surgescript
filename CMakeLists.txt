@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
 # SurgeScript
 # A scripting language for games
-# Copyright 2016-2022 Alexandre Martins <alemartf(at)gmail(dot)com>
+# Copyright 2016-2023 Alexandre Martins <alemartf(at)gmail(dot)com>
 # ------------------------------------------------------------------------------
 
 # Project info
@@ -13,7 +13,7 @@ project(
 )
 include(GNUInstallDirs)
 include(CheckLibraryExists)
-set(PROJECT_YEARS "2016-2022")
+set(PROJECT_YEARS "2016-2023")
 
 # Default config
 set(CMAKE_C_STANDARD 11)
