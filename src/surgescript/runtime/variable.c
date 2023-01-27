@@ -56,18 +56,6 @@ static const int typecode[] = {
     [SSVAR_RAW] = 'r'
 };
 
-/* the inverse of typecode[] */
-static const enum surgescript_vartype_t inverse_typecode[256] = {
-    [ 0 ] = SSVAR_NULL,
-    ['b'] = SSVAR_BOOL,
-    ['n'] = SSVAR_NUMBER,
-    ['s'] = SSVAR_STRING,
-    ['o'] = SSVAR_OBJECTHANDLE,
-    ['r'] = SSVAR_RAW
-
-    /* whatever is not set defaults to 0 = SSVAR_NULL */
-};
-
 /* the variable struct */
 struct surgescript_var_t
 {
@@ -454,10 +442,18 @@ int surgescript_var_typecode(const surgescript_var_t* var)
  */
 int surgescript_var_type2code(const char* type_name)
 {
-    int code = type_name != NULL ? *type_name : typecode[SSVAR_NULL];
+    if(type_name == NULL)
+        return typecode[SSVAR_NULL];
 
-    /* return code if type_name is valid, or 0 (null) otherwise */
-    return typecode[ inverse_typecode[code] ];
+    /* f(type_name) = type_name[0] is a hash function */
+    switch(type_name[0]) {
+        case 'b': return typecode[SSVAR_BOOL];
+        case 'n': return typecode[SSVAR_NUMBER];
+        case 's': return typecode[SSVAR_STRING];
+        case 'o': return typecode[SSVAR_OBJECTHANDLE];
+        case 'r': return typecode[SSVAR_RAW];
+        default:  return typecode[SSVAR_NULL];
+    }
 }
 
 /*
