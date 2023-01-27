@@ -46,6 +46,7 @@ bool surgescript_var_get_bool(const surgescript_var_t* var);
 double surgescript_var_get_number(const surgescript_var_t* var);
 char* surgescript_var_get_string(const surgescript_var_t* var, const struct surgescript_objectmanager_t* manager); /* warning: allocates a new buffer; you have to ssfree() this. See also: surgescript_var_to_string() */
 unsigned surgescript_var_get_objecthandle(const surgescript_var_t* var);
+int64_t surgescript_var_get_rawbits(const surgescript_var_t* var); /* the binary value stored in var */
 
 /* sets the value of a variable */
 surgescript_var_t* surgescript_var_set_null(surgescript_var_t* var);
@@ -53,23 +54,25 @@ surgescript_var_t* surgescript_var_set_bool(surgescript_var_t* var, bool boolean
 surgescript_var_t* surgescript_var_set_number(surgescript_var_t* var, double number);
 surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char* string);
 surgescript_var_t* surgescript_var_set_objecthandle(surgescript_var_t* var, unsigned handle);
+surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int64_t raw); /* sets its binary value */
 
-/* misc */
-int surgescript_var_typecode(const surgescript_var_t* var); /* the typecode */
-int surgescript_var_type2code(const char* type_name); /* typename -> typecode converter */
-int surgescript_var_typecheck(const surgescript_var_t* var, int code); /* returns zero iff var has the given type code */
+/* type checking */
 bool surgescript_var_is_string(const surgescript_var_t* var); /* is var a string? */
 bool surgescript_var_is_bool(const surgescript_var_t* var); /* is var a boolean? */
 bool surgescript_var_is_number(const surgescript_var_t* var); /* is var a number? */
 bool surgescript_var_is_objecthandle(const surgescript_var_t* var); /* is var a handle to an object? */
+bool surgescript_var_sametype(const surgescript_var_t* a, const surgescript_var_t* b); /* checks if a and b have the same type */
+int surgescript_var_typecode(const surgescript_var_t* var); /* the typecode */
+int surgescript_var_type2code(const char* type_name); /* typename -> typecode converter */
+int surgescript_var_typecheck(const surgescript_var_t* var, int code); /* returns zero iff var has the given type code */
+
+/* misc */
 surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescript_var_t* src); /* similar to strcpy */
 surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var); /* similar to strdup */
 char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t bufsize); /* copies var to buf and returns buf, converting var to string if necessary (similar to itoa / strncpy) */
 const char* surgescript_var_fast_get_string(const surgescript_var_t* var); /* gets the string contents of var without performing any type conversion */
 int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t* b); /* similar to strcmp */
 void surgescript_var_swap(surgescript_var_t* a, surgescript_var_t* b); /* swaps a <-> b */
-int64_t surgescript_var_get_rawbits(const surgescript_var_t* var); /* the binary value stored in var */
-surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int64_t raw); /* sets its binary value */
 size_t surgescript_var_size(const surgescript_var_t* var); /* used memory in user space, in bytes */
 
 /* var pooling */

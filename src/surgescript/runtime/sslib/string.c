@@ -117,7 +117,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 /* equals() method */
 surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    if(surgescript_var_typecode(param[0]) == surgescript_var_typecode(param[1])) {
+    if(surgescript_var_sametype(param[0], param[1])) {
         const char* a = surgescript_var_fast_get_string(param[0]); /* can be assumed to be a string, for sure */
         const char* b = surgescript_var_fast_get_string(param[1]); /* it's a string, since param[0] is a string */
         return surgescript_var_set_bool(surgescript_var_create(), strcmp(a, b) == 0);

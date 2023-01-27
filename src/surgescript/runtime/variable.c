@@ -330,7 +330,7 @@ char* surgescript_var_get_string(const surgescript_var_t* var, const surgescript
             return ssstrdup(var->string);
 
         case SSVAR_NUMBER: {
-            char buf[32];
+            char buf[128];
             surgescript_var_to_string(var, buf, sizeof(buf));
             return ssstrdup(buf);
         }
@@ -426,6 +426,15 @@ surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var)
 {
     surgescript_var_t* copy = surgescript_var_create();
     return surgescript_var_copy(copy, var);
+}
+
+/*
+ * surgescript_var_sametype()
+ * Checks if a and b have the same type
+ */
+bool surgescript_var_sametype(const surgescript_var_t* a, const surgescript_var_t* b)
+{
+    return a->type == b->type;
 }
 
 /*

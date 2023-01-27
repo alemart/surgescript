@@ -74,7 +74,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 /* equals() method */
 surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    if(surgescript_var_typecode(param[0]) == surgescript_var_typecode(param[1])) {
+    if(surgescript_var_sametype(param[0], param[1])) {
         bool a = surgescript_var_get_bool(param[0]);
         bool b = surgescript_var_get_bool(param[1]);
         return surgescript_var_set_bool(surgescript_var_create(), a == b);

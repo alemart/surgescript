@@ -83,7 +83,7 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
 surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* tip for users: use Math.approximately() instead */
-    if(surgescript_var_typecode(param[0]) == surgescript_var_typecode(param[1])) {
+    if(surgescript_var_sametype(param[0], param[1])) {
         double a = surgescript_var_get_number(param[0]);
         double b = surgescript_var_get_number(param[1]);
         double ma = fabs(a), mb = fabs(b);
