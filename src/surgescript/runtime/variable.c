@@ -38,14 +38,35 @@
 
 /* possible variable types */
 enum surgescript_vartype_t {
-    SSVAR_NULL,
+    SSVAR_NULL = 0,
     SSVAR_BOOL,
     SSVAR_NUMBER,
     SSVAR_STRING,
     SSVAR_OBJECTHANDLE,
     SSVAR_RAW,
 };
-static const int typecode[] = { 0, 'b', 'n', 's', 'o', 'r' };
+
+/* assign a code to each type */
+static const int typecode[] = {
+    [SSVAR_NULL] = 0,
+    [SSVAR_BOOL] = 'b',
+    [SSVAR_NUMBER] = 'n',
+    [SSVAR_STRING] = 's',
+    [SSVAR_OBJECTHANDLE] = 'o',
+    [SSVAR_RAW] = 'r'
+};
+
+/* the inverse of typecode[] */
+static const enum surgescript_vartype_t inverse_typecode[256] = {
+    [ 0 ] = SSVAR_NULL,
+    ['b'] = SSVAR_BOOL,
+    ['n'] = SSVAR_NUMBER,
+    ['s'] = SSVAR_STRING,
+    ['o'] = SSVAR_OBJECTHANDLE,
+    ['r'] = SSVAR_RAW
+
+    /* whatever is not set defaults to 0 = SSVAR_NULL */
+};
 
 /* the variable struct */
 struct surgescript_var_t
@@ -414,17 +435,20 @@ surgescript_var_t* surgescript_var_clone(const surgescript_var_t* var)
  */
 int surgescript_var_typecode(const surgescript_var_t* var)
 {
-    return typecode[(int)(var->type)];
+    return typecode[var->type];
 }
 
 /*
  * surgescript_var_type2code()
- * Given a type_name (that may be NULL), return its corresponding type code
- * PS: typename must be lowercase
+ * Given a type_name, return its corresponding type code
+ * PS: typename must be NULL | "bool" | "number" | "string" | "object" | "raw"
  */
 int surgescript_var_type2code(const char* type_name)
 {
-    return type_name ? *type_name : 0;
+    int code = type_name != NULL ? *type_name : typecode[SSVAR_NULL];
+
+    /* return code if type_name is valid, or 0 (null) otherwise */
+    return typecode[ inverse_typecode[code] ];
 }
 
 /*
@@ -433,7 +457,7 @@ int surgescript_var_type2code(const char* type_name)
  */
 int surgescript_var_typecheck(const surgescript_var_t* var, int code)
 {
-    return typecode[(int)(var->type)] ^ code;
+    return typecode[var->type] ^ code;
 }
 
 /*
