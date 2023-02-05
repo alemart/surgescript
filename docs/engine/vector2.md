@@ -59,56 +59,46 @@ object "PlayerLocker" is "entity", "awake"
 }
 ```
 
+Static properties
+-----------------
+
 #### Vector2.up
 
 `Vector2.up`
 
-The unit up vector.
-
-*Returns*
-
-Returns the up vector of length 1.
+The unit up vector, i.e., (0,-1).
 
 #### Vector2.right
 
 `Vector2.right`
 
-The unit right vector.
-
-*Returns*
-
-Returns the right vector of length 1.
+The unit right vector, i.e., (1,0).
 
 #### Vector2.down
 
 `Vector2.down`
 
-The unit down vector.
-
-*Returns*
-
-Returns the down vector of length 1.
+The unit down vector, i.e., (0,1).
 
 #### Vector2.left
 
 `Vector2.left`
 
-The unit left vector.
-
-*Returns*
-
-Returns the left vector of length 1.
+The unit left vector, i.e., (-1,0).
 
 #### Vector2.zero
 
 `Vector2.zero`
 
-The zero vector.
+The zero vector, i.e., (0,0).
 
-*Returns*
+#### Vector2.one
 
-Returns the (0,0) vector.
+`Vector2.one`
 
+The (1,1) vector.
+
+*Available since:* Open Surge 0.6.1
 
 Properties
 ----------
@@ -276,8 +266,7 @@ Returns a Vector2 object corresponding to the result of the operation.
 ```
 using SurgeEngine.Vector2;
 ...
-one = Vector2(1,1);
-v = one.translatedBy(4,5); // (5,6)
+v = Vector2.one.translatedBy(4,5); // (5,6)
 ```
 
 #### rotatedBy
@@ -327,7 +316,7 @@ Returns a Vector2 object corresponding to the result of the operation.
 ```
 using SurgeEngine.Vector2;
 ...
-one = Vector2(1,1);
+one = Vector2.one;
 two = one.scaledBy(2); // (2,2)
 half = one.scaledBy(0.5); // (0.5,0.5)
 ```
@@ -361,6 +350,5 @@ Returns a string containing the coordinates of `this`.
 ```
 using SurgeEngine.Vector2;
 ...
-one = Vector2(1,1);
-Console.print(one); // using toString() implicitly
+Console.print(Vector2.one); // using toString() implicitly
 ```
