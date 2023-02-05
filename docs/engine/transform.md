@@ -212,6 +212,31 @@ object "My Level Object" is "entity"
 }
 ```
 
+#### scaleBy
+
+`scaleBy(sx, sy)`
+
+Scales the object by horizontal and vertical factors `sx` and `sy`, respectively.
+
+*Available since:* Open Surge 0.6.1.
+
+*Arguments*
+
+* `sx`: number. Horizontal scale factor. Value `1.0` means no change.
+* `sy`: number. Vertical scale factor. Value `1.0` means no change.
+
+#### scale
+
+`scale(resize)`
+
+Scales the object by a `resize` vector.
+
+*Available since:* Open Surge 0.6.1.
+
+*Arguments*
+
+* `resize`: [Vector2](/engine/vector2) object. `Vector2(1,1)` means no change.
+
 #### lookAt
 
 `lookAt(position)`
