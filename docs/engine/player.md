@@ -65,14 +65,13 @@ Factory
 
 #### Player
 
-`Player(playerName | playerId)`
+`Player(playerName)`
 
-Gets the Player object associated with a certain character.
+Gets the Player object associated with a character in the level.
 
 *Arguments*
 
-* `playerName`: string. The name of the character (defined in the *characters/* folder).
-* `playerId`: number. The ID of the character (as defined in the *.lev* file), an integer between `0` and `Player.count - 1`, inclusive.
+* `playerName`: string. The name of the character, as defined in a *.chr* file stored in the *characters/* folder.
 
 *Returns*
 
@@ -127,6 +126,20 @@ object "Who am I" is "entity", "awake"
     }
 }
 ```
+
+#### Player.get
+
+`Player[i]`
+
+Gets a Player object by its sequence number, as defined in the *players* entry of the level file.
+
+*Arguments*
+
+* `i`: number. An integer between `0` and `Player.count - 1`, inclusive.
+
+*Returns*
+
+A Player object.
 
 #### Player.count
 
