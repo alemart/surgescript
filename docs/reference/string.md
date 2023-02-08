@@ -15,6 +15,36 @@ n = y.length; // 5
 
 Please note that strings in SurgeScript are immutable. Once a string is set, its individual characters cannot be changed. If you need to modify the content of a string, reassign the variable to a new string.
 
+Static functions
+----------------
+
+#### isNullOrEmpty
+
+`isNullOrEmpty(value)`
+
+Checks if the given `value` is either `null` or an empty string (`""`).
+
+*Available since:* SurgeScript 0.5.3
+
+*Arguments*
+
+* `value`: string | `null`. The value to be tested.
+
+*Returns*
+
+Returns `true` if `value` is either `null` or an empty string.
+
+*Example*
+
+```
+name = "Surge";
+//name = "";
+//name = null;
+
+if(!String.isNullOrEmpty(name))
+    Console.print(name);
+```
+
 Properties
 ----------
 
@@ -187,30 +217,3 @@ Converts the string to upper case.
 *Returns*
 
 The string converted to upper case.
-
-#### isNullOrEmpty
-
-`isNullOrEmpty(value)`
-
-This method of the `String` object can be used directly. It checks if the given `value` is either `null` or an empty string.
-
-*Available since:* SurgeScript 0.5.3
-
-*Arguments*
-
-* `value`: string | `null`. The value to be tested.
-
-*Returns*
-
-Returns `true` if `value` is either `null` or an empty string.
-
-*Example*
-
-```
-name = "Surge";
-//name = "";
-//name = null;
-
-if(!String.isNullOrEmpty(name))
-    Console.print(name);
-```

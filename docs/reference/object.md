@@ -307,7 +307,7 @@ Returns `true` if the object has been tagged with `tagName`.
 
 `__invoke(functionName, paramsArray)`
 
-Invokes function `functionName`, passing the parameters specified in `paramsArray`. Please note that the number of elements of `paramsArray` must be the same as the number of parameters required by the function to be invoked.
+Invokes function `functionName`, passing the parameters specified in `paramsArray`. The number of elements of `paramsArray` must be the same as the number of parameters required by the function to be invoked.
 
 *Available since:* SurgeScript 0.5.2
 
