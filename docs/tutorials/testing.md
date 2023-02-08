@@ -31,7 +31,7 @@ object "Application"
 
 You should see the *Hello, world!* message as a result.
 
-**Linux users:** when using a system-wide installation, you may place your scripts on *~/.local/share/opensurge2d/opensurge/scripts/* (i.e., *$XDG_DATA_HOME/opensurge2d/opensurge/scripts/*).
+**Linux users:** when using a system-wide installation, you may place your scripts on *~/.local/share/opensurge/scripts/* (i.e., *$XDG_DATA_HOME/opensurge/scripts/*).
 
 Ready to proceed? Let's go to [Introduction to objects](/tutorials/objects)!
 
