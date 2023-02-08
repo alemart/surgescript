@@ -30,4 +30,12 @@ Properties
 
 `version`: string, read-only.
 
-Open Surge version.
+Version of the Open Surge Engine.
+
+#### mobileMode
+
+`mobileMode`: boolean, read-only.
+
+Whether or not the engine has been launched in mobile mode. The user may be playing on a mobile device or on a Desktop computer with the mobile simulation enabled.
+
+*Available since:* Open Surge 0.6.1
