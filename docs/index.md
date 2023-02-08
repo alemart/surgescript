@@ -8,7 +8,7 @@ Unleash your creativity!
 
 SurgeScript is a scripting language for games. Use it to unleash your creativity and build your own amazing interactive content! It's such a joy to use SurgeScript! You will love it!
 
-[![Download](img/download.png)](/download) [![Donate to the project](img/donate.png)](http://opensurge2d.org/contribute)
+[GET STARTED](/download){ .md-button .md-button--primary }
 
 How do I learn SurgeScript?
 ---------------------------

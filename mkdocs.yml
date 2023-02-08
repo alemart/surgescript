@@ -9,6 +9,8 @@ repo_url: 'https://github.com/alemart/surgescript'
 strict: false
 theme:
     name: 'material'
+markdown_extensions:
+    - attr_list
 nav:
     - 'Introduction': 'index.md'
     - 'Download': 'download.md'
@@ -78,6 +80,7 @@ nav:
         - 'Input':
             - 'Input': 'engine/input.md'
             - 'Mouse': 'engine/mouse.md'
+            - 'MobileGamepad': 'engine/mobile_gamepad.md'
         - 'Lang': 'engine/lang.md'
         - 'Level': 'engine/level.md'
         - 'Player': 'engine/player.md'
