@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/tutorials/advanced_features/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1374,6 +1374,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1684,248 +1698,248 @@
 <h2 id="lookup-operator">Lookup operator</h2>
 <p>Some programming languages, such as C++, have a feature called <em>operator overloading</em>. It's a <em>syntactic sugar</em> that allows the programmer to attribute custom implementations to different operators.</p>
 <p>In SurgeScript, the <code>[]</code> operator (also called the <em>lookup operator</em>), used by <a href="/reference/array">Arrays</a> and <a href="/reference/dictionary">Dictionaries</a>, is used to <strong>get</strong> and <strong>set</strong> values from/to the data structure. In fact, the <code>[]</code> operator can be used with any object. It is necessary to define, in your object, functions named <code>get()</code> and <code>set()</code> with the following signature:</p>
-<pre><code>fun get(key)
-{
-    // custom implementation
-}
-
-fun set(key, value)
-{
-    // custom implementation
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">fun</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="c1">// custom implementation</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">fun</span><span class="w"> </span><span class="nf">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="c1">// custom implementation</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Given an object <code>obj</code>, the expression <code>x = obj[key]</code> is equivalent to <code>x = obj.get(key)</code>. Similarly, <code>obj[key] = value</code> is equivalent to <code>obj.set(key, value)</code>.</p>
 <h2 id="function-objects">Function objects</h2>
 <p>In SurgeScript, objects can be made to behave like functions. We call these objects <em>function objects</em> (or <em>functors</em>). To make an object behave like a function, you have to overload the <code>()</code> operator (also known as the <em>function operator</em>). This is done by defining function <code>call()</code> in your object:</p>
-<pre><code>fun call()
-{
-    // custom implementation
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">fun</span><span class="w"> </span><span class="nf">call</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="c1">// custom implementation</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Function <code>call()</code> may take any number of parameters. Given an object <code>f</code>, the expression <code>y = f(x)</code> is equivalent to <code>y = f.call(x)</code>. Notice that, since <code>f</code> is an object, you may exchange its implementation during runtime.</p>
 <h2 id="assertions">Assertions</h2>
 <p>The <code>assert(condition)</code> statement specifies a <code>condition</code> that you expect to be true at a certain point in your code. If that condition turns out to be false, the code will be interrupted with an <em>assertion failed</em> error. Example:</p>
-<pre><code>assert(name == &quot;Surge&quot;); // will crash if name isn't &quot;Surge&quot;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">assert</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;Surge&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// will crash if name isn&#39;t &quot;Surge&quot;</span>
+</code></pre></div>
 <h2 id="chaining">Chaining</h2>
 <p>In SurgeScript, it's possible to configure objects in an elegant way using a technique called <em>chaining</em>. Consider the object below - it simply displays a message at regular intervals:</p>
-<pre><code>object &quot;Parrot&quot;
-{
-    message = &quot;I am a Parrot&quot;;
-
-    state &quot;main&quot;
-    {
-        if(timeout(1.0))
-            state = &quot;print&quot;;
-    }
-
-    state &quot;print&quot;
-    {
-        Console.print(message);
-        state = &quot;main&quot;;
-    }
-
-    // Note that this function returns
-    // this, i.e., the object itself.
-    fun setMessage(newMessage)
-    {
-        message = newMessage;
-        return this;
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Parrot&quot;</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">message</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;I am a Parrot&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">timeout</span><span class="p">(</span><span class="m">1.0</span><span class="p">))</span><span class="w"></span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">            </span><span class="n">state</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;print&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;print&quot;</span><span class="w"></span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">message</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span><span class="c1">// Note that this function returns</span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="c1">// this, i.e., the object itself.</span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">setMessage</span><span class="p">(</span><span class="n">newMessage</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">        </span><span class="n">message</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">newMessage</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Suppose that, in your Application, you would like to spawn that object and modify its message. One way of doing it would be making its internal variable <code>public</code> and changing its contents in the <a href="/tutorials/functions">constructor function</a> of your Application. A more concise and elegant way of doing it would be calling function <code>setMessage()</code> just after you spawn the object:</p>
-<pre><code>object &quot;Application&quot;
-{
-    parrot = spawn(&quot;Parrot&quot;).setMessage(&quot;Hello!&quot;);
-
-    state &quot;main&quot;
-    {
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="n">parrot</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Parrot&quot;</span><span class="p">).</span><span class="n">setMessage</span><span class="p">(</span><span class="s">&quot;Hello!&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Observe that the function we have defined does two things:</p>
 <ul>
 <li>It modifies the internals of the object in some way</li>
 <li>It always returns <code>this</code> (that is, the object itself)</li>
 </ul>
 <p>We call that function a <em>chainable function</em>. You may call such a function from your Application, just after <code>spawn()</code>, and you'll still have a reference to the spawned object. Moreover, since chainable functions always return <code>this</code>, you may chain multiple function calls into a single statement, making your code concise and your statement descriptive. Example:</p>
-<pre><code>parrot = spawn(&quot;Parrot&quot;).setMessage(&quot;Hello!&quot;).setInterval(2.0);
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">parrot</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Parrot&quot;</span><span class="p">).</span><span class="n">setMessage</span><span class="p">(</span><span class="s">&quot;Hello!&quot;</span><span class="p">).</span><span class="n">setInterval</span><span class="p">(</span><span class="m">2.0</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
 <h2 id="factory">Factory</h2>
 <p>In SurgeScript, a factory is a functor that spawns an object for you. The object can be spawned and configured in a single call. In the example below, factory <code>Greeter</code> spawns and configures <code>Greeting</code> objects. We annotate the factory with <code>@Package</code>, so it can be imported anywhere in the code.</p>
 <p>To the end-user, calling <code>Greeter()</code> is simpler than manually spawning and configuring a <code>Greeting</code> every time it is needed.</p>
-<pre><code>// Factory example
-using Greeter; // import the factory
-
-object &quot;Application&quot;
-{
-    state &quot;main&quot;
-    {
-        // This will print:
-        // Hello, alex!
-        g = Greeter(&quot;alex&quot;);
-        g.greet();
-        exit();
-    }
-}
-
-// File: greeting.ss
-object &quot;Greeting&quot;
-{
-    public name = &quot;anon&quot;;
-
-    fun greet()
-    {
-        Console.print(&quot;Hello, &quot; + name + &quot;!&quot;);
-    }
-}
-
-@Package
-object &quot;Greeter&quot;
-{
-    // Greeter is a factory. It spawns and configures
-    // a Greeting object for you. As it is a package,
-    // it can be imported and used anywhere.
-    fun call(name)
-    {
-        g = spawn(&quot;Greeting&quot;);
-        g.name = name;
-        return g;
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1">// Factory example</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">Greeter</span><span class="p">;</span><span class="w"> </span><span class="c1">// import the factory</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">        </span><span class="c1">// This will print:</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">        </span><span class="c1">// Hello, alex!</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="n">g</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Greeter</span><span class="p">(</span><span class="s">&quot;alex&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="n">g</span><span class="p">.</span><span class="n">greet</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">        </span><span class="n">exit</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="c1">// File: greeting.ss</span>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Greeting&quot;</span><span class="w"></span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;anon&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">greet</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Hello, &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="s">&quot;!&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="n">@Package</span><span class="w"></span>
+<a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Greeter&quot;</span><span class="w"></span>
+<a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a><span class="w">    </span><span class="c1">// Greeter is a factory. It spawns and configures</span>
+<a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a><span class="w">    </span><span class="c1">// a Greeting object for you. As it is a package,</span>
+<a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a><span class="w">    </span><span class="c1">// it can be imported and used anywhere.</span>
+<a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">call</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-35" name="__codelineno-6-35" href="#__codelineno-6-35"></a><span class="w">        </span><span class="n">g</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Greeting&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-6-36" name="__codelineno-6-36" href="#__codelineno-6-36"></a><span class="w">        </span><span class="n">g</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">name</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-6-37" name="__codelineno-6-37" href="#__codelineno-6-37"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">g</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-6-38" name="__codelineno-6-38" href="#__codelineno-6-38"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-6-39" name="__codelineno-6-39" href="#__codelineno-6-39"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>In the example above, objects spawned by the factory will be children of the factory. If you need the parent of the spawned object to be the caller, simply write <code>g = caller.spawn("Greeter")</code>. Know that <code>caller</code> points to the object that called the function (or <code>null</code> if not applicable).</p>
 <h2 id="iterators">Iterators</h2>
 <p>As seen in the <a href="/tutorials/loops#foreach">loops</a> section, the foreach loop may be used to iterate through an iterable collection. In SurgeScript, an iterable collection is an object that implements the iterator protocol described below.</p>
 <p>You may implement your own iterable collections by tagging them as <code>"iterable"</code> and implementing function <code>iterator()</code>. If you have ever used Java, you'll find this to be familiar.</p>
-<pre><code>// Iterable collections are tagged &quot;iterable&quot;
-// and implement function iterator()
-object &quot;MyCollection&quot; is &quot;iterable&quot;
-{
-    fun iterator()
-    {
-        // function iterator() takes no arguments and 
-        // returns a new iterator object
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1">// Iterable collections are tagged &quot;iterable&quot;</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="c1">// and implement function iterator()</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;MyCollection&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;iterable&quot;</span><span class="w"></span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">iterator</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="w">        </span><span class="c1">// function iterator() takes no arguments and </span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">        </span><span class="c1">// returns a new iterator object</span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>For each iterable collection you define, you must define its iterator object. The iterator object must be tagged <code>"iterator"</code> and implement functions <code>next()</code> and <code>hasNext()</code> (both take no arguments):</p>
-<pre><code>// Iterators are tagged &quot;iterator&quot; and
-// implement functions next() and hasNext()
-object &quot;MyIterator&quot; is &quot;iterator&quot;
-{
-    fun next()
-    {
-        // returns the next element of the collection
-        // and advances the iteration pointer
-        // the iterable collection is usually the parent
-        // object, i.e., collection = parent
-    }
-
-    function hasNext()
-    {
-        // returns true if the enumeration isn't over
-        // returns false if there are no more elements
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1">// Iterators are tagged &quot;iterator&quot; and</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="c1">// implement functions next() and hasNext()</span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;MyIterator&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;iterator&quot;</span><span class="w"></span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">next</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">        </span><span class="c1">// returns the next element of the collection</span>
+<a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">        </span><span class="c1">// and advances the iteration pointer</span>
+<a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">        </span><span class="c1">// the iterable collection is usually the parent</span>
+<a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">        </span><span class="c1">// object, i.e., collection = parent</span>
+<a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>
+<a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">    </span><span class="n">function</span><span class="w"> </span><span class="nf">hasNext</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">        </span><span class="c1">// returns true if the enumeration isn&#39;t over</span>
+<a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">        </span><span class="c1">// returns false if there are no more elements</span>
+<a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>You may iterate over an iterable collection using the following code:</p>
-<pre><code>it = collection.iterator();
-while(it.hasNext()) {
-    x = it.next();
-
-    // do something with x
-    // x is an element of the collection
-    Console.print(x);
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">it</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">collection</span><span class="p">.</span><span class="n">iterator</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="k">while</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="n">hasNext</span><span class="p">())</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">it</span><span class="p">.</span><span class="n">next</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="c1">// do something with x</span>
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">    </span><span class="c1">// x is an element of the collection</span>
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Or, alternatively, using the compact foreach:</p>
-<pre><code>foreach(x in collection) {
-    Console.print(x);
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">foreach</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">collection</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>For the sake of completion, the following code demonstrates how to implement a custom iterable collection that hold even numbers from 0 up to 20 without having to store them explicitly in memory:</p>
-<pre><code>object &quot;Application&quot;
-{
-    evenNumbers = spawn(&quot;Even Numbers&quot;).upTo(20);
-
-    state &quot;main&quot;
-    {
-        // print all the numbers of the iterable collection
-        foreach(number in evenNumbers)
-            Console.print(number);
-
-        // we're done!
-        exit();
-    }
-}
-
-object &quot;Even Numbers&quot; is &quot;iterable&quot;
-{
-    lastNumber = 0;
-
-    fun iterator()
-    {
-        return spawn(&quot;Even Numbers Iterator&quot;).upTo(lastNumber);
-    }
-
-    fun upTo(num)
-    {
-        // upTo() is a chainable function that
-        // is NOT part of the iterator protocol
-        // (but it's useful for this example)
-        lastNumber = Number(num);
-        return this;
-    }
-}
-
-object &quot;Even Numbers Iterator&quot; is &quot;iterator&quot;
-{
-    nextNumber = 0;
-    lastNumber = 0;
-
-    fun next()
-    {
-        currentNumber = nextNumber;
-        nextNumber += 2;
-        return currentNumber;
-    }
-
-    fun hasNext()
-    {
-        return nextNumber &lt;= lastNumber;
-    }
-
-    fun upTo(num)
-    {
-        // upTo() is a chainable function that
-        // is NOT part of the iterator protocol
-        // (but it's useful for this example)
-        lastNumber = Number(num);
-        return this;
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="n">evenNumbers</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Even Numbers&quot;</span><span class="p">).</span><span class="n">upTo</span><span class="p">(</span><span class="m">20</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>
+<a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">        </span><span class="c1">// print all the numbers of the iterable collection</span>
+<a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">        </span><span class="k">foreach</span><span class="p">(</span><span class="n">number</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">evenNumbers</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">number</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a>
+<a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">        </span><span class="c1">// we&#39;re done!</span>
+<a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">        </span><span class="n">exit</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-11-14" name="__codelineno-11-14" href="#__codelineno-11-14"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-11-15" name="__codelineno-11-15" href="#__codelineno-11-15"></a>
+<a id="__codelineno-11-16" name="__codelineno-11-16" href="#__codelineno-11-16"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Even Numbers&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;iterable&quot;</span><span class="w"></span>
+<a id="__codelineno-11-17" name="__codelineno-11-17" href="#__codelineno-11-17"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-18" name="__codelineno-11-18" href="#__codelineno-11-18"></a><span class="w">    </span><span class="n">lastNumber</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-11-19" name="__codelineno-11-19" href="#__codelineno-11-19"></a>
+<a id="__codelineno-11-20" name="__codelineno-11-20" href="#__codelineno-11-20"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">iterator</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-11-21" name="__codelineno-11-21" href="#__codelineno-11-21"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-22" name="__codelineno-11-22" href="#__codelineno-11-22"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">spawn</span><span class="p">(</span><span class="s">&quot;Even Numbers Iterator&quot;</span><span class="p">).</span><span class="n">upTo</span><span class="p">(</span><span class="n">lastNumber</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-11-23" name="__codelineno-11-23" href="#__codelineno-11-23"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-11-24" name="__codelineno-11-24" href="#__codelineno-11-24"></a>
+<a id="__codelineno-11-25" name="__codelineno-11-25" href="#__codelineno-11-25"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">upTo</span><span class="p">(</span><span class="n">num</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-11-26" name="__codelineno-11-26" href="#__codelineno-11-26"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-27" name="__codelineno-11-27" href="#__codelineno-11-27"></a><span class="w">        </span><span class="c1">// upTo() is a chainable function that</span>
+<a id="__codelineno-11-28" name="__codelineno-11-28" href="#__codelineno-11-28"></a><span class="w">        </span><span class="c1">// is NOT part of the iterator protocol</span>
+<a id="__codelineno-11-29" name="__codelineno-11-29" href="#__codelineno-11-29"></a><span class="w">        </span><span class="c1">// (but it&#39;s useful for this example)</span>
+<a id="__codelineno-11-30" name="__codelineno-11-30" href="#__codelineno-11-30"></a><span class="w">        </span><span class="n">lastNumber</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Number</span><span class="p">(</span><span class="n">num</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-11-31" name="__codelineno-11-31" href="#__codelineno-11-31"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-11-32" name="__codelineno-11-32" href="#__codelineno-11-32"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-11-33" name="__codelineno-11-33" href="#__codelineno-11-33"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-11-34" name="__codelineno-11-34" href="#__codelineno-11-34"></a>
+<a id="__codelineno-11-35" name="__codelineno-11-35" href="#__codelineno-11-35"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Even Numbers Iterator&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;iterator&quot;</span><span class="w"></span>
+<a id="__codelineno-11-36" name="__codelineno-11-36" href="#__codelineno-11-36"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-37" name="__codelineno-11-37" href="#__codelineno-11-37"></a><span class="w">    </span><span class="n">nextNumber</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-11-38" name="__codelineno-11-38" href="#__codelineno-11-38"></a><span class="w">    </span><span class="n">lastNumber</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-11-39" name="__codelineno-11-39" href="#__codelineno-11-39"></a>
+<a id="__codelineno-11-40" name="__codelineno-11-40" href="#__codelineno-11-40"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">next</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-11-41" name="__codelineno-11-41" href="#__codelineno-11-41"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-42" name="__codelineno-11-42" href="#__codelineno-11-42"></a><span class="w">        </span><span class="n">currentNumber</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">nextNumber</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-11-43" name="__codelineno-11-43" href="#__codelineno-11-43"></a><span class="w">        </span><span class="n">nextNumber</span><span class="w"> </span><span class="p">+=</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-11-44" name="__codelineno-11-44" href="#__codelineno-11-44"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">currentNumber</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-11-45" name="__codelineno-11-45" href="#__codelineno-11-45"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-11-46" name="__codelineno-11-46" href="#__codelineno-11-46"></a>
+<a id="__codelineno-11-47" name="__codelineno-11-47" href="#__codelineno-11-47"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">hasNext</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-11-48" name="__codelineno-11-48" href="#__codelineno-11-48"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-49" name="__codelineno-11-49" href="#__codelineno-11-49"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">nextNumber</span><span class="w"> </span><span class="p">&lt;=</span><span class="w"> </span><span class="n">lastNumber</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-11-50" name="__codelineno-11-50" href="#__codelineno-11-50"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-11-51" name="__codelineno-11-51" href="#__codelineno-11-51"></a>
+<a id="__codelineno-11-52" name="__codelineno-11-52" href="#__codelineno-11-52"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">upTo</span><span class="p">(</span><span class="n">num</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-11-53" name="__codelineno-11-53" href="#__codelineno-11-53"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-11-54" name="__codelineno-11-54" href="#__codelineno-11-54"></a><span class="w">        </span><span class="c1">// upTo() is a chainable function that</span>
+<a id="__codelineno-11-55" name="__codelineno-11-55" href="#__codelineno-11-55"></a><span class="w">        </span><span class="c1">// is NOT part of the iterator protocol</span>
+<a id="__codelineno-11-56" name="__codelineno-11-56" href="#__codelineno-11-56"></a><span class="w">        </span><span class="c1">// (but it&#39;s useful for this example)</span>
+<a id="__codelineno-11-57" name="__codelineno-11-57" href="#__codelineno-11-57"></a><span class="w">        </span><span class="n">lastNumber</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Number</span><span class="p">(</span><span class="n">num</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-11-58" name="__codelineno-11-58" href="#__codelineno-11-58"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="k">this</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-11-59" name="__codelineno-11-59" href="#__codelineno-11-59"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-11-60" name="__codelineno-11-60" href="#__codelineno-11-60"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>The output of this code is:</p>
-<pre><code>0
-2
-4
-6
-8
-10
-12
-14
-16
-18
-20
-</code></pre>
-<p><strong>CHALLENGE:</strong> can you write an iterable collection called <em>Fibonacci Sequence</em> containing the first <em>N</em> <a href="https://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci numbers</a> without storing them all explicitly in memory? It should be used as follows:</p>
-<pre><code>// Desired output (for N=10): 0 1 1 2 3 5 8 13 21 34
-sequence = spawn(&quot;Fibonacci Sequence&quot;).ofLength(10);
-foreach(number in sequence)
-    Console.print(number);
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>0
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>2
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>4
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>6
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>8
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>10
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>12
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a>14
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>16
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>18
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a>20
+</code></pre></div>
+<p><strong>CHALLENGE:</strong> can you write an iterable collection called <em>Fibonacci Sequence</em> containing the first <em>N</em> <a href="https://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci numbers</a> without storing them all explicitly in memory? It should be used as follows:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1">// Desired output (for N=10): 0 1 1 2 3 5 8 13 21 34</span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="n">sequence</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Fibonacci Sequence&quot;</span><span class="p">).</span><span class="n">ofLength</span><span class="p">(</span><span class="m">10</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">foreach</span><span class="p">(</span><span class="n">number</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">sequence</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">number</span><span class="p">);</span><span class="w"></span>
+</code></pre></div></p>
 
               
             </article>
@@ -1976,7 +1990,7 @@ foreach(number in sequence)
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1999,6 +2013,8 @@ foreach(number in sequence)
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

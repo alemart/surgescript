@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/engine/enemy/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1415,6 +1415,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1763,30 +1777,30 @@
 <p>The Enemy <a href="/engine/behavior">behavior</a> makes the associated <a href="/engine/entity">entity</a> behave like an enemy. It will hit the player if touched, unless the player is attacking (jumping, rolling, etc.) In this case the enemy will be destroyed with an explosion, giving the player a certain score.</p>
 <p>Although the Enemy object generates the described behavior, it is not a concrete enemy itself. You may use it to script your own baddies.</p>
 <p><em>Example</em></p>
-<pre><code>//
-// HOW TO SCRIPT A BADDIE:
-//
-// 0. Make sure you have the graphics and the sprite file (.spr) ready,
-//    before you begin with SurgeScript
-// 1. Your object should be tagged (at least): &quot;entity&quot;, &quot;enemy&quot;
-// 2. Spawn an Actor for the graphics and an Enemy object for the behavior.
-//
-using SurgeEngine.Actor;
-using SurgeEngine.Behaviors.Enemy;
-using SurgeEngine.Behaviors.Platformer;
-
-object &quot;My Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
-{
-    actor = Actor(&quot;My Baddie&quot;); // handles the graphics
-    enemy = Enemy(); // handles the behavior
-    platformer = Platformer().walk(); // make it walk
-
-    state &quot;main&quot;
-    {
-        enemy.score = 100;
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">//</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// HOW TO SCRIPT A BADDIE:</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1">//</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">// 0. Make sure you have the graphics and the sprite file (.spr) ready,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1">//    before you begin with SurgeScript</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">// 1. Your object should be tagged (at least): &quot;entity&quot;, &quot;enemy&quot;</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1">// 2. Spawn an Actor for the graphics and an Enemy object for the behavior.</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1">//</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Behaviors.Enemy</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Behaviors.Platformer</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Baddie&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;enemy&quot;</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;My Baddie&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// handles the graphics</span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="n">enemy</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Enemy</span><span class="p">();</span><span class="w"> </span><span class="c1">// handles the behavior</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="n">platformer</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Platformer</span><span class="p">().</span><span class="n">walk</span><span class="p">();</span><span class="w"> </span><span class="c1">// make it walk</span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">        </span><span class="n">enemy</span><span class="p">.</span><span class="n">score</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">100</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Optionally, you may define functions <code>onEnemyAttack(player)</code> and <code>onEnemyDestroy(player)</code> in your entity if you want to catch the events: the enemy has attacked a player and the enemy has been destroyed by the player, respectively.</p>
 <h2 id="factory">Factory</h2>
 <h4 id="behaviorsenemy">Behaviors.Enemy</h4>
@@ -1876,7 +1890,7 @@ object &quot;My Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1899,6 +1913,8 @@ object &quot;My Baddie&quot; is &quot;entity&quot;, &quot;enemy&quot;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

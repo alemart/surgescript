@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/engine/mouse/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1402,6 +1402,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1736,33 +1750,33 @@
 <h1 id="mouse">Mouse</h1>
 <p>The Mouse object is used to read input from the mouse.</p>
 <p><em>Example</em></p>
-<pre><code>// This example shows how to use a sprite
-// as a mouse cursor. Since My Cursor is
-// tagged &quot;detached&quot;, it will be rendered
-// in screen space, not in world space.
-
-using SurgeEngine.Actor;
-using SurgeEngine.Transform;
-using SurgeEngine.Input.Mouse;
-
-object &quot;My Cursor&quot; is &quot;entity&quot;, &quot;detached&quot;
-{
-    actor = Actor(&quot;My Cursor&quot;);
-    transform = Transform();
-
-    state &quot;main&quot;
-    {
-        transform.position = Mouse.position;
-        if(Mouse.buttonPressed(&quot;left&quot;))
-            Console.print(&quot;left click&quot;);
-    }
-
-    fun constructor()
-    {
-        actor.zindex = 1.0;
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// This example shows how to use a sprite</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// as a mouse cursor. Since My Cursor is</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1">// tagged &quot;detached&quot;, it will be rendered</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">// in screen space, not in world space.</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Transform</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Input.Mouse</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Cursor&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;detached&quot;</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;My Cursor&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="n">transform</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Transform</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">        </span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Mouse</span><span class="p">.</span><span class="n">position</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">Mouse</span><span class="p">.</span><span class="n">buttonPressed</span><span class="p">(</span><span class="s">&quot;left&quot;</span><span class="p">))</span><span class="w"></span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;left click&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">constructor</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">        </span><span class="n">actor</span><span class="p">.</span><span class="n">zindex</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">1.0</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h2 id="properties">Properties</h2>
 <h4 id="position">position</h4>
 <p><code>position</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
@@ -1794,32 +1808,32 @@ object &quot;My Cursor&quot; is &quot;entity&quot;, &quot;detached&quot;
 </ul>
 <p><em>Returns</em></p>
 <p>Returns <code>true</code> if the specified button has just been pressed (i.e., a click has just occurred).</p>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Input.Mouse;
-using SurgeEngine.Collisions.CollisionBall;
-using SurgeEngine.Transform;
-using SurgeEngine.Camera;
-
-// Use the mouse cursor to click on any entity that has a collider.
-// Setup: simply place this object on the level.
-object &quot;Entity Picker&quot; is &quot;awake&quot;, &quot;entity&quot;
-{
-    transform = Transform();
-    collider = CollisionBall(8);
-
-    state &quot;main&quot;
-    {
-        transform.position = Camera.screenToWorld(Mouse.position);
-        collider.visible = true;
-    }
-
-    fun onOverlap(otherCollider)
-    {
-        if(Mouse.buttonPressed(&quot;left&quot;))
-            Console.print(&quot;Clicked on &quot; + otherCollider.entity.__name);
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Input.Mouse</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Collisions.CollisionBall</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Transform</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Camera</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1">// Use the mouse cursor to click on any entity that has a collider.</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1">// Setup: simply place this object on the level.</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Entity Picker&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;awake&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">transform</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Transform</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="n">collider</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">CollisionBall</span><span class="p">(</span><span class="m">8</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Camera</span><span class="p">.</span><span class="n">screenToWorld</span><span class="p">(</span><span class="n">Mouse</span><span class="p">.</span><span class="n">position</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="n">collider</span><span class="p">.</span><span class="n">visible</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">onOverlap</span><span class="p">(</span><span class="n">otherCollider</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">Mouse</span><span class="p">.</span><span class="n">buttonPressed</span><span class="p">(</span><span class="s">&quot;left&quot;</span><span class="p">))</span><span class="w"></span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Clicked on &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">otherCollider</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">__name</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <h4 id="buttonreleased">buttonReleased</h4>
 <p><code>buttonReleased(buttonName)</code></p>
 <p>Checks if a mouse button has just been released.</p>
@@ -1858,13 +1872,13 @@ object &quot;Entity Picker&quot; is &quot;awake&quot;, &quot;entity&quot;
       
       
         
-        <a href="../lang/" class="md-footer__link md-footer__link--next" aria-label="Next: Lang" rel="next">
+        <a href="../mobile_gamepad/" class="md-footer__link md-footer__link--next" aria-label="Next: MobileGamepad" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Lang
+              MobileGamepad
             </div>
           </div>
           <div class="md-footer__button md-icon">
@@ -1879,7 +1893,7 @@ object &quot;Entity Picker&quot; is &quot;awake&quot;, &quot;entity&quot;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1902,6 +1916,8 @@ object &quot;Entity Picker&quot; is &quot;awake&quot;, &quot;entity&quot;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

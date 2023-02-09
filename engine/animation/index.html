@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/engine/animation/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1443,6 +1443,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1820,19 +1834,19 @@
 <h1 id="animation">Animation</h1>
 <p>Animation objects are used to gather data about specific animations. Although you can't spawn Animation objects directly, you can access them via other objects such as <a href="/engine/actor">Actor</a> and <a href="/engine/player">Player</a>.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Actor;
-
-object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &quot;private&quot;
-{
-    actor = Actor(&quot;MyExplosion&quot;);
-
-    state &quot;main&quot;
-    {
-        if(actor.animation.finished)
-            destroy();
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;MyExplosion&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;disposable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;private&quot;</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;MyExplosion&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">actor</span><span class="p">.</span><span class="n">animation</span><span class="p">.</span><span class="n">finished</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">            </span><span class="n">destroy</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h2 id="properties">Properties</h2>
 <h4 id="id">id</h4>
 <p><code>id</code>: number.</p>
@@ -1931,7 +1945,7 @@ object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &q
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1954,6 +1968,8 @@ object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &q
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

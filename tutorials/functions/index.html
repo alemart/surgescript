@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/tutorials/functions/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1367,6 +1367,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1668,133 +1682,133 @@
 <h1 id="functions">Functions</h1>
 <h2 id="introduction">Introduction</h2>
 <p>Functions are blocks of code that you can reuse throughout your program. They may receive input parameters and they always output something. The syntax is as follows:</p>
-<pre><code>fun function_name(param_1, param_2, param_3, ..., param_n)
-{
-    // block of code
-    // to be executed
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">fun</span><span class="w"> </span><span class="nf">function_name</span><span class="p">(</span><span class="n">param_1</span><span class="p">,</span><span class="w"> </span><span class="n">param_2</span><span class="p">,</span><span class="w"> </span><span class="n">param_3</span><span class="p">,</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="n">param_n</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="c1">// block of code</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="c1">// to be executed</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Functions may be associated to objects. Any function associated to an object may be used (called) by the object itself or by other objects. This means that functions are <em>public</em> (they are visible to the outside world).</p>
 <p><strong>Note:</strong> functions must be defined after the states.</p>
 <h2 id="return-statement">Return statement</h2>
 <p>Use the <code>return</code> statement to stop executing the function and to return some value to the caller. Example:</p>
-<pre><code>// This function will return the double of input parameter x
-fun double(x)
-{
-    return 2 * x;
-    Console.print(&quot;This line will never be executed.&quot;);
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// This function will return the double of input parameter x</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">fun</span><span class="w"> </span><span class="nf">double</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="p">*</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;This line will never be executed.&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>If no value is specified after the <code>return</code> keyword, the function will be stopped and its return value will be <code>null</code>. Additionally, if no <code>return</code> statement is found, then the return value will also be <code>null</code>.</p>
 <p><strong>Note</strong>: an object state may also contain one or more <code>return</code> statements to stop the execution of its code. However, return values must not be specified in that context, since states do not return values.</p>
 <h2 id="simple-example">Simple example</h2>
 <p>In the example below, we have an object called <code>Calculator</code> with two functions: <code>greet()</code> and <code>sum()</code>. <code>greet()</code> takes no input parameters and just greets the user. On the other hand, <code>sum()</code> takes two input parameters, <code>a</code> and <code>b</code>, and returns the sum <code>a + b</code>:</p>
-<pre><code>object &quot;Calculator&quot;
-{
-    fun greet()
-    {
-        Console.print(&quot;Hello! I am a Calculator!&quot;);
-    }
-
-    fun sum(a, b)
-    {
-        return a + b;
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Calculator&quot;</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">greet</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Hello! I am a Calculator!&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>In function <code>sum()</code>, variables <code>a</code> and <code>b</code> hold the input data and are only visible inside the function.</p>
 <p>Now, let's create a program that uses this <code>Calculator</code>. Remember that the functions defined above can be called by any object, including <code>Application</code>:</p>
-<pre><code>object &quot;Application&quot;
-{
-    calculator = spawn(&quot;Calculator&quot;);
-
-    state &quot;main&quot;
-    {
-        // greet the user
-        calculator.greet();
-
-        // do some computation
-        result = calculator.sum(5, 7);
-        Console.print(result);
-
-        // we're done!
-        Application.exit();
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">calculator</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Calculator&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="c1">// greet the user</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="n">calculator</span><span class="p">.</span><span class="n">greet</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="c1">// do some computation</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="n">result</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">calculator</span><span class="p">.</span><span class="n">sum</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="m">7</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">result</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="c1">// we&#39;re done!</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">        </span><span class="n">Application</span><span class="p">.</span><span class="n">exit</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>The output of the above program is:</p>
-<pre><code>Hello! I am a Calculator!
-12
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Hello! I am a Calculator!
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>12
+</code></pre></div>
 <p>Notice that the <code>Application</code> does not need to know <em>how</em> the functions of the <code>Calculator</code> are implemented. It just needs to know <em>what</em> they do. This means that you may change the implementation of the <code>Calculator</code> without changing the <code>Application</code>, and the end-result will stay the same.</p>
 <h2 id="recursive-functions">Recursive functions</h2>
 <p>In SurgeScript, a function is said to be <strong>recursive</strong> when it calls itself within its code. Recursion can be useful in many ways; namely, when you define a problem in terms of itself. In mathematics, the factorial of a non-negative integer number <code>n</code>, denoted as <code>n!</code>, is such an example:</p>
-<pre><code>n! = { n * (n-1)!    if n &gt; 1
-     { 1             otherwise
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>n! = { n * (n-1)!    if n &gt; 1
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>     { 1             otherwise
+</code></pre></div>
 <p>One interesting example of recursion that arises in computer science is called the <em>binary search</em> algorithm. Given a sorted <a href="/reference/array">Array</a>, the binary search finds the position of a target value without having to inspect the whole collection. In the example below, <code>bsearch()</code> is a recursive function:</p>
-<pre><code>object &quot;Binary Search&quot;
-{
-    // Given an array sorted in ascending order, find()
-    // finds the position of the target value in the array.
-    // It returns its index, or -1 if the target is not found.
-    fun find(array, value)
-    {
-        return bsearch(array, value, 0, array.length - 1);
-    }
-
-    // Performs a binary search in array[start..end]
-    fun bsearch(array, value, start, end)
-    {
-        // get the middle point
-        mid = start + Math.floor((end - start) / 2);
-
-        // compare the middle point to the target value
-        if(start &gt; end)
-            return -1; // target not found
-        else if(value == array[mid])
-            return mid; // found the target value
-        else if(value &lt; array[mid])
-            return bsearch(array, value, start, mid - 1);
-        else
-            return bsearch(array, value, mid + 1, end);
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Binary Search&quot;</span><span class="w"></span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="c1">// Given an array sorted in ascending order, find()</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">    </span><span class="c1">// finds the position of the target value in the array.</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="c1">// It returns its index, or -1 if the target is not found.</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">find</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nf">bsearch</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">array</span><span class="p">.</span><span class="n">length</span><span class="w"> </span><span class="p">-</span><span class="w"> </span><span class="m">1</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="c1">// Performs a binary search in array[start..end]</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">bsearch</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="c1">// get the middle point</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span><span class="n">mid</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">Math</span><span class="p">.</span><span class="n">floor</span><span class="p">((</span><span class="n">end</span><span class="w"> </span><span class="p">-</span><span class="w"> </span><span class="n">start</span><span class="p">)</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="m">2</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>
+<a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">        </span><span class="c1">// compare the middle point to the target value</span>
+<a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">start</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="n">end</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="p">-</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// target not found</span>
+<a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="p">(</span><span class="k">value</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="n">array</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span><span class="w"></span>
+<a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">mid</span><span class="p">;</span><span class="w"> </span><span class="c1">// found the target value</span>
+<a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="p">(</span><span class="k">value</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="n">array</span><span class="p">[</span><span class="n">mid</span><span class="p">])</span><span class="w"></span>
+<a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">bsearch</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">,</span><span class="w"> </span><span class="n">start</span><span class="p">,</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="p">-</span><span class="w"> </span><span class="m">1</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">        </span><span class="k">else</span><span class="w"></span>
+<a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="nf">bsearch</span><span class="p">(</span><span class="n">array</span><span class="p">,</span><span class="w"> </span><span class="k">value</span><span class="p">,</span><span class="w"> </span><span class="n">mid</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">end</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is <code>n &lt;= 1</code> (the factorial is 1). In the binary search example, the base case is <code>start &gt; end</code>, meaning that the array is empty and the target value cannot be found, or <code>value == array[mid]</code>, meaning that the target value has been found at <code>mid</code>.</p>
 <p>A sage once said: <em>"to understand recursion, you must first understand recursion."</em></p>
 <h2 id="constructors-and-destructors">Constructors and destructors</h2>
 <p>In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectively. It's not mandatory to define them, but it may be useful to do so (you may want to set up things in your constructors, for example). Neither may receive any arguments (to set up objects with parameters, take a look at <a href="/tutorials/advanced_features#chaining">chaining</a>).</p>
 <p>Let's take our <code>Calculator</code> again. In the following example, <code>constructor()</code> is called automatically whenever a <code>Calculator</code> object is created. Likewise, <code>destructor()</code> is called automatically when the object is destroyed.</p>
-<pre><code>object &quot;Calculator&quot;
-{
-    fun constructor()
-    {
-        Console.print(&quot;Creating a Calculator...&quot;);
-    }
-
-    fun destructor()
-    {
-        Console.print(&quot;Destroying a Calculator...&quot;);
-    }
-
-    fun greet()
-    {
-        Console.print(&quot;Hello! I am a Calculator!&quot;);
-    }
-
-    fun sum(a, b)
-    {
-        return a + b;
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Calculator&quot;</span><span class="w"></span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">constructor</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Creating a Calculator...&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">destructor</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Destroying a Calculator...&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a>
+<a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">greet</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Hello! I am a Calculator!&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a>
+<a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-7-22" name="__codelineno-7-22" href="#__codelineno-7-22"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Now, if we run the <code>Application</code> of the previous section without any modification, the output of the program will be:</p>
-<pre><code>Creating a Calculator...
-Hello! I am a Calculator!
-12
-Destroying a Calculator...
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Creating a Calculator...
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>Hello! I am a Calculator!
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>12
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>Destroying a Calculator...
+</code></pre></div>
 <p>Note that, for any object, its <code>constructor()</code> runs <em>before</em> its main state.</p>
 
               
@@ -1846,7 +1860,7 @@ Destroying a Calculator...
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1869,6 +1883,8 @@ Destroying a Calculator...
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

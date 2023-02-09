@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/tutorials/tags/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1353,6 +1353,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1641,63 +1655,63 @@
 <p>You may tag objects with as many tags as you want. Tags are a way of attributing categories to objects.</p>
 <h2 id="syntax">Syntax</h2>
 <p>Tags should be placed right after the object name. Example:</p>
-<pre><code>object &quot;Horse&quot; is &quot;animal&quot;, &quot;vehicle&quot;
-{
-    state &quot;main&quot;
-    {
-    }
-}
-
-object &quot;Cat&quot; is &quot;animal&quot;
-{
-    state &quot;main&quot;
-    {
-    }
-}
-
-object &quot;Car&quot; is &quot;vehicle&quot;
-{
-    state &quot;main&quot;
-    {
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Horse&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;animal&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;vehicle&quot;</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Cat&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;animal&quot;</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Car&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;vehicle&quot;</span><span class="w"></span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h2 id="using-tags">Using tags</h2>
 <p>You may check if an object has a particular tag with the <code>hasTag()</code> function (see the <a href="/reference/object#hastag">Object reference</a> for more details):</p>
-<pre><code>object &quot;Application&quot;
-{
-    horse = spawn(&quot;Horse&quot;);
-    cat = spawn(&quot;Cat&quot;);
-    car = spawn(&quot;Car&quot;);
-
-    state &quot;main&quot;
-    {
-        // Horse is both an animal and a vehicle
-        Console.print(horse.hasTag(&quot;animal&quot;)); // true
-        Console.print(horse.hasTag(&quot;vehicle&quot;)); // true
-
-        // Cat is an animal, but not a vehicle
-        Console.print(cat.hasTag(&quot;animal&quot;)); // true
-        Console.print(cat.hasTag(&quot;vehicle&quot;)); // false
-
-        // Car is a vehicle, but not an animal
-        Console.print(car.hasTag(&quot;animal&quot;)); // false
-        Console.print(car.hasTag(&quot;vehicle&quot;)); // true
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">horse</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Horse&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">cat</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Cat&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">car</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Car&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="c1">// Horse is both an animal and a vehicle</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">horse</span><span class="p">.</span><span class="n">hasTag</span><span class="p">(</span><span class="s">&quot;animal&quot;</span><span class="p">));</span><span class="w"> </span><span class="c1">// true</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">horse</span><span class="p">.</span><span class="n">hasTag</span><span class="p">(</span><span class="s">&quot;vehicle&quot;</span><span class="p">));</span><span class="w"> </span><span class="c1">// true</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="c1">// Cat is an animal, but not a vehicle</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">cat</span><span class="p">.</span><span class="n">hasTag</span><span class="p">(</span><span class="s">&quot;animal&quot;</span><span class="p">));</span><span class="w"> </span><span class="c1">// true</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">cat</span><span class="p">.</span><span class="n">hasTag</span><span class="p">(</span><span class="s">&quot;vehicle&quot;</span><span class="p">));</span><span class="w"> </span><span class="c1">// false</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">        </span><span class="c1">// Car is a vehicle, but not an animal</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">car</span><span class="p">.</span><span class="n">hasTag</span><span class="p">(</span><span class="s">&quot;animal&quot;</span><span class="p">));</span><span class="w"> </span><span class="c1">// false</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">car</span><span class="p">.</span><span class="n">hasTag</span><span class="p">(</span><span class="s">&quot;vehicle&quot;</span><span class="p">));</span><span class="w"> </span><span class="c1">// true</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h2 id="emoticons">Emoticons</h2>
 <p>You may also tag objects with emoticons. The syntax is as follows:</p>
-<pre><code>object &quot;Good Day&quot; is &quot;happy&quot;, &quot;sunny&quot; :)
-{
-    ...
-}
-
-object &quot;Good Night&quot; is &lt;3
-{
-    ...
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Good Day&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;happy&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sunny&quot;</span><span class="w"> </span><span class="p">:)</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="p">...</span><span class="w"></span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Good Night&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="p">&lt;</span><span class="m">3</span><span class="w"></span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="p">...</span><span class="w"></span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>The following emoticons are available for your pleasure:</p>
 <table>
 <thead>
@@ -1779,7 +1793,7 @@ object &quot;Good Night&quot; is &lt;3
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1802,6 +1816,8 @@ object &quot;Good Night&quot; is &lt;3
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/engine/collider/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1409,6 +1409,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1752,47 +1766,47 @@
 <p>Colliders must be spawned as children of <a href="/engine/entity">entities</a>. To detect collisions, you may implement function <code>onCollision()</code> on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than simple primitives.</p>
 <p>A collider is an abstract concept, and hence can't be spawned directly. Rather, you can spawn colliders of specific shapes, such as <a href="/engine/collisionbox">CollisionBox</a> and <a href="/engine/collisionball">CollisionBall</a>. All Colliders share some functionalities (detailed in this page), but there are functionalities tied to specific shapes.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Actor;
-using SurgeEngine.Player;
-using SurgeEngine.Collisions.CollisionBall;
-
-object &quot;CollisionDoll&quot; is &quot;entity&quot;
-{
-    actor = Actor(&quot;CollisionDoll&quot;);
-    collider = CollisionBall(25); // ball with radius = 25px
-
-    // The player has a built-in collider
-    // Let's make it visible for debugging
-    state &quot;main&quot;
-    {
-        player = Player.active;
-        player.collider.visible = true;
-        collider.visible = true;
-    }
-
-    // Detect collisions between a collider that is a child
-    // of this object and any other collider in the game
-    fun onCollision(otherCollider)
-    {
-        // A collision has occurred.
-        Console.print(&quot;Collided with something&quot;);
-
-        // Collided with a player?
-        if(otherCollider.entity.hasTag(&quot;player&quot;)) {
-            player = otherCollider.entity;
-            Console.print(&quot;Touched &quot; + player.name);
-        }
-    }
-
-    // While onCollision() catches the moment a collision
-    // first occurs, onOverlap() is called every frame
-    // this collider collides with other collider
-    fun onOverlap(otherCollider)
-    {
-        // This function is optional.
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Player</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Collisions.CollisionBall</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;CollisionDoll&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;CollisionDoll&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="n">collider</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">CollisionBall</span><span class="p">(</span><span class="m">25</span><span class="p">);</span><span class="w"> </span><span class="c1">// ball with radius = 25px</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="c1">// The player has a built-in collider</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="c1">// Let&#39;s make it visible for debugging</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">        </span><span class="n">player</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Player</span><span class="p">.</span><span class="n">active</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">        </span><span class="n">player</span><span class="p">.</span><span class="n">collider</span><span class="p">.</span><span class="n">visible</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="n">collider</span><span class="p">.</span><span class="n">visible</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="c1">// Detect collisions between a collider that is a child</span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="c1">// of this object and any other collider in the game</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">onCollision</span><span class="p">(</span><span class="n">otherCollider</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">        </span><span class="c1">// A collision has occurred.</span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Collided with something&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">        </span><span class="c1">// Collided with a player?</span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">otherCollider</span><span class="p">.</span><span class="n">entity</span><span class="p">.</span><span class="n">hasTag</span><span class="p">(</span><span class="s">&quot;player&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">            </span><span class="n">player</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">otherCollider</span><span class="p">.</span><span class="n">entity</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Touched &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">name</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">    </span><span class="c1">// While onCollision() catches the moment a collision</span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">    </span><span class="c1">// first occurs, onOverlap() is called every frame</span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">    </span><span class="c1">// this collider collides with other collider</span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">onOverlap</span><span class="p">(</span><span class="n">otherCollider</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="w">        </span><span class="c1">// This function is optional.</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h2 id="properties">Properties</h2>
 <h4 id="entity">entity</h4>
 <p><code>entity</code>: object, read-only.</p>
@@ -1837,18 +1851,18 @@ object &quot;CollisionDoll&quot; is &quot;entity&quot;
 <p><em>Returns</em></p>
 <p>Returns the collider itself.</p>
 <p><em>Example</em></p>
-<pre><code>// ...
-using SurgeEngine.Collisions.CollisionBox;
-
-object &quot;CollisionTestObject&quot; is &quot;entity&quot;
-{
-    // see that the following collision box
-    // has its anchor on pixel (16, 64)
-    collider = CollisionBox(32, 64).setAnchor(0.5, 1.0);
-
-    // ...
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// ...</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Collisions.CollisionBox</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;CollisionTestObject&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="c1">// see that the following collision box</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="c1">// has its anchor on pixel (16, 64)</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">collider</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">CollisionBox</span><span class="p">(</span><span class="m">32</span><span class="p">,</span><span class="w"> </span><span class="m">64</span><span class="p">).</span><span class="n">setAnchor</span><span class="p">(</span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="m">1.0</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="c1">// ...</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 
               
             </article>
@@ -1899,7 +1913,7 @@ object &quot;CollisionTestObject&quot; is &quot;entity&quot;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1922,6 +1936,8 @@ object &quot;CollisionTestObject&quot; is &quot;entity&quot;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

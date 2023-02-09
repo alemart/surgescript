@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/tutorials/variables/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1400,6 +1400,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1773,112 +1787,112 @@
 </tbody>
 </table>
 <p>As an example, the script below features an object with 3 variables that may be accessed throughout the whole object:</p>
-<pre><code>object &quot;Application&quot;
-{
-    name = &quot;Surge the Rabbit&quot;;
-    age = 23;
-    underage = false;
-
-    state &quot;main&quot;
-    {
-        Console.print(name); // Surge the Rabbit
-        Console.print(age); // 23
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Surge the Rabbit&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">age</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">23</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">underage</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">name</span><span class="p">);</span><span class="w"> </span><span class="c1">// Surge the Rabbit</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">age</span><span class="p">);</span><span class="w"> </span><span class="c1">// 23</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h3 id="abstract-types">Abstract types</h3>
 <h4 id="arrays">Arrays</h4>
 <p>Arrays are collections of values that you may access using a zero-based index. Example:</p>
-<pre><code>object &quot;Application&quot;
-{
-    // The 'characters' array holds 3 strings
-    characters = [ &quot;Surge&quot;, &quot;Neon&quot;, &quot;Charge&quot; ];
-
-    state &quot;main&quot;
-    {
-        // who are the characters?
-        Console.print(&quot;The characters are:&quot;);
-        Console.print(characters[0]); // will print Surge
-        Console.print(characters[1]); // will print Neon
-        Console.print(characters[2]); // will print Charge
-
-        // how many characters?
-        Console.print(&quot;Number of characters:&quot;);
-        Console.print(characters.length); // will print 3
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="c1">// The &#39;characters&#39; array holds 3 strings</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">characters</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s">&quot;Surge&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Neon&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Charge&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="c1">// who are the characters?</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;The characters are:&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">characters</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span><span class="w"> </span><span class="c1">// will print Surge</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">characters</span><span class="p">[</span><span class="m">1</span><span class="p">]);</span><span class="w"> </span><span class="c1">// will print Neon</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">characters</span><span class="p">[</span><span class="m">2</span><span class="p">]);</span><span class="w"> </span><span class="c1">// will print Charge</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="c1">// how many characters?</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Number of characters:&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">characters</span><span class="p">.</span><span class="n">length</span><span class="p">);</span><span class="w"> </span><span class="c1">// will print 3</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Arrays have many interesting properties and operations that you can see in the <a href="/reference/array">Language Reference</a>.</p>
 <h4 id="dictionaries">Dictionaries</h4>
 <p>Dictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:</p>
-<pre><code>object &quot;Application&quot;
-{
-    // A dictionary that stores the weight (kg) of each character
-    weight = {
-        &quot;Surge&quot;: 35,
-        &quot;Neon&quot;: 30,
-        &quot;Charge&quot;: 37.5,
-        &quot;Gimacian&quot;: 70
-    };
-
-    // print the weights
-    state &quot;main&quot;
-    {
-        Console.print(&quot;Surge weighs &quot; + weight[&quot;Surge&quot;] + &quot; kg.&quot;);
-        Console.print(&quot;Neon weighs &quot; + weight[&quot;Neon&quot;] + &quot; kg.&quot;);
-        Console.print(&quot;Charge weighs &quot; + weight[&quot;Charge&quot;] + &quot; kg.&quot;);
-        Console.print(&quot;Gimacian weighs &quot; + weight[&quot;Gimacian&quot;] + &quot; kg.&quot;);
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="c1">// A dictionary that stores the weight (kg) of each character</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="n">weight</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="s">&quot;Surge&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">35</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="s">&quot;Neon&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">30</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">        </span><span class="s">&quot;Charge&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">37.5</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">        </span><span class="s">&quot;Gimacian&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">70</span><span class="w"></span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="c1">// print the weights</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Surge weighs &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">weight</span><span class="p">[</span><span class="s">&quot;Surge&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="s">&quot; kg.&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Neon weighs &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">weight</span><span class="p">[</span><span class="s">&quot;Neon&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="s">&quot; kg.&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Charge weighs &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">weight</span><span class="p">[</span><span class="s">&quot;Charge&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="s">&quot; kg.&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Gimacian weighs &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">weight</span><span class="p">[</span><span class="s">&quot;Gimacian&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="s">&quot; kg.&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Dictionaries have many interesting properties and operations that you can see in the <a href="/reference/dictionary">Language Reference</a>.</p>
 <blockquote>
 <p><strong>Cautionary note</strong></p>
 <p>Whenever you define an array or a dictionary, you spawn a new object. One is advised to <strong>NOT</strong> define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.</p>
 </blockquote>
-<pre><code>object &quot;Application&quot;
-{
-    // arr will be instantiated once the object is created
-    arr = [ 1, 2, 3 ]; // RIGHT!
-
-    state &quot;main&quot;
-    {
-        // err is instantiated at every frame of the application,
-        // thus memory is wasted with duplicate objects
-        err = [ &quot;don't&quot;, &quot;do&quot;, &quot;this&quot; ]; // AVOID!
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="c1">// arr will be instantiated once the object is created</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">arr</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="c1">// RIGHT!</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="c1">// err is instantiated at every frame of the application,</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="c1">// thus memory is wasted with duplicate objects</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="n">err</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s">&quot;don&#39;t&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;do&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;this&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="c1">// AVOID!</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h2 id="casting">Casting</h2>
 <p>You can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling <code>Number(value)</code>, <code>String(value)</code> or <code>Boolean(value)</code>. Example:</p>
-<pre><code>// Convert string to number
-str = &quot;2&quot;;
-val = Number(str); // val is 2
-
-// Convert number to string
-val = 123;
-str = String(val); // str is &quot;123&quot;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">// Convert string to number</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">str</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">val</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Number</span><span class="p">(</span><span class="n">str</span><span class="p">);</span><span class="w"> </span><span class="c1">// val is 2</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1">// Convert number to string</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">val</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">123</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">str</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">val</span><span class="p">);</span><span class="w"> </span><span class="c1">// str is &quot;123&quot;</span>
+</code></pre></div>
 <p>When converting an object to a string, SurgeScript will implicitly call <code>object.toString()</code>.</p>
 <h2 id="scoping">Scoping</h2>
 <p>Variables that are defined before any state or function are <em>object-level</em> variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are <em>local variables</em>. This means that their accessibility and lifespan is restricted to their own locus of code.</p>
-<pre><code>object &quot;Scope Test&quot;
-{
-    name = &quot;Surge the Rabbit&quot;; // object-level variable
-
-    state &quot;main&quot;
-    {
-        weight = 35; // local variable
-        state = &quot;print-data&quot;; // change the state
-    }
-
-    state &quot;print-data&quot;
-    {
-        Console.print(name); // Surge the Rabbit
-        Console.print(weight); // ERROR: weight is not defined
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Scope Test&quot;</span><span class="w"></span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Surge the Rabbit&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// object-level variable</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="n">weight</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">35</span><span class="p">;</span><span class="w"> </span><span class="c1">// local variable</span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;print-data&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// change the state</span>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;print-data&quot;</span><span class="w"></span>
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">name</span><span class="p">);</span><span class="w"> </span><span class="c1">// Surge the Rabbit</span>
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">weight</span><span class="p">);</span><span class="w"> </span><span class="c1">// ERROR: weight is not defined</span>
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Furthermore, <em>object-level</em> variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are <em>private</em> to the objects). You need to define <a href="/tutorials/functions">functions</a> or <a href="/tutorials/properties">getters and setters</a> to accomplish that.</p>
 
               
@@ -1930,7 +1944,7 @@ str = String(val); // str is &quot;123&quot;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1953,6 +1967,8 @@ str = String(val); // str is &quot;123&quot;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/tutorials/testing/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1346,6 +1346,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1631,57 +1645,51 @@
 </ul>
 <h2 id="using-open-surge">Using Open Surge</h2>
 <p>To test a script in Open Surge, place it on the <em>scripts/</em> folder and start the engine. Your test script must include an object called <em>Application</em>. Make sure to remove the script after you're done with the testing.</p>
-<p>As an example, save the following script to <em>scripts/hello.ss</em> and start the engine:</p>
-<pre><code>// hello.ss: test script
-// Please remove this file after you're done
-object &quot;Application&quot;
-{
-    state &quot;main&quot;
-    {
-        Console.print(&quot;Hello, world!&quot;);
-        state = &quot;done&quot;;
-    }
-
-    state &quot;done&quot;
-    {
-    }
-}
-</code></pre>
+<p>As an example, save the following script to <em>scripts/hello.ss</em> and start the engine:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// hello.ss: test script</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// Please remove this file after you&#39;re done</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Hello, world!&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;done&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;done&quot;</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <p>You should see the <em>Hello, world!</em> message as a result.</p>
-<p><strong>Linux users:</strong> when using a system-wide installation, you may place your scripts on <em>~/.local/share/opensurge2d/opensurge/scripts/</em> (i.e., <em>$XDG_DATA_HOME/opensurge2d/opensurge/scripts/</em>).</p>
+<p><strong>Linux users:</strong> when using a system-wide installation, you may place your scripts on <em>~/.local/share/opensurge/scripts/</em> (i.e., <em>$XDG_DATA_HOME/opensurge/scripts/</em>).</p>
 <p>Ready to proceed? Let's go to <a href="/tutorials/objects">Introduction to objects</a>!</p>
 <h2 id="using-the-standalone-version">Using the standalone version</h2>
 <p>If you've downloaded the standalone version of the language:</p>
 <ul>
-<li>First of all, save the following script to a file named <em>hello.ss</em>. For testing purposes, you may place the file on the same directory as the surgescript executable.</li>
+<li>First of all, save the following script to a file named <em>hello.ss</em>. For testing purposes, you may place the file on the same directory as the surgescript executable.
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// hello.ss: test script</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Hello, world!&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="n">Application</span><span class="p">.</span><span class="n">exit</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></li>
+<li>Then, open up a Terminal and type:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">cd</span> /path/to/surgescript
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>./surgescript hello.ss
+</code></pre></div></li>
+<li>If you're using Microsoft Windows, open up a Command Prompt and type:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>cd C:\path\to\surgescript
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>surgescript.exe hello.ss
+</code></pre></div></li>
+<li>You should see the output of the script as a result:
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Hello, world!
+</code></pre></div></li>
 </ul>
-<pre><code>// hello.ss: test script
-object &quot;Application&quot;
-{
-    state &quot;main&quot;
-    {
-        Console.print(&quot;Hello, world!&quot;);
-        Application.exit();
-    }
-}
-</code></pre>
-<ul>
-<li>Then, open up a Terminal and type:</li>
-</ul>
-<pre><code>cd /path/to/surgescript
-./surgescript hello.ss
-</code></pre>
-<ul>
-<li>If you're using Microsoft Windows, open up a Command Prompt and type:</li>
-</ul>
-<pre><code>cd C:\path\to\surgescript
-surgescript.exe hello.ss
-</code></pre>
-<ul>
-<li>You should see the output of the script as a result:</li>
-</ul>
-<pre><code>Hello, world!
-</code></pre>
 <p>To begin our learning adventure, let's go to <a href="/tutorials/objects">Introduction to objects</a>.</p>
 
               
@@ -1733,7 +1741,7 @@ surgescript.exe hello.ss
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1756,6 +1764,8 @@ surgescript.exe hello.ss
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

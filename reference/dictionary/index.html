@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/reference/dictionary/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1421,6 +1421,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1776,38 +1790,38 @@
 <h1 id="dictionary">Dictionary</h1>
 <p>A Dictionary is a collection of key-value pairs. Dictionary keys are strings. Their corresponding values can be of any type. To create a Dictionary, use the <code>{ key_1: value_1, key_2: value_2, ..., key_n: value_n }</code> syntax rather than the <code>spawn()</code> function.</p>
 <p>Example:</p>
-<pre><code>object &quot;Application&quot;
-{
-    dictionary = {
-        &quot;Surge&quot;: 35,
-        &quot;Neon&quot;: 20,
-        &quot;Charge&quot;: 37.5,
-        &quot;Gimacian&quot;: 70
-    };
-
-    state &quot;main&quot;
-    {
-        // usage example
-        Console.print(dictionary[&quot;Surge&quot;]); // will print 35
-        Console.print(dictionary[&quot;Neon&quot;]); // will print 20
-
-        // will print all entries
-        foreach(entry in dictionary)
-            Console.print(entry.key + &quot;: &quot; + entry.value);
-
-        // done!
-        Application.exit();
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">dictionary</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">        </span><span class="s">&quot;Surge&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">35</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">        </span><span class="s">&quot;Neon&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">20</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="s">&quot;Charge&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">37.5</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="s">&quot;Gimacian&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">70</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">        </span><span class="c1">// usage example</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">dictionary</span><span class="p">[</span><span class="s">&quot;Surge&quot;</span><span class="p">]);</span><span class="w"> </span><span class="c1">// will print 35</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">dictionary</span><span class="p">[</span><span class="s">&quot;Neon&quot;</span><span class="p">]);</span><span class="w"> </span><span class="c1">// will print 20</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="c1">// will print all entries</span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">        </span><span class="k">foreach</span><span class="p">(</span><span class="n">entry</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">dictionary</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">entry</span><span class="p">.</span><span class="n">key</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="s">&quot;: &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">entry</span><span class="p">.</span><span class="k">value</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">        </span><span class="c1">// done!</span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">        </span><span class="n">Application</span><span class="p">.</span><span class="n">exit</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Output:</p>
-<pre><code>35
-20
-Surge: 35
-Neon: 20
-Charge: 37.5
-Gimacian: 70
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>35
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>20
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Surge: 35
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Neon: 20
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Charge: 37.5
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>Gimacian: 70
+</code></pre></div>
 <blockquote>
 <p><strong>Note:</strong></p>
 <p>Whenever you define a dictionary, you spawn a new object. One is advised to <strong>NOT</strong> define dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame of the application, not just once.</p>
@@ -1827,9 +1841,9 @@ Gimacian: 70
 <p><em>Returns</em></p>
 <p>The value corresponding to the specified key, or <code>null</code> if there is no such an entry in the Dictionary.</p>
 <p><em>Example</em></p>
-<pre><code>dict = { &quot;Surge&quot;: 10 };
-ten = dict[&quot;Surge&quot;];
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">dict</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="s">&quot;Surge&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">ten</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">dict</span><span class="p">[</span><span class="s">&quot;Surge&quot;</span><span class="p">];</span><span class="w"></span>
+</code></pre></div>
 <h4 id="set">set</h4>
 <p><code>set(key, value)</code></p>
 <p>Sets the value of the specified key in the Dictionary. Instead of calling <code>set()</code> directly, you may equivalently use the <code>[ ]</code> operator.</p>
@@ -1839,9 +1853,9 @@ ten = dict[&quot;Surge&quot;];
 <li><code>value</code>: any type.</li>
 </ul>
 <p><em>Example</em></p>
-<pre><code>dict = { };
-dict[&quot;Surge&quot;] = 10;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">dict</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">};</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">dict</span><span class="p">[</span><span class="s">&quot;Surge&quot;</span><span class="p">]</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">10</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
 <h4 id="clear">clear</h4>
 <p><code>clear()</code></p>
 <p>Removes all entries from the Dictionary.</p>
@@ -1926,7 +1940,7 @@ dict[&quot;Surge&quot;] = 10;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1949,6 +1963,8 @@ dict[&quot;Surge&quot;] = 10;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

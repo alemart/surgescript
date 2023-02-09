@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/engine/event/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1374,6 +1374,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1683,50 +1697,50 @@
 <p>Events let you reuse your entities in multiple ways and for multiple purposes. You may design an entity and make it trigger an event, but you do not need to specify in advance what the event actually is. Rather, the concrete event (what must happen) will be configured in your <a href="/engine/level/#setup">level setup</a>.</p>
 <p>There are multiple types of events. In practice, you'll use specialized events such as <a href="/engine/entityevent">EntityEvent</a> and <a href="/engine/functionevent">FunctionEvent</a> when configuring your entities. <em>Event</em> is an empty event that does nothing when triggered, but it should be used when designing your entities, as in the example below.</p>
 <p><em>Example</em></p>
-<pre><code>// -----------------------------------------------------------------------------
-// Using Events
-//
-// Note that cause and effect are split into different scripts!
-// -----------------------------------------------------------------------------
-
-// This script contains an object that will trigger an event whenever a certain
-// button is pressed (e.g., the jump button).
-using SurgeEngine.Player;
-using SurgeEngine.Events.Event;
-
-object &quot;Button Detector&quot; is &quot;awake&quot;, &quot;entity&quot;
-{
-    public onButtonPress = Event();
-    public button = &quot;fire1&quot;;
-
-    state &quot;main&quot;
-    {
-        input = Player.active.input;
-        if(input.buttonPressed(button))
-            onButtonPress();
-    }
-}
-
-// -----------------------------------------------------------------------------
-
-// The code below is a different script containing a level setup object.
-// Make sure to link it in your .lev file!
-using SurgeEngine.Level;
-using SurgeEngine.Events.FunctionEvent;
-
-object &quot;My Level Setup&quot;
-{
-    fun constructor()
-    {
-        Level.setup({
-            &quot;Button Detector&quot;: {
-                &quot;button&quot;: &quot;fire1&quot;, // &quot;fire1&quot; is the jump button
-                &quot;onButtonPress&quot;: FunctionEvent(&quot;Print&quot;).withArgument(&quot;You pressed the button!&quot;)
-            }
-        });
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// -----------------------------------------------------------------------------</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// Using Events</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1">//</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1">// Note that cause and effect are split into different scripts!</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1">// -----------------------------------------------------------------------------</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="c1">// This script contains an object that will trigger an event whenever a certain</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="c1">// button is pressed (e.g., the jump button).</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Player</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Events.Event</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Button Detector&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;awake&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="w"></span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">onButtonPress</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Event</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">button</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;fire1&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">        </span><span class="n">input</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Player</span><span class="p">.</span><span class="n">active</span><span class="p">.</span><span class="n">input</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">input</span><span class="p">.</span><span class="n">buttonPressed</span><span class="p">(</span><span class="n">button</span><span class="p">))</span><span class="w"></span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">            </span><span class="n">onButtonPress</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="c1">// -----------------------------------------------------------------------------</span>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="c1">// The code below is a different script containing a level setup object.</span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="c1">// Make sure to link it in your .lev file!</span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Level</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Events.FunctionEvent</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Level Setup&quot;</span><span class="w"></span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">constructor</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a><span class="w">        </span><span class="n">Level</span><span class="p">.</span><span class="n">setup</span><span class="p">({</span><span class="w"></span>
+<a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a><span class="w">            </span><span class="s">&quot;Button Detector&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a><span class="w">                </span><span class="s">&quot;button&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;fire1&quot;</span><span class="p">,</span><span class="w"> </span><span class="c1">// &quot;fire1&quot; is the jump button</span>
+<a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a><span class="w">                </span><span class="s">&quot;onButtonPress&quot;</span><span class="p">:</span><span class="w"> </span><span class="n">FunctionEvent</span><span class="p">(</span><span class="s">&quot;Print&quot;</span><span class="p">).</span><span class="n">withArgument</span><span class="p">(</span><span class="s">&quot;You pressed the button!&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a><span class="w">            </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a><span class="w">        </span><span class="p">});</span><span class="w"></span>
+<a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h2 id="factory">Factory</h2>
 <h4 id="eventsevent">Events.Event</h4>
 <p><code>Events.Event()</code></p>
@@ -1787,7 +1801,7 @@ object &quot;My Level Setup&quot;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1810,6 +1824,8 @@ object &quot;My Level Setup&quot;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

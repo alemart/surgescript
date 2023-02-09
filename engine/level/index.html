@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/engine/level/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1298,6 +1298,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -2028,64 +2042,64 @@
 <h1 id="level">Level</h1>
 <p>Level routines. A level is a scene in the game, represented by a .lev file in the <em>levels/</em> folder.</p>
 <p>Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be automatically deleted by the <a href="/reference/gc">Garbage Collector</a>. Sometimes, you may want to spawn <a href="/engine/entity">entities</a> in your level, but keeping references to all of them may be inconvenient. If this is your case, you can <a href="#spawn">spawn them as children of the Level object</a>. It will keep references of the entities for you; therefore, they won't be garbage collected.</p>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Actor;
-using SurgeEngine.Level;
-using SurgeEngine.Vector2;
-
-object &quot;Application&quot;
-{
-    state &quot;main&quot;
-    {
-        createExplosionAt(100, 200);
-        state = &quot;wait&quot;;
-    }
-
-    state &quot;wait&quot;
-    {
-        if(timeout(1.0))
-            state = &quot;main&quot;;
-    }
-
-    fun createExplosionAt(x, y)
-    {
-        position = Vector2(x, y);
-        return Level.spawnEntity(&quot;MyExplosion&quot;, position); // no need to keep references
-    }
-}
-
-object &quot;MyExplosion&quot; is &quot;entity&quot;, &quot;disposable&quot;, &quot;private&quot;
-{
-    actor = Actor(&quot;MyExplosion&quot;);
-
-    state &quot;main&quot;
-    {
-        if(actor.animation.finished)
-            destroy()
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Level</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Vector2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="n">createExplosionAt</span><span class="p">(</span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="m">200</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;wait&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;wait&quot;</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">timeout</span><span class="p">(</span><span class="m">1.0</span><span class="p">))</span><span class="w"></span>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">            </span><span class="n">state</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">createExplosionAt</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">        </span><span class="n">position</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">Level</span><span class="p">.</span><span class="n">spawnEntity</span><span class="p">(</span><span class="s">&quot;MyExplosion&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">);</span><span class="w"> </span><span class="c1">// no need to keep references</span>
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;MyExplosion&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;disposable&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;private&quot;</span><span class="w"></span>
+<a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;MyExplosion&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>
+<a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">actor</span><span class="p">.</span><span class="n">animation</span><span class="p">.</span><span class="n">finished</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a><span class="w">            </span><span class="n">destroy</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <h2 id="properties">Properties</h2>
 <h4 id="name">name</h4>
 <p><code>name</code>: string, read-only.</p>
 <p>The name of the level.</p>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Level;
-
-// Will display the name of the level
-object &quot;Application&quot;
-{
-    state &quot;main&quot;
-    {
-        Console.print(Level.name);
-        state = &quot;done&quot;;
-    }
-
-    state &quot;done&quot;
-    {
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Level</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="c1">// Will display the name of the level</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Level</span><span class="p">.</span><span class="n">name</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;done&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;done&quot;</span><span class="w"></span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <h4 id="act">act</h4>
 <p><code>act</code>: number, read-only.</p>
 <p>The act number (1, 2, 3...) of the current level.</p>
@@ -2162,37 +2176,37 @@ object &quot;Application&quot;
 <p><em>Returns</em></p>
 <p>The desired entity (<a href="/reference/object">object</a>), or <code>null</code> if there is no entity associated with the given ID.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Level;
-
-//
-// Level.entity() is very useful when creating setup objects, i.e.,
-// objects spawned when the level is initialized. You can use it to
-// tune the parameters of specific entities, call their functions, etc.
-//
-// The example below can be added to the startup list in the .lev file.
-//
-object &quot;My Setup Object&quot;
-{
-    state &quot;main&quot;
-    {
-        // setup the entity
-        item = Level.entity(&quot;ab65d8fe1ebd68de&quot;); // first, we get the entity
-        if(item != null) {
-            Console.print(item.__name); // then we print the object name
-            //item.score = 100; // we can also change a property
-        }
-        else
-            Console.print(&quot;Entity not found&quot;);
-
-        // change the state
-        state = &quot;done&quot;;
-    }
-
-    state &quot;done&quot;
-    {
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Level</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1">//</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="c1">// Level.entity() is very useful when creating setup objects, i.e.,</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1">// objects spawned when the level is initialized. You can use it to</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1">// tune the parameters of specific entities, call their functions, etc.</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1">//</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="c1">// The example below can be added to the startup list in the .lev file.</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1">//</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Setup Object&quot;</span><span class="w"></span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="w">        </span><span class="c1">// setup the entity</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">        </span><span class="n">item</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Level</span><span class="p">.</span><span class="n">entity</span><span class="p">(</span><span class="s">&quot;ab65d8fe1ebd68de&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// first, we get the entity</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">item</span><span class="w"> </span><span class="p">!=</span><span class="w"> </span><span class="k">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">item</span><span class="p">.</span><span class="n">__name</span><span class="p">);</span><span class="w"> </span><span class="c1">// then we print the object name</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">            </span><span class="c1">//item.score = 100; // we can also change a property</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">        </span><span class="k">else</span><span class="w"></span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Entity not found&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">        </span><span class="c1">// change the state</span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;done&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>
+<a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;done&quot;</span><span class="w"></span>
+<a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h4 id="setup">setup</h4>
 <p><code>setup(config)</code></p>
 <p>Sets up the properties of a collection of level objects. This is a handy function typically used in a startup object of your level. Its purpose is to configure the properties of level objects. You may set the properties of groups of objects (given their names) and of individual entities alone (given their IDs).</p>
@@ -2203,37 +2217,37 @@ object &quot;My Setup Object&quot;
 <li><code>config</code>: <a href="/reference/dictionary">Dictionary</a> object. The configuration as described.</li>
 </ul>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Level;
-
-//
-// This is supposed to be a startup object,
-// listed in the startup list of a .lev file
-//
-object &quot;My Level Setup&quot;
-{
-    // setup properties
-    fun constructor()
-    {
-        Level.setup({
-            &quot;Elevator&quot;: {
-                &quot;anim&quot;: 2
-            },
-            &quot;Background Exchanger&quot;: {
-                &quot;background&quot;: &quot;themes/template.bg&quot;
-            },
-            &quot;5640353a6efd2901&quot;: {
-                &quot;someProperty&quot;: 123,
-                &quot;someOtherProperty&quot;: &quot;hello&quot;
-            },
-            &quot;770ae26584229af2&quot;: {
-                &quot;title&quot;: &quot;Super!!&quot;,
-                &quot;message&quot;: &quot;Hey there! Feeling good today?&quot;,
-                &quot;buttons&quot;: [ &quot;Yes&quot;, &quot;No&quot; ]
-            }
-        });
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Level</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1">//</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="c1">// This is supposed to be a startup object,</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1">// listed in the startup list of a .lev file</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="c1">//</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Level Setup&quot;</span><span class="w"></span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="c1">// setup properties</span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">constructor</span><span class="p">()</span><span class="w"></span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="n">Level</span><span class="p">.</span><span class="n">setup</span><span class="p">({</span><span class="w"></span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">            </span><span class="s">&quot;Elevator&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">                </span><span class="s">&quot;anim&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">2</span><span class="w"></span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">            </span><span class="p">},</span><span class="w"></span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">            </span><span class="s">&quot;Background Exchanger&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">                </span><span class="s">&quot;background&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;themes/template.bg&quot;</span><span class="w"></span>
+<a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">            </span><span class="p">},</span><span class="w"></span>
+<a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a><span class="w">            </span><span class="s">&quot;5640353a6efd2901&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="w">                </span><span class="s">&quot;someProperty&quot;</span><span class="p">:</span><span class="w"> </span><span class="m">123</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-3-21" name="__codelineno-3-21" href="#__codelineno-3-21"></a><span class="w">                </span><span class="s">&quot;someOtherProperty&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;hello&quot;</span><span class="w"></span>
+<a id="__codelineno-3-22" name="__codelineno-3-22" href="#__codelineno-3-22"></a><span class="w">            </span><span class="p">},</span><span class="w"></span>
+<a id="__codelineno-3-23" name="__codelineno-3-23" href="#__codelineno-3-23"></a><span class="w">            </span><span class="s">&quot;770ae26584229af2&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-24" name="__codelineno-3-24" href="#__codelineno-3-24"></a><span class="w">                </span><span class="s">&quot;title&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Super!!&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-3-25" name="__codelineno-3-25" href="#__codelineno-3-25"></a><span class="w">                </span><span class="s">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;Hey there! Feeling good today?&quot;</span><span class="p">,</span><span class="w"></span>
+<a id="__codelineno-3-26" name="__codelineno-3-26" href="#__codelineno-3-26"></a><span class="w">                </span><span class="s">&quot;buttons&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s">&quot;Yes&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;No&quot;</span><span class="w"> </span><span class="p">]</span><span class="w"></span>
+<a id="__codelineno-3-27" name="__codelineno-3-27" href="#__codelineno-3-27"></a><span class="w">            </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-28" name="__codelineno-3-28" href="#__codelineno-3-28"></a><span class="w">        </span><span class="p">});</span><span class="w"></span>
+<a id="__codelineno-3-29" name="__codelineno-3-29" href="#__codelineno-3-29"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-30" name="__codelineno-3-30" href="#__codelineno-3-30"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h4 id="restart">restart</h4>
 <p><code>restart()</code></p>
 <p>Restarts the current level.</p>
@@ -2261,22 +2275,22 @@ object &quot;My Level Setup&quot;
 <ul>
 <li><code>filepath</code>: string. Relative path of the level or quest to be loaded.</li>
 </ul>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Level;
-
-object &quot;My Level Loader&quot;
-{
-    fun load(id)
-    {
-        if(id == &quot;beach&quot;)
-            Level.load(&quot;levels/my_beach_level.lev&quot;);
-        else if(id == &quot;forest&quot;)
-            Level.load(&quot;levels/my_forest_level.lev&quot;);
-        else
-            Console.print(&quot;Unrecognized level: &quot; + id);
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Level</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Level Loader&quot;</span><span class="w"></span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;beach&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">            </span><span class="n">Level</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;levels/my_beach_level.lev&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;forest&quot;</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">            </span><span class="n">Level</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;levels/my_forest_level.lev&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="k">else</span><span class="w"></span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Unrecognized level: &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <h4 id="loadnext">loadNext</h4>
 <p><code>loadNext()</code></p>
 <p>Loads the next level in the current quest. This is the usual procedure after <a href="#clear">clearing the level</a>. See also: <a href="#next">next</a>.</p>
@@ -2333,7 +2347,7 @@ object &quot;My Level Loader&quot;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -2356,6 +2370,8 @@ object &quot;My Level Loader&quot;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

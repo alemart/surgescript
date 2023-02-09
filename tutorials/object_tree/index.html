@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/tutorials/object_tree/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1360,6 +1360,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1660,33 +1674,33 @@
 <p>In SurgeScript, the root of the hierarchy is a predefined object called <code>System</code>. Its parent is itself. All other objects are descendants of <code>System</code>.</p>
 <h2 id="spawning-objects">Spawning objects</h2>
 <p>You can use <code>spawn()</code> to instantiate an object. Example:</p>
-<pre><code>object &quot;Parent&quot;
-{
-    child = spawn(&quot;Child&quot;);
-
-    state &quot;main&quot;
-    {
-    }
-}
-
-object &quot;Child&quot;
-{
-    state &quot;main&quot;
-    {
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Parent&quot;</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">child</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Child&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Child&quot;</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>Function <code>spawn()</code> may be invoked on objects other than the caller. In this case, the caller won't be the parent of the newly created object:</p>
-<pre><code>object &quot;Parent&quot;
-{
-    child = spawn(&quot;Child&quot;);
-    grandChild = child.spawn(&quot;Child&quot;);
-
-    state &quot;main&quot;
-    {
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Parent&quot;</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">child</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Child&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">grandChild</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">child</span><span class="p">.</span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Child&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <blockquote>
 <p><strong>Automatic Garbage Collection</strong></p>
 <p>When you spawn an object, make sure you store a reference to it somewhere.</p>
@@ -1694,17 +1708,17 @@ object &quot;Child&quot;
 </blockquote>
 <h2 id="destroying-objects">Destroying objects</h2>
 <p>Objects can be destroyed manually by calling <code>destroy()</code>. Whenever an object is destroyed, its children are destroyed as well.</p>
-<pre><code>object &quot;Foo&quot;
-{
-    state &quot;main&quot;
-    {
-        Console.print(&quot;This object does nothing.&quot;);
-        destroy();
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Foo&quot;</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;This object does nothing.&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">        </span><span class="n">destroy</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <h2 id="traversing-the-hierarchy">Traversing the hierarchy</h2>
-<p>Relevant data about the object hierarchy can be obtained using the following properties and functions (find more on the <a href="/reference/object">Object reference</a>):</p>
+<p>Relevant data about the object hierarchy can be obtained using the following properties and functions (find out more about them at the <a href="/reference/object">Object reference</a>):</p>
 <table>
 <thead>
 <tr>
@@ -1714,7 +1728,7 @@ object &quot;Child&quot;
 </thead>
 <tbody>
 <tr>
-<td><code>obj.parent</code> (read-only)</td>
+<td><code>obj.parent</code></td>
 <td>The parent object</td>
 </tr>
 <tr>
@@ -1726,27 +1740,27 @@ object &quot;Child&quot;
 <td>Finds a descendant named <code>name</code></td>
 </tr>
 <tr>
-<td><code>obj.__childCount</code> (read-only)</td>
+<td><code>obj.__childCount</code></td>
 <td>Number of immediate children</td>
 </tr>
 </tbody>
 </table>
 <p>Example:</p>
-<pre><code>object &quot;Parent&quot;
-{
-    child = spawn(&quot;Child&quot;);
-    otherChild = spawn(&quot;Child&quot;);
-
-    state &quot;main&quot;
-    {
-        Console.print(&quot;This object has &quot; + this.__childCount + &quot; children.&quot;);
-        destroy();
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Parent&quot;</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="n">child</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Child&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">otherChild</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Child&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;This object has &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="k">this</span><span class="p">.</span><span class="n">__childCount</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="s">&quot; children.&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="n">destroy</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>The output is as follows:</p>
-<pre><code>This object has 2 children.
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>This object has 2 children.
+</code></pre></div>
 
               
             </article>
@@ -1797,7 +1811,7 @@ object &quot;Child&quot;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1820,6 +1834,8 @@ object &quot;Child&quot;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

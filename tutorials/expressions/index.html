@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/tutorials/expressions/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1429,6 +1429,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1793,22 +1807,22 @@
 <p>SurgeScript supports many kinds of expressions. Expressions may involve strings, numbers or booleans. Let's study each case:</p>
 <h2 id="constants">Constants</h2>
 <p>Constants are types of expressions. They may be numbers, strings, booleans... You may attribute constant values to variables using the assignment operator (<code>=</code>):</p>
-<pre><code>// strings
-name = &quot;Surge&quot;; // variable name receives string &quot;Surge&quot;
-message = &quot;Surge's home&quot;;
-otherMessage = 'Single-quoted strings are also allowed';
-
-// numbers
-weight = 35;
-speed = 42.2;
-
-// booleans
-like = true;
-crazy = false;
-
-// null
-next = null;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// strings</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Surge&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// variable name receives string &quot;Surge&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">message</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Surge&#39;s home&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">otherMessage</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="err">&#39;</span><span class="n">Single</span><span class="p">-</span><span class="n">quoted</span><span class="w"> </span><span class="n">strings</span><span class="w"> </span><span class="n">are</span><span class="w"> </span><span class="n">also</span><span class="w"> </span><span class="n">allowed</span><span class="err">&#39;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1">// numbers</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">weight</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">35</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">speed</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">42.2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="c1">// booleans</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="n">like</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">crazy</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">false</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="c1">// null</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="n">next</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">null</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
 <h2 id="arithmetic-operators">Arithmetic operators</h2>
 <p>SurgeScript can perform basic arithmetic. The operators are as follows:</p>
 <table>
@@ -1843,21 +1857,21 @@ next = null;
 </table>
 <p>The multiplication, division and remainder operators have precedence over the addition and the subtraction operators.</p>
 <p>Examples:</p>
-<pre><code>two = 1 + 1;
-ten = 5 * 2;
-eleven = 5 * 2 + 1;
-four = two * two;
-fifteen = eleven + four;
-three = fifteen / 5;
-positive = +5;
-negative = -1;
-zero = 15 - 10 - 5;
-one = 15 - (10 + 4);
-twelve = (2 + 2) * 3;
-prime = -(-15 + 8);
-seven = 5 + 5 % 3;
-negativeTwo = -5 % 3;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">two</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">ten</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">*</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">eleven</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">*</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">four</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">two</span><span class="w"> </span><span class="p">*</span><span class="w"> </span><span class="n">two</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">fifteen</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">eleven</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">four</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="n">three</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">fifteen</span><span class="w"> </span><span class="p">/</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">positive</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">+</span><span class="m">5</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">negative</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">-</span><span class="m">1</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">zero</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">15</span><span class="w"> </span><span class="p">-</span><span class="w"> </span><span class="m">10</span><span class="w"> </span><span class="p">-</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">one</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">15</span><span class="w"> </span><span class="p">-</span><span class="w"> </span><span class="p">(</span><span class="m">10</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">4</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">twelve</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="m">2</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">2</span><span class="p">)</span><span class="w"> </span><span class="p">*</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">prime</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">-(-</span><span class="m">15</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">8</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">seven</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">%</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">negativeTwo</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">-</span><span class="m">5</span><span class="w"> </span><span class="p">%</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
 <h2 id="comparison-operators">Comparison operators</h2>
 <p>Comparison operators compare two operands.</p>
 <table>
@@ -1903,12 +1917,12 @@ negativeTwo = -5 % 3;
 </tbody>
 </table>
 <p>Examples:</p>
-<pre><code>x = 1;
-y = (x == 1); // y is true
-z = (x != 1); // z is false
-w = x &gt; 1; // w is false
-t = x &gt;= 1; // t is true
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="m">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// y is true</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">z</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="p">!=</span><span class="w"> </span><span class="m">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// z is false</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">w</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// w is false</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="p">&gt;=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// t is true</span>
+</code></pre></div>
 <blockquote>
 <p><strong>Pay attention!</strong></p>
 <p>Notice that the equality operator, used for comparing expressions for equality, is <code>==</code>. Pay attention! Don't confuse the equality operator (<code>==</code>) with the assignment operator (<code>=</code>). The expression <code>(x = 1)</code> always evaluates to 1, whereas <code>(x == 1)</code> is <code>true</code> only if x equals 1.</p>
@@ -1963,23 +1977,23 @@ t = x &gt;= 1; // t is true
 </tbody>
 </table>
 <p>Notice that <strong>not</strong> has higher precedence than the other two operators. Examples:</p>
-<pre><code>x = 5 &lt; 2; // evaluates to false
-y = !x; // evaluates to true
-z = 18 &lt; 35 || x; // evaluates to true
-w = (z &amp;&amp; x) || true; // evaluates to true
-t = !x &amp;&amp; x; // evaluates to false
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">5</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to false</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">!</span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to true</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">z</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">18</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="m">35</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to true</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">w</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="n">z</span><span class="w"> </span><span class="p">&amp;&amp;</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to true</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">!</span><span class="n">x</span><span class="w"> </span><span class="p">&amp;&amp;</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to false</span>
+</code></pre></div>
 <blockquote>
 <p><strong>Short-circuit evaluation</strong></p>
 <p>SurgeScript performs short-circuit evaluation in <strong>and</strong> and <strong>or</strong> operations. This means that the second operator is not evaluated if the first alone is sufficient to determine the value of the operation. Example: in the expression <code>a || b</code>, expression <code>b</code> is not evaluated if <code>a</code> is evaluated to <code>true</code>. Similarly, in <code>a &amp;&amp; b</code>, expression <code>b</code> is not evaluated if <code>a</code> is evaluated to <code>false</code>.</p>
 </blockquote>
 <h2 id="textual-expressions">Textual expressions</h2>
 <p>You may concatenate strings with the <code>+</code> operator. Example:</p>
-<pre><code>message = &quot;Surge&quot; + &quot; rocks!&quot;; // evaluates to &quot;Surge rocks!&quot;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">message</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Surge&quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="s">&quot; rocks!&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to &quot;Surge rocks!&quot;</span>
+</code></pre></div>
 <p>Other data types, such as numbers and booleans, may also be implicitly converted to strings when using this feature. Example:</p>
-<pre><code>group = &quot;Jackson &quot; + 5; // evaluates to &quot;Jackson 5&quot;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">group</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Jackson &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to &quot;Jackson 5&quot;</span>
+</code></pre></div>
 <h2 id="assignment-operators">Assignment operators</h2>
 <p>The attribution operator (<code>=</code>) may be used to attribute data to variables. However, there's more to it. The expression <code>variable = "data"</code> is itself evaluated to string <code>"data"</code>.</p>
 <p>Likewise, the expression <code>variable = variable + 5</code> is evaluated to the new value of the variable and may be shortened to <code>variable += 5</code>.</p>
@@ -2026,14 +2040,14 @@ t = !x &amp;&amp; x; // evaluates to false
 </tbody>
 </table>
 <p>Example:</p>
-<pre><code>language = &quot;Surge&quot;;
-language += &quot;Script&quot;;
-// language now evaluates to &quot;SurgeScript&quot;
-
-number = 5;
-number += 2;
-// number now evaluates to 7
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">language</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Surge&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">language</span><span class="w"> </span><span class="p">+=</span><span class="w"> </span><span class="s">&quot;Script&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="c1">// language now evaluates to &quot;SurgeScript&quot;</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="n">number</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="n">number</span><span class="w"> </span><span class="p">+=</span><span class="w"> </span><span class="m">2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1">// number now evaluates to 7</span>
+</code></pre></div>
 <h2 id="increment-and-decrement">Increment and decrement</h2>
 <p>Increment and decrement operators should be used only on numeric variables.</p>
 <table>
@@ -2063,50 +2077,50 @@ number += 2;
 </tbody>
 </table>
 <p>Example:</p>
-<pre><code>x = 1;   // x is 1
-y = x++; // y is 1
-z = ++x; // z is 3
-w = --x; // w is 2
-t = --x; // t is 1
-Console.print(x); // prints 1
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w">   </span><span class="c1">// x is 1</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">x</span><span class="p">++;</span><span class="w"> </span><span class="c1">// y is 1</span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">z</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">++</span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// z is 3</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">w</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">--</span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// w is 2</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">--</span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// t is 1</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 1</span>
+</code></pre></div>
 <h2 id="chained-expressions">Chained expressions</h2>
 <p>You may chain assignment operations:</p>
-<pre><code>x = y = z = 1;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
 <h2 id="commas">Commas</h2>
 <p>The comma operator takes two operands. It first evaluates the first operand and then discards the result. Next, it evaluates the second operand and then returns this result. The comma is the operator with the lowest precedence.</p>
-<pre><code>c = (1, 2); // Results in c = 2
-a = 1, b = 2, c = 3; // Results in a = 1, b = 2 and c = 3
-d = (c++, a); // Results in c = 4, d = 1
-e = (++a, f = 2, 3); // Results in a = 2, e = 3, f = 2
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// Results in c = 2</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">a</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"> </span><span class="c1">// Results in a = 1, b = 2 and c = 3</span>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">d</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="n">c</span><span class="p">++,</span><span class="w"> </span><span class="n">a</span><span class="p">);</span><span class="w"> </span><span class="c1">// Results in c = 4, d = 1</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">e</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(++</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">);</span><span class="w"> </span><span class="c1">// Results in a = 2, e = 3, f = 2</span>
+</code></pre></div>
 <h2 id="other-expressions">Other expressions</h2>
 <h4 id="this">this</h4>
 <p>The keyword <code>this</code> represents the object in which it appears. Example:</p>
-<pre><code>this.destroy(); // destroys this object
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">this</span><span class="p">.</span><span class="n">destroy</span><span class="p">();</span><span class="w"> </span><span class="c1">// destroys this object</span>
+</code></pre></div>
 <h4 id="typeof">typeof</h4>
 <p>The expression <code>typeof(expr)</code> (or simply <code>typeof expr</code>), is evaluated to a string corresponding to the type of <code>expr</code>. The possible types are: <em>number</em>, <em>string</em>, <em>boolean</em>, <em>object</em> or <em>null</em>. Example:</p>
-<pre><code>t = typeof 5; // t will hold the string &quot;number&quot;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="n">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="k">typeof</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"> </span><span class="c1">// t will hold the string &quot;number&quot;</span>
+</code></pre></div>
 <h4 id="timeout">timeout</h4>
 <p>The expression <code>timeout(seconds)</code> is a handy feature of SurgeScript. It is evaluated to <code>true</code> if the object has been on the same state for the specified amount of time or more. It can only be used inside states. Example:</p>
-<pre><code>object &quot;Application&quot;
-{
-    state &quot;main&quot;
-    {
-        if(timeout(2.0)) {
-            Console.print(&quot;2 seconds have passed&quot;);
-            state = &quot;done&quot;;
-        }
-    }
-
-    state &quot;done&quot;
-    {
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">timeout</span><span class="p">(</span><span class="m">2.0</span><span class="p">))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;2 seconds have passed&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">            </span><span class="n">state</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;done&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;done&quot;</span><span class="w"></span>
+<a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 
               
             </article>
@@ -2157,7 +2171,7 @@ e = (++a, f = 2, 3); // Results in a = 2, e = 3, f = 2
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -2180,6 +2194,8 @@ e = (++a, f = 2, 3); // Results in a = 2, e = 3, f = 2
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

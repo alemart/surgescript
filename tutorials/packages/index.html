@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/tutorials/packages/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1353,6 +1353,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1644,38 +1658,38 @@
 <h2 id="basic-example">Basic example</h2>
 <p>Suppose you want to extend the language by adding new routines related to string manipulation. These routines will be used frequently throughout your project, and you'd like easy access to them. This makes it perfect for implementing them as a package.</p>
 <p>We'll define an object called <code>StringUtils</code> with a <code>reverse()</code> function that reverses a string. We make the object a package by annotating it with <code>@Package</code>. Take a look at the example below:</p>
-<pre><code>// File: stringutils.ss
-
-@Package
-object &quot;StringUtils&quot;
-{
-    fun reverse(str)
-    {
-        buf = &quot;&quot;;
-        for(i = str.length - 1; i &gt;= 0; i--)
-            buf += str[i];
-        return buf;
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// File: stringutils.ss</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">@Package</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;StringUtils&quot;</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">reverse</span><span class="p">(</span><span class="n">str</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">        </span><span class="n">buf</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">str</span><span class="p">.</span><span class="n">length</span><span class="w"> </span><span class="p">-</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">&gt;=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="p">--)</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">            </span><span class="n">buf</span><span class="w"> </span><span class="p">+=</span><span class="w"> </span><span class="n">str</span><span class="p">[</span><span class="n">i</span><span class="p">];</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">buf</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>When you annotate an object definition with <code>@Package</code>, SurgeScript will spawn an instance of such an object before spawning the <code>Application</code>. Additionally, the package object may be imported anywhere with the <code>using</code> keyword:</p>
-<pre><code>// File: app.ss
-using StringUtils;
-
-object &quot;Application&quot;
-{
-    state &quot;main&quot;
-    {
-        str = StringUtils.reverse(&quot;alucard&quot;);
-        Console.print(str); // will print &quot;dracula&quot;
-        exit();
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// File: app.ss</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">StringUtils</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">        </span><span class="n">str</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">StringUtils</span><span class="p">.</span><span class="n">reverse</span><span class="p">(</span><span class="s">&quot;alucard&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">str</span><span class="p">);</span><span class="w"> </span><span class="c1">// will print &quot;dracula&quot;</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">        </span><span class="n">exit</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p><strong>Note:</strong> it's recommended not to include any special characters in the name of your packages.</p>
 <p>In the example above, <code>Application</code> and <code>StringUtils</code> are located in two separate files. If you want to test them using the SurgeScript command line utility, pass both files as parameters:</p>
-<pre><code>surgescript package.ss app.ss
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>surgescript package.ss app.ss
+</code></pre></div>
 <blockquote>
 <p><strong>Spawning order</strong></p>
 <p>Although packages are spawned before the <em>Application</em> object, for the time being they are spawned in no particular order. You may not access a package from within the constructor of another package, as of now there is no dependency resolver implemented. Use the <em>main</em> state.</p>
@@ -1684,32 +1698,32 @@ object &quot;Application&quot;
 <h2 id="package-example">Package example</h2>
 <p>Packages may aggregate many code units with different functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.</p>
 <p>Suppose that user <em>Parrot</em>, the owner of <em>ParrotSoft</em>, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called <code>ParrotSoft</code>. Since he implemented <a href="/tutorials/properties">getters</a> for each of his utilities, his package provides easy access to all of them. Furthermore, he annotated his package with <code>@Package</code> (but <strong>not</strong> the individual utilities), so his package can be accessed anywhere.</p>
-<pre><code>// File: parrotsoft.ss
-
-@Package
-object &quot;ParrotSoft&quot;
-{
-    public readonly Matrices = spawn(&quot;Parrot Matrices&quot;);
-    public readonly Complex = spawn(&quot;Parrot Complex&quot;);
-    public readonly StringUtils = spawn(&quot;Parrot StringUtils&quot;);
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1">// File: parrotsoft.ss</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">@Package</span><span class="w"></span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;ParrotSoft&quot;</span><span class="w"></span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Matrices</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Parrot Matrices&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">Complex</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Parrot Complex&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">readonly</span><span class="w"> </span><span class="n">StringUtils</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">spawn</span><span class="p">(</span><span class="s">&quot;Parrot StringUtils&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>A user of the <code>ParrotSoft</code> package may import <em>Parrot</em>'s utilities simply by importing the package. Individual utilities may also be imported. The code below shows an example:</p>
-<pre><code>using ParrotSoft.Matrices.Matrix2;
-using ParrotSoft.Complex;
-using ParrotSoft;
-
-object &quot;Application&quot;
-{
-    state &quot;main&quot;
-    {
-        identity = Matrix2([[1, 0], [0, 1]]); // 2x2 matrix
-        z = Complex(2, 3); // 2 + 3i
-        neon = ParrotSoft.StringUtils.reverse(&quot;noen&quot;);
-        exit();
-    }
-}
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">ParrotSoft.Matrices.Matrix2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">ParrotSoft.Complex</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">using</span><span class="w"> </span><span class="nn">ParrotSoft</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="n">identity</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Matrix2</span><span class="p">([[</span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">]]);</span><span class="w"> </span><span class="c1">// 2x2 matrix</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="n">z</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Complex</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">3</span><span class="p">);</span><span class="w"> </span><span class="c1">// 2 + 3i</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="n">neon</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">ParrotSoft</span><span class="p">.</span><span class="n">StringUtils</span><span class="p">.</span><span class="n">reverse</span><span class="p">(</span><span class="s">&quot;noen&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="n">exit</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 <p>In the example above, writing <code>Complex</code> is equivalent to writing <code>ParrotSoft.Complex</code>, since we imported this utility with <code>using ParrotSoft.Complex</code>. Notice that <code>ParrotSoft</code> implements a getter for <code>Complex</code>. Additionally, <code>ParrotSoft</code> has been annotated with <code>@Package</code>, but <code>Complex</code> has <strong>not</strong>. This means that the statement <code>using Complex</code> will <strong>not</strong> yield the expected result. Since <code>Complex</code> is a part of <code>ParrotSoft</code>, it can only be accessed from it. Finally, since we haven't imported <code>StringUtils</code> explicitly, we type <code>ParrotSoft.StringUtils</code> to access it.</p>
 
               
@@ -1761,7 +1775,7 @@ object &quot;Application&quot;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1784,6 +1798,8 @@ object &quot;Application&quot;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

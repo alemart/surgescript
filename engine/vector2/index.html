@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/engine/vector2/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1298,6 +1298,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1490,6 +1504,19 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-properties" class="md-nav__link">
+    Static properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Static properties">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#vector2up" class="md-nav__link">
     Vector2.up
@@ -1521,6 +1548,13 @@
           <li class="md-nav__item">
   <a href="#vector2zero" class="md-nav__link">
     Vector2.zero
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector2one" class="md-nav__link">
+    Vector2.one
   </a>
   
 </li>
@@ -1778,6 +1812,19 @@
   
 </li>
         
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#static-properties" class="md-nav__link">
+    Static properties
+  </a>
+  
+    <nav class="md-nav" aria-label="Static properties">
+      <ul class="md-nav__list">
+        
           <li class="md-nav__item">
   <a href="#vector2up" class="md-nav__link">
     Vector2.up
@@ -1809,6 +1856,13 @@
           <li class="md-nav__item">
   <a href="#vector2zero" class="md-nav__link">
     Vector2.zero
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vector2one" class="md-nav__link">
+    Vector2.one
   </a>
   
 </li>
@@ -1972,16 +2026,16 @@
 <p>In SurgeScript, vectors are immutable. Once created, you can't change their coordinates directly. In order to bring about change (say, in the position of an <a href="/engine/entity">entity</a>), you need to create a new vector.</p>
 <p>Vector2 objects have been designed in such a way that their functions make them chainable. You can compose different vector operations using english-based terms, as in the example below:</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Player;
-using SurgeEngine.Vector2;
-...
-player = Player.active;
-...
-l = Vector2(6, 8).scaledBy(0.5).length; // number five
-u = Vector2.right.rotatedBy(45).scaledBy(2); // a vector
-v = player.transform.position.translatedBy(5,0); // a vector
-...
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Player</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Vector2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="p">...</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">player</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Player</span><span class="p">.</span><span class="n">active</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">...</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">l</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">(</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="m">8</span><span class="p">).</span><span class="n">scaledBy</span><span class="p">(</span><span class="m">0.5</span><span class="p">).</span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="c1">// number five</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">u</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">rotatedBy</span><span class="p">(</span><span class="m">45</span><span class="p">).</span><span class="n">scaledBy</span><span class="p">(</span><span class="m">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// a vector</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">v</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">translatedBy</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="m">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// a vector</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">...</span><span class="w"></span>
+</code></pre></div>
 <p><em>Note:</em> In Open Surge, the x-axis grows to the right of the screen and the y-axis grows downwards, as in many other 2D games and software.</p>
 <h2 id="factory">Factory</h2>
 <h4 id="vector2_1">Vector2</h4>
@@ -1994,47 +2048,42 @@ v = player.transform.position.translatedBy(5,0); // a vector
 </ul>
 <p><em>Returns</em></p>
 <p>A Vector2 object.</p>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Vector2;
-using SurgeEngine.Player;
-
-// This entity will lock the player on position (100, 100)
-object &quot;PlayerLocker&quot; is &quot;entity&quot;, &quot;awake&quot;
-{
-    pos = Vector2(100, 100);
-
-    state &quot;main&quot;
-    {
-        player = Player.active;
-        player.transform.position = pos;
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Vector2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Player</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="c1">// This entity will lock the player on position (100, 100)</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;PlayerLocker&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;awake&quot;</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">pos</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">(</span><span class="m">100</span><span class="p">,</span><span class="w"> </span><span class="m">100</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">        </span><span class="n">player</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Player</span><span class="p">.</span><span class="n">active</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">        </span><span class="n">player</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">pos</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
+<h2 id="static-properties">Static properties</h2>
 <h4 id="vector2up">Vector2.up</h4>
 <p><code>Vector2.up</code></p>
-<p>The unit up vector.</p>
-<p><em>Returns</em></p>
-<p>Returns the up vector of length 1.</p>
+<p>The unit up vector, i.e., (0,-1).</p>
 <h4 id="vector2right">Vector2.right</h4>
 <p><code>Vector2.right</code></p>
-<p>The unit right vector.</p>
-<p><em>Returns</em></p>
-<p>Returns the right vector of length 1.</p>
+<p>The unit right vector, i.e., (1,0).</p>
 <h4 id="vector2down">Vector2.down</h4>
 <p><code>Vector2.down</code></p>
-<p>The unit down vector.</p>
-<p><em>Returns</em></p>
-<p>Returns the down vector of length 1.</p>
+<p>The unit down vector, i.e., (0,1).</p>
 <h4 id="vector2left">Vector2.left</h4>
 <p><code>Vector2.left</code></p>
-<p>The unit left vector.</p>
-<p><em>Returns</em></p>
-<p>Returns the left vector of length 1.</p>
+<p>The unit left vector, i.e., (-1,0).</p>
 <h4 id="vector2zero">Vector2.zero</h4>
 <p><code>Vector2.zero</code></p>
-<p>The zero vector.</p>
-<p><em>Returns</em></p>
-<p>Returns the (0,0) vector.</p>
+<p>The zero vector, i.e., (0,0).</p>
+<h4 id="vector2one">Vector2.one</h4>
+<p><code>Vector2.one</code></p>
+<p>The (1,1) vector.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
 <h2 id="properties">Properties</h2>
 <h4 id="x">x</h4>
 <p><code>x</code>: number, read-only.</p>
@@ -2059,10 +2108,10 @@ object &quot;PlayerLocker&quot; is &quot;entity&quot;, &quot;awake&quot;
 <p><em>Returns</em></p>
 <p>Returns a Vector2 object corresponding to the result of the operation.</p>
 <p><em>Example</em></p>
-<pre><code>a = Vector2(3, 1);
-b = Vector2(2, 1);
-c = a.plus(b); // c = (5,2)
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">a</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">(</span><span class="m">3</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">b</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">(</span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">c</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">plus</span><span class="p">(</span><span class="n">b</span><span class="p">);</span><span class="w"> </span><span class="c1">// c = (5,2)</span>
+</code></pre></div>
 <h4 id="minus">minus</h4>
 <p><code>minus(v)</code></p>
 <p>Returns a Vector2 corresponding to the subtraction between <code>this</code> and <code>v</code>.</p>
@@ -2073,9 +2122,9 @@ c = a.plus(b); // c = (5,2)
 <p><em>Returns</em></p>
 <p>Returns a Vector2 object corresponding to the result of the operation.</p>
 <p><em>Example</em></p>
-<pre><code>v = Vector2(5, 5);
-zero = v.minus(v); // zero = (0,0)
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">v</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">zero</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">minus</span><span class="p">(</span><span class="n">v</span><span class="p">);</span><span class="w"> </span><span class="c1">// zero = (0,0)</span>
+</code></pre></div>
 <h4 id="dot">dot</h4>
 <p><code>dot(v)</code></p>
 <p>Returns the dot product between <code>this</code> and <code>v</code>.</p>
@@ -2108,25 +2157,25 @@ zero = v.minus(v); // zero = (0,0)
 </ul>
 <p><em>Returns</em></p>
 <p>Returns a number corresponding to the specified distance.</p>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Transform;
-using SurgeEngine.Player;
-
-// This entity will show the distance between
-// itself and the active player
-object &quot;DistanceDebugger&quot; is &quot;entity&quot;, &quot;awake&quot;
-{
-    transform = Transform();
-
-    state &quot;main&quot;
-    {
-        player = Player.active;
-        playerpos = player.transform.position;
-        distance = transform.position.distanceTo(playerpos);
-        Console.print(distance);
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Transform</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Player</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1">// This entity will show the distance between</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1">// itself and the active player</span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;DistanceDebugger&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;awake&quot;</span><span class="w"></span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="n">transform</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Transform</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="n">player</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Player</span><span class="p">.</span><span class="n">active</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="n">playerpos</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">        </span><span class="n">distance</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">distanceTo</span><span class="p">(</span><span class="n">playerpos</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">distance</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <h4 id="translatedby">translatedBy</h4>
 <p><code>translatedBy(dx,dy)</code></p>
 <p>Returns a copy of <code>this</code> translated by <code>(dx,dy)</code>.</p>
@@ -2138,11 +2187,10 @@ object &quot;DistanceDebugger&quot; is &quot;entity&quot;, &quot;awake&quot;
 <p><em>Returns</em></p>
 <p>Returns a Vector2 object corresponding to the result of the operation.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Vector2;
-...
-one = Vector2(1,1);
-v = one.translatedBy(4,5); // (5,6)
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Vector2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">...</span><span class="w"></span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">v</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">.</span><span class="n">one</span><span class="p">.</span><span class="n">translatedBy</span><span class="p">(</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">);</span><span class="w"> </span><span class="c1">// (5,6)</span>
+</code></pre></div>
 <h4 id="rotatedby">rotatedBy</h4>
 <p><code>rotatedBy(deg)</code></p>
 <p>Returns a copy of <code>this</code> rotated counterclockwise by <code>deg</code> degrees.</p>
@@ -2153,14 +2201,14 @@ v = one.translatedBy(4,5); // (5,6)
 <p><em>Returns</em></p>
 <p>Returns a Vector2 object corresponding to the result of the operation.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Vector2;
-
-...
-
-// A unit vector with an angle of 45 degrees
-// (relative to the positive x-axis)
-v = Vector2.right.rotatedBy(45);
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Vector2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="p">...</span><span class="w"></span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="c1">// A unit vector with an angle of 45 degrees</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="c1">// (relative to the positive x-axis)</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">v</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">.</span><span class="n">right</span><span class="p">.</span><span class="n">rotatedBy</span><span class="p">(</span><span class="m">45</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
 <p><em>Note:</em> in Open Surge, the y-axis grows downwards. As an example, <a href="#vector2right">Vector2.right</a> (1,0) rotated counterclockwise by 90 degrees will be the same as <a href="#vector2up">Vector2.up</a> (0,-1). In addition, to rotate a Vector2 by <code>deg</code> degrees clockwise you may rotate it by <code>-deg</code> degrees counterclockwise.</p>
 <h4 id="scaledby">scaledBy</h4>
 <p><code>scaledBy(s)</code></p>
@@ -2172,12 +2220,12 @@ v = Vector2.right.rotatedBy(45);
 <p><em>Returns</em></p>
 <p>Returns a Vector2 object corresponding to the result of the operation.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Vector2;
-...
-one = Vector2(1,1);
-two = one.scaledBy(2); // (2,2)
-half = one.scaledBy(0.5); // (0.5,0.5)
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Vector2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="p">...</span><span class="w"></span>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">one</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Vector2</span><span class="p">.</span><span class="n">one</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">two</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">one</span><span class="p">.</span><span class="n">scaledBy</span><span class="p">(</span><span class="m">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// (2,2)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">half</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">one</span><span class="p">.</span><span class="n">scaledBy</span><span class="p">(</span><span class="m">0.5</span><span class="p">);</span><span class="w"> </span><span class="c1">// (0.5,0.5)</span>
+</code></pre></div>
 <h4 id="projectedon">projectedOn</h4>
 <p><code>projectedOn(v)</code></p>
 <p>Returns a copy of <code>this</code> projected on nonzero vector <code>v</code>.</p>
@@ -2193,11 +2241,10 @@ half = one.scaledBy(0.5); // (0.5,0.5)
 <p><em>Returns</em></p>
 <p>Returns a string containing the coordinates of <code>this</code>.</p>
 <p><em>Example</em></p>
-<pre><code>using SurgeEngine.Vector2;
-...
-one = Vector2(1,1);
-Console.print(one); // using toString() implicitly
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Vector2</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="p">...</span><span class="w"></span>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Vector2</span><span class="p">.</span><span class="n">one</span><span class="p">);</span><span class="w"> </span><span class="c1">// using toString() implicitly</span>
+</code></pre></div>
 
               
             </article>
@@ -2248,7 +2295,7 @@ Console.print(one); // using toString() implicitly
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -2271,6 +2318,8 @@ Console.print(one); // using toString() implicitly
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

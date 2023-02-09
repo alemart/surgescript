@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/engine/transform/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1298,6 +1298,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1528,6 +1542,20 @@
           <li class="md-nav__item">
   <a href="#rotate" class="md-nav__link">
     rotate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scaleby" class="md-nav__link">
+    scaleBy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale" class="md-nav__link">
+    scale
   </a>
   
 </li>
@@ -1826,6 +1854,20 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#scaleby" class="md-nav__link">
+    scaleBy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scale" class="md-nav__link">
+    scale
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#lookat" class="md-nav__link">
     lookAt
   </a>
@@ -1864,51 +1906,51 @@
 <p>Spawns a Transform on the object. The object is required to be an <a href="/engine/entity">entity</a>.</p>
 <p><em>Returns</em></p>
 <p>A Transform object.</p>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Actor;
-using SurgeEngine.Transform;
-
-object &quot;My Level Object&quot; is &quot;entity&quot;
-{
-    public transform = Transform();
-    actor = Actor(&quot;My Level Object&quot;);
-
-    state &quot;main&quot;
-    {
-        // prints the position of this entity
-        Console.print(transform.position);
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Transform</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Level Object&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">transform</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Transform</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;My Level Object&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">        </span><span class="c1">// prints the position of this entity</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <h2 id="properties">Properties</h2>
 <h4 id="position">position</h4>
 <p><code>position</code>: <a href="/engine/vector2">Vector2</a> object.</p>
 <p>The position of the object in world coordinates.</p>
 <p>Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use <a href="#translateBy">translateBy</a> instead.</p>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Actor;
-using SurgeEngine.Player;
-using SurgeEngine.Transform;
-
-object &quot;My Level Object&quot; is &quot;entity&quot;
-{
-    public transform = Transform();
-    actor = Actor(&quot;My Level Object&quot;);
-
-    state &quot;main&quot;
-    {
-        // this will show the distance between
-        // this entity and the active player
-        player = Player.active;
-        Console.print(distanceTo(player));
-    }
-
-    fun distanceTo(obj)
-    {
-        return transform.position.distanceTo(obj.transform.position);
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Player</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Transform</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Level Object&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="w"></span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">transform</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Transform</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;My Level Object&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">        </span><span class="c1">// this will show the distance between</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="w">        </span><span class="c1">// this entity and the active player</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="w">        </span><span class="n">player</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Player</span><span class="p">.</span><span class="n">active</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">distanceTo</span><span class="p">(</span><span class="n">player</span><span class="p">));</span><span class="w"></span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">distanceTo</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">.</span><span class="n">distanceTo</span><span class="p">(</span><span class="n">obj</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <h4 id="angle">angle</h4>
 <p><code>angle</code>: number.</p>
 <p>The angle, in degrees, specifying the rotation of the object.</p>
@@ -1946,32 +1988,32 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
 <li><code>dx</code>: number. Specifies how much to move the object in the x-axis.</li>
 <li><code>dy</code>: number. Specifies how much to move the object in the y-axis.</li>
 </ul>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Actor;
-using SurgeEngine.Transform;
-
-object &quot;My Level Object&quot; is &quot;entity&quot;
-{
-    public transform = Transform();
-    actor = Actor(&quot;My Level Object&quot;);
-
-    state &quot;main&quot;
-    {
-        // move the entity at a speed of
-        // 50 pixels/second, to the right
-        transform.translateBy(50 * Time.delta, 0);
-
-        // the command below would move it
-        // at a speed of 30 pixels per FRAME
-        //transform.translateBy(30, 0); // don't do this
-
-        // since the framerate may vary across
-        // different systems, it's advisable
-        // to multiply the value by Time.delta
-        // to make the behavior consistent.
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Transform</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Level Object&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="w"></span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">transform</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Transform</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;My Level Object&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">        </span><span class="c1">// move the entity at a speed of</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">        </span><span class="c1">// 50 pixels/second, to the right</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">        </span><span class="n">transform</span><span class="p">.</span><span class="n">translateBy</span><span class="p">(</span><span class="m">50</span><span class="w"> </span><span class="p">*</span><span class="w"> </span><span class="n">Time</span><span class="p">.</span><span class="n">delta</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a><span class="w">        </span><span class="c1">// the command below would move it</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="w">        </span><span class="c1">// at a speed of 30 pixels per FRAME</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="c1">//transform.translateBy(30, 0); // don&#39;t do this</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">        </span><span class="c1">// since the framerate may vary across</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">        </span><span class="c1">// different systems, it&#39;s advisable</span>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">        </span><span class="c1">// to multiply the value by Time.delta</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="w">        </span><span class="c1">// to make the behavior consistent.</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <p><em>Note:</em> in versions prior to 0.5.1, this function was called <code>move</code>.</p>
 <h4 id="translate">translate</h4>
 <p><code>translate(delta)</code></p>
@@ -1987,23 +2029,40 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
 <ul>
 <li><code>deg</code>: number. An angle in degrees.</li>
 </ul>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Actor;
-using SurgeEngine.Transform;
-
-object &quot;My Level Object&quot; is &quot;entity&quot;
-{
-    public transform = Transform();
-    actor = Actor(&quot;My Level Object&quot;);
-
-    state &quot;main&quot;
-    {
-        // rotate the entity at a speed of
-        // 45 degrees per second
-        transform.rotate(45 * Time.delta);
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Transform</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Level Object&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="w"></span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">transform</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Transform</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;My Level Object&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="c1">// rotate the entity at a speed of</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="c1">// 45 degrees per second</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="n">transform</span><span class="p">.</span><span class="n">rotate</span><span class="p">(</span><span class="m">45</span><span class="w"> </span><span class="p">*</span><span class="w"> </span><span class="n">Time</span><span class="p">.</span><span class="n">delta</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
+<h4 id="scaleby">scaleBy</h4>
+<p><code>scaleBy(sx, sy)</code></p>
+<p>Scales the object by horizontal and vertical factors <code>sx</code> and <code>sy</code>, respectively.</p>
+<p><em>Available since:</em> Open Surge 0.6.1.</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>sx</code>: number. Horizontal scale factor. Value <code>1.0</code> means no change.</li>
+<li><code>sy</code>: number. Vertical scale factor. Value <code>1.0</code> means no change.</li>
+</ul>
+<h4 id="scale">scale</h4>
+<p><code>scale(resize)</code></p>
+<p>Scales the object by a <code>resize</code> vector.</p>
+<p><em>Available since:</em> Open Surge 0.6.1.</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>resize</code>: <a href="/engine/vector2">Vector2</a> object. <code>Vector2(1,1)</code> means no change.</li>
+</ul>
 <h4 id="lookat">lookAt</h4>
 <p><code>lookAt(position)</code></p>
 <p>Rotates the transform so that its <a href="#right">right</a> vector points at the given position. Use this function to make your object look at some point in world space.</p>
@@ -2012,23 +2071,23 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
 <ul>
 <li><code>position</code>: <a href="/engine/vector2">Vector2</a> object. A point in world space.</li>
 </ul>
-<p><em>Example</em></p>
-<pre><code>using SurgeEngine.Actor;
-using SurgeEngine.Player;
-using SurgeEngine.Transform;
-
-object &quot;My Level Object&quot; is &quot;entity&quot;
-{
-    public transform = Transform();
-    actor = Actor(&quot;My Level Object&quot;);
-
-    state &quot;main&quot;
-    {
-        player = Player.active;
-        transform.lookAt(player.transform.position);
-    }
-}
-</code></pre>
+<p><em>Example</em>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Player</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Transform</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Level Object&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="w"></span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="n">transform</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Transform</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;My Level Object&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="n">player</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Player</span><span class="p">.</span><span class="n">active</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="n">transform</span><span class="p">.</span><span class="n">lookAt</span><span class="p">(</span><span class="n">player</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">position</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div></p>
 <p><em>Note:</em> in versions prior to 0.5.1, this function accepted a Transform parameter.</p>
 
               
@@ -2080,7 +2139,7 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -2103,6 +2162,8 @@ object &quot;My Level Object&quot; is &quot;entity&quot;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>

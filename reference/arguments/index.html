@@ -14,7 +14,7 @@
       
         <link rel="canonical" href="https://docs.opensurge2d.org/reference/arguments/">
       
-      <link rel="icon" href="../../assets/images/favicon.png">
+      <link rel="icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.2.3, mkdocs-material-8.2.4">
     
     
@@ -82,7 +82,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-header__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -180,7 +180,7 @@
     <a href="../.." title="SurgeScript Documentation" class="md-nav__button md-logo" aria-label="SurgeScript Documentation" data-md-component="logo">
       
   
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M11 15H6l7-14v8h5l-7 14v-8z"/></svg>
 
     </a>
     SurgeScript Documentation
@@ -1400,6 +1400,20 @@
 
             
           
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../engine/mobile_gamepad/" class="md-nav__link">
+        MobileGamepad
+      </a>
+    </li>
+  
+
+            
+          
         </ul>
       </nav>
     </li>
@@ -1734,17 +1748,17 @@
 <h1 id="arguments">Arguments</h1>
 <p>If you've launched your application via the command-line, this Array-like object can be used to read command-line arguments. This is available at <code>Application.args</code>.</p>
 <p>The example below prints all the arguments to the screen:</p>
-<pre><code>// Method 1 (foreach)
-foreach(argument in Application.args)
-    Console.print(argument);
-
-// Method 2 (for loops)
-for(i = 0; i &lt; Application.args.length; i++)
-    Console.print(Application.args[i]);
-
-// Or, alternatively:
-Console.print(Application.args);
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// Method 1 (foreach)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">foreach</span><span class="p">(</span><span class="n">argument</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">argument</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="c1">// Method 2 (for loops)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="p">++)</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span><span class="w"></span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="c1">// Or, alternatively:</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
 <h2 id="properties">Properties</h2>
 <h4 id="length">length</h4>
 <p><code>length</code>: number, read-only.</p>
@@ -1760,11 +1774,11 @@ Console.print(Application.args);
 <p><em>Returns</em></p>
 <p>A string with the specified command-line argument, or <code>null</code> if there is no such argument.</p>
 <p><em>Example</em></p>
-<pre><code>// Suppose that you run surgescript via the command-line:
-// surgescript test_args.ss
-executable = Application.args[0]; // &quot;surgescript&quot;
-script_file = Application.args[1]; // &quot;test_args.ss&quot;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Suppose that you run surgescript via the command-line:</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="c1">// surgescript test_args.ss</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="n">executable</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">[</span><span class="m">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// &quot;surgescript&quot;</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">script_file</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">[</span><span class="m">1</span><span class="p">];</span><span class="w"> </span><span class="c1">// &quot;test_args.ss&quot;</span>
+</code></pre></div>
 <h4 id="option">option</h4>
 <p><code>option(optionName)</code></p>
 <p>Gets the value of a certain command-line option.</p>
@@ -1775,20 +1789,20 @@ script_file = Application.args[1]; // &quot;test_args.ss&quot;
 <p><em>Returns</em></p>
 <p>A string featuring the value of the desired command-line option, or <code>null</code> if such an option hasn't been provided by the user.</p>
 <p><em>Example</em></p>
-<pre><code>// Suppose that you run surgescript via the command-line:
-// surgescript test_args.ss --my-option 12345
-my_option = Application.args.option(&quot;--my-option&quot;);
-
-// Options -p and --port are equivalent
-// surgescript test_args.ss -p 80
-// surgescript test_args.ss --port 80
-port = Application.args.option(&quot;--port&quot;) || Application.args.option(&quot;-p&quot;);
-
-// Default values (useful if the option is not present)
-// surgescript test_args.ss
-// surgescript test_args.ss --name alice
-name = Application.args.option(&quot;--name&quot;) || &quot;anonymous&quot;;
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Suppose that you run surgescript via the command-line:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="c1">// surgescript test_args.ss --my-option 12345</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">my_option</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">option</span><span class="p">(</span><span class="s">&quot;--my-option&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="c1">// Options -p and --port are equivalent</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1">// surgescript test_args.ss -p 80</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="c1">// surgescript test_args.ss --port 80</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="n">port</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">option</span><span class="p">(</span><span class="s">&quot;--port&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">option</span><span class="p">(</span><span class="s">&quot;-p&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1">// Default values (useful if the option is not present)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1">// surgescript test_args.ss</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1">// surgescript test_args.ss --name alice</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Application</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">option</span><span class="p">(</span><span class="s">&quot;--name&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="s">&quot;anonymous&quot;</span><span class="p">;</span><span class="w"></span>
+</code></pre></div>
 <h4 id="hasoption">hasOption</h4>
 <p><code>hasOption(optionName)</code></p>
 <p>Checks if the specified option is present in the command-line.</p>
@@ -1858,7 +1872,7 @@ name = Application.args.option(&quot;--name&quot;) || &quot;anonymous&quot;;
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2021 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
     </div>
   
   
@@ -1881,6 +1895,8 @@ name = Application.args.option(&quot;--name&quot;) || &quot;anonymous&quot;;
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/donate.js"></script>
       
     
   </body>
