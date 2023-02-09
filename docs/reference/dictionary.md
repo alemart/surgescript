@@ -5,7 +5,7 @@ A Dictionary is a collection of key-value pairs. Dictionary keys are strings. Th
 
 Example:
 
-```
+```cs
 object "Application"
 {
     dictionary = {
@@ -74,7 +74,7 @@ The value corresponding to the specified key, or `null` if there is no such an e
 
 *Example*
 
-```
+```cs
 dict = { "Surge": 10 };
 ten = dict["Surge"];
 ```
@@ -92,7 +92,7 @@ Sets the value of the specified key in the Dictionary. Instead of calling `set()
 
 *Example*
 
-```
+```cs
 dict = { };
 dict["Surge"] = 10;
 ```

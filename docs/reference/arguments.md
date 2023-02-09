@@ -5,7 +5,7 @@ If you've launched your application via the command-line, this Array-like object
 
 The example below prints all the arguments to the screen:
 
-```
+```cs
 // Method 1 (foreach)
 foreach(argument in Application.args)
     Console.print(argument);
@@ -46,7 +46,7 @@ A string with the specified command-line argument, or `null` if there is no such
 
 *Example*
 
-```
+```cs
 // Suppose that you run surgescript via the command-line:
 // surgescript test_args.ss
 executable = Application.args[0]; // "surgescript"
@@ -69,7 +69,7 @@ A string featuring the value of the desired command-line option, or `null` if su
 
 *Example*
 
-```
+```cs
 // Suppose that you run surgescript via the command-line:
 // surgescript test_args.ss --my-option 12345
 my_option = Application.args.option("--my-option");

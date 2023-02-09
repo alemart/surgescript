@@ -10,7 +10,7 @@ Other parameters include: a movement scale in both X and Y axes (making it an el
 
 *Example*
 
-```
+```cs
 //
 // The example below shows how to make an entity move along
 // a circle of 128 pixels of radius at a rate of 0.25 cycles

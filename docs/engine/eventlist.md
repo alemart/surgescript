@@ -22,7 +22,7 @@ A new EventList that triggers the specified events at once, in the order they ha
 
 *Example*
 
-```
+```cs
 // This is a level setup object. Make sure to link it in your .lev file!
 using SurgeEngine.Level;
 using SurgeEngine.Events.EventList;

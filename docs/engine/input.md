@@ -4,7 +4,7 @@ Input
 The Input object is used to read input from the user.
 
 *Example*
-```
+```cs
 using SurgeEngine.Player;
 
 object "Application"
@@ -39,7 +39,7 @@ Spawns a new Input component with the given input map.
 An Input component.
 
 *Example*
-```
+```cs
 using SurgeEngine.Player;
 using SurgeEngine.Input;
 

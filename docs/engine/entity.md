@@ -16,7 +16,7 @@ Tags
 
 Tells Open Surge that the object is an entity and should be treated as such.
 
-```
+```cs
 // In the example below, MyExplosion (entity) has an Actor component
 // that gives it a visible form (a sprite) in world space.
 using SurgeEngine.Actor;
@@ -62,7 +62,7 @@ If an entity\* that has been placed in the level via the editor gets too far off
 **Note\*:** entities tagged as awake or detached are not affected.
 
 *Example*
-```
+```cs
 using SurgeEngine.UI.Text;
 
 // The object below is a simple counter that gets

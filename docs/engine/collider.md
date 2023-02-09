@@ -9,7 +9,7 @@ A collider is an abstract concept, and hence can't be spawned directly. Rather, 
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Player;
 using SurgeEngine.Collisions.CollisionBall;
@@ -130,7 +130,7 @@ Returns the collider itself.
 
 *Example*
 
-```
+```cs
 // ...
 using SurgeEngine.Collisions.CollisionBox;
 

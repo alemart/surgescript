@@ -10,7 +10,7 @@ Some programming languages, such as C++, have a feature called *operator overloa
 
 In SurgeScript, the `[]` operator (also called the *lookup operator*), used by [Arrays](/reference/array) and [Dictionaries](/reference/dictionary), is used to **get** and **set** values from/to the data structure. In fact, the `[]` operator can be used with any object. It is necessary to define, in your object, functions named `get()` and `set()` with the following signature:
 
-```
+```cs
 fun get(key)
 {
     // custom implementation
@@ -29,7 +29,7 @@ Function objects
 
 In SurgeScript, objects can be made to behave like functions. We call these objects *function objects* (or *functors*). To make an object behave like a function, you have to overload the `()` operator (also known as the *function operator*). This is done by defining function `call()` in your object:
 
-```
+```cs
 fun call()
 {
     // custom implementation
@@ -43,7 +43,7 @@ Assertions
 
 The `assert(condition)` statement specifies a `condition` that you expect to be true at a certain point in your code. If that condition turns out to be false, the code will be interrupted with an *assertion failed* error. Example:
 
-```
+```cs
 assert(name == "Surge"); // will crash if name isn't "Surge"
 ```
 
@@ -52,7 +52,7 @@ Chaining
 
 In SurgeScript, it's possible to configure objects in an elegant way using a technique called *chaining*. Consider the object below - it simply displays a message at regular intervals:
 
-```
+```cs
 object "Parrot"
 {
     message = "I am a Parrot";
@@ -81,7 +81,7 @@ object "Parrot"
 
 Suppose that, in your Application, you would like to spawn that object and modify its message. One way of doing it would be making its internal variable `public` and changing its contents in the [constructor function](/tutorials/functions) of your Application. A more concise and elegant way of doing it would be calling function `setMessage()` just after you spawn the object:
 
-```
+```cs
 object "Application"
 {
     parrot = spawn("Parrot").setMessage("Hello!");
@@ -99,7 +99,7 @@ Observe that the function we have defined does two things:
 
 We call that function a *chainable function*. You may call such a function from your Application, just after `spawn()`, and you'll still have a reference to the spawned object. Moreover, since chainable functions always return `this`, you may chain multiple function calls into a single statement, making your code concise and your statement descriptive. Example:
 
-```
+```cs
 parrot = spawn("Parrot").setMessage("Hello!").setInterval(2.0);
 ```
 
@@ -110,7 +110,7 @@ In SurgeScript, a factory is a functor that spawns an object for you. The object
 
 To the end-user, calling `Greeter()` is simpler than manually spawning and configuring a `Greeting` every time it is needed.
 
-```
+```cs
 // Factory example
 using Greeter; // import the factory
 
@@ -161,7 +161,7 @@ As seen in the [loops](/tutorials/loops#foreach) section, the foreach loop may b
 
 You may implement your own iterable collections by tagging them as `"iterable"` and implementing function `iterator()`. If you have ever used Java, you'll find this to be familiar.
 
-```
+```cs
 // Iterable collections are tagged "iterable"
 // and implement function iterator()
 object "MyCollection" is "iterable"
@@ -176,7 +176,7 @@ object "MyCollection" is "iterable"
 
 For each iterable collection you define, you must define its iterator object. The iterator object must be tagged `"iterator"` and implement functions `next()` and `hasNext()` (both take no arguments):
 
-```
+```cs
 // Iterators are tagged "iterator" and
 // implement functions next() and hasNext()
 object "MyIterator" is "iterator"
@@ -199,7 +199,7 @@ object "MyIterator" is "iterator"
 
 You may iterate over an iterable collection using the following code:
 
-```
+```cs
 it = collection.iterator();
 while(it.hasNext()) {
     x = it.next();
@@ -212,7 +212,7 @@ while(it.hasNext()) {
 
 Or, alternatively, using the compact foreach:
 
-```
+```cs
 foreach(x in collection) {
     Console.print(x);
 }
@@ -220,7 +220,7 @@ foreach(x in collection) {
 
 For the sake of completion, the following code demonstrates how to implement a custom iterable collection that hold even numbers from 0 up to 20 without having to store them explicitly in memory:
 
-```
+```cs
 object "Application"
 {
     evenNumbers = spawn("Even Numbers").upTo(20);
@@ -300,7 +300,7 @@ The output of this code is:
 ```
 
 **CHALLENGE:** can you write an iterable collection called *Fibonacci Sequence* containing the first *N* [Fibonacci numbers](https://en.wikipedia.org/wiki/Fibonacci_number) without storing them all explicitly in memory? It should be used as follows:
-```
+```cs
 // Desired output (for N=10): 0 1 1 2 3 5 8 13 21 34
 sequence = spawn("Fibonacci Sequence").ofLength(10);
 foreach(number in sequence)

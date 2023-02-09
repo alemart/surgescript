@@ -5,7 +5,7 @@ The SurgeEngine plugin is the interface between SurgeScript (scripting language)
 
 *Example*
 
-```
+```cs
 using SurgeEngine;
 
 // Open Surge version

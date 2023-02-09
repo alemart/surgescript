@@ -31,7 +31,7 @@ Objects in SurgeScript
 
 In SurgeScript, each object has a name. Objects may have any number of states you'd like. The initial state is always called **main**. The syntax is as follows:
 
-```
+```cs
 object "name of the object"
 {
     state "state name"
@@ -43,7 +43,7 @@ object "name of the object"
 
 The following code shows an example of a door that opens and closes (it keep changing states) every 2 seconds:
 
-```
+```cs
 object "Cosmic Door"
 {
     state "main"

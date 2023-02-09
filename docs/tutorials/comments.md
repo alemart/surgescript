@@ -8,7 +8,7 @@ Single-line comments
 
 Single-line comments start with a `//`. Example:
 
-```
+```cs
 // This line has no effect on the code (it's just for improved readability)
 x = 3 + 4; // x is now 7
 ```
@@ -18,7 +18,7 @@ Multi-line comments
 
 Multi-line comments start with a `/*` and end with a `*/`. Example:
 
-```
+```cs
 /*
  * Comments can, but don't have to, take
  * multiple lines if you use this form.

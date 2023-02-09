@@ -21,7 +21,7 @@ Spawns a new Actor component with the given sprite name.
 An Actor component.
 
 *Example*
-```
+```cs
 using SurgeEngine.Actor;
 
 object "SurgeTest" is "entity"

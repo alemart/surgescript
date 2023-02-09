@@ -8,7 +8,7 @@ Syntax
 
 Tags should be placed right after the object name. Example:
 
-```
+```cs
 object "Horse" is "animal", "vehicle"
 {
     state "main"
@@ -36,7 +36,7 @@ Using tags
 
 You may check if an object has a particular tag with the `hasTag()` function (see the [Object reference](/reference/object#hastag) for more details):
 
-```
+```cs
 object "Application"
 {
     horse = spawn("Horse");
@@ -65,7 +65,7 @@ Emoticons
 
 You may also tag objects with emoticons. The syntax is as follows:
 
-```
+```cs
 object "Good Day" is "happy", "sunny" :)
 {
     ...

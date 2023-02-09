@@ -4,7 +4,7 @@ Sensor
 A Sensor is used to detect collisions with bricks. Due to performance optimizations, passable bricks (or bricks that are too far off camera) can't be sensed.
 
 *Example*
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Collisions.Sensor;
 

@@ -6,7 +6,7 @@ The Brick component is used to create brick-like objects, or bricks endowed with
 The Brick component only affects collisions. The object that uses it is required to be an [entity](/engine/entity). **This component won't do any rendering.** Therefore, it's typically used in conjunction with the [Actor](/engine/actor) component.
 
 *Example*
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Brick;
 

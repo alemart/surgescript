@@ -4,7 +4,7 @@ Screen
 Screen settings.
 
 *Example*
-```
+```cs
 // display the size of the screen
 using SurgeEngine.Video.Screen;
 

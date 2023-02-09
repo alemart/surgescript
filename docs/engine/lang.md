@@ -4,7 +4,7 @@ Lang
 Lang is a SurgeEngine element used to read translation-specific strings, as defined in the language files (.lng).
 
 *Example*
-```
+```cs
 using SurgeEngine.Lang;
 
 // Display the current language

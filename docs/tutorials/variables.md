@@ -21,7 +21,7 @@ Null|An empty value|`null`
 
 As an example, the script below features an object with 3 variables that may be accessed throughout the whole object:
 
-```
+```cs
 object "Application"
 {
     name = "Surge the Rabbit";
@@ -42,7 +42,7 @@ object "Application"
 
 Arrays are collections of values that you may access using a zero-based index. Example:
 
-```
+```cs
 object "Application"
 {
     // The 'characters' array holds 3 strings
@@ -69,7 +69,7 @@ Arrays have many interesting properties and operations that you can see in the [
 
 Dictionaries are collections of key-value pairs. In some programming languages, these are known as associative arrays or hash tables. Here's the syntax:
 
-```
+```cs
 object "Application"
 {
     // A dictionary that stores the weight (kg) of each character
@@ -97,7 +97,7 @@ Dictionaries have many interesting properties and operations that you can see in
 > 
 > Whenever you define an array or a dictionary, you spawn a new object. One is advised to **NOT** define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.
 
-```
+```cs
 object "Application"
 {
     // arr will be instantiated once the object is created
@@ -117,7 +117,7 @@ Casting
 
 You can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling `Number(value)`, `String(value)` or `Boolean(value)`. Example:
 
-```
+```cs
 // Convert string to number
 str = "2";
 val = Number(str); // val is 2
@@ -133,7 +133,7 @@ Scoping
 -------
 Variables that are defined before any state or function are *object-level* variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are *local variables*. This means that their accessibility and lifespan is restricted to their own locus of code.
 
-```
+```cs
 object "Scope Test"
 {
     name = "Surge the Rabbit"; // object-level variable

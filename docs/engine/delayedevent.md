@@ -22,7 +22,7 @@ A new DelayedEvent that, when triggered, will trigger the specified event after 
 
 *Example*
 
-```
+```cs
 // This is a level setup object. Make sure to link it in your .lev file!
 using SurgeEngine.Level;
 using SurgeEngine.Events.EventList;

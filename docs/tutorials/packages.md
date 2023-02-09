@@ -15,7 +15,7 @@ Suppose you want to extend the language by adding new routines related to string
 
 We'll define an object called `StringUtils` with a `reverse()` function that reverses a string. We make the object a package by annotating it with `@Package`. Take a look at the example below:
 
-```
+```cs
 // File: stringutils.ss
 
 @Package
@@ -33,7 +33,7 @@ object "StringUtils"
 
 When you annotate an object definition with `@Package`, SurgeScript will spawn an instance of such an object before spawning the `Application`. Additionally, the package object may be imported anywhere with the `using` keyword:
 
-```
+```cs
 // File: app.ss
 using StringUtils;
 
@@ -52,7 +52,7 @@ object "Application"
 
 In the example above, `Application` and `StringUtils` are located in two separate files. If you want to test them using the SurgeScript command line utility, pass both files as parameters:
 
-```
+```sh
 surgescript package.ss app.ss
 ```
 
@@ -69,7 +69,7 @@ Packages may aggregate many code units with different functionalities. This lets
 
 Suppose that user *Parrot*, the owner of *ParrotSoft*, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called `ParrotSoft`. Since he implemented [getters](/tutorials/properties) for each of his utilities, his package provides easy access to all of them. Furthermore, he annotated his package with `@Package` (but **not** the individual utilities), so his package can be accessed anywhere.
 
-```
+```cs
 // File: parrotsoft.ss
 
 @Package
@@ -83,7 +83,7 @@ object "ParrotSoft"
 
 A user of the `ParrotSoft` package may import *Parrot*'s utilities simply by importing the package. Individual utilities may also be imported. The code below shows an example:
 
-```
+```cs
 using ParrotSoft.Matrices.Matrix2;
 using ParrotSoft.Complex;
 using ParrotSoft;

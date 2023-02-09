@@ -7,7 +7,7 @@ The Player object is used to control a specific player/character. Player objects
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Audio.Sound;
 
 //
@@ -78,7 +78,7 @@ Gets the Player object associated with a character in the level.
 A Player object.
 
 *Example*
-```
+```cs
 using SurgeEngine.Player;
 
 // Gives Surge 1 collectible each second
@@ -112,7 +112,7 @@ The active player, i.e., the one currently in focus.
 A Player object.
 
 *Example*
-```
+```cs
 using SurgeEngine.Player;
 
 // Tells the name of the active player
@@ -177,7 +177,7 @@ The name of the character.
 Reference to the Input object of the Player.
 
 *Example*
-```
+```cs
 using SurgeEngine.Player;
 
 object "Application"
@@ -528,7 +528,7 @@ Makes the player bounce after smashing a hazard. The trajectory of the movement 
 * `hazard`: [Actor](/engine/actor) object. The hazard.
 
 *Example*
-```
+```cs
 using SurgeEngine.Player;
 using SurgeEngine.Actor;
 using SurgeEngine.Collisions.CollisionBox;

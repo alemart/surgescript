@@ -6,7 +6,7 @@ The Music object lets you play music. This is meant to handle background music; 
 Unlike regular [sounds](/engine/sound), musics are streamed, (i.e., not loaded completely in memory). Given the longer nature of musics, this improves memory usage and helps with the loading times.
 
 *Example*
-```
+```cs
 using SurgeEngine.Level;
 
 // Fades the music in a linear fashion ;)
@@ -60,7 +60,7 @@ Creates a Music object associated with a certain file.
 A Music object.
 
 *Example*
-```
+```cs
 using SurgeEngine.Audio.Music;
 
 object "MusicTest"

@@ -22,7 +22,7 @@ A new FunctionEvent that, when triggered, calls the specified function object.
 
 *Example*
 
-```
+```cs
 // This is a level setup object. Make
 // sure to link it in your .lev file!
 using SurgeEngine.Level;

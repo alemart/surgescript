@@ -5,7 +5,7 @@ An Array is a collection of values organized in sequencial fashion. To instantia
 
 Example:
 
-```
+```cs
 object "Application"
 {
     // The 'characters' array hold 3 strings
@@ -67,7 +67,7 @@ The Array element at position `index` (0-based).
 
 *Example*
 
-```
+```cs
 characters = [ "Surge", "Neon", "Charge" ];
 
 ...
@@ -90,7 +90,7 @@ Sets to `value` the element of the Array at position `index`. Instead of calling
 
 *Example*
 
-```
+```cs
 characters = [ "Surge", "Neon", "Charge" ];
 characters[0] = "Gimacian";
 Console.print(characters[0]); // Gimacian
@@ -109,7 +109,7 @@ Adds a new element to the end of the Array.
 
 *Example*
 
-```
+```cs
 characters = [ "Surge", "Neon", "Charge" ];
 characters.push("Gimacian");
 Console.print(characters); // [ "Surge", "Neon", "Charge", "Gimacian" ]
@@ -169,7 +169,7 @@ The position of the searched element - a number between `0` and `this.length - 1
 
 *Example*
 
-```
+```cs
 characters = [ "Surge", "Neon", "Charge" ];
 ...
 two = characters.indexOf("Neon"); // 2
@@ -194,7 +194,7 @@ The sorted array. The returned array is the same array as you called `sort()` on
 
 *Example*
 
-```
+```cs
 // this example will print the elements
 // of the Array in ascending order
 object "Application"
@@ -213,7 +213,7 @@ object "Application"
 
 Output: `[ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ]`
 
-```
+```cs
 // this example will print the elements
 // of the Array in descending order
 object "Application"

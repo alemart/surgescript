@@ -21,7 +21,7 @@ Spawns a new Text object with the given font name. If `null` is provided as the 
 A Text object.
 
 *Example*
-```
+```cs
 using SurgeEngine.UI.Text;
 using SurgeEngine.Transform;
 using SurgeEngine.Player;

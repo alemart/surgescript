@@ -5,7 +5,7 @@ A CollisionBall is a special type of [Collider](/engine/collider) that takes the
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Collisions.CollisionBall;
 

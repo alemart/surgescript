@@ -185,7 +185,7 @@ A descendant named `objectName`, or `null` if there is no such object.
 
 *Example*
 
-```
+```cs
 object "TestObject"
 {
     // will search for SomeOtherObject in the Application
@@ -322,7 +322,7 @@ Returns the value returned by the invoked function.
 
 *Example*
 
-```
+```cs
 // The program below will print:
 // 12
 // 12

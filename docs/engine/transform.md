@@ -19,7 +19,7 @@ Spawns a Transform on the object. The object is required to be an [entity](/engi
 A Transform object.
 
 *Example*
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 
@@ -48,7 +48,7 @@ The position of the object in world coordinates.
 Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use [translateBy](#translateBy) instead.
 
 *Example*
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Player;
 using SurgeEngine.Transform;
@@ -144,7 +144,7 @@ Translates (moves) the object by (`dx`, `dy`).
 * `dy`: number. Specifies how much to move the object in the y-axis.
 
 *Example*
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 
@@ -194,7 +194,7 @@ Rotates the object by `deg` degrees.
 * `deg`: number. An angle in degrees.
 
 *Example*
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Transform;
 
@@ -250,7 +250,7 @@ Rotates the transform so that its [right](#right) vector points at the given pos
 * `position`: [Vector2](/engine/vector2) object. A point in world space.
 
 *Example*
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Player;
 using SurgeEngine.Transform;

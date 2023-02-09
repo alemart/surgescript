@@ -6,7 +6,7 @@ Introduction
 
 Functions are blocks of code that you can reuse throughout your program. They may receive input parameters and they always output something. The syntax is as follows:
 
-```
+```cs
 fun function_name(param_1, param_2, param_3, ..., param_n)
 {
     // block of code
@@ -23,7 +23,7 @@ Return statement
 
 Use the `return` statement to stop executing the function and to return some value to the caller. Example:
 
-```
+```cs
 // This function will return the double of input parameter x
 fun double(x)
 {
@@ -41,7 +41,7 @@ Simple example
 
 In the example below, we have an object called `Calculator` with two functions: `greet()` and `sum()`. `greet()` takes no input parameters and just greets the user. On the other hand, `sum()` takes two input parameters, `a` and `b`, and returns the sum `a + b`:
 
-```
+```cs
 object "Calculator"
 {
     fun greet()
@@ -61,7 +61,7 @@ In function `sum()`, variables `a` and `b` hold the input data and are only visi
 Now, let's create a program that uses this `Calculator`. Remember that the functions defined above can be called by any object, including `Application`:
 
 
-```
+```cs
 object "Application"
 {
     calculator = spawn("Calculator");
@@ -102,7 +102,7 @@ n! = { n * (n-1)!    if n > 1
 
 One interesting example of recursion that arises in computer science is called the *binary search* algorithm. Given a sorted [Array](/reference/array), the binary search finds the position of a target value without having to inspect the whole collection. In the example below, `bsearch()` is a recursive function:
 
-```
+```cs
 object "Binary Search"
 {
     // Given an array sorted in ascending order, find()
@@ -143,7 +143,7 @@ In SurgeScript, constructors and destructors are special functions that are call
 
 Let's take our `Calculator` again. In the following example, `constructor()` is called automatically whenever a `Calculator` object is created. Likewise, `destructor()` is called automatically when the object is destroyed.
 
-```
+```cs
 object "Calculator"
 {
     fun constructor()

@@ -5,7 +5,7 @@ Data related to the scripting language itself. You can access this object simply
 
 Example:
 
-```
+```cs
 // Prints the version of the SurgeScript runtime
 object "Application"
 {

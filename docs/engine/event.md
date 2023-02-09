@@ -11,7 +11,7 @@ There are multiple types of events. In practice, you'll use specialized events s
 
 *Example*
 
-```
+```cs
 // -----------------------------------------------------------------------------
 // Using Events
 //

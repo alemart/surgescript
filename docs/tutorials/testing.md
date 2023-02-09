@@ -12,7 +12,7 @@ Using Open Surge
 To test a script in Open Surge, place it on the *scripts/* folder and start the engine. Your test script must include an object called *Application*. Make sure to remove the script after you're done with the testing.
 
 As an example, save the following script to *scripts/hello.ss* and start the engine:
-```
+```cs
 // hello.ss: test script
 // Please remove this file after you're done
 object "Application"
@@ -41,7 +41,7 @@ Using the standalone version
 If you've downloaded the standalone version of the language:
 
 - First of all, save the following script to a file named *hello.ss*. For testing purposes, you may place the file on the same directory as the surgescript executable.
-```
+```cs
 // hello.ss: test script
 object "Application"
 {
@@ -53,7 +53,7 @@ object "Application"
 }
 ```
 - Then, open up a Terminal and type:
-```
+```sh
 cd /path/to/surgescript
 ./surgescript hello.ss
 ```

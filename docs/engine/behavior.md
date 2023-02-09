@@ -9,7 +9,7 @@ Behavior objects must be tagged *behavior* and are supposed to be spawned as dir
 
 *Example*
 
-```
+```cs
 //
 // The example below shows an entity with 2 behaviors:
 //

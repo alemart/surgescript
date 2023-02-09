@@ -11,7 +11,7 @@ Defining properties
 
 Suppose you have an object called `Animal` with an object-level variable called `sound` and a function named `speak()`:
 
-```
+```cs
 object "Animal"
 {
     sound = "meow!";
@@ -25,7 +25,7 @@ object "Animal"
 
 This object can only speak *meow!* Let's see:
 
-```
+```cs
 object "Application"
 {
     animal = spawn("Animal");
@@ -49,7 +49,7 @@ meow!
 
 What if an external object could modify the sound of the animal? Trying to access `animal.sound` externally will trigger an error, unless you add the `public` specifier to your variable:
 
-```
+```cs
 object "Animal"
 {
     public sound = "meow!";
@@ -63,7 +63,7 @@ object "Animal"
 
 Now, external objects may access (read and write) the `sound` variable (or *property*):
 
-```
+```cs
 object "Application"
 {
     animal = spawn("Animal");
@@ -78,7 +78,7 @@ object "Application"
 
 Since SurgeScript 0.5.3, you may add the `readonly` modifier after the `public` specifier. Doing so disallows the modification of the property by external objects:
 
-```
+```cs
 object "Animal"
 {
     public readonly sound = "meow!";
@@ -107,7 +107,7 @@ Using getters and setters
 
 In reality, however, there are no public variables in SurgeScript. Behind the scenes, the language defines special functions called *getters* and *setters* that will perform the read/write logic for you. Rather than using `public`, you may want to define the getters and the setters yourself:
 
-```
+```cs
 object "Animal"
 {
     sound = "meow!";
@@ -133,7 +133,7 @@ This code is semantically the same as setting `sound` to be `public`; this is ju
 
 An advantage of defining getters and setters by yourself is that you control how the data passes through the objects. You may want to validate the data before changing the internal variables of the objects. Example:
 
-```
+```cs
 // lives must not be a negative number
 fun set_lives(value)
 {

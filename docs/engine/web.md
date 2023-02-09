@@ -17,7 +17,7 @@ Launches a URL using the default web browser. It's mandatory to specify a protoc
 * `url`: string. The URL to be launched.
 
 *Example*
-```
+```cs
 using SurgeEngine.Web;
 
 object "Application"

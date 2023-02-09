@@ -5,7 +5,7 @@ Routines for strings. The String object is not supposed to be used directly (gen
 
 Example:
 
-```
+```cs
 // Useful string routines
 x = "SurgeScript".toLowerCase(); // "surgescript"
 y = x.substr(0, 5); // "surge"
@@ -36,7 +36,7 @@ Returns `true` if `value` is either `null` or an empty string.
 
 *Example*
 
-```
+```cs
 name = "Surge";
 //name = "";
 //name = null;
@@ -121,7 +121,7 @@ The position (0-based index) of the first occurrence of `str` in the string, or 
 
 *Example*
 
-```
+```cs
 name = "SurgeScript";
 a = name.indexOf("Surge"); // a is 0
 b = name.indexOf("Neon"); // b is -1
@@ -146,7 +146,7 @@ The substring with length `length` starting at `start`.
 
 *Example*
 
-```
+```cs
 name = "SurgeScript";
 surge = name.substr(0, 5); // "Surge"
 script = name.substr(5, 6); // "Script"
@@ -170,7 +170,7 @@ The caller string concatenated with `str` at the end.
 
 *Example*
 
-```
+```cs
 name = "Surge".concat("Script"); // SurgeScript
 name = "Surge" + "Script"; // SurgeScript
 ```
@@ -192,7 +192,7 @@ The caller string having all its occurrences of `oldstr` replaced to `newstr`.
 
 *Example*
 
-```
+```cs
 // dst is "Gimacian, Neon and Charge"
 src = "Surge, Neon and Charge";
 dst = src.replace("Surge", "Gimacian");

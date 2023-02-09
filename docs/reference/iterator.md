@@ -9,7 +9,7 @@ The data structure that you wish to traverse should include an `iterator()` func
 
 The basic usage of an Iterator is as follows:
 
-```
+```cs
 // container is an object such as an Array
 iterator = container.iterator(); // spawn an iterator to traverse the container
 while(iterator.hasNext()) {

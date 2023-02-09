@@ -24,7 +24,7 @@ A new EventChain that triggers the specified events, one at a time. The first ti
 
 *Example*
 
-```
+```cs
 // EventChain example
 // This is a level setup object. Make sure to link it in your .lev file!
 using SurgeEngine.Level;
@@ -65,7 +65,7 @@ The EventChain object.
 
 *Example*
 
-```
+```cs
 // Triggering Alternating Events
 // This is a level setup object. Make sure to link it in your .lev file!
 using SurgeEngine.Level;

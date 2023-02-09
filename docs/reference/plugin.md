@@ -5,7 +5,7 @@ SurgeScript features a plugin system that allows you to extend the functionaliti
 
 Example:
 
-```
+```cs
 // File: app.ss
 // An application that uses StringUtils, defined in another file
 using StringUtils;
@@ -24,7 +24,7 @@ object "Application"
 }
 ```
 
-```
+```cs
 // File: string_utils.ss
 // String utilities
 
@@ -79,7 +79,7 @@ Rather than using this function, it's recommended to import the desired object u
 
 *Example*
 
-```
+```cs
 using StringUtils;
 
 // ...

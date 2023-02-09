@@ -9,7 +9,7 @@ The Camera object can be used to control what content (in world space) is render
 
 *Example*
 
-```
+```cs
 // Import the Camera object
 using SurgeEngine.Camera;
 

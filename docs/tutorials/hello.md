@@ -3,7 +3,7 @@ Hello, World!
 
 SurgeScript creates automatically an object called **Application**. That object is defined by the user. Let's see how we can use that to make a simple program:
 
-```
+```cs
 object "Application"
 {
     state "main"

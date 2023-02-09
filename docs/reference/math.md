@@ -5,7 +5,7 @@ Built-in mathematical functions. The Math object can be accessed simply by typin
 
 Examples:
 
-```
+```cs
 // Math functions
 two = Math.sqrt(4); // square root of 4
 eight = Math.pow(2, 3); // 2 raised to the 3rd power

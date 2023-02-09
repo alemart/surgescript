@@ -5,7 +5,7 @@ The Mouse object is used to read input from the mouse.
 
 *Example*
 
-```
+```cs
 // This example shows how to use a sprite
 // as a mouse cursor. Since My Cursor is
 // tagged "detached", it will be rendered
@@ -91,7 +91,7 @@ Checks if a mouse button has just been pressed.
 Returns `true` if the specified button has just been pressed (i.e., a click has just occurred).
 
 *Example*
-```
+```cs
 using SurgeEngine.Input.Mouse;
 using SurgeEngine.Collisions.CollisionBall;
 using SurgeEngine.Transform;

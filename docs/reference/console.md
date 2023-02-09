@@ -18,7 +18,7 @@ Prints a line to the console.
 
 *Example*
 
-```
+```cs
 // this will print "Hello, there!" and quit
 object "Application"
 {
@@ -52,7 +52,7 @@ Returns the string just read, without a line break at the end.
 
 *Example*
 
-```
+```cs
 // will ask the name of the user until a name is given
 object "Application"
 {

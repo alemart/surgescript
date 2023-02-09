@@ -6,7 +6,7 @@ Level routines. A level is a scene in the game, represented by a .lev file in th
 Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be automatically deleted by the [Garbage Collector](/reference/gc). Sometimes, you may want to spawn [entities](/engine/entity) in your level, but keeping references to all of them may be inconvenient. If this is your case, you can [spawn them as children of the Level object](#spawn). It will keep references of the entities for you; therefore, they won't be garbage collected.
 
 *Example*
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Level;
 using SurgeEngine.Vector2;
@@ -54,7 +54,7 @@ Properties
 The name of the level.
 
 *Example*
-```
+```cs
 using SurgeEngine.Level;
 
 // Will display the name of the level
@@ -212,7 +212,7 @@ The desired entity ([object](/reference/object)), or `null` if there is no entit
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Level;
 
 //
@@ -261,7 +261,7 @@ This function will search for all the specified objects in the level, so it's no
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Level;
 
 //
@@ -333,7 +333,7 @@ Loads the specified level/quest.
 * `filepath`: string. Relative path of the level or quest to be loaded.
 
 *Example*
-```
+```cs
 using SurgeEngine.Level;
 
 object "My Level Loader"

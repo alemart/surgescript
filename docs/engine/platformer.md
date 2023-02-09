@@ -7,7 +7,7 @@ The Platformer [behavior](/engine/behavior) makes the associated [entity](/engin
 
 *Example*
 
-```
+```cs
 //
 // In the example below, we create a dummy that
 // walks around the level (left and right)
@@ -187,7 +187,7 @@ Returns the platformer itself.
 
 *Example*
 
-```
+```cs
 //
 // In the example below, we create a jumping
 // dummy that walks left and right
@@ -260,7 +260,7 @@ Returns the platformer itself.
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Actor;
 using SurgeEngine.Behaviors.Platformer;
 

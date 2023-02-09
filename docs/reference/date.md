@@ -5,7 +5,7 @@ Date is used to retrieve current date and time. You can access this object simpl
 
 Example:
 
-```
+```cs
 // What day is today?
 object "Application"
 {

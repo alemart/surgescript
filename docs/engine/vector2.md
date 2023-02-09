@@ -9,7 +9,7 @@ Vector2 objects have been designed in such a way that their functions make them 
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Player;
 using SurgeEngine.Vector2;
 ...
@@ -42,7 +42,7 @@ Spawns a 2D vector with the given coordinates.
 A Vector2 object.
 
 *Example*
-```
+```cs
 using SurgeEngine.Vector2;
 using SurgeEngine.Player;
 
@@ -146,7 +146,7 @@ Returns a Vector2 object corresponding to the result of the operation.
 
 *Example*
 
-```
+```cs
 a = Vector2(3, 1);
 b = Vector2(2, 1);
 c = a.plus(b); // c = (5,2)
@@ -168,7 +168,7 @@ Returns a Vector2 object corresponding to the result of the operation.
 
 *Example*
 
-```
+```cs
 v = Vector2(5, 5);
 zero = v.minus(v); // zero = (0,0)
 ```
@@ -226,7 +226,7 @@ Considering `this` and `v` as points in space, this function returns the distanc
 Returns a number corresponding to the specified distance.
 
 *Example*
-```
+```cs
 using SurgeEngine.Transform;
 using SurgeEngine.Player;
 
@@ -263,7 +263,7 @@ Returns a Vector2 object corresponding to the result of the operation.
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Vector2;
 ...
 v = Vector2.one.translatedBy(4,5); // (5,6)
@@ -285,7 +285,7 @@ Returns a Vector2 object corresponding to the result of the operation.
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Vector2;
 
 ...
@@ -313,7 +313,7 @@ Returns a Vector2 object corresponding to the result of the operation.
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Vector2;
 ...
 one = Vector2.one;
@@ -347,7 +347,7 @@ Returns a string containing the coordinates of `this`.
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Vector2;
 ...
 Console.print(Vector2.one); // using toString() implicitly

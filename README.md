@@ -22,7 +22,7 @@ The 15-second example
 
 The following script prints a message to the screen:
 
-```
+```cs
 // My first application
 object "Application"
 {

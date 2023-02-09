@@ -19,7 +19,7 @@ Spawning objects
 
 You can use `spawn()` to instantiate an object. Example:
 
-```
+```cs
 object "Parent"
 {
     child = spawn("Child");
@@ -39,7 +39,7 @@ object "Child"
 
 Function `spawn()` may be invoked on objects other than the caller. In this case, the caller won't be the parent of the newly created object:
 
-```
+```cs
 object "Parent"
 {
     child = spawn("Child");
@@ -64,7 +64,7 @@ Destroying objects
 
 Objects can be destroyed manually by calling `destroy()`. Whenever an object is destroyed, its children are destroyed as well.
 
-```
+```cs
 object "Foo"
 {
     state "main"
@@ -78,18 +78,18 @@ object "Foo"
 Traversing the hierarchy
 ------------------------
 
-Relevant data about the object hierarchy can be obtained using the following properties and functions (find more on the [Object reference](/reference/object)):
+Relevant data about the object hierarchy can be obtained using the following properties and functions (find out more about them at the [Object reference](/reference/object)):
 
 Function / property|Description
 -------------------|-----------
-`obj.parent` (read-only) | The parent object
+`obj.parent` | The parent object
 `obj.child(name)` | Gets a child object named `name`
 `obj.findObject(name)` | Finds a descendant named `name`
-`obj.__childCount` (read-only) | Number of immediate children
+`obj.__childCount` | Number of immediate children
 
 Example:
 
-```
+```cs
 object "Parent"
 {
     child = spawn("Child");

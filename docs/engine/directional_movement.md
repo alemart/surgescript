@@ -12,7 +12,7 @@ Directional Movement is very versatile. You can use it to implement many things:
 
 *Example*
 
-```
+```cs
 //
 // The example below shows how to make an entity move to the
 // right of the screen at a rate of 60 pixels per second

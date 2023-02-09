@@ -22,7 +22,7 @@ A new EntityEvent linked to the specified entity.
 
 *Example*
 
-```
+```cs
 // This is a level setup object. Make sure to link it in your .lev file!
 using SurgeEngine.Level;
 using SurgeEngine.Events.EntityEvent;

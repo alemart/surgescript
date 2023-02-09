@@ -5,7 +5,7 @@ Animation objects are used to gather data about specific animations. Although yo
 
 *Example*
 
-```
+```cs
 using SurgeEngine.Actor;
 
 object "MyExplosion" is "entity", "disposable", "private"

@@ -5,7 +5,7 @@ Routines for numbers. The Number object is not supposed to be used directly. The
 
 Example:
 
-```
+```cs
 x = 2.toString(); // x is "2"
 t = typeof(x); // t is "string"
 ```

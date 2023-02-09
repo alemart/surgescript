@@ -7,7 +7,7 @@ Although the Enemy object generates the described behavior, it is not a concrete
 
 *Example*
 
-```
+```cs
 //
 // HOW TO SCRIPT A BADDIE:
 //

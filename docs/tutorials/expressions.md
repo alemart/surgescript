@@ -8,7 +8,7 @@ Constants
 
 Constants are types of expressions. They may be numbers, strings, booleans... You may attribute constant values to variables using the assignment operator (`=`):
 
-```
+```cs
 // strings
 name = "Surge"; // variable name receives string "Surge"
 message = "Surge's home";
@@ -43,7 +43,7 @@ The multiplication, division and remainder operators have precedence over the ad
 
 Examples:
 
-```
+```cs
 two = 1 + 1;
 ten = 5 * 2;
 eleven = 5 * 2 + 1;
@@ -78,7 +78,7 @@ Operator|Meaning
 
 Examples:
 
-```
+```cs
 x = 1;
 y = (x == 1); // y is true
 z = (x != 1); // z is false
@@ -115,7 +115,7 @@ Expression|Result
 
 Notice that **not** has higher precedence than the other two operators. Examples:
 
-```
+```cs
 x = 5 < 2; // evaluates to false
 y = !x; // evaluates to true
 z = 18 < 35 || x; // evaluates to true
@@ -132,13 +132,13 @@ Textual expressions
 
 You may concatenate strings with the `+` operator. Example:
 
-```
+```cs
 message = "Surge" + " rocks!"; // evaluates to "Surge rocks!"
 ```
 
 Other data types, such as numbers and booleans, may also be implicitly converted to strings when using this feature. Example:
 
-```
+```cs
 group = "Jackson " + 5; // evaluates to "Jackson 5"
 ```
 
@@ -162,7 +162,7 @@ Expression|Translates to|Meaning
 
 Example:
 
-```
+```cs
 language = "Surge";
 language += "Script";
 // language now evaluates to "SurgeScript"
@@ -186,7 +186,7 @@ Expression|Meaning
 
 Example:
 
-```
+```cs
 x = 1;   // x is 1
 y = x++; // y is 1
 z = ++x; // z is 3
@@ -200,7 +200,7 @@ Chained expressions
 
 You may chain assignment operations:
 
-```
+```cs
 x = y = z = 1;
 ```
 
@@ -209,7 +209,7 @@ Commas
 
 The comma operator takes two operands. It first evaluates the first operand and then discards the result. Next, it evaluates the second operand and then returns this result. The comma is the operator with the lowest precedence.
 
-```
+```cs
 c = (1, 2); // Results in c = 2
 a = 1, b = 2, c = 3; // Results in a = 1, b = 2 and c = 3
 d = (c++, a); // Results in c = 4, d = 1
@@ -224,7 +224,7 @@ Other expressions
 
 The keyword `this` represents the object in which it appears. Example:
 
-```
+```cs
 this.destroy(); // destroys this object
 ```
 
@@ -232,7 +232,7 @@ this.destroy(); // destroys this object
 
 The expression `typeof(expr)` (or simply `typeof expr`), is evaluated to a string corresponding to the type of `expr`. The possible types are: *number*, *string*, *boolean*, *object* or *null*. Example:
 
-```
+```cs
 t = typeof 5; // t will hold the string "number"
 ```
 
@@ -240,7 +240,7 @@ t = typeof 5; // t will hold the string "number"
 
 The expression `timeout(seconds)` is a handy feature of SurgeScript. It is evaluated to `true` if the object has been on the same state for the specified amount of time or more. It can only be used inside states. Example:
 
-```
+```cs
 object "Application"
 {
     state "main"
