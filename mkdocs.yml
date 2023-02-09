@@ -9,6 +9,9 @@ repo_url: 'https://github.com/alemart/surgescript'
 strict: false
 theme:
     name: 'material'
+    favicon: 'img/favicon.ico'
+    icon:
+        logo: 'material/lightning-bolt'
 extra_javascript:
     - js/donate.js
 markdown_extensions:
