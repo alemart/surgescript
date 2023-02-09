@@ -17,4 +17,14 @@ document.addEventListener('DOMContentLoaded', () => {
     script.src = 'https://storage.ko-fi.com/cdn/scripts/overlay-widget.js';
 
     document.body.appendChild(script);
+
+    const style = document.createElement('style');
+    style.appendChild(document.createTextNode(`
+        .floatingchat-container-wrap, .floatingchat-container-wrap-mobi,
+        .floating-chat-kofi-popup-iframe, .floating-chat-kofi-popup-iframe-mobi {
+            right: 16px !important;
+            left: initial !important;
+        }
+    `));
+    document.head.appendChild(style);
 });
