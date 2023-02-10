@@ -94,6 +94,9 @@ static surgescript_tagtree_t* add_to_tree(surgescript_tagtree_t* tree, const cha
 static void remove_tree(surgescript_tagtree_t* tree);
 static void traverse_tree(const surgescript_tagtree_t* tree, void* data, void (*callback)(const char*, void*));
 
+/* misc */
+static void foreach_tag_of_object(const char* tag_name, void* wrapper);
+
 
 /*
  * surgescript_tagsystem_create()
@@ -285,6 +288,17 @@ void surgescript_tagsystem_foreach_tagged_object(const surgescript_tagsystem_t* 
     }
 }
 
+/*
+ * surgescript_tagsystem_foreach_tag_of_object()
+ * For each tag of object named object_name, calls callback(tag_name, data)
+ */
+void surgescript_tagsystem_foreach_tag_of_object(const surgescript_tagsystem_t* tag_system, const char* object_name, void* data, void (*callback)(const char*,void*))
+{
+    /* this operation can be made faster with a dedicated data structure
+       (USE_FAST_TAGS is in place), but there aren't too many tags, are there? */
+    void* wrapper[] = { (void*)tag_system, (void*)object_name, data, callback };
+    surgescript_tagsystem_foreach_tag(tag_system, wrapper, foreach_tag_of_object);
+}
 
 
 /* private stuff */
@@ -352,3 +366,15 @@ void destroy_tagtable_entry(void* e)
     ssfree(entry);
 }
 #endif
+
+/* calls a callback for each tag of object named object_name */
+void foreach_tag_of_object(const char* tag_name, void* wrapper)
+{
+    const surgescript_tagsystem_t* tag_system = (const surgescript_tagsystem_t*)(((void**)wrapper)[0]);
+    const char* object_name = (const char*)(((void**)wrapper)[1]);
+    void* data = ((void**)wrapper)[2];
+    void (*callback)(const char*,void*) = (void(*)(const char*,void*))(((void**)wrapper)[3]);
+
+    if(surgescript_tagsystem_has_tag(tag_system, object_name, tag_name))
+        callback(tag_name, data);
+}

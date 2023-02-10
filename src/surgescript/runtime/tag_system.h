@@ -35,5 +35,6 @@ bool surgescript_tagsystem_has_tag(const surgescript_tagsystem_t* tag_system, co
 /* iteration */
 void surgescript_tagsystem_foreach_tag(const surgescript_tagsystem_t* tag_system, void* data, void (*callback)(const char*,void*)); /* for each registered tag, calls callback(tag_name, data) */
 void surgescript_tagsystem_foreach_tagged_object(const surgescript_tagsystem_t* tag_system, const char* tag_name, void* data, void (*callback)(const char*,void*)); /* for each object tagged tag_name, calls callback(object_name, data) */
+void surgescript_tagsystem_foreach_tag_of_object(const surgescript_tagsystem_t* tag_system, const char* object_name, void* data, void (*callback)(const char*,void*)); /* for each tag of object named object_name, calls callback(tag_name, data) */
 
 #endif
