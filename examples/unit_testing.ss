@@ -14,6 +14,7 @@ object "Application"
         test.number();
         test.boolean();
         test.objects();
+        test.tags();
         test.system();
         test.functor();
         test.getset();
@@ -221,12 +222,26 @@ object "SurgeScript Test" is "test"
         test(this != null) || fail(15);
         test((this == null) === false) || fail(16);
         test(null == null && null === null) || fail(17);
-        test(!this.hasTag("noTag")) || fail(18);
-        test(this.hasTag("test")) || fail(19);
-        test(System.tags.select("test").indexOf(this.__name) >= 0) || fail(20);
-        test(System.tags.select("noTag").length == 0) || fail(21);
-        test(System.tags.list().indexOf("test") >= 0) || fail(22);
-        test(Application.args.hasTag("iterable")) || fail(23);
+        end();
+    }
+
+    fun tags()
+    {
+        begin("Tag System");
+        test(this.hasTag("test")) || fail(1);
+        test(!this.hasTag("not-a-tag")) || fail(2);
+        test(Application.args.hasTag("iterable")) || fail(3);
+        test(System.tags.select("test").length > 0) || fail(4);
+        test(System.tags.select("test").indexOf(this.__name) >= 0) || fail(5);
+        test(System.tags.select("not-a-tag").length == 0) || fail(6);
+        test(System.tags.list().indexOf("test") >= 0) || fail(7);
+        test(System.tags.list().indexOf("not-a-tag") < 0) || fail(8);
+        test(System.tags.tagsOf(this.__name).length > 0) || fail(9);
+        test(System.tags.tagsOf(this.__name).indexOf("test") >= 0) || fail(10);
+        test(System.tags.tagsOf("Array").length > 0) || fail(11);
+        test(System.tags.tagsOf("Array").indexOf("iterable") >= 0) || fail(12);
+        test(System.tags.tagsOf("Not An Object!!!").length == 0) || fail(13);
+        test(System.tags.tagsOf("Application").length == 0) || fail(14);
         end();
     }
 
