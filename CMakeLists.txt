@@ -8,7 +8,7 @@
 cmake_minimum_required(VERSION 3.2)
 project(
     surgescript
-    VERSION 0.5.7
+    VERSION 0.6.0
     LANGUAGES C
 )
 include(GNUInstallDirs)

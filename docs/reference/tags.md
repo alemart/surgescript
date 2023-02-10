@@ -36,7 +36,7 @@ A new [Array](/reference/array) of strings with the names of the objects tagged 
 
 Returns the tags of the objects named `objectName`.
 
-*Available since:* SurgeScript 0.5.7
+*Available since:* SurgeScript 0.6.0
 
 *Arguments*
 
