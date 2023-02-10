@@ -101,5 +101,6 @@ nav:
             - 'Text': 'engine/text.md'
         - 'Vector2': 'engine/vector2.md'
         - 'Video':
+            - 'Video': 'engine/video.md'
             - 'Screen': 'engine/screen.md'
         - 'Web': 'engine/web.md'

@@ -1,7 +1,7 @@
 Screen
 ======
 
-Screen settings.
+Screen settings. The screen represents the backbuffer, i.e., the texture in which things are drawn.
 
 *Example*
 ```cs
