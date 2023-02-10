@@ -14,7 +14,7 @@ Lists all tags used in all objects.
 
 *Returns*
 
-This function spawns a new Array object with all tags and returns it.
+A new [Array](/reference/array) of strings with all tags used in all objects.
 
 #### select
 
@@ -28,4 +28,20 @@ Selects all objects that are tagged with `tagName`.
 
 *Returns*
 
-This function returns a new Array with all the names of the objects tagged with `tagName`.
+A new [Array](/reference/array) of strings with the names of the objects tagged with `tagName`. If there are no such objects, an empty array is returned.
+
+#### tagsOf
+
+`tagsOf(objectName)`
+
+Returns the tags of the objects named `objectName`.
+
+*Available since:* SurgeScript 0.5.7
+
+*Arguments*
+
+* `objectName`: string.
+
+*Returns*
+
+A new [Array](/reference/array) of strings with the names of the tags associated with the objects named `objectName`. If the objects are untagged or do not exist, an empty array is returned.

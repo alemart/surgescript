@@ -32,9 +32,10 @@ static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_list(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_select(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_tagsof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* private stuff */
-static void push_to_array(const char* string, void* arr);
+static void array_push(const char* string, void* arr);
 
 /*
  * surgescript_sslib_register_tagsystem()
@@ -48,6 +49,7 @@ void surgescript_sslib_register_tagsystem(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "__TagSystem", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "__TagSystem", "list", fun_list, 0);
     surgescript_vm_bind(vm, "__TagSystem", "select", fun_select, 1);
+    surgescript_vm_bind(vm, "__TagSystem", "tagsOf", fun_tagsof, 1);
 }
 
 
@@ -81,7 +83,7 @@ surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_v
     return NULL;
 }
 
-/* list(): returns an array with all tags */
+/* list(): returns an array of strings with all the tags that have been registered */
 surgescript_var_t* fun_list(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
@@ -89,12 +91,12 @@ surgescript_var_t* fun_list(surgescript_object_t* object, const surgescript_var_
     surgescript_object_t* array = surgescript_objectmanager_get(object_manager, array_handle);
     surgescript_tagsystem_t* tag_system = surgescript_objectmanager_tagsystem(object_manager);
 
-    surgescript_tagsystem_foreach_tag(tag_system, array, push_to_array);
+    surgescript_tagsystem_foreach_tag(tag_system, array, array_push);
 
     return surgescript_var_set_objecthandle(surgescript_var_create(), array_handle);
 }
 
-/* select(tag): returns an array with all the names of the objects tagged tag */
+/* select(tag): returns an array of strings with all the names of the objects tagged tag */
 surgescript_var_t* fun_select(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
@@ -103,16 +105,33 @@ surgescript_var_t* fun_select(surgescript_object_t* object, const surgescript_va
     surgescript_tagsystem_t* tag_system = surgescript_objectmanager_tagsystem(object_manager);
     char* tag_name = surgescript_var_get_string(param[0], object_manager);
 
-    surgescript_tagsystem_foreach_tagged_object(tag_system, tag_name, array, push_to_array);
+    surgescript_tagsystem_foreach_tagged_object(tag_system, tag_name, array, array_push);
 
     ssfree(tag_name);
+    return surgescript_var_set_objecthandle(surgescript_var_create(), array_handle);
+}
+
+/* tagsOf(objectName): returns an array of strings with all the tags of the objects named objectName */
+surgescript_var_t* fun_tagsof(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
+    surgescript_objecthandle_t array_handle = surgescript_objectmanager_spawn_array(object_manager);
+    surgescript_object_t* array = surgescript_objectmanager_get(object_manager, array_handle);
+    surgescript_tagsystem_t* tag_system = surgescript_objectmanager_tagsystem(object_manager);
+    char* object_name = surgescript_var_get_string(param[0], object_manager);
+
+    surgescript_tagsystem_foreach_tag_of_object(tag_system, object_name, array, array_push);
+
+    ssfree(object_name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), array_handle);
 }
 
 
 
 /* --- private stuff --- */
-void push_to_array(const char* string, void* arr)
+
+/* add a string to a SurgeScript array */
+void array_push(const char* string, void* arr)
 {
     surgescript_object_t* array = (surgescript_object_t*)arr;
     surgescript_var_t* tmp = surgescript_var_create();
