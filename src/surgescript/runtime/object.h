@@ -75,6 +75,7 @@ bool surgescript_object_remove_child(surgescript_object_t* object, unsigned chil
 bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
 bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*)); /* tree traversal with an additional data parameter */
 int surgescript_object_depth(const surgescript_object_t* object); /* depth in the object tree (root has depth zero) */
+bool surgescript_object_is_ascendant(const surgescript_object_t* object, const surgescript_object_t* ascendant); /* is ascendant an ascendant of object? */
 
 /* life operations */
 const char* surgescript_object_state(const surgescript_object_t *object); /* each object is a state machine. in which state am i in? */
