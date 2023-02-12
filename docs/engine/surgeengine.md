@@ -32,9 +32,9 @@ Properties
 
 Version of the Open Surge Engine.
 
-#### mobileMode
+#### mobile
 
-`mobileMode`: boolean, read-only.
+`mobile`: boolean, read-only.
 
 Whether or not the engine has been launched in mobile mode. The user may be playing on a mobile device or on a Desktop computer with the mobile simulation enabled.
 
