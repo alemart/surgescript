@@ -762,7 +762,7 @@ bool surgescript_object_update(surgescript_object_t* object)
 
     /* check if I am destroyed */
     if(object->is_killed) {
-        surgescript_objectmanager_delete(manager, object->handle); /* children gets deleted too */
+        surgescript_objectmanager_delete(manager, object->handle); /* children are deleted too */
         return false;
     }
 
