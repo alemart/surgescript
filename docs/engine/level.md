@@ -245,6 +245,22 @@ object "My Setup Object"
 }
 ```
 
+#### entityId
+
+`entityId(entityObject)`
+
+Returns the [ID](#entity) of the provided [entity](/engine/entity), if it is defined. If no such ID is defined, an empty string is returned.
+
+*Available since:* Open Surge 0.6.1
+
+*Arguments*
+
+* `entityObject`: object. An object tagged [entity](/engine/entity).
+
+*Returns*
+
+A string with a hexadecimal identification code, or an empty string.
+
 #### setup
 
 `setup(config)`
