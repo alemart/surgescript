@@ -38,7 +38,22 @@ Properties
 
 `position`: [Vector2](/engine/vector2) object.
 
-The position of the camera in world space.
+The position of the camera in world space. Tip: use [lateUpdate()](/engine/entity) if you need to change it.
+
+*Example*
+```cs
+using SurgeEngine.Camera;
+using SurgeEngine.Player;
+
+object "My Simple Camera" is "awake", "entity"
+{
+    fun lateUpdate()
+    {
+        player = Player.active;
+        Camera.position = player.transform.position;
+    }
+}
+```
 
 #### locked
 

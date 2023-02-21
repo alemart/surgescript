@@ -53,6 +53,29 @@ Private entities cannot be spawned via the level editor (they will be hidden).
 Functions
 ---------
 
+#### lateUpdate
+
+`lateUpdate()`
+
+If `lateUpdate()` is implemented in your entity, it will be called after all other objects have been updated. This handy function helps order script execution. For example: a routine that controls the [Camera](/engine/camera) should be implemented in `lateUpdate()`, since it's guaranteed to be executed after other entities have been updated.
+
+*Available since:* Open Surge 0.6.1
+
+*Example*
+```cs
+using SurgeEngine.Camera;
+using SurgeEngine.Player;
+
+object "My Simple Camera" is "awake", "entity"
+{
+    fun lateUpdate()
+    {
+        player = Player.active;
+        Camera.position = player.transform.position;
+    }
+}
+```
+
 #### onReset
 
 `onReset()`
