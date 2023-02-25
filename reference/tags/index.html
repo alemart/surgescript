@@ -803,6 +803,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#tagsof" class="md-nav__link">
+    tagsOf
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1557,6 +1564,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../../engine/video/" class="md-nav__link">
+        Video
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../engine/screen/" class="md-nav__link">
         Screen
       </a>
@@ -1640,6 +1661,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#tagsof" class="md-nav__link">
+    tagsOf
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1670,7 +1698,7 @@
 <p><code>list()</code></p>
 <p>Lists all tags used in all objects.</p>
 <p><em>Returns</em></p>
-<p>This function spawns a new Array object with all tags and returns it.</p>
+<p>A new <a href="/reference/array">Array</a> of strings with all tags used in all objects.</p>
 <h4 id="select">select</h4>
 <p><code>select(tagName)</code></p>
 <p>Selects all objects that are tagged with <code>tagName</code>.</p>
@@ -1679,7 +1707,17 @@
 <li><code>tagName</code>: string.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>This function returns a new Array with all the names of the objects tagged with <code>tagName</code>.</p>
+<p>A new <a href="/reference/array">Array</a> of strings with the names of the objects tagged with <code>tagName</code>. If there are no such objects, an empty array is returned.</p>
+<h4 id="tagsof">tagsOf</h4>
+<p><code>tagsOf(objectName)</code></p>
+<p>Returns the tags of the objects named <code>objectName</code>.</p>
+<p><em>Available since:</em> SurgeScript 0.6.0</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>objectName</code>: string.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>A new <a href="/reference/array">Array</a> of strings with the names of the tags associated with the objects named <code>objectName</code>. If the objects are untagged or do not exist, an empty array is returned.</p>
 
               
             </article>
