@@ -12,9 +12,7 @@ object "Application"
 {
     state "main"
     {
-        platform = currentPlatform();
-        Console.print(platform);
-
+        Console.print(platformName());
         state = "done";
     }
 
@@ -22,7 +20,7 @@ object "Application"
     {
     }
 
-    fun currentPlatform()
+    fun platformName()
     {
         if(Platform.android)
             return "Android";
