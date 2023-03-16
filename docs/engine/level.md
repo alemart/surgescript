@@ -340,15 +340,16 @@ Pauses the game.
 
 Loads the specified level/quest.
 
-* If you pass the path to a level (a .lev file in the *levels/* folder), the specified level will be loaded. The state of the current level (position of the [entities](/engine/entity) and so on) will be lost.
+* If you pass the path to a level (a .lev file in the *levels/* folder), that level will be loaded. The state of the current level (position of the [entities](/engine/entity) and so on) will be lost.
 
-* If you pass the path to a quest (a .qst file in the *quests/* folder), the specified quest will be loaded and, when it's completed, the engine will redirect the user back to the level he/she was before. This might be useful for creating bonuses, configuration screens, and so on.
+* If you pass the path to a quest (a .qst file in the *quests/* folder), that quest will be loaded and, when it's completed or aborted, the engine will redirect the user back to the level he/she was before.
 
 *Arguments*
 
 * `filepath`: string. Relative path of the level or quest to be loaded.
 
 *Example*
+
 ```cs
 using SurgeEngine.Level;
 
@@ -364,6 +365,25 @@ object "My Level Loader"
             Console.print("Unrecognized level: " + id);
     }
 }
+```
+
+#### loadAndReturn
+
+`loadAndReturn(filepath)`
+
+Loads the specified level or quest and, after completing or exiting the loaded scene, returns to the level the player was before. If you pass the path to a quest, this function behaves exactly like [load()](#load).
+
+*Available since:* Open Surge 0.6.1
+
+*Arguments*
+
+* `filepath`: string. Relative path of the level or quest to be loaded.
+
+*Example*
+
+```cs
+// Load a Bonus Stage and return to the level the player was before
+Level.loadAndReturn("levels/bonus_stage.lev");
 ```
 
 #### loadNext
