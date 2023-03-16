@@ -322,6 +322,8 @@ Restarts the current level.
 
 Prompts the user to see if he/she wants to quit the current level.
 
+*Deprecated since:* Open Surge 0.6.1
+
 #### abort
 
 `abort()`
@@ -357,10 +359,16 @@ object "My Level Loader"
 {
     fun load(id)
     {
-        if(id == "beach")
-            Level.load("levels/my_beach_level.lev");
-        else if(id == "forest")
-            Level.load("levels/my_forest_level.lev");
+        if(id == "beach") {
+            Level.load("levels/beach_level.lev");
+        }
+        else if(id == "forest") {
+            Level.load("levels/forest_level.lev");
+        }
+        else if(id == "bonus") {
+            Level.next -= 1; // return to the current level after completing the bonus
+            Level.load("levels/bonus_stage.lev");
+        }
         else
             Console.print("Unrecognized level: " + id);
     }
@@ -382,7 +390,7 @@ Loads the specified level or quest and, after completing or exiting the loaded s
 *Example*
 
 ```cs
-// Load a Bonus Stage and return to the level the player was before
+// Load a bonus stage and return to the current level if the player completes it or exits from it
 Level.loadAndReturn("levels/bonus_stage.lev");
 ```
 
