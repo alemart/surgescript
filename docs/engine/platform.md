@@ -22,13 +22,13 @@ object "Application"
 
     fun platformName()
     {
-        if(Platform.android)
+        if(Platform.isAndroid)
             return "Android";
-        else if(Platform.windows)
+        else if(Platform.isWindows)
             return "Windows";
-        else if(Platform.macos)
+        else if(Platform.isMacOS)
             return "macOS";
-        else if(Platform.unix)
+        else if(Platform.isUnix)
             return "Unix";
         else
             return "Unknown";
@@ -41,26 +41,26 @@ object "Application"
 Properties
 ----------
 
-#### windows
+#### isWindows
 
-`windows`: boolean, read-only.
+`isWindows`: boolean, read-only.
 
 Will be `true` if the game engine is running on Microsoft Windows.
 
-#### unix
+#### isUnix
 
-`unix`: boolean, read-only.
+`isUnix`: boolean, read-only.
 
 Will be `true` if the game engine is running on a Unix-like operating system such as: Linux, BSD, macOS, Android, etc.
 
-#### macos
+#### isMacOS
 
-`macos`: boolean, read-only.
+`isMacOS`: boolean, read-only.
 
 Will be `true` if the game engine is running on macOS.
 
-#### android
+#### isAndroid
 
-`android`: boolean, read-only.
+`isAndroid`: boolean, read-only.
 
 Will be `true` if the game engine is running on Android. Check [SurgeEngine.mobile](/engine/surgeengine#mobile) instead if you want to see if the game engine is running on mobile mode.
