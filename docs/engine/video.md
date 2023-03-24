@@ -26,6 +26,14 @@ object "Application"
 Properties
 ----------
 
+#### fullscreen
+
+`fullscreen`: boolean.
+
+Whether or not the engine is running on fullscreen mode. Use this property to toggle between windowed and fullscreen modes.
+
+*Available since:* Open Surge 0.6.1
+
 #### mode
 
 `mode`: string.
