@@ -93,7 +93,9 @@ nav:
             - 'MobileGamepad': 'engine/mobile_gamepad.md'
         - 'Lang': 'engine/lang.md'
         - 'Level': 'engine/level.md'
-        - 'Platform': 'engine/platform.md'
+        - 'Platform':
+            - 'Platform': 'engine/platform.md'
+            - 'Android': 'engine/androidplatform.md'
         - 'Player': 'engine/player.md'
         - 'Prefs': 'engine/prefs.md'
         - 'SurgeEngine': 'engine/surgeengine.md'

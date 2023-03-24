@@ -1,11 +1,14 @@
 Platform
 ========
 
-Use `SurgeEngine.Platform` to know which platform the game engine is currently running on.
+Routines specific to the platform the game engine is currently running on.
+
+*Available since*: Open Surge 0.6.1
 
 *Example*
 
 ```cs
+// Let's find out which platform the game engine is currently running on
 using SurgeEngine.Platform;
 
 object "Application"
@@ -36,8 +39,6 @@ object "Application"
 }
 ```
 
-*Available since*: Open Surge 0.6.1
-
 Properties
 ----------
 
@@ -63,4 +64,10 @@ Will be `true` if the game engine is running on macOS.
 
 `isAndroid`: boolean, read-only.
 
-Will be `true` if the game engine is running on Android. Check [SurgeEngine.mobile](/engine/surgeengine#mobile) instead if you want to see if the game engine is running on mobile mode.
+Will be `true` if the game engine is running on Android. Check [SurgeEngine.mobile](/engine/surgeengine#mobile) instead if you want to know if the game engine is running on mobile mode.
+
+#### Android
+
+`Android`: [AndroidPlatform](/engine/androidplatform) object, read-only.
+
+Android-specific routines.
