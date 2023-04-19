@@ -69,3 +69,11 @@ Should the sensor be rendered? Useful for debugging. Defaults to `false`.
 `enabled`: boolean.
 
 Indicates whether the sensor is enabled or not. Defaults to `true`.
+
+#### layer
+
+`layer`: string.
+
+The layer of this sensor. This property assumes one of the following values: `"default"`, `"green"` or `"yellow"`. If it's set to `"default"`, then all non-passable bricks and [brick-like objects](/engine/brick) are sensed. If it's set to `"green"`, then all non-passable bricks and brick-like objects are sensed, except the ones in the yellow layer. Conversely, if it's set to `"yellow"`, then all non-passable bricks and brick-like objects are sensed, except the ones in the green layer.
+
+*Available since:* Open Surge 0.6.1
