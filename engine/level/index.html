@@ -52,12 +52,16 @@
   
     
     
+      
     
     
     
-    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
   
     
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
     
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
@@ -104,6 +108,28 @@
         </div>
       </div>
     </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1z"/></svg>
+            </label>
+          
+        
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5z"/></svg>
+            </label>
+          
+        
+      </form>
     
     
     
@@ -1576,6 +1602,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#loadandreturn" class="md-nav__link">
+    loadAndReturn
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#loadnext" class="md-nav__link">
     loadNext
   </a>
@@ -1598,6 +1631,67 @@
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_13" type="checkbox" id="__nav_5_13" >
+      
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5_13">
+          Platform
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Platform" data-md-level="2">
+        <label class="md-nav__title" for="__nav_5_13">
+          <span class="md-nav__icon md-icon"></span>
+          Platform
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../platform/" class="md-nav__link">
+        Platform
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../androidplatform/" class="md-nav__link">
+        Android
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
     </li>
   
 
@@ -1668,18 +1762,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_17" type="checkbox" id="__nav_5_17" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_18" type="checkbox" id="__nav_5_18" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_17">
+        <label class="md-nav__link" for="__nav_5_18">
           UI
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="UI" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_17">
+        <label class="md-nav__title" for="__nav_5_18">
           <span class="md-nav__icon md-icon"></span>
           UI
         </label>
@@ -1729,18 +1823,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_19" type="checkbox" id="__nav_5_19" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_20" type="checkbox" id="__nav_5_20" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_19">
+        <label class="md-nav__link" for="__nav_5_20">
           Video
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Video" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_19">
+        <label class="md-nav__title" for="__nav_5_20">
           <span class="md-nav__icon md-icon"></span>
           Video
         </label>
@@ -2031,6 +2125,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#loadandreturn" class="md-nav__link">
+    loadAndReturn
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#loadnext" class="md-nav__link">
     loadNext
   </a>
@@ -2292,6 +2393,7 @@
 <h4 id="quit">quit</h4>
 <p><code>quit()</code></p>
 <p>Prompts the user to see if he/she wants to quit the current level.</p>
+<p><em>Deprecated since:</em> Open Surge 0.6.1</p>
 <h4 id="abort">abort</h4>
 <p><code>abort()</code></p>
 <p>Quits the current level/quest without prompting the user.</p>
@@ -2303,32 +2405,50 @@
 <p>Loads the specified level/quest.</p>
 <ul>
 <li>
-<p>If you pass the path to a level (a .lev file in the <em>levels/</em> folder), the specified level will be loaded. The state of the current level (position of the <a href="/engine/entity">entities</a> and so on) will be lost.</p>
+<p>If you pass the path to a level (a .lev file in the <em>levels/</em> folder), that level will be loaded. The state of the current level (position of the <a href="/engine/entity">entities</a> and so on) will be lost.</p>
 </li>
 <li>
-<p>If you pass the path to a quest (a .qst file in the <em>quests/</em> folder), the specified quest will be loaded and, when it's completed, the engine will redirect the user back to the level he/she was before. This might be useful for creating bonuses, configuration screens, and so on.</p>
+<p>If you pass the path to a quest (a .qst file in the <em>quests/</em> folder), that quest will be loaded and, when it's completed or aborted, the engine will redirect the user back to the level he/she was before.</p>
 </li>
 </ul>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>filepath</code>: string. Relative path of the level or quest to be loaded.</li>
 </ul>
-<p><em>Example</em>
+<p><em>Example</em></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Level</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>
 <a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Level Loader&quot;</span><span class="w"></span>
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="p">{</span><span class="w"></span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="n">fun</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"></span>
 <a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;beach&quot;</span><span class="p">)</span><span class="w"></span>
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">            </span><span class="n">Level</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;levels/my_beach_level.lev&quot;</span><span class="p">);</span><span class="w"></span>
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;forest&quot;</span><span class="p">)</span><span class="w"></span>
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">            </span><span class="n">Level</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;levels/my_forest_level.lev&quot;</span><span class="p">);</span><span class="w"></span>
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">        </span><span class="k">else</span><span class="w"></span>
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Unrecognized level: &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w"></span>
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="p">}</span><span class="w"></span>
-</code></pre></div></p>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;beach&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">            </span><span class="n">Level</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;levels/beach_level.lev&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;forest&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">            </span><span class="n">Level</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;levels/forest_level.lev&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="k">else</span><span class="w"> </span><span class="nf">if</span><span class="p">(</span><span class="n">id</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;bonus&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">            </span><span class="n">Level</span><span class="p">.</span><span class="n">next</span><span class="w"> </span><span class="p">-=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// return to the current level after completing the bonus</span>
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">            </span><span class="n">Level</span><span class="p">.</span><span class="n">load</span><span class="p">(</span><span class="s">&quot;levels/bonus_stage.lev&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">        </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">        </span><span class="k">else</span><span class="w"></span>
+<a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">            </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;Unrecognized level: &quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">id</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h4 id="loadandreturn">loadAndReturn</h4>
+<p><code>loadAndReturn(filepath)</code></p>
+<p>Loads the specified level or quest and, after completing or exiting the loaded scene, returns to the level the player was before. If you pass the path to a quest, this function behaves exactly like <a href="#load">load()</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>filepath</code>: string. Relative path of the level or quest to be loaded.</li>
+</ul>
+<p><em>Example</em></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Load a bonus stage and return to the current level if the player completes it or exits from it</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">Level</span><span class="p">.</span><span class="n">loadAndReturn</span><span class="p">(</span><span class="s">&quot;levels/bonus_stage.lev&quot;</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
 <h4 id="loadnext">loadNext</h4>
 <p><code>loadNext()</code></p>
 <p>Loads the next level in the current quest. This is the usual procedure after <a href="#clear">clearing the level</a>. See also: <a href="#next">next</a>.</p>
@@ -2364,13 +2484,13 @@
       
       
         
-        <a href="../player/" class="md-footer__link md-footer__link--next" aria-label="Next: Player" rel="next">
+        <a href="../platform/" class="md-footer__link md-footer__link--next" aria-label="Next: Platform" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
                 Next
               </span>
-              Player
+              Platform
             </div>
           </div>
           <div class="md-footer__button md-icon">
