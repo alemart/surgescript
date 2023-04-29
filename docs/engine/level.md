@@ -164,6 +164,14 @@ The number of the next level in the current quest: 1 means the first level of th
 
 Used to specify a [function object](/tutorials/advanced_features/#function-objects) to be called when the level is unloaded.
 
+#### debugMode
+
+`debugMode`: boolean.
+
+Whether or not the Debug Mode is activated.
+
+*Available since:* Open Surge 0.6.1
+
 Functions
 ---------
 
