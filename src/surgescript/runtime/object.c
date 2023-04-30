@@ -754,7 +754,7 @@ void surgescript_object_release(surgescript_object_t* object)
 
 /*
  * surgescript_object_update()
- * Updates this object; runs my programs and those of my children
+ * Updates this object; runs the current state and returns true if my children should be updated too
  */
 bool surgescript_object_update(surgescript_object_t* object)
 {
@@ -769,10 +769,11 @@ bool surgescript_object_update(surgescript_object_t* object)
     /* update myself */
     if(object->is_active) {
         object->time_spent += run_current_state(object);
-        return true; /* success! */
+        return object->is_active; /* will generally be true, but not necessarily */
     }
-    else
-        return false; /* optimize; don't update my children */
+
+    /* optimize; don't update my children */
+    return false;
 }
 
 /*
