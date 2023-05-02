@@ -18,7 +18,7 @@ set(PROJECT_YEARS "2016-2023")
 # Default config
 set(CMAKE_C_STANDARD 11)
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build: Debug | Release | MinSizeRel | RelWithDebInfo" FORCE)
+    set(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "Choose the type of build: Debug | Release | MinSizeRel | RelWithDebInfo" FORCE)
     set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo")
 endif()
 
