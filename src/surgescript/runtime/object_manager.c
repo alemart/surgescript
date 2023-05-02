@@ -234,7 +234,7 @@ bool surgescript_objectmanager_exists(const surgescript_objectmanager_t* manager
 
 /*
  * surgescript_objectmanager_get()
- * Gets an object from the pool (returns NULL if not found)
+ * Gets an object from the pool (crashes if not found)
  */
 surgescript_object_t* surgescript_objectmanager_get(const surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle)
 {
@@ -498,6 +498,14 @@ void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manag
     add_to_plugin_list(manager, object_name);
 }
 
+/*
+ * surgescript_objectmanager_is_declared()
+ * Checks if the specified class of objects exist
+ */
+bool surgescript_objectmanager_is_declared(const surgescript_objectmanager_t* manager, const char* object_name)
+{
+    return surgescript_programpool_is_compiled(manager->program_pool, object_name);
+}
 
 
 
