@@ -193,30 +193,30 @@ The spawned object.
 
 `spawnEntity(objectName, position)`
 
-Spawns an [entity](/engine/entity) named `objectName` at a certain `position`. This works like [spawn](#spawn), but lets you position the entity as well.
+Spawns an [entity](/engine/entity) named `objectName` at a certain `position`. The entity won't be garbage collected, as in [spawn](#spawn).
 
 *Arguments*
 
 * `objectName`: string. The name of the entity to be spawned.
-* `position`: [Vector2](/engine/vector2) object. A position in world coordinates.
+* `position`: [Vector2](/engine/vector2) object. The position of the entity.
 
 *Returns*
 
-The spawned entity.
+The spawned entity object.
 
 #### entity
 
-`entity(id)`
+`entity(entityId)`
 
-[Entities](/engine/entity) placed on the level via the editor are automatically assigned an ID, a hexadecimal identification code. The purpose of the ID is to uniquely identify the entity in the level. This function returns the entity whose ID is `id`. It's recommended to cache the return value of this function. Do not call it every frame (better performance).
+[Entities](/engine/entity) spawned with [spawnEntity](#spawnentity) are automatically assigned an ID, a hexadecimal identification string. The purpose of the ID is to uniquely identify the entity in the level. This function returns the entity whose ID is `entityId`.
 
 *Arguments*
 
-* `id`: string. The ID of the entity to be retrieved.
+* `entityId`: string. The ID of the entity to be retrieved.
 
 *Returns*
 
-The desired entity ([object](/reference/object)), or `null` if there is no entity associated with the given ID.
+The desired entity object, or `null` if there is no entity associated with the given ID.
 
 *Example*
 
@@ -263,11 +263,43 @@ Returns the [ID](#entity) of the provided [entity](/engine/entity), if it is def
 
 *Arguments*
 
-* `entityObject`: object. An object tagged [entity](/engine/entity).
+* `entityObject`: object. An entity.
 
 *Returns*
 
 A string with a hexadecimal identification code, or an empty string.
+
+#### findEntity
+
+`findEntity(entityName)`
+
+Finds an entity named `entityName` that was spawned with [spawnEntity](#spawnentity). Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+
+*Available since:* Open Surge 0.6.1
+
+*Arguments*
+
+* `entityName`: string. The name of an entity object.
+
+*Returns*
+
+An entity named `entityName`, or `null` if there is none.
+
+#### findEntities
+
+`findEntities(entityName)`
+
+Finds all entities named `entityName` that were spawned with [spawnEntity](#spawnentity). Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+
+*Available since:* Open Surge 0.6.1
+
+*Arguments*
+
+* `entityName`: string. The name of the entities to be searched.
+
+*Returns*
+
+A new array containing all entities named `entityName`. If none are found, an empty array is returned.
 
 #### setup
 
