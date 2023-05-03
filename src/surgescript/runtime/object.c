@@ -71,7 +71,8 @@ void surgescript_object_release(surgescript_object_t* object);
 
 /* private stuff */
 #define MAIN_STATE "main"
-static char* state2fun(const char* state);
+#define STATE2FUN_BUFFER_SIZE ((SS_NAMEMAX+1)+6) /* prefix a string with "state:" */
+static char* state2fun(const char* state, char* buffer, size_t size);
 static uint64_t run_current_state(const surgescript_object_t* object);
 static surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
@@ -846,9 +847,9 @@ void surgescript_object_call_function(surgescript_object_t* object, const char* 
  */
 void surgescript_object_call_state(surgescript_object_t* object, const char* state_name)
 {
-    char* fun_name = state2fun(state_name);
+    char buffer[STATE2FUN_BUFFER_SIZE];
+    char* fun_name = state2fun(state_name, buffer, sizeof(buffer));
     surgescript_object_call_function(object, fun_name, NULL, 0, NULL);
-    ssfree(fun_name);
 }
 
 
@@ -873,12 +874,22 @@ size_t surgescript_object_memspent(const surgescript_object_t* object)
 }
 
 /* private stuff */
-char* state2fun(const char* state)
+char* state2fun(const char* state, char* buffer, size_t size)
 {
-    /* fun = STATE2FUN + state */
-    static const char prefix[] = "state:";
-    char *fun_name = ssmalloc((strlen(state) + strlen(prefix) + 1) * sizeof(char));
-    return strcat(strcpy(fun_name, prefix), state);
+    /* return (buffer = prefix + state); */
+    const char prefix[] = "state:";
+    const size_t prefix_size = sizeof(prefix) - 1; /* 6, assumed to be less than size */
+    size_t suffix_size = strlen(state);
+
+    memcpy(buffer, prefix, prefix_size);
+    memcpy(buffer + prefix_size, state, size - prefix_size);
+
+    if(prefix_size + suffix_size < size)
+        buffer[prefix_size + suffix_size] = '\0';
+    else
+        buffer[size - 1] = '\0';
+
+    return buffer;
 }
 
 uint64_t run_current_state(const surgescript_object_t* object)
@@ -894,14 +905,14 @@ uint64_t run_current_state(const surgescript_object_t* object)
 
 surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name)
 {
-    char* fun_name = state2fun(state_name);
+    char buffer[STATE2FUN_BUFFER_SIZE];
+    char* fun_name = state2fun(state_name, buffer, sizeof(buffer));
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
     surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
 
     if(program == NULL)
         ssfatal("Runtime Error: state \"%s\" of object \"%s\" doesn't exist.", state_name, object->name);
 
-    ssfree(fun_name);
     return program;
 }
 
