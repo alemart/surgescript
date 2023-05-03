@@ -499,10 +499,10 @@ void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manag
 }
 
 /*
- * surgescript_objectmanager_is_declared()
+ * surgescript_objectmanager_class_exists()
  * Checks if the specified class of objects exist
  */
-bool surgescript_objectmanager_is_declared(const surgescript_objectmanager_t* manager, const char* object_name)
+bool surgescript_objectmanager_class_exists(const surgescript_objectmanager_t* manager, const char* object_name)
 {
     return surgescript_programpool_is_compiled(manager->program_pool, object_name);
 }
