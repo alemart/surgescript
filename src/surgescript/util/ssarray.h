@@ -58,10 +58,10 @@
     
 /*
  * ssarray_remove()
- * removes the index-th element from the array. Must give index >= 0
+ * removes the index-th element from the array
  */
  #define ssarray_remove(arr, index)           \
-    do { for(int j = (index) + 1; j < (arr##_len); j++) { memmove((arr) + j - 1, (arr) + j, sizeof(*(arr))); } if(arr##_len > (index)) arr##_len--; } while(0)
+    do { if((index) < arr##_len && (index) >= 0) { memmove((arr) + (index), (arr) + ((index) + 1), (arr##_len - ((index) + 1)) * sizeof(*(arr))); arr##_len--; } } while(0)
 
 /*
  * ssarray_length()
