@@ -474,63 +474,6 @@ int surgescript_object_find_tagged_descendants(const surgescript_object_t* objec
 }
 
 /*
- * surgescript_object_add_child()
- * Adds a child to this object (adds the link)
- */
-void surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle)
-{
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-    surgescript_object_t* child;
-
-    /* check if it doesn't exist already */
-    for(int i = 0; i < ssarray_length(object->child); i++) {
-        if(object->child[i] == child_handle)
-            return;
-    }
-
-    /* check if the child isn't myself */
-    if(object->handle == child_handle) {
-        ssfatal("Runtime Error: object 0x%X (\"%s\") can't be a child of itself.", object->handle, object->name);
-        return;
-    }
-
-    /* check if the child belongs to someone else */
-    child = surgescript_objectmanager_get(manager, child_handle);
-    if(child->parent != child->handle) {
-        ssfatal("Runtime Error: can't add child 0x%X (\"%s\") to object 0x%X (\"%s\") - child already registered", child->handle, child->name, object->handle, object->name);
-        return;
-    }
-
-    /* add it */
-    ssarray_push(object->child, child->handle);
-    child->parent = object->handle;
-    child->depth = 1 + object->depth;
-}
-
-/*
- * surgescript_object_remove_child()
- * Removes a child having this handle from this object (removes the link only)
- */
-bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle)
-{
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-
-    /* find the child */
-    for(int i = 0; i < ssarray_length(object->child); i++) {
-        if(object->child[i] == child_handle) {
-            surgescript_object_t* child = surgescript_objectmanager_get(manager, child_handle);
-            ssarray_remove(object->child, i);
-            child->parent = child->handle; /* the child is now a root */
-            return true;
-        }
-    }
-
-    /* child not found */
-    sslog("Can't remove child 0x%X of object 0x%X (\"%s\"): child not found", child_handle, object->handle, object->name);
-    return false;
-}
-
-/*
  * surgescript_object_depth()
  * The depth of the object in the object tree (the root has depth zero)
  */
@@ -556,6 +499,114 @@ bool surgescript_object_is_ascendant(const surgescript_object_t* object, const s
 
     return object->handle == target_handle;
 }
+
+/*
+ * surgescript_object_add_child()
+ * Adds a child to this object (adds the link)
+ */
+bool surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle)
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_object_t* child;
+
+    /* check if it doesn't exist already */
+    for(int i = 0; i < ssarray_length(object->child); i++) {
+        if(object->child[i] == child_handle)
+            return true;
+    }
+
+    /* check if the child isn't myself */
+    if(object->handle == child_handle) {
+        ssfatal("Runtime Error: object 0x%X (\"%s\") can't be a child of itself.", object->handle, object->name);
+        return false;
+    }
+
+    /* check if the child belongs to someone else */
+    child = surgescript_objectmanager_get(manager, child_handle);
+    if(child->parent != child->handle) {
+        ssfatal("Runtime Error: can't add child 0x%X (\"%s\") to object 0x%X (\"%s\") - child already registered", child->handle, child->name, object->handle, object->name);
+        return false;
+    }
+
+    /* add it */
+    ssarray_push(object->child, child->handle);
+    child->parent = object->handle;
+    child->depth = 1 + object->depth;
+
+    /* done */
+    return true;
+}
+
+/*
+ * surgescript_object_remove_child()
+ * Removes a child having this handle from this object (removes the link only)
+ */
+bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle)
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+
+    /* find the child */
+    for(int i = 0; i < ssarray_length(object->child); i++) {
+        if(object->child[i] == child_handle) {
+            surgescript_object_t* child = surgescript_objectmanager_get(manager, child_handle);
+            ssarray_remove(object->child, i);
+            child->parent = child->handle; /* the child is now a root */
+            child->depth = 0;
+            return true;
+        }
+    }
+
+    /* child not found */
+    sslog("Can't remove child 0x%X of object 0x%X (\"%s\"): child not found", child_handle, object->handle, object->name);
+    return false;
+}
+
+/*
+ * surgescript_object_reparent()
+ * Changes the parent of this object. This function must not be available in
+ * the API in an unbounded manner, as it may have unintended side-effects
+ */
+bool surgescript_object_reparent(surgescript_object_t* object, unsigned new_parent_handle, int flags)
+{
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_object_t* old_parent = surgescript_objectmanager_get(manager, object->parent);
+    surgescript_object_t* new_parent = surgescript_objectmanager_get(manager, new_parent_handle);
+
+    /* nothing to do */
+    if(object->handle == new_parent_handle)
+        return true;
+
+    /* remove previous parent */
+    if(!surgescript_object_remove_child(old_parent, object->handle)) {
+        sslog("Can't reparent object 0x%X (\"%s\")", object->handle, object->name); /* this shouldn't happen */
+        return false;
+    }
+
+    /* add new parent */
+    if(!surgescript_object_add_child(new_parent, object->handle)) {
+        ssfatal("Can't reparent object 0x%X (\"%s\")", object->handle, object->name);
+        return false;
+    }
+
+    /* flags */
+
+    /*
+
+    How exactly should the reparenting take place, other than changing the links?
+    Should the transform of the object be changed in any way?
+    For now, we do nothing. The flags are unused and must set to be zero.
+
+    */
+    if(flags != 0) {
+        ssfatal("Can't reparent object 0x%X (\"%s\"): unsupported flags 0x%X", object->handle, object->name, flags);
+        return false;
+    }
+
+    /* done */
+    return true;
+}
+
+
 
 
 /* life operations */

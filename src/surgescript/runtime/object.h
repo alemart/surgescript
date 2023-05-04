@@ -70,12 +70,13 @@ unsigned surgescript_object_find_descendant(const surgescript_object_t* object, 
 int surgescript_object_find_descendants(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* finds all descendants named name */
 unsigned surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name); /* find 1st child (or grand-child...) tagged tag_name */
 int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*)); /* finds all descendants tagged tag_name */
-void surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle); /* adds a child to this object */
-bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle); /* removes a child having this handle from this object */
 bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
 bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*)); /* tree traversal with an additional data parameter */
 int surgescript_object_depth(const surgescript_object_t* object); /* depth in the object tree (root has depth zero) */
 bool surgescript_object_is_ascendant(const surgescript_object_t* object, const surgescript_object_t* ascendant); /* is ascendant an ascendant of object? */
+bool surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle); /* adds a child to this object */
+bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle); /* removes a child having this handle from this object */
+bool surgescript_object_reparent(surgescript_object_t* object, unsigned new_parent_handle, int flags); /* changes the parent of this object */
 
 /* life operations */
 const char* surgescript_object_state(const surgescript_object_t *object); /* each object is a state machine. in which state am i in? */
