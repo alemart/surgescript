@@ -97,5 +97,6 @@ struct surgescript_transform_t* surgescript_object_transform(surgescript_object_
 void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value); /* call a SurgeScript function */
 void surgescript_object_call_super_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value); /* call a function of the super class */
 void surgescript_object_call_state(surgescript_object_t* object, const char* state_name); /* run the code of a state */
+void surgescript_object_call_current_state(surgescript_object_t* object); /* run the code of the current state */
 
 #endif

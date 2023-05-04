@@ -880,7 +880,6 @@ bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* dat
     return false;
 }
 
-
 /*
  * surgescript_object_call_function()
  * Call SurgeScript functions from C (you may pass NULL to return_value;
@@ -891,7 +890,6 @@ void surgescript_object_call_function(surgescript_object_t* object, const char* 
     call_object_function(object, object->name, fun_name, param, num_params, return_value);
 }
 
-
 /*
  * surgescript_object_call_super_function()
  * Call function of the super class. Analogous to surgescript_object_call_function()
@@ -900,7 +898,6 @@ void surgescript_object_call_super_function(surgescript_object_t* object, const 
 {
     call_object_function(object, "Object", fun_name, param, num_params, return_value);
 }
-
 
 /*
  * surgescript_object_call_state()
@@ -913,6 +910,14 @@ void surgescript_object_call_state(surgescript_object_t* object, const char* sta
     surgescript_object_call_function(object, fun_name, NULL, 0, NULL);
 }
 
+/*
+ * surgescript_object_call_current_state()
+ * Runs the code of the current state of the given object from C
+ */
+void surgescript_object_call_current_state(surgescript_object_t* object)
+{
+    run_current_state(object);
+}
 
 /*
  * surgescript_object_timespent()
