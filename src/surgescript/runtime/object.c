@@ -474,6 +474,28 @@ int surgescript_object_find_tagged_descendants(const surgescript_object_t* objec
 }
 
 /*
+ * surgescript_object_find_ascendant()
+ * Finds the ascendant named name that is closest to the object in the tree.
+ * Returns a null handle if no such ascendant exists.
+ */
+unsigned surgescript_object_find_ascendant(const surgescript_object_t* object, const char* name)
+{
+    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+
+    object = surgescript_objectmanager_get(manager, object->parent);
+    while(object->handle != object->parent) {
+        if(0 == strcmp(object->name, name))
+            return object->handle;
+        object = surgescript_objectmanager_get(manager, object->parent);
+    }
+
+    if(0 == strcmp(object->name, name)) /* is it the root? */
+        return object->handle;
+    else
+        return surgescript_objectmanager_null(manager); /* not found */
+}
+
+/*
  * surgescript_object_depth()
  * The depth of the object in the object tree (the root has depth zero)
  */

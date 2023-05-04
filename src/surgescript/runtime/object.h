@@ -66,10 +66,11 @@ unsigned surgescript_object_child(const surgescript_object_t* object, const char
 int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* gets all direct children named name */
 unsigned surgescript_object_tagged_child(const surgescript_object_t* object, const char* tag_name); /* gets the handle to a child tagged tag_name */
 int surgescript_object_tagged_children(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*)); /* gets all direct children tagged tag_name */
-unsigned surgescript_object_find_descendant(const surgescript_object_t* object, const char* name); /* finds a child (or grand-child...) whose name equals name */
+unsigned surgescript_object_find_descendant(const surgescript_object_t* object, const char* name); /* finds a descendant named name */
 int surgescript_object_find_descendants(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* finds all descendants named name */
 unsigned surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name); /* find 1st child (or grand-child...) tagged tag_name */
 int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*)); /* finds all descendants tagged tag_name */
+unsigned surgescript_object_find_ascendant(const surgescript_object_t* object, const char* name); /* finds an ascendant named name */
 bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
 bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*)); /* tree traversal with an additional data parameter */
 int surgescript_object_depth(const surgescript_object_t* object); /* depth in the object tree (root has depth zero) */
