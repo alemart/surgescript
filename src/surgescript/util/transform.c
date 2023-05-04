@@ -27,10 +27,33 @@
 #include "../runtime/object.h"
 #include "../runtime/object_manager.h"
 
+/* A Transform holds position, rotation and scale
+   TODO: change this to a 4x4 matrix representation for more flexibility */
+struct surgescript_transform_t
+{
+    /* we'll make this transform struct public */
+    struct {
+        float x, y, z; /* local position in world units */
+    } position;
+    
+    struct {
+        float x, y, z; /* euler angles in degrees */
+    } rotation; /* note: use the API to rotate */
+    
+    struct {
+        float x, y, z; /* scale multipliers */
+    } scale;
+
+    /* internal data */
+    struct {
+        float sx, cx, sy, cy, sz, cz; /* cached sin & cos of each component of the rotation */
+    } _;
+};
+
 /* utilities */
 static const float DEG2RAD = 0.01745329251f;
 static const float RAD2DEG = 57.2957795131f;
-static surgescript_transform_t identity = {
+static const surgescript_transform_t IDENTITY = {
     .position = { .x = 0.0f, .y = 0.0f, .z = 0.0f },
     .rotation = { .x = 0.0f, .y = 0.0f, .z = 0.0f },
     .scale    = { .x = 1.0f, .y = 1.0f, .z = 1.0f },
@@ -68,7 +91,7 @@ surgescript_transform_t* surgescript_transform_destroy(surgescript_transform_t* 
  */
 void surgescript_transform_reset(surgescript_transform_t* t)
 {
-    *t = identity;
+    *t = IDENTITY;
 }
 
 /*
@@ -91,6 +114,16 @@ void surgescript_transform_setposition2d(surgescript_transform_t* t, float x, fl
 }
 
 /*
+ * surgescript_transform_getposition2d()
+ * Get local position
+ */
+void surgescript_transform_getposition2d(const surgescript_transform_t* t, float* x, float* y)
+{
+    *x = t->position.x;
+    *y = t->position.y;
+}
+
+/*
  * surgescript_transform_setrotation2d()
  * Set local rotation angle
  */
@@ -102,6 +135,15 @@ void surgescript_transform_setrotation2d(surgescript_transform_t* t, float degre
 }
 
 /*
+ * surgescript_transform_getrotation2d()
+ * Get local rotation angle
+ */
+void surgescript_transform_getrotation2d(const surgescript_transform_t* t, float* degrees)
+{
+    *degrees = fmodf(t->rotation.z, 360.0f);
+}
+
+/*
  * surgescript_transform_setscale2d()
  * Set local scale
  */
@@ -109,6 +151,16 @@ void surgescript_transform_setscale2d(surgescript_transform_t* t, float sx, floa
 {
     t->scale.x = sx;
     t->scale.y = sy;
+}
+
+/*
+ * surgescript_transform_getscale2d()
+ * Get local scale
+ */
+void surgescript_transform_getscale2d(const surgescript_transform_t* t, float* sx, float* sy)
+{
+    *sx = t->scale.x;
+    *sy = t->scale.y;
 }
 
 /*

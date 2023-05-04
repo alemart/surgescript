@@ -24,35 +24,11 @@
 
 #include <stdbool.h>
 
-/* transform type */
+/* opaque transform type */
 typedef struct surgescript_transform_t surgescript_transform_t;
 
-/* A Transform holds position, rotation and scale
-   (use the API below to change the values) */
-struct surgescript_transform_t
-{
-    /* we'll make this transform struct public */
-    struct {
-        float x, y, z; /* local position in world units */
-    } position;
-    
-    struct {
-        float x, y, z; /* euler angles in degrees */
-    } rotation; /* note: use the API to rotate */
-    
-    struct {
-        float x, y, z; /* scale multipliers */
-    } scale;
-
-
-
-    /* internal data */
-    struct {
-        float sx, cx, sy, cy, sz, cz; /* cached sin & cos of each component of the rotation */
-    } _;
-};
-
 /* forward declarations */
+struct surgescript_transform_t;
 struct surgescript_object_t;
 
 /* public API */
@@ -64,9 +40,12 @@ void surgescript_transform_reset(surgescript_transform_t* t); /* turns t into an
 void surgescript_transform_copy(surgescript_transform_t* dst, const surgescript_transform_t* src); /* copies src to dst */
 
 /* 2D operations */
-void surgescript_transform_setposition2d(surgescript_transform_t* t, float x, float y); /* set position */
-void surgescript_transform_setrotation2d(surgescript_transform_t* t, float degrees); /* set rotation */
-void surgescript_transform_setscale2d(surgescript_transform_t* t, float sx, float sy); /* set scale */
+void surgescript_transform_setposition2d(surgescript_transform_t* t, float x, float y); /* set local position */
+void surgescript_transform_getposition2d(const surgescript_transform_t* t, float* x, float* y); /* get local position */
+void surgescript_transform_setrotation2d(surgescript_transform_t* t, float degrees); /* set local rotation */
+void surgescript_transform_getrotation2d(const surgescript_transform_t* t, float* degrees); /* get local rotation */
+void surgescript_transform_setscale2d(surgescript_transform_t* t, float sx, float sy); /* set local scale */
+void surgescript_transform_getscale2d(const surgescript_transform_t* t, float* sx, float* sy); /* get local position */
 void surgescript_transform_translate2d(surgescript_transform_t* t, float x, float y); /* translate */
 void surgescript_transform_rotate2d(surgescript_transform_t* t, float degrees); /* rotate */
 void surgescript_transform_scale2d(surgescript_transform_t* t, float sx, float sy); /* scale */
@@ -76,7 +55,7 @@ void surgescript_transform_apply2dinverse(const surgescript_transform_t* t, floa
 /* 3D operations */
 /* TODO */
 
-/* object utilities (considers the object tree) */
+/* object utilities */
 void surgescript_transform_util_worldposition2d(const struct surgescript_object_t* object, float* x, float* y); /* get 2D world position */
 void surgescript_transform_util_setworldposition2d(struct surgescript_object_t* object, float x, float y); /* set 2D world position */
 float surgescript_transform_util_worldangle2d(const struct surgescript_object_t* object); /* get 2D world angle */
