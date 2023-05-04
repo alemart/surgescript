@@ -484,20 +484,19 @@ int surgescript_object_depth(const surgescript_object_t* object)
 
 /*
  * surgescript_object_is_ascendant()
- * Checks if parameter ascendant is an ascendant of the given object
+ * Checks if an object is an ascendant of another
  */
-bool surgescript_object_is_ascendant(const surgescript_object_t* object, const surgescript_object_t* ascendant)
+bool surgescript_object_is_ascendant(const surgescript_object_t* object, unsigned ascendant_handle)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-    surgescript_objecthandle_t target_handle = ascendant->handle;
 
-    if(object->handle == ascendant->handle)
+    if(object->handle == ascendant_handle)
         return false;
 
-    while(object->handle != target_handle && object->handle != object->parent)
+    while(object->parent != ascendant_handle && object->parent != object->handle)
         object = surgescript_objectmanager_get(manager, object->parent);
 
-    return object->handle == target_handle;
+    return object->parent == ascendant_handle;
 }
 
 /*
