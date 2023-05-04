@@ -273,7 +273,7 @@ A string with a hexadecimal identification code, or an empty string.
 
 `findEntity(entityName)`
 
-Finds an entity named `entityName` that was spawned with [spawnEntity](#spawnentity). Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Finds an entity named `entityName`. Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
 
 *Available since:* Open Surge 0.6.1
 
@@ -289,7 +289,7 @@ An entity named `entityName`, or `null` if there is none.
 
 `findEntities(entityName)`
 
-Finds all entities named `entityName` that were spawned with [spawnEntity](#spawnentity). Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Finds all entities named `entityName`. Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
 
 *Available since:* Open Surge 0.6.1
 
