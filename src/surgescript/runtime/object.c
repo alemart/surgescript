@@ -903,13 +903,17 @@ char* state2fun(const char* state, char* buffer, size_t size)
     const size_t prefix_size = sizeof(prefix) - 1; /* 6, assumed to be less than size */
     size_t suffix_size = strlen(state);
 
+    /*if(prefix_size < size)*/ /* assumed to be true */
     memcpy(buffer, prefix, prefix_size);
-    memcpy(buffer + prefix_size, state, size - prefix_size);
 
-    if(prefix_size + suffix_size < size)
+    if(prefix_size + suffix_size < size) {
+        memcpy(buffer + prefix_size, state, suffix_size);
         buffer[prefix_size + suffix_size] = '\0';
-    else
+    }
+    else {
+        memcpy(buffer + prefix_size, state, size - prefix_size);
         buffer[size - 1] = '\0';
+    }
 
     return buffer;
 }
