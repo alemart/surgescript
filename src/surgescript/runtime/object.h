@@ -92,7 +92,8 @@ bool surgescript_object_transform_changed(const surgescript_object_t* object); /
 struct surgescript_transform_t* surgescript_object_transform(surgescript_object_t* object); /* inner pointer to the local transform */
 
 /* call SurgeScript functions from C (you may pass NULL to return_value; you may also pass NULL to param iff num_params is 0) */
-void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value);
-void surgescript_object_call_state(surgescript_object_t* object, const char* state_name);
+void surgescript_object_call_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value); /* call a SurgeScript function */
+void surgescript_object_call_super_function(surgescript_object_t* object, const char* fun_name, const struct surgescript_var_t* param[], int num_params, struct surgescript_var_t* return_value); /* call a function of the super class */
+void surgescript_object_call_state(surgescript_object_t* object, const char* state_name); /* run the code of a state */
 
 #endif
