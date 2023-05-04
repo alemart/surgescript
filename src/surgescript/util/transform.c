@@ -138,9 +138,9 @@ void surgescript_transform_setrotation2d(surgescript_transform_t* t, float degre
  * surgescript_transform_getrotation2d()
  * Get local rotation angle
  */
-void surgescript_transform_getrotation2d(const surgescript_transform_t* t, float* degrees)
+float surgescript_transform_getrotation2d(const surgescript_transform_t* t)
 {
-    *degrees = fmodf(t->rotation.z, 360.0f);
+    return fmodf(t->rotation.z, 360.0f);
 }
 
 /*

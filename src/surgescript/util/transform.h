@@ -43,7 +43,7 @@ void surgescript_transform_copy(surgescript_transform_t* dst, const surgescript_
 void surgescript_transform_setposition2d(surgescript_transform_t* t, float x, float y); /* set local position */
 void surgescript_transform_getposition2d(const surgescript_transform_t* t, float* x, float* y); /* get local position */
 void surgescript_transform_setrotation2d(surgescript_transform_t* t, float degrees); /* set local rotation */
-void surgescript_transform_getrotation2d(const surgescript_transform_t* t, float* degrees); /* get local rotation */
+float surgescript_transform_getrotation2d(const surgescript_transform_t* t); /* get local rotation in degrees */
 void surgescript_transform_setscale2d(surgescript_transform_t* t, float sx, float sy); /* set local scale */
 void surgescript_transform_getscale2d(const surgescript_transform_t* t, float* sx, float* sy); /* get local position */
 void surgescript_transform_translate2d(surgescript_transform_t* t, float x, float y); /* translate */
@@ -58,7 +58,7 @@ void surgescript_transform_apply2dinverse(const surgescript_transform_t* t, floa
 /* object utilities */
 void surgescript_transform_util_worldposition2d(const struct surgescript_object_t* object, float* x, float* y); /* get 2D world position */
 void surgescript_transform_util_setworldposition2d(struct surgescript_object_t* object, float x, float y); /* set 2D world position */
-float surgescript_transform_util_worldangle2d(const struct surgescript_object_t* object); /* get 2D world angle */
+float surgescript_transform_util_worldangle2d(const struct surgescript_object_t* object); /* get 2D world angle in degrees */
 void surgescript_transform_util_setworldangle2d(struct surgescript_object_t* object, float degrees); /* set 2D world angle */
 void surgescript_transform_util_lookat2d(struct surgescript_object_t* object, float x, float y); /* rotates the right vector of the object transform so that is points at world position (x,y) */
 void surgescript_transform_util_right2d(const struct surgescript_object_t* object, float* x, float* y); /* get the right vector of the transform */
