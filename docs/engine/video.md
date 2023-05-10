@@ -45,9 +45,3 @@ The current video mode. The following are the valid values:
 * `"best-fit"`: similar to `"fill"`, except that the aspect ratio of the default size of the screen is maintained.
 
 *Available since:* Open Surge 0.6.1
-
-#### Screen
-
-`Screen`: [Screen](/engine/screen) object, read-only.
-
-Screen settings.

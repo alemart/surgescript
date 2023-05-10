@@ -65,9 +65,3 @@ Will be `true` if the game engine is running on macOS.
 `isAndroid`: boolean, read-only.
 
 Will be `true` if the game engine is running on Android. Check [SurgeEngine.mobile](/engine/surgeengine#mobile) instead if you want to know if the game engine is running on mobile mode.
-
-#### Android
-
-`Android`: [AndroidPlatform](/engine/androidplatform) object, read-only.
-
-Android-specific routines.
