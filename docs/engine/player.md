@@ -622,3 +622,44 @@ Does the player have focus?
 *Returns*
 
 Returns `true` if the player has focus, `false` otherwise.
+
+#### moveBy
+
+`moveBy(dx, dy)`
+
+Moves the player by a (`dx`,`dy`) offset after the physics update of the current framestep. This is similar to calling `player.transform.translateBy(dx, dy)` in `lateUpdate()`. See also: [lateUpdate](/engine/entity#lateupdate), [translateBy](/engine/transform#translateby).
+
+*Available since:* Open Surge 0.6.1
+
+*Arguments*
+
+* `dx`: number. Horizontal offset in pixels.
+* `dy`: number. Vertical offset in pixels.
+
+*Example*
+
+```cs
+// Let's compare player.moveBy() to
+// player.transform.translateBy()
+dx = 5;
+dy = 0;
+
+// this moves the player AFTER the physics update
+player.moveBy(dx, dy);
+
+// this moves the player BEFORE the physics update
+// (immediately), unless you call it in lateUpdate()
+player.transform.translateBy(dx, dy);
+```
+
+#### move
+
+`move(offset)`
+
+Moves the player by the given `offset` after the physics update of the current framestep. Calling `player.move(offset)` is equivalent to calling `player.moveBy(offset.x, offset.y)`. See also: [moveBy](#moveby).
+
+*Available since:* Open Surge 0.6.1
+
+*Arguments*
+
+* `offset`: [Vector2](/engine/vector2) object. Offset vector.
