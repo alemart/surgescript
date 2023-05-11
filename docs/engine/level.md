@@ -181,6 +181,8 @@ Functions
 
 Spawns an object as a child of Level. Such objects won't be garbage collected.
 
+Use [spawnEntity](#spawnentity) instead if you intend to spawn an [entity](/engine/entity).
+
 *Arguments*
 
 * `objectName`: string. The name of the object to be spawned.
@@ -194,6 +196,8 @@ The spawned object.
 `spawnEntity(objectName, position)`
 
 Spawns an [entity](/engine/entity) named `objectName` at a certain `position`. The entity won't be garbage collected, as in [spawn](#spawn).
+
+*Note:* the spawned entity will be a [descendant](/tutorials/object_tree), but not a direct child of Level since Open Surge 0.6.1.
 
 *Arguments*
 
@@ -300,6 +304,18 @@ Finds all entities named `entityName`. Since this function traverses the [object
 *Returns*
 
 A new array containing all entities named `entityName`. If none are found, an empty array is returned.
+
+#### activeEntities
+
+`activeEntities()`
+
+Finds all active entities, i.e.: those that are near the camera, as well as all awake and detached ones.
+
+*Available since:* Open Surge 0.6.1
+
+*Returns*
+
+A new array containing active entities. If none are found, an empty array is returned.
 
 #### setup
 
