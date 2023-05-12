@@ -593,6 +593,9 @@ bool surgescript_object_reparent(surgescript_object_t* object, unsigned new_pare
     surgescript_object_t* old_parent = surgescript_objectmanager_get(manager, object->parent);
     surgescript_object_t* new_parent = surgescript_objectmanager_get(manager, new_parent_handle);
 
+    /* WARNING: we make no guarantees that a cycle will not be introduced in the object tree !!!
+                e.g., reparent to a descendant. maybe we should check that with a flag? */
+
     /* nothing to do */
     if(object->handle == new_parent_handle)
         return true;
