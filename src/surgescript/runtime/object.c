@@ -589,16 +589,22 @@ bool surgescript_object_remove_child(surgescript_object_t* object, unsigned chil
  */
 bool surgescript_object_reparent(surgescript_object_t* object, unsigned new_parent_handle, int flags)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-    surgescript_object_t* old_parent = surgescript_objectmanager_get(manager, object->parent);
-    surgescript_object_t* new_parent = surgescript_objectmanager_get(manager, new_parent_handle);
+    /* nothing to do */
+    if(object->parent == new_parent_handle)
+        return true;
 
     /* WARNING: we make no guarantees that a cycle will not be introduced in the object tree !!!
                 e.g., reparent to a descendant. maybe we should check that with a flag? */
 
-    /* nothing to do */
-    if(object->handle == new_parent_handle)
-        return true;
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_object_t* old_parent = surgescript_objectmanager_get(manager, object->parent);
+    surgescript_object_t* new_parent = surgescript_objectmanager_get(manager, new_parent_handle);
+
+    /* can't make it a root */
+    if(object->handle == new_parent_handle) {
+        ssfatal("Can't reparent object 0x%X (\"%s\"): can't turn it into root", object->handle, object->name);
+        return false;
+    }
 
     /* remove previous parent */
     if(!surgescript_object_remove_child(old_parent, object->handle)) {
