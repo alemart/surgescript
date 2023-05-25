@@ -146,6 +146,22 @@ void surgescript_heap_scan_objects(surgescript_heap_t* heap, void* userdata, boo
 }
 
 /*
+ * surgescript_heap_scan_all()
+ * Scans all elements in the heap, calling callback for each one of them
+ */
+bool surgescript_heap_scan_all(surgescript_heap_t* heap, void* userdata, bool (*callback)(surgescript_var_t*,surgescript_heapptr_t,void*))
+{
+    for(surgescript_heapptr_t ptr = 0; ptr < heap->size; ptr++) {
+        if(heap->mem[ptr] != NULL) {
+            if(!callback(heap->mem[ptr], ptr, userdata))
+                return false; /* stop iteration */
+        }
+    }
+
+    return true;
+}
+
+/*
  * surgescript_heap_size()
  * The size of the heap
  */
