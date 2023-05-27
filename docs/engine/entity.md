@@ -1,29 +1,45 @@
 Entity
 ======
 
-Entity is not an object per-se. It's a class of objects. An entity is an object that is present in the game world (examples: an item, a NPC, a baddie, and so on). Abstract objects or components are **not** entities. **In Open Surge, all objects that are tagged *"entity"* are considered to be entities.**
+An entity is an object that generally is present in the virtual world. Examples include: a pickup item, a gimmick, a non-playable-character, and so on. Entites have special treatment:
 
-Entites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.
+* Entities can have [components](/tutorials/components) associated to it. They can be fully customized.
+* By default, they are automatically disabled and moved back to their initial position in the world if they get too far off camera.
+* Behavior can be changed by adding special [tags](#tags) them.
+* The engine will automatically call special [functions](#functions) if you define them.
 
-> **Tip**
-> 
-> During level design, entities may be placed in world space using the editor palette. The icon of the entity will be the first animation (animation 0) of the sprite that has the name of the entity.
+!!! abstract "Definition"
+    
+    A SurgeScript object is considered to be an entity if it meets all of the following conditions:
+    
+    1. the object is [tagged](/tutorials/tags) "entity"
+    2. the object is a [direct child](/tutorials/object_tree) of [Level](/engine/level) or a direct child of another entity
+    
+    Objects that are direct children of entities but that are not tagged "entity" are considered to be [components](/tutorials/components). Components are meant to modify the entities in some way.
+    
+    Components may not have any entities as descendants. For example: a child of a component is not considered to be an entity, even if it's tagged "entity".
+    
+    Level setup objects and player companion objects are special cases. They are always considered to be entities, regardless if they are tagged "entity" or not, for backwards compatibility purposes.
+
+!!! tip
+    
+    During level design, entities may be placed in world space using the editor palette. The icon of the entity will be the first animation (animation 0) of the sprite that has the name of the entity.
 
 Tags
 ----
 
 #### entity
 
-Tells Open Surge that the object is an entity and should be treated as such.
+Mark the object as an entity.
 
 ```cs
-// In the example below, MyExplosion (entity) has an Actor component
-// that gives it a visible form (a sprite) in world space.
+// In the example below, entity "My Explosion" has an Actor
+// component that gives it visible form: a sprite.
 using SurgeEngine.Actor;
 
-object "MyExplosion" is "entity", "private", "disposable"
+object "My Explosion" is "entity", "private", "disposable"
 {
-    actor = Actor("MyExplosion");
+    actor = Actor("My Explosion");
 
     state "main"
     {
@@ -33,21 +49,22 @@ object "MyExplosion" is "entity", "private", "disposable"
 }
 ```
 
+#### private
+
+Private entities cannot be spawned via the level editor - they will be hidden.
+
 #### awake
 
-Tells Open Surge to **not** disable the object if it gets too far off camera.
-
-#### detached
-
-The object will **not** follow the camera - it will be rendered in screen space.
+Don't disable the object nor move it back to its initial position if it gets too far off camera.
 
 #### disposable
 
-Will destroy the object automatically if it gets too far off camera.
+The engine will automatically destroy the object if it gets too far off camera.
 
-#### private
+#### detached
 
-Private entities cannot be spawned via the level editor (they will be hidden).
+The object will not follow the camera. It will be rendered in screen space.
+
 
 
 Functions
@@ -80,7 +97,7 @@ object "My Simple Camera" is "awake", "entity"
 
 `onReset()`
 
-If an entity\* that has been placed in the level via the editor gets too far off camera, it will be deactivated and repositioned back to its spawn point (i.e., the place where it was originally). Whenever that happens, the engine will call this function if it's available in your entity. You may want to use this to reset the entity back to its initial state.
+If an entity that is not awake nor detached gets too far off camera, it will be automatically disabled and moved back to its initial position. Whenever that happens, the engine will call this function if it's available in your entity. You may use this function to reset the entity back to its initial state.
 
 **Note\*:** entities tagged as awake or detached are not affected.
 
@@ -128,4 +145,4 @@ object "My Test Counter" is "entity"
 
 `onLeaveEditor()`
 
-If declared, function `onLeaveEditor()` will be called whenever the player leaves the level editor and returns to the game. This might be useful to reconfigure your objects.
+If declared, function `onLeaveEditor()` will be called whenever the player leaves the level editor and returns to the game. This may be useful to reconfigure your objects.
