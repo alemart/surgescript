@@ -25,11 +25,13 @@ extra_javascript:
     - js/donate.js
 markdown_extensions:
     - attr_list
+    - admonition
     - pymdownx.highlight:
           anchor_linenums: true
     - pymdownx.inlinehilite
     - pymdownx.snippets
     - pymdownx.superfences
+    - pymdownx.details
 nav:
     - 'Introduction': 'index.md'
     - 'Download': 'download.md'
