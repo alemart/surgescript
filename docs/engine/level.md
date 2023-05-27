@@ -197,8 +197,6 @@ The spawned object.
 
 Spawns an [entity](/engine/entity) named `objectName` at a certain `position`. The entity won't be garbage collected, as in [spawn](#spawn).
 
-*Note:* the spawned entity will be a [descendant](/tutorials/object_tree), but not a direct child of Level since Open Surge 0.6.1.
-
 *Arguments*
 
 * `objectName`: string. The name of the entity to be spawned.
@@ -277,7 +275,7 @@ A string with a hexadecimal identification code, or an empty string.
 
 `findEntity(entityName)`
 
-Finds an entity named `entityName`. Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Finds an entity named `entityName` spawned with [spawnEntity](#spawnentity).
 
 *Available since:* Open Surge 0.6.1
 
@@ -293,7 +291,7 @@ An entity named `entityName`, or `null` if there is none.
 
 `findEntities(entityName)`
 
-Finds all entities named `entityName`. Since this function traverses the [object tree](/tutorials/object_tree), it's recommended to cache its return value. Do not use it in loops or states, as it might be slow.
+Finds all entities named `entityName` spawned with [spawnEntity](#spawnentity).
 
 *Available since:* Open Surge 0.6.1
 
