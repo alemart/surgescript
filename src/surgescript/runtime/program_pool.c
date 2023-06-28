@@ -19,6 +19,7 @@
  * SurgeScript program pool
  */
 
+#include <stdalign.h>
 #include <stdint.h>
 #include <string.h>
 #include "program_pool.h"
@@ -27,11 +28,23 @@
 #include "../util/util.h"
 #include "../util/ssarray.h"
 
-#define XXH_INLINE_ALL
-#include "../util/xxhash.h"
-
 #define FASTHASH_INLINE
 #include "../util/fasthash.h"
+
+#define XXH_INLINE_ALL
+#define XXH_FORCE_ALIGN_CHECK 1
+#include "../util/xxhash.h"
+#define WANT_FIXED_LENGTH_XXH 1 /* beneficial when XXH_INLINE_ALL is defined */
+
+#if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
+/* Use XXH32() only on 32-bit platforms */
+#define XXH(input, len, seed) XXH32((input), (len), (seed))
+typedef uint32_t xxhash_t;
+#else
+/* XXH64() is faster on 64-bit but slower on 32-bit platforms */
+#define XXH(input, len, seed) (XXH64((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
+typedef uint64_t xxhash_t;
+#endif
 
 
 /*
@@ -373,12 +386,26 @@ void delete_program(const char* program_name, void* data)
 surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
 {
     /* Our app must enforce signature uniqueness */
-    char buf[2 * SS_NAMEMAX + 2] = { 0 };
-    uint32_t ha = 0, hb = 0;
+    alignas(8) char buf[2 * SS_NAMEMAX + 2] = { 0 };
     size_t l1 = strlen(object_name), l2 = strlen(program_name);
+    xxhash_t ha, hb;
+
+#if WANT_FIXED_LENGTH_XXH
+    /* version with compile-time constant lengths and inline xxhash functions
+       buf[] is pre-initialized with zeros */
+    enum { SIZE = sizeof(buf) / 2, DBL_SIZE = sizeof(buf) };
+    memcpy(buf, object_name, l1 <= SIZE ? l1 : SIZE);
+    memcpy(buf + SIZE, program_name, l2 <= SIZE ? l2 : SIZE);
+    ha = XXH(buf, SIZE, *program_name);
+    hb = XXH(buf, DBL_SIZE, ha + *object_name);
+#else
+    if(l1 > SS_NAMEMAX) l1 = SS_NAMEMAX;
+    if(l2 > SS_NAMEMAX) l2 = SS_NAMEMAX;
     memcpy(buf, object_name, l1);
     memcpy(buf + l1 + 1, program_name, l2);
-    ha = XXH32(buf, l1 + 1, l1) + (uint8_t)program_name[0];
-    hb = XXH32(buf, l1 + l2 + 1, ha + (uint8_t)object_name[0]);
+    ha = XXH(buf, l1 + 1, l1) + (uint8_t)program_name[0];
+    hb = XXH(buf, l1 + l2 + 1, ha + (uint8_t)object_name[0]);
+#endif
+
     return (uint64_t)hb | (((uint64_t)ha) << 32); /* probably unique */
 }

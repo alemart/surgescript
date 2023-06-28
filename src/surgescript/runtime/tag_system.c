@@ -19,18 +19,32 @@
  * SurgeScript Tag System
  */
 
+#include <stdalign.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include "tag_system.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
 #include "../util/uthash.h"
+
 #define XXH_INLINE_ALL
+#define XXH_FORCE_ALIGN_CHECK 1
 #include "../util/xxhash.h"
+#define WANT_FIXED_LENGTH_XXH 1 /* beneficial when XXH_INLINE_ALL is defined */
+
+#if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
+/* Use XXH32() only on 32-bit platforms */
+#define XXH(input, len, seed) XXH32((input), (len), (seed))
+typedef uint32_t xxhash_t;
+#else
+/* XXH64() is faster on 64-bit but slower on 32-bit platforms */
+#define XXH(input, len, seed) (XXH64((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
+typedef uint64_t xxhash_t;
+#endif
 
 #define USE_FAST_TAGS /* use faster algorithms */
-#define generate_tag(tag_name) XXH64(tag_name, strlen(tag_name), 0)
-typedef uint64_t surgescript_tag_t;
+#define generate_tag(tag_name) (surgescript_tag_t)(XXH((tag_name), strlen(tag_name), 0))
+typedef xxhash_t surgescript_tag_t;
 typedef struct surgescript_tagtable_t surgescript_tagtable_t;
 typedef struct surgescript_inversetagtable_t surgescript_inversetagtable_t;
 typedef struct surgescript_tagtree_t surgescript_tagtree_t;
@@ -244,10 +258,7 @@ bool surgescript_tagsystem_has_tag(const surgescript_tagsystem_t* tag_system, co
     surgescript_tagsignature_t signature = generate_tag_signature(object_name, tag_name);
     surgescript_tagtable_t* entry = fasthash_get(tag_system->tag_table, signature);
 
-    if(entry != NULL)
-        return (entry->tag == generate_tag(tag_name));
-    else
-        return false;
+    return (entry != NULL) && (entry->tag == generate_tag(tag_name));
 #else
     surgescript_tagtable_t* entry = NULL;
 
@@ -348,13 +359,28 @@ void traverse_tree(const surgescript_tagtree_t* tree, void* data, void (*callbac
 /* signature generator */
 surgescript_tagsignature_t generate_tag_signature(const char* object_name, const char* tag_name)
 {
-    char buf[2 * SS_NAMEMAX + 2] = { 0 };
-    uint32_t ha = 0, hb = 0;
+    /* Our app must enforce signature uniqueness */
+    alignas(8) char buf[2 * SS_NAMEMAX + 2] = { 0 };
     size_t l1 = strlen(object_name), l2 = strlen(tag_name);
+    xxhash_t ha, hb;
+
+#if WANT_FIXED_LENGTH_XXH
+    /* version with compile-time constant lengths and inline xxhash functions
+       buf[] is pre-initialized with zeros */
+    enum { SIZE = sizeof(buf) / 2, DBL_SIZE = sizeof(buf) };
+    memcpy(buf, object_name, l1 <= SIZE ? l1 : SIZE);
+    memcpy(buf + SIZE, tag_name, l2 <= SIZE ? l2 : SIZE);
+    ha = XXH(buf, SIZE, *tag_name);
+    hb = XXH(buf, DBL_SIZE, ha + *object_name);
+#else
+    if(l1 > SS_NAMEMAX) l1 = SS_NAMEMAX;
+    if(l2 > SS_NAMEMAX) l2 = SS_NAMEMAX;
     memcpy(buf, object_name, l1);
     memcpy(buf + l1 + 1, tag_name, l2);
-    ha = XXH32(buf, l1 + 1, l1) + (uint8_t)tag_name[0];
-    hb = XXH32(buf, l1 + l2 + 1, ha + (uint8_t)object_name[0]);
+    ha = XXH(buf, l1 + 1, l1) + (uint8_t)tag_name[0];
+    hb = XXH(buf, l1 + l2 + 1, ha + (uint8_t)object_name[0]);
+#endif
+
     return (uint64_t)hb | (((uint64_t)ha) << 32); /* probably unique */
 }
 
