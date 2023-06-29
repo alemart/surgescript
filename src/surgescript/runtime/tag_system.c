@@ -30,7 +30,7 @@
 #define XXH_INLINE_ALL
 #define XXH_FORCE_ALIGN_CHECK 1
 #include "../util/xxhash.h"
-#define WANT_FIXED_LENGTH_XXH 1 /* beneficial when XXH_INLINE_ALL is defined */
+#define WANT_FIXED_LENGTH_XXH 0
 
 #if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
 /* Use XXH32() only on 32-bit platforms */
@@ -258,7 +258,7 @@ bool surgescript_tagsystem_has_tag(const surgescript_tagsystem_t* tag_system, co
     surgescript_tagsignature_t signature = generate_tag_signature(object_name, tag_name);
     surgescript_tagtable_t* entry = fasthash_get(tag_system->tag_table, signature);
 
-    return (entry != NULL) && (entry->tag == generate_tag(tag_name));
+    return (entry != NULL) && (0 == strcmp(entry->object_name, object_name)) && (0 == strcmp(entry->tag_name, tag_name));
 #else
     surgescript_tagtable_t* entry = NULL;
 

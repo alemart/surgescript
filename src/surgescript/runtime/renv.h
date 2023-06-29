@@ -51,12 +51,12 @@ surgescript_renv_t* surgescript_renv_create(struct surgescript_object_t* owner, 
 surgescript_renv_t* surgescript_renv_destroy(surgescript_renv_t* runtime_environment);
 
 /* getters */
-static inline struct surgescript_object_t* surgescript_renv_owner(surgescript_renv_t* renv) { return renv->owner; }
-static inline struct surgescript_stack_t* surgescript_renv_stack(surgescript_renv_t* renv) { return renv->stack; }
-static inline struct surgescript_heap_t* surgescript_renv_heap(surgescript_renv_t* renv) { return renv->heap; }
-static inline struct surgescript_programpool_t* surgescript_renv_programpool(surgescript_renv_t* renv) { return renv->program_pool; }
-static inline struct surgescript_objectmanager_t* surgescript_renv_objectmanager(surgescript_renv_t* renv) { return renv->object_manager; }
-static inline struct surgescript_var_t** surgescript_renv_tmp(surgescript_renv_t* renv) { return renv->tmp; }
-static inline unsigned surgescript_renv_caller(surgescript_renv_t* renv) { return renv->caller; }
+#define surgescript_renv_owner(renv)            ((renv)->owner)
+#define surgescript_renv_stack(renv)            ((renv)->stack)
+#define surgescript_renv_heap(renv)             ((renv)->heap)
+#define surgescript_renv_programpool(renv)      ((renv)->program_pool)
+#define surgescript_renv_objectmanager(renv)    ((renv)->object_manager)
+#define surgescript_renv_tmp(renv)              ((renv)->tmp)
+#define surgescript_renv_caller(renv)           ((renv)->caller)
 
 #endif
