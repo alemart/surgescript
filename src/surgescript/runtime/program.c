@@ -86,20 +86,17 @@ static inline bool is_jump_instruction(surgescript_program_operator_t instructio
 static inline bool remove_labels(surgescript_program_t* program);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
 static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
-static inline int fast_sign(double f);
-static inline int fast_sign1(double f);
-static inline int fast_notzero(double f);
 static const int MAX_PROGRAM_ARITY = 256;
 
 /* debug mode? */
-#define SURGESCRIPT_DEBUG_MODE 0
+#define SURGESCRIPT_DEBUG_MODE          0
 #if SURGESCRIPT_DEBUG_MODE
 static inline void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_var_t** _t);
 #endif
 
 /* optimizations */
-#define WANT_OPTIMIZED_PROGRAM_CALLS 1
-#define OPTIMIZED_CALL_THRESHOLD 8
+#define WANT_OPTIMIZED_PROGRAM_CALLS    1
+#define OPTIMIZED_CALL_THRESHOLD        4 /*8*/
 
 /* -------------------------------
  * public methods
@@ -715,6 +712,7 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
 
             }
 #else
+            /* nop */
             break;
 #endif
     }
@@ -938,25 +936,3 @@ void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environme
         printf("..\t%s\t%s\t%s\n", instruction_name[instruction], hexdump(a.u, hex[0]), hexdump(b.u, hex[1]));
 }
 #endif
-
-
-
-/* --------------- numeric utilities --------------- */
-
-/* returns -1 if f < 0, 0 if if == 0, 1 if f > 0 */
-int fast_sign(double f)
-{
-    return (f > 0.0) - (f < 0.0);
-}
-
-/* returns -1 if f <= -0, 1 if f >= +0 */
-int fast_sign1(double f)
-{
-    return signbit(f) == 0 ? 1 : -1;
-}
-
-/* returns "true" iff f != +0 and f != -0 */
-int fast_notzero(double f)
-{
-    return fpclassify(f) != FP_ZERO;
-}
