@@ -32,6 +32,7 @@
 #include "../util/transform.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
+#include "../third_party/gettimeofday.h"
 
 /* object structure */
 struct surgescript_object_t
@@ -58,7 +59,8 @@ struct surgescript_object_t
     /* internal timer */
     const surgescript_vmtime_t* vmtime; /* VM time */
     uint64_t last_state_change; /* moment of the last state change */
-    uint64_t time_spent; /* how much time did this object consume since the last state change */
+    uint64_t time_spent; /* time spent updating the object since the last state change, measured in microseconds */
+    uint64_t frames_spent; /* number of update cycles since the last state change */
 
     /* local transform */
     surgescript_transform_t* transform;
@@ -74,7 +76,8 @@ void surgescript_object_release(surgescript_object_t* object);
 #define MAIN_STATE "main"
 #define STATE2FUN_BUFFER_SIZE ((SS_NAMEMAX+1)+6) /* prefix a string with "state:" */
 static char* state2fun(const char* state, char* buffer, size_t size);
-static uint64_t run_current_state(const surgescript_object_t* object);
+static inline void run_current_state(const surgescript_object_t* object);
+static inline uint64_t run_and_measure_current_state(const surgescript_object_t* object);
 static surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name);
 static bool object_exists(surgescript_programpool_t* program_pool, const char* object_name);
 static bool simple_traversal(surgescript_object_t* object, void* data);
@@ -123,6 +126,7 @@ surgescript_object_t* surgescript_object_create(const char* name, surgescript_ob
     obj->vmtime = vmtime;
     obj->last_state_change = surgescript_vmtime_time(obj->vmtime);
     obj->time_spent = 0;
+    obj->frames_spent = 0;
 
     obj->transform = NULL;
     obj->user_data = user_data;
@@ -694,6 +698,7 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
         object->current_state = get_state_program(object, object->state_name);
         object->last_state_change = surgescript_vmtime_time(object->vmtime);
         object->time_spent = 0;
+        object->frames_spent = 0;
     }
 }
 
@@ -863,7 +868,8 @@ bool surgescript_object_update(surgescript_object_t* object)
 
     /* update myself */
     if(object->is_active) {
-        object->time_spent += run_current_state(object);
+        object->time_spent += run_and_measure_current_state(object);
+        object->frames_spent++;
         return object->is_active; /* will generally be true, but not necessarily */
     }
 
@@ -946,9 +952,10 @@ void surgescript_object_call_current_state(surgescript_object_t* object)
  */
 double surgescript_object_timespent(const surgescript_object_t* object)
 {
-    uint64_t now = surgescript_util_gettickcount();
-    uint64_t dt = now > object->last_state_change ? now - object->last_state_change : 1;
-    return ((double)(object->time_spent) * 0.001) / ((double)dt);
+    if(object->frames_spent > 0)
+        return ((double)object->time_spent * 1e-6) / (double)object->frames_spent;
+    else
+        return 0.0;
 }
 
 /*
@@ -1016,15 +1023,27 @@ char* state2fun(const char* state, char* buffer, size_t size)
     return buffer;
 }
 
-uint64_t run_current_state(const surgescript_object_t* object)
+void run_current_state(const surgescript_object_t* object)
 {
-    uint64_t start = surgescript_util_gettickcount(), end;
     surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
     surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
     surgescript_program_call(object->current_state, object->renv, 0);
     surgescript_stack_pop(stack);
-    end = surgescript_util_gettickcount();
-    return end > start ? end - start : 0;
+}
+
+/* measured in microseconds */
+uint64_t run_and_measure_current_state(const surgescript_object_t* object)
+{
+    struct timeval begin, end;
+    uint64_t begin_usec, end_usec;
+
+    gettimeofday(&begin, NULL);
+    run_current_state(object);
+    gettimeofday(&end, NULL);
+
+    begin_usec = (uint64_t)begin.tv_sec * 1000000 + (uint64_t)begin.tv_usec;
+    end_usec = (uint64_t)end.tv_sec * 1000000 + (uint64_t)end.tv_usec;
+    return end_usec > begin_usec ? end_usec - begin_usec : 0;
 }
 
 surgescript_program_t* get_state_program(const surgescript_object_t* object, const char* state_name)

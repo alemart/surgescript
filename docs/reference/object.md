@@ -36,7 +36,7 @@ The functions of this object represented as a collection of strings.
 
 `__timespent`: number, read-only.
 
-The approximate time spent in the current state (in seconds).
+The average time spent in the current state (measured in seconds).
 
 #### __file
 
