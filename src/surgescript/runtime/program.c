@@ -743,9 +743,13 @@ surgescript_objectclassid_t class_id_of_callee(const surgescript_renv_t* caller_
     surgescript_objecthandle_t object_handle = surgescript_var_get_objecthandle(callee);
 
     /* find the class id */
-    /*if(surgescript_objectmanager_exists(manager, object_handle)) {*/ /* the object is assumed to exist */
-    const surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
-    surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
+    surgescript_objectclassid_t class_id = 0;
+    if(surgescript_objectmanager_exists(manager, object_handle)) {
+        const surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
+        class_id = surgescript_object_class_id(object);
+    }
+    else
+        ssfatal("Runtime Error: null pointer exception - can't find class ID of null callee (called in \"%s\").", surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
 
     /* clean up & done */
     surgescript_stack_popenv(stack);
