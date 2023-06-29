@@ -23,10 +23,11 @@
 #define _SURGESCRIPT_RUNTIME_OBJECT_H
 
 #include <stdbool.h>
-#include "heap.h"
 
 /* types */
 typedef struct surgescript_object_t surgescript_object_t;
+typedef unsigned surgescript_objecthandle_t;
+typedef unsigned surgescript_objectclassid_t;
 
 /* forward declarations */
 struct surgescript_programpool_t;
@@ -47,6 +48,7 @@ bool surgescript_object_update(surgescript_object_t* object); /* runs my program
 
 /* properties */
 const char* surgescript_object_name(const surgescript_object_t* object); /* what's my name? */
+surgescript_objectclassid_t surgescript_object_class_id(const surgescript_object_t* object); /* the ID of my class of objects */
 struct surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object); /* each object has its own heap */
 struct surgescript_objectmanager_t* surgescript_object_manager(const surgescript_object_t* object); /* pointer to the object manager */
 void* surgescript_object_userdata(const surgescript_object_t* object); /* custom user data (if any) */
@@ -58,26 +60,26 @@ double surgescript_object_timespent(const surgescript_object_t* object); /* aver
 size_t surgescript_object_memspent(const surgescript_object_t* object); /* memory consumption (in bytes) */
 
 /* object tree */
-unsigned surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer handle (in the object manager) */
-unsigned surgescript_object_parent(const surgescript_object_t* object); /* parent object handle (in the object manager) */
-unsigned surgescript_object_nth_child(const surgescript_object_t* object, int index); /* n-th child */
+surgescript_objecthandle_t surgescript_object_handle(const surgescript_object_t* object); /* "this" pointer handle (in the object manager) */
+surgescript_objecthandle_t surgescript_object_parent(const surgescript_object_t* object); /* parent object handle (in the object manager) */
+surgescript_objecthandle_t surgescript_object_nth_child(const surgescript_object_t* object, int index); /* n-th child */
 int surgescript_object_child_count(const surgescript_object_t* object); /* how many children there are? */
-unsigned surgescript_object_child(const surgescript_object_t* object, const char* name); /* gets the handle to a child named name */
-int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* gets all direct children named name */
-unsigned surgescript_object_tagged_child(const surgescript_object_t* object, const char* tag_name); /* gets the handle to a child tagged tag_name */
-int surgescript_object_tagged_children(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*)); /* gets all direct children tagged tag_name */
-unsigned surgescript_object_find_descendant(const surgescript_object_t* object, const char* name); /* finds a descendant named name */
-int surgescript_object_find_descendants(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*)); /* finds all descendants named name */
-unsigned surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name); /* find 1st child (or grand-child...) tagged tag_name */
-int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*)); /* finds all descendants tagged tag_name */
-unsigned surgescript_object_find_ascendant(const surgescript_object_t* object, const char* name); /* finds an ascendant named name */
+surgescript_objecthandle_t surgescript_object_child(const surgescript_object_t* object, const char* name); /* gets the handle to a child named name */
+int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(surgescript_objecthandle_t,void*)); /* gets all direct children named name */
+surgescript_objecthandle_t surgescript_object_tagged_child(const surgescript_object_t* object, const char* tag_name); /* gets the handle to a child tagged tag_name */
+int surgescript_object_tagged_children(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(surgescript_objecthandle_t,void*)); /* gets all direct children tagged tag_name */
+surgescript_objecthandle_t surgescript_object_find_descendant(const surgescript_object_t* object, const char* name); /* finds a descendant named name */
+int surgescript_object_find_descendants(const surgescript_object_t* object, const char* name, void* data, void (*callback)(surgescript_objecthandle_t,void*)); /* finds all descendants named name */
+surgescript_objecthandle_t surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name); /* find 1st child (or grand-child...) tagged tag_name */
+int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(surgescript_objecthandle_t,void*)); /* finds all descendants tagged tag_name */
+surgescript_objecthandle_t surgescript_object_find_ascendant(const surgescript_object_t* object, const char* name); /* finds an ascendant named name */
 bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
 bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*)); /* tree traversal with an additional data parameter */
 int surgescript_object_depth(const surgescript_object_t* object); /* depth in the object tree (root has depth zero) */
-bool surgescript_object_is_ascendant(const surgescript_object_t* object, unsigned ascendant_handle); /* is an object an ascendant of another? */
-bool surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle); /* adds a child to this object */
-bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle); /* removes a child having this handle from this object */
-bool surgescript_object_reparent(surgescript_object_t* object, unsigned new_parent_handle, int flags); /* changes the parent of this object */
+bool surgescript_object_is_ascendant(const surgescript_object_t* object, surgescript_objecthandle_t ascendant_handle); /* is an object an ascendant of another? */
+bool surgescript_object_add_child(surgescript_object_t* object, surgescript_objecthandle_t child_handle); /* adds a child to this object */
+bool surgescript_object_remove_child(surgescript_object_t* object, surgescript_objecthandle_t child_handle); /* removes a child having this handle from this object */
+bool surgescript_object_reparent(surgescript_object_t* object, surgescript_objecthandle_t new_parent_handle, int flags); /* changes the parent of this object */
 
 /* life operations */
 const char* surgescript_object_state(const surgescript_object_t *object); /* each object is a state machine. in which state am i in? */

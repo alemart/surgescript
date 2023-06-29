@@ -38,13 +38,14 @@ struct surgescript_object_t
 {
     /* general properties */
     char* name; /* my name */
+    surgescript_objectclassid_t class_id; /* the ID of the class of objects */
     surgescript_heap_t* heap; /* each object has its own heap */
     surgescript_renv_t* renv; /* runtime environment */
 
     /* object tree */
-    unsigned handle; /* "this" pointer in the object manager */
-    unsigned parent; /* handle to the parent in the object manager */
-    SSARRAY(unsigned, child); /* handles to the children */
+    surgescript_objecthandle_t handle; /* "this" pointer in the object manager */
+    surgescript_objecthandle_t parent; /* handle to the parent in the object manager */
+    SSARRAY(surgescript_objecthandle_t, child); /* handles to the children */
     int depth; /* object depth */
 
     /* inner state */
@@ -95,12 +96,14 @@ static inline void call_object_function(surgescript_object_t* object, const char
  * surgescript_object_create()
  * Creates a new blank object
  */
-surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data)
+surgescript_object_t* surgescript_object_create(const char* name, surgescript_objecthandle_t handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data)
 {
     surgescript_object_t* obj = ssmalloc(sizeof *obj);
 
     if(!object_exists(program_pool, name))
         ssfatal("Runtime Error: can't spawn object \"%s\" - it doesn't exist!", name);
+    else if(!surgescript_objectmanager_class_id(object_manager, name, &(obj->class_id)))
+        ssfatal("Runtime Error: can't spawn object \"%s\" - no such class!", name); /* this should never happen */
 
     obj->name = ssstrdup(name);
     obj->heap = surgescript_heap_create();
@@ -186,6 +189,15 @@ const char* surgescript_object_name(const surgescript_object_t* object)
 }
 
 /*
+ * surgescript_object_class_id()
+ * The ID of my class of objects
+ */
+surgescript_objectclassid_t surgescript_object_class_id(const surgescript_object_t* object)
+{
+    return object->class_id; /* fast access */
+}
+
+/*
  * surgescript_object_heap()
  * Each object has its own heap. This gets mine.
  */
@@ -252,7 +264,7 @@ bool surgescript_object_has_function(const surgescript_object_t* object, const c
  * surgescript_object_handle()
  * What's my handle in the object manager?
  */
-unsigned surgescript_object_handle(const surgescript_object_t* object)
+surgescript_objecthandle_t surgescript_object_handle(const surgescript_object_t* object)
 {
     return object->handle;
 }
@@ -261,7 +273,7 @@ unsigned surgescript_object_handle(const surgescript_object_t* object)
  * surgescript_object_parent()
  * A handle to my parent in the object manager
  */
-unsigned surgescript_object_parent(const surgescript_object_t* object)
+surgescript_objecthandle_t surgescript_object_parent(const surgescript_object_t* object)
 {
     return object->parent;
 }
@@ -270,7 +282,7 @@ unsigned surgescript_object_parent(const surgescript_object_t* object)
  * surgescript_object_nth_child()
  * Gets the handle to the index-th child in the object manager
  */
-unsigned surgescript_object_nth_child(const surgescript_object_t* object, int index)
+surgescript_objecthandle_t surgescript_object_nth_child(const surgescript_object_t* object, int index)
 {
     if(index >= 0 && index < ssarray_length(object->child))
         return object->child[index];
@@ -291,7 +303,7 @@ int surgescript_object_child_count(const surgescript_object_t* object)
  * surgescript_object_child()
  * Gets a handle to a child named name
  */
-unsigned surgescript_object_child(const surgescript_object_t* object, const char* name)
+surgescript_objecthandle_t surgescript_object_child(const surgescript_object_t* object, const char* name)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
 
@@ -309,7 +321,7 @@ unsigned surgescript_object_child(const surgescript_object_t* object, const char
  * Gets the handles to all the direct children named name.
  * Returns the number of direct children named name.
  */
-int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*))
+int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(surgescript_objecthandle_t,void*))
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     int count = 0;
@@ -329,7 +341,7 @@ int surgescript_object_children(const surgescript_object_t* object, const char* 
  * surgescript_object_tagged_child()
  * Gets a handle to a child having the specified tag
  */
-unsigned surgescript_object_tagged_child(const surgescript_object_t* object, const char* tag_name)
+surgescript_objecthandle_t surgescript_object_tagged_child(const surgescript_object_t* object, const char* tag_name)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
 
@@ -347,7 +359,7 @@ unsigned surgescript_object_tagged_child(const surgescript_object_t* object, con
  * Gets the handles to all the direct children tagged tag_name.
  * Returns the number of all such direct children.
  */
-int surgescript_object_tagged_children(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*))
+int surgescript_object_tagged_children(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(surgescript_objecthandle_t,void*))
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     int count = 0;
@@ -368,7 +380,7 @@ int surgescript_object_tagged_children(const surgescript_object_t* object, const
  * Find a descendant whose name matches the name parameter.
  * This might be slow, so it's recommended to cache the objects.
  */
-unsigned surgescript_object_find_descendant(const surgescript_object_t* object, const char* name)
+surgescript_objecthandle_t surgescript_object_find_descendant(const surgescript_object_t* object, const char* name)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
@@ -382,7 +394,7 @@ unsigned surgescript_object_find_descendant(const surgescript_object_t* object, 
 
     for(i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        unsigned handle = surgescript_object_find_descendant(child, name);
+        surgescript_objecthandle_t handle = surgescript_object_find_descendant(child, name);
         if(handle != null_handle)
             return handle;
     }
@@ -396,7 +408,7 @@ unsigned surgescript_object_find_descendant(const surgescript_object_t* object, 
  * Returns the number of matching descendants.
  * This might be slow, so it's recommended to cache the objects.
  */
-int surgescript_object_find_descendants(const surgescript_object_t* object, const char* name, void* data, void (*callback)(unsigned,void*))
+int surgescript_object_find_descendants(const surgescript_object_t* object, const char* name, void* data, void (*callback)(surgescript_objecthandle_t,void*))
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
@@ -423,7 +435,7 @@ int surgescript_object_find_descendants(const surgescript_object_t* object, cons
  * Find a descendant tagged tag_name.
  * This might be slow, so it's recommended to cache the objects.
  */
-unsigned surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name)
+surgescript_objecthandle_t surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
@@ -437,7 +449,7 @@ unsigned surgescript_object_find_tagged_descendant(const surgescript_object_t* o
 
     for(i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-        unsigned handle = surgescript_object_find_tagged_descendant(child, tag_name);
+        surgescript_objecthandle_t handle = surgescript_object_find_tagged_descendant(child, tag_name);
         if(handle != null_handle)
             return handle;
     }
@@ -451,7 +463,7 @@ unsigned surgescript_object_find_tagged_descendant(const surgescript_object_t* o
  * Returns the number of matching descendants.
  * This might be slow, so it's recommended to cache the objects.
  */
-int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(unsigned,void*))
+int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(surgescript_objecthandle_t,void*))
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
@@ -478,7 +490,7 @@ int surgescript_object_find_tagged_descendants(const surgescript_object_t* objec
  * Finds the ascendant named name that is closest to the object in the tree.
  * Returns a null handle if no such ascendant exists.
  */
-unsigned surgescript_object_find_ascendant(const surgescript_object_t* object, const char* name)
+surgescript_objecthandle_t surgescript_object_find_ascendant(const surgescript_object_t* object, const char* name)
 {
     const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
 
@@ -508,7 +520,7 @@ int surgescript_object_depth(const surgescript_object_t* object)
  * surgescript_object_is_ascendant()
  * Checks if an object is an ascendant of another
  */
-bool surgescript_object_is_ascendant(const surgescript_object_t* object, unsigned ascendant_handle)
+bool surgescript_object_is_ascendant(const surgescript_object_t* object, surgescript_objecthandle_t ascendant_handle)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
 
@@ -525,7 +537,7 @@ bool surgescript_object_is_ascendant(const surgescript_object_t* object, unsigne
  * surgescript_object_add_child()
  * Adds a child to this object (adds the link)
  */
-bool surgescript_object_add_child(surgescript_object_t* object, unsigned child_handle)
+bool surgescript_object_add_child(surgescript_object_t* object, surgescript_objecthandle_t child_handle)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     surgescript_object_t* child;
@@ -562,7 +574,7 @@ bool surgescript_object_add_child(surgescript_object_t* object, unsigned child_h
  * surgescript_object_remove_child()
  * Removes a child having this handle from this object (removes the link only)
  */
-bool surgescript_object_remove_child(surgescript_object_t* object, unsigned child_handle)
+bool surgescript_object_remove_child(surgescript_object_t* object, surgescript_objecthandle_t child_handle)
 {
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
 
@@ -587,7 +599,7 @@ bool surgescript_object_remove_child(surgescript_object_t* object, unsigned chil
  * Changes the parent of this object. This function must not be available in
  * the API in an unbounded manner, as it may have unintended side-effects
  */
-bool surgescript_object_reparent(surgescript_object_t* object, unsigned new_parent_handle, int flags)
+bool surgescript_object_reparent(surgescript_object_t* object, surgescript_objecthandle_t new_parent_handle, int flags)
 {
     /* nothing to do */
     if(object->parent == new_parent_handle)
@@ -851,6 +863,7 @@ bool surgescript_object_update(surgescript_object_t* object)
 
     /* update myself */
     if(object->is_active) {
+        uint64_t start=object->time_spent;
         object->time_spent += run_current_state(object);
         return object->is_active; /* will generally be true, but not necessarily */
     }

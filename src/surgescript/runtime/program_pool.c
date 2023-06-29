@@ -34,7 +34,7 @@
 #define XXH_INLINE_ALL
 #define XXH_FORCE_ALIGN_CHECK 1
 #include "../util/xxhash.h"
-#define WANT_FIXED_LENGTH_XXH 1 /* beneficial when XXH_INLINE_ALL is defined */
+#define WANT_FIXED_LENGTH_XXH 0
 
 #if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
 /* Use XXH32() only on 32-bit platforms */
@@ -57,10 +57,12 @@ static inline surgescript_programpool_signature_t generate_signature(const char*
 
 /* metadata */
 typedef struct surgescript_programpool_metadata_t surgescript_programpool_metadata_t;
-struct surgescript_programpool_metadata_t /* we'll store the list of program names for each object */
+struct surgescript_programpool_metadata_t /* meta data for each class of objects */
 {
-    char* object_name;
-    SSARRAY(char*, program_name);
+    char* object_name; /* name of the class of objects */
+    SSARRAY(char*, program_name); /* names of its programs */
+    surgescript_objectclassid_t class_id; /* unique ID of the class */
+
     UT_hash_handle hh;
 };
 
@@ -70,6 +72,11 @@ static void remove_object_metadata(surgescript_programpool_t* pool, const char* 
 static void clear_metadata(surgescript_programpool_t* pool);
 static void traverse_metadata(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*,void*));
 static void traverse_adapter(const char* program_name, void* callback);
+
+/* class IDs */
+#define INVALID_CLASS_ID            ((surgescript_objectclassid_t)0)  /* convention: 0 means invalid class ID (the underlying class ID type is unsigned) */
+#define INITIAL_CLASS_ID            ((surgescript_objectclassid_t)1)  /* the first class ID is non-zero, i.e., not invalid */
+
 
 
 /* program pool hash type */
@@ -86,6 +93,7 @@ struct surgescript_programpool_t
 {
     fasthash_t* hash; /* a hash table of hashpair_t's */
     surgescript_programpool_metadata_t* meta;
+    surgescript_objectclassid_t next_class_id;
 };
 
 /* misc */
@@ -108,6 +116,7 @@ surgescript_programpool_t* surgescript_programpool_create()
     surgescript_programpool_t* pool = ssmalloc(sizeof *pool);
     pool->hash = fasthash_create(delete_pair, 16);
     pool->meta = NULL;
+    pool->next_class_id = INITIAL_CLASS_ID;
     return pool;
 }
 
@@ -217,14 +226,17 @@ bool surgescript_programpool_replace(surgescript_programpool_t* pool, const char
     surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
     surgescript_programpool_hashpair_t* pair = fasthash_get(pool->hash, signature); /* find the program */
     
-    /* replace the program */
+    /* replace the program? */
     if(pair != NULL) {
+        /* replace the program */
         surgescript_program_destroy(pair->program);
         pair->program = program;
         return true;
     }
-    else
-        return surgescript_programpool_put(pool, object_name, program_name, program); /* program doesn't exist yet */
+    else {
+        /* the program doesn't exist in the pool yet */
+        return surgescript_programpool_put(pool, object_name, program_name, program);
+    }
 }
 
 
@@ -265,9 +277,31 @@ bool surgescript_programpool_is_compiled(surgescript_programpool_t* pool, const 
 {
     surgescript_programpool_metadata_t *m = NULL;
     HASH_FIND_STR(pool->meta, object_name, m);
+
     return (m != NULL) && (ssarray_length(m->program_name) > 0);
 }
 
+/*
+ * surgescript_programpool_class_id()
+ * Gets the ID of a class of objects, given its name
+ * Returns true and sets the output value if the class exists
+ */
+bool surgescript_programpool_class_id(const surgescript_programpool_t* pool, const char* object_name, surgescript_objectclassid_t* out_class_id)
+{
+    surgescript_programpool_metadata_t *m = NULL;
+    HASH_FIND_STR(pool->meta, object_name, m);
+
+    /* class not found */
+    if(m == NULL)
+        return false;
+
+    /* set the class ID */
+    if(out_class_id != NULL)
+        *out_class_id = m->class_id;
+
+    /* success! */
+    return true;
+}
 
 
 /* -------------------------------
@@ -285,6 +319,7 @@ void insert_metadata(surgescript_programpool_t* pool, const char* object_name, c
     if(m == NULL) {
         m = ssmalloc(sizeof *m);
         m->object_name = ssstrdup(object_name);
+        m->class_id = pool->next_class_id++;
         ssarray_init(m->program_name);
         HASH_ADD_KEYPTR(hh, pool->meta, m->object_name, strlen(m->object_name), m);
     }

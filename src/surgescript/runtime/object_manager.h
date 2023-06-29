@@ -23,10 +23,10 @@
 #define _SURGESCRIPT_RUNTIME_OBJECTMANAGER_H
 
 #include <stdbool.h>
+#include "object.h"
 
 /* opaque types */
 typedef struct surgescript_objectmanager_t surgescript_objectmanager_t;
-typedef unsigned surgescript_objecthandle_t;
 
 /* forward declarations */
 struct surgescript_object_t;
@@ -52,6 +52,7 @@ bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surg
 int surgescript_objectmanager_count(const surgescript_objectmanager_t* manager); /* how many objects there are? */
 void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manager, const char* object_name); /* installs a plugin */
 bool surgescript_objectmanager_class_exists(const surgescript_objectmanager_t* manager, const char* object_name); /* does the specified class of objects exist? */
+bool surgescript_objectmanager_class_id(const surgescript_objectmanager_t* manager, const char* object_name, surgescript_objectclassid_t* out_class_id); /* returns true and sets the output parameter if the class of objects exist */
 
 /* components */
 struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */

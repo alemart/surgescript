@@ -30,6 +30,7 @@
 #include "variable.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
+#include "../util/uthash.h"
 
 /* types */
 typedef struct surgescript_vmargs_t surgescript_vmargs_t;
@@ -38,23 +39,27 @@ typedef struct surgescript_vmargs_t surgescript_vmargs_t;
 struct surgescript_objectmanager_t
 {
     int count; /* how many objects are allocated at the moment */
-    surgescript_objecthandle_t handle_ptr; /* memory allocation */
+    surgescript_objecthandle_t next_handle; /* memory allocation */
     SSARRAY(surgescript_object_t*, data); /* object table */
+
     surgescript_programpool_t* program_pool; /* reference to the program pool */
     surgescript_stack_t* stack; /* reference to the stack */
     surgescript_tagsystem_t* tag_system; /* tag system */
+
     surgescript_vmargs_t* args; /* VM command-line arguments (NULL-terminated array) */
     const surgescript_vmtime_t* vmtime; /* VM time */
+
     SSARRAY(surgescript_objecthandle_t, objects_to_be_scanned); /* garbage collection */
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
     int garbage_count; /* last number of garbage-collected objects */
+
     SSARRAY(char*, plugin_list); /* plugin list */
 };
 
 /* fixed objects */
-#define NULL_HANDLE                 0   /* must always be zero */
-#define ROOT_HANDLE                 1
+#define NULL_HANDLE                 ((surgescript_objecthandle_t)0)   /* must always be zero */
+#define ROOT_HANDLE                 ((surgescript_objecthandle_t)1)
 
 /* system objects are children of the root and
    their addresses must be known at compile-time */
@@ -82,7 +87,7 @@ static const char* SYSTEM_OBJECTS[] = {
 }; /* this must be a NULL-terminated array */
 
 /* object methods acessible by me */
-extern surgescript_object_t* surgescript_object_create(const char* name, unsigned handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data); /* creates a new blank object */
+extern surgescript_object_t* surgescript_object_create(const char* name, surgescript_objecthandle_t handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data); /* creates a new blank object */
 extern surgescript_object_t* surgescript_object_destroy(surgescript_object_t* object); /* destroys an object */
 
 /* the life-cycle of the objects is handled by me */
@@ -94,12 +99,12 @@ extern bool surgescript_object_is_reachable(const surgescript_object_t* object);
 extern void surgescript_object_set_reachable(surgescript_object_t* object, bool reachable); /* sets whether this object is reachable or not */
 
 /* garbage collector: private stuff */
-static bool mark_as_reachable(unsigned handle, void* mgr);
+static bool mark_as_reachable(surgescript_objecthandle_t handle, void* mgr);
 static bool sweep_unreachables(surgescript_object_t* object);
 
 /* other */
 #define is_power_of_two(x)                !((x) & ((x) - 1)) /* this assumes x > 0 */
-static surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr);
+static inline surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* manager);
 static void add_to_plugin_list(surgescript_objectmanager_t* manager, const char* object_name);
 static void release_plugin_list(surgescript_objectmanager_t* manager);
 static char** compile_plugins_list(const surgescript_objectmanager_t* manager);
@@ -117,16 +122,17 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
 {
     surgescript_objectmanager_t* manager = ssmalloc(sizeof *manager);
 
+    manager->count = 0;
     ssarray_init(manager->data);
     ssarray_push(manager->data, NULL); /* NULL is *always* the first element */
 
-    manager->count = 0;
     manager->program_pool = program_pool;
     manager->tag_system = tag_system;
     manager->stack = stack;
+
     manager->args = args;
     manager->vmtime = vmtime;
-    manager->handle_ptr = ROOT_HANDLE;
+    manager->next_handle = ROOT_HANDLE;
 
     ssarray_init(manager->objects_to_be_scanned);
     manager->first_object_to_be_scanned = 0;
@@ -149,8 +155,8 @@ surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objec
     while(handle != 0)
         surgescript_objectmanager_delete(manager, --handle);
 
-    ssarray_release(manager->data);
     ssarray_release(manager->objects_to_be_scanned);
+    ssarray_release(manager->data);
     release_plugin_list(manager);
 
     return ssfree(manager);
@@ -172,7 +178,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectman
         /* new slot */
         ssarray_push(manager->data, object);
         if(is_power_of_two(handle))
-            manager->handle_ptr = ssmax(2, manager->handle_ptr / 2); /* handle_ptr must never be zero */
+            manager->next_handle = ssmax(ROOT_HANDLE, manager->next_handle / 2); /* the handle must never be zero; it would point to NULL */
     }
     else if(handle > ROOT_HANDLE) {
         /* reuse unused slot */
@@ -201,7 +207,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectman
  */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_objectmanager_t* manager)
 {
-    if(manager->handle_ptr == ROOT_HANDLE) {
+    if(manager->next_handle == ROOT_HANDLE) {
         /* preparing the data */
         char** plugins = compile_plugins_list(manager);
         char** data[] = { (char**)SYSTEM_OBJECTS, plugins };
@@ -507,12 +513,22 @@ bool surgescript_objectmanager_class_exists(const surgescript_objectmanager_t* m
     return surgescript_programpool_is_compiled(manager->program_pool, object_name);
 }
 
+/*
+ * surgescript_objectmanager_class_id()
+ * Gets the ID of a class of objects, given its name
+ * Returns true and sets the output value if the class exists
+ */
+bool surgescript_objectmanager_class_id(const surgescript_objectmanager_t* manager, const char* object_name, surgescript_objectclassid_t* out_class_id)
+{
+    extern bool surgescript_programpool_class_id(const surgescript_programpool_t* pool, const char* object_name, surgescript_objectclassid_t* out_class_id);
+    return surgescript_programpool_class_id(manager->program_pool, object_name, out_class_id);
+}
 
 
 /* private stuff */
 
 /* garbage collector */
-bool mark_as_reachable(unsigned handle, void* mgr)
+bool mark_as_reachable(surgescript_objecthandle_t handle, void* mgr)
 {
     surgescript_objectmanager_t* manager = (surgescript_objectmanager_t*)mgr;
     if(surgescript_objectmanager_exists(manager, handle)) {
@@ -547,11 +563,11 @@ bool sweep_unreachables(surgescript_object_t* object)
 }
 
 /* gets a handle at a unused space */
-surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* mgr)
+surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* manager)
 {
-    while(mgr->handle_ptr < ssarray_length(mgr->data) && mgr->data[mgr->handle_ptr] != NULL)
-        mgr->handle_ptr++;
-    return mgr->handle_ptr;
+    while(manager->next_handle < ssarray_length(manager->data) && manager->data[manager->next_handle] != NULL)
+        manager->next_handle++;
+    return manager->next_handle;
 }
 
 /* adds an object to the plugin list */
