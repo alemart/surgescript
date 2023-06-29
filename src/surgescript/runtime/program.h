@@ -32,7 +32,7 @@
 
 /*
  * A program is composed by:
- * 1. operations = a sequence of ( operator, operand_a, operand_b, operand_c )
+ * 1. operations = a sequence of ( operator, ( operand_a, operand_b ) )
  * 2. labels = indexes of operations
  * 3. string literals
  */
@@ -60,7 +60,9 @@ typedef union surgescript_program_operand_t {
     uint32_t u;
     int32_t i;
     bool b;
-    uint64_t _u;
+    uint64_t u64;
+    int64_t i64;
+    void* p;
 } surgescript_program_operand_t;
 
 #define SSOP()   SSOPu(0)
@@ -71,7 +73,7 @@ typedef union surgescript_program_operand_t {
 
 static inline surgescript_program_operand_t surgescript_program_operand_u(unsigned u) { surgescript_program_operand_t o = { .u = u }; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_f(double f) { surgescript_program_operand_t o = { .f = f }; return o; }
-static inline surgescript_program_operand_t surgescript_program_operand_b(bool b) { surgescript_program_operand_t o = { ._u = 0 }; o.b = b; return o; }
+static inline surgescript_program_operand_t surgescript_program_operand_b(bool b) { surgescript_program_operand_t o = { .u64 = 0 }; o.b = b; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_i(int i) { surgescript_program_operand_t o = { .i = i }; return o; }
 
 

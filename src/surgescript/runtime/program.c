@@ -55,7 +55,8 @@ struct surgescript_program_operation_t
 struct surgescript_program_t
 {
     int arity; /* config */
-    void (*run)(surgescript_program_t*, surgescript_renv_t*); /* run function; strategy pattern */
+    bool executed; /* has this program ever been executed? */
+    void (*run)(surgescript_program_t*, const surgescript_renv_t*); /* run function; strategy pattern */
     SSARRAY(surgescript_program_operation_t, line); /* a set of operations (or lines of code) */
     SSARRAY(surgescript_program_label_t, label); /* labels (label[j] is the index of a line of code, j is a label) */
     SSARRAY(char*, text); /* read-only text data */
@@ -76,11 +77,12 @@ static const char* instruction_name[] = {
 };
 
 /* utilities */
-static surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, surgescript_renv_t*));
-static void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
-static void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment);
-static inline void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, int* ip);
-static inline void call_program(surgescript_renv_t* caller_runtime_environment, const char* program_name, int number_of_given_params);
+static surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, const surgescript_renv_t*));
+static void run_program(surgescript_program_t* program, const surgescript_renv_t* runtime_environment);
+static void run_cprogram(surgescript_program_t* program, const surgescript_renv_t* runtime_environment);
+static inline unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip);
+static inline surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* cached_program, surgescript_objectclassid_t* out_class_id);
+static inline surgescript_objectclassid_t class_id_of_callee(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
@@ -91,10 +93,14 @@ static inline int fast_notzero(double f);
 static const int MAX_PROGRAM_ARITY = 256;
 
 /* debug mode? */
-/*#define SURGESCRIPT_DEBUG_MODE*/
-#ifdef SURGESCRIPT_DEBUG_MODE
+#define SURGESCRIPT_DEBUG_MODE 0
+#if SURGESCRIPT_DEBUG_MODE
 static inline void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_var_t** _t);
 #endif
+
+/* optimizations */
+#define WANT_OPTIMIZED_PROGRAM_CALLS 1
+#define OPTIMIZED_CALL_THRESHOLD 8
 
 /* -------------------------------
  * public methods
@@ -147,16 +153,31 @@ int surgescript_program_add_line(surgescript_program_t* program, surgescript_pro
 {
     surgescript_program_operation_t line = { op, a, b };
     ssarray_push(program->line, line);
+
+#if WANT_OPTIMIZED_PROGRAM_CALLS
+    /* we add two NOPs after every CALL as a trick to help
+       the program optimize itself during its own execution */
+    if(op == SSOP_CALL) {
+        surgescript_program_operand_t zero = surgescript_program_operand_u(0);
+        surgescript_program_operation_t nop = { SSOP_NOP, zero, zero };
+
+        ssarray_push(program->line, nop);
+        ssarray_push(program->line, nop);
+    }
+#endif
+
     return ssarray_length(program->line) - 1;
 }
 
 /*
  * surgescript_program_chg_line()
- * changes an existing line of code of the program
+ * Changes an existing line of code of the program
  */
 int surgescript_program_chg_line(surgescript_program_t* program, int line, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b)
 {
     surgescript_program_operation_t newline = { op, a, b };
+    ssassert(op != SSOP_CALL); /* can't change the line do CALL due to the NOP optimization trick in surgescript_program_add_line(); won't change the labels */
+
     if(line >= 0 && line < ssarray_length(program->line)) {
         program->line[line] = newline;
         return line;
@@ -245,6 +266,41 @@ int surgescript_program_arity(const surgescript_program_t* program)
     return program->arity;
 }
 
+/*
+ * surgescript_program_call()
+ * Low-level SurgeScript program call.
+ * You'll need to push the stack parameters yourself (prefer using surgescript_object_call_function() instead)
+*/
+void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t* runtime_environment, int num_params)
+{
+    if(num_params == program->arity) {
+        surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
+        surgescript_stack_pushenv(stack);
+        program->run(program, runtime_environment);
+        surgescript_stack_popenv(stack);
+    }
+    else {
+        surgescript_object_t* owner = surgescript_renv_owner(runtime_environment);
+        ssfatal("Runtime Error: internal program call - function of object \"%s\" expects %d parameters, but received %d.", surgescript_object_name(owner), program->arity, num_params);
+    }
+}
+
+
+/*
+ * surgescript_program_is_native()
+ * Is the program native (i.e., written in C)?
+ */
+bool surgescript_program_is_native(const surgescript_program_t* program)
+{
+    return program->run == run_cprogram;
+}
+
+/* has this program ever been executed? */
+bool surgescript_program_executed(const surgescript_program_t* program)
+{
+    return program->executed;
+}
+
 /* dump the program to a file */
 void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 {
@@ -290,43 +346,13 @@ void surgescript_program_dump(surgescript_program_t* program, FILE* fp)
 }
 
 
-/*
- * surgescript_program_call()
- * Low-level SurgeScript program call.
- * You'll need to push the stack parameters yourself (prefer using surgescript_object_call_function() instead)
-*/
-void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t* runtime_environment, int num_params)
-{
-    if(num_params == program->arity) {
-        surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
-        surgescript_stack_pushenv(stack);
-        program->run(program, runtime_environment);
-        surgescript_stack_popenv(stack);
-    }
-    else {
-        surgescript_object_t* owner = surgescript_renv_owner(runtime_environment);
-        ssfatal("Runtime Error: internal program call - function of object \"%s\" expects %d parameters, but received %d.", surgescript_object_name(owner), program->arity, num_params);
-    }
-}
-
-
-/*
- * surgescript_program_is_native()
- * Is the program native (i.e., written in C)?
- */
-bool surgescript_program_is_native(const surgescript_program_t* program)
-{
-    return program->run == run_cprogram;
-}
-
-
 
 /* -------------------------------
  * private stuff
  * ------------------------------- */
 
 /* initializes a program */
-surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, surgescript_renv_t*))
+surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, const surgescript_renv_t*))
 {
     /* sanity check */
     if(arity > MAX_PROGRAM_ARITY)
@@ -334,6 +360,7 @@ surgescript_program_t* init_program(surgescript_program_t* program, int arity, v
 
     /* initialization */
     program->arity = ssmax(0, arity);
+    program->executed = false;
     program->run = run_function;
 
     ssarray_init(program->line);
@@ -344,23 +371,28 @@ surgescript_program_t* init_program(surgescript_program_t* program, int arity, v
 }
 
 /* runs a program */
-void run_program(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
+void run_program(surgescript_program_t* program, const surgescript_renv_t* runtime_environment)
 {
-    int ip = 0; /* instruction pointer */
+    unsigned int ip = 0; /* instruction pointer */
+
+    program->executed = true;
     remove_labels(program);
 
     while(ip < ssarray_length(program->line))
-        run_instruction(program, runtime_environment, program->line[ip].instruction, program->line[ip].a, program->line[ip].b, &ip);
+        ip = run_instruction(program, runtime_environment, program->line + ip, ip);
 }
 
 /* runs a C-program */
-void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_environment)
+void run_cprogram(surgescript_program_t* program, const surgescript_renv_t* runtime_environment)
 {
     surgescript_cprogram_t* cprogram = (surgescript_cprogram_t*)program;
     surgescript_object_t* object = surgescript_renv_owner(runtime_environment);
     surgescript_stack_t* stack = surgescript_renv_stack(runtime_environment);
     const surgescript_var_t** param = program->arity > 0 ? alloca(program->arity * sizeof(*param)) : NULL;
     surgescript_var_t* return_value = NULL;
+
+    /* set the execution flag */
+    program->executed = true;
 
     /* grab parameters from the stack (stacked in left-to-right order) */
     for(int i = 1; i <= program->arity; i++)
@@ -376,25 +408,29 @@ void run_cprogram(surgescript_program_t* program, surgescript_renv_t* runtime_en
         surgescript_var_set_null(*(surgescript_renv_tmp(runtime_environment) + 0));
 }
 
-/* runs an instruction */
-void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, int* ip)
+/* runs an instruction and returns a new value for the instruction pointer */
+unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip)
 {
-    /* temporary variables */
-    surgescript_var_t** _t = surgescript_renv_tmp(runtime_environment);
-
     /* helper macro */
     #ifdef t
     #undef t
     #endif
     #define t(k)             _t[(k).u & 3]
 
+    /* temporary variables */
+    surgescript_var_t** _t = surgescript_renv_tmp(runtime_environment);
+
+    /* read the operands */
+    surgescript_program_operand_t a = operation->a;
+    surgescript_program_operand_t b = operation->b;
+
     /* debug mode */
-    #ifdef SURGESCRIPT_DEBUG_MODE
-    debug(program, runtime_environment, instruction, a, b, _t);
+    #if SURGESCRIPT_DEBUG_MODE
+    debug(program, runtime_environment, operation->instruction, a, b, _t);
     #endif
 
     /* run the instruction */
-    switch(instruction) {
+    switch(operation->instruction) {
         /* basics */
         case SSOP_NOP: /* no-operation */
             break;
@@ -440,7 +476,7 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
             break;
 
         case SSOP_MOVX: /* move int64 */
-            surgescript_var_set_rawbits(t(a), b.u);
+            surgescript_var_set_rawbits(t(a), b.i64);
             break;
 
         case SSOP_MOV: /* move temp */
@@ -578,69 +614,149 @@ void run_instruction(surgescript_program_t* program, surgescript_renv_t* runtime
 
         /* jumping */
         case SSOP_JMP:
-            *ip = a.u;
-            return;
+            return a.u;
 
         case SSOP_JE:
-            if(!surgescript_var_get_rawbits(_t[2])) {
-                *ip = a.u;
-                return;
-            }
+            if(!surgescript_var_get_rawbits(_t[2]))
+                return a.u;
             break;
 
         case SSOP_JNE:
-            if(surgescript_var_get_rawbits(_t[2])) {
-                *ip = a.u;
-                return;
-            }
+            if(surgescript_var_get_rawbits(_t[2]))
+                return a.u;
             break;
 
         case SSOP_JL:
-            if(surgescript_var_get_rawbits(_t[2]) < 0) {
-                *ip = a.u;
-                return;
-            }
+            if(surgescript_var_get_rawbits(_t[2]) < 0)
+                return a.u;
             break;
 
         case SSOP_JG:
-            if(surgescript_var_get_rawbits(_t[2]) > 0) {
-                *ip = a.u;
-                return;
-            }
+            if(surgescript_var_get_rawbits(_t[2]) > 0)
+                return a.u;
             break;
 
         case SSOP_JLE:
-            if(surgescript_var_get_rawbits(_t[2]) <= 0) {
-                *ip = a.u;
-                return;
-            }
+            if(surgescript_var_get_rawbits(_t[2]) <= 0)
+                return a.u;
             break;
 
         case SSOP_JGE:
-            if(surgescript_var_get_rawbits(_t[2]) >= 0) {
-                *ip = a.u;
-                return;
-            }
+            if(surgescript_var_get_rawbits(_t[2]) >= 0)
+                return a.u;
             break;
 
         /* function calls */
+        case SSOP_RET:
+            return ssarray_length(program->line);
+
         case SSOP_CALL:
-            if(a.u < ssarray_length(program->text))
-                call_program(runtime_environment, program->text[a.u], b.u);
+            if(a.u < ssarray_length(program->text)) {
+                surgescript_objectclassid_t class_id = 0;
+                surgescript_program_t* callee_program = call_program(runtime_environment, b.u, program->text[a.u], NULL, &class_id);
+
+#if WANT_OPTIMIZED_PROGRAM_CALLS
+                /* count the number of consecutive times the program has been
+                   executed with this same callee or equivalent object of the
+                   same class (a == class_id; b == count) */
+                if(operation[1].a.u == class_id) {
+                    if(++operation[1].b.i >= OPTIMIZED_CALL_THRESHOLD) {
+                        /* the program has run enough consecutive times with
+                           the same or equivalent callee. Let's optimize. */
+
+                        /* save the current operands */
+                        operation[2].a = a;
+                        operation[2].b = b;
+
+                        /* reset the counter */
+                        operation[1].b.i = 0;
+
+                        /* let's change this instruction */
+                        operation->instruction = SSOP_OPTCALL;
+                        operation->a.p = callee_program;
+                        operation->b.u = b.u;
+                    }
+                }
+                else {
+                    /* new class. Reset the counter */
+                    operation[1].a.u = class_id;
+                    operation[1].b.i = 1;
+                }
+
+                /* skip the two NOPs placed after every CALL */
+                ip += 2;
+#endif
+            }
             break;
 
-        case SSOP_RET:
-            *ip = ssarray_length(program->line);
-            return;
+        case SSOP_OPTCALL: {
+#if WANT_OPTIMIZED_PROGRAM_CALLS
+            /* check if we still have the same or equivalent callee */
+            surgescript_objectclassid_t class_id = class_id_of_callee(runtime_environment, b.u);
+            if(operation[1].a.u == class_id) {
+
+                /* run the cached program. We can afford to do that because
+                   surgescript_program_t* entries will not change after execution */
+                surgescript_program_t* callee_program = operation->a.p;
+                call_program(runtime_environment, b.u, NULL, callee_program, &class_id);
+
+            }
+            else {
+
+                /* Got a different callee. Restore the original CALL */
+                operation->instruction = SSOP_CALL;
+                operation->a = operation[2].a;
+                operation->b = operation[2].b;
+
+                /* run the same instruction again */
+                operation[1].b.i = 0;
+                return ip;
+
+            }
+
+            /* skip the two NOPs placed after every CALL */
+            ip += 2;
+#else
+            (void)class_id_of_callee; /* nop */
+#endif
+            break;
+        }
     }
 
     /* next line */
-    ++(*ip);
+    return ip + 1;
+
+    /* done */
+    #undef t
+}
+
+/* the class id of the callee */
+surgescript_objectclassid_t class_id_of_callee(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params)
+{
+    /* preparing the stack */
+    surgescript_stack_t* stack = surgescript_renv_stack(caller_runtime_environment);
+    surgescript_stack_pushenv(stack);
+
+    /* there is a program to be called */
+    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
+    const surgescript_var_t* callee = surgescript_stack_peek(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
+    surgescript_objecthandle_t object_handle = surgescript_var_get_objecthandle(callee);
+
+    /* find the class id */
+    /*if(surgescript_objectmanager_exists(manager, object_handle)) {*/ /* the object is assumed to exist */
+    const surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
+    surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
+
+    /* clean up & done */
+    surgescript_stack_popenv(stack);
+    return class_id;
 }
 
 /* calls a program */
-void call_program(surgescript_renv_t* caller_runtime_environment, const char* program_name, int number_of_given_params)
+surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* cached_program, surgescript_objectclassid_t* out_class_id)
 {
+    surgescript_program_t* program = NULL;
+
     /* preparing the stack */
     surgescript_stack_t* stack = surgescript_renv_stack(caller_runtime_environment);
     surgescript_stack_pushenv(stack);
@@ -649,17 +765,24 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
     const surgescript_var_t* callee = surgescript_stack_peek(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
     surgescript_objecthandle_t object_handle = surgescript_var_get_objecthandle(callee);
+    surgescript_objectclassid_t class_id = 0;
 
     /* surgescript can also call programs on primitive types */
     if(!surgescript_var_is_objecthandle(callee)) /* callee is of a primitive type */
         number_of_given_params++; /* object_handle points to the appropriate wrapper */
 
-    /* finds the program */
+    /* find the program */
     if(surgescript_objectmanager_exists(manager, object_handle)) {
+        surgescript_programpool_t* pool = surgescript_renv_programpool(caller_runtime_environment);
         surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
         const char* object_name = surgescript_object_name(object);
-        surgescript_programpool_t* pool = surgescript_renv_programpool(caller_runtime_environment);
-        surgescript_program_t* program = surgescript_programpool_get(pool, object_name, program_name); /* bottleneck? */
+        class_id = surgescript_object_class_id(object);
+
+        program = cached_program;
+        if(program == NULL) {
+            /* this is a bottleneck - use cached_program if possible */
+            program = surgescript_programpool_get(pool, object_name, program_name);
+        }
         
         /* does the selected program exist? */
         if(program != NULL) {
@@ -693,6 +816,10 @@ void call_program(surgescript_renv_t* caller_runtime_environment, const char* pr
 
     /* clean up */
     surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */
+
+    /* done */
+    *out_class_id = class_id;
+    return program;
 }
 
 /* writes data to buf, in hex/big-endian format (writes (1 + 2 * sizeof(unsigned)) bytes to buf) */
@@ -775,7 +902,7 @@ bool remove_labels(surgescript_program_t* program)
 }
 
 /* debug mode */
-#ifdef SURGESCRIPT_DEBUG_MODE
+#if SURGESCRIPT_DEBUG_MODE
 void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_var_t** _t)
 {
     int i;

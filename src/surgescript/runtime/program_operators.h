@@ -93,6 +93,8 @@
                                        /* stack[top-b] and store in t[0] */ \
                                       /* the return value of the program */ \
                                  /* parameters are stacked left-to-right */ \
-    F( SSOP_RET, "ret" )                 /* returns, halting the program */
+    F( SSOP_RET, "ret" )                 /* returns, halting the program */ \
+    F( SSOP_OPTCALL, "optcall" )          /* optimized program call with */ \
+                                        /* b parameters and located at a */
 
 #endif

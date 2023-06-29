@@ -228,6 +228,10 @@ bool surgescript_programpool_replace(surgescript_programpool_t* pool, const char
     
     /* replace the program? */
     if(pair != NULL) {
+        /* can't replace an already executed program due to program call optimizations */
+        extern bool surgescript_program_executed(const surgescript_program_t* program);
+        ssassert(!surgescript_program_executed(pair->program));
+
         /* replace the program */
         surgescript_program_destroy(pair->program);
         pair->program = program;
