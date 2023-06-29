@@ -35,11 +35,10 @@
 #if defined(_WIN32)
 #include <windows.h>
 #include <wchar.h>
-#else
-#include <sys/time.h>
 #endif
 
 #include "util.h"
+#include "../third_party/gettimeofday.h"
 
 /* private stuff */
 static void mem_crash(const char* file, int line);
@@ -342,18 +341,13 @@ char* surgescript_util_accessorfun(const char* prefix, const char* text)
 
 /*
  * surgescript_util_gettickcount()
- * Returns the number of milliseconds since some arbitrary zero
- * This is a system-specific routine
+ * Returns the number of milliseconds since the Unix Epoch
  */
 uint64_t surgescript_util_gettickcount()
 {
-#ifndef _WIN32
     struct timeval now;
     gettimeofday(&now, NULL);
     return ((uint64_t)now.tv_sec * 1000) + ((uint64_t)now.tv_usec / 1000);
-#else
-    return GetTickCount(); /*GetTickCount64()*/
-#endif
 }
 
 /*

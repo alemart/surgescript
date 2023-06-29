@@ -102,6 +102,7 @@ set(
     src/surgescript/runtime/variable.h
     src/surgescript/runtime/vm.h
     src/surgescript/runtime/vm_time.h
+    src/surgescript/third_party/gettimeofday.h
     src/surgescript/third_party/utf8.h
     src/surgescript/third_party/uthash.h
     src/surgescript/third_party/xxh3.h
