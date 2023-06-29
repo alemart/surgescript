@@ -82,7 +82,6 @@ static void run_program(surgescript_program_t* program, const surgescript_renv_t
 static void run_cprogram(surgescript_program_t* program, const surgescript_renv_t* runtime_environment);
 static inline unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip);
 static inline surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* cached_program, surgescript_objectclassid_t* out_class_id);
-static inline surgescript_objectclassid_t class_id_of_callee(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
@@ -668,9 +667,6 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
                         operation[2].a = a;
                         operation[2].b = b;
 
-                        /* reset the counter */
-                        operation[1].b.i = 0;
-
                         /* let's change this instruction */
                         operation->instruction = SSOP_OPTCALL;
                         operation->a.p = callee_program;
@@ -684,43 +680,43 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
                 }
 
                 /* skip the two NOPs placed after every CALL */
-                ip += 2;
+                return ip += 3;
 #endif
             }
             break;
 
-        case SSOP_OPTCALL: {
+        case SSOP_OPTCALL:
 #if WANT_OPTIMIZED_PROGRAM_CALLS
-            /* check if we still have the same or equivalent callee */
-            surgescript_objectclassid_t class_id = class_id_of_callee(runtime_environment, b.u);
-            if(operation[1].a.u == class_id) {
+            /* run the cached program. We can afford to cache because
+               surgescript_program_t* entries of the program pool will not
+               change after execution */
+            if(!call_program(runtime_environment, b.u, NULL, a.p, &operation[1].a.u)) {
 
-                /* run the cached program. We can afford to do that because
-                   surgescript_program_t* entries will not change after execution */
-                surgescript_program_t* callee_program = operation->a.p;
-                call_program(runtime_environment, b.u, NULL, callee_program, &class_id);
+                /* Got a different callee. Execution was aborted! */
 
-            }
-            else {
-
-                /* Got a different callee. Restore the original CALL */
+                /* restore the original CALL */
                 operation->instruction = SSOP_CALL;
                 operation->a = operation[2].a;
                 operation->b = operation[2].b;
 
-                /* run the same instruction again */
+                /* reset the counter */
                 operation[1].b.i = 0;
+
+                /* run the same instruction again */
                 return ip;
 
             }
+            else {
 
-            /* skip the two NOPs placed after every CALL */
-            ip += 2;
+                /* Execution was successful! */
+
+                /* skip the two NOPs placed after every CALL */
+                return ip += 3;
+
+            }
 #else
-            (void)class_id_of_callee; /* nop */
-#endif
             break;
-        }
+#endif
     }
 
     /* next line */
@@ -730,34 +726,8 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
     #undef t
 }
 
-/* the class id of the callee */
-surgescript_objectclassid_t class_id_of_callee(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params)
-{
-    /* preparing the stack */
-    surgescript_stack_t* stack = surgescript_renv_stack(caller_runtime_environment);
-    surgescript_stack_pushenv(stack);
-
-    /* there is a program to be called */
-    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
-    const surgescript_var_t* callee = surgescript_stack_peek(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
-    surgescript_objecthandle_t object_handle = surgescript_var_get_objecthandle(callee);
-
-    /* find the class id */
-    surgescript_objectclassid_t class_id = 0;
-    if(surgescript_objectmanager_exists(manager, object_handle)) {
-        const surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
-        class_id = surgescript_object_class_id(object);
-    }
-    else
-        ssfatal("Runtime Error: null pointer exception - can't find class ID of null callee (called in \"%s\").", surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
-
-    /* clean up & done */
-    surgescript_stack_popenv(stack);
-    return class_id;
-}
-
 /* calls a program */
-surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* cached_program, surgescript_objectclassid_t* out_class_id)
+surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* cached_program, surgescript_objectclassid_t* inout_class_id)
 {
     surgescript_program_t* program = NULL;
 
@@ -769,7 +739,6 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(caller_runtime_environment);
     const surgescript_var_t* callee = surgescript_stack_peek(stack, -1 - number_of_given_params); /* 1st param, left-to-right */
     surgescript_objecthandle_t object_handle = surgescript_var_get_objecthandle(callee);
-    surgescript_objectclassid_t class_id = 0;
 
     /* surgescript can also call programs on primitive types */
     if(!surgescript_var_is_objecthandle(callee)) /* callee is of a primitive type */
@@ -780,12 +749,22 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
         surgescript_programpool_t* pool = surgescript_renv_programpool(caller_runtime_environment);
         surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
         const char* object_name = surgescript_object_name(object);
-        class_id = surgescript_object_class_id(object);
+        surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
 
-        program = cached_program;
-        if(program == NULL) {
-            /* this is a bottleneck - use cached_program if possible */
+        if(cached_program == NULL) {
+            /* do a program lookup. this is a bottleneck!
+               use cached_program if possible */
             program = surgescript_programpool_get(pool, object_name, program_name);
+            *inout_class_id = class_id;
+        }
+        else {
+            /* we're using a cached program.
+               Abort if callee is incompatible */
+            program = cached_program;
+            if(class_id != *inout_class_id) {
+                program = NULL;
+                goto cleanup;
+            }
         }
         
         /* does the selected program exist? */
@@ -819,10 +798,10 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
         ssfatal("Runtime Error: null pointer exception - can't call function %s (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
 
     /* clean up */
+    cleanup:
     surgescript_stack_popenv(stack); /* clear stack frame, including a unknown number of local variables */
 
     /* done */
-    *out_class_id = class_id;
     return program;
 }
 
