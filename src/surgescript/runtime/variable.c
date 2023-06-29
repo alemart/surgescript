@@ -31,7 +31,7 @@
 #include "object.h"
 #include "object_manager.h"
 #include "../util/util.h"
-#include "../util/utf8.h"
+#include "../third_party/utf8.h"
 
 
 /* private stuff */

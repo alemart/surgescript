@@ -73,10 +73,10 @@ set(
     src/surgescript/runtime/variable.c
     src/surgescript/runtime/vm.c
     src/surgescript/runtime/vm_time.c
+    src/surgescript/third_party/utf8.c
+    src/surgescript/third_party/xoroshiro128plus.c
     src/surgescript/util/transform.c
-    src/surgescript/util/utf8.c
     src/surgescript/util/util.c
-    src/surgescript/util/xoroshiro128plus.c
     ${CMAKE_BINARY_DIR}/src/surgescript/misc/info.c
 )
 
@@ -102,11 +102,13 @@ set(
     src/surgescript/runtime/variable.h
     src/surgescript/runtime/vm.h
     src/surgescript/runtime/vm_time.h
+    src/surgescript/third_party/utf8.h
+    src/surgescript/third_party/uthash.h
+    src/surgescript/third_party/xxh3.h
+    src/surgescript/third_party/xxhash.h
     src/surgescript/util/fasthash.h
     src/surgescript/util/ssarray.h
     src/surgescript/util/transform.h
-    src/surgescript/util/utf8.h
-    src/surgescript/util/uthash.h
     src/surgescript/util/util.h
     src/surgescript.h
 )

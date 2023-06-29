@@ -30,7 +30,6 @@
 #include "variable.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
-#include "../util/uthash.h"
 
 /* types */
 typedef struct surgescript_vmargs_t surgescript_vmargs_t;

@@ -26,7 +26,7 @@
 #include "../object_manager.h"
 #include "../../util/ssarray.h"
 #include "../../util/util.h"
-#include "../../util/utf8.h"
+#include "../../third_party/utf8.h"
 
 /* private stuff */
 static surgescript_var_t* fun_valueof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);

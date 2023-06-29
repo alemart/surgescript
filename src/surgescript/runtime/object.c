@@ -863,7 +863,6 @@ bool surgescript_object_update(surgescript_object_t* object)
 
     /* update myself */
     if(object->is_active) {
-        uint64_t start=object->time_spent;
         object->time_spent += run_current_state(object);
         return object->is_active; /* will generally be true, but not necessarily */
     }

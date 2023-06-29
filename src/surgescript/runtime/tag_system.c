@@ -25,11 +25,11 @@
 #include "tag_system.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
-#include "../util/uthash.h"
+#include "../third_party/uthash.h"
 
 #define XXH_INLINE_ALL
 #define XXH_FORCE_ALIGN_CHECK 1
-#include "../util/xxhash.h"
+#include "../third_party/xxhash.h"
 #define WANT_FIXED_LENGTH_XXH 0
 
 #if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
