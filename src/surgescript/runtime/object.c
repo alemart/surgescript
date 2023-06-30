@@ -674,7 +674,16 @@ bool surgescript_object_is_active(const surgescript_object_t* object)
  */
 void surgescript_object_set_active(surgescript_object_t* object, bool active)
 {
+    /* nothing to do */
+    if(object->is_active == active)
+        return;
+
+    /* update the flag */
     object->is_active = active;
+
+    /* reset the time stats */
+    object->time_spent = 0;
+    object->frames_spent = 0;
 }
 
 /*
