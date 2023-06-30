@@ -27,6 +27,9 @@
 #include "../util/util.h"
 #include "../third_party/uthash.h"
 
+#define FASTHASH_INLINE
+#include "../util/fasthash.h"
+
 #define XXH_INLINE_ALL
 #define XXH_FORCE_ALIGN_CHECK 1
 #include "../third_party/xxhash.h"
@@ -42,61 +45,13 @@ typedef uint32_t xxhash_t;
 typedef uint64_t xxhash_t;
 #endif
 
-#define USE_FAST_TAGS /* use faster algorithms */
-#define generate_tag(tag_name) (surgescript_tag_t)(XXH((tag_name), strlen(tag_name), 0))
+
+/* tag */
 typedef xxhash_t surgescript_tag_t;
-typedef struct surgescript_tagtable_t surgescript_tagtable_t;
-typedef struct surgescript_inversetagtable_t surgescript_inversetagtable_t;
-typedef struct surgescript_tagtree_t surgescript_tagtree_t;
-
-#if defined(USE_FAST_TAGS)
-typedef uint64_t surgescript_tagsignature_t;
-#  define FASTHASH_INLINE
-#  include "../util/fasthash.h"
-#endif
-
-/* tag system */
-struct surgescript_tagsystem_t
-{
-#if defined(USE_FAST_TAGS)
-    fasthash_t* tag_table; /* tag table: object -> tags */
-#else
-    surgescript_tagtable_t* tag_table; /* tag table: object -> tags */
-#endif
-    surgescript_inversetagtable_t* inverse_tag_table; /* inverse tag table: tag -> objects */
-    surgescript_tagtree_t* tag_tree; /* the set of all tags */
-};
-
-/* tag table: an object may hold an arbitrary number of tags */
-#if defined(USE_FAST_TAGS)
-struct surgescript_tagtable_t
-{
-    surgescript_tag_t tag;
-    char* object_name;
-    char* tag_name;
-};
-
-static void destroy_tagtable_entry(void* e);
-static inline surgescript_tagsignature_t generate_tag_signature(const char* object_name, const char* tag_name);
-#else
-struct surgescript_tagtable_t
-{
-    char* object_name; /* key */
-    SSARRAY(surgescript_tag_t, tag); /* values */
-    UT_hash_handle hh;
-};
-#endif
-
-/* inverse tag table: we'll get to know all objects that have a certain tag */
-struct surgescript_inversetagtable_t
-{
-    char* tag_name; /* key */
-    surgescript_tagtree_t* objects; /* value */
-    surgescript_tag_t tag;
-    UT_hash_handle hh;
-};
+#define generate_tag(tag_name) (surgescript_tag_t)(XXH((tag_name), strlen(tag_name), 0))
 
 /* tag tree: a binary tree of strings */
+typedef struct surgescript_tagtree_t surgescript_tagtree_t;
 struct surgescript_tagtree_t
 {
     char* key;
@@ -105,11 +60,46 @@ struct surgescript_tagtree_t
 };
 
 static surgescript_tagtree_t* add_to_tree(surgescript_tagtree_t* tree, const char* key);
-static void remove_tree(surgescript_tagtree_t* tree);
+static surgescript_tagtree_t* remove_tree(surgescript_tagtree_t* tree);
 static void traverse_tree(const surgescript_tagtree_t* tree, void* data, void (*callback)(const char*, void*));
+
+/* inverse tag table: we'll get to know all objects that have a certain tag */
+typedef struct surgescript_inversetagtable_t surgescript_inversetagtable_t;
+struct surgescript_inversetagtable_t
+{
+    char* tag_name; /* key */
+    surgescript_tagtree_t* objects; /* value */
+    surgescript_tag_t tag;
+    UT_hash_handle hh;
+};
+
+/* tag table: an object may hold an arbitrary number of tags */
+typedef struct surgescript_tagtable_t surgescript_tagtable_t;
+struct surgescript_tagtable_t
+{
+    surgescript_tag_t tag;
+    char* object_name;
+    char* tag_name;
+};
+
+static void destroy_tagtable_entry(void* e);
+
+/* tag signature */
+typedef uint64_t surgescript_tagsignature_t;
+static inline surgescript_tagsignature_t generate_tag_signature(const char* object_name, const char* tag_name);
+
+/* tag system */
+struct surgescript_tagsystem_t
+{
+    fasthash_t* tag_table; /* tag table: object -> tags */
+    surgescript_inversetagtable_t* inverse_tag_table; /* inverse tag table: tag -> objects */
+    surgescript_tagtree_t* tag_tree; /* the set of all tags */
+};
 
 /* misc */
 static void foreach_tag_of_object(const char* tag_name, void* wrapper);
+
+
 
 
 /*
@@ -119,15 +109,9 @@ static void foreach_tag_of_object(const char* tag_name, void* wrapper);
 surgescript_tagsystem_t* surgescript_tagsystem_create()
 {
     surgescript_tagsystem_t* tag_system = ssmalloc(sizeof *tag_system);
-#if defined(USE_FAST_TAGS)
     tag_system->tag_table = fasthash_create(destroy_tagtable_entry, 13);
     tag_system->inverse_tag_table = NULL;
     tag_system->tag_tree = NULL;
-#else
-    tag_system->tag_table = NULL;
-    tag_system->inverse_tag_table = NULL;
-    tag_system->tag_tree = NULL;
-#endif
     return tag_system;
 }
 
@@ -137,7 +121,6 @@ surgescript_tagsystem_t* surgescript_tagsystem_create()
  */
 surgescript_tagsystem_t* surgescript_tagsystem_destroy(surgescript_tagsystem_t* tag_system)
 {
-#if defined(USE_FAST_TAGS)
     surgescript_inversetagtable_t *iit, *itmp;
 
     remove_tree(tag_system->tag_tree);
@@ -149,26 +132,6 @@ surgescript_tagsystem_t* surgescript_tagsystem_destroy(surgescript_tagsystem_t* 
         ssfree(iit->tag_name);
         ssfree(iit);
     }
-#else
-    surgescript_tagtable_t *it, *tmp;
-    surgescript_inversetagtable_t *iit, *itmp;
-
-    remove_tree(tag_system->tag_tree);
-
-    HASH_ITER(hh, tag_system->inverse_tag_table, iit, itmp) {
-        HASH_DEL(tag_system->inverse_tag_table, iit);
-        remove_tree(iit->objects);
-        ssfree(iit->tag_name);
-        ssfree(iit);
-    }
-
-    HASH_ITER(hh, tag_system->tag_table, it, tmp) {
-        HASH_DEL(tag_system->tag_table, it);
-        ssarray_release(it->tag);
-        ssfree(it->object_name);
-        ssfree(it);
-    }
-#endif
 
     return ssfree(tag_system);
 }
@@ -179,7 +142,6 @@ surgescript_tagsystem_t* surgescript_tagsystem_destroy(surgescript_tagsystem_t* 
  */
 void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const char* object_name, const char* tag_name)
 {
-#if defined(USE_FAST_TAGS)
     surgescript_tagsignature_t signature = generate_tag_signature(object_name, tag_name);
     surgescript_tagtable_t* entry = fasthash_get(tag_system->tag_table, signature);
     surgescript_tag_t tag = generate_tag(tag_name);
@@ -216,35 +178,6 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
 
     /* add tag to tag_tree */
     tag_system->tag_tree = add_to_tree(tag_system->tag_tree, tag_name);
-#else
-    surgescript_tagtable_t* entry = NULL;
-    surgescript_inversetagtable_t* ientry = NULL;
-    surgescript_tag_t tag = generate_tag(tag_name);
-
-    if(surgescript_tagsystem_has_tag(tag_system, object_name, tag_name))
-        return;
-
-    HASH_FIND(hh, tag_system->tag_table, object_name, strlen(object_name), entry);
-    if(entry == NULL) {
-        entry = ssmalloc(sizeof *entry);
-        entry->object_name = ssstrdup(object_name);
-        ssarray_init(entry->tag);
-        HASH_ADD_KEYPTR(hh, tag_system->tag_table, entry->object_name, strlen(entry->object_name), entry);
-    }
-
-    HASH_FIND(hh, tag_system->inverse_tag_table, tag_name, strlen(tag_name), ientry);
-    if(ientry == NULL) {
-        ientry = ssmalloc(sizeof *ientry);
-        ientry->tag_name = ssstrdup(tag_name);
-        ientry->objects = NULL;
-        ientry->tag = tag;
-        HASH_ADD_KEYPTR(hh, tag_system->inverse_tag_table, ientry->tag_name, strlen(ientry->tag_name), ientry);
-    }
-
-    ssarray_push(entry->tag, tag);
-    ientry->objects = add_to_tree(ientry->objects, object_name);
-    tag_system->tag_tree = add_to_tree(tag_system->tag_tree, tag_name);
-#endif
 }
 
 /*
@@ -253,26 +186,11 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
  */
 bool surgescript_tagsystem_has_tag(const surgescript_tagsystem_t* tag_system, const char* object_name, const char* tag_name)
 {
-#if defined(USE_FAST_TAGS)
     /* This function must be fast!!! */
     surgescript_tagsignature_t signature = generate_tag_signature(object_name, tag_name);
     surgescript_tagtable_t* entry = fasthash_get(tag_system->tag_table, signature);
 
     return (entry != NULL) && (0 == strcmp(entry->object_name, object_name)) && (0 == strcmp(entry->tag_name, tag_name));
-#else
-    surgescript_tagtable_t* entry = NULL;
-
-    HASH_FIND(hh, tag_system->tag_table, object_name, strlen(object_name), entry);
-    if(entry != NULL) {
-        surgescript_tag_t tag = generate_tag(tag_name);
-        for(int i = 0; i < ssarray_length(entry->tag); i++) {
-            if(entry->tag[i] == tag)
-                return true;
-        }
-    }
-
-    return false;
-#endif
 }
 
 /*
@@ -305,8 +223,8 @@ void surgescript_tagsystem_foreach_tagged_object(const surgescript_tagsystem_t* 
  */
 void surgescript_tagsystem_foreach_tag_of_object(const surgescript_tagsystem_t* tag_system, const char* object_name, void* data, void (*callback)(const char*,void*))
 {
-    /* this operation can be made faster with a dedicated data structure
-       (USE_FAST_TAGS is in place), but there aren't too many tags, are there? */
+    /* this operation can be made faster with a dedicated data
+       structure, but there aren't too many tags, are there? */
     void* wrapper[] = { (void*)tag_system, (void*)object_name, data, callback };
     surgescript_tagsystem_foreach_tag(tag_system, wrapper, foreach_tag_of_object);
 }
@@ -335,7 +253,7 @@ surgescript_tagtree_t* add_to_tree(surgescript_tagtree_t* tree, const char* key)
 }
 
 /* removes the whole tag tree */
-void remove_tree(surgescript_tagtree_t* tree)
+surgescript_tagtree_t* remove_tree(surgescript_tagtree_t* tree)
 {
     if(tree != NULL) {
         remove_tree(tree->left);
@@ -343,6 +261,8 @@ void remove_tree(surgescript_tagtree_t* tree)
         ssfree(tree->key);
         ssfree(tree);
     }
+
+    return NULL;
 }
 
 /* traverses the tag tree, in alphabetical order */
@@ -355,7 +275,6 @@ void traverse_tree(const surgescript_tagtree_t* tree, void* data, void (*callbac
     }
 }
 
-#if defined(USE_FAST_TAGS)
 /* signature generator */
 surgescript_tagsignature_t generate_tag_signature(const char* object_name, const char* tag_name)
 {
@@ -391,7 +310,6 @@ void destroy_tagtable_entry(void* e)
     ssfree(entry->tag_name);
     ssfree(entry);
 }
-#endif
 
 /* calls a callback for each tag of object named object_name */
 void foreach_tag_of_object(const char* tag_name, void* wrapper)
