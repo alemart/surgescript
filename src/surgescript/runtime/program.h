@@ -71,10 +71,10 @@ typedef union surgescript_program_operand_t {
 #define SSOPi(x) surgescript_program_operand_i(x)
 #define SSOPb(x) surgescript_program_operand_b(x)
 
-static inline surgescript_program_operand_t surgescript_program_operand_u(unsigned u) { surgescript_program_operand_t o = { .u = u }; return o; }
-static inline surgescript_program_operand_t surgescript_program_operand_f(double f) { surgescript_program_operand_t o = { .f = f }; return o; }
+static inline surgescript_program_operand_t surgescript_program_operand_u(unsigned u) { surgescript_program_operand_t o = { .u64 = 0 }; o.u = u; return o; }
+static inline surgescript_program_operand_t surgescript_program_operand_f(double f) { surgescript_program_operand_t o = { .u64 = 0 }; o.f = f; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_b(bool b) { surgescript_program_operand_t o = { .u64 = 0 }; o.b = b; return o; }
-static inline surgescript_program_operand_t surgescript_program_operand_i(int i) { surgescript_program_operand_t o = { .i = i }; return o; }
+static inline surgescript_program_operand_t surgescript_program_operand_i(int i) { surgescript_program_operand_t o = { .u64 = 0 }; o.i = i; return o; }
 
 
 

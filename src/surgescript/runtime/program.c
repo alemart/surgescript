@@ -81,7 +81,7 @@ static surgescript_program_t* init_program(surgescript_program_t* program, int a
 static void run_program(surgescript_program_t* program, const surgescript_renv_t* runtime_environment);
 static void run_cprogram(surgescript_program_t* program, const surgescript_renv_t* runtime_environment);
 static inline unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip);
-static inline surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* cached_program, surgescript_objectclassid_t* out_class_id);
+static inline surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* program, surgescript_objectclassid_t* out_class_id);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
@@ -689,7 +689,7 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
                change after execution */
             if(!call_program(runtime_environment, b.u, NULL, a.p, &operation[1].a.u)) {
 
-                /* Got a different callee. Execution was aborted! */
+                /* Got an incompatible callee. Execution was aborted! */
 
                 /* restore the original CALL */
                 operation->instruction = SSOP_CALL;
@@ -725,10 +725,8 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
 }
 
 /* calls a program */
-surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* cached_program, surgescript_objectclassid_t* inout_class_id)
+surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* program, surgescript_objectclassid_t* inout_class_id)
 {
-    surgescript_program_t* program = NULL;
-
     /* preparing the stack */
     surgescript_stack_t* stack = surgescript_renv_stack(caller_runtime_environment);
     surgescript_stack_pushenv(stack);
@@ -749,20 +747,17 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
         const char* object_name = surgescript_object_name(object);
         surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
 
-        if(cached_program == NULL) {
+        if(program == NULL) {
             /* do a program lookup. this is a bottleneck!
-               use cached_program if possible */
+               use a cached program if possible */
             program = surgescript_programpool_get(pool, object_name, program_name);
             *inout_class_id = class_id;
         }
-        else {
-            /* we're using a cached program.
-               Abort if callee is incompatible */
-            program = cached_program;
-            if(class_id != *inout_class_id) {
-                program = NULL;
-                goto cleanup;
-            }
+        else if(class_id != *inout_class_id) {
+            /* we're using a cached program, but the callee
+               is incompatible. Let's abort the execution. */
+            program = NULL;
+            goto cleanup;
         }
         
         /* does the selected program exist? */
