@@ -84,9 +84,32 @@ struct surgescript_tagtable_t
 
 static void destroy_tagtable_entry(void* e);
 
-/* tag signature */
+/* tag signature used in the tag table */
 typedef uint64_t surgescript_tagsignature_t;
+
+#if defined(__GNUC__)
+static inline surgescript_tagsignature_t generate_tag_signature(const char* object_name, const char* tag_name) __attribute__((always_inline));
+#else
 static inline surgescript_tagsignature_t generate_tag_signature(const char* object_name, const char* tag_name);
+#endif
+
+/* bound tag system: helps to quickly test a particular class of objects */
+struct surgescript_boundtagsystem_t
+{
+    char* object_name;
+    uint64_t bitset;
+    const surgescript_tagsystem_t* tag_system;
+
+    UT_hash_handle hh;
+};
+
+static surgescript_boundtagsystem_t* find_bound_tag_system(surgescript_tagsystem_t* tag_system, const char* object_name);
+
+#if defined(__GNUC__)
+static inline uint64_t bitmask(const char* tag_name) __attribute__((always_inline));
+#else
+static inline uint64_t bitmask(const char* tag_name);
+#endif
 
 /* tag system */
 struct surgescript_tagsystem_t
@@ -94,6 +117,7 @@ struct surgescript_tagsystem_t
     fasthash_t* tag_table; /* tag table: object -> tags */
     surgescript_inversetagtable_t* inverse_tag_table; /* inverse tag table: tag -> objects */
     surgescript_tagtree_t* tag_tree; /* the set of all tags */
+    surgescript_boundtagsystem_t* bound_tag_system; /* bound tag system */
 };
 
 /* misc */
@@ -112,6 +136,7 @@ surgescript_tagsystem_t* surgescript_tagsystem_create()
     tag_system->tag_table = fasthash_create(destroy_tagtable_entry, 13);
     tag_system->inverse_tag_table = NULL;
     tag_system->tag_tree = NULL;
+    tag_system->bound_tag_system = NULL;
     return tag_system;
 }
 
@@ -122,6 +147,7 @@ surgescript_tagsystem_t* surgescript_tagsystem_create()
 surgescript_tagsystem_t* surgescript_tagsystem_destroy(surgescript_tagsystem_t* tag_system)
 {
     surgescript_inversetagtable_t *iit, *itmp;
+    surgescript_boundtagsystem_t *bit, *btmp;
 
     remove_tree(tag_system->tag_tree);
     fasthash_destroy(tag_system->tag_table);
@@ -131,6 +157,12 @@ surgescript_tagsystem_t* surgescript_tagsystem_destroy(surgescript_tagsystem_t* 
         remove_tree(iit->objects);
         ssfree(iit->tag_name);
         ssfree(iit);
+    }
+
+    HASH_ITER(hh, tag_system->bound_tag_system, bit, btmp) {
+        HASH_DEL(tag_system->bound_tag_system, bit);
+        ssfree(bit->object_name);
+        ssfree(bit);
     }
 
     return ssfree(tag_system);
@@ -146,6 +178,7 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
     surgescript_tagtable_t* entry = fasthash_get(tag_system->tag_table, signature);
     surgescript_tag_t tag = generate_tag(tag_name);
     surgescript_inversetagtable_t* ientry = NULL;
+    surgescript_boundtagsystem_t* bentry = NULL;
 
     /* add (object, tag) signature to tag_table */
     if(entry == NULL) {
@@ -178,6 +211,10 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
 
     /* add tag to tag_tree */
     tag_system->tag_tree = add_to_tree(tag_system->tag_tree, tag_name);
+
+    /* add the object to the bound tag system */
+    bentry = find_bound_tag_system(tag_system, object_name);
+    bentry->bitset |= bitmask(tag_name);
 }
 
 /*
@@ -227,6 +264,29 @@ void surgescript_tagsystem_foreach_tag_of_object(const surgescript_tagsystem_t* 
        structure, but there aren't too many tags, are there? */
     void* wrapper[] = { (void*)tag_system, (void*)object_name, data, callback };
     surgescript_tagsystem_foreach_tag(tag_system, wrapper, foreach_tag_of_object);
+}
+
+/*
+ * surgescript_tagsystem_bind()
+ * Get a bound tag system bound to object_name
+ */
+const surgescript_boundtagsystem_t* surgescript_tagsystem_bind(surgescript_tagsystem_t* tag_system, const char* object_name)
+{
+    return find_bound_tag_system(tag_system, object_name);
+}
+
+/*
+ * surgescript_boundtagsystem_has_tag()
+ * Super quick tag test
+ */
+bool surgescript_boundtagsystem_has_tag(const surgescript_boundtagsystem_t* bound_tag_system, const char* tag_name)
+{
+    /* we can check super quickly if the bound class of objects is NOT tagged tag_name */
+    if(bound_tag_system->bitset & bitmask(tag_name) == 0)
+        return false;
+
+    /* run a standard tag test */
+    return surgescript_tagsystem_has_tag(bound_tag_system->tag_system, bound_tag_system->object_name, tag_name);
 }
 
 
@@ -321,4 +381,70 @@ void foreach_tag_of_object(const char* tag_name, void* wrapper)
 
     if(surgescript_tagsystem_has_tag(tag_system, object_name, tag_name))
         callback(tag_name, data);
+}
+
+/* find or create a surgescript_boundtagsystem_t entry */
+surgescript_boundtagsystem_t* find_bound_tag_system(surgescript_tagsystem_t* tag_system, const char* object_name)
+{
+    surgescript_boundtagsystem_t* entry = NULL;
+
+    HASH_FIND(hh, tag_system->bound_tag_system, object_name, strlen(object_name), entry);
+    if(entry == NULL) {
+        entry = ssmalloc(sizeof *entry);
+        entry->object_name = ssstrdup(object_name);
+        entry->bitset = 0;
+        entry->tag_system = tag_system;
+        HASH_ADD_KEYPTR(hh, tag_system->bound_tag_system, entry->object_name, strlen(entry->object_name), entry);
+    }
+
+    return entry;
+}
+
+/* compute a bit mask for a tag name VERY QUICKLY */
+uint64_t bitmask(const char* tag_name)
+{
+    /*
+
+    vowels (lowercase only)
+    ------
+    'a' == 0b 011 00001 -> 1
+    'e' == 0b 011 00101 -> 5
+    'i' == 0b 011 01001 -> 9
+    'o' == 0b 011 01111 -> 15
+    'u' == 0b 011 10101 -> 21
+
+    same 011 prefix, different 5-bit suffix
+
+    bit mask:
+    0b1000001000001000100010 == 2130466
+
+    */
+    int c0 = *tag_name;
+    int is_vowel = (2130466 >> (c0 & 31)) & 1; /* 1 if tag_name[0] is a vowel; 0 otherwise */
+
+    /* take two characters of the string */
+    int c1 = tag_name[is_vowel]; /* c1 is probably the first consonant */
+    int c2 = tag_name[(c0 != 0 && tag_name[1] != 0) << 1]; /* tag_name[2] unless strlen(tag_name) <= 1 */
+
+    /*
+
+    this code will read tag_name[0] and may read tag_name[1] and tag_name[2],
+    depending on the length of the string and on whether or not the first
+    character is a lowercase vowel.
+
+    assuming that tag_name[0..2] has only lowercase letters (the convention
+    for tag names), c1 and c2 are probably the first two consonants, or maybe
+    the first consonant and the next vowel, respectively.
+
+    */
+
+    /* compute a hash in [0, 63] */
+    int h = (c2 * 31 + c1) & 63; /* c1 in the lower-order bits */
+
+    /* testing / visual inspection */
+    /*printf("%s => %c%c => %d\n", tag_name, c1, c2, h);*/
+
+    /* return the 64-bit (1 << h) mask, or zero if we
+       received an empty string (branchless code) */
+    return ((uint64_t)(c0 != 0)) << h;
 }

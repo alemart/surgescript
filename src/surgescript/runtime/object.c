@@ -62,6 +62,9 @@ struct surgescript_object_t
     uint64_t time_spent; /* time spent updating the object since the last state change, measured in microseconds */
     uint64_t frames_spent; /* number of update cycles since the last state change */
 
+    /* tags */
+    const surgescript_boundtagsystem_t* bound_tag_system; /* bound tag system for quicker tag tests */
+
     /* local transform */
     surgescript_transform_t* transform;
 
@@ -127,6 +130,8 @@ surgescript_object_t* surgescript_object_create(const char* name, surgescript_ob
     obj->last_state_change = surgescript_vmtime_time(obj->vmtime);
     obj->time_spent = 0;
     obj->frames_spent = 0;
+
+    obj->bound_tag_system = surgescript_tagsystem_bind(surgescript_objectmanager_tagsystem(object_manager), name);
 
     obj->transform = NULL;
     obj->user_data = user_data;
@@ -243,8 +248,13 @@ void surgescript_object_set_userdata(surgescript_object_t* object, void* data)
  */
 bool surgescript_object_has_tag(const surgescript_object_t* object, const char* tag_name)
 {
+#if 1
+    /* quicker tag test */
+    return surgescript_boundtagsystem_has_tag(object->bound_tag_system, tag_name);
+#else
     surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
     return surgescript_tagsystem_has_tag(surgescript_objectmanager_tagsystem(manager), object->name, tag_name);
+#endif
 }
 
 /*
