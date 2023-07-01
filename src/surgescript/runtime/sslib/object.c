@@ -286,11 +286,9 @@ surgescript_var_t* fun_hasfunction(surgescript_object_t* object, const surgescri
 /* is this object tagged param[0] ? */
 surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
-    const surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
-    const char* object_name = surgescript_object_name(object);
     const char* tag_name = surgescript_var_fast_get_string(param[0]);
-    bool tagged = surgescript_tagsystem_has_tag(surgescript_objectmanager_tagsystem(object_manager), object_name, tag_name);
-    return surgescript_var_set_bool(surgescript_var_create(), tagged);
+    bool has_tag = surgescript_object_has_tag(object, tag_name);
+    return surgescript_var_set_bool(surgescript_var_create(), has_tag);
 }
 
 /* returns true iff the object has been on the same state for param[0] seconds or more */
