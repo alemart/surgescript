@@ -80,13 +80,18 @@ static const char* instruction_name[] = {
 static surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, const surgescript_renv_t*));
 static void run_program(surgescript_program_t* program, const surgescript_renv_t* runtime_environment);
 static void run_cprogram(surgescript_program_t* program, const surgescript_renv_t* runtime_environment);
-static inline unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip);
 static inline surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* program, surgescript_objectclassid_t* out_class_id);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
 static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
 static const int MAX_PROGRAM_ARITY = 256;
+
+#if defined(__GNUC__)
+static inline unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip) __attribute__((always_inline));
+#else
+static inline unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip);
+#endif
 
 /* debug mode? */
 #define SURGESCRIPT_DEBUG_MODE          0
@@ -366,13 +371,14 @@ surgescript_program_t* init_program(surgescript_program_t* program, int arity, v
     return program;
 }
 
-/* runs a program */
+/* runs a SurgeScript program */
 void run_program(surgescript_program_t* program, const surgescript_renv_t* runtime_environment)
 {
     unsigned int ip = 0; /* instruction pointer */
 
     program->executed = true;
-    remove_labels(program);
+    if(ssarray_length(program->label) > 0)
+        remove_labels(program);
 
     while(ip < ssarray_length(program->line))
         ip = run_instruction(program, runtime_environment, program->line + ip, ip);
@@ -857,24 +863,24 @@ bool is_jump_instruction(surgescript_program_operator_t instruction)
    on all jump instructions. Returns true if there were any removed labels. */
 bool remove_labels(surgescript_program_t* program)
 {
-    if(ssarray_length(program->label) > 0) {
-        /* correct all jump instructions */
-        for(int i = 0; i < ssarray_length(program->line); i++) {
-            if(is_jump_instruction(program->line[i].instruction)) {
-                surgescript_program_label_t label = program->line[i].a.u;
-                if(label >= 0 && label < ssarray_length(program->label))
-                    program->line[i].a.u = program->label[label];
-                else
-                    ssfatal("Runtime Error: invalid jump instruction - unknown label.");
-            }
-        }
-
-        /* no more labels */
-        ssarray_reset(program->label);
-        return true;
-    }
-    else
+    /* nothing to do */
+    if(ssarray_length(program->label) == 0)
         return false;
+
+    /* correct all jump instructions */
+    for(int i = 0; i < ssarray_length(program->line); i++) {
+        if(is_jump_instruction(program->line[i].instruction)) {
+            surgescript_program_label_t label = program->line[i].a.u;
+            if(label >= 0 && label < ssarray_length(program->label))
+                program->line[i].a.u = program->label[label];
+            else
+                ssfatal("Runtime Error: invalid jump instruction - unknown label.");
+        }
+    }
+
+    /* no more labels */
+    ssarray_reset(program->label);
+    return true;
 }
 
 /* debug mode */
