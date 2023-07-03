@@ -45,6 +45,7 @@ set(
     src/surgescript/compiler/symtable.c
     src/surgescript/compiler/token.c
     src/surgescript/runtime/heap.c
+    src/surgescript/runtime/managed_string.c
     src/surgescript/runtime/object.c
     src/surgescript/runtime/object_manager.c
     src/surgescript/runtime/program.c
@@ -90,6 +91,7 @@ set(
     src/surgescript/compiler/symtable.h
     src/surgescript/compiler/token.h
     src/surgescript/runtime/heap.h
+    src/surgescript/runtime/managed_string.h
     src/surgescript/runtime/object.h
     src/surgescript/runtime/object_manager.h
     src/surgescript/runtime/program.h

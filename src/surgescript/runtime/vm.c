@@ -29,6 +29,7 @@
 #include "tag_system.h"
 #include "object_manager.h"
 #include "vm_time.h"
+#include "managed_string.h"
 #include "sslib/sslib.h"
 #include "../compiler/parser.h"
 #include "../util/util.h"
@@ -88,9 +89,13 @@ surgescript_vm_t* surgescript_vm_create()
     /* SurgeScript info */
     sslog("Using SurgeScript %s", surgescript_util_version());
 
+    /* initialize the pools */
+    sslog("Initializing the pools...");
+    surgescript_managedstring_init_pool();
+    surgescript_var_init_pool();
+
     /* set up the VM */
     sslog("Creating the VM...");
-    surgescript_var_init_pool();
     init_vm(vm);
 
     /* done! */
@@ -105,7 +110,12 @@ surgescript_vm_t* surgescript_vm_destroy(surgescript_vm_t* vm)
 {
     sslog("Shutting down the VM...");
     release_vm(vm);
+
+    sslog("Releasing the pools...");
     surgescript_var_release_pool();
+    surgescript_managedstring_release_pool();
+
+    sslog("The VM has been shut down.");
     return ssfree(vm);
 }
 
@@ -118,14 +128,22 @@ bool surgescript_vm_reset(surgescript_vm_t* vm)
     sslog("Will reset the VM...");
 
     if(surgescript_vm_is_active(vm)) {
-        /* shut down */
+        /* shut down the VM */
         sslog("Shutting down the VM...");
         release_vm(vm);
+
+        /* release the pools */
+        sslog("Releasing the pools...");
         surgescript_var_release_pool();
+        surgescript_managedstring_release_pool();
+
+        /* start new pools */
+        sslog("Initializing new pools...");
+        surgescript_managedstring_init_pool();
+        surgescript_var_init_pool();
 
         /* set up the VM again */
         sslog("Starting the VM again...");
-        surgescript_var_init_pool();
         init_vm(vm);
 
         /* done */

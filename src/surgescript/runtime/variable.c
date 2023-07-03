@@ -30,6 +30,7 @@
 #include "variable.h"
 #include "object.h"
 #include "object_manager.h"
+#include "managed_string.h"
 #include "../util/util.h"
 #include "../third_party/utf8.h"
 
@@ -43,7 +44,7 @@ enum surgescript_vartype_t {
     SSVAR_NUMBER,
     SSVAR_STRING,
     SSVAR_OBJECTHANDLE,
-    SSVAR_RAW,
+    SSVAR_RAW, /* binary */
 };
 
 /* assign a code to each type */
@@ -61,18 +62,18 @@ struct surgescript_var_t
 {
     /* data */
     union {
-        char* string;
+        surgescript_managedstring_t* managed_string;
         double number;
         unsigned handle:32;
         bool boolean;
         int64_t raw;
     };
 
-    /* metadata */
+    /* data type */
     enum surgescript_vartype_t type;
 };
 
-/* var pool */
+/* a pool of variables */
 /*#define DISABLE_VARPOOL*/
 #ifndef DISABLE_VARPOOL
 #define VARPOOL_NUM_BUCKETS 2730
@@ -94,22 +95,32 @@ struct surgescript_varpool_t
 
     surgescript_varpool_t* next;
 };
-static surgescript_varpool_t* new_varpool(surgescript_varpool_t* next);
-static surgescript_varpool_t* delete_varpools(surgescript_varpool_t* head);
-static surgescript_varbucket_t* get_1stbucket(surgescript_varpool_t* pool);
+
+#if defined(__GNUC__)
+static inline surgescript_varbucket_t* allocate_bucket() __attribute__((always_inline));
+static inline void free_bucket(surgescript_varbucket_t* bucket) __attribute__((always_inline));
+#else
 static inline surgescript_varbucket_t* allocate_bucket();
 static inline void free_bucket(surgescript_varbucket_t* bucket);
+#endif
+
+static surgescript_varpool_t* new_varpool(surgescript_varpool_t* next);
+static surgescript_varpool_t* delete_varpools(surgescript_varpool_t* head);
 static surgescript_varpool_t* varpool = NULL;
 static surgescript_varbucket_t* varpool_currbucket = NULL;
 
 #endif
 
 /* helpers */
-#define RELEASE_DATA(var)       if((var)->type == SSVAR_STRING) \
-                                    (var)->string = ssfree((var)->string); \
-                                (var)->raw = 0; /* must clear all bits */
+#define FIRST_BUCKET(pool) (&((pool)->bucket[0])) /* the first bucket of a pool */
+
+#define RELEASE_DATA(var) do { \
+    if((var)->type == SSVAR_STRING) \
+        surgescript_managedstring_destroy((var)->managed_string); \
+    (var)->raw = 0; /* must clear all bits */ \
+} while(0)
+
 static inline bool is_number(const char* str);
-static inline void convert_to_ascii(char* str);
 static inline void convert_decimal_point(char* str);
 
 /* -------------------------------
@@ -201,25 +212,12 @@ surgescript_var_t* surgescript_var_set_number(surgescript_var_t* var, double num
  */
 surgescript_var_t* surgescript_var_set_string(surgescript_var_t* var, const char* string)
 {
-    static const int MAXLEN = 1048576 - 1; /* 1 MB */
+    if(string == NULL)
+        string = "";
 
     RELEASE_DATA(var);
-    if(string != NULL && strlen(string) <= MAXLEN) {
-        var->type = SSVAR_STRING;
-        var->string = ssstrdup(string);
-        if(!u8_isvalid(var->string, strlen(var->string)))
-            convert_to_ascii(var->string);
-    }
-    else if(string == NULL) {
-        var->type = SSVAR_STRING;
-        var->string = ssstrdup("");
-    }
-    else {
-        static char buf[128];
-        surgescript_util_strncpy(buf, string, sizeof(buf));
-        ssfatal("Runtime Error: string \"%s...\" is too large!", buf);
-    }
-
+    var->type = SSVAR_STRING;
+    var->managed_string = surgescript_managedstring_create(string);
     return var;
 }
 
@@ -263,7 +261,7 @@ bool surgescript_var_get_bool(const surgescript_var_t* var)
         case SSVAR_NUMBER:
             return var->raw != 0 && fpclassify(var->number) != FP_ZERO;
         case SSVAR_STRING:
-            return *(var->string) != 0;
+            return *(surgescript_managedstring_data(var->managed_string)) != '\0';
         case SSVAR_NULL:
             return false;
         case SSVAR_OBJECTHANDLE:
@@ -287,7 +285,7 @@ double surgescript_var_get_number(const surgescript_var_t* var)
         case SSVAR_BOOL:
             return var->boolean ? 1.0 : 0.0;
         case SSVAR_STRING:
-            return is_number(var->string) ? ssatof(var->string) : NAN;
+            return is_number(surgescript_managedstring_data(var->managed_string)) ? ssatof(surgescript_managedstring_data(var->managed_string)) : NAN;
         case SSVAR_NULL:
             return 0.0;
         case SSVAR_OBJECTHANDLE:
@@ -315,7 +313,7 @@ char* surgescript_var_get_string(const surgescript_var_t* var, const surgescript
             return ssstrdup(var->boolean ? "true" : "false");
 
         case SSVAR_STRING:
-            return ssstrdup(var->string);
+            return ssstrdup(surgescript_managedstring_data(var->managed_string));
 
         case SSVAR_NUMBER: {
             char buf[128];
@@ -393,7 +391,7 @@ surgescript_var_t* surgescript_var_copy(surgescript_var_t* dst, const surgescrip
             dst->number = src->number;
             break;
         case SSVAR_STRING:
-            dst->string = ssstrdup(src->string);
+            dst->managed_string = surgescript_managedstring_clone(src->managed_string);
             break;
         case SSVAR_OBJECTHANDLE:
             dst->handle = src->handle;
@@ -509,7 +507,7 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
 {
     switch(var->type) {
         case SSVAR_STRING:
-            return surgescript_util_strncpy(buf, var->string, bufsize);
+            return surgescript_util_strncpy(buf, surgescript_managedstring_data(var->managed_string), bufsize);
         case SSVAR_BOOL:
             return surgescript_util_strncpy(buf, var->boolean ? "true" : "false", bufsize);
         case SSVAR_NULL:
@@ -542,7 +540,7 @@ char* surgescript_var_to_string(const surgescript_var_t* var, char* buf, size_t 
  */
 const char* surgescript_var_fast_get_string(const surgescript_var_t* var)
 {
-    return var->type == SSVAR_STRING ? var->string : "";
+    return var->type == SSVAR_STRING ? surgescript_managedstring_data(var->managed_string) : "";
 }
 
 /*
@@ -563,7 +561,10 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             case SSVAR_OBJECTHANDLE:
                 return (a->handle > b->handle) - (a->handle < b->handle);
             case SSVAR_STRING:
-                return strcmp(a->string, b->string);
+                return strcmp(
+                    surgescript_managedstring_data(a->managed_string),
+                    surgescript_managedstring_data(b->managed_string)
+                );
             case SSVAR_NUMBER: {
                 /* encourage users to use approximatelyEqual() */
                 /* epsilon comparisons may cause underlying problems, e.g., with infinity */
@@ -584,11 +585,11 @@ int surgescript_var_compare(const surgescript_var_t* a, const surgescript_var_t*
             char buf[128];
             if(a->type == SSVAR_STRING) {
                 surgescript_var_to_string(b, buf, sizeof(buf));
-                return strcmp(a->string, buf);
+                return strcmp(surgescript_managedstring_data(a->managed_string), buf);
             }
             else {
                 surgescript_var_to_string(a, buf, sizeof(buf));
-                return strcmp(buf, b->string);
+                return strcmp(buf, surgescript_managedstring_data(b->managed_string));
             }
         }
         else if(a->type == SSVAR_NUMBER || b->type == SSVAR_NUMBER) {
@@ -647,14 +648,16 @@ surgescript_var_t* surgescript_var_set_rawbits(surgescript_var_t* var, int64_t r
 
 /*
  * surgescript_var_size()
- * Used memory in user space, in bytes
+ * Approximate used memory in user space, in bytes
  */
 size_t surgescript_var_size(const surgescript_var_t* var)
 {
-    if(var->type == SSVAR_STRING)
-        return sizeof(surgescript_var_t) + (1 + strlen(var->string)) * sizeof(char);
-    else
-        return sizeof(surgescript_var_t);
+    if(var->type == SSVAR_STRING) {
+        size_t string_size = 1 + strlen(surgescript_managedstring_data(var->managed_string)); /* approximate */
+        return sizeof(surgescript_var_t) + string_size * sizeof(char);
+    }
+
+    return sizeof(surgescript_var_t);
 }
 
 
@@ -672,7 +675,7 @@ void surgescript_var_init_pool()
 #ifndef DISABLE_VARPOOL
     if(varpool == NULL) {
         varpool = new_varpool(NULL);
-        varpool_currbucket = get_1stbucket(varpool);
+        varpool_currbucket = FIRST_BUCKET(varpool);
     }
 #else
     sslog("Warning: SurgeScript has been compiled with disabled var pooling.");
@@ -726,19 +729,6 @@ bool is_number(const char* str)
     return true;
 }
 
-/* convert string to ascii */
-void convert_to_ascii(char* str)
-{
-    char *p, *q;
-
-    for(q = p = str; *p; p++) {
-        if(!(*p & 0x80))
-            *(q++) = *p;
-    }
-
-    *q = 0;
-}
-
 /* convert a locale-specific decimal point to '.' */
 void convert_decimal_point(char* str)
 {
@@ -785,12 +775,6 @@ surgescript_varpool_t* delete_varpools(surgescript_varpool_t* head)
     return ssfree(head);
 }
 
-/* Gets the 1st bucket of a pool */
-surgescript_varbucket_t* get_1stbucket(surgescript_varpool_t* pool)
-{
-    return &(pool->bucket[0]);
-}
-
 /* Allocates a bucket (must be fast) */
 surgescript_varbucket_t* allocate_bucket()
 {
@@ -800,8 +784,10 @@ surgescript_varbucket_t* allocate_bucket()
     /*ssassert(bucket && !bucket->in_use);*/
 
     /* select bucket */
-    if(bucket->next == NULL)
-        bucket->next = get_1stbucket(varpool = new_varpool(varpool));
+    if(bucket->next == NULL) {
+        varpool = new_varpool(varpool);
+        bucket->next = FIRST_BUCKET(varpool);
+    }
     varpool_currbucket = bucket->next;
     bucket->in_use = true;
 
