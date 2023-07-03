@@ -226,10 +226,11 @@ char* surgescript_util_strncpy(char* dst, const char* src, size_t n)
  * surgescript_util_strdup()
  * Copies a string into another, allocating the required memory
  */
-char* surgescript_util_strdup(const char* src, const char* file, int line)
+char* surgescript_util_strdup(const char* str, const char* file, int line)
 {
-    char* str = surgescript_util_malloc(sizeof(char) * (1 + strlen(src)), file, line);
-    return strcpy(str, src);
+    size_t size = 1 + strlen(str);
+    char* new_str = surgescript_util_malloc(sizeof(char) * size, file, line);
+    return memcpy(new_str, str, size); /* include '\0' */
 }
 
 /*

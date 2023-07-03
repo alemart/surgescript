@@ -63,7 +63,7 @@ void surgescript_util_fatal(const char* fmt, ...); /* logs a message and kills t
 void surgescript_util_set_error_functions(void (*log)(const char*), void (*fatal)(const char*)); /* set custom error functions */
 
 char* surgescript_util_strncpy(char* dst, const char* src, size_t n); /* strcpy */
-char* surgescript_util_strdup(const char* src, const char* file, int line); /* strdup */
+char* surgescript_util_strdup(const char* str, const char* file, int line); /* strdup */
 double surgescript_util_strtod(const char* str, char** endptr); /* convert a string to a floating-point number in a locale-independent manner */
 const char* surgescript_util_basename(const char* path); /* basename */
 char* surgescript_util_accessorfun(const char* prefix, const char* text); /* getter/setter prefixing function */
