@@ -316,7 +316,7 @@ char* surgescript_var_get_string(const surgescript_var_t* var, const surgescript
             return ssstrdup(surgescript_managedstring_data(var->managed_string));
 
         case SSVAR_NUMBER: {
-            char buf[128];
+            char buf[32];
             surgescript_var_to_string(var, buf, sizeof(buf));
             return ssstrdup(buf);
         }
