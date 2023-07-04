@@ -374,8 +374,9 @@ bool find_in_tree(const surgescript_tagtree_t* tree, const char* key)
 {
     int cmp;
 
+    /* this will likely take a single iteration (or none) */
     while(tree != NULL) {
-        cmp = strcmp(tree->key, key);
+        cmp = strcmp(key, tree->key);
 
         if(cmp == 0)
             return true;
@@ -459,11 +460,11 @@ int minihash(const char* tag_name)
 
     vowels (lowercase only)
     ------
-    'a' == 0b 011 00001 -> 1
-    'e' == 0b 011 00101 -> 5
-    'i' == 0b 011 01001 -> 9
-    'o' == 0b 011 01111 -> 15
-    'u' == 0b 011 10101 -> 21
+    'a' ==  97 == 0b 011 00001 -> 1
+    'e' == 101 == 0b 011 00101 -> 5
+    'i' == 105 == 0b 011 01001 -> 9
+    'o' == 111 == 0b 011 01111 -> 15
+    'u' == 117 == 0b 011 10101 -> 21
 
     same 011 prefix, different 5-bit suffix
 
