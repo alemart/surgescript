@@ -19,6 +19,7 @@
  * SurgeScript Tag System
  */
 
+#include <assert.h>
 #include <stdalign.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -63,6 +64,12 @@ static surgescript_tagtree_t* add_to_tree(surgescript_tagtree_t* tree, const cha
 static surgescript_tagtree_t* remove_tree(surgescript_tagtree_t* tree);
 static void traverse_tree(const surgescript_tagtree_t* tree, void* data, void (*callback)(const char*, void*));
 
+#if defined(__GNUC__)
+static inline bool find_in_tree(const surgescript_tagtree_t* tree, const char* key) __attribute__((always_inline));
+#else
+static inline bool find_in_tree(const surgescript_tagtree_t* tree, const char* key);
+#endif
+
 /* inverse tag table: we'll get to know all objects that have a certain tag */
 typedef struct surgescript_inversetagtable_t surgescript_inversetagtable_t;
 struct surgescript_inversetagtable_t
@@ -94,21 +101,24 @@ static inline surgescript_tagsignature_t generate_tag_signature(const char* obje
 #endif
 
 /* bound tag system: helps to quickly test a particular class of objects */
+#define NUMBER_OF_TAG_GROUPS 64
 struct surgescript_boundtagsystem_t
 {
     char* object_name;
     uint64_t bitset;
+    surgescript_tagtree_t* tag_group[NUMBER_OF_TAG_GROUPS];
     const surgescript_tagsystem_t* tag_system;
 
     UT_hash_handle hh;
 };
 
 static surgescript_boundtagsystem_t* find_bound_tag_system(surgescript_tagsystem_t* tag_system, const char* object_name);
+#define bitmask(tag_name, h) (((uint64_t)(*(tag_name) != '\0')) << (h)) /* 64-bit mask; empty strings have no mask (branchless) */
 
 #if defined(__GNUC__)
-static inline uint64_t bitmask(const char* tag_name) __attribute__((always_inline));
+static inline int minihash(const char* tag_name) __attribute__((always_inline));
 #else
-static inline uint64_t bitmask(const char* tag_name);
+static inline int minihash(const char* tag_name);
 #endif
 
 /* tag system */
@@ -133,10 +143,14 @@ static void foreach_tag_of_object(const char* tag_name, void* wrapper);
 surgescript_tagsystem_t* surgescript_tagsystem_create()
 {
     surgescript_tagsystem_t* tag_system = ssmalloc(sizeof *tag_system);
+
     tag_system->tag_table = fasthash_create(destroy_tagtable_entry, 13);
     tag_system->inverse_tag_table = NULL;
     tag_system->tag_tree = NULL;
     tag_system->bound_tag_system = NULL;
+
+    static_assert(NUMBER_OF_TAG_GROUPS == 64, "minihash");
+
     return tag_system;
 }
 
@@ -161,6 +175,10 @@ surgescript_tagsystem_t* surgescript_tagsystem_destroy(surgescript_tagsystem_t* 
 
     HASH_ITER(hh, tag_system->bound_tag_system, bit, btmp) {
         HASH_DEL(tag_system->bound_tag_system, bit);
+
+        for(int i = 0; i < NUMBER_OF_TAG_GROUPS; i++)
+            remove_tree(bit->tag_group[i]);
+
         ssfree(bit->object_name);
         ssfree(bit);
     }
@@ -180,6 +198,12 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
     surgescript_inversetagtable_t* ientry = NULL;
     surgescript_boundtagsystem_t* bentry = NULL;
 
+    /* reject empty tags */
+    if(*tag_name == '\0') {
+        ssfatal("Can't add empty tag to object \"%s\"", object_name);
+        return;
+    }
+
     /* add (object, tag) signature to tag_table */
     if(entry == NULL) {
         entry = ssmalloc(sizeof *entry);
@@ -192,8 +216,9 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
         /* conflict check */
         if(entry->tag != tag || strcmp(entry->object_name, object_name) != 0 || strcmp(entry->tag_name, tag_name) != 0)
             ssfatal("Tag \"%s\" of object \"%s\" conflicts with tag \"%s\" of object \"%s\"", entry->tag_name, entry->object_name, tag_name, object_name);
-        else
-            return; /* adding an existing tag */
+
+        /* this is an already existing tag */
+        return;
     }
 
     /* add tag to inverse_tag_table */
@@ -213,8 +238,10 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
     tag_system->tag_tree = add_to_tree(tag_system->tag_tree, tag_name);
 
     /* add the object to the bound tag system */
+    int h = minihash(tag_name);
     bentry = find_bound_tag_system(tag_system, object_name);
-    bentry->bitset |= bitmask(tag_name);
+    bentry->bitset |= bitmask(tag_name, h);
+    bentry->tag_group[h] = add_to_tree(bentry->tag_group[h], tag_name);
 }
 
 /*
@@ -281,12 +308,19 @@ const surgescript_boundtagsystem_t* surgescript_tagsystem_bind(surgescript_tagsy
  */
 bool surgescript_boundtagsystem_has_tag(const surgescript_boundtagsystem_t* bound_tag_system, const char* tag_name)
 {
+    int h = minihash(tag_name);
+
     /* we can check super quickly if the bound class of objects is NOT tagged tag_name */
-    if(bound_tag_system->bitset & bitmask(tag_name) == 0)
+    if(bound_tag_system->bitset & bitmask(tag_name, h) == 0)
         return false;
 
+#if 1
+    /* run a quick tree search */
+    return find_in_tree(bound_tag_system->tag_group[h], tag_name);
+#else
     /* run a standard tag test */
     return surgescript_tagsystem_has_tag(bound_tag_system->tag_system, bound_tag_system->object_name, tag_name);
+#endif
 }
 
 
@@ -333,6 +367,23 @@ void traverse_tree(const surgescript_tagtree_t* tree, void* data, void (*callbac
         callback(tree->key, data);
         traverse_tree(tree->right, data, callback);
     }
+}
+
+/* checks if a key exists in the tree - iteratively and VERY QUICKLY */
+bool find_in_tree(const surgescript_tagtree_t* tree, const char* key)
+{
+    int cmp;
+
+    while(tree != NULL) {
+        cmp = strcmp(tree->key, key);
+
+        if(cmp == 0)
+            return true;
+        else
+            tree = (cmp < 0) ? tree->left : tree->right;
+    }
+
+    return false;
 }
 
 /* signature generator */
@@ -394,14 +445,15 @@ surgescript_boundtagsystem_t* find_bound_tag_system(surgescript_tagsystem_t* tag
         entry->object_name = ssstrdup(object_name);
         entry->bitset = 0;
         entry->tag_system = tag_system;
+        memset(entry->tag_group, 0, sizeof(entry->tag_group)); /* initialize with NULL pointers */
         HASH_ADD_KEYPTR(hh, tag_system->bound_tag_system, entry->object_name, strlen(entry->object_name), entry);
     }
 
     return entry;
 }
 
-/* compute a bit mask for a tag name VERY QUICKLY */
-uint64_t bitmask(const char* tag_name)
+/* compute a hash in [0, 63] for a tag name VERY QUICKLY */
+int minihash(const char* tag_name)
 {
     /*
 
@@ -444,7 +496,6 @@ uint64_t bitmask(const char* tag_name)
     /* testing / visual inspection */
     /*printf("%s => %c%c => %d\n", tag_name, c1, c2, h);*/
 
-    /* return the 64-bit (1 << h) mask, or zero if we
-       received an empty string (branchless code) */
-    return ((uint64_t)(c0 != 0)) << h;
+    /* done! */
+    return h;
 }
