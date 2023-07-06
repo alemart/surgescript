@@ -374,7 +374,8 @@ bool find_in_tree(const surgescript_tagtree_t* tree, const char* key)
 {
     int cmp;
 
-    /* this will likely take a single iteration (or none) */
+    /* this will likely take a single iteration (or none)
+       when searching for a tag in a tag_group[] */
     while(tree != NULL) {
         cmp = strcmp(key, tree->key);
 
