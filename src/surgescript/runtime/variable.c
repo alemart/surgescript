@@ -74,9 +74,7 @@ struct surgescript_var_t
 };
 
 /* a pool of variables */
-/*#define DISABLE_VARPOOL*/
-#ifndef DISABLE_VARPOOL
-#define VARPOOL_NUM_BUCKETS 2730
+#define VARPOOL_NUM_BUCKETS 43690 /* sizeof(surgescript_varpool_t) is approximately 1 MB */
 
 typedef struct surgescript_varpool_t surgescript_varpool_t;
 typedef struct surgescript_varbucket_t surgescript_varbucket_t;
@@ -109,11 +107,8 @@ static surgescript_varpool_t* delete_varpools(surgescript_varpool_t* head);
 static surgescript_varpool_t* varpool = NULL;
 static surgescript_varbucket_t* varpool_currbucket = NULL;
 
-#endif
-
 /* helpers */
 #define FIRST_BUCKET(pool) (&((pool)->bucket[0])) /* the first bucket of a pool */
-
 #define RELEASE_DATA(var) do { \
     if((var)->type == SSVAR_STRING) \
         surgescript_managedstring_destroy((var)->managed_string); \
@@ -135,34 +130,21 @@ static inline void convert_decimal_point(char* str);
  */
 surgescript_var_t* surgescript_var_create()
 {
-#ifndef DISABLE_VARPOOL
     surgescript_var_t* var = (surgescript_var_t*)allocate_bucket();
     var->type = SSVAR_NULL;
     var->raw = 0;
     return var;
-#else
-    surgescript_var_t* var = ssmalloc(sizeof *var);
-    var->type = SSVAR_NULL;
-    var->raw = 0;
-    return var;
-#endif
 }
 
 /*
  * surgescript_var_destroy()
- * Destroys an existing variable from memory
+ * Destroys an existing variable
  */
 surgescript_var_t* surgescript_var_destroy(surgescript_var_t* var)
 {
-#ifndef DISABLE_VARPOOL
     RELEASE_DATA(var);
     free_bucket((surgescript_varbucket_t*)var);
     return NULL;
-#else
-    RELEASE_DATA(var);
-    ssfree(var);
-    return NULL;
-#endif
 }
 
 
@@ -672,14 +654,10 @@ size_t surgescript_var_size(const surgescript_var_t* var)
  */
 void surgescript_var_init_pool()
 {
-#ifndef DISABLE_VARPOOL
     if(varpool == NULL) {
         varpool = new_varpool(NULL);
         varpool_currbucket = FIRST_BUCKET(varpool);
     }
-#else
-    sslog("Warning: SurgeScript has been compiled with disabled var pooling.");
-#endif
 }
 
 /*
@@ -688,12 +666,10 @@ void surgescript_var_init_pool()
  */
 void surgescript_var_release_pool()
 {
-#ifndef DISABLE_VARPOOL
     if(varpool != NULL) {
         varpool_currbucket = NULL;
         varpool = delete_varpools(varpool);
     }
-#endif
 }
 
 
@@ -747,7 +723,6 @@ void convert_decimal_point(char* str)
 }
 
 /* private var pool routines */
-#ifndef DISABLE_VARPOOL
 
 /* Creates a new var pool */
 surgescript_varpool_t* new_varpool(surgescript_varpool_t* next)
@@ -799,12 +774,10 @@ surgescript_varbucket_t* allocate_bucket()
 void free_bucket(surgescript_varbucket_t* bucket)
 {
     /* can't free if not in use */
-    ssassert(bucket->in_use);
+    /*ssassert(bucket->in_use);*/
 
     /* put the bucket back in the pool */
     bucket->in_use = false;
     bucket->next = varpool_currbucket;
     varpool_currbucket = bucket;
 }
-
-#endif
