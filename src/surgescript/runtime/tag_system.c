@@ -116,9 +116,9 @@ static surgescript_boundtagsystem_t* find_bound_tag_system(surgescript_tagsystem
 #define bitmask(tag_name, h) (((uint64_t)(*(tag_name) != '\0')) << (h)) /* 64-bit mask; empty strings have no mask (branchless) */
 
 #if defined(__GNUC__)
-static inline int minihash(const char* tag_name) __attribute__((always_inline));
+static inline int minihash64(const char* tag_name) __attribute__((always_inline));
 #else
-static inline int minihash(const char* tag_name);
+static inline int minihash64(const char* tag_name);
 #endif
 
 /* tag system */
@@ -149,7 +149,7 @@ surgescript_tagsystem_t* surgescript_tagsystem_create()
     tag_system->tag_tree = NULL;
     tag_system->bound_tag_system = NULL;
 
-    static_assert(NUMBER_OF_TAG_GROUPS == 64, "minihash");
+    static_assert(NUMBER_OF_TAG_GROUPS == 64, "minihash64");
 
     return tag_system;
 }
@@ -238,7 +238,7 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
     tag_system->tag_tree = add_to_tree(tag_system->tag_tree, tag_name);
 
     /* add the object to the bound tag system */
-    int h = minihash(tag_name);
+    int h = minihash64(tag_name);
     bentry = find_bound_tag_system(tag_system, object_name);
     bentry->bitset |= bitmask(tag_name, h);
     bentry->tag_group[h] = add_to_tree(bentry->tag_group[h], tag_name);
@@ -308,7 +308,7 @@ const surgescript_boundtagsystem_t* surgescript_tagsystem_bind(surgescript_tagsy
  */
 bool surgescript_boundtagsystem_has_tag(const surgescript_boundtagsystem_t* bound_tag_system, const char* tag_name)
 {
-    int h = minihash(tag_name);
+    int h = minihash64(tag_name);
 
     /* we can check super quickly if the bound class of objects is NOT tagged tag_name */
     if(bound_tag_system->bitset & bitmask(tag_name, h) == 0)
@@ -455,7 +455,7 @@ surgescript_boundtagsystem_t* find_bound_tag_system(surgescript_tagsystem_t* tag
 }
 
 /* compute a hash in [0, 63] for a tag name VERY QUICKLY */
-int minihash(const char* tag_name)
+int minihash64(const char* tag_name)
 {
     /*
 
@@ -471,6 +471,7 @@ int minihash(const char* tag_name)
 
     bit mask:
     0b1000001000001000100010 == 2130466
+      u     o     i   e   a
 
     */
     int c0 = *tag_name;
