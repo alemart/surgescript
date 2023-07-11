@@ -34,16 +34,17 @@
 #define XXH_INLINE_ALL
 #define XXH_FORCE_ALIGN_CHECK 1
 #include "../third_party/xxhash.h"
-#define WANT_FIXED_LENGTH_XXH 0
 
 #if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
 /* Use XXH32() only on 32-bit platforms */
 #define XXH(input, len, seed) XXH32((input), (len), (seed))
 typedef uint32_t xxhash_t;
+typedef uint32_t xxhashseed_t;
 #else
 /* XXH64() is faster on 64-bit but slower on 32-bit platforms */
 #define XXH(input, len, seed) (XXH64((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
 typedef uint64_t xxhash_t;
+typedef uint64_t xxhashseed_t;
 #endif
 
 
@@ -52,7 +53,7 @@ typedef uint64_t xxhash_t;
  * that depends on the containing object and on the function name
  */
 typedef uint64_t surgescript_programpool_signature_t;
-static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name); /* generates a function signature, given an object name and a program name */
+static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name, xxhashseed_t seed); /* generates a function signature */
 
 
 /* metadata */
@@ -61,7 +62,6 @@ struct surgescript_programpool_metadata_t /* meta data for each class of objects
 {
     char* object_name; /* name of the class of objects */
     SSARRAY(char*, program_name); /* names of its programs */
-    surgescript_objectclassid_t class_id; /* unique ID of the class */
 
     UT_hash_handle hh;
 };
@@ -72,12 +72,7 @@ static void remove_object_metadata(surgescript_programpool_t* pool, const char* 
 static void clear_metadata(surgescript_programpool_t* pool);
 static void traverse_metadata(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*,void*));
 static void traverse_adapter(const char* program_name, void* callback);
-
-/* class IDs */
-#define INVALID_CLASS_ID            ((surgescript_objectclassid_t)0)  /* convention: 0 means invalid class ID (the underlying class ID type is unsigned) */
-#define INITIAL_CLASS_ID            ((surgescript_objectclassid_t)1)  /* the first class ID is non-zero, i.e., not invalid */
-
-
+static void foreach_object_name(surgescript_programpool_t* pool, void* data, void (*callback)(const char*,void*));
 
 /* program pool hash type */
 typedef struct surgescript_programpool_hashpair_t surgescript_programpool_hashpair_t;
@@ -93,7 +88,8 @@ struct surgescript_programpool_t
 {
     fasthash_t* hash; /* a hash table of hashpair_t's */
     surgescript_programpool_metadata_t* meta;
-    surgescript_objectclassid_t next_class_id;
+    bool is_locked;
+    xxhashseed_t seed;
 };
 
 /* misc */
@@ -116,7 +112,14 @@ surgescript_programpool_t* surgescript_programpool_create()
     surgescript_programpool_t* pool = ssmalloc(sizeof *pool);
     pool->hash = fasthash_create(delete_pair, 16);
     pool->meta = NULL;
-    pool->next_class_id = INITIAL_CLASS_ID;
+    pool->is_locked = false;
+    pool->seed = surgescript_util_random64(); /* will *probably* generate perfect hashes [!] */
+
+    /* [!] we don't know the set of all (classes of) objects at this point, but
+           we know that the size of that set is going to be very small compared
+           to the universe of possible hashes */
+    /*sslog("Created a program pool with seed 0x%llx", (uint64_t)pool->seed);*/
+
     return pool;
 }
 
@@ -146,7 +149,7 @@ bool surgescript_programpool_exists(surgescript_programpool_t* pool, const char*
  */
 bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
-    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name, pool->seed);
     surgescript_programpool_hashpair_t* pair = fasthash_get(pool->hash, signature);
     return pair != NULL;
 }
@@ -157,18 +160,24 @@ bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const
  */
 bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* object_name, const char* program_name, surgescript_program_t* program)
 {
-    if(!surgescript_programpool_shallowcheck(pool, object_name, program_name)) {
-        surgescript_programpool_hashpair_t* pair = ssmalloc(sizeof *pair);
-        pair->signature = generate_signature(object_name, program_name);
-        pair->program = program;
-        fasthash_put(pool->hash, pair->signature, pair);
-        insert_metadata(pool, object_name, program_name);
-        return true;
+    if(pool->is_locked) {
+        if(!surgescript_programpool_is_compiled(pool, object_name)) {
+            ssfatal("Runtime Error: can't add function \"%s\" of object \"%s\" in a locked pool", program_name, object_name);
+            return false;
+        }
     }
-    else {
+
+    if(surgescript_programpool_shallowcheck(pool, object_name, program_name)) {
         ssfatal("Runtime Error: duplicate function \"%s\" in object \"%s\"", program_name, object_name);
         return false;
     }
+
+    surgescript_programpool_hashpair_t* pair = ssmalloc(sizeof *pair);
+    pair->signature = generate_signature(object_name, program_name, pool->seed);
+    pair->program = program;
+    fasthash_put(pool->hash, pair->signature, pair);
+    insert_metadata(pool, object_name, program_name);
+    return true;
 }
 
 
@@ -179,13 +188,13 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
  */
 surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
-    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name, pool->seed);
     surgescript_programpool_hashpair_t* pair = fasthash_get(pool->hash, signature); /* find the program */
     
     /* if there is no such program */
     if(!pair) {
         /* try locating it in a common base for all objects */
-        signature = generate_signature("Object", program_name);
+        signature = generate_signature("Object", program_name, pool->seed);
         pair = fasthash_get(pool->hash, signature);
 
         /* really, the program doesn't exist */
@@ -215,6 +224,23 @@ void surgescript_programpool_foreach_ex(surgescript_programpool_t* pool, const c
     traverse_metadata(pool, object_name, data, callback);
 }
 
+/*
+ * surgescript_programpool_foreach_object()
+ * For each object named object_name, calls the callback
+ */
+void surgescript_programpool_foreach_object(surgescript_programpool_t* pool, void (*callback)(const char*))
+{
+    foreach_object_name(pool, callback, traverse_adapter);
+}
+
+/*
+ * surgescript_programpool_foreach_object_ex()
+ * For each object named object_name, calls the callback with an added data parameter
+ */
+void surgescript_programpool_foreach_object_ex(surgescript_programpool_t* pool, void* data, void (*callback)(const char*, void*))
+{
+    foreach_object_name(pool, data, callback);
+}
 
 
 /*
@@ -223,7 +249,7 @@ void surgescript_programpool_foreach_ex(surgescript_programpool_t* pool, const c
  */
 bool surgescript_programpool_replace(surgescript_programpool_t* pool, const char* object_name, const char* program_name, surgescript_program_t* program)
 {
-    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name, pool->seed);
     surgescript_programpool_hashpair_t* pair = fasthash_get(pool->hash, signature); /* find the program */
     
     /* replace the program? */
@@ -262,7 +288,7 @@ void surgescript_programpool_purge(surgescript_programpool_t* pool, const char* 
  */
 void surgescript_programpool_delete(surgescript_programpool_t* pool, const char* object_name, const char* program_name)
 {
-    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name, pool->seed);
     
     /* delete the program */
     fasthash_delete(pool->hash, signature);
@@ -285,27 +311,16 @@ bool surgescript_programpool_is_compiled(surgescript_programpool_t* pool, const 
     return (m != NULL) && (ssarray_length(m->program_name) > 0);
 }
 
+
 /*
- * surgescript_programpool_class_id()
- * Gets the ID of a class of objects, given its name
- * Returns true and sets the output value if the class exists
+ * surgescript_programpool_lock()
+ * Locks the program pool, so that no (programs of) new objects can be added to it
  */
-bool surgescript_programpool_class_id(const surgescript_programpool_t* pool, const char* object_name, surgescript_objectclassid_t* out_class_id)
+void surgescript_programpool_lock(surgescript_programpool_t* pool)
 {
-    surgescript_programpool_metadata_t *m = NULL;
-    HASH_FIND_STR(pool->meta, object_name, m);
-
-    /* class not found */
-    if(m == NULL)
-        return false;
-
-    /* set the class ID */
-    if(out_class_id != NULL)
-        *out_class_id = m->class_id;
-
-    /* success! */
-    return true;
+    pool->is_locked = true;
 }
+
 
 
 /* -------------------------------
@@ -323,7 +338,6 @@ void insert_metadata(surgescript_programpool_t* pool, const char* object_name, c
     if(m == NULL) {
         m = ssmalloc(sizeof *m);
         m->object_name = ssstrdup(object_name);
-        m->class_id = pool->next_class_id++;
         ssarray_init(m->program_name);
         HASH_ADD_KEYPTR(hh, pool->meta, m->object_name, strlen(m->object_name), m);
     }
@@ -401,6 +415,14 @@ void traverse_adapter(const char* program_name, void* callback)
     ((void (*)(const char*))callback)(program_name);
 }
 
+void foreach_object_name(surgescript_programpool_t* pool, void* data, void (*callback)(const char*,void*))
+{
+    surgescript_programpool_metadata_t *m = NULL;
+
+    for(m = pool->meta; m != NULL; m = m->hh.next)
+        callback(m->object_name, data);
+}
+
 
 /* utilities */
 void delete_pair(void* pair)
@@ -414,7 +436,7 @@ void delete_program(const char* program_name, void* data)
 {
     surgescript_programpool_t* pool = (surgescript_programpool_t*)(((void**)data)[0]);
     const char* object_name = (const char*)(((void**)data)[1]);
-    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name);
+    surgescript_programpool_signature_t signature = generate_signature(object_name, program_name, pool->seed);
 
     /* delete the program */
     fasthash_delete(pool->hash, signature);
@@ -422,29 +444,28 @@ void delete_program(const char* program_name, void* data)
 
 
 /* program signature generator: must be extremely fast */
-surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name)
+surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name, xxhashseed_t seed)
 {
     /* Our app must enforce signature uniqueness */
     alignas(8) char buf[2 * SS_NAMEMAX + 2] = { 0 };
     size_t l1 = strlen(object_name), l2 = strlen(program_name);
+    xxhashseed_t seed_offset = *program_name * 31u + *object_name;
     xxhash_t ha, hb;
 
-#if WANT_FIXED_LENGTH_XXH
-    /* version with compile-time constant lengths and inline xxhash functions
-       buf[] is pre-initialized with zeros */
-    enum { SIZE = sizeof(buf) / 2, DBL_SIZE = sizeof(buf) };
-    memcpy(buf, object_name, l1 <= SIZE ? l1 : SIZE);
-    memcpy(buf + SIZE, program_name, l2 <= SIZE ? l2 : SIZE);
-    ha = XXH(buf, SIZE, *program_name);
-    hb = XXH(buf, DBL_SIZE, ha + *object_name);
-#else
-    if(l1 > SS_NAMEMAX) l1 = SS_NAMEMAX;
-    if(l2 > SS_NAMEMAX) l2 = SS_NAMEMAX;
-    memcpy(buf, object_name, l1);
-    memcpy(buf + l1 + 1, program_name, l2);
-    ha = XXH(buf, l1 + 1, l1) + (uint8_t)program_name[0];
-    hb = XXH(buf, l1 + l2 + 1, ha + (uint8_t)object_name[0]);
-#endif
+    if(l1 > SS_NAMEMAX)
+        l1 = SS_NAMEMAX;
 
-    return (uint64_t)hb | (((uint64_t)ha) << 32); /* probably unique */
+    if(l2 > SS_NAMEMAX)
+        l2 = SS_NAMEMAX;
+
+    memcpy(buf, object_name, l1);
+    memcpy(buf + (l1 + 1), program_name, l2); /* keep the '\0' after object_name */
+
+    ha = XXH(buf, l1, seed); /* probably perfect hash (~100%) within the set of all compiled object names */
+    hb = XXH(buf, (l1 + 1) + l2, seed + seed_offset); /* probably perfect hash within the set of all program names of object_name */
+
+    /* note: l1, l2 <= SS_NAMEMAX;
+       therefore (l1 + 1) + l2 <= 2*SS_NAMEMAX + 1 < 2*SS_NAMEMAX + 2 = sizeof(buf) */
+
+    return ((uint64_t)hb) | (((uint64_t)ha) << 32); /* probably unique */
 }

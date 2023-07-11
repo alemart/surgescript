@@ -89,6 +89,9 @@ surgescript_vm_t* surgescript_vm_create()
     /* SurgeScript info */
     sslog("Using SurgeScript %s", surgescript_util_version());
 
+    /* setup the pseudo-number generator */
+    surgescript_util_srand(time(NULL));
+
     /* initialize the pools */
     sslog("Initializing the pools...");
     surgescript_managedstring_init_pool();
@@ -229,9 +232,6 @@ void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
     /* Already launched? */
     if(surgescript_vm_is_active(vm))
         return;
-
-    /* Setup the pseudo-number generator */
-    surgescript_util_srand(time(NULL));
 
     /* Setup the command line arguments */
     surgescript_vmargs_configure(vm->args, argc, argv);

@@ -39,9 +39,12 @@ bool surgescript_programpool_exists(surgescript_programpool_t* pool, const char*
 bool surgescript_programpool_shallowcheck(surgescript_programpool_t* pool, const char* object_name, const char* program_name); /* program exists? (shallow check) */
 void surgescript_programpool_foreach(surgescript_programpool_t* pool, const char* object_name, void (*callback)(const char*)); /* for each program of object_name... */
 void surgescript_programpool_foreach_ex(surgescript_programpool_t* pool, const char* object_name, void* data, void (*callback)(const char*, void*)); /* same as above with an added data parameter */
+void surgescript_programpool_foreach_object(surgescript_programpool_t* pool, void (*callback)(const char*)); /* for each object named object_name... */
+void surgescript_programpool_foreach_object_ex(surgescript_programpool_t* pool, void* data, void (*callback)(const char*, void*)); /* same as above with an added data parameter */
 bool surgescript_programpool_replace(surgescript_programpool_t* pool, const char* object_name, const char* program_name, struct surgescript_program_t* program); /* replaces a program */
 void surgescript_programpool_delete(surgescript_programpool_t* pool, const char* object_name, const char* program_name); /* deletes a programs from the specified object */
 void surgescript_programpool_purge(surgescript_programpool_t* pool, const char* object_name); /* deletes all programs from the specified object */
 bool surgescript_programpool_is_compiled(surgescript_programpool_t* pool, const char* object_name); /* is there any code for object_name? */
+void surgescript_programpool_lock(surgescript_programpool_t* pool); /* locks the program pool, so that no (programs of) new objects can be added to it */
 
 #endif
