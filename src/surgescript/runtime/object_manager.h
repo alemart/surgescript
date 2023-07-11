@@ -43,8 +43,11 @@ struct surgescript_vmtime_t;
 surgescript_objectmanager_t* surgescript_objectmanager_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system, struct surgescript_stack_t* stack, struct surgescript_vmargs_t* args, const struct surgescript_vmtime_t* vmtime);
 surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objectmanager_t* manager);
 
-/* operations */
+/* initialization */
+bool surgescript_objectmanager_generate_class_ids(surgescript_objectmanager_t* manager); /* generates a unique ID for each class of objects */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_objectmanager_t* manager); /* spawns the root object */
+
+/* operations */
 surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, surgescript_objecthandle_t parent, const char* object_name, void* user_data); /* spawns a new object; user_data may be NULL */
 bool surgescript_objectmanager_exists(const surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* does the specified handle points to a valid object? */
 struct surgescript_object_t* surgescript_objectmanager_get(const surgescript_objectmanager_t* manager, surgescript_objecthandle_t handle); /* crashes if the object is not found */
@@ -52,7 +55,6 @@ bool surgescript_objectmanager_delete(surgescript_objectmanager_t* manager, surg
 int surgescript_objectmanager_count(const surgescript_objectmanager_t* manager); /* how many objects there are? */
 void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manager, const char* object_name); /* installs a plugin */
 bool surgescript_objectmanager_class_exists(const surgescript_objectmanager_t* manager, const char* object_name); /* does the specified class of objects exist? */
-bool surgescript_objectmanager_class_id(const surgescript_objectmanager_t* manager, const char* object_name, surgescript_objectclassid_t* out_class_id); /* returns true and sets the output parameter if the class of objects exist */
 
 /* components */
 struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */

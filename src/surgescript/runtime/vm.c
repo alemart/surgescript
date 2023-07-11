@@ -239,6 +239,9 @@ void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
     /* Install plugins */
     surgescript_parser_foreach_plugin(vm->parser, vm, install_plugin);
 
+    /* Generate class IDs */
+    surgescript_objectmanager_generate_class_ids(vm->object_manager);
+
     /* Create the root object */
     surgescript_objectmanager_spawn_root(vm->object_manager);
 }

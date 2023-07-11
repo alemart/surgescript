@@ -19,6 +19,7 @@
  * SurgeScript object manager
  */
 
+#include <stdint.h>
 #include <string.h>
 #include "object_manager.h"
 #include "object.h"
@@ -30,6 +31,23 @@
 #include "variable.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
+#include "../util/perfect_hash.h"
+
+#define XXH_INLINE_ALL
+#define XXH_FORCE_ALIGN_CHECK 1
+#include "../third_party/xxhash.h"
+
+#if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
+/* Use XXH32() only on 32-bit platforms */
+#define XXH(input, len, seed) XXH32((input), (len), (seed))
+typedef uint32_t xxhash_t;
+#else
+/* XXH64() is faster on 64-bit but slower on 32-bit platforms */
+#define XXH(input, len, seed) (XXH64((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
+typedef uint64_t xxhash_t;
+#endif
+
+
 
 /* types */
 typedef struct surgescript_vmargs_t surgescript_vmargs_t;
@@ -54,6 +72,8 @@ struct surgescript_objectmanager_t
     int garbage_count; /* last number of garbage-collected objects */
 
     SSARRAY(char*, plugin_list); /* plugin list */
+
+    surgescript_perfecthashseed_t class_id_seed; /* used to generate class IDs from object names */
 };
 
 /* fixed objects */
@@ -86,7 +106,7 @@ static const char* SYSTEM_OBJECTS[] = {
 }; /* this must be a NULL-terminated array */
 
 /* object methods acessible by me */
-extern surgescript_object_t* surgescript_object_create(const char* name, surgescript_objecthandle_t handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data); /* creates a new blank object */
+extern surgescript_object_t* surgescript_object_create(const char* name, surgescript_objectclassid_t class_id, surgescript_objecthandle_t handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data); /* creates a new blank object */
 extern surgescript_object_t* surgescript_object_destroy(surgescript_object_t* object); /* destroys an object */
 
 /* the life-cycle of the objects is handled by me */
@@ -103,11 +123,15 @@ static bool sweep_unreachables(surgescript_object_t* object);
 
 /* other */
 #define is_power_of_two(x)                !((x) & ((x) - 1)) /* this assumes x > 0 */
+static const surgescript_perfecthashseed_t NO_SEED = 0;
 static inline surgescript_objecthandle_t new_handle(surgescript_objectmanager_t* manager);
 static void add_to_plugin_list(surgescript_objectmanager_t* manager, const char* object_name);
 static void release_plugin_list(surgescript_objectmanager_t* manager);
 static char** compile_plugins_list(const surgescript_objectmanager_t* manager);
 static inline surgescript_object_t* plugin_object(const surgescript_objectmanager_t* manager);
+static void accumulate_object_name(const char* object_name, void* data);
+static inline surgescript_perfecthashkey_t seeded_hash(const char* string, surgescript_perfecthashseed_t seed);
+static inline surgescript_objectclassid_t find_class_id(const surgescript_objectmanager_t* manager, const char* object_name);
 
 /* -------------------------------
  * public methods
@@ -140,6 +164,8 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
 
     ssarray_init(manager->plugin_list);
 
+    manager->class_id_seed = NO_SEED;
+
     return manager;
 }
 
@@ -163,21 +189,58 @@ surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objec
 
 
 /*
+ * surgescript_objectmanager_generate_class_ids()
+ * Generates a unique ID for each class of objects
+ */
+bool surgescript_objectmanager_generate_class_ids(surgescript_objectmanager_t* manager)
+{
+    /* class IDs are based on a perfect hash function applied to the name of
+       the class of objects. The perfect hash function is based on a seed. */
+
+    /* don't change the seed after it's set */
+    ssassert(manager->class_id_seed == NO_SEED);
+
+    /* create a list of all object names */
+    char** object_list = NULL;
+    int object_count = 0;
+    surgescript_programpool_foreach_object_ex(manager->program_pool, (void*[]){ &object_list, &object_count }, accumulate_object_name);
+    ssassert(object_count > 0);
+
+    /* compute a seed */
+    manager->class_id_seed = surgescript_perfecthash_find_seed(seeded_hash, (const char**)object_list, object_count);
+    ssassert(manager->class_id_seed != NO_SEED); /* just in case */
+
+    /* release the list of object names */
+    while(object_count-- > 0)
+        ssfree(object_list[object_count]);
+    ssfree(object_list);
+
+    /* lock the program pool, so that no new class of objects can be added to it
+       (perfect hashing) */
+    surgescript_programpool_lock(manager->program_pool);
+
+    /* done! */
+    return true;
+}
+
+
+/*
  * surgescript_objectmanager_spawn()
  * Spawns a new object and puts it in the internal pool (you can't spawn the root using this)
  */
 surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, surgescript_objecthandle_t parent, const char* object_name, void* user_data)
 {
     surgescript_objecthandle_t handle = new_handle(manager);
+    surgescript_objectclassid_t class_id = find_class_id(manager, object_name);
     surgescript_object_t *parent_object = surgescript_objectmanager_get(manager, parent);
-    surgescript_object_t *object = surgescript_object_create(object_name, handle, manager, manager->program_pool, manager->stack, manager->vmtime, user_data);
+    surgescript_object_t *object = surgescript_object_create(object_name, class_id, handle, manager, manager->program_pool, manager->stack, manager->vmtime, user_data);
 
     /* store the object */
     if(handle >= ssarray_length(manager->data) && handle > ROOT_HANDLE) {
         /* new slot */
         ssarray_push(manager->data, object);
         if(is_power_of_two(handle))
-            manager->next_handle = ssmax(ROOT_HANDLE, manager->next_handle / 2); /* the handle must never be zero; it would point to NULL */
+            manager->next_handle = ssmax((1 + ROOT_HANDLE), manager->next_handle / 2); /* the handle must never be zero; it would point to NULL */
     }
     else if(handle > ROOT_HANDLE) {
         /* reuse unused slot */
@@ -206,25 +269,27 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectman
  */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_objectmanager_t* manager)
 {
-    if(manager->next_handle == ROOT_HANDLE) {
-        /* preparing the data */
-        char** plugins = compile_plugins_list(manager);
-        char** data[] = { (char**)SYSTEM_OBJECTS, plugins };
+    /* the root must be the first object to be spawned */
+    ssassert(manager->next_handle == ROOT_HANDLE);
 
-        /* spawn the root object */
-        surgescript_object_t *object = surgescript_object_create(ROOT_OBJECT, ROOT_HANDLE, manager, manager->program_pool, manager->stack, manager->vmtime, data);
-        ssarray_push(manager->data, object);
-        manager->count++;
+    /* we'll only spawn the root after all class IDs can be known */
+    ssassert(manager->class_id_seed != NO_SEED);
 
-        /* initialize the root and call its constructor */
-        surgescript_object_init(object);
+    /* preparing the data */
+    char** plugins = compile_plugins_list(manager);
+    char** data[] = { (char**)SYSTEM_OBJECTS, plugins };
 
-        /* done! */
-        ssfree(plugins);
-    }
-    else
-        ssfatal("The root object should be the first one to be spawned.");
+    /* spawn the root object */
+    surgescript_objectclassid_t root_class_id = find_class_id(manager, ROOT_OBJECT);
+    surgescript_object_t *object = surgescript_object_create(ROOT_OBJECT, root_class_id, ROOT_HANDLE, manager, manager->program_pool, manager->stack, manager->vmtime, data);
+    ssarray_push(manager->data, object);
+    manager->count++;
 
+    /* initialize the root and call its constructor */
+    surgescript_object_init(object);
+
+    /* done! */
+    ssfree(plugins);
     return ROOT_HANDLE;
 }
 
@@ -512,18 +577,6 @@ bool surgescript_objectmanager_class_exists(const surgescript_objectmanager_t* m
     return surgescript_programpool_is_compiled(manager->program_pool, object_name);
 }
 
-/*
- * surgescript_objectmanager_class_id()
- * Gets the ID of a class of objects, given its name
- * Returns true and sets the output value if the class exists
- */
-bool surgescript_objectmanager_class_id(const surgescript_objectmanager_t* manager, const char* object_name, surgescript_objectclassid_t* out_class_id)
-{
-    extern bool surgescript_programpool_class_id(const surgescript_programpool_t* pool, const char* object_name, surgescript_objectclassid_t* out_class_id);
-    return surgescript_programpool_class_id(manager->program_pool, object_name, out_class_id);
-}
-
-
 /* private stuff */
 
 /* garbage collector */
@@ -617,4 +670,32 @@ surgescript_object_t* plugin_object(const surgescript_objectmanager_t* manager)
         handle = surgescript_objectmanager_system_object(NULL, "Plugin");
 
     return surgescript_objectmanager_get(manager, handle);
+}
+
+/* helper function (callback) */
+void accumulate_object_name(const char* object_name, void* data)
+{
+    char*** object_list = ((void**)data)[0];
+    int* object_count = ((void**)data)[1];
+
+    int last_index = *object_count;
+    *object_list = ssrealloc(*object_list, ++(*object_count) * sizeof(const char*));
+    *((*object_list) + last_index) = ssstrdup(object_name);
+}
+
+/* hash function */
+surgescript_perfecthashkey_t seeded_hash(const char* string, surgescript_perfecthashseed_t seed)
+{
+    int len = strlen(string);
+    xxhash_t hash = XXH(string, len, seed);
+
+    return (surgescript_perfecthashkey_t)hash;
+}
+
+/* find the ID of a class of objects */
+surgescript_objectclassid_t find_class_id(const surgescript_objectmanager_t* manager, const char* object_name)
+{
+    /*ssassert(manager->class_id_seed != NO_SEED);*/
+    surgescript_perfecthashkey_t hash32 = seeded_hash(object_name, manager->class_id_seed); /* perfect hash */
+    return (surgescript_objectclassid_t)hash32;
 }

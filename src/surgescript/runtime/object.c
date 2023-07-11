@@ -102,16 +102,15 @@ static inline void call_object_function(surgescript_object_t* object, const char
  * surgescript_object_create()
  * Creates a new blank object
  */
-surgescript_object_t* surgescript_object_create(const char* name, surgescript_objecthandle_t handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data)
+surgescript_object_t* surgescript_object_create(const char* name, surgescript_objectclassid_t class_id, surgescript_objecthandle_t handle, surgescript_objectmanager_t* object_manager, surgescript_programpool_t* program_pool, surgescript_stack_t* stack, const surgescript_vmtime_t* vmtime, void* user_data)
 {
     surgescript_object_t* obj = ssmalloc(sizeof *obj);
 
     if(!object_exists(program_pool, name))
         ssfatal("Runtime Error: can't spawn object \"%s\" - it doesn't exist!", name);
-    else if(!surgescript_objectmanager_class_id(object_manager, name, &(obj->class_id)))
-        ssfatal("Runtime Error: can't spawn object \"%s\" - no such class!", name); /* this should never happen */
 
     obj->name = ssstrdup(name);
+    obj->class_id = class_id;
     obj->heap = surgescript_heap_create();
     obj->renv = surgescript_renv_create(obj, stack, obj->heap, program_pool, object_manager, NULL);
 
