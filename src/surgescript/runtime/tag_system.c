@@ -32,18 +32,14 @@
 #include "../util/fasthash.h"
 
 #define XXH_INLINE_ALL
-#define XXH_FORCE_ALIGN_CHECK 1
 #include "../third_party/xxhash.h"
-#define WANT_FIXED_LENGTH_XXH 0
 
 #if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
-/* Use XXH32() only on 32-bit platforms */
-#define XXH(input, len, seed) XXH32((input), (len), (seed))
-typedef uint32_t xxhash_t;
+#define XXH(input, len, seed) (XXH32_hash_t)(XXH3_64bits_withSeed((input), (len), (seed))) /* just discard the higher bits */
+typedef XXH32_hash_t xxhash_t;
 #else
-/* XXH64() is faster on 64-bit but slower on 32-bit platforms */
-#define XXH(input, len, seed) (XXH64((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
-typedef uint64_t xxhash_t;
+#define XXH(input, len, seed) (XXH3_64bits_withSeed((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
+typedef XXH64_hash_t xxhash_t;
 #endif
 
 
@@ -394,24 +390,16 @@ surgescript_tagsignature_t generate_tag_signature(const char* object_name, const
     /* Our app must enforce signature uniqueness */
     alignas(8) char buf[2 * SS_NAMEMAX + 2] = { 0 };
     size_t l1 = strlen(object_name), l2 = strlen(tag_name);
+    xxhash_t seed = 0xCAFEC0DE + (xxhash_t)generate_tag_signature;
+    xxhash_t secondary_seed = seed + *object_name;
     xxhash_t ha, hb;
 
-#if WANT_FIXED_LENGTH_XXH
-    /* version with compile-time constant lengths and inline xxhash functions
-       buf[] is pre-initialized with zeros */
-    enum { SIZE = sizeof(buf) / 2, DBL_SIZE = sizeof(buf) };
-    memcpy(buf, object_name, l1 <= SIZE ? l1 : SIZE);
-    memcpy(buf + SIZE, tag_name, l2 <= SIZE ? l2 : SIZE);
-    ha = XXH(buf, SIZE, *tag_name);
-    hb = XXH(buf, DBL_SIZE, ha + *object_name);
-#else
     if(l1 > SS_NAMEMAX) l1 = SS_NAMEMAX;
     if(l2 > SS_NAMEMAX) l2 = SS_NAMEMAX;
     memcpy(buf, object_name, l1);
     memcpy(buf + l1 + 1, tag_name, l2);
-    ha = XXH(buf, l1 + 1, l1) + (uint8_t)tag_name[0];
-    hb = XXH(buf, l1 + l2 + 1, ha + (uint8_t)object_name[0]);
-#endif
+    ha = XXH(buf, l1 + 1, seed);
+    hb = XXH(buf, l1 + l2 + 1, secondary_seed + ha);
 
     return (uint64_t)hb | (((uint64_t)ha) << 32); /* probably unique */
 }

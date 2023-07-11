@@ -34,17 +34,14 @@
 #include "../util/perfect_hash.h"
 
 #define XXH_INLINE_ALL
-#define XXH_FORCE_ALIGN_CHECK 1
 #include "../third_party/xxhash.h"
 
 #if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
-/* Use XXH32() only on 32-bit platforms */
-#define XXH(input, len, seed) XXH32((input), (len), (seed))
-typedef uint32_t xxhash_t;
+#define XXH(input, len, seed) (XXH32_hash_t)(XXH3_64bits_withSeed((input), (len), (seed))) /* just discard the higher bits */
+typedef XXH32_hash_t xxhash_t;
 #else
-/* XXH64() is faster on 64-bit but slower on 32-bit platforms */
-#define XXH(input, len, seed) (XXH64((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
-typedef uint64_t xxhash_t;
+#define XXH(input, len, seed) (XXH3_64bits_withSeed((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
+typedef XXH64_hash_t xxhash_t;
 #endif
 
 
@@ -686,7 +683,7 @@ void accumulate_object_name(const char* object_name, void* data)
 /* hash function */
 surgescript_perfecthashkey_t seeded_hash(const char* string, surgescript_perfecthashseed_t seed)
 {
-    int len = strlen(string);
+    size_t len = strlen(string);
     xxhash_t hash = XXH(string, len, seed);
 
     return (surgescript_perfecthashkey_t)hash;

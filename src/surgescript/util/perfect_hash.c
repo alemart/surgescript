@@ -47,7 +47,7 @@ surgescript_perfecthashseed_t surgescript_perfecthash_find_seed(surgescript_perf
 
     We generate a seed for a perfect hash function using brute force. This very
     simple implementation is expected to finish in a single iteration if the
-    provided hash function has "good" distribution and if the input set of
+    provided hash function is of "high quality" and if the input set of
     strings is "small" enough (how small?)
 
     If any of the possible 2^b hashes (b = 32 bits) can be generated with

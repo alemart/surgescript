@@ -32,19 +32,14 @@
 #include "../util/fasthash.h"
 
 #define XXH_INLINE_ALL
-#define XXH_FORCE_ALIGN_CHECK 1
 #include "../third_party/xxhash.h"
 
 #if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
-/* Use XXH32() only on 32-bit platforms */
-#define XXH(input, len, seed) XXH32((input), (len), (seed))
-typedef uint32_t xxhash_t;
-typedef uint32_t xxhashseed_t;
+#define XXH(input, len, seed) (XXH32_hash_t)(XXH3_64bits_withSeed((input), (len), (seed))) /* just discard the higher bits */
+typedef XXH32_hash_t xxhash_t;
 #else
-/* XXH64() is faster on 64-bit but slower on 32-bit platforms */
-#define XXH(input, len, seed) (XXH64((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
-typedef uint64_t xxhash_t;
-typedef uint64_t xxhashseed_t;
+#define XXH(input, len, seed) (XXH3_64bits_withSeed((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
+typedef XXH64_hash_t xxhash_t;
 #endif
 
 
@@ -53,7 +48,7 @@ typedef uint64_t xxhashseed_t;
  * that depends on the containing object and on the function name
  */
 typedef uint64_t surgescript_programpool_signature_t;
-static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name, xxhashseed_t seed); /* generates a function signature */
+static inline surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name, xxhash_t seed); /* generates a function signature */
 
 
 /* metadata */
@@ -89,7 +84,7 @@ struct surgescript_programpool_t
     fasthash_t* hash; /* a hash table of hashpair_t's */
     surgescript_programpool_metadata_t* meta;
     bool is_locked;
-    xxhashseed_t seed;
+    xxhash_t seed;
 };
 
 /* misc */
@@ -444,12 +439,12 @@ void delete_program(const char* program_name, void* data)
 
 
 /* program signature generator: must be extremely fast */
-surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name, xxhashseed_t seed)
+surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name, xxhash_t seed)
 {
     /* Our app must enforce signature uniqueness */
     alignas(8) char buf[2 * SS_NAMEMAX + 2] = { 0 };
     size_t l1 = strlen(object_name), l2 = strlen(program_name);
-    xxhashseed_t seed_offset = *program_name * 31u + *object_name;
+    xxhash_t secondary_seed = seed + *object_name;
     xxhash_t ha, hb;
 
     if(l1 > SS_NAMEMAX)
@@ -462,10 +457,18 @@ surgescript_programpool_signature_t generate_signature(const char* object_name, 
     memcpy(buf + (l1 + 1), program_name, l2); /* keep the '\0' after object_name */
 
     ha = XXH(buf, l1, seed); /* probably perfect hash (~100%) within the set of all compiled object names */
-    hb = XXH(buf, (l1 + 1) + l2, seed + seed_offset); /* probably perfect hash within the set of all program names of object_name */
+    hb = XXH(buf, (l1 + 1) + l2, secondary_seed + ha); /* probably perfect hash within the set of all program names of object_name */
 
     /* note: l1, l2 <= SS_NAMEMAX;
        therefore (l1 + 1) + l2 <= 2*SS_NAMEMAX + 1 < 2*SS_NAMEMAX + 2 = sizeof(buf) */
 
     return ((uint64_t)hb) | (((uint64_t)ha) << 32); /* probably unique */
+
+    /* an attacker could intentionally generate keys that trigger collisions
+       on XXH3; using random seeds helps alleviate that issue. XXH3 is a non
+       cryptographic algorithm. There's also the XXH3_64bits_withSecret()
+       variant, which must be used with a high-entropy secret.
+
+       at the time of this writing, I'm not sure if this remark is of any
+       practical concern. Still, I'm leaving this here as documentation. */
 }
