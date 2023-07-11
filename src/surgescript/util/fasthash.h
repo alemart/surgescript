@@ -19,8 +19,8 @@
  * A fast hash table with integer keys and linear probing
  */
 
-#ifndef _FASTHASH_H
-#define _FASTHASH_H
+#ifndef _SURGESCRIPT_FASTHASH_H
+#define _SURGESCRIPT_FASTHASH_H
 
 #include <stdint.h>
 #include <stdbool.h>
