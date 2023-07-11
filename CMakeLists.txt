@@ -108,7 +108,6 @@ set(
     src/surgescript/third_party/gettimeofday.h
     src/surgescript/third_party/utf8.h
     src/surgescript/third_party/uthash.h
-    src/surgescript/third_party/xxh3.h
     src/surgescript/third_party/xxhash.h
     src/surgescript/util/fasthash.h
     src/surgescript/util/ssarray.h
