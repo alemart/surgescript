@@ -76,6 +76,7 @@ set(
     src/surgescript/runtime/vm_time.c
     src/surgescript/third_party/utf8.c
     src/surgescript/third_party/xoroshiro128plus.c
+    src/surgescript/util/perfect_hash.c
     src/surgescript/util/transform.c
     src/surgescript/util/util.c
     ${CMAKE_BINARY_DIR}/src/surgescript/misc/info.c
@@ -111,6 +112,7 @@ set(
     src/surgescript/third_party/xxhash.h
     src/surgescript/util/fasthash.h
     src/surgescript/util/ssarray.h
+    src/surgescript/util/perfect_hash.h
     src/surgescript/util/transform.h
     src/surgescript/util/util.h
     src/surgescript.h
