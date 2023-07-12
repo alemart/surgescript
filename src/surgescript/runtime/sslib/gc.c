@@ -26,7 +26,11 @@
 #include "../../util/util.h"
 
 /* constants */
+#if 0
 static const double DEFAULT_GC_INTERVAL = 1.0; /* will run GC.collect() every DEFAULT_GC_INTERVAL seconds (by default) */
+#else
+static const double DEFAULT_GC_INTERVAL = 0.0; /* will run GC.collect() continuously (as fast as possible) */
+#endif
 
 /* private stuff */
 static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
