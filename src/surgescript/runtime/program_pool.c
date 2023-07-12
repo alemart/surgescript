@@ -444,7 +444,7 @@ surgescript_programpool_signature_t generate_signature(const char* object_name, 
     /* Our app must enforce signature uniqueness */
     alignas(8) char buf[2 * SS_NAMEMAX + 2] = { 0 };
     size_t l1 = strlen(object_name), l2 = strlen(program_name);
-    xxhash_t secondary_seed = seed + *object_name;
+    xxhash_t secondary_seed = seed + *object_name; /* better to pick another seed at random? */
     xxhash_t ha, hb;
 
     if(l1 > SS_NAMEMAX)
@@ -467,7 +467,8 @@ surgescript_programpool_signature_t generate_signature(const char* object_name, 
     /* an attacker could intentionally generate keys that trigger collisions
        on XXH3; using random seeds helps alleviate that issue. XXH3 is a non
        cryptographic algorithm. There's also the XXH3_64bits_withSecret()
-       variant, which must be used with a high-entropy secret.
+       variant, which must be used with a high-entropy secret. Recall that the
+       input strings are small.
 
        at the time of this writing, I'm not sure if this remark is of any
        practical concern. Still, I'm leaving this here as documentation. */
