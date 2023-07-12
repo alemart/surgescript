@@ -471,5 +471,8 @@ surgescript_programpool_signature_t generate_signature(const char* object_name, 
        input strings are small.
 
        at the time of this writing, I'm not sure if this remark is of any
-       practical concern. Still, I'm leaving this here as documentation. */
+       practical concern. Still, I'm leaving this here as documentation.
+
+       see also:
+       https://github.com/Cyan4973/xxHash/wiki/Collision-ratio-comparison */
 }
