@@ -711,8 +711,10 @@ const char* surgescript_object_state(const surgescript_object_t *object)
 void surgescript_object_set_state(surgescript_object_t* object, const char* state_name)
 {
     if(strcmp(object->state_name, state_name) != 0) {
-        ssfree(object->state_name);
-        object->state_name = ssstrdup(state_name ? state_name : MAIN_STATE);
+        size_t new_size = (1 + strlen(state_name)) * sizeof(char);
+        object->state_name = ssrealloc(object->state_name, new_size);
+        memcpy(object->state_name, state_name, new_size); /* include '\0' */
+
         object->current_state = get_state_program(object, object->state_name);
         object->last_state_change = surgescript_vmtime_time(object->vmtime);
         object->time_spent = 0;
