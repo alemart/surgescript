@@ -73,8 +73,8 @@ int surgescript_object_find_descendants(const surgescript_object_t* object, cons
 surgescript_objecthandle_t surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name); /* find 1st child (or grand-child...) tagged tag_name */
 int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(surgescript_objecthandle_t,void*)); /* finds all descendants tagged tag_name */
 surgescript_objecthandle_t surgescript_object_find_ascendant(const surgescript_object_t* object, const char* name); /* finds an ascendant named name */
-bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
-bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*)); /* tree traversal with an additional data parameter */
+void surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*)); /* traverses the object tree, calling the callback function for each object */
+void surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*)); /* tree traversal with an additional data parameter */
 int surgescript_object_depth(const surgescript_object_t* object); /* depth in the object tree (root has depth zero) */
 bool surgescript_object_is_ascendant(const surgescript_object_t* object, surgescript_objecthandle_t ascendant_handle); /* is an object an ascendant of another? */
 bool surgescript_object_add_child(surgescript_object_t* object, surgescript_objecthandle_t child_handle); /* adds a child to this object */

@@ -902,9 +902,19 @@ bool surgescript_object_update(surgescript_object_t* object)
  * Traverses the object tree, calling the callback function for each object
  * If the callback returns false, the traversal doesn't visit the children
  */
-bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*))
+void surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callback)(surgescript_object_t*))
 {
-    return surgescript_object_traverse_tree_ex(object, callback, simple_traversal);
+    if(!callback(object))
+        return;
+
+    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    for(int i = 0; i < ssarray_length(object->child); i++) {
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+        surgescript_object_traverse_tree(child, callback);
+    }
+
+    /*surgescript_object_traverse_tree_ex(object, callback, simple_traversal);*/
+    (void)simple_traversal;
 }
 
 /*
@@ -913,18 +923,16 @@ bool surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callb
  * If the callback returns false, the traversal doesn't visit the children
  * Accepts an extra data parameter
  */
-bool surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*))
+void surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* data, bool (*callback)(surgescript_object_t*,void*))
 {
-    if(callback(object, data)) {
-        surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
-        for(int i = 0; i < ssarray_length(object->child); i++) {
-            surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
-            surgescript_object_traverse_tree_ex(child, data, callback);
-        }
-        return true;
-    }
+    if(!callback(object, data))
+        return;
 
-    return false;
+    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    for(int i = 0; i < ssarray_length(object->child); i++) {
+        surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
+        surgescript_object_traverse_tree_ex(child, data, callback);
+    }
 }
 
 /*
