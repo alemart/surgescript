@@ -94,14 +94,8 @@ struct surgescript_varpool_t
     surgescript_varpool_t* next;
 };
 
-#if defined(__GNUC__)
-static inline surgescript_varbucket_t* allocate_bucket() __attribute__((always_inline));
-static inline void free_bucket(surgescript_varbucket_t* bucket) __attribute__((always_inline));
-#else
-static inline surgescript_varbucket_t* allocate_bucket();
-static inline void free_bucket(surgescript_varbucket_t* bucket);
-#endif
-
+static SS_FORCE_INLINE surgescript_varbucket_t* allocate_bucket();
+static SS_FORCE_INLINE void free_bucket(surgescript_varbucket_t* bucket);
 static surgescript_varpool_t* new_varpool(surgescript_varpool_t* next);
 static surgescript_varpool_t* delete_varpools(surgescript_varpool_t* head);
 static surgescript_varpool_t* varpool = NULL;

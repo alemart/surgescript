@@ -59,12 +59,7 @@ struct surgescript_tagtree_t
 static surgescript_tagtree_t* add_to_tree(surgescript_tagtree_t* tree, const char* key);
 static surgescript_tagtree_t* remove_tree(surgescript_tagtree_t* tree);
 static void traverse_tree(const surgescript_tagtree_t* tree, void* data, void (*callback)(const char*, void*));
-
-#if defined(__GNUC__)
-static inline bool find_in_tree(const surgescript_tagtree_t* tree, const char* key) __attribute__((always_inline));
-#else
-static inline bool find_in_tree(const surgescript_tagtree_t* tree, const char* key);
-#endif
+static SS_FORCE_INLINE bool find_in_tree(const surgescript_tagtree_t* tree, const char* key);
 
 /* inverse tag table: we'll get to know all objects that have a certain tag */
 typedef struct surgescript_inversetagtable_t surgescript_inversetagtable_t;
@@ -89,12 +84,7 @@ static void destroy_tagtable_entry(void* e);
 
 /* tag signature used in the tag table */
 typedef uint64_t surgescript_tagsignature_t;
-
-#if defined(__GNUC__)
-static inline surgescript_tagsignature_t generate_tag_signature(const char* object_name, const char* tag_name) __attribute__((always_inline));
-#else
-static inline surgescript_tagsignature_t generate_tag_signature(const char* object_name, const char* tag_name);
-#endif
+static SS_FORCE_INLINE surgescript_tagsignature_t generate_tag_signature(const char* object_name, const char* tag_name);
 
 /* bound tag system: helps to quickly test a particular class of objects */
 #define NUMBER_OF_TAG_GROUPS 64
@@ -108,14 +98,9 @@ struct surgescript_boundtagsystem_t
     UT_hash_handle hh;
 };
 
-static surgescript_boundtagsystem_t* find_bound_tag_system(surgescript_tagsystem_t* tag_system, const char* object_name);
 #define bitmask(tag_name, h) (((uint64_t)(*(tag_name) != '\0')) << (h)) /* 64-bit mask; empty strings have no mask (branchless) */
-
-#if defined(__GNUC__)
-static inline int minihash64(const char* tag_name) __attribute__((always_inline));
-#else
-static inline int minihash64(const char* tag_name);
-#endif
+static SS_FORCE_INLINE int minihash64(const char* tag_name);
+static surgescript_boundtagsystem_t* find_bound_tag_system(surgescript_tagsystem_t* tag_system, const char* object_name);
 
 /* tag system */
 struct surgescript_tagsystem_t

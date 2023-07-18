@@ -47,6 +47,15 @@
 /* constants */
 #define SS_NAMEMAX                  63 /* names can't be larger than this (computes hashes quickly) */
 
+/* inlining hints */
+#if defined(__GNUC__) || defined(__clang__)
+#define SS_FORCE_INLINE             inline __attribute__((always_inline))
+#elif defined(_MSC_VER)
+#define SS_FORCE_INLINE             __forceinline /* MSVC */
+#else
+#define SS_FORCE_INLINE             inline
+#endif
+
 /* public routines */
 int surgescript_util_versioncode(const char* version); /* converts a version string to a comparable number */
 const char* surgescript_util_version(); /* compiled version of SurgeScript */

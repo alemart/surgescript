@@ -80,18 +80,13 @@ static const char* instruction_name[] = {
 static surgescript_program_t* init_program(surgescript_program_t* program, int arity, void (*run_function)(surgescript_program_t*, const surgescript_renv_t*));
 static void run_program(surgescript_program_t* program, const surgescript_renv_t* runtime_environment);
 static void run_cprogram(surgescript_program_t* program, const surgescript_renv_t* runtime_environment);
+static SS_FORCE_INLINE unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip);
 static inline surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* program, surgescript_objectclassid_t* out_class_id);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
 static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
 static const int MAX_PROGRAM_ARITY = 256;
-
-#if defined(__GNUC__)
-static inline unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip) __attribute__((always_inline));
-#else
-static inline unsigned int run_instruction(surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, unsigned int ip);
-#endif
 
 /* debug mode? */
 #define SURGESCRIPT_DEBUG_MODE          0
