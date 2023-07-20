@@ -65,6 +65,7 @@ struct surgescript_objectmanager_t
     const surgescript_vmtime_t* vmtime; /* VM time */
 
     SSARRAY(surgescript_objecthandle_t, objects_to_be_scanned); /* garbage collection */
+    SSARRAY(surgescript_objecthandle_t, objects_scheduled_for_removal); /* a helper for the garbage collector */
     int first_object_to_be_scanned; /* an index of objects_to_be_scanned */
     int reachables_count; /* garbage-collector stuff */
     int garbage_count; /* last number of garbage-collected objects */
@@ -117,7 +118,7 @@ extern void surgescript_object_set_reachable(surgescript_object_t* object, bool 
 
 /* garbage collector: private stuff */
 static bool mark_as_reachable(surgescript_objecthandle_t handle, void* mgr);
-static bool sweep_unreachables(surgescript_object_t* object);
+static bool sweep_unreachables(surgescript_object_t* object, void* mgr);
 
 /* other */
 #define is_power_of_two(x)                !((x) & ((x) - 1)) /* this assumes x > 0 */
@@ -156,6 +157,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     manager->next_handle = ROOT_HANDLE;
 
     ssarray_init(manager->objects_to_be_scanned);
+    ssarray_init(manager->objects_scheduled_for_removal);
     manager->first_object_to_be_scanned = 0;
     manager->reachables_count = 0;
     manager->garbage_count = 0;
@@ -178,6 +180,7 @@ surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objec
     while(handle != 0)
         surgescript_objectmanager_delete(manager, --handle);
 
+    ssarray_release(manager->objects_scheduled_for_removal);
     ssarray_release(manager->objects_to_be_scanned);
     ssarray_release(manager->data);
     release_plugin_list(manager);
@@ -479,10 +482,19 @@ bool surgescript_objectmanager_garbagecollect(surgescript_objectmanager_t* manag
         if(surgescript_objectmanager_exists(manager, ROOT_HANDLE)) {
             /* I have already scanned some objects */
             if(ssarray_length(manager->objects_to_be_scanned) > 0) {
-                /* clear the unreachable objects */
+                int prev_count = manager->count;
+
+                /* find the unreachable objects */
                 surgescript_object_t* root = surgescript_objectmanager_get(manager, ROOT_HANDLE);
-                manager->garbage_count = 0;
-                surgescript_object_traverse_tree(root, sweep_unreachables);
+                surgescript_object_traverse_tree_ex(root, manager, sweep_unreachables);
+
+                /* delete the unreachable objects */
+                for(int i = ssarray_length(manager->objects_scheduled_for_removal) - 1; i >= 0; i--)
+                    surgescript_objectmanager_delete(manager, manager->objects_scheduled_for_removal[i]);
+                ssarray_reset(manager->objects_scheduled_for_removal);
+
+                /* done */
+                manager->garbage_count = prev_count - manager->count;
                 disposed = true;
             }
 
@@ -581,35 +593,39 @@ bool surgescript_objectmanager_class_exists(const surgescript_objectmanager_t* m
 bool mark_as_reachable(surgescript_objecthandle_t handle, void* mgr)
 {
     surgescript_objectmanager_t* manager = (surgescript_objectmanager_t*)mgr;
+
     if(surgescript_objectmanager_exists(manager, handle)) {
         surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
+
         if(!surgescript_object_is_reachable(object)) {
             surgescript_object_set_reachable(object, true);
             ssarray_push(manager->objects_to_be_scanned, handle);
             manager->reachables_count++;
         }
+
         return true;
     }
     else
         return false; /* returns false if the handle is broken */
 }
 
-bool sweep_unreachables(surgescript_object_t* object)
+bool sweep_unreachables(surgescript_object_t* object, void* mgr)
 {
-    /* dispose the object */
+    surgescript_objectmanager_t* manager = (surgescript_objectmanager_t*)mgr;
+
+    /* is the object reachable? */
     if(!surgescript_object_is_reachable(object)) {
+        /* dispose the object */
         /*sslog("Garbage Collector: disposing \"%s\"...", surgescript_object_name(object));*/
-        if(!surgescript_object_is_killed(object)) {
-            surgescript_object_kill(object);
-            surgescript_object_manager(object)->garbage_count++;
-        }
+        surgescript_object_kill(object);
+        ssarray_push(manager->objects_scheduled_for_removal, surgescript_object_handle(object)); /* do not wait for the update cycle (inactive ascendants?) */
+        return false; /* no need to visit the children; we're going to delete the parent */
     }
-
-    /* reset the mark */
-    surgescript_object_set_reachable(object, false);
-
-    /* done! */
-    return true;
+    else {
+        /* reset the mark */
+        surgescript_object_set_reachable(object, false);
+        return true; /* visit the children */
+    }
 }
 
 /* gets a handle at a unused space */
