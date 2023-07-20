@@ -64,17 +64,20 @@ typedef union surgescript_program_operand_t {
     int64_t i64;
     void* p;
 } surgescript_program_operand_t;
+typedef char _operand_size_assert[ !!(sizeof(surgescript_program_operand_t) == sizeof(uint64_t)) * 2 - 1 ];
 
 #define SSOP()   SSOPu(0)
 #define SSOPu(x) surgescript_program_operand_u(x)
 #define SSOPf(x) surgescript_program_operand_f(x)
 #define SSOPi(x) surgescript_program_operand_i(x)
 #define SSOPb(x) surgescript_program_operand_b(x)
+#define SSOPp(x) surgescript_program_operand_p(x)
 
 static inline surgescript_program_operand_t surgescript_program_operand_u(unsigned u) { surgescript_program_operand_t o = { .u64 = 0 }; o.u = u; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_f(double f) { surgescript_program_operand_t o = { .u64 = 0 }; o.f = f; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_b(bool b) { surgescript_program_operand_t o = { .u64 = 0 }; o.b = b; return o; }
 static inline surgescript_program_operand_t surgescript_program_operand_i(int i) { surgescript_program_operand_t o = { .u64 = 0 }; o.i = i; return o; }
+static inline surgescript_program_operand_t surgescript_program_operand_p(void* p) { surgescript_program_operand_t o = { .u64 = 0 }; o.p = p; return o; }
 
 
 
