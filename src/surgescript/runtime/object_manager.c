@@ -19,6 +19,7 @@
  * SurgeScript object manager
  */
 
+#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 #include "object_manager.h"
@@ -692,7 +693,9 @@ surgescript_perfecthashkey_t seeded_hash(const char* string, surgescript_perfect
 /* find the ID of a class of objects */
 surgescript_objectclassid_t find_class_id(const surgescript_objectmanager_t* manager, const char* object_name)
 {
+    static_assert(sizeof(surgescript_objectclassid_t) == sizeof(surgescript_perfecthashkey_t));
     /*ssassert(manager->class_id_seed != NO_SEED);*/
+
     surgescript_perfecthashkey_t hash32 = seeded_hash(object_name, manager->class_id_seed); /* perfect hash */
     return (surgescript_objectclassid_t)hash32;
 }
