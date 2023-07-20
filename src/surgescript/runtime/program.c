@@ -151,13 +151,11 @@ int surgescript_program_add_line(surgescript_program_t* program, surgescript_pro
     ssarray_push(program->line, line);
 
 #if WANT_OPTIMIZED_PROGRAM_CALLS
-    /* we add two NOPs after every CALL as a trick to help
-       the program optimize itself during its own execution */
+    /* we add a NOP after every CALL as a trick to help the
+       program optimize itself during its own execution */
     if(op == SSOP_CALL) {
         surgescript_program_operand_t zero = surgescript_program_operand_u(0);
         surgescript_program_operation_t nop = { SSOP_NOP, zero, zero };
-
-        ssarray_push(program->line, nop);
         ssarray_push(program->line, nop);
     }
 #endif
@@ -661,44 +659,60 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
                         /* the program has run enough consecutive times with
                            the same or equivalent callee. Let's optimize. */
 
-                        /* save the current operands */
-                        operation[2].a = a;
-                        operation[2].b = b;
+                        /* cache the program */
+                        operation[1].b = surgescript_program_operand_p(callee_program);
 
                         /* let's change this instruction */
                         operation->instruction = SSOP_OPTCALL;
-                        operation->a.p = callee_program;
-                        operation->b.u = b.u;
                     }
                 }
                 else {
                     /* new class. Reset the counter */
-                    operation[1].a.u = class_id;
-                    operation[1].b.i = 1;
+                    operation[1].a = surgescript_program_operand_u(class_id);
+                    operation[1].b = surgescript_program_operand_i(1);
+
+#if 1
+                    /* apparently we need the following line, otherwise we may
+                       get an invalidated cached program. The class_id changes,
+                       but the instruction shouldn't. Why does this happen?
+                       operation->instruction should only be SSOP_CALL here,
+                       but it may actually be SSOP_OPTCALL.
+
+                       tested with object_name "Debug Mode - Tap Detector",
+                       program_name "onNotifyObserver" of Open Surge Engine
+                       version 0.6.1. Compiled with gcc 9.4.0 (Linux), build
+                       type RelWithDebInfo (-O2 -g -DNDEBUG). */
+                    /*ssassert(operation->instruction == SSOP_CALL);*/ /* fails */
+                    /*if(operation->instruction == SSOP_OPTCALL) ssfatal("how?");*/
+                    operation->instruction = SSOP_CALL;
+#endif
                 }
 
-                /* skip the two NOPs placed after every CALL */
-                return ip += 3;
+                /* skip the NOP placed after every CALL */
+                return ip + 2;
 #endif
             }
             break;
 
-        case SSOP_OPTCALL:
+        case SSOP_OPTCALL: {
 #if WANT_OPTIMIZED_PROGRAM_CALLS
             /* run the cached program. We can afford to cache because
                surgescript_program_t* entries of the program pool will not
                change after execution */
-            if(!call_program(runtime_environment, b.u, NULL, a.p, &operation[1].a.u)) {
+            surgescript_objectclassid_t expected_class_id = operation[1].a.u;
+            surgescript_program_t* expected_program = operation[1].b.p;
+            /*const char* program_name = program->text[a.u];*/
+
+            if(!call_program(runtime_environment, b.u, NULL /*program_name*/, expected_program, &expected_class_id)) {
 
                 /* Got an incompatible callee. Execution was aborted! */
 
+                /* reset the counter */
+                operation[1].a = surgescript_program_operand_u(0);
+                operation[1].b = surgescript_program_operand_i(0);
+
                 /* restore the original CALL */
                 operation->instruction = SSOP_CALL;
-                operation->a = operation[2].a;
-                operation->b = operation[2].b;
-
-                /* reset the counter */
-                operation[1].b.i = 0;
 
                 /* run the same instruction again */
                 return ip;
@@ -708,14 +722,15 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
 
                 /* Execution was successful! */
 
-                /* skip the two NOPs placed after every CALL */
-                return ip += 3;
+                /* skip the NOP placed after every CALL */
+                return ip + 2;
 
             }
 #else
-            /* nop */
+            /* no operation */
             break;
 #endif
+        }
     }
 
     /* next line */
@@ -760,6 +775,13 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
             program = NULL;
             goto cleanup;
         }
+#if 0
+        /* verify the cached program; for testing only, as it performs a lookup */
+        else ssassert(
+            program_name != NULL &&
+            program == surgescript_programpool_get(pool, object_name, program_name)
+        );
+#endif
         
         /* does the selected program exist? */
         if(program != NULL) {
