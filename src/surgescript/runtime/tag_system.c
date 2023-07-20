@@ -440,15 +440,18 @@ int minihash64(const char* tag_name)
     'o' == 111 == 0b 011 01111 -> 15
     'u' == 117 == 0b 011 10101 -> 21
 
-    same 011 prefix, different 5-bit suffix
+    same 011 prefix*, different 5-bit suffix
 
     bit mask:
     0b1000001000001000100010 == 2130466
       u     o     i   e   a
+     21    15     9   5   1
+
+    (*) we're ignoring the prefix
 
     */
     int c0 = *tag_name;
-    int is_vowel = (2130466 >> (c0 & 31)) & 1; /* 1 if tag_name[0] is a vowel; 0 otherwise */
+    int is_vowel = (2130466 >> (c0 & 31)) & 1; /* 1 if tag_name[0] is a probable vowel; 0 otherwise */
 
     /* take two characters of the string */
     int c1 = tag_name[is_vowel]; /* c1 is probably the first consonant */
