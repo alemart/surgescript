@@ -44,6 +44,12 @@ void surgescript_sslib_register_temp(surgescript_vm_t* vm)
 /* main state */
 surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
+    /* we reduce the time of tree traversal by deactivating __Temp. As a consequence,
+       descendants of __Temp (e.g., Arrays & Dictionaries spawned as its children)
+       won't be updated / traversed. __Temp may hold hundreds or thousands of objects,
+       and so the benefit of this optimization outweights its cost (as I see it at the
+       time of this writing). */
+    surgescript_object_set_active(object, false);
     return NULL;
 }
 
