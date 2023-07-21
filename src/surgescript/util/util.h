@@ -72,7 +72,9 @@ void* surgescript_util_free(void* ptr); /* memory deallocation */
 
 void surgescript_util_log(const char* fmt, ...); /* logs a message */
 void surgescript_util_fatal(const char* fmt, ...); /* logs a message and kills the app */
-void surgescript_util_set_error_functions(void (*log)(const char*), void (*fatal)(const char*)); /* set custom error functions */
+void surgescript_util_set_log_function(void (*fn)(const char*,void*), void* context); /* set a custom log function */
+void surgescript_util_set_crash_function(void (*fn)(const char*,void*), void* context); /* set a custom crash function */
+void surgescript_util_set_error_functions(void (*log)(const char*), void (*crash)(const char*)); /* (obsolete) set custom log & crash functions */
 
 char* surgescript_util_strncpy(char* dst, const char* src, size_t n); /* strcpy */
 char* surgescript_util_strdup(const char* str, const char* file, int line); /* strdup */

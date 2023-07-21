@@ -42,10 +42,13 @@
 
 /* private stuff */
 static void mem_crash(const char* file, int line);
-static void my_log(const char* message);
-static void my_fatal(const char* message);
-static void (*log_function)(const char* message) = my_log;
-static void (*fatal_function)(const char* message) = my_fatal;
+static void my_adapter_function(const char* message, void* context);
+static void my_log_function(const char* message, void* context);
+static void my_crash_function(const char* message, void* context);
+static void (*log_function)(const char* message, void* context) = my_log_function;
+static void (*crash_function)(const char* message, void* context) = my_crash_function;
+static void* log_context = NULL;
+static void* crash_context = NULL;
 
 
 
@@ -107,7 +110,7 @@ void surgescript_util_log(const char* fmt, ...)
     vsnprintf(buf+len, sizeof(buf)-len, fmt, args);
     va_end(args);
 
-    log_function(buf);
+    log_function(buf, log_context);
 }
 
 /*
@@ -124,8 +127,7 @@ void surgescript_util_fatal(const char* fmt, ...)
     vsnprintf(buf+len, sizeof(buf)-len, fmt, args);
     va_end(args);
 
-    fatal_function(buf);
-    exit(1); /* just in case */
+    crash_function(buf, crash_context);
 }
 
 /*
@@ -196,13 +198,46 @@ const char* surgescript_util_authors()
 }
 
 /*
- * surgescript_util_set_error_functions()
- * Customize the error messages
+ * surgescript_util_set_log_function()
+ * Set a custom log function fn.
  */
-void surgescript_util_set_error_functions(void (*log)(const char*), void (*fatal)(const char*))
+void surgescript_util_set_log_function(void (*fn)(const char*,void*), void* context)
 {
-    log_function = log ? log : my_log;
-    fatal_function = fatal ? fatal : my_fatal;
+    if(fn != NULL) {
+        log_function = fn;
+        log_context = context;
+    }
+    else {
+        log_function = my_log_function;
+        log_context = NULL;
+    }
+}
+
+/*
+ * surgescript_util_set_crash_function()
+ * Set a custom crash function fn. It must exit the app / thread.
+ */
+void surgescript_util_set_crash_function(void (*fn)(const char*,void*), void* context)
+{
+    if(fn != NULL) {
+        crash_function = fn;
+        crash_context = context;
+    }
+    else {
+        crash_function = my_crash_function;
+        crash_context = NULL;
+    }
+}
+
+/*
+ * surgescript_util_set_error_functions()
+ * Set custom log & crash functions
+ * This function is obsolete and has been kept for backwards compatibility
+ */
+void surgescript_util_set_error_functions(void (*log)(const char*), void (*crash)(const char*))
+{
+    surgescript_util_set_log_function(my_adapter_function, log);
+    surgescript_util_set_crash_function(my_adapter_function, crash);
 }
 
 /*
@@ -423,16 +458,23 @@ FILE* surgescript_util_fopen_utf8(const char* filepath, const char* mode)
 }
 
 /* -------------------------------
- * private methods
+ * private functions
  * ------------------------------- */
-void my_log(const char* message)
+void my_adapter_function(const char* message, void* context)
+{
+    void (*fn)(const char*) = (void(*)(const char*))context;
+    fn(message);
+}
+
+void my_log_function(const char* message, void* context)
 {
     printf("%s\n", message);
 }
 
-void my_fatal(const char* message)
+void my_crash_function(const char* message, void* context)
 {
     fprintf(stderr, "%s\n", message);
+    exit(1); /* must exit the app */
 }
 
 void mem_crash(const char* file, int line) /* out of memory error */
@@ -441,7 +483,7 @@ void mem_crash(const char* file, int line) /* out of memory error */
     static const int prefix_len = 17;
 
     snprintf(buf + prefix_len, sizeof(buf) - prefix_len, "%s:%d", file, line);
-    fatal_function(buf);
+    crash_function(buf, crash_context);
 
     exit(1); /* just in case */
 }

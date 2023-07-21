@@ -653,7 +653,7 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
 
         case SSOP_CALL:
             if(a.u < ssarray_length(program->text)) {
-#if !WANT_OPTIMIZED_PROGRAM_CALLS
+#if !(WANT_OPTIMIZED_PROGRAM_CALLS)
                 /* unoptimized version */
                 surgescript_objectclassid_t class_id = 0;
                 call_program(runtime_environment, b.u, program->text[a.u], NULL, &class_id);
@@ -705,7 +705,7 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
             break;
 
         case SSOP_OPTCALL: {
-#if !WANT_OPTIMIZED_PROGRAM_CALLS
+#if !(WANT_OPTIMIZED_PROGRAM_CALLS)
             /* no operation */
             ;
 #else
