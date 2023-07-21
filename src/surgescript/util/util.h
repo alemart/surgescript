@@ -50,10 +50,13 @@
 /* inlining hints */
 #if defined(__GNUC__) || defined(__clang__)
 #define SS_FORCE_INLINE             inline __attribute__((always_inline))
+#define SS_NO_INLINE                __attribute__((noinline))
 #elif defined(_MSC_VER)
 #define SS_FORCE_INLINE             __forceinline /* MSVC */
+#define SS_NO_INLINE                __declspec(noinline)
 #else
 #define SS_FORCE_INLINE             inline
+#define SS_NO_INLINE
 #endif
 
 /* public routines */
