@@ -422,17 +422,16 @@ unsigned int run_instruction(surgescript_program_t* program, const surgescript_r
 
     /* read the operation */
     surgescript_program_operation_t* operation = program->line + ip;
-    surgescript_program_operator_t instruction = operation->instruction;
     surgescript_program_operand_t a = operation->a;
     surgescript_program_operand_t b = operation->b;
 
     /* debug mode */
     #if SURGESCRIPT_DEBUG_MODE
-    debug(program, runtime_environment, instruction, a, b, _t);
+    debug(program, runtime_environment, operation->instruction, a, b, _t);
     #endif
 
     /* run the instruction */
-    switch(instruction) {
+    switch(operation->instruction) {
         /* basics */
         case SSOP_NOP: /* no-operation */
             break;
