@@ -1518,6 +1518,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#debugmode" class="md-nav__link">
+    debugMode
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1555,6 +1562,27 @@
           <li class="md-nav__item">
   <a href="#entityid" class="md-nav__link">
     entityId
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#findentity" class="md-nav__link">
+    findEntity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#findentities" class="md-nav__link">
+    findEntities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activeentities" class="md-nav__link">
+    activeEntities
   </a>
   
 </li>
@@ -2041,6 +2069,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#debugmode" class="md-nav__link">
+    debugMode
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2078,6 +2113,27 @@
           <li class="md-nav__item">
   <a href="#entityid" class="md-nav__link">
     entityId
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#findentity" class="md-nav__link">
+    findEntity
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#findentities" class="md-nav__link">
+    findEntities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#activeentities" class="md-nav__link">
+    activeEntities
   </a>
   
 </li>
@@ -2169,8 +2225,8 @@
 
 
 <h1 id="level">Level</h1>
-<p>Level routines. A level is a scene in the game, represented by a .lev file in the <em>levels/</em> folder.</p>
-<p>Whenever you spawn an object in SurgeScript, you should keep a reference to it, otherwise it will be automatically deleted by the <a href="/reference/gc">Garbage Collector</a>. Sometimes, you may want to spawn <a href="/engine/entity">entities</a> in your level, but keeping references to all of them may be inconvenient. If this is your case, you can <a href="#spawn">spawn them as children of the Level object</a>. It will keep references of the entities for you; therefore, they won't be garbage collected.</p>
+<p>Level routines. A level is a scene in the game, stored as a .lev file in the <em>levels/</em> folder.</p>
+<p>Whenever you spawn an object in SurgeScript, you must keep a reference to it, otherwise it will be automatically deleted by the <a href="/reference/gc">Garbage Collector</a>. Sometimes you want to spawn <a href="/engine/entity">entities</a> in your level, but keeping references to all of them is inconvenient. In this case, you can <a href="#spawnentity">spawn them as children of the Level object</a>. It will keep the references for you, and thus they won't be garbage collected.</p>
 <p><em>Example</em>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Level</span><span class="p">;</span><span class="w"></span>
@@ -2275,10 +2331,15 @@
 <h4 id="onunload">onUnload</h4>
 <p><code>onUnload</code>: object | <code>null</code>.</p>
 <p>Used to specify a <a href="/tutorials/advanced_features/#function-objects">function object</a> to be called when the level is unloaded.</p>
+<h4 id="debugmode">debugMode</h4>
+<p><code>debugMode</code>: boolean.</p>
+<p>Whether or not the Debug Mode is activated.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
 <h2 id="functions">Functions</h2>
 <h4 id="spawn">spawn</h4>
 <p><code>spawn(objectName)</code></p>
 <p>Spawns an object as a child of Level. Such objects won't be garbage collected.</p>
+<p>Use <a href="#spawnentity">spawnEntity</a> instead if you intend to spawn an <a href="/engine/entity">entity</a>.</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>objectName</code>: string. The name of the object to be spawned.</li>
@@ -2287,23 +2348,23 @@
 <p>The spawned object.</p>
 <h4 id="spawnentity">spawnEntity</h4>
 <p><code>spawnEntity(objectName, position)</code></p>
-<p>Spawns an <a href="/engine/entity">entity</a> named <code>objectName</code> at a certain <code>position</code>. This works like <a href="#spawn">spawn</a>, but lets you position the entity as well.</p>
+<p>Spawns an <a href="/engine/entity">entity</a> named <code>objectName</code> at a certain <code>position</code>. The entity won't be garbage collected, as in <a href="#spawn">spawn</a>.</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>objectName</code>: string. The name of the entity to be spawned.</li>
-<li><code>position</code>: <a href="/engine/vector2">Vector2</a> object. A position in world coordinates.</li>
+<li><code>position</code>: <a href="/engine/vector2">Vector2</a> object. The position of the entity.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>The spawned entity.</p>
+<p>The spawned entity object.</p>
 <h4 id="entity">entity</h4>
-<p><code>entity(id)</code></p>
-<p><a href="/engine/entity">Entities</a> placed on the level via the editor are automatically assigned an ID, a hexadecimal identification code. The purpose of the ID is to uniquely identify the entity in the level. This function returns the entity whose ID is <code>id</code>. It's recommended to cache the return value of this function. Do not call it every frame (better performance).</p>
+<p><code>entity(entityId)</code></p>
+<p><a href="/engine/entity">Entities</a> spawned with <a href="#spawnentity">spawnEntity</a> are automatically assigned an ID, a hexadecimal identification string. The purpose of the ID is to uniquely identify the entity in the level. This function returns the entity whose ID is <code>entityId</code>.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>id</code>: string. The ID of the entity to be retrieved.</li>
+<li><code>entityId</code>: string. The ID of the entity to be retrieved.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>The desired entity (<a href="/reference/object">object</a>), or <code>null</code> if there is no entity associated with the given ID.</p>
+<p>The desired entity object, or <code>null</code> if there is no entity associated with the given ID.</p>
 <p><em>Example</em></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Level</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
@@ -2342,10 +2403,36 @@
 <p><em>Available since:</em> Open Surge 0.6.1</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>entityObject</code>: object. An object tagged <a href="/engine/entity">entity</a>.</li>
+<li><code>entityObject</code>: object. An entity.</li>
 </ul>
 <p><em>Returns</em></p>
 <p>A string with a hexadecimal identification code, or an empty string.</p>
+<h4 id="findentity">findEntity</h4>
+<p><code>findEntity(entityName)</code></p>
+<p>Finds an entity named <code>entityName</code> spawned with <a href="#spawnentity">spawnEntity</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>entityName</code>: string. The name of an entity object.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>An entity named <code>entityName</code>, or <code>null</code> if there is none.</p>
+<h4 id="findentities">findEntities</h4>
+<p><code>findEntities(entityName)</code></p>
+<p>Finds all entities named <code>entityName</code> spawned with <a href="#spawnentity">spawnEntity</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>entityName</code>: string. The name of the entities to be searched.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>A new array containing all entities named <code>entityName</code>. If none are found, an empty array is returned.</p>
+<h4 id="activeentities">activeEntities</h4>
+<p><code>activeEntities()</code></p>
+<p>Finds all active entities, i.e.: those that are near the camera, as well as all awake and detached ones.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
+<p><em>Returns</em></p>
+<p>A new array containing active entities. If none are found, an empty array is returned.</p>
 <h4 id="setup">setup</h4>
 <p><code>setup(config)</code></p>
 <p>Sets up the properties of a collection of level objects. This is a handy function typically used in a startup object of your level. Its purpose is to configure the properties of level objects. You may set the properties of groups of objects (given their names) and of individual entities alone (given their IDs).</p>

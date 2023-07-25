@@ -1990,6 +1990,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#moveby" class="md-nav__link">
+    moveBy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#move" class="md-nav__link">
+    move
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2731,6 +2745,20 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#moveby" class="md-nav__link">
+    moveBy
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#move" class="md-nav__link">
+    move
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3133,6 +3161,36 @@
 <p>Does the player have focus?</p>
 <p><em>Returns</em></p>
 <p>Returns <code>true</code> if the player has focus, <code>false</code> otherwise.</p>
+<h4 id="moveby">moveBy</h4>
+<p><code>moveBy(dx, dy)</code></p>
+<p>Moves the player by a (<code>dx</code>,<code>dy</code>) offset after the physics update of the current framestep. This is similar to calling <code>player.transform.translateBy(dx, dy)</code> in <code>lateUpdate()</code>. See also: <a href="/engine/entity#lateupdate">lateUpdate</a>, <a href="/engine/transform#translateby">translateBy</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>dx</code>: number. Horizontal offset in pixels.</li>
+<li><code>dy</code>: number. Vertical offset in pixels.</li>
+</ul>
+<p><em>Example</em></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Let&#39;s compare player.moveBy() to</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="c1">// player.transform.translateBy()</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">dx</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">dy</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="c1">// this moves the player AFTER the physics update</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">player</span><span class="p">.</span><span class="n">moveBy</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="c1">// this moves the player BEFORE the physics update</span>
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="c1">// (immediately), unless you call it in lateUpdate()</span>
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="n">player</span><span class="p">.</span><span class="n">transform</span><span class="p">.</span><span class="n">translateBy</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span><span class="w"> </span><span class="n">dy</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
+<h4 id="move">move</h4>
+<p><code>move(offset)</code></p>
+<p>Moves the player by the given <code>offset</code> after the physics update of the current framestep. Calling <code>player.move(offset)</code> is equivalent to calling <code>player.moveBy(offset.x, offset.y)</code>. See also: <a href="#moveby">moveBy</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>offset</code>: <a href="/engine/vector2">Vector2</a> object. Offset vector.</li>
+</ul>
 
               
             </article>

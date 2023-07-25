@@ -1194,15 +1194,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#awake" class="md-nav__link">
-    awake
+  <a href="#private" class="md-nav__link">
+    private
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#detached" class="md-nav__link">
-    detached
+  <a href="#awake" class="md-nav__link">
+    awake
   </a>
   
 </li>
@@ -1215,8 +1215,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#private" class="md-nav__link">
-    private
+  <a href="#detached" class="md-nav__link">
+    detached
   </a>
   
 </li>
@@ -1790,15 +1790,15 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#awake" class="md-nav__link">
-    awake
+  <a href="#private" class="md-nav__link">
+    private
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#detached" class="md-nav__link">
-    detached
+  <a href="#awake" class="md-nav__link">
+    awake
   </a>
   
 </li>
@@ -1811,8 +1811,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#private" class="md-nav__link">
-    private
+  <a href="#detached" class="md-nav__link">
+    detached
   </a>
   
 </li>
@@ -1875,22 +1875,38 @@
 
 
 <h1 id="entity">Entity</h1>
-<p>Entity is not an object per-se. Rather, it's a class of objects. An entity is an object that is present in world space (for example: an item, a NPC, a baddie, and so on). Abstract objects or components are <strong>not</strong> entities. <strong>In Open Surge, all objects that are tagged <em>"entity"</em> are considered to be entities.</strong></p>
-<p>Entites have special treatment in Open Surge. They are deactivated automatically if they get too far off camera. Behavior can be changed by adding different tags to your entities. Additionally, entities can have components associated to it, so they can be fully customized.</p>
-<blockquote>
-<p><strong>Tip</strong></p>
+<p>An entity is an object that generally is present in the virtual world. Examples include: a pickup item, a gimmick, a non-playable-character, and so on. Entites have special treatment:</p>
+<ul>
+<li>Entities can have <a href="/tutorials/components">components</a> associated to it. They can be fully customized.</li>
+<li>By default, they are automatically disabled and moved back to their initial position in the world if they get too far off camera.</li>
+<li>Behavior can be changed by adding special <a href="#tags">tags</a> them.</li>
+<li>The engine will automatically call special <a href="#functions">functions</a> if you define them.</li>
+</ul>
+<div class="admonition abstract">
+<p class="admonition-title">Definition</p>
+<p>A SurgeScript object is considered to be an entity if it meets all of the following conditions:</p>
+<ol>
+<li>the object is <a href="/tutorials/tags">tagged</a> "entity"</li>
+<li>the object is a <a href="/tutorials/object_tree">direct child</a> of <a href="/engine/level">Level</a> or a direct child of another entity</li>
+</ol>
+<p>Objects that are direct children of entities but that are not tagged "entity" are considered to be <a href="/tutorials/components">components</a>. Components are meant to modify the entities in some way.</p>
+<p>Components may not have any entities as descendants. For example: a child of a component is not considered to be an entity, even if it's tagged "entity".</p>
+<p>Level setup objects and player companion objects are special cases. They are always considered to be entities, regardless if they are tagged "entity" or not, for backwards compatibility purposes.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
 <p>During level design, entities may be placed in world space using the editor palette. The icon of the entity will be the first animation (animation 0) of the sprite that has the name of the entity.</p>
-</blockquote>
+</div>
 <h2 id="tags">Tags</h2>
 <h4 id="entity_1">entity</h4>
-<p>Tells Open Surge that the object is an entity and should be treated as such.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// In the example below, MyExplosion (entity) has an Actor component</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// that gives it a visible form (a sprite) in world space.</span>
+<p>Mark the object as an entity.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// In the example below, entity &quot;My Explosion&quot; has an Actor</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// component that gives it visible form: a sprite.</span>
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Actor</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;MyExplosion&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;private&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;disposable&quot;</span><span class="w"></span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;My Explosion&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;entity&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;private&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;disposable&quot;</span><span class="w"></span>
 <a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">{</span><span class="w"></span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;MyExplosion&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">actor</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Actor</span><span class="p">(</span><span class="s">&quot;My Explosion&quot;</span><span class="p">);</span><span class="w"></span>
 <a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
 <a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span><span class="w"></span>
 <a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="p">{</span><span class="w"></span>
@@ -1899,14 +1915,14 @@
 <a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
 <a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<h4 id="awake">awake</h4>
-<p>Tells Open Surge to <strong>not</strong> disable the object if it gets too far off camera.</p>
-<h4 id="detached">detached</h4>
-<p>The object will <strong>not</strong> follow the camera - it will be rendered in screen space.</p>
-<h4 id="disposable">disposable</h4>
-<p>Will destroy the object automatically if it gets too far off camera.</p>
 <h4 id="private">private</h4>
-<p>Private entities cannot be spawned via the level editor (they will be hidden).</p>
+<p>Private entities cannot be spawned via the level editor - they will be hidden.</p>
+<h4 id="awake">awake</h4>
+<p>Don't disable the object nor move it back to its initial position if it gets too far off camera.</p>
+<h4 id="disposable">disposable</h4>
+<p>The engine will automatically destroy the object if it gets too far off camera.</p>
+<h4 id="detached">detached</h4>
+<p>The object will not follow the camera. It will be rendered in screen space.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="lateupdate">lateUpdate</h4>
 <p><code>lateUpdate()</code></p>
@@ -1927,7 +1943,7 @@
 </code></pre></div></p>
 <h4 id="onreset">onReset</h4>
 <p><code>onReset()</code></p>
-<p>If an entity* that has been placed in the level via the editor gets too far off camera, it will be deactivated and repositioned back to its spawn point (i.e., the place where it was originally). Whenever that happens, the engine will call this function if it's available in your entity. You may want to use this to reset the entity back to its initial state.</p>
+<p>If an entity that is not awake nor detached gets too far off camera, it will be automatically disabled and moved back to its initial position. Whenever that happens, the engine will call this function if it's available in your entity. You may use this function to reset the entity back to its initial state.</p>
 <p><strong>Note*:</strong> entities tagged as awake or detached are not affected.</p>
 <p><em>Example</em>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.UI.Text</span><span class="p">;</span><span class="w"></span>
@@ -1969,7 +1985,7 @@
 </code></pre></div></p>
 <h4 id="onleaveeditor">onLeaveEditor</h4>
 <p><code>onLeaveEditor()</code></p>
-<p>If declared, function <code>onLeaveEditor()</code> will be called whenever the player leaves the level editor and returns to the game. This might be useful to reconfigure your objects.</p>
+<p>If declared, function <code>onLeaveEditor()</code> will be called whenever the player leaves the level editor and returns to the game. This may be useful to reconfigure your objects.</p>
 
               
             </article>

@@ -1769,7 +1769,7 @@
 <h1 id="object-tree">Object tree</h1>
 <h2 id="introduction">Introduction</h2>
 <p>In SurgeScript, objects have a hierarchical relationship. Suppose that object P <em>spawns</em> (or <em>instantiates</em>) object C. We say that object P is the <em>parent</em> of C. Similarly, object C is a <em>child</em> of P.</p>
-<p>An object may spawn many children. However, all objects have only one parent. This relationship between objects form a hierarchy (a tree). The Figure below shows an example:</p>
+<p>An object may spawn many children. However, all objects have only one parent. This relationship between objects forms a hierarchy (a tree). The Figure below shows an example:</p>
 <p><img alt="An object tree" src="/img/tree.png" /></p>
 <p>In this example, Level is the parent of GameItem1 and GameItem2. Components A and B are children of GameItem1, but not of GameItem2. Level has two children and GameItem2 has zero. Finally, GameItem1, GameItem2, Component A and Component B are all <em>descendants</em> of Level.</p>
 <p>In SurgeScript, the root of the hierarchy is a predefined object called <code>System</code>. Its parent is itself. All other objects are descendants of <code>System</code>.</p>
