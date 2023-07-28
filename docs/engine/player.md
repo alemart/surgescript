@@ -428,6 +428,14 @@ If set to `true`, the [attacking](#attacking) flag will be `true` and the player
 
 *Available since:* Open Surge 0.5.1
 
+#### invulnerable
+
+`invulnerable`: boolean.
+
+If set to `true`, the player will be invulnerable to damage. It's like having an invisible shield that is permanent. The player may still be killed if crushed or by falling into a pit.
+
+*Available since:* Open Surge 0.6.1
+
 #### breathTime
 
 `breathTime`: number.
