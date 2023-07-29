@@ -444,6 +444,14 @@ If set to `true`, the player will be invulnerable to damage. It's like having an
 
 *Available since:* Open Surge 0.6.1
 
+#### immortal
+
+`immortal`: boolean.
+
+If an immortal player appears to be killed, it will appear to be ressurrected on its spawn point without losing a [life](#lives).
+
+*Available since:* Open Surge 0.6.1
+
 #### breathTime
 
 `breathTime`: number.
