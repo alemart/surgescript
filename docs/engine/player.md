@@ -417,6 +417,14 @@ If an immortal player appears to be killed, it will appear to be ressurrected on
 
 *Available since:* Open Surge 0.6.1
 
+#### secondary
+
+`secondary`: boolean.
+
+A secondary player plays a secondary role and interacts with items in different ways. It cannot smash item boxes, activate goal signs, etc. This flag is best used with AI-controlled players. Defaults to `false`.
+
+*Available since:* Open Surge 0.6.1
+
 #### breathTime
 
 `breathTime`: number.
