@@ -164,6 +164,14 @@ The initial number of lives.
 Properties
 ----------
 
+#### id
+
+`id`: number, read-only.
+
+A number that uniquely identifies the player in the Level.
+
+*Available since:* Open Surge 0.6.1
+
 #### name
 
 `name`: string, read-only.
@@ -671,3 +679,35 @@ Moves the player by the given `offset` after the physics update of the current f
 *Arguments*
 
 * `offset`: [Vector2](/engine/vector2) object. Offset vector.
+
+#### transformInto
+
+`player.transformInto(characterName)`
+
+Transforms the player into the character named `characterName`. The transformation succeeds only if there is such a character.
+
+*Available since:* Open Surge 0.6.1
+
+*Arguments*
+
+* `characterName`: string. The name of a character, as defined in a .chr file.
+
+*Returns*
+
+Returns `true` if the transformation is successful. Transforming a player into itself is considered successful, but nothing happens in this case.
+
+```cs
+// this player will become Surge
+player.transformInto("Surge");
+
+// this player will become Tux
+player.transformInto("Tux");
+
+// the following transformation will fail:
+if(!player.transformInto("non-existent-character"))
+    Console.print("No transformation took place!");
+
+// After a successful transformation:
+// - player.name will change;
+// - player.id will not change!
+```
