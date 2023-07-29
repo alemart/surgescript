@@ -1,67 +1,28 @@
 Player
 ======
 
-The Player object is used to control a specific player/character. Player objects are tagged *player*. That might be useful when dealing with collisions.
+The Player object is used to control a specific player/character. Player objects are tagged *player*.
 
-**Note:** in Open Surge, companion objects can be used to give new abilities to players. Companion objects must be indicated in the character definition files (.chr) and are implemented as regular scripts. The engine will automatically spawn the user-defined companion objects as children of the correct Player objects.
+**Note:** in Open Surge, companion objects can be used to give new abilities to players. Companion objects must be indicated in the character definition files (.chr) and are implemented as regular scripts. The engine will automatically spawn the companions as children of the appropriate Player objects.
 
 *Example*
 
 ```cs
-using SurgeEngine.Audio.Sound;
-
-//
-// This is a dash move that should be configured as a
-// companion object in a character definition file (.chr)
-//
-// When you are stopped, hold up and press jump to charge.
-// Release up after 0.5 second and you'll gain a nice boost!
-//
-object "My Peel Out" is "companion"
+object "Display player name" is "companion"
 {
-    charge = Sound("samples/charge.wav");
-    release = Sound("samples/release.wav");
     player = parent; // since this object is configured as a
                      // companion, parent is the reference
-                     // to the correct Player object
+                     // to the appropriate Player object
 
-    speed = 720;     // dash speed, in pixels/second
-
-    // capture the event
     state "main"
     {
-        if(player.lookingUp) {
-            if(player.input.buttonPressed("fire1")) {
-                charge.play();
-                state = "charging";
-            }
-        }
-    }
-
-    // charging the dash
-    state "charging"
-    {
-        player.anim = 2; // running animation
-        player.animation.speedFactor = 1.85;
-        player.frozen = true; // disable physics (temporarily)
-
-        // ready to go?
-        if(player.input.buttonReleased("up")) {
-            if(timeout(0.5)) {
-                player.gsp = speed * player.direction; // dash!!!
-                release.play();
-            }
-            player.frozen = false; // enable physics
-            state = "main";
-        }
-        else if(player.input.buttonPressed("fire1"))
-            charge.play();
+        Console.print("I am a companion of " + player.name);
     }
 }
 ```
 
-Factory
--------
+Global
+------
 
 #### Player
 
@@ -101,32 +62,6 @@ object "Collectible Giver" is "entity", "awake"
 }
 ```
 
-#### Player.active
-
-`Player.active`
-
-The active player, i.e., the one currently in focus.
-
-*Returns*
-
-A Player object.
-
-*Example*
-```cs
-using SurgeEngine.Player;
-
-// Tells the name of the active player
-// Just place it in the level
-object "Who am I" is "entity", "awake"
-{
-    state "main"
-    {
-        Console.print("I am " + Player.active.name);
-        destroy();
-    }
-}
-```
-
 #### Player.get
 
 `Player[i]`
@@ -141,25 +76,53 @@ Gets a Player object by its sequence number, as defined in the *players* entry o
 
 A Player object.
 
+#### Player.active
+
+`Player.active`: [Player](#) object.
+
+The player currently in focus. See also: [focus](#focus), [hasFocus](#hasfocus).
+
+*Example*
+```cs
+using SurgeEngine.Player;
+
+// Tells the name of the active player
+// Just place it in the level
+object "Who am I" is "entity", "awake"
+{
+    state "main"
+    {
+        player = Player.active.name;
+        Console.print("I am " + player.name);
+        destroy();
+    }
+}
+```
+
 #### Player.count
 
-`Player.count`
-
-Player count.
-
-*Returns*
+`Player.count`: number, read-only.
 
 The number of players in the level.
 
 #### Player.initialLives
 
-`Player.initialLives`
+`Player.initialLives`: number, read-only.
 
 The initial number of lives set by the engine.
 
-*Returns*
+#### Player.mode
 
-The initial number of lives.
+`Player.mode`: string.
+
+Player modes change gameplay mechanics. They affect how players interact in a level. There may be multiple players in a level, but [only one has focus](#playeractive) at any given time. The table below summarizes the available modes:
+
+| Mode | Use case | Damage | Input | Items |
+| ---- | -------- | ------ | ----- | ----- |
+| <nobr>`"cooperative"`</nobr> <nobr>*since v0.6.1*</nobr> <nobr>*default mode*</nobr> | Best suited when all players are human-controlled. | A [life](#lives) is lost if any player is [killed](#kill). If a player is [hit](#hit), it receives [focus](#focus). | Only the [focused player](#playeractive) receives direct user [input](#input). All respond to [simulated input](/engine/input#simulatebutton). | No special treatment. |
+| <nobr>`"classic"`</nobr> <nobr>*since v0.6.1*</nobr> | Best suited when non-focused players are AI-controlled. | Non-focused players are [invulnerable](#invulnerable) and [immortal](#immortal). A life is lost only if the focused player is killed. | Only the focused player receives direct user input. All respond to simulated input. | Non-focused players are made [secondary](#secondary). |
+
+*Available since:* Open Surge 0.6.1
 
 Properties
 ----------
@@ -192,7 +155,9 @@ object "Application"
 {
     state "main"
     {
-        if(Player.active.input.buttonDown("right"))
+        player = Player.active;
+
+        if(player.input.buttonDown("right"))
             Console.print("Player is holding right");
     }
 }
@@ -635,7 +600,7 @@ Locks the horizontal controls of the player for a few `seconds` (left and right 
 
 `focus()`
 
-Focuses on the player. The focused player is controlled by the user. Only one player can have focus at any given time.
+Focuses on the player. The focused player is controlled by the user. Only one player has focus at any given time.
 
 #### hasFocus
 
