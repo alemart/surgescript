@@ -106,7 +106,7 @@ object "Who am I" is "entity", "awake"
 {
     state "main"
     {
-        player = Player.active.name;
+        player = Player.active;
         Console.print("I am " + player.name);
         destroy();
     }
