@@ -28,11 +28,11 @@ Global
 
 `Player(playerName)`
 
-Gets the Player object associated with a character in the level.
+Gets the Player object associated with a character in the level. If a player with the specified name doesn't exist in the level, there will be an error. See also: [exists](#playerexists).
 
 *Arguments*
 
-* `playerName`: string. The name of the character, as defined in a *.chr* file stored in the *characters/* folder.
+* `playerName`: string. The name of a character, as defined in a *.chr* file stored in the *characters/* folder.
 
 *Returns*
 
@@ -66,7 +66,7 @@ object "Collectible Giver" is "entity", "awake"
 
 `Player[i]`
 
-Gets a Player object by its sequence number, as defined in the *players* entry of the level file.
+Gets a Player object by its sequence number, as defined in the *players* entry of the level file. See also: [count](#playercount).
 
 *Arguments*
 
@@ -75,6 +75,20 @@ Gets a Player object by its sequence number, as defined in the *players* entry o
 *Returns*
 
 A Player object.
+
+#### Player.exists
+
+`Player.exists(playerName)`
+
+Checks if a player named `playerName` exists in the level.
+
+*Arguments*
+
+* `playerName`: string. The name of a character.
+
+*Returns*
+
+Returns `true` if such a player exists in the level.
 
 #### Player.active
 
@@ -405,7 +419,7 @@ If set to `true`, the [attacking](#attacking) flag will be `true` and the player
 
 `invulnerable`: boolean.
 
-If set to `true`, the player will be invulnerable to damage. It's like having an invisible shield that is permanent. The player may still be killed if crushed or by falling into a pit.
+If set to `true`, the player will be invulnerable to damage. It's like having an invisible shield that is permanent. The player may still be killed if crushed, by falling into a pit, by drowning, or by calling [kill](#kill).
 
 *Available since:* Open Surge 0.6.1
 
