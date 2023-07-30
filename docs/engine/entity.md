@@ -99,7 +99,9 @@ object "My Simple Camera" is "awake", "entity"
 
 If an entity that is not awake nor detached gets too far off camera, it will be automatically disabled and moved back to its initial position. Whenever that happens, the engine will call this function if it's available in your entity. You may use this function to reset the entity back to its initial state.
 
-**Note\*:** entities tagged as awake or detached are not affected.
+!!! info "Note"
+
+    Entities tagged "awake" or "detached" are not affected by `onReset()`.
 
 *Example*
 ```cs
