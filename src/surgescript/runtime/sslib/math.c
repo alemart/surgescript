@@ -385,16 +385,30 @@ surgescript_var_t* fun_lerpangle(surgescript_object_t* object, const surgescript
     double alpha = surgescript_var_get_number(param[0]) * DEG2RAD;
     double beta = surgescript_var_get_number(param[1]) * DEG2RAD;
     double t = clamp01(surgescript_var_get_number(param[2]));
-    double vx, vy;
+    double theta;
 
-    /* we'll lerp the unit vectors corresponding to alpha and beta */
-    vx = cos(alpha);
-    vy = sin(alpha);
-    vx = (cos(beta) - vx) * t + vx;
-    vy = (sin(beta) - vy) * t + vy;
+    /* find unit vectors corresponding to alpha and beta */
+    double vx = cos(alpha);
+    double vy = sin(alpha);
+    double ux = cos(beta);
+    double uy = sin(beta);
+
+    /* if dot(u,v) == -1, then alpha == beta + k * pi, k odd */
+    double dot = ux * vx + uy * vy;
+    if(fabs(dot + 1.0) < 1e-5) {
+        theta = alpha + t * PI; /* why not alpha - t * PI? */
+    }
+
+    /* lerp the unit vectors and find the angle */
+    else {
+        double r = 1.0 - t;
+        double wx = r * vx + t * ux;
+        double wy = r * vy + t * uy;
+        theta = atan2(wy, wx);
+    }
 
     /* return the interpolated angle in degrees */
-    return surgescript_var_set_number(surgescript_var_create(), fmod(atan2(vy, vx) * RAD2DEG, 360.0));
+    return surgescript_var_set_number(surgescript_var_create(), fmod(theta * RAD2DEG, 360.0));
 }
 
 /* deltaAngle(a,b): the shortest difference between two angles given in degrees */
