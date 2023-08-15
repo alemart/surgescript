@@ -155,6 +155,12 @@ A number that uniquely identifies the player in the Level.
 
 The name of the character.
 
+#### direction
+
+`direction`: number, read-only.
+
+This number will be +1 if the player is facing right, or -1 if facing left.
+
 #### input
 
 `input`: [Input](/engine/input) object, read-only.
@@ -357,13 +363,23 @@ The number of seconds to drown, if underwater.
 
 `topspeed`: number, read-only.
 
-The maximum speed the player can reach without items (i.e., running naturally), in pixels per second.
+The maximum speed that the player can reach when running naturally, without rolling and with no external forces applied. Given in pixels per second.
 
-#### direction
+#### capspeed
 
-`direction`: number, read-only.
+`capspeed`: number, read-only.
 
-Direction will be +1 if the player is facing right, -1 if facing left.
+The maximum speed that the player can reach by normal means (e.g., rolling downhill), not considering external forces. Given in pixels per second.
+
+*Available since:* Open Surge 0.6.1
+
+#### hlockTime
+
+`hlockTime`: number, read-only.
+
+The time, in seconds, in which the player will not respond to horizontal input when on the ground. Defaults to zero. See also: [hlock](#hlock).
+
+*Available since:* Open Surge 0.6.1
 
 #### transform
 
@@ -612,11 +628,13 @@ Makes the player roll.
 
 `hlock(seconds)`
 
-Locks the horizontal controls of the player for a few `seconds` (left and right input will be ignored during that time).
+Locks the horizontal controls of the player for the specified time. Left and right input will be ignored during that time. See also: [hlockTime](#hlocktime).
 
 *Arguments*
 
-* `seconds`: number. Specify how long the horizontal controls of the player will stay locked.
+* `seconds`: number. How long the horizontal controls of the player will stay locked? This usually should be set to a value no higher than `0.5`.
+
+*Note:* since Open Surge 0.6.1, the locking will not take place if the player is midair.
 
 #### focus
 
