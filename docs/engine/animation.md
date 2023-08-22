@@ -116,3 +116,66 @@ While the [FPS](#fps) rate controls the speed of the animation, the speed factor
 `sync`: boolean.
 
 Is the animation is synchronized? A synchronized animation is a repeating animation that displays the same frame across multiple sprites. Defaults to `false`.
+
+Functions
+---------
+
+#### prop
+
+`prop(propertyName)`
+
+Read the user-defined custom property named `propertyName` defined in a *custom_properties* block of the [sprite](#sprite) of this animation (.spr file). If the property exists, this function will return a string, a number, a boolean, or an [Array](/reference/array) of these, depending on the property. If the property does not exist, this function will return `null`.
+
+*Available since:* Open Surge 0.6.1
+
+*Arguments*
+
+* `propertyName`: string. The name of a custom property.
+
+*Returns*
+
+Returns a string, a number, a boolean, an array of these primitive types with at least two elements, or `null`.
+
+*Example*
+
+```cs
+/*
+
+Example of a custom_properties block:
+
+// .spr file
+sprite "My Test Sprite"
+{
+    // ...
+
+    custom_properties
+    {
+        number_of_layers        8
+        want_awesomeness        true
+        font_name               "GoodNeighbors"
+        position                100 200
+    }
+}
+
+*/
+
+// It's a good idea to cast the value of the property to the expected type, so
+// that your script will work reliably regardless of what is in the .spr file!
+
+animation = actor.animation;
+
+numberOfLayers = Number(animation.prop("number_of_layers")); // 8
+wantAwesomeness = Boolean(animation.prop("want_awesomeness")); // true
+fontName = String(animation.prop("font_name") || "Default Font Name"); // "GoodNeighbors"
+foobar = String(animation.prop("foobar") || "undefined"); // "undefined"
+
+position = animation.prop("position");
+if(typeof position == "object") {
+    xpos = Number(position[0]); // 100
+    ypos = Number(position[1]); // 200
+}
+else {
+    xpos = 0;
+    ypos = 0;
+}
+```
