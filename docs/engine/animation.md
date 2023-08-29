@@ -81,23 +81,31 @@ When this vector is added to the position of the sprite, you'll get the position
 
 *Available since:* Open Surge 0.6.0
 
-#### fps
-
-`fps`: number, read-only.
-
-Frames per second of the animation.
-
 #### repeats
 
 `repeats`: boolean, read-only.
 
 Does the animation repeat itself?
 
+#### fps
+
+`fps`: number, read-only.
+
+Frames per second of the animation.
+
 #### frameCount
 
 `frameCount`: number, read-only.
 
 The number of frames of the animation.
+
+#### duration
+
+`duration`: number, read-only.
+
+The duration of the animation, in seconds.
+
+*Available since:* Open Surge 0.6.1
 
 #### frame
 
