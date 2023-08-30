@@ -187,3 +187,22 @@ else {
     ypos = 0;
 }
 ```
+
+#### findInterpolatedTransform
+
+`findInterpolatedTransform()`
+
+When a keyframe-based animation is playing, compute an approximation of the transformation applied to the sprite at the current time. You may use this function to make objects follow the transformed sprite or to know its location. If no keyframe-based animation is currently playing, the identity transform will be returned.
+
+*Available since:* Open Surge 0.6.1
+
+*Returns*
+
+Returns a [Transform](/engine/transform) object.
+
+*Example*
+
+```cs
+interpolatedTransform = animation.findInterpolatedTransform();
+Console.print(interpolatedTransform.localPosition);
+```
