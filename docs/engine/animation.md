@@ -188,9 +188,9 @@ else {
 }
 ```
 
-#### findInterpolatedTransform
+#### findTransform
 
-`findInterpolatedTransform()`
+`findTransform()`
 
 When a keyframe-based animation is playing, compute an approximation of the transformation applied to the sprite at the current time. You may use this function to make objects follow the transformed sprite or to know its location. If no keyframe-based animation is currently playing, the identity transform will be returned.
 
@@ -203,6 +203,6 @@ Returns a [Transform](/engine/transform) object.
 *Example*
 
 ```cs
-interpolatedTransform = animation.findInterpolatedTransform();
-Console.print(interpolatedTransform.localPosition);
+animationTransform = animation.findTransform();
+Console.print(animationTransform.localPosition);
 ```
