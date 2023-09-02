@@ -1944,7 +1944,10 @@
 <h4 id="onreset">onReset</h4>
 <p><code>onReset()</code></p>
 <p>If an entity that is not awake nor detached gets too far off camera, it will be automatically disabled and moved back to its initial position. Whenever that happens, the engine will call this function if it's available in your entity. You may use this function to reset the entity back to its initial state.</p>
-<p><strong>Note*:</strong> entities tagged as awake or detached are not affected.</p>
+<div class="admonition info">
+<p class="admonition-title">Note</p>
+<p>Entities tagged "awake" or "detached" are not affected by <code>onReset()</code>.</p>
+</div>
 <p><em>Example</em>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.UI.Text</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>

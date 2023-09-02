@@ -948,13 +948,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fps" class="md-nav__link">
-    fps
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#repeats" class="md-nav__link">
     repeats
   </a>
@@ -962,8 +955,22 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#fps" class="md-nav__link">
+    fps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#framecount" class="md-nav__link">
     frameCount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duration" class="md-nav__link">
+    duration
   </a>
   
 </li>
@@ -985,6 +992,33 @@
           <li class="md-nav__item">
   <a href="#sync" class="md-nav__link">
     sync
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prop" class="md-nav__link">
+    prop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#findtransform" class="md-nav__link">
+    findTransform
   </a>
   
 </li>
@@ -1868,13 +1902,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#fps" class="md-nav__link">
-    fps
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#repeats" class="md-nav__link">
     repeats
   </a>
@@ -1882,8 +1909,22 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#fps" class="md-nav__link">
+    fps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#framecount" class="md-nav__link">
     frameCount
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#duration" class="md-nav__link">
+    duration
   </a>
   
 </li>
@@ -1905,6 +1946,33 @@
           <li class="md-nav__item">
   <a href="#sync" class="md-nav__link">
     sync
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#functions" class="md-nav__link">
+    Functions
+  </a>
+  
+    <nav class="md-nav" aria-label="Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#prop" class="md-nav__link">
+    prop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#findtransform" class="md-nav__link">
+    findTransform
   </a>
   
 </li>
@@ -1978,15 +2046,19 @@
 <p><code>actionOffset</code>: <a href="/engine/vector2">Vector2</a> object, read-only.</p>
 <p>When this vector is added to the position of the sprite, you'll get the position of the <a href="#actionspot">action spot</a>. This is suitable to be used with <a href="/engine/transform#localposition">transform.localPosition</a>.</p>
 <p><em>Available since:</em> Open Surge 0.6.0</p>
-<h4 id="fps">fps</h4>
-<p><code>fps</code>: number, read-only.</p>
-<p>Frames per second of the animation.</p>
 <h4 id="repeats">repeats</h4>
 <p><code>repeats</code>: boolean, read-only.</p>
 <p>Does the animation repeat itself?</p>
+<h4 id="fps">fps</h4>
+<p><code>fps</code>: number, read-only.</p>
+<p>Frames per second of the animation.</p>
 <h4 id="framecount">frameCount</h4>
 <p><code>frameCount</code>: number, read-only.</p>
 <p>The number of frames of the animation.</p>
+<h4 id="duration">duration</h4>
+<p><code>duration</code>: number, read-only.</p>
+<p>The duration of the animation, in seconds.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
 <h4 id="frame">frame</h4>
 <p><code>frame</code>: number.</p>
 <p>The current frame of the animation: an integer between <code>0</code> and <code>frameCount - 1</code>, inclusive.</p>
@@ -1996,6 +2068,68 @@
 <h4 id="sync">sync</h4>
 <p><code>sync</code>: boolean.</p>
 <p>Is the animation is synchronized? A synchronized animation is a repeating animation that displays the same frame across multiple sprites. Defaults to <code>false</code>.</p>
+<h2 id="functions">Functions</h2>
+<h4 id="prop">prop</h4>
+<p><code>prop(propertyName)</code></p>
+<p>Read the user-defined custom property named <code>propertyName</code> defined in a <em>custom_properties</em> block of the <a href="#sprite">sprite</a> of this animation (.spr file). If the property exists, this function will return a string, a number, a boolean, or an <a href="/reference/array">Array</a> of these, depending on the property. If the property does not exist, this function will return <code>null</code>.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>propertyName</code>: string. The name of a custom property.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns a string, a number, a boolean, an array of these primitive types with at least two elements, or <code>null</code>.</p>
+<p><em>Example</em></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="cm">/*</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="cm">Example of a custom_properties block:</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="cm">// .spr file</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="cm">sprite &quot;My Test Sprite&quot;</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="cm">{</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="cm">    // ...</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="cm">    custom_properties</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="cm">    {</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="cm">        number_of_layers        8</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="cm">        want_awesomeness        true</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="cm">        font_name               &quot;GoodNeighbors&quot;</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="cm">        position                100 200</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="cm">    }</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="cm">}</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="cm">*/</span><span class="w"></span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="c1">// It&#39;s a good idea to cast the value of the property to the expected type, so</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="c1">// that your script will work reliably regardless of what is in the .spr file!</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="n">animation</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">actor</span><span class="p">.</span><span class="n">animation</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="n">numberOfLayers</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Number</span><span class="p">(</span><span class="n">animation</span><span class="p">.</span><span class="n">prop</span><span class="p">(</span><span class="s">&quot;number_of_layers&quot;</span><span class="p">));</span><span class="w"> </span><span class="c1">// 8</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="n">wantAwesomeness</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Boolean</span><span class="p">(</span><span class="n">animation</span><span class="p">.</span><span class="n">prop</span><span class="p">(</span><span class="s">&quot;want_awesomeness&quot;</span><span class="p">));</span><span class="w"> </span><span class="c1">// true</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a><span class="n">fontName</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">animation</span><span class="p">.</span><span class="n">prop</span><span class="p">(</span><span class="s">&quot;font_name&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="s">&quot;Default Font Name&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// &quot;GoodNeighbors&quot;</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a><span class="n">foobar</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">animation</span><span class="p">.</span><span class="n">prop</span><span class="p">(</span><span class="s">&quot;foobar&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="s">&quot;undefined&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// &quot;undefined&quot;</span>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="n">position</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">animation</span><span class="p">.</span><span class="n">prop</span><span class="p">(</span><span class="s">&quot;position&quot;</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a><span class="k">if</span><span class="p">(</span><span class="k">typeof</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="s">&quot;object&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a><span class="w">    </span><span class="n">xpos</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Number</span><span class="p">(</span><span class="n">position</span><span class="p">[</span><span class="m">0</span><span class="p">]);</span><span class="w"> </span><span class="c1">// 100</span>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="w">    </span><span class="n">ypos</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">Number</span><span class="p">(</span><span class="n">position</span><span class="p">[</span><span class="m">1</span><span class="p">]);</span><span class="w"> </span><span class="c1">// 200</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a><span class="w">    </span><span class="n">xpos</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a><span class="w">    </span><span class="n">ypos</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<h4 id="findtransform">findTransform</h4>
+<p><code>findTransform()</code></p>
+<p>When a keyframe-based animation is playing, compute an approximation of the transformation applied to the sprite at the current time. You may use this function to make objects follow the transformed sprite or to know its location. If no keyframe-based animation is currently playing, the identity transform will be returned.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
+<p><em>Returns</em></p>
+<p>Returns a <a href="/engine/transform">Transform</a> object.</p>
+<p><em>Example</em></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">animationTransform</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">animation</span><span class="p">.</span><span class="n">findTransform</span><span class="p">();</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">animationTransform</span><span class="p">.</span><span class="n">localPosition</span><span class="p">);</span><span class="w"></span>
+</code></pre></div>
 
               
             </article>
