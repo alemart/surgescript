@@ -19,7 +19,7 @@ SOFTWARE.
 */
 
 #ifndef GETTIMEOFDAY_H
-#define GETTIMEOFDAY_h
+#define GETTIMEOFDAY_H
 
 #ifndef _WIN32
 #include <sys/time.h>
