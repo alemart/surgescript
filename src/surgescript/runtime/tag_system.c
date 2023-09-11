@@ -292,7 +292,7 @@ bool surgescript_boundtagsystem_has_tag(const surgescript_boundtagsystem_t* boun
     int h = minihash64(tag_name);
 
     /* we can check super quickly if the bound class of objects is NOT tagged tag_name */
-    if(bound_tag_system->bitset & bitmask(tag_name, h) == 0)
+    if((bound_tag_system->bitset & bitmask(tag_name, h)) == 0)
         return false;
 
 #if 1
