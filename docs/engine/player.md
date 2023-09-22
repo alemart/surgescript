@@ -612,6 +612,14 @@ Kills the player.
 
 Makes the player breathe (underwater only).
 
+#### restore
+
+`restore()`
+
+Restores the player to a vulnerable state.
+
+*Available since:* Open Surge 0.6.1
+
 #### springify
 
 `springify()`
