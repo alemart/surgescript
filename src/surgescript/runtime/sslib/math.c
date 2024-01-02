@@ -281,12 +281,40 @@ surgescript_var_t* fun_round(surgescript_object_t* object, const surgescript_var
     return surgescript_var_set_number(surgescript_var_create(), (x >= 0.0) ? floor(x + 0.5) : ceil(x - 0.5));
 }
 
-/* mod(x,y): the remainder of x/y */
+/* mod(x,y): the modulo (x mod y) */
 surgescript_var_t* fun_mod(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
+    /* Consider the following definitions:
+
+       The modulo m, (x mod y), is m := x - y * q_m, where q_m is the integer
+       such that m has the same sign as the divisor y and that |m| < |y|.
+
+       The remainder r, (x % y), is r := x - y * q_r, where q_r is the integer
+       such that r has the same sign as the dividend x and that |r| < |y|.
+
+       Now, q_r = trunc(x/y) and q_m = floor(x/y). If x and y have the same
+       sign, then the quotient x/y is positive and q_r = q_m because trunc(x/y)
+       equals floor(x/y). If not, then the quotient x/y is negative and q_m =
+       q_r - 1 because trunc(x/y) equals ceil(x/y): truncation is towards zero.
+       It follows that:
+
+       - If x and y have the same sign, then m = r.
+       - If x and y have different signs, then m = r + y.
+
+       Now, let's say that m* = (r + y) % y. If x and y have the same sign,
+       then m* = (m + y) % y = m. If not, then m* = (m - y + y) % y = m. This
+       means that m* = m regardless of the signs of x and y.
+
+       If either x or y is +-0, +-inf or NaN, then the rules of fmod() apply.
+
+       More about the usage of trunc and floor:
+       https://en.wikipedia.org/wiki/Modulo */
+
     double x = surgescript_var_get_number(param[0]);
     double y = surgescript_var_get_number(param[1]);
-    return surgescript_var_set_number(surgescript_var_create(), fmod(x, y));
+    double remainder = fmod(x, y); /* same sign as x as of C99 */
+    double modulo = fmod(remainder + y, y);
+    return surgescript_var_set_number(surgescript_var_create(), modulo);
 }
 
 /* sign(x): returns +1 if x is non-negative, or -1 otherwise */

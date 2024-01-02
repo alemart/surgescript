@@ -336,7 +336,7 @@ void emit_multiplicativeexpr2(surgescript_nodecontext_t context, const char* mul
             break;
 
         case '%':
-            SSASM(SSOP_MOD, T1, T0);
+            SSASM(SSOP_REM, T1, T0);
             SSASM(SSOP_XCHG, T1, T0);
             break;
 
@@ -513,7 +513,7 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
             else if(*assignop == '/')
                 SSASM(SSOP_DIV, T0, T1); /* t0 = dict.get(<expr>) / <assignexpr> */
             else
-                SSASM(SSOP_MOD, T0, T1); /* t0 = dict.get(<expr>) % <assignexpr> */
+                SSASM(SSOP_REM, T0, T1); /* t0 = dict.get(<expr>) % <assignexpr> */
 
             /* call set() */
             SSASM(SSOP_PUSH, T0);

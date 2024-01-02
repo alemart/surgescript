@@ -564,7 +564,8 @@ unsigned int run_instruction(const surgescript_program_t* program, const surgesc
             surgescript_var_set_number(t(a), surgescript_var_get_number(t(a)) / surgescript_var_get_number(t(b)));
             break;
 
-        case SSOP_MOD:
+        case SSOP_REM:
+            /* the remainder a % b takes the sign of a (the dividend) */
             surgescript_var_set_number(t(a), fmod(surgescript_var_get_number(t(a)), surgescript_var_get_number(t(b))));
             break;
 

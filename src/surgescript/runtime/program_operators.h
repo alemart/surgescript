@@ -65,7 +65,7 @@
     F( SSOP_SUB, "sub" )                                 /* t[a] -= t[b] */ \
     F( SSOP_MUL, "mul" )                                 /* t[a] *= t[b] */ \
     F( SSOP_DIV, "div" )                                 /* t[a] /= t[b] */ \
-    F( SSOP_MOD, "mod" )                                 /* t[a] %= t[b] */ \
+    F( SSOP_REM, "rem" )                                 /* t[a] %= t[b] */ \
     F( SSOP_NEG, "neg" )                                 /* t[a] = -t[b] */ \
     F( SSOP_LNOT, "lnot" )                               /* t[a] = !t[b] */ \
     F( SSOP_LNOT2, "lnot2" )                            /* t[a] = !!t[b] */ \

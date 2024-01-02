@@ -305,18 +305,43 @@ If the fraction of `x` is 0.5, this function uses the [commercial rounding](http
 
 `mod(x, y)`
 
-Modulus function. Used to get the remainder of a division.
+Modulo operation. This is used to get the value `x` mod `y` - the modulo - defined as the remainder of the division of `x` by `y` that has the sign of the divisor `y`.
 
-*Deprecated since SurgeScript 0.5.3. Use the remainder operator (%) instead, e.g.* `x % y`.
+!!! info
+
+    The modulo `x` mod `y` may differ from the remainder `x % y`. The former has the sign of the divisor `y`, whereas the latter has the sign of the dividend `x`. When `x` and `y` have the same sign, the modulo and the remainder are equal. When the signs differ, modulo and remainder differ by `y`.
 
 *Arguments*
 
-* `x`: number.
-* `y`: number.
+* `x`: number. The dividend.
+* `y`: number. The divisor.
 
 *Returns*
 
-The remainder of `x / y`.
+The modulo `x` mod `y`.
+
+!!! note
+
+    The modulo `x` mod `y` is returned since SurgeScript 0.6.0. The remainder `x % y` was returned on SurgeScript 0.5.x.
+
+*Example*
+
+```cs
+x = 5;
+y = 3;
+
+Console.print(Math.mod(x, y)); // 2
+Console.print(x % y); // 2
+
+Console.print(Math.mod(-x, -y)); // -2
+Console.print(-x % -y); // -2
+
+Console.print(Math.mod(-x, y)); // 1
+Console.print(-x % y); // -2
+
+Console.print(Math.mod(x, -y)); // -1
+Console.print(x % -y); // 2
+```
 
 #### sign
 
