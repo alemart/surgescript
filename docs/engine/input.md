@@ -121,3 +121,19 @@ Changes the input object so that `buttonName` will be identified as being held d
 
 * `buttonName`: string. One of the following: *"up", "down", "left", "right", "fire1", "fire2", ..., "fire8"*.
 * `down`: boolean. Should the button be considered as being held down?
+
+#### remap
+
+`remap(inputMap)`
+
+Changes the input map.
+
+*Available since:* Open Surge 0.6.1
+
+*Arguments*
+
+* `inputMap`: string. The name of the input map.
+
+*Returns*
+
+Returns `true` on success, or `false` otherwise.
