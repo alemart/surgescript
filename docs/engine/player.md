@@ -131,19 +131,6 @@ The number of players in the level.
 
 The initial number of lives set by the engine.
 
-#### Player.mode
-
-`Player.mode`: string.
-
-Player modes change gameplay mechanics. They affect how players interact in a level. There may be multiple players in a level, but [only one has focus](#playeractive) at any given time. The table below summarizes the available modes:
-
-| Mode | Use case | Damage | Input | Items |
-| ---- | -------- | ------ | ----- | ----- |
-| <nobr>`"cooperative"`</nobr> <nobr>*since v0.6.1*</nobr> <nobr>*default mode*</nobr> | Best suited when all players are human-controlled. | A [life](#lives) is lost if any player is [killed](#kill). If a player is [hit](#hit), it receives [focus](#focus). | Only the [focused player](#playeractive) receives direct user [input](#input). All respond to [simulated input](/engine/input#simulatebutton). | No special treatment. |
-| <nobr>`"classic"`</nobr> <nobr>*since v0.6.1*</nobr> | Best suited when non-focused players are AI-controlled. | Non-focused players are [invulnerable](#invulnerable) and [immortal](#immortal). A life is lost only if the focused player is killed. | Only the focused player receives direct user input. All respond to simulated input. | Non-focused players are made [secondary](#secondary). |
-
-*Available since:* Open Surge 0.6.1
-
 Properties
 ----------
 
