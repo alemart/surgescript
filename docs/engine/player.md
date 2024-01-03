@@ -28,7 +28,9 @@ Global
 
 `Player(playerName)`
 
-Gets the Player object associated with a character in the level. If a player with the specified name doesn't exist in the level, there will be an error. See also: [exists](#playerexists).
+Gets the Player object associated with a character in the level. If a player with the specified name doesn't exist in the level, there will be an error.
+
+See also: [exists](#playerexists).
 
 *Arguments*
 
@@ -66,7 +68,9 @@ object "Collectible Giver" is "entity", "awake"
 
 `Player[i]`
 
-Gets a Player object by its sequence number, as defined in the *players* entry of the level file. See also: [count](#playercount).
+Gets a Player object by its sequence number, as defined in the *players* entry of the level file.
+
+See also: [count](#playercount).
 
 *Arguments*
 
@@ -94,7 +98,9 @@ Returns `true` if such a player exists in the level.
 
 `Player.active`: [Player](#) object.
 
-The player currently in focus. See also: [focus](#focus), [hasFocus](#hasfocus).
+The player currently in focus.
+
+See also: [focus](#focus), [hasFocus](#hasfocus), [focusable](#focusable).
 
 *Example*
 ```cs
@@ -193,13 +199,17 @@ Reference to the Animation object of the Player.
 
 `anim`: number.
 
-A shortcut to `animation.id`: an integer corresponding to the animation number. See also: [Animation](/engine/animation), [id](/engine/animation#id).
+A shortcut to `animation.id`: an integer corresponding to the animation number.
+
+See also: [Animation](/engine/animation), [id](/engine/animation#id).
 
 #### anchor
 
 `anchor`: [Vector2](/engine/vector2) object.
 
-A shortcut to `animation.anchor`. See also: [anchor](/engine/animation#anchor).
+A shortcut to `animation.anchor`.
+
+See also: [anchor](/engine/animation#anchor).
 
 *Available since:* Open Surge 0.6.0
 
@@ -207,7 +217,9 @@ A shortcut to `animation.anchor`. See also: [anchor](/engine/animation#anchor).
 
 `hotSpot`: [Vector2](/engine/vector2) object.
 
-A shortcut to `animation.hotSpot`. See also: [hot spot](/engine/animation#hotspot).
+A shortcut to `animation.hotSpot`.
+
+See also: [hot spot](/engine/animation#hotspot).
 
 *Available since:* Open Surge 0.6.0. In versions prior to 0.6.0, you may get the hot spot using the [Animation](/engine/animation#hotspot) object.
 
@@ -215,7 +227,9 @@ A shortcut to `animation.hotSpot`. See also: [hot spot](/engine/animation#hotspo
 
 `actionSpot`: [Vector2](/engine/vector2) object.
 
-A shortcut to `animation.actionSpot`. See also: [action spot](/engine/animation#actionspot).
+A shortcut to `animation.actionSpot`.
+
+See also: [action spot](/engine/animation#actionspot).
 
 *Available since:* Open Surge 0.6.0
 
@@ -223,7 +237,9 @@ A shortcut to `animation.actionSpot`. See also: [action spot](/engine/animation#
 
 `actionOffset`: [Vector2](/engine/vector2) object, read-only.
 
-A shortcut to `animation.actionOffset`. See also: [action offset](/engine/animation#actionoffset).
+A shortcut to `animation.actionOffset`.
+
+See also: [action offset](/engine/animation#actionoffset).
 
 *Available since:* Open Surge 0.6.0
 
@@ -377,7 +393,9 @@ The maximum speed that the player can reach by normal means (e.g., rolling downh
 
 `hlockTime`: number, read-only.
 
-The time, in seconds, in which the player will not respond to horizontal input when on the ground. Defaults to zero. See also: [hlock](#hlock).
+The time, in seconds, in which the player will not respond to horizontal input when on the ground. Defaults to zero.
+
+See also: [hlock](#hlock).
 
 *Available since:* Open Surge 0.6.1
 
@@ -454,6 +472,18 @@ If an immortal player appears to be killed, it will appear to be ressurrected on
 A secondary player plays a secondary role and interacts with items in different ways. It cannot smash item boxes, activate goal signs, etc. This flag is best used with AI-controlled players. Defaults to `false`.
 
 *Available since:* Open Surge 0.6.1
+
+#### focusable
+
+`focusable`: boolean.
+
+A focusable player can receive focus. Defaults to `true`.
+
+See also: [focus](#focus), [hasFocus](#hasfocus), [Player.active](#playeractive).
+
+*Available since:* Open Surge 0.6.1
+
+*Note:* if only a single player exists in the level, then that player will have focus regardless of the value of this flag.
 
 #### breathTime
 
@@ -636,7 +666,9 @@ Makes the player roll.
 
 `hlock(seconds)`
 
-Locks the horizontal controls of the player for the specified time. Left and right input will be ignored during that time. See also: [hlockTime](#hlocktime).
+Locks the horizontal controls of the player for the specified time. Left and right input will be ignored during that time.
+
+See also: [hlockTime](#hlocktime).
 
 *Arguments*
 
@@ -650,11 +682,15 @@ Locks the horizontal controls of the player for the specified time. Left and rig
 
 Focuses on the player. The focused player is controlled by the user. Only one player has focus at any given time.
 
+See also: [hasFocus](#hasfocus), [focusable](#focusable), [Player.active](#playeractive).
+
 #### hasFocus
 
 `hasFocus()`
 
 Does the player have focus?
+
+See also: [focus](#focus), [focusable](#focusable), [Player.active](#playeractive).
 
 *Returns*
 
@@ -664,7 +700,9 @@ Returns `true` if the player has focus, `false` otherwise.
 
 `moveBy(dx, dy)`
 
-Moves the player by a (`dx`,`dy`) offset after the physics update of the current framestep. This is similar to calling `player.transform.translateBy(dx, dy)` in `lateUpdate()`. See also: [lateUpdate](/engine/entity#lateupdate), [translateBy](/engine/transform#translateby).
+Moves the player by a (`dx`,`dy`) offset after the physics update of the current framestep. This is similar to calling `player.transform.translateBy(dx, dy)` in `lateUpdate()`.
+
+See also: [lateUpdate](/engine/entity#lateupdate), [translateBy](/engine/transform#translateby).
 
 *Available since:* Open Surge 0.6.1
 
@@ -693,7 +731,9 @@ player.transform.translateBy(dx, dy);
 
 `move(offset)`
 
-Moves the player by the given `offset` after the physics update of the current framestep. Calling `player.move(offset)` is equivalent to calling `player.moveBy(offset.x, offset.y)`. See also: [moveBy](#moveby).
+Moves the player by the given `offset` after the physics update of the current framestep. Calling `player.move(offset)` is equivalent to calling `player.moveBy(offset.x, offset.y)`.
+
+See also: [moveBy](#moveby).
 
 *Available since:* Open Surge 0.6.1
 
