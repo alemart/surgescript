@@ -592,15 +592,12 @@ player.hflip = (player.direction < 0);
 // make the sprite appear facing left, regardless of player.direction
 player.hflip = (player.direction > 0);
 
-// let's see how the sprite is appearing on the screen
-if(!player.hflip) {
-    isFacingRight = (player.direction > 0);
-    isFacingLeft = (player.direction < 0);
-}
-else {
-    isFacingRight = (player.direction < 0);
-    isFacingLeft = (player.direction > 0);
-}
+// spriteDirection is analogous to player.direction
+spriteDirection = player.direction * (player.hflip ? -1 : 1);
+
+// let's check if the sprite is facing right or left
+isFacingRight = (spriteDirection > 0);
+isFacingLeft = (spriteDirection < 0);
 ```
 
 #### vflip
