@@ -154,6 +154,15 @@ The name of the character.
 
 This number will be +1 if the player is facing right, or -1 if facing left.
 
+See also: [hflip](#hflip).
+
+*Example*
+```cs
+// let's check if the player is facing right or left
+isFacingRight = (player.direction > 0);
+isFacingLeft = (player.direction < 0);
+```
+
 #### input
 
 `input`: [Input](/engine/input) object, read-only.
@@ -557,6 +566,50 @@ The width of the player sprite, in pixels.
 `height`: number, read-only.
 
 The height of the player sprite, in pixels.
+
+#### hflip
+
+`hflip`: boolean.
+
+Used to horizontally flip the sprite of the player relative to its direction. Defaults to `false`. Changing this flag does not change the direction of the player in any way. It only changes the way the sprite is rendered. Also, reading this flag alone does not tell you whether the sprite is facing left or right. Use the direction of the player for that.
+
+See also: [direction](#direction).
+
+*Available since:* Open Surge 0.6.1
+
+*Example*
+
+```cs
+// make the sprite appear in accordance with player.direction
+player.hflip = false;
+
+// make the sprite appear flipped relative to player.direction
+player.hflip = true;
+
+// make the sprite appear facing right, regardless of player.direction
+player.hflip = (player.direction < 0);
+
+// make the sprite appear facing left, regardless of player.direction
+player.hflip = (player.direction > 0);
+
+// let's see how the sprite is appearing on the screen
+if(!player.hflip) {
+    isFacingRight = (player.direction > 0);
+    isFacingLeft = (player.direction < 0);
+}
+else {
+    isFacingRight = (player.direction < 0);
+    isFacingLeft = (player.direction > 0);
+}
+```
+
+#### vflip
+
+`vflip`: boolean.
+
+Used to vertically flip the sprite of the player. Defaults to `false`.
+
+*Available since:* Open Surge 0.6.1
 
 Functions
 ---------
