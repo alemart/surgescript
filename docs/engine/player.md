@@ -721,6 +721,10 @@ Focuses on the player. The focused player is controlled by the user. Only one pl
 
 See also: [hasFocus](#hasfocus), [focusable](#focusable), [Player.active](#playeractive).
 
+*Returns*
+
+Returns `true` on success, `false` otherwise.
+
 #### hasFocus
 
 `hasFocus()`
