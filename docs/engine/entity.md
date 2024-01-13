@@ -57,6 +57,10 @@ Private entities cannot be spawned via the level editor - they will be hidden.
 
 Don't disable the object nor move it back to its initial position if it gets too far off camera.
 
+!!! tip "Performance tip"
+
+    The engine optimizes entities that are not awake by "putting them to sleep" whenever they are too far off camera. Take advantage of this optimization by not making your entities awake unless you need to.
+
 #### disposable
 
 The engine will automatically destroy the object if it gets too far off camera.
@@ -64,6 +68,10 @@ The engine will automatically destroy the object if it gets too far off camera.
 #### detached
 
 The object will not follow the camera. It will be rendered in screen space.
+
+!!! abstract "Effectively detached entities"
+
+    If a non-detached entity is a descendant of a detached entity, the former is _effetively detached_. Effectively detached entites are rendered just like detached entities. (since 0.6.1)
 
 
 
