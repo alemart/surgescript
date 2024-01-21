@@ -140,6 +140,8 @@ Properties
 
 A number that uniquely identifies the player in the Level.
 
+See also: [name](#name).
+
 *Available since:* Open Surge 0.6.1
 
 #### name
@@ -147,6 +149,8 @@ A number that uniquely identifies the player in the Level.
 `name`: string, read-only.
 
 The name of the character.
+
+See also: [id](#id).
 
 #### direction
 
@@ -191,13 +195,15 @@ object "Application"
 
 Reference to the Animation object of the Player.
 
+See also: [anim](#anim).
+
 #### anim
 
 `anim`: number.
 
-A shortcut to `animation.id`: an integer corresponding to the animation number.
+A shortcut to `animation.id`: an integer corresponding to the current animation number.
 
-See also: [Animation](/engine/animation), [id](/engine/animation#id).
+See also: [animation](#animation), [id](/engine/animation#id).
 
 #### anchor
 
@@ -215,9 +221,11 @@ See also: [anchor](/engine/animation#anchor).
 
 A shortcut to `animation.hotSpot`.
 
-See also: [hot spot](/engine/animation#hotspot).
+See also: [hotSpot](/engine/animation#hotspot).
 
-*Available since:* Open Surge 0.6.0. In versions prior to 0.6.0, you may get the hot spot using the [Animation](/engine/animation#hotspot) object.
+*Available since:* Open Surge 0.6.0.
+
+*Note:* in versions prior to 0.6.0, you may get the hot spot using the [Animation](/engine/animation#hotspot) object.
 
 #### actionSpot
 
@@ -225,7 +233,7 @@ See also: [hot spot](/engine/animation#hotspot).
 
 A shortcut to `animation.actionSpot`.
 
-See also: [action spot](/engine/animation#actionspot).
+See also: [actionSpot](/engine/animation#actionspot).
 
 *Available since:* Open Surge 0.6.0
 
@@ -235,7 +243,7 @@ See also: [action spot](/engine/animation#actionspot).
 
 A shortcut to `animation.actionOffset`.
 
-See also: [action offset](/engine/animation#actionoffset).
+See also: [actionOffset](/engine/animation#actionoffset).
 
 *Available since:* Open Surge 0.6.0
 
@@ -244,6 +252,8 @@ See also: [action offset](/engine/animation#actionoffset).
 `attacking`: boolean, read-only.
 
 Is the player attacking? (jumping, rolling, and so on)
+
+See also: [aggressive](#aggressive).
 
 #### midair
 
@@ -323,6 +333,8 @@ Is the player pushing a wall?
 
 Is the player getting hit (i.e., losing collectibles or a shield)?
 
+See also: [getHit](#gethit).
+
 #### blinking
 
 `blinking`: boolean, read-only.
@@ -341,11 +353,15 @@ Is the player dying or drowning?
 
 Is the player drowning (i.e., dying underwater)?
 
+See also: [underwater](#underwater), [dying](#dying).
+
 #### breathing
 
 `breathing`: boolean, read-only.
 
-Is the player breathing an air bubble underwater?
+Is the player breathing an air bubble that is underwater?
+
+See also: [underwater](#underwater), [breathTime](#breathtime).
 
 #### crouchingDown
 
@@ -365,11 +381,21 @@ Is the player looking up?
 
 Is the player displaying the "winning" animation (after clearing a level)?
 
+#### underwater
+
+`underwater`: boolean, read-only.
+
+Is the player underwater? Players are considered to be underwater if they are below the [water level](/engine/level#waterlevel) or if their [forciblyUnderwater](#forciblyunderwater) flag is set to `true`.
+
+See also: [secondsToDrown](#secondstodrown), [drowning](#drowning), [breathing](#breathing), [breathTime](#breathtime), [forciblyUnderwater](#forciblyunderwater), [waterlevel](/engine/level#waterlevel).
+
 #### secondsToDrown
 
 `secondsToDrown`: number, read-only.
 
 The number of seconds to drown, if underwater.
+
+See also: [underwater](#underwater), [drowning](#drowning), [breathTime](#breahtime).
 
 #### topspeed
 
@@ -377,11 +403,15 @@ The number of seconds to drown, if underwater.
 
 The maximum speed that the player can reach when running naturally, without rolling and with no external forces applied. Given in pixels per second.
 
+See also: [capspeed](#capspeed).
+
 #### capspeed
 
 `capspeed`: number, read-only.
 
 The maximum speed that the player can reach by normal means (e.g., rolling downhill), not considering external forces. Given in pixels per second.
+
+See also: [topspeed](#topspeed).
 
 *Available since:* Open Surge 0.6.1
 
@@ -413,6 +443,8 @@ A collider associated with this Player.
 
 One of the following: *"shield"*, *"fire"*, *"thunder"*, *"water"*, *"acid"*, *"wind"* or `null` (if there is no shield).
 
+See also: [invulnerable](#invulnerable).
+
 #### invincible
 
 `invincible`: boolean.
@@ -423,7 +455,7 @@ Used to make the player invincible. Defaults to `false`.
 
 `turbo`: boolean.
 
-Turbo mode (increases player speed). Defaults to `false`.
+Turbocharged mode (increases player speed). Defaults to `false`.
 
 #### frozen
 
@@ -431,17 +463,13 @@ Turbo mode (increases player speed). Defaults to `false`.
 
 Disable/enable player movement. Defaults to `false`.
 
-#### underwater
-
-`underwater`: boolean.
-
-Get underwater / out of water. Defaults to `false`.
-
 #### aggressive
 
 `aggressive`: boolean.
 
 If set to `true`, the [attacking](#attacking) flag will be `true` and the player will be able to hit the baddies just by touching them, regardless if he/she is jumping or not. Defaults to `false`.
+
+See also: [attacking](#attacking).
 
 *Available since:* Open Surge 0.5.1
 
@@ -458,6 +486,8 @@ If set to `true`, the player will be invulnerable to damage. It's like having an
 `immortal`: boolean.
 
 If an immortal player appears to be killed, it will appear to be ressurrected on its spawn point without losing a [life](#lives).
+
+See also: [lives](#lives).
 
 *Available since:* Open Surge 0.6.1
 
@@ -486,6 +516,18 @@ See also: [focus](#focus), [hasFocus](#hasfocus), [Player.active](#playeractive)
 `breathTime`: number.
 
 The maximum number of seconds the player can remain underwater without breathing.
+
+See also: [underwater](#underwater), [secondsToDrown](#secondstodrown).
+
+#### forciblyUnderwater
+
+`forciblyUnderwater`: boolean.
+
+If set to `true`, the [underwater](#underwater) flag will be true regardless of the [water level](/engine/level#waterlevel). If set to `false`, the underwater flag will be true only if the player is below the water level. Defaults to `false`.
+
+See also: [underwater](#underwater), [waterlevel](/engine/level#waterlevel).
+
+*Available since:* Open Surge 0.6.1
 
 #### layer
 
@@ -523,17 +565,23 @@ The score of the player, an integer value shared between all player objects.
 
 The speed of the player, in pixels per second. This will be mapped automatically to [gsp](#gsp) or [xsp](#xsp), depending on whether the player is touching the ground or not.
 
+See also: [gsp](#gsp), [xsp](#xsp).
+
 #### gsp
 
 `gsp`: number.
 
 Ground speed, in pixels per second. Prefer using [speed](#speed) instead, since `gsp` is only meaningful if the player is touching the ground.
 
+See also: [speed](#speed).
+
 #### xsp
 
 `xsp`: number.
 
 Horizontal speed, in pixels per second (useful while midair). Prefer using [speed](#speed) instead.
+
+See also: [speed](#speed).
 
 #### ysp
 
@@ -547,11 +595,15 @@ Vertical speed, in pixels per second.
 
 The angle of the player, in degrees. The same as `transform.angle`.
 
+See also: [slope](#slope), [transform](#transform).
+
 #### slope
 
 `slope`: number, read-only.
 
 The angle detected by the physics system, in degrees. Unlike [angle](#angle), slope is read-only and does not feature any smoothing for visual aesthetics. Its purpose is to be a helper for physics calculations.
+
+See also: [angle](#angle).
 
 *Available since:* Open Surge 0.5.2
 
@@ -561,19 +613,23 @@ The angle detected by the physics system, in degrees. Unlike [angle](#angle), sl
 
 The width of the player sprite, in pixels.
 
+See also: [height](#height).
+
 #### height
 
 `height`: number, read-only.
 
 The height of the player sprite, in pixels.
 
+See also: [width](#width).
+
 #### hflip
 
 `hflip`: boolean.
 
-Used to horizontally flip the sprite of the player relative to its direction. Defaults to `false`. Changing this flag does not change the direction of the player in any way. It only changes the way the sprite is rendered. Also, reading this flag alone does not tell you whether the sprite is facing left or right. Use the direction of the player for that.
+Used to horizontally flip the sprite of the player relative to its [direction](#direction). Defaults to `false`. Changing this flag does not change the direction of the player in any way. It only changes the way the sprite is rendered. Also, reading this flag alone does not tell you whether the sprite is facing left or right. Use it in addition to the direction of the player for that.
 
-See also: [direction](#direction).
+See also: [direction](#direction), [vflip](#vflip).
 
 *Available since:* Open Surge 0.6.1
 
@@ -605,6 +661,8 @@ isFacingLeft = (spriteDirection < 0);
 `vflip`: boolean.
 
 Used to vertically flip the sprite of the player. Defaults to `false`.
+
+See also: [hflip](#hflip).
 
 *Available since:* Open Surge 0.6.1
 
@@ -667,6 +725,8 @@ Makes the player get hit. Call it whenever the player gets hit by a hazard. The 
 
 * `hazard`: [Actor](/engine/actor) object. The hazard.
 
+See also: [hit](#hit).
+
 #### kill
 
 `kill()`
@@ -692,6 +752,8 @@ Restores the player to a vulnerable state.
 `springify()`
 
 Activates the "springing" activity.
+
+See also: [restore](#restore).
 
 #### roll
 
