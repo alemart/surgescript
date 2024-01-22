@@ -251,9 +251,9 @@ See also: [actionOffset](/engine/animation#actionoffset).
 
 `attacking`: boolean, read-only.
 
-Is the player attacking? (jumping, rolling, and so on)
+Is the player attacking, i.e., jumping, rolling, or charging? This flag will be modified if the player is aggressive or inoffensive.
 
-See also: [aggressive](#aggressive).
+See also: [aggressive](#aggressive), [inoffensive](#inoffensive).
 
 #### midair
 
@@ -467,11 +467,23 @@ Disable/enable player movement. Defaults to `false`.
 
 `aggressive`: boolean.
 
-If set to `true`, the [attacking](#attacking) flag will be `true` and the player will be able to hit the baddies just by touching them, regardless if he/she is jumping or not. Defaults to `false`.
+If set to `true`, the [attacking](#attacking) flag will be `true` regardless of the state of the player. The player will be able to hit the baddies just by touching them. Defaults to `false`.
 
-See also: [attacking](#attacking).
+See also: [attacking](#attacking), [inoffensive](#inoffensive).
 
 *Available since:* Open Surge 0.5.1
+
+#### inoffensive
+
+`inoffensive`: boolean.
+
+If set to `true`, the [attacking](#attacking) flag will be `false` regardless of the state of the player. The player will be vulnerable to damage even if jumping, rolling or charging. Defaults to `false`.
+
+*Note:* if the player is simultaneously [aggressive](#aggressive) and inoffensive, the aggressive behavior prevails.
+
+See also: [attacking](#attacking), [aggressive](#aggressive).
+
+*Available since:* Open Surge 0.6.1
 
 #### invulnerable
 
