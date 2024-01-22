@@ -251,7 +251,7 @@ See also: [actionOffset](/engine/animation#actionoffset).
 
 `attacking`: boolean, read-only.
 
-Is the player attacking, i.e., jumping, rolling, or charging? This flag will be modified if the player is aggressive or inoffensive.
+Is the player attacking, i.e., jumping, rolling, charging or invincible? This flag will be modified if the player is aggressive or inoffensive.
 
 See also: [aggressive](#aggressive), [inoffensive](#inoffensive).
 
