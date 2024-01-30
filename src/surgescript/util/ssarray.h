@@ -34,7 +34,13 @@
  * ssarray_init()
  * initializes the array
  */
-#define ssarray_init(arr)                     (arr##_len = 0, arr##_cap = 4, arr = ssmalloc(arr##_cap * sizeof(*(arr))))
+#define ssarray_init(arr)                     ssarray_init_ex(arr, 0)
+
+/*
+ * ssarray_init_ex()
+ * initializes the array with a pre-defined initial capacity
+ */
+#define ssarray_init_ex(arr, cap)             (arr##_len = 0, arr##_cap = ((cap) > 0 ? (cap) : 4), arr = ssmalloc(arr##_cap * sizeof(*(arr))))
 
 /*
  * ssarray_release()
