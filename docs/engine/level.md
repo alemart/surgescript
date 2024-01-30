@@ -74,15 +74,19 @@ object "Application"
 
 #### act
 
-`act`: number, read-only.
+`act`: number.
 
 The act number (1, 2, 3...) of the current level.
+
+*Note:* this property is writable since Open Surge 0.6.1.
 
 #### cleared
 
 `cleared`: boolean, read-only.
 
-Checks if the current level has been cleared by the player. If this is `true`, a *level cleared* animation should be played. Although the engine provides a default animation, you may use this property to design your own. See also: [clear()](#clear).
+Checks if the current level has been cleared by the player. If this is `true`, a level cleared animation should be played. Although the engine provides a default animation, you may use this property to design your own.
+
+See also: [clear](#clear).
 
 #### file
 
@@ -148,7 +152,7 @@ The acceleration of gravity, measured in pixels per second squared.
 
 `time`: number.
 
-Elapsed time in the level, given in seconds.
+Elapsed time in the level, given in seconds. The level time will be frozen if the [cleared](#cleared) flag is set or if the player is dying.
 
 *Note:* this property is writable since Open Surge 0.6.0.
 
@@ -458,4 +462,16 @@ Loads the next level in the current quest. This is the usual procedure after [cl
 
 `clear()`
 
-Clears the level without actually changing it. Once the level is cleared, a *level cleared* animation is played. See also: [cleared](#cleared).
+Sets the [cleared](#cleared) flag and disables player input.
+
+See also: [cleared](#cleared), [undoClear](#undoclear).
+
+#### undoClear
+
+`undoClear()`
+
+Reverses a previous call to [clear](#clear), disabling the [cleared](#cleared) flag and enabling player input again. This is typically used to play a cutscene after a level cleared animation or to have multiple [acts](#act) in the same level file.
+
+See also: [cleared](#cleared), [clear](#clear), [act](#act).
+
+*Available since:* Open Surge 0.6.1
