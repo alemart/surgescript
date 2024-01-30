@@ -444,7 +444,7 @@ surgescript_programpool_signature_t generate_signature(const char* object_name, 
     /* Our app must enforce signature uniqueness */
     alignas(8) char buf[2 * SS_NAMEMAX + 2] = { 0 };
     size_t l1 = strlen(object_name), l2 = strlen(program_name);
-    xxhash_t secondary_seed = seed + *object_name; /* better to pick another seed at random? */
+    xxhash_t secondary_seed = seed ^ *object_name; /* better to pick another seed at random? */
     xxhash_t ha, hb;
 
     if(l1 > SS_NAMEMAX)
