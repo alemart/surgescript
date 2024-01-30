@@ -19,7 +19,6 @@
  * SurgeScript Tag System
  */
 
-#include <assert.h>
 #include <stdalign.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -88,6 +87,8 @@ static SS_FORCE_INLINE surgescript_tagsignature_t generate_tag_signature(const c
 
 /* bound tag system: helps to quickly test a particular class of objects */
 #define NUMBER_OF_TAG_GROUPS 64
+SS_STATIC_ASSERT(NUMBER_OF_TAG_GROUPS == 64, minihash64); /* we use minihash64 */
+
 struct surgescript_boundtagsystem_t
 {
     char* object_name;
@@ -129,8 +130,6 @@ surgescript_tagsystem_t* surgescript_tagsystem_create()
     tag_system->inverse_tag_table = NULL;
     tag_system->tag_tree = NULL;
     tag_system->bound_tag_system = NULL;
-
-    static_assert(NUMBER_OF_TAG_GROUPS == 64, "minihash64");
 
     return tag_system;
 }

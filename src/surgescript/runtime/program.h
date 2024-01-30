@@ -29,6 +29,7 @@
 #include "program_operators.h"
 #include "variable.h"
 #include "object.h"
+#include "../util/util.h"
 
 /*
  * A program is composed by:
@@ -64,7 +65,7 @@ typedef union surgescript_program_operand_t {
     int64_t i64;
     void* p;
 } surgescript_program_operand_t;
-typedef char _operand_size_assert[ !!(sizeof(surgescript_program_operand_t) == sizeof(uint64_t)) * 2 - 1 ];
+SS_STATIC_ASSERT(sizeof(surgescript_program_operand_t) == sizeof(uint64_t));
 
 #define SSOP()   SSOPu(0)
 #define SSOPu(x) surgescript_program_operand_u(x)

@@ -19,7 +19,6 @@
  * Fast immutable strings
  */
 
-#include <assert.h>
 #include <stdbool.h>
 #include <string.h>
 #include "managed_string.h"
@@ -32,6 +31,8 @@
 #define PAGE_CAPACITY   1024    /* the number of strings that a page holds */
 #define WANT_POOLING    1       /* keep it enabled in production; for testing only */
 #define WANT_VALIDATION 0       /* enable utf-8 validation? it takes extra cycles */
+
+SS_STATIC_ASSERT(MAXLEN <= SS_NAMEMAX, managed_string);
 
 typedef struct surgescript_managedstringpool_t surgescript_managedstringpool_t;
 typedef struct surgescript_managedstringpage_t surgescript_managedstringpage_t;
@@ -186,8 +187,6 @@ void surgescript_managedstring_init_pool()
     ssarray_init(pool.page);
     ssarray_push(pool.page, page);
     pool.head = &page->managed_string[0];
-
-    static_assert(MAXLEN >= SS_NAMEMAX, "");
 }
 
 /*
