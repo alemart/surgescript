@@ -26,14 +26,18 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+/* helpers */
+#define SSTOK(x)                    #x
+#define SSSTR(x)                    SSTOK(x)
+#define SSCAT_(x, y)                x##y
+#define SSCAT(x, y)                 SSCAT_(x, y)
+
 /* macros */
 #define ssmin(a, b)                 ((a) < (b) ? (a) : (b))
 #define ssmax(a, b)                 ((a) >= (b) ? (a) : (b))
 #define ssclamp(x, min, max)        ssmax(ssmin((x), (max)), (min))
 #define sssign(x)                   ((x) >= 0 ? 1 : -1)
-#define sstok(x)                    #x
-#define ssstr(x)                    sstok(x)
-#define ssassert(expr)              do { if(!(expr)) ssfatal("In %s:%d: %s", __FILE__, __LINE__, ": assertion `" sstok(expr) "` failed."); } while(0)
+#define ssassert(expr)              do { if(!(expr)) ssfatal("In %s:%d: %s", __FILE__, __LINE__, ": assertion `" SSTOK(expr) "` failed."); } while(0)
 
 /* common aliases */
 #define ssmalloc(n)                 surgescript_util_malloc((n), __FILE__, __LINE__)
@@ -46,6 +50,10 @@
 
 /* constants */
 #define SS_NAMEMAX                  63 /* names can't be larger than this (computes hashes quickly) */
+
+/* compile-time assertions */
+#define SS_STATIC_ASSERT(expr, ...) \
+    struct SSCAT(static_assert_at_ ## __VA_ARGS__ ## _line_, __LINE__) { int x: !!(expr); }
 
 /* inlining hints */
 #if defined(__GNUC__) || defined(__clang__)
