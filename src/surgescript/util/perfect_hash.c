@@ -58,24 +58,26 @@ surgescript_perfecthashseed_t surgescript_perfecthash_find_seed(surgescript_perf
     This method will fail if there are repeated strings in key[].
 
     */
-    surgescript_perfecthashseed_t seed = 0;
+    const int MAX_ITERATIONS = 16; /* really?! */
+    const surgescript_perfecthashseed_t NO_SEED = 0;
+
+    surgescript_perfecthashseed_t seed = NO_SEED;
     surgescript_perfecthashkey_t hash = 0;
     treenode_t* set = NULL; /* a set of hash keys */
     bool failed = false;
     int iterations = 1;
-    const int MAX_ITERATIONS = 16; /* really?! */
 
     /* if there are no strings, any seed will work */
     if(key_count == 0)
-        return seed;
+        return 0xCAFE;
 
     /* pick a seed at random and check if there is a collision */
     sslog("Finding a perfect hash function for a set of %d strings...", key_count);
     do {
-        failed = false;
         seed = surgescript_util_random64() & UINT64_C(0xFFFFFFFF);
         sslog("Trying seed 0x%lx...", seed);
 
+        failed = (seed == NO_SEED);
         hash = hash_fn(key[0], seed);
         set = treenode_create(hash, key[0]);
 
