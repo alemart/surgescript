@@ -19,7 +19,6 @@
  * SurgeScript object manager
  */
 
-#include <assert.h>
 #include <stdint.h>
 #include <string.h>
 #include "object_manager.h"
@@ -132,6 +131,15 @@ static void accumulate_object_name(const char* object_name, void* data);
 static inline surgescript_perfecthashkey_t seeded_hash(const char* string, surgescript_perfecthashseed_t seed);
 static inline surgescript_objectclassid_t find_class_id(const surgescript_objectmanager_t* manager, const char* object_name);
 
+/* the initial size of the object table
+   object handles are recycled, so we pick a large value */
+#define INITIAL_OBJECT_TABLE_SIZE 65536
+SS_STATIC_ASSERT(is_power_of_two(INITIAL_OBJECT_TABLE_SIZE)); /* handles are recycled in a special way */
+
+/* class IDs are hashes that are computed using class names */
+SS_STATIC_ASSERT(sizeof(surgescript_objectclassid_t) == sizeof(surgescript_perfecthashkey_t), class_ids_are_hashes);
+
+
 /* -------------------------------
  * public methods
  * ------------------------------- */
@@ -145,8 +153,10 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     surgescript_objectmanager_t* manager = ssmalloc(sizeof *manager);
 
     manager->count = 0;
-    ssarray_init(manager->data);
+    ssarray_init_ex(manager->data, INITIAL_OBJECT_TABLE_SIZE);
     ssarray_push(manager->data, NULL); /* NULL is *always* the first element */
+    while(ssarray_length(manager->data) < INITIAL_OBJECT_TABLE_SIZE)
+        ssarray_push(manager->data, NULL); /* fill the object table with NULL pointers */
 
     manager->program_pool = program_pool;
     manager->tag_system = tag_system;
@@ -709,7 +719,6 @@ surgescript_perfecthashkey_t seeded_hash(const char* string, surgescript_perfect
 /* find the ID of a class of objects */
 surgescript_objectclassid_t find_class_id(const surgescript_objectmanager_t* manager, const char* object_name)
 {
-    static_assert(sizeof(surgescript_objectclassid_t) == sizeof(surgescript_perfecthashkey_t), "");
     /*ssassert(manager->class_id_seed != NO_SEED);*/
 
     surgescript_perfecthashkey_t hash32 = seeded_hash(object_name, manager->class_id_seed); /* perfect hash */
