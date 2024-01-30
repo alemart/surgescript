@@ -292,8 +292,11 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_obje
 
     /* spawn the root object */
     surgescript_objectclassid_t root_class_id = find_class_id(manager, ROOT_OBJECT);
-    surgescript_object_t *object = surgescript_object_create(ROOT_OBJECT, root_class_id, ROOT_HANDLE, manager, manager->program_pool, manager->stack, manager->vmtime, data);
-    ssarray_push(manager->data, object);
+    surgescript_object_t* object = surgescript_object_create(ROOT_OBJECT, root_class_id, ROOT_HANDLE, manager, manager->program_pool, manager->stack, manager->vmtime, data);
+
+    ssassert(ssarray_length(manager->data) > ROOT_HANDLE);
+    manager->data[ROOT_HANDLE] = object;
+
     manager->count++;
 
     /* initialize the root and call its constructor */
