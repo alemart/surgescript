@@ -26,11 +26,8 @@
 #include "../../util/util.h"
 
 /* constants */
-#if 0
-static const double DEFAULT_GC_INTERVAL = 1.0; /* will run GC.collect() every DEFAULT_GC_INTERVAL seconds (by default) */
-#else
-static const double DEFAULT_GC_INTERVAL = 0.0; /* will run GC.collect() continuously (as fast as possible) */
-#endif
+static const double DEFAULT_GC_INTERVAL = 2.0; /* will run GC.collect() every DEFAULT_GC_INTERVAL seconds by default
+                                                  (it traverses the entire object tree from the root) */
 
 /* private stuff */
 static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -86,11 +83,18 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
     surgescript_heap_t* heap = surgescript_object_heap(object);
     double interval = surgescript_var_get_number(surgescript_heap_at(heap, INTERVAL_ADDR));
     double last_collect = surgescript_var_get_number(surgescript_heap_at(heap, LASTCOLLECT_ADDR));
-    double now = surgescript_util_gettickcount() * 0.001;
 
+    /* look for garbage */
     surgescript_objectmanager_garbagecheck(manager);
+
+    /* is it time to collect? */
+    double now = surgescript_util_gettickcount() * 0.001;
     if(now - last_collect >= interval) {
+        /* collect garbage */
         surgescript_object_call_function(object, "collect", NULL, 0, NULL);
+
+        /* update collect time */
+        now = surgescript_util_gettickcount() * 0.001;
         surgescript_var_set_number(surgescript_heap_at(heap, LASTCOLLECT_ADDR), now);
     }
 
