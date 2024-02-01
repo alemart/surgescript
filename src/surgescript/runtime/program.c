@@ -86,8 +86,8 @@ static inline __attribute__((flatten,always_inline)) unsigned int run_instructio
 #else
 static SS_FORCE_INLINE unsigned int run_instruction(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, unsigned int ip);
 #endif
-static SS_FORCE_INLINE unsigned int run_call_instruction(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, surgescript_program_operand_t a, surgescript_program_operand_t b);
-static SS_FORCE_INLINE unsigned int run_optcall_instruction(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, surgescript_program_operand_t a, surgescript_program_operand_t b);
+static unsigned int run_call_instruction(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, surgescript_program_operand_t a, surgescript_program_operand_t b);
+static unsigned int run_optcall_instruction(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, surgescript_program_operand_t a, surgescript_program_operand_t b);
 static surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* program, surgescript_objectclassid_t* out_class_id);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
