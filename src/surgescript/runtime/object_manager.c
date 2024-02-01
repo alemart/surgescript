@@ -525,7 +525,7 @@ bool surgescript_objectmanager_garbagecollect(surgescript_objectmanager_t* manag
 }
 
 /*
- * surgescript_objectmanager_garbagechceck()
+ * surgescript_objectmanager_garbagecheck()
  * Incrementally looks for garbage in the system
  */
 void surgescript_objectmanager_garbagecheck(surgescript_objectmanager_t* manager)
@@ -557,8 +557,7 @@ int surgescript_objectmanager_garbagecount(const surgescript_objectmanager_t* ma
  */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_array(surgescript_objectmanager_t* manager)
 {
-    surgescript_objecthandle_t temp = surgescript_objectmanager_system_object(manager, "__Temp");
-    return surgescript_objectmanager_spawn(manager, temp, "Array", NULL);
+    return surgescript_objectmanager_spawn_temp(manager, "Array");
 }
 
 /*
@@ -567,8 +566,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_array(surgescript_obj
  */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescript_objectmanager_t* manager)
 {
-    surgescript_objecthandle_t temp = surgescript_objectmanager_system_object(manager, "__Temp");
-    return surgescript_objectmanager_spawn(manager, temp, "Dictionary", NULL);
+    return surgescript_objectmanager_spawn_temp(manager, "Dictionary");
 }
 
 /*
