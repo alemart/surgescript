@@ -1573,22 +1573,36 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../engine/game/" class="md-nav__link">
+        Game
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_10" type="checkbox" id="__nav_5_10" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_11" type="checkbox" id="__nav_5_11" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_10">
+        <label class="md-nav__link" for="__nav_5_11">
           Input
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Input" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_10">
+        <label class="md-nav__title" for="__nav_5_11">
           <span class="md-nav__icon md-icon"></span>
           Input
         </label>
@@ -1680,18 +1694,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_13" type="checkbox" id="__nav_5_13" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_14" type="checkbox" id="__nav_5_14" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_13">
+        <label class="md-nav__link" for="__nav_5_14">
           Platform
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Platform" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_13">
+        <label class="md-nav__title" for="__nav_5_14">
           <span class="md-nav__icon md-icon"></span>
           Platform
         </label>
@@ -1797,18 +1811,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_18" type="checkbox" id="__nav_5_18" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_19" type="checkbox" id="__nav_5_19" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_18">
+        <label class="md-nav__link" for="__nav_5_19">
           UI
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="UI" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_18">
+        <label class="md-nav__title" for="__nav_5_19">
           <span class="md-nav__icon md-icon"></span>
           UI
         </label>
@@ -1858,18 +1872,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_20" type="checkbox" id="__nav_5_20" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_21" type="checkbox" id="__nav_5_21" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_20">
+        <label class="md-nav__link" for="__nav_5_21">
           Video
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Video" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_20">
+        <label class="md-nav__title" for="__nav_5_21">
           <span class="md-nav__icon md-icon"></span>
           Video
         </label>
@@ -2427,15 +2441,38 @@
 <p>If the fraction of <code>x</code> is 0.5, this function uses the <a href="https://en.wikipedia.org/wiki/Rounding#Round_half_away_from_zero">commercial rounding</a> tie-breaking method.</p>
 <h4 id="mod">mod</h4>
 <p><code>mod(x, y)</code></p>
-<p>Modulus function. Used to get the remainder of a division.</p>
-<p><em>Deprecated since SurgeScript 0.5.3. Use the remainder operator (%) instead, e.g.</em> <code>x % y</code>.</p>
+<p>Modulo operation. This is used to get the value <code>x</code> mod <code>y</code> - the modulo - defined as the remainder of the division of <code>x</code> by <code>y</code> that has the sign of the divisor <code>y</code>.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The modulo <code>x</code> mod <code>y</code> may differ from the remainder <code>x % y</code>. The former has the sign of the divisor <code>y</code>, whereas the latter has the sign of the dividend <code>x</code>. When <code>x</code> and <code>y</code> have the same sign, the modulo and the remainder are equal. When the signs differ, modulo and remainder differ by <code>y</code>.</p>
+</div>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>x</code>: number.</li>
-<li><code>y</code>: number.</li>
+<li><code>x</code>: number. The dividend.</li>
+<li><code>y</code>: number. The divisor.</li>
 </ul>
 <p><em>Returns</em></p>
-<p>The remainder of <code>x / y</code>.</p>
+<p>The modulo <code>x</code> mod <code>y</code>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The modulo <code>x</code> mod <code>y</code> is returned since SurgeScript 0.6.0. The remainder <code>x % y</code> was returned on SurgeScript 0.5.x.</p>
+</div>
+<p><em>Example</em></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">x</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="n">y</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">mod</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">));</span><span class="w"> </span><span class="c1">// 2</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="p">%</span><span class="w"> </span><span class="n">y</span><span class="p">);</span><span class="w"> </span><span class="c1">// 2</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">mod</span><span class="p">(-</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="p">-</span><span class="n">y</span><span class="p">));</span><span class="w"> </span><span class="c1">// -2</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(-</span><span class="n">x</span><span class="w"> </span><span class="p">%</span><span class="w"> </span><span class="p">-</span><span class="n">y</span><span class="p">);</span><span class="w"> </span><span class="c1">// -2</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">mod</span><span class="p">(-</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">));</span><span class="w"> </span><span class="c1">// 1</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(-</span><span class="n">x</span><span class="w"> </span><span class="p">%</span><span class="w"> </span><span class="n">y</span><span class="p">);</span><span class="w"> </span><span class="c1">// -2</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">mod</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="p">-</span><span class="n">y</span><span class="p">));</span><span class="w"> </span><span class="c1">// -1</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="p">%</span><span class="w"> </span><span class="p">-</span><span class="n">y</span><span class="p">);</span><span class="w"> </span><span class="c1">// 2</span>
+</code></pre></div>
 <h4 id="sign">sign</h4>
 <p><code>sign(x)</code></p>
 <p>The sign of <code>x</code>: 1 if <code>x</code> is non-negative, -1 otherwise.</p>

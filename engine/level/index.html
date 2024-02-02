@@ -1275,22 +1275,36 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../game/" class="md-nav__link">
+        Game
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
     
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_10" type="checkbox" id="__nav_5_10" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_11" type="checkbox" id="__nav_5_11" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_10">
+        <label class="md-nav__link" for="__nav_5_11">
           Input
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Input" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_10">
+        <label class="md-nav__title" for="__nav_5_11">
           <span class="md-nav__icon md-icon"></span>
           Input
         </label>
@@ -1650,6 +1664,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#undoclear" class="md-nav__link">
+    undoClear
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1673,18 +1694,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_13" type="checkbox" id="__nav_5_13" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_14" type="checkbox" id="__nav_5_14" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_13">
+        <label class="md-nav__link" for="__nav_5_14">
           Platform
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Platform" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_13">
+        <label class="md-nav__title" for="__nav_5_14">
           <span class="md-nav__icon md-icon"></span>
           Platform
         </label>
@@ -1790,18 +1811,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_18" type="checkbox" id="__nav_5_18" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_19" type="checkbox" id="__nav_5_19" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_18">
+        <label class="md-nav__link" for="__nav_5_19">
           UI
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="UI" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_18">
+        <label class="md-nav__title" for="__nav_5_19">
           <span class="md-nav__icon md-icon"></span>
           UI
         </label>
@@ -1851,18 +1872,18 @@
     <li class="md-nav__item md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_20" type="checkbox" id="__nav_5_20" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_5_21" type="checkbox" id="__nav_5_21" >
       
       
       
       
-        <label class="md-nav__link" for="__nav_5_20">
+        <label class="md-nav__link" for="__nav_5_21">
           Video
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <nav class="md-nav" aria-label="Video" data-md-level="2">
-        <label class="md-nav__title" for="__nav_5_20">
+        <label class="md-nav__title" for="__nav_5_21">
           <span class="md-nav__icon md-icon"></span>
           Video
         </label>
@@ -2201,6 +2222,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#undoclear" class="md-nav__link">
+    undoClear
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2286,11 +2314,13 @@
 <a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div></p>
 <h4 id="act">act</h4>
-<p><code>act</code>: number, read-only.</p>
+<p><code>act</code>: number.</p>
 <p>The act number (1, 2, 3...) of the current level.</p>
+<p><em>Note:</em> this property is writable since Open Surge 0.6.1.</p>
 <h4 id="cleared">cleared</h4>
 <p><code>cleared</code>: boolean, read-only.</p>
-<p>Checks if the current level has been cleared by the player. If this is <code>true</code>, a <em>level cleared</em> animation should be played. Although the engine provides a default animation, you may use this property to design your own. See also: <a href="#clear">clear()</a>.</p>
+<p>Checks if the current level has been cleared by the player. If this is <code>true</code>, a level cleared animation should be played. Although the engine provides a default animation, you may use this property to design your own.</p>
+<p>See also: <a href="#clear">clear</a>.</p>
 <h4 id="file">file</h4>
 <p><code>file</code>: string, read-only.</p>
 <p>The relative path of the .lev file of the current level.</p>
@@ -2323,7 +2353,7 @@
 <p>The acceleration of gravity, measured in pixels per second squared.</p>
 <h4 id="time">time</h4>
 <p><code>time</code>: number.</p>
-<p>Elapsed time in the level, given in seconds.</p>
+<p>Elapsed time in the level, given in seconds. The level time will be frozen if the <a href="#cleared">cleared</a> flag is set or if the player is dying.</p>
 <p><em>Note:</em> this property is writable since Open Surge 0.6.0.</p>
 <h4 id="next">next</h4>
 <p><code>next</code>: number.</p>
@@ -2541,7 +2571,13 @@
 <p>Loads the next level in the current quest. This is the usual procedure after <a href="#clear">clearing the level</a>. See also: <a href="#next">next</a>.</p>
 <h4 id="clear">clear</h4>
 <p><code>clear()</code></p>
-<p>Clears the level without actually changing it. Once the level is cleared, a <em>level cleared</em> animation is played. See also: <a href="#cleared">cleared</a>.</p>
+<p>Sets the <a href="#cleared">cleared</a> flag and disables player input.</p>
+<p>See also: <a href="#cleared">cleared</a>, <a href="#undoclear">undoClear</a>.</p>
+<h4 id="undoclear">undoClear</h4>
+<p><code>undoClear()</code></p>
+<p>Reverses a previous call to <a href="#clear">clear</a>, disabling the <a href="#cleared">cleared</a> flag and enabling player input again. This is typically used to play a cutscene after a level cleared animation or to have multiple <a href="#act">acts</a> in the same level file.</p>
+<p>See also: <a href="#cleared">cleared</a>, <a href="#clear">clear</a>, <a href="#act">act</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
 
               
             </article>
