@@ -293,7 +293,9 @@ Returns `true` if the object has a function named `functionName`.
 
 `hasTag(tagName)`
 
-Checks if the object has been tagged with `tagName`.
+Checks if the object has been tagged `tagName`.
+
+See also: [TagSystem.hasTag()](/reference/tags#hastag).
 
 *Arguments*
 
@@ -301,7 +303,7 @@ Checks if the object has been tagged with `tagName`.
 
 *Returns*
 
-Returns `true` if the object has been tagged with `tagName`.
+Returns `true` if the object has been tagged `tagName`.
 
 #### __invoke
 

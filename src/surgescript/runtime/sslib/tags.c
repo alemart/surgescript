@@ -33,6 +33,7 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
 static surgescript_var_t* fun_list(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_select(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_tagsof(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
 /* private stuff */
 static void array_push(const char* string, void* arr);
@@ -50,6 +51,7 @@ void surgescript_sslib_register_tagsystem(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "__TagSystem", "list", fun_list, 0);
     surgescript_vm_bind(vm, "__TagSystem", "select", fun_select, 1);
     surgescript_vm_bind(vm, "__TagSystem", "tagsOf", fun_tagsof, 1);
+    surgescript_vm_bind(vm, "__TagSystem", "hasTag", fun_hastag, 2);
 }
 
 
@@ -103,11 +105,10 @@ surgescript_var_t* fun_select(surgescript_object_t* object, const surgescript_va
     surgescript_objecthandle_t array_handle = surgescript_objectmanager_spawn_array(object_manager);
     surgescript_object_t* array = surgescript_objectmanager_get(object_manager, array_handle);
     surgescript_tagsystem_t* tag_system = surgescript_objectmanager_tagsystem(object_manager);
-    char* tag_name = surgescript_var_get_string(param[0], object_manager);
+    const char* tag_name = surgescript_var_fast_get_string(param[0]);
 
     surgescript_tagsystem_foreach_tagged_object(tag_system, tag_name, array, array_push);
 
-    ssfree(tag_name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), array_handle);
 }
 
@@ -118,12 +119,24 @@ surgescript_var_t* fun_tagsof(surgescript_object_t* object, const surgescript_va
     surgescript_objecthandle_t array_handle = surgescript_objectmanager_spawn_array(object_manager);
     surgescript_object_t* array = surgescript_objectmanager_get(object_manager, array_handle);
     surgescript_tagsystem_t* tag_system = surgescript_objectmanager_tagsystem(object_manager);
-    char* object_name = surgescript_var_get_string(param[0], object_manager);
+    const char* object_name = surgescript_var_fast_get_string(param[0]);
 
     surgescript_tagsystem_foreach_tag_of_object(tag_system, object_name, array, array_push);
 
-    ssfree(object_name);
     return surgescript_var_set_objecthandle(surgescript_var_create(), array_handle);
+}
+
+/* hasTag(objectName, tagName): checks if objects named objectName are tagged tagName */
+surgescript_var_t* fun_hastag(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    const surgescript_objectmanager_t* object_manager = surgescript_object_manager(object);
+    const surgescript_tagsystem_t* tag_system = surgescript_objectmanager_tagsystem(object_manager);
+    const char* object_name = surgescript_var_fast_get_string(param[0]);
+    const char* tag_name = surgescript_var_fast_get_string(param[1]);
+
+    bool has_tag = surgescript_tagsystem_has_tag(tag_system, object_name, tag_name);
+
+    return surgescript_var_set_bool(surgescript_var_create(), has_tag);
 }
 
 

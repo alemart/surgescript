@@ -242,6 +242,10 @@ object "SurgeScript Test" is "test"
         test(System.tags.tagsOf("Array").indexOf("iterable") >= 0) || fail(12);
         test(System.tags.tagsOf("Not An Object!!!").length == 0) || fail(13);
         test(System.tags.tagsOf("Application").length == 0) || fail(14);
+        test(System.tags.hasTag("Array", "iterable") || fail(15));
+        test(System.tags.hasTag("Dictionary", "iterable") || fail(16));
+        test(System.tags.hasTag(this.__name, "test") || fail(17));
+        test(!System.tags.hasTag(this.__name, "not-a-tag") || fail(18));
         end();
     }
 

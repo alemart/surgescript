@@ -20,7 +20,7 @@ A new [Array](/reference/array) of strings with all tags used in all objects.
 
 `select(tagName)`
 
-Selects all objects that are tagged with `tagName`.
+Selects all objects that are tagged `tagName`.
 
 *Arguments*
 
@@ -45,3 +45,22 @@ Returns the tags of the objects named `objectName`.
 *Returns*
 
 A new [Array](/reference/array) of strings with the names of the tags associated with the objects named `objectName`. If the objects are untagged or do not exist, an empty array is returned.
+
+#### hasTag
+
+`hasTag(objectName, tagName)`
+
+Checks if objects named `objectName` are tagged `tagName`. Prefer using [Object.hasTag()](/reference/object#hastag) if possible.
+
+See also: [Object.hasTag()](/reference/object#hastag).
+
+*Available since:* SurgeScript 0.6.0
+
+*Arguments*
+
+* `objectName`: string.
+* `tagName`: string.
+
+*Returns*
+
+Returns `true` if the objects are tagged as specified, or `false` otherwise.
