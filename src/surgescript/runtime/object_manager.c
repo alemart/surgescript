@@ -242,23 +242,29 @@ bool surgescript_objectmanager_generate_class_ids(surgescript_objectmanager_t* m
 surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectmanager_t* manager, surgescript_objecthandle_t parent, const char* object_name, void* user_data)
 {
     surgescript_objecthandle_t handle = new_handle(manager);
-    surgescript_objectclassid_t class_id = find_class_id(manager, object_name);
     surgescript_object_t *parent_object = surgescript_objectmanager_get(manager, parent);
+
+    /* can't spawn the root object, neither using the C API nor via SurgeScript code (i.e., Object.spawn("System")) */
+    if(handle == ROOT_HANDLE || 0 == strcmp(object_name, "System")) {
+        ssfatal("Object \"%s\" can't spawn the root object.", surgescript_object_name(parent_object));
+        return NULL_HANDLE;
+    }
+
+    /* create the object */
+    surgescript_objectclassid_t class_id = find_class_id(manager, object_name);
     surgescript_object_t *object = surgescript_object_create(object_name, class_id, handle, manager, manager->program_pool, manager->stack, manager->vmtime, user_data);
 
     /* store the object */
-    if(handle >= ssarray_length(manager->data) && handle > ROOT_HANDLE) {
+    if(handle >= ssarray_length(manager->data)) {
         /* new slot */
         ssarray_push(manager->data, object);
         if(is_power_of_two(handle))
             manager->next_handle = ssmax((1 + ROOT_HANDLE), manager->next_handle / 2); /* the handle must never be zero; it would point to NULL */
     }
-    else if(handle > ROOT_HANDLE) {
+    else {
         /* reuse unused slot */
         manager->data[handle] = object;
     }
-    else
-        ssfatal("Can't spawn the root object.");
 
     /* register the object */
     manager->count++;

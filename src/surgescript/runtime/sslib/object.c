@@ -63,7 +63,6 @@ static surgescript_var_t* fun_assert(surgescript_object_t* object, const surgesc
 static void add_to_array(surgescript_objecthandle_t handle, void* arr);
 static void add_to_function_array(const char* fun_name, void* arr);
 static inline bool is_visible_function(const char* fun_name);
-static inline bool can_spawn_object(const char* object_name, surgescript_objectmanager_t* manager);
 
 
 /*
@@ -221,16 +220,9 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
 {
     const char* child_name = surgescript_var_fast_get_string(param[0]);
     surgescript_objectmanager_t* manager = surgescript_object_manager(object);
-    if(can_spawn_object(child_name, manager)) {
-        surgescript_objecthandle_t me = surgescript_object_handle(object);
-        surgescript_objecthandle_t child = surgescript_objectmanager_spawn(manager, me, child_name, NULL);
-        return surgescript_var_set_objecthandle(surgescript_var_create(), child);
-    }
-    else {
-        const char* object_name = surgescript_object_name(object);
-        ssfatal("Runtime Error: object \"%s\" can't spawn \"%s\".", object_name, child_name);
-        return NULL;
-    }
+    surgescript_objecthandle_t me = surgescript_object_handle(object);
+    surgescript_objecthandle_t child = surgescript_objectmanager_spawn(manager, me, child_name, NULL);
+    return surgescript_var_set_objecthandle(surgescript_var_create(), child);
 }
 
 /* destroys the object */
@@ -484,14 +476,4 @@ void add_to_function_array(const char* fun_name, void* arr)
 bool is_visible_function(const char* fun_name)
 {
     return strncmp(fun_name, "state:", 6) && strcmp(fun_name, "__ssconstructor");
-}
-
-/* can the desired object be spawned? */
-bool can_spawn_object(const char* object_name, surgescript_objectmanager_t* manager)
-{
-    /*return !(
-        strcmp(object_name, "System") == 0 ||
-        strcmp(object_name, "Application") == 0
-    );*/
-    return strcmp(object_name, "System") != 0;
 }
