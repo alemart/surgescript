@@ -8,9 +8,11 @@ Properties
 
 #### interval
 
-`interval`: number.
+`interval`: number, read-only.
 
 Every `interval` seconds, the garbage collector will be called automatically.
+
+*Note:* this property is read-only since SurgeScript 0.6.0.
 
 #### objectCount
 
@@ -25,4 +27,4 @@ Functions
 
 `collect()`
 
-Calls the Garbage Collector manually.
+Calls the Garbage Collector manually. You generally don't need to call this.
