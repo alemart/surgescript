@@ -29,7 +29,7 @@
 #include "../../util/util.h"
 
 /* helpers & constants */
-static const int DEFAULT_GC_INTERVAL = 2000;  /* will run GC.collect() every DEFAULT_GC_INTERVAL milliseconds by default
+static const int DEFAULT_GC_INTERVAL = 1000;  /* will run GC.collect() every DEFAULT_GC_INTERVAL milliseconds by default
                                                 (it traverses the entire object tree from the root) */
 static const int MINIMUM_GC_INTERVAL = 0;     /* run the GC as fast as possible */
 static const int MAXIMUM_GC_INTERVAL = 20000;
