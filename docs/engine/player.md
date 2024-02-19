@@ -387,7 +387,7 @@ Is the player displaying the "winning" animation (after clearing a level)?
 
 Is the player underwater? Players are considered to be underwater if they are below the [water level](/engine/level#waterlevel) or if their [forciblyUnderwater](#forciblyunderwater) flag is set to `true`.
 
-See also: [secondsToDrown](#secondstodrown), [drowning](#drowning), [breathing](#breathing), [breathTime](#breathtime), [forciblyUnderwater](#forciblyunderwater), [waterlevel](/engine/level#waterlevel).
+See also: [secondsToDrown](#secondstodrown), [drowning](#drowning), [breathing](#breathing), [breathTime](#breathtime), [forciblyUnderwater](#forciblyunderwater), [forciblyOutOfWater](#forciblyOutOfWater), [waterlevel](/engine/level#waterlevel).
 
 #### secondsToDrown
 
@@ -537,7 +537,15 @@ See also: [underwater](#underwater), [secondsToDrown](#secondstodrown).
 
 If set to `true`, the [underwater](#underwater) flag will be true regardless of the [water level](/engine/level#waterlevel). If set to `false`, the underwater flag will be true only if the player is below the water level. Defaults to `false`.
 
-See also: [underwater](#underwater), [waterlevel](/engine/level#waterlevel).
+See also: [underwater](#underwater), [waterlevel](/engine/level#waterlevel), [forciblyOutOfWater](#forciblyoutofwater).
+
+*Available since:* Open Surge 0.6.1
+
+#### forciblyOutOfWater
+
+If set to `true`, the [underwater](#underwater) mechanics will be disabled, even if the player is below the [water level](/engine/level#waterlevel). If [forciblyUnderwater](#forciblyunderwater) is also `true`, this flag will do nothing. Defaults to `false`.
+
+See also: [underwater](#underwater), [waterlevel](/engine/level#waterlevel), [forciblyUnderwater](#forciblyUnderwater).
 
 *Available since:* Open Surge 0.6.1
 
