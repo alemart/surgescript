@@ -312,8 +312,8 @@ void show_help(const char* executable)
         "\n"
         "Full documentation available at: <%s>\n",
         surgescript_util_version(),
-        surgescript_util_year(),
-        surgescript_util_authors(),
+        surgescript_util_years(),
+        surgescript_util_author(),
         surgescript_util_website(),
         executable,
         executable,

@@ -168,10 +168,10 @@ const char* surgescript_util_version()
 }
 
 /*
- * surgescript_util_year()
- * Returns a year string of the SurgeScript runtime
+ * surgescript_util_years()
+ * Returns a years string of the SurgeScript runtime
  */
-const char* surgescript_util_year()
+const char* surgescript_util_years()
 {
     extern const char SURGESCRIPT_YEARS[];
     return SURGESCRIPT_YEARS;
@@ -188,13 +188,13 @@ const char* surgescript_util_website()
 }
 
 /*
- * surgescript_util_authors()
+ * surgescript_util_author()
  * Author string
  */
-const char* surgescript_util_authors()
+const char* surgescript_util_author()
 {
-    extern const char SURGESCRIPT_AUTHORS[];
-    return SURGESCRIPT_AUTHORS;
+    extern const char SURGESCRIPT_AUTHOR[];
+    return SURGESCRIPT_AUTHOR;
 }
 
 /*

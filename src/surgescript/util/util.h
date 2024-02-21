@@ -70,9 +70,9 @@
 /* public routines */
 int surgescript_util_versioncode(const char* version); /* converts a version string to a comparable number */
 const char* surgescript_util_version(); /* compiled version of SurgeScript */
-const char* surgescript_util_year(); /* year string of the SurgeScript runtime */
+const char* surgescript_util_years(); /* years string of the SurgeScript runtime */
 const char* surgescript_util_website(); /* project website */
-const char* surgescript_util_authors(); /* project authors */
+const char* surgescript_util_author(); /* project author */
 
 void* surgescript_util_malloc(size_t bytes, const char* file, int line); /* memory allocation */
 void* surgescript_util_realloc(void* ptr, size_t bytes, const char* file, int line); /* memory reallocation */

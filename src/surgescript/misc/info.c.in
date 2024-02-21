@@ -6,7 +6,7 @@
 #error Undefined PROJECT_YEARS
 #endif
 
-const char SURGESCRIPT_AUTHORS[] = "Alexandre Martins";
+const char SURGESCRIPT_AUTHOR[]  = "Alexandre Martins";
 const char SURGESCRIPT_WEBSITE[] = "https://github.com/alemart/surgescript";
 const char SURGESCRIPT_VERSION[] = SURGESCRIPT_VERSION_STR;
 const char SURGESCRIPT_YEARS[]   = PROJECT_YEARS;
