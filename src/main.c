@@ -23,6 +23,8 @@
 #include <locale.h>
 #include <string.h>
 #include <stdio.h>
+#include <time.h>
+#include <limits.h>
 
 /* multithread support */
 #if ENABLE_THREADS
@@ -33,15 +35,22 @@
 # endif
 #endif
 
-static surgescript_vm_t* make_vm(int argc, char** argv, uint64_t* time_limit);
-static void run_vm(surgescript_vm_t* vm, uint64_t time_limit);
+static surgescript_vm_t* make_vm(int argc, char** argv, int* time_limit);
+static void run_vm(surgescript_vm_t* vm, int time_limit);
 static void destroy_vm(surgescript_vm_t* vm);
 static void print_to_stdout(const char* message);
 static void print_to_stderr(const char* message);
 static void discard_message(const char* message);
 static void show_help(const char* executable);
 static char* read_from_stdin();
+
+#if ENABLE_THREADS
+static mtx_t mutex;
+static cnd_t cond;
+static bool quit, stop;
 static int main_loop(void* arg);
+static bool timeout(time_t limit);
+#endif
 
 /* default time limit, given in milliseconds */
 #define DEFAULT_TIME_LIMIT 30000
@@ -52,7 +61,7 @@ static int main_loop(void* arg);
  */
 int main(int argc, char* argv[])
 {
-    uint64_t time_limit = DEFAULT_TIME_LIMIT;
+    int time_limit = DEFAULT_TIME_LIMIT;
 
     /* SurgeScript uses UTF-8 */
     setlocale(LC_ALL, "en_US.UTF-8");
@@ -62,11 +71,13 @@ int main(int argc, char* argv[])
 
     /* got a VM? */
     if(vm != NULL) {
+
         /* run the VM */
         run_vm(vm, time_limit);
 
         /* destroy the VM */
         destroy_vm(vm);
+
     }
 
     /* done! */
@@ -77,19 +88,21 @@ int main(int argc, char* argv[])
  * run_vm()
  * Run the VM with a time limit
  */
-void run_vm(surgescript_vm_t* vm, uint64_t time_limit)
+void run_vm(surgescript_vm_t* vm, int time_limit)
 {
-    uint64_t start_time = surgescript_util_gettickcount();
-    #define show_time_limit_error() \
-        fprintf(stderr, "Time limit of %.1lf seconds exceeded.\n", (double)time_limit * 0.001)
+#define show_time_limit_error() \
+    fprintf(stderr, "Time limit of %d seconds exceeded.\n", time_limit)
 
 #if !ENABLE_THREADS
+
+    uint64_t start_time = surgescript_util_gettickcount();
+    uint64_t end_time = start_time + (uint64_t)time_limit * 1000;
 
     /* main loop */
     while(surgescript_vm_update(vm)) {
 
         /* time limit */
-        if(time_limit > 0 && surgescript_util_gettickcount() > start_time + time_limit) {
+        if(surgescript_util_gettickcount() > end_time) {
             show_time_limit_error();
             break;
         }
@@ -98,27 +111,44 @@ void run_vm(surgescript_vm_t* vm, uint64_t time_limit)
 
 #else
 
-    /* run the SurgeScript VM on a separate thread */
+    /* initialize */
+    struct timespec ts;
+    timespec_get(&ts, TIME_UTC);
+    ts.tv_sec += time_limit;
+    time_t limit = ts.tv_sec;
+
+    quit = stop = false;
+    mtx_init(&mutex, mtx_timed);
+    cnd_init(&cond);
+
+    /* run the SurgeScript VM in a separate thread */
     thrd_t thread;
     thrd_create(&thread, main_loop, vm);
 
-    /* handle the time limit, if it's been set */
-    if(time_limit > 0) {
-        while(surgescript_vm_is_active(vm)) {
-            if(surgescript_util_gettickcount() > start_time + time_limit) {
-                show_time_limit_error();
-                exit(1); /* TODO we should kill the other thread instead */
-            }
+    /* wait for the other thread to complete */
+    mtx_lock(&mutex);
+    while(!quit && !timeout(limit))
+        cnd_timedwait(&cond, &mutex, &ts);
+    mtx_unlock(&mutex);
 
-            thrd_yield();
-        }
+    /* handle the time limit */
+    if(timeout(limit)) {
+        show_time_limit_error();
+
+        /* stop the other thread */
+        mtx_lock(&mutex);
+        stop = true;
+        mtx_unlock(&mutex);
+        thrd_join(thread, NULL);
     }
 
-    /* wait for the other thread to complete */
-    thrd_join(thread, NULL);
+    /* done */
+    cnd_destroy(&cond);
+    mtx_destroy(&mutex);
 
 #endif
 
+#undef show_time_limit_error
 }
 
 /**
@@ -130,36 +160,52 @@ void destroy_vm(surgescript_vm_t* vm)
     surgescript_vm_destroy(vm);
 }
 
-/**
+#if ENABLE_THREADS
+
+/*
  * main_loop()
  * Game loop for multithreaded execution
  */
 int main_loop(void* arg)
 {
-#if !ENABLE_THREADS
-
-    (void)arg;
-    return 0;
-
-#else
-
     surgescript_vm_t* vm = (surgescript_vm_t*)arg;
+    bool end = false;
 
-    while(surgescript_vm_update(vm)) {
+    while(!end && surgescript_vm_update(vm)) {
+        mtx_lock(&mutex);
+        end = stop;
+        mtx_unlock(&mutex);
+
         thrd_yield();
     }
 
+    mtx_lock(&mutex);
+    quit = true;
+    cnd_broadcast(&cond);
+    mtx_unlock(&mutex);
+
     return 0;
+}
+
+/*
+ * timeout()
+ * Timeout helper
+ */
+bool timeout(time_t limit)
+{
+    struct timespec ts;
+    timespec_get(&ts, TIME_UTC);
+    return ts.tv_sec > limit;
+}
 
 #endif
-}
 
 /*
  * make_vm()
  * Parses the command line arguments and creates a VM
  * with the compiled scripts
  */
-surgescript_vm_t* make_vm(int argc, char** argv, uint64_t* time_limit)
+surgescript_vm_t* make_vm(int argc, char** argv, int* time_limit)
 {
     surgescript_vm_t* vm = NULL;
     int i;
@@ -187,8 +233,8 @@ surgescript_vm_t* make_vm(int argc, char** argv, uint64_t* time_limit)
         else if(strcmp(arg, "--timelimit") == 0 || strcmp(arg, "-t") == 0) {
             /* set time limit (maximum execution time) */
             if(++i < argc && time_limit != NULL) {
-                double seconds = atof(argv[i]);
-                *time_limit = (seconds > 0.0) ? (uint64_t)(seconds * 1000.0) : 0;
+                int seconds = atoi(argv[i]);
+                *time_limit = (seconds > 0) ? seconds : INT_MAX;
             }
         }
         else if(strcmp(arg, "--") == 0) {
