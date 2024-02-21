@@ -44,9 +44,10 @@ object "Application"
     {
         // intro text
         Console.print("Garbage Collector Test");
+        Console.print("Usage: surgescript /path/to/garbage_collector.ss -- --surgescript-gc-interval <milliseconds>");
 
         // disable automatic garbage collection
-        System.gc.interval = Math.infinity;
+        //System.gc.interval = Math.infinity; // obsolete since SurgeScript 0.6.0
     }
 
     fun phonyAlloc()
