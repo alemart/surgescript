@@ -35,6 +35,8 @@ endif()
 
 # Library search
 CHECK_LIBRARY_EXISTS(m sqrt "${CMAKE_SYSTEM_LIBRARY_PATH}" SURGESCRIPT_libm_EXISTS)
+CHECK_LIBRARY_EXISTS(stdthreads thrd_create "${CMAKE_SYSTEM_LIBRARY_PATH}" SURGESCRIPT_libstdthreads_EXISTS)
+CHECK_LIBRARY_EXISTS(pthread pthread_create "${CMAKE_SYSTEM_LIBRARY_PATH}" SURGESCRIPT_libpthread_EXISTS)
 
 # Sources
 set(
@@ -196,7 +198,7 @@ if(WANT_EXECUTABLE)
     endif()
 
     # Use multithreading?
-    set(LIBTHREAD "")
+    set(LIBTHREADS "")
     set(ENABLE_THREADS 0)
     if(WANT_EXECUTABLE_MULTITHREAD)
 
@@ -208,8 +210,11 @@ if(WANT_EXECUTABLE)
             message(STATUS "Will use multithreading on the SurgeScript CLI")
             set(ENABLE_THREADS 1)
 
-            # hmmmm...
-            set(LIBTHREAD "pthread")
+            if(SURGESCRIPT_libstdthreads_EXISTS)
+                set(LIBTHREADS "stdthreads")
+            elseif(SURGESCRIPT_libpthread_EXISTS)
+                set(LIBTHREADS "pthread")
+            endif()
         endif()
 
     endif()
@@ -218,7 +223,7 @@ if(WANT_EXECUTABLE)
     add_executable(surgescript.bin src/main.c)
     include_directories("${CMAKE_BINARY_DIR}/src")
     target_compile_definitions(surgescript.bin PUBLIC ENABLE_THREADS=${ENABLE_THREADS})
-    target_link_libraries(surgescript.bin ${LIBSURGESCRIPT} ${LIBTHREAD})
+    target_link_libraries(surgescript.bin ${LIBSURGESCRIPT} ${LIBTHREADS})
     target_include_directories(surgescript.bin PRIVATE src)
     set_target_properties(surgescript.bin PROPERTIES OUTPUT_NAME surgescript)
     drop_compilation_paths(surgescript.bin)
