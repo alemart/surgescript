@@ -1680,6 +1680,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#encodeuricomponent" class="md-nav__link">
+    encodeURIComponent
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1741,6 +1748,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#encodeuricomponent" class="md-nav__link">
+    encodeURIComponent
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1792,6 +1806,30 @@
 <a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
 <a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div></p>
+<h4 id="encodeuricomponent">encodeURIComponent</h4>
+<p><code>encodeURIComponent(str)</code></p>
+<p>Encodes a component of a Universal Resource Identifier (URI). It escapes all characters of the input string, except:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>A–Z a–z 0–9 - _ . ! ~ * &#39; ( )
+</code></pre></div>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>str</code>: string. The string to be escaped.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns the input string escaped as above.</p>
+<p><em>Example</em></p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Web</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="c1">// ...</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">user</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Jane Doe&quot;</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">url</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;https://my.website.name/?user=&quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="n">Web</span><span class="p">.</span><span class="n">encodeURIComponent</span><span class="p">(</span><span class="n">user</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">url</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="c1">// output:</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="c1">// https://my.website.name/?user=Jane%20Doe</span>
+</code></pre></div>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
 
               
             </article>
