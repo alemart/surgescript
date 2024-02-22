@@ -35,3 +35,38 @@ object "Application"
     }
 }
 ```
+
+#### encodeURIComponent
+
+`encodeURIComponent(str)`
+
+Encodes a component of a Universal Resource Identifier (URI). It escapes all characters of the input string, except:
+
+```
+A–Z a–z 0–9 - _ . ! ~ * ' ( )
+```
+
+*Arguments*
+
+* `str`: string. The string to be escaped.
+
+*Returns*
+
+Returns the input string escaped as above.
+
+*Example*
+
+```cs
+using SurgeEngine.Web;
+
+// ...
+
+user = "Jane Doe";
+url = "https://my.website.name/?user=" + Web.encodeURIComponent(user);
+Console.print(url);
+
+// output:
+// https://my.website.name/?user=Jane%20Doe
+```
+
+*Available since:* Open Surge 0.6.1
