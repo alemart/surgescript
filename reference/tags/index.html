@@ -836,6 +836,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#hastag" class="md-nav__link">
+    hasTag
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1769,6 +1776,13 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#hastag" class="md-nav__link">
+    hasTag
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1802,7 +1816,7 @@
 <p>A new <a href="/reference/array">Array</a> of strings with all tags used in all objects.</p>
 <h4 id="select">select</h4>
 <p><code>select(tagName)</code></p>
-<p>Selects all objects that are tagged with <code>tagName</code>.</p>
+<p>Selects all objects that are tagged <code>tagName</code>.</p>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>tagName</code>: string.</li>
@@ -1819,6 +1833,18 @@
 </ul>
 <p><em>Returns</em></p>
 <p>A new <a href="/reference/array">Array</a> of strings with the names of the tags associated with the objects named <code>objectName</code>. If the objects are untagged or do not exist, an empty array is returned.</p>
+<h4 id="hastag">hasTag</h4>
+<p><code>hasTag(objectName, tagName)</code></p>
+<p>Checks if objects named <code>objectName</code> are tagged <code>tagName</code>. Prefer using <a href="/reference/object#hastag">Object.hasTag()</a> if possible.</p>
+<p>See also: <a href="/reference/object#hastag">Object.hasTag()</a>.</p>
+<p><em>Available since:</em> SurgeScript 0.6.0</p>
+<p><em>Arguments</em></p>
+<ul>
+<li><code>objectName</code>: string.</li>
+<li><code>tagName</code>: string.</li>
+</ul>
+<p><em>Returns</em></p>
+<p>Returns <code>true</code> if the objects are tagged as specified, or <code>false</code> otherwise.</p>
 
               
             </article>

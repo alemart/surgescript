@@ -1822,15 +1822,16 @@
 <p>SurgeScript features a Garbage Collector (GC) that automatically disposes objects that cannot be reached from the root (i.e., their references are lost). The Garbage Collector is available at <code>System.gc</code>. Generally, you do not need to modify any of its settings.</p>
 <h2 id="properties">Properties</h2>
 <h4 id="interval">interval</h4>
-<p><code>interval</code>: number.</p>
+<p><code>interval</code>: number, read-only.</p>
 <p>Every <code>interval</code> seconds, the garbage collector will be called automatically.</p>
+<p><em>Note:</em> this property is read-only since SurgeScript 0.6.0.</p>
 <h4 id="objectcount">objectCount</h4>
 <p><code>objectCount</code>: number, read-only.</p>
 <p>How many objects were disposed when the garbage collector was last called.</p>
 <h2 id="functions">Functions</h2>
 <h4 id="collect">collect</h4>
 <p><code>collect()</code></p>
-<p>Calls the Garbage Collector manually.</p>
+<p>Calls the Garbage Collector manually. You generally don't need to call this.</p>
 
               
             </article>

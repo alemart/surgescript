@@ -1901,6 +1901,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#forciblyoutofwater" class="md-nav__link">
+    forciblyOutOfWater
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#layer" class="md-nav__link">
     layer
   </a>
@@ -2754,6 +2761,13 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#forciblyoutofwater" class="md-nav__link">
+    forciblyOutOfWater
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#layer" class="md-nav__link">
     layer
   </a>
@@ -3220,7 +3234,7 @@
 <h4 id="underwater">underwater</h4>
 <p><code>underwater</code>: boolean, read-only.</p>
 <p>Is the player underwater? Players are considered to be underwater if they are below the <a href="/engine/level#waterlevel">water level</a> or if their <a href="#forciblyunderwater">forciblyUnderwater</a> flag is set to <code>true</code>.</p>
-<p>See also: <a href="#secondstodrown">secondsToDrown</a>, <a href="#drowning">drowning</a>, <a href="#breathing">breathing</a>, <a href="#breathtime">breathTime</a>, <a href="#forciblyunderwater">forciblyUnderwater</a>, <a href="/engine/level#waterlevel">waterlevel</a>.</p>
+<p>See also: <a href="#secondstodrown">secondsToDrown</a>, <a href="#drowning">drowning</a>, <a href="#breathing">breathing</a>, <a href="#breathtime">breathTime</a>, <a href="#forciblyunderwater">forciblyUnderwater</a>, <a href="#forciblyOutOfWater">forciblyOutOfWater</a>, <a href="/engine/level#waterlevel">waterlevel</a>.</p>
 <h4 id="secondstodrown">secondsToDrown</h4>
 <p><code>secondsToDrown</code>: number, read-only.</p>
 <p>The number of seconds to drown, if underwater.</p>
@@ -3295,7 +3309,11 @@
 <h4 id="forciblyunderwater">forciblyUnderwater</h4>
 <p><code>forciblyUnderwater</code>: boolean.</p>
 <p>If set to <code>true</code>, the <a href="#underwater">underwater</a> flag will be true regardless of the <a href="/engine/level#waterlevel">water level</a>. If set to <code>false</code>, the underwater flag will be true only if the player is below the water level. Defaults to <code>false</code>.</p>
-<p>See also: <a href="#underwater">underwater</a>, <a href="/engine/level#waterlevel">waterlevel</a>.</p>
+<p>See also: <a href="#underwater">underwater</a>, <a href="/engine/level#waterlevel">waterlevel</a>, <a href="#forciblyoutofwater">forciblyOutOfWater</a>.</p>
+<p><em>Available since:</em> Open Surge 0.6.1</p>
+<h4 id="forciblyoutofwater">forciblyOutOfWater</h4>
+<p>If set to <code>true</code>, the <a href="#underwater">underwater</a> mechanics will be disabled, even if the player is below the <a href="/engine/level#waterlevel">water level</a>. If <a href="#forciblyunderwater">forciblyUnderwater</a> is also <code>true</code>, this flag will do nothing. Defaults to <code>false</code>.</p>
+<p>See also: <a href="#underwater">underwater</a>, <a href="/engine/level#waterlevel">waterlevel</a>, <a href="#forciblyUnderwater">forciblyUnderwater</a>.</p>
 <p><em>Available since:</em> Open Surge 0.6.1</p>
 <h4 id="layer">layer</h4>
 <p><code>layer</code>: string.</p>
