@@ -137,7 +137,7 @@ Extracts the substring starting at position `start` with length `length`.
 
 *Arguments*
 
-* `start`: number. The start position.
+* `start`: number. The start position. The beginning of the string is at position 0.
 * `length`: number. The length of the substring.
 
 *Returns*
@@ -150,7 +150,7 @@ The substring with length `length` starting at `start`.
 name = "SurgeScript";
 surge = name.substr(0, 5); // "Surge"
 script = name.substr(5, 6); // "Script"
-e = name.substr(4, 2); // "e"
+e = name.substr(4, 1); // "e"
 empty = name.substr(555, 1); // ""
 ```
 
