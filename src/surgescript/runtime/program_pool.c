@@ -113,7 +113,7 @@ surgescript_programpool_t* surgescript_programpool_create()
     /* [!] we don't know the set of all (classes of) objects at this point, but
            we know that the size of that set is going to be very small compared
            to the universe of possible hashes */
-    /*sslog("Created a program pool with seed 0x%llx", (uint64_t)pool->seed);*/
+    sslog("Created a program pool with seed 0x%llx", (uint64_t)pool->seed);
 
     return pool;
 }
@@ -442,9 +442,9 @@ void delete_program(const char* program_name, void* data)
 surgescript_programpool_signature_t generate_signature(const char* object_name, const char* program_name, xxhash_t seed)
 {
     /* Our app must enforce signature uniqueness */
-    alignas(8) char buf[2 * SS_NAMEMAX + 2] = { 0 };
+    alignas(8) char buf[2 * SS_NAMEMAX + 2];
     size_t l1 = strlen(object_name), l2 = strlen(program_name);
-    xxhash_t secondary_seed = seed ^ *object_name; /* better to pick another seed at random? */
+    xxhash_t secondary_seed = ((~seed) ^ (*object_name)) + l1; /* better to pick another seed at random? */
     xxhash_t ha, hb;
 
     if(l1 > SS_NAMEMAX)
@@ -453,6 +453,7 @@ surgescript_programpool_signature_t generate_signature(const char* object_name, 
     if(l2 > SS_NAMEMAX)
         l2 = SS_NAMEMAX;
 
+    memset(buf, 0, l1 + l2 + 2);
     memcpy(buf, object_name, l1);
     memcpy(buf + (l1 + 1), program_name, l2); /* keep the '\0' after object_name */
 
