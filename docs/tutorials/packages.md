@@ -101,3 +101,7 @@ object "Application"
 ```
 
 In the example above, writing `Complex` is equivalent to writing `ParrotSoft.Complex`, since we imported this utility with `using ParrotSoft.Complex`. Notice that `ParrotSoft` implements a getter for `Complex`. Additionally, `ParrotSoft` has been annotated with `@Package`, but `Complex` has **not**. This means that the statement `using Complex` will **not** yield the expected result. Since `Complex` is a part of `ParrotSoft`, it can only be accessed from it. Finally, since we haven't imported `StringUtils` explicitly, we type `ParrotSoft.StringUtils` to access it.
+
+!!! warning "Pay attention!"
+
+    Combine related packages into one. Don't pollute the global namespace!
