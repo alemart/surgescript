@@ -36,6 +36,6 @@ Version of the Open Surge Engine.
 
 `mobile`: boolean, read-only.
 
-Whether or not the engine has been launched in mobile mode. The user may be playing on a mobile device or on a Desktop computer with the mobile simulation enabled.
+Whether or not the engine has been launched in mobile mode. The user may be playing on a mobile device or on a Desktop computer with the mobile mode enabled.
 
 *Available since:* Open Surge 0.6.1
