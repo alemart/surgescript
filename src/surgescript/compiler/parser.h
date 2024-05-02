@@ -121,6 +121,7 @@
  * <condstmt> := if ( <expr> ) <stmt>
  *            |  if ( <expr> ) <stmt> else <stmt>
  * <loopstmt> := while ( <expr> ) <stmt>
+ *            |  do <stmt> while ( <expr> ) ;
  *            |  for ( <expr> ; <expr> ; <expr> ) <stmt>
  *            |  foreach ( identifier in <expr> ) <stmt>
  * <retstmt> := return <expr> ;

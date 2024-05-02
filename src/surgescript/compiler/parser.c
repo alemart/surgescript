@@ -1349,6 +1349,10 @@ bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         loopstmt(parser, context);
         return true;
     }
+    else if(got_type(parser, SSTOK_DO)) {
+        loopstmt(parser, context);
+        return true;
+    }
     else if(got_type(parser, SSTOK_FOR)) {
         loopstmt(parser, context);
         return true;
@@ -1439,6 +1443,18 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         if(!stmt(parser, context)) /* loop body */
             unexpected_symbol(parser);
         emit_while2(context, begin, end);
+    }
+    else if(optmatch(parser, SSTOK_DO)) {
+        /* do-while loops */
+        emit_dowhile1(context, begin);
+        if(!stmt(parser, context)) /* loop body */
+            unexpected_symbol(parser);
+        match(parser, SSTOK_WHILE);
+        match(parser, SSTOK_LPAREN);
+        expr(parser, context); /* loop condition */
+        match(parser, SSTOK_RPAREN);
+        match(parser, SSTOK_SEMICOLON);
+        emit_dowhile2(context, begin, end);
     }
     else if(optmatch(parser, SSTOK_FOR)) {
         /* for loop */

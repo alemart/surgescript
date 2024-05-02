@@ -322,7 +322,6 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         return surgescript_token_create(SSTOK_ASSIGNOP, lexer->buf, lexer->line, prev);
     }
 
-
     /* equality operators */
     if(*(lexer->p) == '=' && *(lexer->p + 1) == '=') {
         bufadd(lexer, *(lexer->p++));

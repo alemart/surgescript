@@ -759,6 +759,18 @@ void emit_while2(surgescript_nodecontext_t context, surgescript_program_label_t 
     LABEL(end);
 }
 
+void emit_dowhile1(surgescript_nodecontext_t context, surgescript_program_label_t begin)
+{
+    LABEL(begin);
+}
+
+void emit_dowhile2(surgescript_nodecontext_t context, surgescript_program_label_t begin, surgescript_program_label_t end)
+{
+    SSASM(SSOP_TEST, T0, T0);
+    SSASM(SSOP_JNE, U(begin));
+    LABEL(end);
+}
+
 void emit_for1(surgescript_nodecontext_t context, surgescript_program_label_t begin)
 {
     LABEL(begin);

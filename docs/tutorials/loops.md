@@ -23,10 +23,58 @@ while(i <= 10) {
 }
 ```
 
+The following example prints nothing:
+
+```cs
+i = 20;
+while(i <= 10) { // this condition is false
+    Console.print(i);
+    i = i + 1;
+}
+```
+
+The while loop is skipped because the condition is initially false.
+
+Do-while loops
+--------------
+
+Do-while loops are similar to while loops, except that the block of code is executed at least once, unconditionally. It is repeated while a condition is true. Syntax:
+
+```cs
+do {
+    // block of code
+    // to be executed
+} while(condition);
+```
+
+The example below counts from 1 to 10:
+
+```cs
+i = 1;
+do {
+    Console.print(i);
+    i = i + 1;
+} while(i <= 10);
+```
+
+The following example prints the number 20:
+
+```cs
+i = 20;
+do {
+    Console.print(i);
+    i = i + 1;
+} while(i <= 10); // this condition is false
+```
+
+Since the condition is false, the block of code is executed only once.
+
+*Note:* do-while loops are available since SurgeScript 0.6.0.
+
 For loops
 ---------
 
-A for loop is a more controlled repetition structure when compared to the while loop. For loops support an initialization command, a condition and an increment command. The syntax is as follows:
+A for loop is a more controlled repetition structure when compared to a while loop. For loops support an initialization command, a condition and an increment command. The syntax is as follows:
 
 ```cs
 for(initialization; condition; increment) {
