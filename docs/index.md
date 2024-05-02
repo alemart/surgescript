@@ -26,7 +26,6 @@ SurgeScript is:
 * Free and open-source software
 * Built in C, which is nearly universal
 * Named after a really charismatic character: [Surge the Rabbit](http://opensurge2d.org)!
-* A programming language that lets you tag objects with emoticons ;)
 
 Why use SurgeScript?
 --------------------

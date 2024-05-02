@@ -666,7 +666,7 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     if(optmatch(parser, SSTOK_IS)) {
         /* validate */
-        if(!got_type(parser, SSTOK_STRING) && !got_type(parser, SSTOK_EMOTICON))
+        if(!got_type(parser, SSTOK_STRING))
             unexpected_symbol(parser);
 
         /* read tags */
@@ -686,13 +686,6 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
                 expect(parser, SSTOK_STRING);
             else
                 break;
-        }
-
-        /* read emoticon */
-        if(got_type(parser, SSTOK_EMOTICON)) {
-            const char* emoticon = surgescript_token_lexeme(parser->lookahead);
-            surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, emoticon);
-            match(parser, SSTOK_EMOTICON);
         }
     }
 }

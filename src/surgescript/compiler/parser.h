@@ -33,7 +33,7 @@
  * <objectlist> := <object> <objectlist> | e
  * <object> := <annotations> object string <qualifiers> { <objectdecl> }
  * <objectdecl> := <vardecllist> <statedecllist> <fundecllist>
- * <qualifiers> := is <tags> | is <tags> emoticon | is emoticon | e
+ * <qualifiers> := is <tags> | e
  * <tags> := string , <tags> | string
  * <annotations> := annotation <annotations> | e
  *

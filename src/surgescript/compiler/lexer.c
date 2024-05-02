@@ -237,7 +237,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     }
 
     /* colon operator */
-    if(*(lexer->p) == ':' && (*(lexer->p + 1) != ')' && *(lexer->p + 1) != '(' && *(lexer->p + 1) != 'P')) {
+    if(*(lexer->p) == ':') {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_COLON, lexer->buf, lexer->line, prev);
     }
@@ -349,7 +349,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_RELATIONALOP, lexer->buf, lexer->line, prev);
     }
-    else if(*(lexer->p) == '<' && *(lexer->p + 1) != '=' && *(lexer->p + 1) != '3') {
+    else if(*(lexer->p) == '<' && *(lexer->p + 1) != '=') {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_RELATIONALOP, lexer->buf, lexer->line, prev);
     }
@@ -407,24 +407,6 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         bufadd(lexer, *(lexer->p++));
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_INCDECOP, lexer->buf, lexer->line, prev);
-    }
-
-    /* read emoticon */
-    if(*(lexer->p) == '$' && 0 == strncmp(lexer->p, "$_$", 3)) {
-        bufadd(lexer, *(lexer->p++));
-        bufadd(lexer, *(lexer->p++));
-        bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line, prev);
-    }
-    else if(*(lexer->p) == '<' && *(lexer->p + 1) == '3') {
-        bufadd(lexer, *(lexer->p++));
-        bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line, prev);
-    }
-    else if(*(lexer->p) == ':' && (*(lexer->p + 1) == ')' || *(lexer->p + 1) == '(' || *(lexer->p + 1) == 'P')) {
-        bufadd(lexer, *(lexer->p++));
-        bufadd(lexer, *(lexer->p++));
-        return surgescript_token_create(SSTOK_EMOTICON, lexer->buf, lexer->line, prev);
     }
 
     /* read an annotation */

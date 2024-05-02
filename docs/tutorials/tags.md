@@ -59,30 +59,3 @@ object "Application"
     }
 }
 ```
-
-Emoticons
----------
-
-You may also tag objects with emoticons. The syntax is as follows:
-
-```cs
-object "Good Day" is "happy", "sunny" :)
-{
-    ...
-}
-
-object "Good Night" is <3
-{
-    ...
-}
-```
-
-The following emoticons are available for your pleasure:
-
-Emoticon|Meaning
---------|-------
-`$_$` | Feelin' Rich
-`<3` | Lovin' it
-`:)` | Happy
-`:(` | Sad
-`:P` | D'oh
