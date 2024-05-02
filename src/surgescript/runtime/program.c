@@ -600,7 +600,10 @@ unsigned int run_instruction(const surgescript_program_t* program, const surgesc
 
         /* comparing & testing */
         case SSOP_TEST:
-            surgescript_var_set_rawbits(_t[2], surgescript_var_get_rawbits(t(a)) & surgescript_var_get_rawbits(t(b)));
+            if(a.u64 == b.u64)
+                surgescript_var_set_rawbits(_t[2], surgescript_var_get_rawbits(t(a)));
+            else
+                surgescript_var_set_rawbits(_t[2], surgescript_var_get_rawbits(t(a)) & surgescript_var_get_rawbits(t(b)));
             break;
 
         case SSOP_TCHK:
