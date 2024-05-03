@@ -52,6 +52,7 @@ static surgescript_var_t* fun_log10(surgescript_object_t* object, const surgescr
 static surgescript_var_t* fun_floor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_ceil(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_round(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_trunc(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_mod(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_sign(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_signum(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
@@ -103,6 +104,7 @@ void surgescript_sslib_register_math(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Math", "floor", fun_floor, 1);
     surgescript_vm_bind(vm, "Math", "ceil", fun_ceil, 1);
     surgescript_vm_bind(vm, "Math", "round", fun_round, 1);
+    surgescript_vm_bind(vm, "Math", "trunc", fun_trunc, 1);
     surgescript_vm_bind(vm, "Math", "mod", fun_mod, 2);
     surgescript_vm_bind(vm, "Math", "sign", fun_sign, 1);
     surgescript_vm_bind(vm, "Math", "signum", fun_signum, 1);
@@ -279,6 +281,12 @@ surgescript_var_t* fun_round(surgescript_object_t* object, const surgescript_var
 {
     double x = surgescript_var_get_number(param[0]); /* round x half away from zero */
     return surgescript_var_set_number(surgescript_var_create(), (x >= 0.0) ? floor(x + 0.5) : ceil(x - 0.5));
+}
+
+/* trunc(x): truncate x to the nearest integer not greater in magnitude than x */
+surgescript_var_t* fun_trunc(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    return surgescript_var_set_number(surgescript_var_create(), trunc(surgescript_var_get_number(param[0])));
 }
 
 /* mod(x,y): the modulo (x mod y) */

@@ -301,6 +301,24 @@ Returns `x` rounded to the nearest integer.
 
 If the fraction of `x` is 0.5, this function uses the [commercial rounding](https://en.wikipedia.org/wiki/Rounding#Round_half_away_from_zero) tie-breaking method.
 
+#### trunc
+
+`trunc(x)`
+
+Truncate to integer.
+
+*Available since:* SurgeScript 0.6.0
+
+*Arguments*
+
+* `x`: number.
+
+*Returns*
+
+The nearest integer not greater in magnitude than `x`.
+
+
+
 #### mod
 
 `mod(x, y)`
