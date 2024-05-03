@@ -93,9 +93,9 @@ object "Application"
 
 Dictionaries have many interesting properties and operations that you can see in the [Language Reference](/reference/dictionary).
 
-> **Cautionary note**
-> 
-> Whenever you define an array or a dictionary, you spawn a new object. One is advised to **NOT** define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.
+!!! warning "Caution!"
+
+    Whenever you define an array or a dictionary, you spawn a new object. You are advised to **NOT** define arrays or dictionaries within states, because the code within the states run continuously. New objects will be created at every frame, not just once.
 
 ```cs
 object "Application"

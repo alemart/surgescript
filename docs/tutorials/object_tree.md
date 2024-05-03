@@ -51,11 +51,11 @@ object "Parent"
 }
 ```
 
-> **Automatic Garbage Collection**
->
-> When you spawn an object, make sure you store a reference to it somewhere.
->
-> If an object cannot be reached from the root (no reachable object has any references to it), it will be automatically destroyed by SurgeScript's built-in Garbage Collector.
+!!! tip "Automatic Garbage Collection"
+
+    When you spawn an object, make sure you store a reference to it somewhere.
+
+    If an object cannot be reached from the root (no reachable object has any references to it), it will be automatically destroyed by SurgeScript's built-in garbage collector.
 
 
 

@@ -42,9 +42,11 @@ Charge: 37.5
 Gimacian: 70
 ```
 
-> **Note:**
-> 
-> Whenever you define a dictionary, you spawn a new object. One is advised to **NOT** define dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame of the application, not just once.
+!!! warning "Caution!"
+
+    Whenever you define a dictionary, you spawn a new object. You are advised to **NOT** define dictionaries within states, because the code within the states run continuously. New objects will be created at every frame, not just once. In the above example, `dictionary` is defined as an [object-level variable](/tutorials/variables#scoping).
+
+
 
 Properties
 ----------

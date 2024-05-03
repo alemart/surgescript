@@ -10,7 +10,7 @@ Properties
 
 `time`: number, read-only.
 
-The number of seconds since the application was started at the beginning of this frame.
+Elapsed time, in seconds, since the application was started and measured at the beginning of the current frame.
 
 #### delta
 
@@ -22,10 +22,10 @@ The time, in seconds, taken to complete the last frame of the application. Use t
 
 `now`: number, read-only.
 
-The number of seconds since the application was started at the moment this property is evaluated.
+Elapsed time, in seconds, since the application was started and measured at the moment this property is evaluated.
 
 *Available since:* SurgeScript 0.5.4
 
-> **Note:**
->
-> Since `Time.now` may return different values during the same frame of your application, it's generally advisable to use `Time.time` instead.
+!!! tip
+
+    It's generally advisable to use [Time.time](#time) instead, because [Time.now](#now) may return different values in the same frame of your application.

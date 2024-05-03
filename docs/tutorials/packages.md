@@ -50,17 +50,17 @@ object "Application"
 
 **Note:** it's recommended not to include any special characters in the name of your packages.
 
+**Note:** before SurgeScript 0.5.4, you would annotate the object with `@Plugin` instead.
+
 In the example above, `Application` and `StringUtils` are located in two separate files. If you want to test them using the SurgeScript command line utility, pass both files as parameters:
 
 ```sh
 surgescript package.ss app.ss
 ```
 
-> **Spawning order**
->
-> Although packages are spawned before the *Application* object, for the time being they are spawned in no particular order. You may not access a package from within the constructor of another package, as of now there is no dependency resolver implemented. Use the *main* state.
+!!! info "Spawning order"
 
-**Note:** before SurgeScript 0.5.4, you would annotate the object with `@Plugin` instead.
+    Although packages are spawned before the *Application* object, for the time being they are spawned in no particular order. You may not access a package from within the constructor of another package, as of now there is no dependency resolver implemented. Use the *main* state.
 
 Package example
 ---------------

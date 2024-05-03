@@ -1,11 +1,11 @@
 Camera
 ======
 
-The Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.
+The Camera object can be used to control what content, in world space, is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.
 
-> **HUD elements**
->
-> Objects tagged as *"detached"* do not follow the camera. They are not in world space, but in screen space. This is useful for creating HUD elements.
+!!! tip "Detached entities"
+
+    Entities tagged *"detached"* do not follow the camera. They are rendered in screen space, not in world space. This is useful for creating HUD elements (*Heads-Up Display*). Read more about [entities](/engine/entity).
 
 *Example*
 

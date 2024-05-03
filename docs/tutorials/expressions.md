@@ -86,13 +86,13 @@ w = x > 1; // w is false
 t = x >= 1; // t is true
 ```
 
-> **Pay attention!**
->
-> Notice that the equality operator, used for comparing expressions for equality, is `==`. Pay attention! Don't confuse the equality operator (`==`) with the assignment operator (`=`). The expression `(x = 1)` always evaluates to 1, whereas `(x == 1)` is `true` only if x equals 1.
+!!! warning "Pay attention!"
 
-> **Strong equality**
->
-> Unlike their counterparts, strong equality/inequality operators compare not only the content of the operands, but also their type. While `"1" == 1` evalutes to `true`, `"1" === 1` does not.
+    Notice that the equality operator, used for comparing expressions for equality, is `==`. Pay attention! Don't confuse the equality operator (`==`) with the assignment operator (`=`). The expression `(x = 1)` always evaluates to 1, whereas `(x == 1)` is `true` only if x equals 1.
+
+!!! info "Strong equality"
+
+    Unlike their counterparts, strong equality/inequality operators compare not only the content of the operands, but also their type. While `"1" == 1` evalutes to `true`, `"1" === 1` does not.
 
 Logical operators
 -----------------
@@ -123,9 +123,9 @@ w = (z && x) || true; // evaluates to true
 t = !x && x; // evaluates to false
 ```
 
-> **Short-circuit evaluation**
->
-> SurgeScript performs short-circuit evaluation in **and** and **or** operations. This means that the second operator is not evaluated if the first alone is sufficient to determine the value of the operation. Example: in the expression `a || b`, expression `b` is not evaluated if `a` is evaluated to `true`. Similarly, in `a && b`, expression `b` is not evaluated if `a` is evaluated to `false`.
+!!! info "Short-circuit evaluation"
+
+    SurgeScript performs short-circuit evaluation in **and** and **or** operations. This means that the second operator is not evaluated if the first alone is sufficient to determine the value of the operation. Example: in the expression `a || b`, expression `b` is not evaluated if `a` is evaluated to `true`. Similarly, in `a && b`, expression `b` is not evaluated if `a` is evaluated to `false`.
 
 Textual expressions
 -------------------

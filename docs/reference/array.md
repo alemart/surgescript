@@ -35,9 +35,9 @@ Charge
 Number of characters: 3
 ```
 
-> **Note:**
-> 
-> Whenever you define a array, you spawn a new object. One is advised to **NOT** define arrays within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.
+!!! warning "Caution!"
+
+    Whenever you define an array, you spawn a new object. You are advised to **NOT** define arrays within states, because the code within the states run continuously. New objects will be created at every frame, not just once. In the above example, the `characters` array is defined as an [object-level variable](/tutorials/variables#scoping).
 
 Properties
 ----------

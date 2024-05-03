@@ -134,6 +134,6 @@ foreach(entry in dictionary) {
 }
 ```
 
-> **Implementing your own iterable collections**
->
-> The foreach loop can be used with any iterable collections, not only [Arrays](/reference/array) and [Dictionaries](/reference/dictionary). You may even [implement your own!](/tutorials/advanced_features#iterators)
+!!! tip "Implementing your own iterable collections"
+
+    The foreach loop can be used with any iterable collections, not only [Arrays](/reference/array) and [Dictionaries](/reference/dictionary). You may even [implement your own!](/tutorials/advanced_features#iterators)
