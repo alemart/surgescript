@@ -1,5 +1,19 @@
 # Release Notes
 
+## 0.6.0 - May 17th, 2024
+
+* Optimized function calls with self-modifying SurgeScript bytecode that recognizes opportunities for optimization
+* Optimized tag tests with faster hashes and bitsets
+* Optimized the allocation and the deallocation of strings with a pool of managed strings
+* Introduced do-while loops
+* Changed `Math.mod()` so that it returns the modulo instead of the remainder
+* Made various updates and additions to the standard library
+* Updated the documentation
+* Updated the CLI
+* Added support for reading scripts in virtual files
+* Removed support for emoticons
+* General improvements to the code. Bugfixes
+
 ## 0.5.6.1 - September 22nd, 2022
 
 * Tweaks to the build system
