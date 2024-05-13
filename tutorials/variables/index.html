@@ -1961,10 +1961,10 @@
 <a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>Dictionaries have many interesting properties and operations that you can see in the <a href="/reference/dictionary">Language Reference</a>.</p>
-<blockquote>
-<p><strong>Cautionary note</strong></p>
-<p>Whenever you define an array or a dictionary, you spawn a new object. One is advised to <strong>NOT</strong> define arrays or dictionaries within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.</p>
-</blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Caution!</p>
+<p>Whenever you define an array or a dictionary, you spawn a new object. You are advised to <strong>NOT</strong> define arrays or dictionaries within states, because the code within the states run continuously. New objects will be created at every frame, not just once.</p>
+</div>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span><span class="w"></span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span><span class="w"></span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="c1">// arr will be instantiated once the object is created</span>
@@ -2059,7 +2059,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-present Alexandre Martins.
     </div>
   
   

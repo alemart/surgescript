@@ -1979,7 +1979,7 @@
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">z</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">x</span><span class="p">[</span><span class="m">0</span><span class="p">];</span><span class="w"> </span><span class="c1">// &quot;s&quot; (first character of x)</span>
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">n</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">y</span><span class="p">.</span><span class="n">length</span><span class="p">;</span><span class="w"> </span><span class="c1">// 5</span>
 </code></pre></div>
-<p>Please note that strings in SurgeScript are immutable. Once a string is set, its individual characters cannot be changed. If you need to modify the content of a string, reassign the variable to a new string.</p>
+<p>Strings in SurgeScript are immutable. Once a string is set, its individual characters cannot be changed. If you need to modify the content of a string, reassign the variable to a new string.</p>
 <h2 id="static-functions">Static functions</h2>
 <h4 id="isnullorempty">isNullOrEmpty</h4>
 <p><code>isNullOrEmpty(value)</code></p>
@@ -2053,7 +2053,7 @@
 <p>Extracts the substring starting at position <code>start</code> with length <code>length</code>.</p>
 <p><em>Arguments</em></p>
 <ul>
-<li><code>start</code>: number. The start position.</li>
+<li><code>start</code>: number. The start position. The beginning of the string is at position 0.</li>
 <li><code>length</code>: number. The length of the substring.</li>
 </ul>
 <p><em>Returns</em></p>
@@ -2062,7 +2062,7 @@
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">name</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;SurgeScript&quot;</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">surge</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">);</span><span class="w"> </span><span class="c1">// &quot;Surge&quot;</span>
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">script</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="m">6</span><span class="p">);</span><span class="w"> </span><span class="c1">// &quot;Script&quot;</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">e</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">);</span><span class="w"> </span><span class="c1">// &quot;e&quot;</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">e</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// &quot;e&quot;</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">empty</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">name</span><span class="p">.</span><span class="n">substr</span><span class="p">(</span><span class="m">555</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// &quot;&quot;</span>
 </code></pre></div>
 <h4 id="concat">concat</h4>
@@ -2153,7 +2153,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-present Alexandre Martins.
     </div>
   
   

@@ -1802,14 +1802,14 @@
 <a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p><strong>Note:</strong> it's recommended not to include any special characters in the name of your packages.</p>
+<p><strong>Note:</strong> before SurgeScript 0.5.4, you would annotate the object with <code>@Plugin</code> instead.</p>
 <p>In the example above, <code>Application</code> and <code>StringUtils</code> are located in two separate files. If you want to test them using the SurgeScript command line utility, pass both files as parameters:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>surgescript package.ss app.ss
 </code></pre></div>
-<blockquote>
-<p><strong>Spawning order</strong></p>
+<div class="admonition info">
+<p class="admonition-title">Spawning order</p>
 <p>Although packages are spawned before the <em>Application</em> object, for the time being they are spawned in no particular order. You may not access a package from within the constructor of another package, as of now there is no dependency resolver implemented. Use the <em>main</em> state.</p>
-</blockquote>
-<p><strong>Note:</strong> before SurgeScript 0.5.4, you would annotate the object with <code>@Plugin</code> instead.</p>
+</div>
 <h2 id="package-example">Package example</h2>
 <p>Packages may aggregate many code units with different functionalities. This lets you separate your code in coherent, logical units and also helps you to distribute it.</p>
 <p>Suppose that user <em>Parrot</em>, the owner of <em>ParrotSoft</em>, created SurgeScript utilities related to string manipulation, matrix math and complex numbers. He decided to share his code as a single package called <code>ParrotSoft</code>. Since he implemented <a href="/tutorials/properties">getters</a> for each of his utilities, his package provides easy access to all of them. Furthermore, he annotated his package with <code>@Package</code> (but <strong>not</strong> the individual utilities), so his package can be accessed anywhere.</p>
@@ -1840,6 +1840,10 @@
 <a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>In the example above, writing <code>Complex</code> is equivalent to writing <code>ParrotSoft.Complex</code>, since we imported this utility with <code>using ParrotSoft.Complex</code>. Notice that <code>ParrotSoft</code> implements a getter for <code>Complex</code>. Additionally, <code>ParrotSoft</code> has been annotated with <code>@Package</code>, but <code>Complex</code> has <strong>not</strong>. This means that the statement <code>using Complex</code> will <strong>not</strong> yield the expected result. Since <code>Complex</code> is a part of <code>ParrotSoft</code>, it can only be accessed from it. Finally, since we haven't imported <code>StringUtils</code> explicitly, we type <code>ParrotSoft.StringUtils</code> to access it.</p>
+<div class="admonition warning">
+<p class="admonition-title">Pay attention!</p>
+<p>Combine related packages into one. Don't pollute the global namespace!</p>
+</div>
 
               
             </article>
@@ -1890,7 +1894,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-present Alexandre Martins.
     </div>
   
   

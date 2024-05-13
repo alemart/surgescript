@@ -1861,11 +1861,11 @@
 
 
 <h1 id="camera">Camera</h1>
-<p>The Camera object can be used to control what content (in world space) is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.</p>
-<blockquote>
-<p><strong>HUD elements</strong></p>
-<p>Objects tagged as <em>"detached"</em> do not follow the camera. They are not in world space, but in screen space. This is useful for creating HUD elements.</p>
-</blockquote>
+<p>The Camera object can be used to control what content, in world space, is rendered to the screen. The Camera is represented by a 2-dimensional point in world space that is mapped to the center of the screen.</p>
+<div class="admonition tip">
+<p class="admonition-title">Detached entities</p>
+<p>Entities tagged <em>"detached"</em> do not follow the camera. They are rendered in screen space, not in world space. This is useful for creating HUD elements (<em>Heads-Up Display</em>). Read more about <a href="/engine/entity">entities</a>.</p>
+</div>
 <p><em>Example</em></p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// Import the Camera object</span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Camera</span><span class="p">;</span><span class="w"></span>
@@ -1991,7 +1991,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-present Alexandre Martins.
     </div>
   
   

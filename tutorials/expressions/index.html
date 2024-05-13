@@ -2038,12 +2038,14 @@
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="n">w</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="p">&gt;</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// w is false</span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="n">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="p">&gt;=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// t is true</span>
 </code></pre></div>
-<blockquote>
-<p><strong>Pay attention!</strong></p>
+<div class="admonition warning">
+<p class="admonition-title">Pay attention!</p>
 <p>Notice that the equality operator, used for comparing expressions for equality, is <code>==</code>. Pay attention! Don't confuse the equality operator (<code>==</code>) with the assignment operator (<code>=</code>). The expression <code>(x = 1)</code> always evaluates to 1, whereas <code>(x == 1)</code> is <code>true</code> only if x equals 1.</p>
-<p><strong>Strong equality</strong></p>
+</div>
+<div class="admonition info">
+<p class="admonition-title">Strong equality</p>
 <p>Unlike their counterparts, strong equality/inequality operators compare not only the content of the operands, but also their type. While <code>"1" == 1</code> evalutes to <code>true</code>, <code>"1" === 1</code> does not.</p>
-</blockquote>
+</div>
 <h2 id="logical-operators">Logical operators</h2>
 <p>Logical operators involve booleans (<code>true</code> or <code>false</code> values). While the <strong>not</strong> operator requires only one operand, operators <strong>and</strong> and <strong>or</strong> require two.</p>
 <table>
@@ -2098,10 +2100,10 @@
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">w</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">(</span><span class="n">z</span><span class="w"> </span><span class="p">&amp;&amp;</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">||</span><span class="w"> </span><span class="k">true</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to true</span>
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">t</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="p">!</span><span class="n">x</span><span class="w"> </span><span class="p">&amp;&amp;</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to false</span>
 </code></pre></div>
-<blockquote>
-<p><strong>Short-circuit evaluation</strong></p>
+<div class="admonition info">
+<p class="admonition-title">Short-circuit evaluation</p>
 <p>SurgeScript performs short-circuit evaluation in <strong>and</strong> and <strong>or</strong> operations. This means that the second operator is not evaluated if the first alone is sufficient to determine the value of the operation. Example: in the expression <code>a || b</code>, expression <code>b</code> is not evaluated if <code>a</code> is evaluated to <code>true</code>. Similarly, in <code>a &amp;&amp; b</code>, expression <code>b</code> is not evaluated if <code>a</code> is evaluated to <code>false</code>.</p>
-</blockquote>
+</div>
 <h2 id="textual-expressions">Textual expressions</h2>
 <p>You may concatenate strings with the <code>+</code> operator. Example:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">message</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="s">&quot;Surge&quot;</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="s">&quot; rocks!&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// evaluates to &quot;Surge rocks!&quot;</span>
@@ -2286,7 +2288,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-present Alexandre Martins.
     </div>
   
   

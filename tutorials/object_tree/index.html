@@ -1816,11 +1816,11 @@
 <a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">}</span><span class="w"></span>
 <a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<blockquote>
-<p><strong>Automatic Garbage Collection</strong></p>
+<div class="admonition tip">
+<p class="admonition-title">Automatic Garbage Collection</p>
 <p>When you spawn an object, make sure you store a reference to it somewhere.</p>
-<p>If an object cannot be reached from the root (no reachable object has any references to it), it will be automatically destroyed by SurgeScript's built-in Garbage Collector.</p>
-</blockquote>
+<p>If an object cannot be reached from the root (no reachable object has any references to it), it will be automatically destroyed by SurgeScript's built-in garbage collector.</p>
+</div>
 <h2 id="destroying-objects">Destroying objects</h2>
 <p>Objects can be destroyed manually by calling <code>destroy()</code>. Whenever an object is destroyed, its children are destroyed as well.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Foo&quot;</span><span class="w"></span>
@@ -1926,7 +1926,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-present Alexandre Martins.
     </div>
   
   

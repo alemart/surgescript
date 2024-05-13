@@ -1797,18 +1797,18 @@
 <h2 id="properties">Properties</h2>
 <h4 id="time_1">time</h4>
 <p><code>time</code>: number, read-only.</p>
-<p>The number of seconds since the application was started at the beginning of this frame.</p>
+<p>Elapsed time, in seconds, since the application was started and measured at the beginning of the current frame.</p>
 <h4 id="delta">delta</h4>
 <p><code>delta</code>: number, read-only.</p>
 <p>The time, in seconds, taken to complete the last frame of the application. Use this value to make your application behave consistently regardless of the frame rate.</p>
 <h4 id="now">now</h4>
 <p><code>now</code>: number, read-only.</p>
-<p>The number of seconds since the application was started at the moment this property is evaluated.</p>
+<p>Elapsed time, in seconds, since the application was started and measured at the moment this property is evaluated.</p>
 <p><em>Available since:</em> SurgeScript 0.5.4</p>
-<blockquote>
-<p><strong>Note:</strong></p>
-<p>Since <code>Time.now</code> may return different values during the same frame of your application, it's generally advisable to use <code>Time.time</code> instead.</p>
-</blockquote>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>It's generally advisable to use <a href="#time">Time.time</a> instead, because <a href="#now">Time.now</a> may return different values in the same frame of your application.</p>
+</div>
 
               
             </article>
@@ -1859,7 +1859,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-present Alexandre Martins.
     </div>
   
   

@@ -2000,10 +2000,10 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>Charge
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Number of characters: 3
 </code></pre></div>
-<blockquote>
-<p><strong>Note:</strong></p>
-<p>Whenever you define a array, you spawn a new object. One is advised to <strong>NOT</strong> define arrays within states, because the code within states run continuously. Therefore, new objects will be created at every frame, not just once.</p>
-</blockquote>
+<div class="admonition warning">
+<p class="admonition-title">Caution!</p>
+<p>Whenever you define an array, you spawn a new object. You are advised to <strong>NOT</strong> define arrays within states, because the code within the states run continuously. New objects will be created at every frame, not just once. In the above example, the <code>characters</code> array is defined as an <a href="/tutorials/variables#scoping">object-level variable</a>.</p>
+</div>
 <h2 id="properties">Properties</h2>
 <h4 id="length">length</h4>
 <p><code>length</code>: number, read-only.</p>
@@ -2215,7 +2215,7 @@
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      SurgeScript is a scripting language for games. Copyright © 2016-2023 Alexandre Martins.
+      SurgeScript is a scripting language for games. Copyright © 2016-present Alexandre Martins.
     </div>
   
   
