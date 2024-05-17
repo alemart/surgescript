@@ -1891,7 +1891,10 @@
 <a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
 <p>Recursive functions must have at least one base case. A base case is a scenario that does not need recursion to solve the problem. In the factorial example, the base case is <code>n &lt;= 1</code> (the factorial is 1). In the binary search example, the base case is <code>start &gt; end</code>, meaning that the array is empty and the target value cannot be found, or <code>value == array[mid]</code>, meaning that the target value has been found at <code>mid</code>.</p>
-<p>A sage once said: <em>"to understand recursion, you must first understand recursion."</em></p>
+<div class="admonition tip">
+<p class="admonition-title">How to understand recursion</p>
+<p>A sage once said: <em>"to understand recursion, you must first understand recursion".</em></p>
+</div>
 <h2 id="constructors-and-destructors">Constructors and destructors</h2>
 <p>In SurgeScript, constructors and destructors are special functions that are called whenever objects are created and destroyed, respectively. It's not mandatory to define them, but it may be useful to do so (you may want to set up things in your constructors, for example). Neither may receive any arguments (to set up objects with parameters, take a look at <a href="/tutorials/advanced_features#chaining">chaining</a>).</p>
 <p>Let's take our <code>Calculator</code> again. In the following example, <code>constructor()</code> is called automatically whenever a <code>Calculator</code> object is created. Likewise, <code>destructor()</code> is called automatically when the object is destroyed.</p>
@@ -1998,6 +2001,8 @@
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/analytics.js"></script>
       
         <script src="../../js/donate.js"></script>
       

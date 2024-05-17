@@ -1,7 +1,7 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     const script = document.createElement('script');
 
-    script.addEventListener('load', () => {
+    script.addEventListener('load', function() {
         kofiWidgetOverlay.draw('alemart', {
             'type': 'floating-chat',
             'floating-chat.donateButton.text': 'Support me',
@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    script.addEventListener('error', e => console.log(`Can't load the Ko-fi widget`, e));
+    script.addEventListener('error', function(e) {
+        console.log(`Can't load the Ko-fi widget`, e);
+    });
 
     script.type = 'text/javascript';
     script.async = true;

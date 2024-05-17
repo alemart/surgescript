@@ -1795,14 +1795,13 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<p>The following example prints nothing:</p>
+<p>The following example prints nothing. The while loop is skipped because the condition is initially false:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">20</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">&lt;=</span><span class="w"> </span><span class="m">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="c1">// this condition is false</span>
 <a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<p>The while loop is skipped because the condition is initially false.</p>
 <h2 id="do-while-loops">Do-while loops</h2>
 <p>Do-while loops are similar to while loops, except that the block of code is executed at least once, unconditionally. It is repeated while a condition is true. Syntax:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">do</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -1817,23 +1816,22 @@
 <a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">&lt;=</span><span class="w"> </span><span class="m">10</span><span class="p">);</span><span class="w"></span>
 </code></pre></div>
-<p>The following example prints the number 20:</p>
+<p>The following example prints the number 20. Since the condition is false, the block of code is executed only once:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">20</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">do</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">&lt;=</span><span class="w"> </span><span class="m">10</span><span class="p">);</span><span class="w"> </span><span class="c1">// this condition is false</span>
 </code></pre></div>
-<p>Since the condition is false, the block of code is executed only once.</p>
 <p><em>Note:</em> do-while loops are available since SurgeScript 0.6.0.</p>
 <h2 id="for-loops">For loops</h2>
-<p>A for loop is a more controlled repetition structure when compared to a while loop. For loops support an initialization command, a condition and an increment command. The syntax is as follows:</p>
+<p>A for loop is a more controlled repetition structure compared to a while loop. For loops support an initialization command, a condition and an increment command. The syntax is as follows:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">for</span><span class="p">(</span><span class="n">initialization</span><span class="p">;</span><span class="w"> </span><span class="n">condition</span><span class="p">;</span><span class="w"> </span><span class="n">increment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="c1">// block of code</span>
 <a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="c1">// to be executed</span>
 <a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
-<p>The code just displayed is equivalent to:</p>
+<p>The for loop above is equivalent to:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">initialization</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="k">while</span><span class="p">(</span><span class="n">condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
 <a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="c1">// block of code</span>
@@ -1944,6 +1942,8 @@
     
     
       <script src="../../assets/javascripts/bundle.5413a266.min.js"></script>
+      
+        <script src="../../js/analytics.js"></script>
       
         <script src="../../js/donate.js"></script>
       
