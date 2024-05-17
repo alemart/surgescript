@@ -299,10 +299,13 @@ The output of this code is:
 20
 ```
 
-**CHALLENGE:** can you write an iterable collection called *Fibonacci Sequence* containing the first *N* [Fibonacci numbers](https://en.wikipedia.org/wiki/Fibonacci_number) without storing them all explicitly in memory? It should be used as follows:
-```cs
-// Desired output (for N=10): 0 1 1 2 3 5 8 13 21 34
-sequence = spawn("Fibonacci Sequence").ofLength(10);
-foreach(number in sequence)
-    Console.print(number);
-```
+!!! tip "Challenge!"
+
+    Can you write an iterable collection called *Fibonacci Sequence* containing the first *N* [Fibonacci numbers](https://en.wikipedia.org/wiki/Fibonacci_number) without storing them all explicitly in memory? It should be used as follows:
+
+    ```cs
+    // Desired output (for N=10): 0 1 1 2 3 5 8 13 21 34
+    sequence = spawn("Fibonacci Sequence").ofLength(10);
+    foreach(number in sequence)
+        Console.print(number);
+    ```

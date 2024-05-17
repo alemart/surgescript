@@ -4,7 +4,6 @@ site_author: 'Alexandre Martins'
 site_description: 'SurgeScript is a scripting language for games.'
 site_dir: 'docs_html/'
 copyright: 'SurgeScript is a scripting language for games. Copyright © 2016-present Alexandre Martins.'
-google_analytics: ['UA-120511928-1', 'opensurge2d.org']
 repo_url: 'https://github.com/alemart/surgescript'
 strict: false
 theme:
@@ -22,6 +21,7 @@ theme:
             icon: 'material/lightbulb-outline'
             name: 'Switch to light mode'
 extra_javascript:
+    - js/analytics.js
     - js/donate.js
 markdown_extensions:
     - attr_list
