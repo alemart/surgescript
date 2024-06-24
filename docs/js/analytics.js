@@ -1,4 +1,4 @@
-window.addEventListener('load', function() {
+(function() {
     const script = document.createElement('script');
 
     script.addEventListener('error', function(e) {
@@ -11,4 +11,4 @@ window.addEventListener('load', function() {
     script.src = 'https://gc.zgo.at/count.js';
 
     document.head.appendChild(script);
-});
+})();
