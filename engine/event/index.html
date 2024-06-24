@@ -1807,7 +1807,7 @@
 
 
 <h1 id="event">Event</h1>
-<p>An event is a <a href="/tutorials/advanced_features/#function-objects">function object</a> that is tagged <em>"event"</em>. Events are used to run code when triggered.</p>
+<p>An event is a <a href="/tutorials/advanced_features/#function-objects">function object</a> with zero parameters and no return value that is tagged <em>"event"</em>. Events are used to run code when triggered.</p>
 <p>Events let you seamlessly connect <a href="/engine/entity">entities</a> and write cause and effect relationships. Suppose you have an on/off switch in a level. Whenever that switch is pressed by the player, you want something to happen: raise the water level, open a door, make it rain, teleport the player, and so on. Events are important because they let you decouple the source of the happening (the pressing of the switch) from the results that are experienced (e.g., the raising of the water).</p>
 <p>Events let you reuse your entities in multiple ways and for multiple purposes. You may design an entity and make it trigger an event, but you do not need to specify in advance what the event actually is. Rather, the concrete event (what must happen) will be configured in your <a href="/engine/level/#setup">level setup</a>.</p>
 <p>There are multiple types of events. In practice, you'll use specialized events such as <a href="/engine/entityevent">EntityEvent</a> and <a href="/engine/functionevent">FunctionEvent</a> when configuring your entities. <em>Event</em> is an empty event that does nothing when triggered, but it should be used when designing your entities, as in the example below.</p>
@@ -1865,7 +1865,7 @@
 <h2 id="functions">Functions</h2>
 <h4 id="call">call</h4>
 <p><code>call()</code></p>
-<p>Triggers the event. All event types implement this function.</p>
+<p>Triggers the event. All event types implement this function. It takes no arguments and it returns no value other than <code>null</code>.</p>
 
               
             </article>
