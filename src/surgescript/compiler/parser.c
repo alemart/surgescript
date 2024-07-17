@@ -1508,13 +1508,18 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
         /* emit code */
         match(parser, SSTOK_LPAREN);
-        expr(parser, context); /* initialization */
+        if(!got_type(parser, SSTOK_SEMICOLON))
+            expr(parser, context); /* initialization */
         emit_for1(context, begin);
         match(parser, SSTOK_SEMICOLON);
-        expr(parser, context); /* loop condition */
+        if(!got_type(parser, SSTOK_SEMICOLON))
+            expr(parser, context); /* loop condition */
+        else
+            emit_bool(context, true); /* empty loop condition */
         match(parser, SSTOK_SEMICOLON);
         emit_forcheck(context, begin, body, increment, end);
-        expr(parser, context); /* increment / update expression */
+        if(!got_type(parser, SSTOK_RPAREN))
+            expr(parser, context); /* increment / update expression */
         match(parser, SSTOK_RPAREN);
         emit_for2(context, begin, body);
         if(!stmt(parser, context)) /* loop body */
