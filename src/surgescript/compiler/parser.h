@@ -123,6 +123,13 @@
  * <loopstmt> := while ( <expr> ) <stmt>
  *            |  do <stmt> while ( <expr> ) ;
  *            |  for ( <expr> ; <expr> ; <expr> ) <stmt>
+ *            |  for ( <expr> ; <expr> ;        ) <stmt>
+ *            |  for ( <expr> ;        ; <expr> ) <stmt>
+ *            |  for (        ; <expr> ; <expr> ) <stmt>
+ *            |  for ( <expr> ;        ;        ) <stmt>
+ *            |  for (        ; <expr> ;        ) <stmt>
+ *            |  for (        ;        ; <expr> ) <stmt>
+ *            |  for (        ;        ;        ) <stmt>
  *            |  foreach ( identifier in <expr> ) <stmt>
  * <retstmt> := return <expr> ;
  *           |  return ;
