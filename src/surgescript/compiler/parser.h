@@ -128,7 +128,7 @@
  *           |  return ;
  * <jumpstmt> := break ;
  *            |  continue ;
- * <miscstmt> := assert ( <expr> ) ;
+ * <miscstmt> := assert ( <assignexpr> ) ;
  *
  */
 

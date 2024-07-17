@@ -1582,7 +1582,7 @@ void miscstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     if(optmatch(parser, SSTOK_ASSERT)) {
         int line = surgescript_token_linenumber(parser->lookahead);
         match(parser, SSTOK_LPAREN);
-        expr(parser, context);
+        assignexpr(parser, context);
         emit_assert(context, line);
         match(parser, SSTOK_RPAREN);
     }
