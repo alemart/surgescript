@@ -1431,6 +1431,7 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     /* save the loop context */
     context.loop_begin = begin;
     context.loop_end = end;
+    context.loop_increment = begin;
 
     /* what kind of loop do we have? */
     if(optmatch(parser, SSTOK_WHILE)) {
@@ -1460,6 +1461,7 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         /* for loop */
         surgescript_program_label_t body = surgescript_program_new_label(context.program);
         surgescript_program_label_t increment = surgescript_program_new_label(context.program);
+        context.loop_increment = increment;
 
         /* emit code */
         match(parser, SSTOK_LPAREN);
@@ -1469,7 +1471,7 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         expr(parser, context); /* loop condition */
         match(parser, SSTOK_SEMICOLON);
         emit_forcheck(context, begin, body, increment, end);
-        expr(parser, context); /* increment */
+        expr(parser, context); /* increment / update expression */
         match(parser, SSTOK_RPAREN);
         emit_for2(context, begin, body);
         if(!stmt(parser, context)) /* loop body */
