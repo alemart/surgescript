@@ -7,8 +7,8 @@
 
     script.type = 'text/javascript';
     script.async = true;
-    script.dataset.goatcounter = 'https://stats.opensurge2d.org/count';
+    script.dataset.goatcounter = 'https://surgescript.goatcounter.com/count';
     script.src = 'https://gc.zgo.at/count.js';
 
-    document.head.appendChild(script);
+    document.body.appendChild(script);
 })();
