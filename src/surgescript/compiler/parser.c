@@ -55,6 +55,7 @@ struct surgescript_parser_t
 /* helpers */
 static void parse(surgescript_parser_t* parser);
 static inline bool got_type(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
+static inline bool got_any_type(surgescript_parser_t* parser, const surgescript_tokentype_t symbol[], int number_of_symbols);
 static inline bool has_token(surgescript_parser_t* parser);
 static void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
 static bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
@@ -261,6 +262,16 @@ void parse(surgescript_parser_t* parser)
 bool got_type(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
     return parser->lookahead && surgescript_token_type(parser->lookahead) == symbol;
+}
+
+/* does the lookahead symbol have any of the given types? */
+bool got_any_type(surgescript_parser_t* parser, const surgescript_tokentype_t symbol[], int number_of_symbols)
+{
+    for(int i = 0; i < number_of_symbols; i++) {
+        if(got_type(parser, symbol[i]))
+            return true;
+    }
+    return false;
 }
 
 /* match a symbol; throw a fatal error if the symbol is not matched */
@@ -869,9 +880,41 @@ void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 /* expressions (their return value is stored in t[0]) */
 void expr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    do {
+    const surgescript_tokentype_t acceptable_lookaheads[] = {
+        SSTOK_TRUE, /* basic literals */
+        SSTOK_FALSE,
+        SSTOK_STRING,
+        SSTOK_NUMBER,
+        SSTOK_NULL,
+
+        SSTOK_IDENTIFIER,
+        SSTOK_THIS,
+        SSTOK_CALLER,
+        SSTOK_STATE,
+        SSTOK_TYPEOF,
+        SSTOK_TIMEOUT,
+
+        SSTOK_LPAREN,
+        SSTOK_LBRACKET, /* new array */
+        SSTOK_LCURLY, /* new dictionary */
+
+        SSTOK_ADDITIVEOP, /* unary */
+        SSTOK_INCDECOP,
+        SSTOK_LOGICALNOTOP
+    };
+    const int n = sizeof(acceptable_lookaheads) / sizeof(surgescript_tokentype_t);
+
+    for(;;) {
         assignexpr(parser, context);
-    } while(optmatch(parser, SSTOK_COMMA));
+
+        /* comma operator: lowest precedence */
+        if(!optmatch(parser, SSTOK_COMMA))
+            break;
+
+        /* do not accept trailing commas */
+        if(!got_any_type(parser, acceptable_lookaheads, n))
+            unexpected_symbol(parser);
+    }
 }
 
 void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
