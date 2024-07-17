@@ -38,9 +38,9 @@
 static surgescript_vm_t* make_vm(int argc, char** argv, int* time_limit);
 static void run_vm(surgescript_vm_t* vm, int time_limit);
 static void destroy_vm(surgescript_vm_t* vm);
-static void print_to_stdout(const char* message);
-static void print_to_stderr(const char* message);
-static void discard_message(const char* message);
+static void print(const char* message);
+static void crash(const char* message);
+static void discard(const char* message);
 static void show_help(const char* executable);
 static char* read_from_stdin();
 
@@ -211,14 +211,14 @@ surgescript_vm_t* make_vm(int argc, char** argv, int* time_limit)
     int i;
 
     /* disable debugging */
-    surgescript_util_set_error_functions(discard_message, print_to_stderr);
+    surgescript_util_set_error_functions(discard, crash);
 
     /* parse the command line options */
     for(i = 1; i < argc && *argv[i] == '-'; i++) {
         const char* arg = argv[i];
         if(strcmp(arg, "--debug") == 0 || strcmp(arg, "-D") == 0) {
             /* enable debugging */
-            surgescript_util_set_error_functions(print_to_stdout, print_to_stderr);
+            surgescript_util_set_error_functions(print, crash);
         }
         else if(strcmp(arg, "--version") == 0 || strcmp(arg, "-v") == 0) {
             /* display version */
@@ -326,28 +326,29 @@ void show_help(const char* executable)
 }
 
 /*
- * print_to_stdout()
+ * print()
  * Prints a message to the standard output
  */
-void print_to_stdout(const char* message)
+void print(const char* message)
 {
     puts(message);
 }
 
 /*
- * print_to_stderr()
- * Writes a message to the standard error stream
+ * crash()
+ * Prints a message to the standard error stream and exits the application
  */
-void print_to_stderr(const char* message)
+void crash(const char* message)
 {
     fprintf(stderr, "%s\n", message);
+    exit(1);
 }
 
 /*
- * discard_message()
+ * discard()
  * Discards a message
  */
-void discard_message(const char* message)
+void discard(const char* message)
 {
     ;
 }
