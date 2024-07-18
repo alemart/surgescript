@@ -1552,10 +1552,14 @@ void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     int line = surgescript_token_linenumber(parser->lookahead);
 
-    if(optmatch(parser, SSTOK_BREAK))
+    if(optmatch(parser, SSTOK_BREAK)) {
+        match(parser, SSTOK_SEMICOLON);
         emit_break(context, line);
-    else if(optmatch(parser, SSTOK_CONTINUE))
+    }
+    else if(optmatch(parser, SSTOK_CONTINUE)) {
+        match(parser, SSTOK_SEMICOLON);
         emit_continue(context, line);
+    }
 }
 
 void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -1585,6 +1589,7 @@ void miscstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         assignexpr(parser, context);
         emit_assert(context, line);
         match(parser, SSTOK_RPAREN);
+        match(parser, SSTOK_SEMICOLON);
     }
 }
 
