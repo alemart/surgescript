@@ -1835,7 +1835,11 @@
 
 
 <h1 id="prefs">Prefs</h1>
-<p>Prefs is a SurgeEngine component used to save/load data to/from the disk (permanent storage). Prefs is a (key, value) storage that works like a <a href="/reference/dictionary">Dictionary</a>, but its data can be persisted between game sessions.</p>
+<p>Prefs is a SurgeEngine component used to save/load data to/from the disk (permanent storage). Prefs is a (key, value) storage that works like a <a href="/reference/dictionary">Dictionary</a>, but its data can be persisted between game sessions. Each (key, value) pair is called an entry. Prefs holds multiple entries.</p>
+<div class="admonition info">
+<p class="admonition-title">Primitive types</p>
+<p>Each entry can hold a value of any primitive type: string, number, boolean or null. Objects cannot be saved or loaded directly, but you may serialize them. If you try to save an object directly, it will be converted to and saved as a string.</p>
+</div>
 <p><em>Example</em>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Prefs</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
