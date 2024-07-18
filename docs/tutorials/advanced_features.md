@@ -197,7 +197,7 @@ object "MyIterator" is "iterator"
         // object, i.e., collection = parent
     }
 
-    function hasNext()
+    fun hasNext()
     {
         // returns true if the enumeration isn't over
         // returns false if there are no more elements
