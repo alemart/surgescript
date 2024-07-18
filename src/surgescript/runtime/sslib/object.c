@@ -90,7 +90,7 @@ void surgescript_sslib_register_object(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Object", "__timeout", fun_timeout, 1);
     surgescript_vm_bind(vm, "Object", "__invoke", fun_invoke, 2);
     surgescript_vm_bind(vm, "Object", "__arity", fun_arity, 1);
-    surgescript_vm_bind(vm, "Object", "__assert", fun_assert, 3);
+    surgescript_vm_bind(vm, "Object", "__assert", fun_assert, 4);
     surgescript_vm_bind(vm, "Object", "get___name", fun_name, 0);
     surgescript_vm_bind(vm, "Object", "get___active", fun_getactive, 0);
     surgescript_vm_bind(vm, "Object", "set___active", fun_setactive, 1);
@@ -429,12 +429,18 @@ surgescript_var_t* fun_arity(surgescript_object_t* object, const surgescript_var
 surgescript_var_t* fun_assert(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const char* object_name = surgescript_object_name(object);
-    bool assertion = surgescript_var_get_bool(param[0]);
-    const char* file = surgescript_var_fast_get_string(param[1]);
-    int line = surgescript_var_get_number(param[2]);
+    bool expr = surgescript_var_get_bool(param[0]);
+    const char* file = surgescript_var_fast_get_string(param[2]);
+    int line = surgescript_var_get_number(param[3]);
 
-    if(!assertion)
-        ssfatal("Assertion failed! Object: \"%s\". Location: %s:%d.", object_name, file, line);
+    if(!expr) {
+        if(!surgescript_var_is_null(param[1])) {
+            const char* message = surgescript_var_fast_get_string(param[1]);
+            ssfatal("Assertion failed!\nMessage: %s\nObject: \"%s\"\nLocation: %s:%d", message, object_name, file, line);
+        }
+        else
+            ssfatal("Assertion failed!\nObject: \"%s\"\nLocation: %s:%d", object_name, file, line);
+    }
 
     return NULL;
 }

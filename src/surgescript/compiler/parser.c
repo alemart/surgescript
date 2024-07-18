@@ -1587,7 +1587,13 @@ void miscstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         int line = surgescript_token_linenumber(parser->lookahead);
         match(parser, SSTOK_LPAREN);
         assignexpr(parser, context);
-        emit_assert(context, line);
+        if(optmatch(parser, SSTOK_COMMA)) {
+            const char* message = surgescript_token_lexeme(parser->lookahead);
+            match(parser, SSTOK_STRING);
+            emit_assert(context, line, message);
+        }
+        else
+            emit_assert(context, line, NULL);
         match(parser, SSTOK_RPAREN);
         match(parser, SSTOK_SEMICOLON);
     }

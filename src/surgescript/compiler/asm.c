@@ -711,16 +711,21 @@ void emit_timeout(surgescript_nodecontext_t context)
     SSASM(SSOP_POPN, U(2));
 }
 
-void emit_assert(surgescript_nodecontext_t context, int line)
+void emit_assert(surgescript_nodecontext_t context, int line, const char* message)
 {
     SSASM(SSOP_SELF, T1);
     SSASM(SSOP_PUSH, T1); /* this */
     SSASM(SSOP_PUSH, T0); /* <expr> */
+    if(message == NULL)
+        SSASM(SSOP_MOVN, T0); /* there is no message */
+    else
+        SSASM(SSOP_MOVS, T0, TEXT(message)); /* message is a string literal */
+    SSASM(SSOP_PUSH, T0); /* message */
     SSASM(SSOP_MOVS, T0, TEXT(context.source_file));
     SSASM(SSOP_PUSH, T0); /* file */
     SSASM(SSOP_MOVF, T0, F(line));
     SSASM(SSOP_PUSH, T0); /* line number */
-    SSASM(SSOP_CALL, TEXT("__assert"), U(3));
+    SSASM(SSOP_CALL, TEXT("__assert"), U(4));
     SSASM(SSOP_POPN, U(4));
 }
 

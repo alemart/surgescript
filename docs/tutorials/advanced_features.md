@@ -41,10 +41,18 @@ Function `call()` may take any number of parameters. Given an object `f`, the ex
 Assertions
 ----------
 
-The `assert(condition)` statement specifies a `condition` that you expect to be true at a certain point in your code. If that condition turns out to be false, the code will be interrupted with an *assertion failed* error. Example:
+The `assert(condition)` statement specifies a `condition` that you expect to be true at a certain point of your program. If that condition turns out to be false, the program will be interrupted with an *assertion failed* error. Example:
 
 ```cs
-assert(name == "Surge"); // will crash if name isn't "Surge"
+// will crash if name isn't "Surge"
+assert(name == "Surge");
+```
+
+Since SurgeScript 0.6.1, you may add a `message` to your assertion, as in `assert(condition, message)`. Your `message` must be a string literal. It will be displayed in a crash if the assertion fails. Example:
+
+```cs
+// crash with a message if the assertion fails
+assert(name == "Surge", "The name must be Surge");
 ```
 
 Chaining
