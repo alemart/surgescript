@@ -1375,6 +1375,13 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 /* constant expressions */
 void constexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    /*
+
+    Constant expressions must be evaluated at compile-time
+    (see the switch statement)
+
+    */
+
     /* TODO */
     signedconst(parser, context);
 }
@@ -1637,8 +1644,8 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             next_test = surgescript_program_new_label(context.program);
 
             emit_case1(context, skip, test);
-            constexpr(parser, context);
-            check_if_repeated();
+            constexpr(parser, context); /* evaluated at compile-time, so that */
+            check_if_repeated(); /* we can check for repeated case constants */
             match(parser, SSTOK_COLON);
             emit_case2(context, skip, test, next_test);
 
