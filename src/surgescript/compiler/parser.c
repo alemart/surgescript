@@ -1382,6 +1382,13 @@ void constexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     */
 
+    /* ( <constxpr> ) */
+    if(optmatch(parser, SSTOK_LPAREN)) {
+        constexpr(parser, context);
+        match(parser, SSTOK_RPAREN);
+        return;
+    }
+
     /* TODO */
     signedconst(parser, context);
 }
