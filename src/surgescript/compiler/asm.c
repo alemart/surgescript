@@ -836,15 +836,79 @@ void emit_break(surgescript_nodecontext_t context, int line)
     if(context.loop_end != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
         SSASM(SSOP_JMP, U(context.loop_end));
     else
-        ssfatal("Compile Error: invalid usage of the \"break\" command in %s:%d - break may only be used inside loops.", context.source_file, line);
+        ssfatal("Compile Error: invalid usage of the \"break\" command in %s:%d - break may only be used inside loops or switch statements.", context.source_file, line);
 }
 
 void emit_continue(surgescript_nodecontext_t context, int line)
 {
-    if(context.loop_increment != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
-        SSASM(SSOP_JMP, U(context.loop_increment));
+    if(context.loop_begin != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
+        SSASM(SSOP_JMP, U(context.loop_begin));
     else
         ssfatal("Compile Error: invalid usage of the \"continue\" command in %s:%d - continue may only be used inside loops.", context.source_file, line);
+}
+
+void emit_switch1(surgescript_nodecontext_t context, surgescript_program_label_t first_test)
+{
+    /* the implementation of the switch statement is designed with two code
+       paths: fallthrough and test. We begin by taking the test path */
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_JMP, U(first_test));
+}
+
+void emit_switch2(surgescript_nodecontext_t context, surgescript_program_label_t end, surgescript_program_label_t def, surgescript_program_label_t final_test)
+{
+    /* fallthrough: skip test */
+    SSASM(SSOP_JMP, U(end));
+
+    /* final test: always succeed. If a default label is defined, jump to that */
+    LABEL(final_test);
+    if(def != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
+        SSASM(SSOP_JMP, U(def)); /* the test path runs at most once */
+
+    /* end */
+    LABEL(end);
+    SSASM(SSOP_POP, T0);
+}
+
+void emit_case1(surgescript_nodecontext_t context, surgescript_program_label_t skip, surgescript_program_label_t test)
+{
+    /* fallthrough: skip test */
+    SSASM(SSOP_JMP, U(skip));
+
+    /* start test */
+    LABEL(test);
+
+    /* read the case expression into T0... */
+}
+
+void emit_case2(surgescript_nodecontext_t context, surgescript_program_label_t skip, surgescript_program_label_t test, surgescript_program_label_t next_test)
+{
+    /* after reading the case expression into T0... */
+
+    /* perform test: strong equality comparison T0 === T1
+       if the test fails, we continue on the test path */
+    SSASM(SSOP_POP, T1); /* XXX SSASM(SSOP_TOP, T1) */
+    SSASM(SSOP_PUSH, T1);
+    SSASM(SSOP_TCMP, T1, T0);
+    SSASM(SSOP_JNE, U(next_test));
+    SSASM(SSOP_CMP, T1, T0);
+    SSASM(SSOP_JNE, U(next_test));
+
+    /* the test succeeded or was skipped: take the fallthrough path */
+    LABEL(skip);
+}
+
+void emit_default(surgescript_nodecontext_t context, surgescript_program_label_t test, surgescript_program_label_t next_test, surgescript_program_label_t def)
+{
+    /* fallthrough: skip test */
+    SSASM(SSOP_JMP, U(def));
+
+    /* test: always fail. We'll jump directly to def later if necessary */
+    LABEL(test);
+    SSASM(SSOP_JMP, U(next_test));
+
+    /* default label: take the fallthrough path */
+    LABEL(def);
 }
 
 /* functions */

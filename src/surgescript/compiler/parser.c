@@ -132,11 +132,13 @@ static bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context
 static void blockstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void exprstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void miscstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
+static void constexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
@@ -1370,6 +1372,79 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     emit_dictdecl2(context);
 }
 
+/* constant expressions */
+void constexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    /* TODO */
+    signedconst(parser, context);
+}
+
+void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_token_t* token;
+
+    expect_something(parser);
+    token = parser->lookahead;
+
+    switch(surgescript_token_type(token)) {
+        case SSTOK_NULL:
+            emit_null(context);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_TRUE:
+            emit_bool(context, true);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_FALSE:
+            emit_bool(context, false);
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_STRING:
+            emit_string(context, surgescript_token_lexeme(token));
+            match(parser, surgescript_token_type(token));
+            break;
+
+        case SSTOK_NUMBER:
+        case SSTOK_ADDITIVEOP:
+            signednum(parser, context);
+            break;
+
+        default:
+            ssfatal("Parse Error: expected a literal on %s:%d.", context.source_file, surgescript_token_linenumber(token));
+            break;
+    }
+}
+
+void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_token_t* token;
+
+    expect_something(parser);
+    token = parser->lookahead;
+
+    if(got_type(parser, SSTOK_ADDITIVEOP)) {
+        double value = 0.0;
+        bool plus = (strcmp(surgescript_token_lexeme(token), "+") == 0);
+
+        match(parser, SSTOK_ADDITIVEOP);
+        if(got_type(parser, SSTOK_NUMBER)) {
+            token = parser->lookahead;
+            value = ssatof(surgescript_token_lexeme(token));
+            emit_number(context, plus ? value : -value);
+        }
+        match(parser, SSTOK_NUMBER);
+    }
+    else if(got_type(parser, SSTOK_NUMBER)) {
+        emit_number(context, ssatof(surgescript_token_lexeme(token)));
+        match(parser, SSTOK_NUMBER);
+    }
+    else
+        expect(parser, SSTOK_NUMBER); /* will throw an error */
+}
+
 /* programming constructs */
 void stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
@@ -1386,6 +1461,10 @@ bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
     else if(got_type(parser, SSTOK_IF)) {
         condstmt(parser, context);
+        return true;
+    }
+    else if(got_type(parser, SSTOK_SWITCH)) {
+        switchstmt(parser, context);
         return true;
     }
     else if(got_type(parser, SSTOK_WHILE)) {
@@ -1408,7 +1487,11 @@ bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         retstmt(parser, context);
         return true;
     }
-    else if(got_type(parser, SSTOK_BREAK) || got_type(parser, SSTOK_CONTINUE)) {
+    else if(got_type(parser, SSTOK_BREAK)) {
+        jumpstmt(parser, context);
+        return true;
+    }
+    else if(got_type(parser, SSTOK_CONTINUE)) {
         jumpstmt(parser, context);
         return true;
     }
@@ -1416,7 +1499,7 @@ bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         miscstmt(parser, context);
         return true;
     }
-    else if(has_token(parser) && !got_type(parser, SSTOK_RCURLY)) {
+    else if(has_token(parser) && !got_type(parser, SSTOK_RCURLY) && !got_type(parser, SSTOK_CASE) && !got_type(parser, SSTOK_DEFAULT)) {
         exprstmt(parser, context);
         return true;
     }
@@ -1466,6 +1549,119 @@ void condstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         emit_endif(context, nope);
 }
 
+void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    /* in switch statements, the fallthrough behavior is a common source of
+       programming errors, especially among beginners. We mitigate this problem
+       in SurgeScript by requiring the termination of every non-empty case or
+       default section by a break or by a return statement. */
+    #define check_if_terminated() do { \
+        surgescript_program_operator_t op; \
+        surgescript_program_operand_t a; \
+        \
+        /* read the last emitted operation */ \
+        int n = surgescript_program_count_lines(context.program); \
+        if(!surgescript_program_read_line(context.program, n-1, &op, &a, NULL)) \
+            break; \
+        \
+        /* checking the last emitted operation has a limitation: it's possible */ \
+        /* to activate fallthrough behavior with a hack like if(false) break; */ \
+        /* make sure we're not skipping line n-1, in which we expect a break */ \
+        /* or a return statement */ \
+        if(surgescript_program_find_label(context.program, n) == SURGESCRIPT_PROGRAM_UNDEFINED_LABEL) { \
+            /* a break statement is emitted as JMP end */ \
+            if(op == SSOP_JMP && a.u == end) \
+                break; \
+            \
+            /* a return statement is emitted as a RET instruction */ \
+            if(op == SSOP_RET) \
+                break; \
+        } \
+        \
+        /* error */ \
+        ssfatal("Compile Error: found an unterminated section of a switch statement at %s:%d. Did you forget a break or a return statement?", context.source_file, surgescript_token_linenumber(parser->previous)); \
+    } while(0)
+
+    surgescript_program_label_t next_test = surgescript_program_new_label(context.program);
+    surgescript_program_label_t end = surgescript_program_new_label(context.program);
+    surgescript_program_label_t def = SURGESCRIPT_PROGRAM_UNDEFINED_LABEL;
+
+    /* save the switch context */
+    context.loop_end = end; /* use the loop_end field, so that there is no ambiguity for break statements */
+
+    /* switch statement */
+    match(parser, SSTOK_SWITCH);
+    match(parser, SSTOK_LPAREN);
+    expr(parser, context);
+    match(parser, SSTOK_RPAREN);
+
+    emit_switch1(context, next_test);
+
+    /* remark: in C, switch statements can be followed by *any* statement
+       in SurgeScript, we require case / default labels (as in standard practice) */
+    match(parser, SSTOK_LCURLY);
+    for(;;) {
+        if(optmatch(parser, SSTOK_CASE)) {
+            /* we do not check for repeated values in case statements;
+               only the first matching expression will be accepted */
+            surgescript_program_label_t skip = surgescript_program_new_label(context.program);
+            surgescript_program_label_t test = next_test;
+            next_test = surgescript_program_new_label(context.program);
+
+            emit_case1(context, skip, test);
+            constexpr(parser, context);
+            match(parser, SSTOK_COLON);
+            emit_case2(context, skip, test, next_test);
+
+            bool is_empty_section = (
+                got_type(parser, SSTOK_CASE) ||
+                got_type(parser, SSTOK_DEFAULT) ||
+                false /*got_type(parser, SSTOK_RCURLY)*/ /* the last section can't be empty */
+            );
+
+            /* section body */
+            stmtlist(parser, context);
+
+            /* we allow fallthrough in empty sections only */
+            if(!is_empty_section)
+                check_if_terminated();
+        }
+        else if(optmatch(parser, SSTOK_DEFAULT)) {
+            /* we accept at most one default label */
+            surgescript_program_label_t test = next_test;
+            next_test = surgescript_program_new_label(context.program);
+
+            match(parser, SSTOK_COLON);
+
+            bool is_empty_section = (
+                got_type(parser, SSTOK_CASE) ||
+                got_type(parser, SSTOK_DEFAULT) ||
+                false /*got_type(parser, SSTOK_RCURLY)*/ /* the last section can't be empty */
+            );
+
+            if(def != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
+                ssfatal("Compile Error: found a duplicate default label in a switch statement at %s:%d", context.source_file, surgescript_token_linenumber(parser->previous));
+            def = surgescript_program_new_label(context.program);
+            emit_default(context, test, next_test, def);
+
+            /* section body */
+            stmtlist(parser, context);
+
+            /* we allow fallthrough in empty sections only */
+            if(!is_empty_section)
+                check_if_terminated();
+        }
+        else if(optmatch(parser, SSTOK_RCURLY))
+            break;
+        else
+            unexpected_symbol(parser);
+    }
+
+    emit_switch2(context, end, def, next_test);
+
+    #undef check_if_terminated
+}
+
 void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     surgescript_program_label_t begin = surgescript_program_new_label(context.program);
@@ -1474,7 +1670,6 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     /* save the loop context */
     context.loop_begin = begin;
     context.loop_end = end;
-    context.loop_increment = begin;
 
     /* what kind of loop do we have? */
     if(optmatch(parser, SSTOK_WHILE)) {
@@ -1504,7 +1699,7 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         /* for loop */
         surgescript_program_label_t body = surgescript_program_new_label(context.program);
         surgescript_program_label_t increment = surgescript_program_new_label(context.program);
-        context.loop_increment = increment;
+        context.loop_begin = increment;
 
         /* emit code */
         match(parser, SSTOK_LPAREN);
@@ -1599,74 +1794,7 @@ void miscstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
 }
 
-/* misc */
-
-void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context)
-{
-    surgescript_token_t* token;
-    
-    expect_something(parser);
-    token = parser->lookahead;
-
-    switch(surgescript_token_type(token)) {
-        case SSTOK_NULL:
-            emit_null(context);
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_TRUE:
-            emit_bool(context, true);
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_FALSE:
-            emit_bool(context, false);
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_STRING:
-            emit_string(context, surgescript_token_lexeme(token));
-            match(parser, surgescript_token_type(token));
-            break;
-
-        case SSTOK_NUMBER:
-        case SSTOK_ADDITIVEOP:
-            signednum(parser, context);
-            break;
-
-        default:
-            ssfatal("Parse Error: expected a constant on %s:%d.", context.source_file, surgescript_token_linenumber(token));
-            break;
-    }
-}
-
-void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t context)
-{
-    surgescript_token_t* token;
-    
-    expect_something(parser);
-    token = parser->lookahead;
-
-    if(got_type(parser, SSTOK_ADDITIVEOP)) {
-        double value = 0.0;
-        bool plus = (strcmp(surgescript_token_lexeme(token), "+") == 0);
-        
-        match(parser, SSTOK_ADDITIVEOP);
-        if(got_type(parser, SSTOK_NUMBER)) {
-            token = parser->lookahead;
-            value = ssatof(surgescript_token_lexeme(token));
-            emit_number(context, plus ? value : -value);
-        }
-        match(parser, SSTOK_NUMBER);
-    }
-    else if(got_type(parser, SSTOK_NUMBER)) {
-        emit_number(context, ssatof(surgescript_token_lexeme(token)));
-        match(parser, SSTOK_NUMBER);
-    }
-    else
-        expect(parser, SSTOK_NUMBER); /* will throw an error */
-}
-
+/* utilities */
 void make_accessor(const char* fun_name, void* symtable)
 {
     /* run only if fun_name is an accessor */

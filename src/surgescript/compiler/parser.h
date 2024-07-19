@@ -107,10 +107,15 @@
  *
  *
  *
+ * <constexpr> := + number | - number | number | string | true | false | null // TODO
+ *
+ *
+ *
  * <stmtlist> := <stmt> <stmtlist> | e
  * <stmt> := <blockstmt>
  *        |  <exprstmt>
  *        |  <condstmt>
+ *        |  <switchstmt>
  *        |  <loopstmt>
  *        |  <jumpstmt>
  *        |  <retstmt>
@@ -120,6 +125,10 @@
  *            |  <expr> ;
  * <condstmt> := if ( <expr> ) <stmt>
  *            |  if ( <expr> ) <stmt> else <stmt>
+ * <switchstmt> := switch ( <expr> ) { <casestmtlist> }
+ * <casestmtlist> := <casestmt> <casestmtlist> | e
+ * <casestmt> := case <constexpr> : <stmtlist>
+              |  default : <stmtlist>
  * <loopstmt> := while ( <expr> ) <stmt>
  *            |  do <stmt> while ( <expr> ) ;
  *            |  for ( <expr> ; <expr> ; <expr> ) <stmt>
@@ -136,7 +145,6 @@
  * <jumpstmt> := break ;
  *            |  continue ;
  * <miscstmt> := assert ( <assignexpr> ) ;
- *
  */
 
 #include <stdbool.h>

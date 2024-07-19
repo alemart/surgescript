@@ -96,6 +96,11 @@ void emit_for2(surgescript_nodecontext_t context, surgescript_program_label_t be
 void emit_for3(surgescript_nodecontext_t context, surgescript_program_label_t increment, surgescript_program_label_t end);
 void emit_break(surgescript_nodecontext_t context, int line);
 void emit_continue(surgescript_nodecontext_t context, int line);
+void emit_switch1(surgescript_nodecontext_t context, surgescript_program_label_t first_test);
+void emit_switch2(surgescript_nodecontext_t context, surgescript_program_label_t end, surgescript_program_label_t def, surgescript_program_label_t final_test);
+void emit_case1(surgescript_nodecontext_t context, surgescript_program_label_t skip, surgescript_program_label_t test);
+void emit_case2(surgescript_nodecontext_t context, surgescript_program_label_t skip, surgescript_program_label_t test, surgescript_program_label_t next_test);
+void emit_default(surgescript_nodecontext_t context, surgescript_program_label_t test, surgescript_program_label_t next_test, surgescript_program_label_t def);
 
 /* functions */
 int emit_function_header(surgescript_nodecontext_t context);
