@@ -1582,9 +1582,38 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         ssfatal("Compile Error: found an unterminated section of a switch statement at %s:%d. Did you forget a break or a return statement?", context.source_file, surgescript_token_linenumber(parser->previous)); \
     } while(0)
 
+    /* prevent repeated case constants */
+    #define check_if_repeated() do { \
+        /* read the last emitted operation */ \
+        int n = surgescript_program_count_lines(context.program); \
+        if(surgescript_program_read_line(context.program, n-1, &cc.op, NULL, &cc.b)){ \
+            /* we should have emitted a constant */ \
+            ssassert( \
+                cc.op == SSOP_MOVF || cc.op == SSOP_MOVS || \
+                cc.op == SSOP_MOVN || cc.op == SSOP_MOVB || \
+                cc.op == SSOP_MOVX \
+            ); \
+            \
+            /* no repetitions? */ \
+            for(int j = ssarray_length(case_constant) - 1; j >= 0; j--) { \
+                const struct caseconst_t* ref = &case_constant[j]; \
+                if(ref->op == cc.op && ref->b.u64 == cc.b.u64) \
+                    ssfatal("Compile Error: found a duplicate case constant in a switch statement at %s:%d", context.source_file, surgescript_token_linenumber(parser->previous)); \
+            } \
+            \
+            /* store the constant */ \
+            ssarray_push(case_constant, cc); \
+        } \
+    } while(0)
+
     surgescript_program_label_t next_test = surgescript_program_new_label(context.program);
     surgescript_program_label_t end = surgescript_program_new_label(context.program);
     surgescript_program_label_t def = SURGESCRIPT_PROGRAM_UNDEFINED_LABEL;
+
+    /* auxiliary structure to prevent repeated case constants */
+    struct caseconst_t { surgescript_program_operator_t op; surgescript_program_operand_t b; } cc;
+    SSARRAY(struct caseconst_t, case_constant);
+    ssarray_init(case_constant);
 
     /* save the switch context */
     context.loop_end = end; /* use the loop_end field, so that there is no ambiguity for break statements */
@@ -1602,14 +1631,14 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     match(parser, SSTOK_LCURLY);
     for(;;) {
         if(optmatch(parser, SSTOK_CASE)) {
-            /* we do not check for repeated values in case statements;
-               only the first matching expression will be accepted */
+            /* we do not accept repeated case constants */
             surgescript_program_label_t skip = surgescript_program_new_label(context.program);
             surgescript_program_label_t test = next_test;
             next_test = surgescript_program_new_label(context.program);
 
             emit_case1(context, skip, test);
             constexpr(parser, context);
+            check_if_repeated();
             match(parser, SSTOK_COLON);
             emit_case2(context, skip, test, next_test);
 
@@ -1659,6 +1688,9 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     emit_switch2(context, end, def, next_test);
 
+    ssarray_release(case_constant);
+
+    #undef check_if_repeated
     #undef check_if_terminated
 }
 
