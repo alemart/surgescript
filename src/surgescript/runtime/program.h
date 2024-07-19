@@ -47,7 +47,7 @@ typedef surgescript_var_t* (*surgescript_program_cfunction_t)(surgescript_object
 
 /* labels */
 typedef unsigned surgescript_program_label_t;
-#define SURGESCRIPT_PROGRAM_UNDEFINED_LABEL (~0)
+#define SURGESCRIPT_PROGRAM_UNDEFINED_LABEL (surgescript_program_label_t)(~0u)
 
 /* operators */
 typedef enum surgescript_program_operator_t { // let t[a .. c] be the registers (temps) that belong to the object. then,
@@ -98,6 +98,9 @@ surgescript_program_label_t surgescript_program_new_label(surgescript_program_t*
 void surgescript_program_add_label(surgescript_program_t* program, surgescript_program_label_t label); /* adds a label to the current line of code in the program */
 int surgescript_program_add_line(surgescript_program_t* program, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b); /* adds a line of code to the program */
 int surgescript_program_chg_line(surgescript_program_t* program, int line, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b); /* changes an existing line of code of the program */
+bool surgescript_program_read_line(const surgescript_program_t* program, int line, surgescript_program_operator_t* op, surgescript_program_operand_t* a, surgescript_program_operand_t* b); /* reads a line of code of the program */
+int surgescript_program_count_lines(const surgescript_program_t* program); /* the number of lines of code of the program */
+surgescript_program_label_t surgescript_program_find_label(const surgescript_program_t* program, int line); /* finds a label that points to a line of code */
 
 /* program data */
 int surgescript_program_arity(const surgescript_program_t* program); /* what's the arity of this program? (i.e., how many parameters does it take) */

@@ -98,7 +98,7 @@ static const int MAX_PROGRAM_ARITY = 256;
 /* debug mode? */
 #define SURGESCRIPT_DEBUG_MODE          0
 #if SURGESCRIPT_DEBUG_MODE
-static inline void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_var_t** _t);
+static inline void debug(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_var_t** _t);
 #endif
 
 /* optimizations */
@@ -191,12 +191,57 @@ int surgescript_program_chg_line(surgescript_program_t* program, int line, surge
 }
 
 /*
+ * surgescript_program_read_line()
+ * Reads a line of code of the program. The output parameters (op, a, b) may be NULL.
+ * Returns false if there is no such line
+ */
+bool surgescript_program_read_line(const surgescript_program_t* program, int line, surgescript_program_operator_t* op, surgescript_program_operand_t* a, surgescript_program_operand_t* b)
+{
+    if(line < 0 || line >= ssarray_length(program->line))
+        return false;
+
+    if(op != NULL)
+        *op = program->line[line].instruction;
+
+    if(a != NULL)
+        *a = program->line[line].a;
+
+    if(b != NULL)
+        *b = program->line[line].b;
+
+    return true;
+}
+
+/*
+ * surgescript_program_count_lines()
+ * The number of lines of code of the program
+ */
+int surgescript_program_count_lines(const surgescript_program_t* program)
+{
+    return ssarray_length(program->line);
+}
+
+/*
  * surgescript_program_add_label()
  * Adds a newly created label to the program
  */
 void surgescript_program_add_label(surgescript_program_t* program, surgescript_program_label_t label)
 {
     program->label[label] = ssarray_length(program->line);
+}
+
+/*
+ * surgescript_program_find_label()
+ * Finds a label that points to a line of code
+ */
+surgescript_program_label_t surgescript_program_find_label(const surgescript_program_t* program, int line)
+{
+    for(signed int i = ssarray_length(program->label) - 1; i >= 0; i--) {
+        if(program->label[i] == line)
+            return (surgescript_program_label_t)i;
+    }
+
+    return SURGESCRIPT_PROGRAM_UNDEFINED_LABEL;
 }
 
 /*
@@ -963,7 +1008,7 @@ bool remove_labels(surgescript_program_t* program)
 
 /* debug mode */
 #if SURGESCRIPT_DEBUG_MODE
-void debug(surgescript_program_t* program, surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_var_t** _t)
+void debug(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operator_t instruction, surgescript_program_operand_t a, surgescript_program_operand_t b, surgescript_var_t** _t)
 {
     int i;
     char hex[2][1 + 2 * sizeof(unsigned)];
