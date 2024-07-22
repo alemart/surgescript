@@ -65,7 +65,7 @@ do {
 } while(i <= 10); // this condition is false
 ```
 
-*Note:* do-while loops are available since SurgeScript 0.6.0.
+Do-while loops are available since SurgeScript 0.6.0.
 
 For loops
 ---------
@@ -98,6 +98,8 @@ for(i = 1; i <= 10; i++) {
     Console.print(i);
 }
 ```
+
+Since SurgeScript 0.6.1, the initialization, condition and increment expressions may be empty. Empty initialization and increment expressions do nothing. An empty condition is interpreted as `true`, meaning that the loop will keep repeating until you [break out of it](#break) with a `break` or with a `return` statement.
 
 Foreach
 -------
@@ -133,3 +135,71 @@ foreach(entry in dictionary) {
 !!! tip "Implementing your own iterable collections"
 
     The foreach loop can be used with any iterable collections, not only [Arrays](/reference/array) and [Dictionaries](/reference/dictionary). You may even [implement your own!](/tutorials/advanced_features#iterators)
+
+Break
+-----
+
+Use the `break` statement to terminate the innermost enclosing loop. The statement following the loop will be executed immediately afterwards. Example:
+
+```cs
+i = 0;
+
+while(i < 10) {
+    if(i == 5)
+        break; // break out of the loop when i is equal to 5
+
+    i = i + 1;
+}
+
+// This line will be executed immediately after breaking out of the loop
+Console.print(i); // Output: 5
+```
+
+Continue
+--------
+
+Use the `continue` statement to terminate the current iteration of the innermost enclosing loop and to start the next iteration. The exact behavior of `continue` depends on the type of the loop:
+
+* In `while` and `do-while` loops, `continue` jumps to the loop condition. The loop condition is reevaluated.
+* In a `for` loop, `continue` jumps to the increment expression. Next, the loop condition is reevaluated.
+* In a `foreach` loop, `continue` jumps to the start of the next iteration.
+
+Example:
+
+```cs
+i = 0;
+
+while(i < 5) {
+    i = i + 1;
+
+    if(i == 3)
+        continue; // jump back to the condition i < 5 when i is equal to 3
+
+    Console.print(i);
+}
+
+// Expected output: 1 2 4 5
+// Number 3 was skipped
+```
+
+A similar example with a `for` loop:
+
+```cs
+for(i = 1; i <= 5; i++) {
+    if(i == 3)
+        continue; // jump to i++ when i is equal to 3
+
+    Console.print(i);
+}
+```
+
+An analogous example with a `foreach` loop:
+
+```cs
+foreach(i in [1,2,3,4,5]) {
+    if(i == 3)
+        continue; // jump to the next iteration when i is equal to 3
+
+    Console.print(i);
+}
+```
