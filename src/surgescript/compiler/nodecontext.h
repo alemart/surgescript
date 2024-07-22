@@ -34,8 +34,8 @@ typedef struct surgescript_nodecontext_t
     const char* program_name; /* may be NULL */
     struct surgescript_symtable_t* symtable;
     surgescript_program_t* program;
-    surgescript_program_label_t loop_begin; /* union loop_increment (inner-most loop) */
-    surgescript_program_label_t loop_end; /* union switch_end (inner-most loop or switch statement) */
+    surgescript_program_label_t loop_continue; /* continue statement helper; inner-most loop */
+    surgescript_program_label_t loop_break; /* break statement helper; inner-most loop or switch statement */
 } surgescript_nodecontext_t;
 
 /* node context constructor */

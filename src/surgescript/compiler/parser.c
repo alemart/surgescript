@@ -1630,7 +1630,7 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     ssarray_init(case_constant);
 
     /* save the switch context */
-    context.loop_end = end; /* use the loop_end field, so that there is no ambiguity for break statements */
+    context.loop_break = end; /* use the loop_break field, so that there is no ambiguity for break statements */
 
     /* switch statement */
     match(parser, SSTOK_SWITCH);
@@ -1714,8 +1714,8 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     surgescript_program_label_t end = surgescript_program_new_label(context.program);
 
     /* save the loop context */
-    context.loop_begin = begin;
-    context.loop_end = end;
+    context.loop_continue = begin;
+    context.loop_break = end;
 
     /* what kind of loop do we have? */
     if(optmatch(parser, SSTOK_WHILE)) {
@@ -1731,11 +1731,15 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
     else if(optmatch(parser, SSTOK_DO)) {
         /* do-while loops */
+        surgescript_program_label_t condition = surgescript_program_new_label(context.program);
+        context.loop_continue = condition;
+
         emit_dowhile1(context, begin);
         if(!stmt(parser, context)) /* loop body */
             unexpected_symbol(parser);
         match(parser, SSTOK_WHILE);
         match(parser, SSTOK_LPAREN);
+        emit_dowhilecondition(context, condition);
         expr(parser, context); /* loop condition */
         match(parser, SSTOK_RPAREN);
         match(parser, SSTOK_SEMICOLON);
@@ -1745,7 +1749,7 @@ void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         /* for loop */
         surgescript_program_label_t body = surgescript_program_new_label(context.program);
         surgescript_program_label_t increment = surgescript_program_new_label(context.program);
-        context.loop_begin = increment;
+        context.loop_continue = increment;
 
         /* emit code */
         match(parser, SSTOK_LPAREN);
