@@ -231,7 +231,8 @@ int surgescript_program_count_lines(const surgescript_program_t* program)
  */
 void surgescript_program_add_label(surgescript_program_t* program, surgescript_program_label_t label)
 {
-    program->label[label] = ssarray_length(program->line);
+    ssassert(program->label[label] == SURGESCRIPT_PROGRAM_UNDEFINED_LABEL); /* labels can only be added once */
+    program->label[label] = ssarray_length(program->line); /* initialize label */
 }
 
 /*
@@ -269,7 +270,7 @@ int surgescript_program_add_text(surgescript_program_t* program, const char* tex
  */
 surgescript_program_label_t surgescript_program_new_label(surgescript_program_t* program)
 {
-    ssarray_push(program->label, 0);
+    ssarray_push(program->label, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL); /* uninitialized */
     return ssarray_length(program->label) - 1;
 }
 
@@ -998,10 +999,12 @@ bool remove_labels(surgescript_program_t* program)
     for(int i = 0; i < ssarray_length(program->line); i++) {
         if(is_jump_instruction(program->line[i].instruction)) {
             surgescript_program_label_t label = program->line[i].a.u;
-            if(label >= 0 && label < ssarray_length(program->label))
+            if(label >= 0 && label < ssarray_length(program->label)) {
+                ssassert(program->label[label] != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL); /* check if initialized */
                 program->line[i].a.u = program->label[label];
+            }
             else
-                ssfatal("Runtime Error: invalid jump instruction - unknown label.");
+                ssfatal("Runtime Error: invalid jump instruction - unknown label 0x%X.", label);
         }
     }
 
