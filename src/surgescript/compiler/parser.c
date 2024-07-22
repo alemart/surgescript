@@ -1598,26 +1598,29 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* prevent repeated case constants */
     #define check_if_repeated() do { \
+        struct caseconst_t cc; \
+        \
         /* read the last emitted operation */ \
         int n = surgescript_program_count_lines(context.program); \
-        if(surgescript_program_read_line(context.program, n-1, &cc.op, NULL, &cc.b)){ \
-            /* we should have emitted a constant */ \
-            ssassert( \
-                cc.op == SSOP_MOVF || cc.op == SSOP_MOVS || \
-                cc.op == SSOP_MOVN || cc.op == SSOP_MOVB || \
-                cc.op == SSOP_MOVX \
-            ); \
-            \
-            /* no repetitions? */ \
-            for(int j = ssarray_length(case_constant) - 1; j >= 0; j--) { \
-                const struct caseconst_t* ref = &case_constant[j]; \
-                if(ref->op == cc.op && ref->b.u64 == cc.b.u64) \
-                    ssfatal("Compile Error: found a duplicate case constant in a switch statement at %s:%d", context.source_file, surgescript_token_linenumber(parser->previous)); \
-            } \
-            \
-            /* store the constant */ \
-            ssarray_push(case_constant, cc); \
+        if(!surgescript_program_read_line(context.program, n-1, &cc.op, NULL, &cc.b)) \
+            break; \
+        \
+        /* we should have emitted a constant */ \
+        ssassert( \
+            cc.op == SSOP_MOVF || cc.op == SSOP_MOVS || \
+            cc.op == SSOP_MOVN || cc.op == SSOP_MOVB || \
+            cc.op == SSOP_MOVX \
+        ); \
+        \
+        /* no repetitions? */ \
+        for(int j = ssarray_length(case_constant) - 1; j >= 0; j--) { \
+            const struct caseconst_t* ref = &case_constant[j]; \
+            if(ref->op == cc.op && ref->b.u64 == cc.b.u64) \
+                ssfatal("Compile Error: found a duplicate case constant in a switch statement at %s:%d", context.source_file, surgescript_token_linenumber(parser->previous)); \
         } \
+        \
+        /* store the constant */ \
+        ssarray_push(case_constant, cc); \
     } while(0)
 
     surgescript_program_label_t next_test = surgescript_program_new_label(context.program);
@@ -1625,7 +1628,7 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     surgescript_program_label_t def = SURGESCRIPT_PROGRAM_UNDEFINED_LABEL;
 
     /* auxiliary structure to prevent repeated case constants */
-    struct caseconst_t { surgescript_program_operator_t op; surgescript_program_operand_t b; } cc;
+    struct caseconst_t { surgescript_program_operator_t op; surgescript_program_operand_t b; };
     SSARRAY(struct caseconst_t, case_constant);
     ssarray_init(case_constant);
 

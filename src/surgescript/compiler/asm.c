@@ -841,7 +841,7 @@ void emit_break(surgescript_nodecontext_t context, int line)
     if(context.loop_break != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
         SSASM(SSOP_JMP, U(context.loop_break));
     else
-        ssfatal("Compile Error: invalid usage of the \"break\" command in %s:%d - break may only be used inside loops or switch statements.", context.source_file, line);
+        ssfatal("Compile Error: invalid usage of the \"break\" statement in %s:%d - break may only be used inside loops or switch statements.", context.source_file, line);
 }
 
 void emit_continue(surgescript_nodecontext_t context, int line)
@@ -849,7 +849,7 @@ void emit_continue(surgescript_nodecontext_t context, int line)
     if(context.loop_continue != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
         SSASM(SSOP_JMP, U(context.loop_continue));
     else
-        ssfatal("Compile Error: invalid usage of the \"continue\" command in %s:%d - continue may only be used inside loops.", context.source_file, line);
+        ssfatal("Compile Error: invalid usage of the \"continue\" statement in %s:%d - continue may only be used inside loops.", context.source_file, line);
 }
 
 void emit_switch1(surgescript_nodecontext_t context, surgescript_program_label_t first_test)
