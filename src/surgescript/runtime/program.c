@@ -197,8 +197,12 @@ int surgescript_program_chg_line(surgescript_program_t* program, int line, surge
  */
 bool surgescript_program_read_line(const surgescript_program_t* program, int line, surgescript_program_operator_t* op, surgescript_program_operand_t* a, surgescript_program_operand_t* b)
 {
-    if(line < 0 || line >= ssarray_length(program->line))
+    if(line < 0 || line >= ssarray_length(program->line)) {
+        if(op) *op = SSOP_NOP;
+        if(a) a->u64 = 0;
+        if(b) b->u64 = 0;
         return false;
+    }
 
     if(op != NULL)
         *op = program->line[line].instruction;
