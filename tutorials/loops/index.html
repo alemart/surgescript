@@ -348,6 +348,20 @@
   
   
     <li class="md-nav__item">
+      <a href="../comments/" class="md-nav__link">
+        Comments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../expressions/" class="md-nav__link">
         Expressions
       </a>
@@ -364,6 +378,20 @@
     <li class="md-nav__item">
       <a href="../conditionals/" class="md-nav__link">
         Conditionals
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../selections/" class="md-nav__link">
+        Selections
       </a>
     </li>
   
@@ -437,6 +465,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#break" class="md-nav__link">
+    Break
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continue" class="md-nav__link">
+    Continue
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -454,20 +496,6 @@
     <li class="md-nav__item">
       <a href="../functions/" class="md-nav__link">
         Functions
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../comments/" class="md-nav__link">
-        Comments
       </a>
     </li>
   
@@ -1762,6 +1790,20 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#break" class="md-nav__link">
+    Break
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#continue" class="md-nav__link">
+    Continue
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1823,7 +1865,7 @@
 <a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
 <a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">&lt;=</span><span class="w"> </span><span class="m">10</span><span class="p">);</span><span class="w"> </span><span class="c1">// this condition is false</span>
 </code></pre></div>
-<p><em>Note:</em> do-while loops are available since SurgeScript 0.6.0.</p>
+<p>Do-while loops are available since SurgeScript 0.6.0.</p>
 <h2 id="for-loops">For loops</h2>
 <p>A for loop is a more controlled repetition structure compared to a while loop. For loops support an initialization command, a condition and an increment command. The syntax is as follows:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">for</span><span class="p">(</span><span class="n">initialization</span><span class="p">;</span><span class="w"> </span><span class="n">condition</span><span class="p">;</span><span class="w"> </span><span class="n">increment</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -1845,6 +1887,7 @@
 <a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
 <a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="p">}</span><span class="w"></span>
 </code></pre></div>
+<p>Since SurgeScript 0.6.1, the initialization, condition and increment expressions may be empty. Empty initialization and increment expressions do nothing. An empty condition is interpreted as <code>true</code>, meaning that the loop will keep repeating until you <a href="#break">break out of it</a> with a <code>break</code> or with a <code>return</code> statement.</p>
 <h2 id="foreach">Foreach</h2>
 <p>Foreach loops are used to iterate throughout iterable collections (such as <a href="/reference/array">Arrays</a> and <a href="/reference/dictionary">Dictionaries</a>). Basically: for each element <code>x</code> in the iterable collection, do something with <code>x</code>. The syntax is as follows:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">foreach</span><span class="p">(</span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">collection</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
@@ -1869,6 +1912,58 @@
 <p class="admonition-title">Implementing your own iterable collections</p>
 <p>The foreach loop can be used with any iterable collections, not only <a href="/reference/array">Arrays</a> and <a href="/reference/dictionary">Dictionaries</a>. You may even <a href="/tutorials/advanced_features#iterators">implement your own!</a></p>
 </div>
+<h2 id="break">Break</h2>
+<p>Use the <code>break</code> statement to terminate the innermost enclosing loop. The statement following the loop will be executed immediately afterwards. Example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>
+<a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="m">10</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a><span class="w">        </span><span class="k">break</span><span class="p">;</span><span class="w"> </span><span class="c1">// break out of the loop when i is equal to 5</span>
+<a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>
+<a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a><span class="w">    </span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>
+<a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a><span class="c1">// This line will be executed immediately after breaking out of the loop</span>
+<a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"> </span><span class="c1">// Output: 5</span>
+</code></pre></div>
+<h2 id="continue">Continue</h2>
+<p>Use the <code>continue</code> statement to terminate the current iteration of the innermost enclosing loop and to start the next iteration. The exact behavior of <code>continue</code> depends on the type of the loop:</p>
+<ul>
+<li>In <code>while</code> and <code>do-while</code> loops, <code>continue</code> jumps to the loop condition. The loop condition is reevaluated.</li>
+<li>In a <code>for</code> loop, <code>continue</code> jumps to the increment expression. Next, the loop condition is reevaluated.</li>
+<li>In a <code>foreach</code> loop, <code>continue</code> jumps to the start of the next iteration.</li>
+</ul>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">0</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="k">while</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">&lt;</span><span class="w"> </span><span class="m">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">    </span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">+</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"></span>
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="c1">// jump back to the condition i &lt; 5 when i is equal to 3</span>
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="p">}</span><span class="w"></span>
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="c1">// Expected output: 1 2 4 5</span>
+<a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="c1">// Number 3 was skipped</span>
+</code></pre></div>
+<p>A similar example with a <code>for</code> loop:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="p">&lt;=</span><span class="w"> </span><span class="m">5</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="p">++)</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="c1">// jump to i++ when i is equal to 3</span>
+<a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>
+<a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
+<p>An analogous example with a <code>foreach</code> loop:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="k">foreach</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="m">1</span><span class="p">,</span><span class="m">2</span><span class="p">,</span><span class="m">3</span><span class="p">,</span><span class="m">4</span><span class="p">,</span><span class="m">5</span><span class="p">])</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="p">==</span><span class="w"> </span><span class="m">3</span><span class="p">)</span><span class="w"></span>
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">        </span><span class="k">continue</span><span class="p">;</span><span class="w"> </span><span class="c1">// jump to the next iteration when i is equal to 3</span>
+<a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a>
+<a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="w">    </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w"></span>
+<a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="p">}</span><span class="w"></span>
+</code></pre></div>
 
               
             </article>
@@ -1882,7 +1977,7 @@
     <nav class="md-footer__inner md-grid" aria-label="Footer">
       
         
-        <a href="../conditionals/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Conditionals" rel="prev">
+        <a href="../selections/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Selections" rel="prev">
           <div class="md-footer__button md-icon">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
           </div>
@@ -1891,7 +1986,7 @@
               <span class="md-footer__direction">
                 Previous
               </span>
-              Conditionals
+              Selections
             </div>
           </div>
         </a>
