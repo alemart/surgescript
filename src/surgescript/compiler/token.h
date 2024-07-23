@@ -65,14 +65,33 @@
     F( SSTOK_CONTINUE, "continue" )                                             \
     F( SSTOK_TYPEOF, "typeof" )                                                 \
     F( SSTOK_PUBLIC, "public" )                                                 \
+    F( SSTOK_PRIVATE, "private" )                                               \
+    F( SSTOK_PROTECTED, "protected" )                                           \
+    F( SSTOK_EXTENDS, "extends" )                                               \
+    F( SSTOK_IMPLEMENTS, "implements" )                                         \
+    F( SSTOK_INTERFACE, "interface" )                                           \
+    F( SSTOK_ABSTRACT, "abstract" )                                             \
+    F( SSTOK_CLASS, "class" )                                                   \
+    F( SSTOK_PACKAGE, "package" )                                               \
+    F( SSTOK_NAMESPACE, "namespace" )                                           \
     F( SSTOK_USING, "using" )                                                   \
+    F( SSTOK_TRY, "try" )                                                       \
+    F( SSTOK_CATCH, "catch" )                                                   \
+    F( SSTOK_THROW, "throw" )                                                   \
+    F( SSTOK_THROWS, "throws" )                                                 \
+    F( SSTOK_GOTO, "goto" )                                                     \
+    F( SSTOK_VOID, "void" )                                                     \
     F( SSTOK_DO, "do" )                                                         \
     F( SSTOK_SWITCH, "switch" )                                                 \
     F( SSTOK_CASE, "case" )                                                     \
     F( SSTOK_DEFAULT, "default" )                                               \
     F( SSTOK_CONST, "const" )                                                   \
+    F( SSTOK_FINAL, "final" )                                                   \
+    F( SSTOK_VAR, "var" )                                                       \
+    F( SSTOK_LET, "let" )                                                       \
     F( SSTOK_ASSERT, "assert" )                                                 \
     F( SSTOK_WAIT, "wait" )                                                     \
+    F( SSTOK_YIELD, "yield" )                                                   \
     F( SSTOK_STATIC, "static" )                                                 \
     F( SSTOK_SUPER, "super" )                                                   \
     F( SSTOK_OF, "of" )                                                         \
