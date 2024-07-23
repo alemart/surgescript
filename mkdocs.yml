@@ -26,6 +26,7 @@ extra_javascript:
 markdown_extensions:
     - attr_list
     - admonition
+    - footnotes
     - pymdownx.highlight:
           anchor_linenums: true
     - pymdownx.inlinehilite
@@ -40,11 +41,12 @@ nav:
         - 'Testing your scripts': 'tutorials/testing.md'
         - 'Introduction to objects': 'tutorials/objects.md'
         - 'Variables': 'tutorials/variables.md'
+        - 'Comments': 'tutorials/comments.md'
         - 'Expressions': 'tutorials/expressions.md'
         - 'Conditionals': 'tutorials/conditionals.md'
+        - 'Selections': 'tutorials/selections.md'
         - 'Loops': 'tutorials/loops.md'
         - 'Functions': 'tutorials/functions.md'
-        - 'Comments': 'tutorials/comments.md'
         - 'Tags': 'tutorials/tags.md'
         - 'Object tree': 'tutorials/object_tree.md'
         - 'Components': 'tutorials/components.md'
