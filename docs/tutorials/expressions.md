@@ -230,7 +230,7 @@ this.destroy(); // destroys this object
 
 #### typeof
 
-The expression `typeof(expr)` (or simply `typeof expr`), is evaluated to a string corresponding to the type of `expr`. The possible types are: *number*, *string*, *boolean*, *object* or *null*. Example:
+The expression `typeof(expr)` (or simply `typeof expr`) is evaluated to a string corresponding to the type of `expr`. The possible types are: *number*, *string*, *boolean*, *object* or *null*. Example:
 
 ```cs
 t = typeof 5; // t will hold the string "number"

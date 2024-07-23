@@ -4,7 +4,7 @@ Conditionals
 Introduction
 ------------
 
-Conditionals are *if ... then ...* statements. If a certain `condition` evaluates to `true`, execute a block of code. If not, don't execute it.
+Conditionals are `if-then` statements. If a certain `condition` evaluates to `true`, execute a block of code. If not, don't execute it.
 
 ```cs
 if(condition) {
