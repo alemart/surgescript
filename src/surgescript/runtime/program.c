@@ -906,7 +906,7 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
                     manager,
                     surgescript_renv_tmp(caller_runtime_environment),
                     NULL,
-                    surgescript_object_handle(surgescript_renv_owner(caller_runtime_environment))
+                    caller_runtime_environment
                 };
 
                 /* call the program */

@@ -47,7 +47,7 @@ surgescript_renv_t* surgescript_renv_create(surgescript_object_t* owner, surgesc
     runtime_environment->heap = heap;
     runtime_environment->program_pool = program_pool;
     runtime_environment->object_manager = object_manager;
-    runtime_environment->caller = surgescript_objectmanager_null(object_manager);
+    runtime_environment->parent = NULL;
 
     if(!tmp) {
         int i;

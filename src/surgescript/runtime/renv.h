@@ -41,7 +41,7 @@ typedef struct surgescript_renv_t
     struct surgescript_objectmanager_t* object_manager; /* pointer to the object manager */
     struct surgescript_var_t** tmp; /* temporary variables */
     struct surgescript_renv_t* (*_destructor)(struct surgescript_renv_t*); /* internal destructor */
-    unsigned caller; /* handle to the object that called this program */
+    const struct surgescript_renv_t* parent; /* runtime environment of the caller, if any (possibly NULL) */
 } surgescript_renv_t ;
 
 /* creates a new renv (the tmp parameter may be NULL) */
@@ -57,6 +57,6 @@ surgescript_renv_t* surgescript_renv_destroy(surgescript_renv_t* runtime_environ
 #define surgescript_renv_programpool(renv)      ((renv)->program_pool)
 #define surgescript_renv_objectmanager(renv)    ((renv)->object_manager)
 #define surgescript_renv_tmp(renv)              ((renv)->tmp)
-#define surgescript_renv_caller(renv)           ((renv)->caller)
+#define surgescript_renv_caller(renv)           ((renv)->parent != NULL ? surgescript_object_handle((renv)->parent->owner) : surgescript_objectmanager_null((renv)->object_manager))
 
 #endif
