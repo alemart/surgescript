@@ -1,5 +1,14 @@
 # Release Notes
 
+## 0.6.1 - August 23rd, 2024
+
+* Introduced switch statements
+* Made optional the expressions in for loops
+* Added an optional message to assertions
+* Bugfix in continue statements
+* Updated docs
+* General improvements
+
 ## 0.6.0 - May 17th, 2024
 
 * Optimized function calls with self-modifying SurgeScript bytecode that recognizes opportunities for optimization
