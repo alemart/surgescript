@@ -1,19 +1,19 @@
 # ------------------------------------------------------------------------------
 # SurgeScript
 # A scripting language for games
-# Copyright 2016-2024 Alexandre Martins <alemartf(at)gmail(dot)com>
+# Copyright 2016-2025 Alexandre Martins <alemartf(at)gmail(dot)com>
 # ------------------------------------------------------------------------------
 
 # Project info
 cmake_minimum_required(VERSION 3.2)
 project(
     surgescript
-    VERSION 0.6.1
+    VERSION 0.6.1.1
     LANGUAGES C
 )
 include(GNUInstallDirs)
 include(CheckLibraryExists)
-set(PROJECT_YEARS "2016-2024")
+set(PROJECT_YEARS "2016-2025")
 
 # Default config
 set(CMAKE_C_STANDARD 11)
