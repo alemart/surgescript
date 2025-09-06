@@ -38,6 +38,8 @@ fun call()
 
 Function `call()` may take any number of parameters. Given an object `f`, the expression `y = f(x)` is equivalent to `y = f.call(x)`. Notice that, since `f` is an object, you may exchange its implementation during runtime.
 
+Function objects have many uses, including [events](/engine/functionevent) and [sorting arrays](/reference/array#sort).
+
 Assertions
 ----------
 
