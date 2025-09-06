@@ -38,7 +38,11 @@ Properties
 
 `position`: [Vector2](/engine/vector2) object.
 
-The position of the camera in world space. Tip: use [lateUpdate()](/engine/entity) if you need to change it.
+The position of the camera in world space.
+
+!!! tip
+
+    Use [lateUpdate](/engine/entity) when changing the position of the camera.
 
 *Example*
 ```cs
