@@ -40,7 +40,7 @@ Whether or not the engine is running on fullscreen mode. Use this property to to
 
 The current video mode. The following are the valid values:
 
-* `"default"`: the size of the [screen](#screen) is set to its default.
+* `"default"`: the size of the [screen](./screen) is set to its default.
 * `"fill"`: the size of the screen is set to the size of the window.
 * `"best-fit"`: similar to `"fill"`, except that the aspect ratio of the default size of the screen is maintained.
 

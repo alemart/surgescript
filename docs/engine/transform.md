@@ -45,7 +45,7 @@ Properties
 
 The position of the object in world coordinates.
 
-Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use [translateBy](#translateBy) instead.
+Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use [translateBy](#translateby) instead.
 
 *Example*
 ```cs
@@ -87,7 +87,7 @@ Unless you need to read or to set the angle of the object to a pre-determined va
 
 The position of the object relative to the parent object.
 
-Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use [translateBy](#translateBy) instead.
+Only use this property if you need to read the position of the object or to set it to a fixed value. If you need to move the entity, use [translateBy](#translateby) instead.
 
 #### localAngle
 
