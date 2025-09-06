@@ -180,13 +180,23 @@ if(gimacian < 0)
 
 #### sort
 
-`sort(cmpFun)`
+`sort(cmp)`
 
-Sorts the Array. If no comparison [functor](/tutorials/advanced_features#functors) is provided (`cmpFun` is `null`), the Array will be sorted in ascending order.
+Sorts the Array.
 
 *Arguments*
 
-* `cmpFun`: object | null. This [functor](/tutorials/advanced_features#functors) implements function `call(a, b)` that compares two array elements as described in the example below.
+* `cmp`: object | null. A [functor](/tutorials/advanced_features#function-objects) that compares two array elements, returning a number as indicated below. If `null` is provided, the Array will be sorted in ascending order (implementation-defined).
+
+| Return value of `cmp(a,b)` | Description |
+| ------------ | ----------- |
+| < `0` | `a` must come before `b` |
+| = `0` | `a` and `b` are equivalent |
+| > `0` | `a` must come after `b` |
+
+!!! note
+
+    `Array.sort()` does **not** guarantee that the relative order of equivalent elements will be preserved.
 
 *Returns*
 
@@ -236,9 +246,9 @@ object "Sort.OrderByDesc"
     // elements of the Array: a and b.
     //
     // It should return a number:
-    //   < 0 if a must come BEFORE b
+    //   < 0 if a must come before b
     //   = 0 if a and b are equivalent
-    //   > 0 if a must come AFTER b
+    //   > 0 if a must come after b
     fun call(a, b)
     {
         // sort in descending order
