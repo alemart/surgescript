@@ -3,15 +3,17 @@ Player
 
 The Player object is used to control a specific player/character. Player objects are tagged *player*.
 
-**Note:** in Open Surge, companion objects can be used to give new abilities to players. Companion objects must be indicated in the character definition files (.chr) and are implemented as regular scripts. The engine will automatically spawn the companions as children of the appropriate Player objects.
+Companion objects can be used to give new abilities to players. Such objects must be indicated in the character definition files (.chr) and are implemented as regular scripts. The engine will automatically spawn the companions as children of the appropriate Player objects.
 
 *Example*
 
 ```cs
+// "Display player name" is a companion object
+// Companion objects should be tagged "companion"
 object "Display player name" is "companion"
 {
-    player = parent; // since this object is configured as a
-                     // companion, parent is the reference
+    player = parent; // since this object is configured as
+                     // a companion, parent is a reference
                      // to the appropriate Player object
 
     state "main"
@@ -98,7 +100,7 @@ Returns `true` if such a player exists in the level.
 
 `Player.active`: [Player](#) object.
 
-The player currently in focus.
+The player currently in focus. Only one player has focus at any given time.
 
 See also: [focus](#focus), [hasFocus](#hasfocus), [focusable](#focusable).
 
@@ -130,6 +132,8 @@ The number of players in the level.
 `Player.initialLives`: number, read-only.
 
 The initial number of lives set by the engine.
+
+See also: [lives](#lives).
 
 Properties
 ----------
@@ -289,7 +293,9 @@ Is the player jumping?
 
 `springing`: boolean, read-only.
 
-Is the player playing the "springing" animation, displayed just after hitting a spring?
+Is the player in the "springing" state, which is typically activated just after hitting a spring?
+
+See also: [springify](#springify).
 
 #### braking
 
@@ -315,11 +321,15 @@ Is the player waiting? (happens after remaining stopped for a few seconds)
 
 Is the player rolling?
 
+See also: [roll](#roll), [charging](#charging).
+
 #### charging
 
 `charging`: boolean, read-only.
 
 Is the player charging a rolling movement?
+
+See also: [rolling](#rolling).
 
 #### pushing
 
@@ -347,6 +357,8 @@ Is the player blinking? (happens just after getting hit)
 
 Is the player dying or drowning?
 
+See also: [kill](#kill).
+
 #### drowning
 
 `drowning`: boolean, read-only.
@@ -361,7 +373,7 @@ See also: [underwater](#underwater), [dying](#dying).
 
 Is the player breathing an air bubble that is underwater?
 
-See also: [underwater](#underwater), [breathTime](#breathtime).
+See also: [underwater](#underwater), [breathTime](#breathtime), [breathe](#breathe).
 
 #### crouchingDown
 
@@ -381,13 +393,15 @@ Is the player looking up?
 
 Is the player displaying the "winning" animation (after clearing a level)?
 
+See also: [Level.clear](level#clear).
+
 #### underwater
 
 `underwater`: boolean, read-only.
 
 Is the player underwater? Players are considered to be underwater if they are below the [water level](/engine/level#waterlevel) or if their [forciblyUnderwater](#forciblyunderwater) flag is set to `true`.
 
-See also: [secondsToDrown](#secondstodrown), [drowning](#drowning), [breathing](#breathing), [breathTime](#breathtime), [forciblyUnderwater](#forciblyunderwater), [forciblyOutOfWater](#forciblyoutofwater), [waterlevel](/engine/level#waterlevel).
+See also: [secondsToDrown](#secondstodrown), [drowning](#drowning), [breathing](#breathing), [forciblyUnderwater](#forciblyunderwater), [forciblyOutOfWater](#forciblyoutofwater), [waterlevel](/engine/level#waterlevel).
 
 #### secondsToDrown
 
@@ -451,11 +465,13 @@ See also: [invulnerable](#invulnerable).
 
 Used to make the player invincible. Defaults to `false`.
 
+See also: [invulnerable](#invulnerable), [aggressive](#aggressive).
+
 #### turbo
 
 `turbo`: boolean.
 
-Turbocharged mode (increases player speed). Defaults to `false`.
+Turbocharged mode (increased player speed). Defaults to `false`.
 
 #### frozen
 
@@ -496,6 +512,8 @@ See also: [attacking](#attacking), [aggressive](#aggressive).
 If set to `true`, the player will be invulnerable to damage. It's like having an invisible shield that is permanent. The player may still be killed if crushed, by falling into a pit, by drowning, or by calling [kill](#kill).
 
 *Available since:* Open Surge 0.6.1
+
+*See also:* [invincible](#invincible), [immortal](#immortal).
 
 #### immortal
 
@@ -541,7 +559,7 @@ See also: [underwater](#underwater), [secondsToDrown](#secondstodrown).
 
 If set to `true`, the [underwater](#underwater) flag will be true regardless of the [water level](/engine/level#waterlevel). If set to `false`, the underwater flag will be true only if the player is below the water level. Defaults to `false`.
 
-See also: [underwater](#underwater), [waterlevel](/engine/level#waterlevel), [forciblyOutOfWater](#forciblyoutofwater).
+See also: [underwater](#underwater), [forciblyOutOfWater](#forciblyoutofwater), [waterlevel](/engine/level#waterlevel).
 
 *Available since:* Open Surge 0.6.1
 
@@ -576,6 +594,8 @@ The number of collectibles, an integer shared between all player objects.
 `lives`: number.
 
 The number of lives, an integer shared between all player objects.
+
+See also: [initialLives](#playerinitiallives).
 
 #### score
 
@@ -757,11 +777,15 @@ See also: [hit](#hit).
 
 Kills the player.
 
+See also: [dying](#dying).
+
 #### breathe
 
 `breathe()`
 
 Makes the player breathe (underwater only).
+
+See also: [breathing](#breathing).
 
 #### restore
 
@@ -775,15 +799,17 @@ Restores the player to a vulnerable state.
 
 `springify()`
 
-Activates the "springing" activity.
+Activates the "springing" state.
 
-See also: [restore](#restore).
+See also: [springing](#springing), [restore](#restore).
 
 #### roll
 
 `roll()`
 
 Makes the player roll.
+
+See also: [rolling](#rolling).
 
 #### hlock
 
