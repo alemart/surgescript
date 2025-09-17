@@ -4231,19 +4231,21 @@
 
 <h1 id="player">Player</h1>
 <p>The Player object is used to control a specific player/character. Player objects are tagged <em>player</em>.</p>
-<p><strong>Note:</strong> in Open Surge, companion objects can be used to give new abilities to players. Companion objects must be indicated in the character definition files (.chr) and are implemented as regular scripts. The engine will automatically spawn the companions as children of the appropriate Player objects.</p>
+<p>Companion objects can be used to give new abilities to players. Such objects must be indicated in the character definition files (.chr) and are implemented as regular scripts. The engine will automatically spawn the companions as children of the appropriate Player objects.</p>
 <p><em>Example</em></p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Display player name&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;companion&quot;</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="p">{</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span><span class="w"> </span><span class="c1">// since this object is configured as a</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">                     </span><span class="c1">// companion, parent is the reference</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">                     </span><span class="c1">// to the appropriate Player object</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;I am a companion of &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// &quot;Display player name&quot; is a companion object</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// Companion objects should be tagged &quot;companion&quot;</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Display player name&quot;</span><span class="w"> </span><span class="k">is</span><span class="w"> </span><span class="s">&quot;companion&quot;</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">{</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">player</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">parent</span><span class="p">;</span><span class="w"> </span><span class="c1">// since this object is configured as</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">                     </span><span class="c1">// a companion, parent is a reference</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">                     </span><span class="c1">// to the appropriate Player object</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="s">&quot;I am a companion of &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">player</span><span class="p">.</span><span class="n">name</span><span class="p">);</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="global">Global</h2>
 <h4 id="player_1">Player</h4>
@@ -4299,7 +4301,7 @@
 <p>Returns <code>true</code> if such a player exists in the level.</p>
 <h4 id="playeractive">Player.active</h4>
 <p><code>Player.active</code>: <a href="#">Player</a> object.</p>
-<p>The player currently in focus.</p>
+<p>The player currently in focus. Only one player has focus at any given time.</p>
 <p>See also: <a href="#focus">focus</a>, <a href="#hasfocus">hasFocus</a>, <a href="#focusable">focusable</a>.</p>
 <p><em>Example</em>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">using</span><span class="w"> </span><span class="nn">SurgeEngine.Player</span><span class="p">;</span>
@@ -4322,6 +4324,7 @@
 <h4 id="playerinitiallives">Player.initialLives</h4>
 <p><code>Player.initialLives</code>: number, read-only.</p>
 <p>The initial number of lives set by the engine.</p>
+<p>See also: <a href="#lives">lives</a>.</p>
 <h2 id="properties">Properties</h2>
 <h4 id="id">id</h4>
 <p><code>id</code>: number, read-only.</p>
@@ -4408,7 +4411,8 @@
 <p>Is the player jumping?</p>
 <h4 id="springing">springing</h4>
 <p><code>springing</code>: boolean, read-only.</p>
-<p>Is the player playing the "springing" animation, displayed just after hitting a spring?</p>
+<p>Is the player in the "springing" state, which is typically activated just after hitting a spring?</p>
+<p>See also: <a href="#springify">springify</a>.</p>
 <h4 id="braking">braking</h4>
 <p><code>braking</code>: boolean, read-only.</p>
 <p>Is the player braking?</p>
@@ -4421,9 +4425,11 @@
 <h4 id="rolling">rolling</h4>
 <p><code>rolling</code>: boolean, read-only.</p>
 <p>Is the player rolling?</p>
+<p>See also: <a href="#roll">roll</a>, <a href="#charging">charging</a>.</p>
 <h4 id="charging">charging</h4>
 <p><code>charging</code>: boolean, read-only.</p>
 <p>Is the player charging a rolling movement?</p>
+<p>See also: <a href="#rolling">rolling</a>.</p>
 <h4 id="pushing">pushing</h4>
 <p><code>pushing</code>: boolean, read-only.</p>
 <p>Is the player pushing a wall?</p>
@@ -4437,6 +4443,7 @@
 <h4 id="dying">dying</h4>
 <p><code>dying</code>: boolean, read-only.</p>
 <p>Is the player dying or drowning?</p>
+<p>See also: <a href="#kill">kill</a>.</p>
 <h4 id="drowning">drowning</h4>
 <p><code>drowning</code>: boolean, read-only.</p>
 <p>Is the player drowning (i.e., dying underwater)?</p>
@@ -4444,7 +4451,7 @@
 <h4 id="breathing">breathing</h4>
 <p><code>breathing</code>: boolean, read-only.</p>
 <p>Is the player breathing an air bubble that is underwater?</p>
-<p>See also: <a href="#underwater">underwater</a>, <a href="#breathtime">breathTime</a>.</p>
+<p>See also: <a href="#underwater">underwater</a>, <a href="#breathtime">breathTime</a>, <a href="#breathe">breathe</a>.</p>
 <h4 id="crouchingdown">crouchingDown</h4>
 <p><code>crouchingDown</code>: boolean, read-only.</p>
 <p>Is the player crouching down?</p>
@@ -4454,10 +4461,11 @@
 <h4 id="winning">winning</h4>
 <p><code>winning</code>: boolean, read-only.</p>
 <p>Is the player displaying the "winning" animation (after clearing a level)?</p>
+<p>See also: <a href="level#clear">Level.clear</a>.</p>
 <h4 id="underwater">underwater</h4>
 <p><code>underwater</code>: boolean, read-only.</p>
 <p>Is the player underwater? Players are considered to be underwater if they are below the <a href="/engine/level#waterlevel">water level</a> or if their <a href="#forciblyunderwater">forciblyUnderwater</a> flag is set to <code>true</code>.</p>
-<p>See also: <a href="#secondstodrown">secondsToDrown</a>, <a href="#drowning">drowning</a>, <a href="#breathing">breathing</a>, <a href="#breathtime">breathTime</a>, <a href="#forciblyunderwater">forciblyUnderwater</a>, <a href="#forciblyoutofwater">forciblyOutOfWater</a>, <a href="/engine/level#waterlevel">waterlevel</a>.</p>
+<p>See also: <a href="#secondstodrown">secondsToDrown</a>, <a href="#drowning">drowning</a>, <a href="#breathing">breathing</a>, <a href="#forciblyunderwater">forciblyUnderwater</a>, <a href="#forciblyoutofwater">forciblyOutOfWater</a>, <a href="/engine/level#waterlevel">waterlevel</a>.</p>
 <h4 id="secondstodrown">secondsToDrown</h4>
 <p><code>secondsToDrown</code>: number, read-only.</p>
 <p>The number of seconds to drown, if underwater.</p>
@@ -4489,9 +4497,10 @@
 <h4 id="invincible">invincible</h4>
 <p><code>invincible</code>: boolean.</p>
 <p>Used to make the player invincible. Defaults to <code>false</code>.</p>
+<p>See also: <a href="#invulnerable">invulnerable</a>, <a href="#aggressive">aggressive</a>.</p>
 <h4 id="turbo">turbo</h4>
 <p><code>turbo</code>: boolean.</p>
-<p>Turbocharged mode (increases player speed). Defaults to <code>false</code>.</p>
+<p>Turbocharged mode (increased player speed). Defaults to <code>false</code>.</p>
 <h4 id="frozen">frozen</h4>
 <p><code>frozen</code>: boolean.</p>
 <p>Disable/enable player movement. Defaults to <code>false</code>.</p>
@@ -4504,12 +4513,17 @@
 <p><code>inoffensive</code>: boolean.</p>
 <p>If set to <code>true</code>, the <a href="#attacking">attacking</a> flag will be <code>false</code> regardless of the state of the player. The player will be vulnerable to damage even if jumping, rolling or charging. Defaults to <code>false</code>.</p>
 <p><em>Note:</em> if the player is simultaneously <a href="#aggressive">aggressive</a> and inoffensive, the aggressive behavior prevails.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Enabling the <code>inoffensive</code> flag will make the player generally vulnerable. This may lead to unintended side-effects: the player may take damage even when it shouldn't. Consider using <a href="#springify">springify</a> for temporary vulnerability instead.</p>
+</div>
 <p>See also: <a href="#attacking">attacking</a>, <a href="#aggressive">aggressive</a>.</p>
 <p><em>Available since:</em> Open Surge 0.6.1</p>
 <h4 id="invulnerable">invulnerable</h4>
 <p><code>invulnerable</code>: boolean.</p>
 <p>If set to <code>true</code>, the player will be invulnerable to damage. It's like having an invisible shield that is permanent. The player may still be killed if crushed, by falling into a pit, by drowning, or by calling <a href="#kill">kill</a>.</p>
 <p><em>Available since:</em> Open Surge 0.6.1</p>
+<p><em>See also:</em> <a href="#invincible">invincible</a>, <a href="#immortal">immortal</a>.</p>
 <h4 id="immortal">immortal</h4>
 <p><code>immortal</code>: boolean.</p>
 <p>If an immortal player appears to be killed, it will appear to be ressurrected on its spawn point without losing a <a href="#lives">life</a>.</p>
@@ -4532,7 +4546,7 @@
 <h4 id="forciblyunderwater">forciblyUnderwater</h4>
 <p><code>forciblyUnderwater</code>: boolean.</p>
 <p>If set to <code>true</code>, the <a href="#underwater">underwater</a> flag will be true regardless of the <a href="/engine/level#waterlevel">water level</a>. If set to <code>false</code>, the underwater flag will be true only if the player is below the water level. Defaults to <code>false</code>.</p>
-<p>See also: <a href="#underwater">underwater</a>, <a href="/engine/level#waterlevel">waterlevel</a>, <a href="#forciblyoutofwater">forciblyOutOfWater</a>.</p>
+<p>See also: <a href="#underwater">underwater</a>, <a href="#forciblyoutofwater">forciblyOutOfWater</a>, <a href="/engine/level#waterlevel">waterlevel</a>.</p>
 <p><em>Available since:</em> Open Surge 0.6.1</p>
 <h4 id="forciblyoutofwater">forciblyOutOfWater</h4>
 <p>If set to <code>true</code>, the <a href="#underwater">underwater</a> mechanics will be disabled, even if the player is below the <a href="/engine/level#waterlevel">water level</a>. If <a href="#forciblyunderwater">forciblyUnderwater</a> is also <code>true</code>, this flag will do nothing. Defaults to <code>false</code>.</p>
@@ -4550,6 +4564,7 @@
 <h4 id="lives">lives</h4>
 <p><code>lives</code>: number.</p>
 <p>The number of lives, an integer shared between all player objects.</p>
+<p>See also: <a href="#playerinitiallives">initialLives</a>.</p>
 <h4 id="score">score</h4>
 <p><code>score</code>: number.</p>
 <p>The score of the player, an integer value shared between all player objects.</p>
@@ -4665,20 +4680,23 @@
 <h4 id="kill">kill</h4>
 <p><code>kill()</code></p>
 <p>Kills the player.</p>
+<p>See also: <a href="#dying">dying</a>.</p>
 <h4 id="breathe">breathe</h4>
 <p><code>breathe()</code></p>
 <p>Makes the player breathe (underwater only).</p>
+<p>See also: <a href="#breathing">breathing</a>.</p>
 <h4 id="restore">restore</h4>
 <p><code>restore()</code></p>
 <p>Restores the player to a vulnerable state.</p>
 <p><em>Available since:</em> Open Surge 0.6.1</p>
 <h4 id="springify">springify</h4>
 <p><code>springify()</code></p>
-<p>Activates the "springing" activity.</p>
-<p>See also: <a href="#restore">restore</a>.</p>
+<p>Activates the "springing" state.</p>
+<p>See also: <a href="#springing">springing</a>, <a href="#restore">restore</a>.</p>
 <h4 id="roll">roll</h4>
 <p><code>roll()</code></p>
 <p>Makes the player roll.</p>
+<p>See also: <a href="#rolling">rolling</a>.</p>
 <h4 id="hlock">hlock</h4>
 <p><code>hlock(seconds)</code></p>
 <p>Locks the horizontal controls of the player for the specified time. Left and right input will be ignored during that time.</p>
