@@ -481,6 +481,10 @@ If set to `true`, the [attacking](#attacking) flag will be `false` regardless of
 
 *Note:* if the player is simultaneously [aggressive](#aggressive) and inoffensive, the aggressive behavior prevails.
 
+!!! warning
+
+    Enabling the `inoffensive` flag will make the player generally vulnerable. This may lead to unintended side-effects: the player may take damage even when it shouldn't. Consider using [springify](#springify) for temporary vulnerability instead.
+
 See also: [attacking](#attacking), [aggressive](#aggressive).
 
 *Available since:* Open Surge 0.6.1
