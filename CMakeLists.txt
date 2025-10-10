@@ -5,7 +5,7 @@
 # ------------------------------------------------------------------------------
 
 # Project info
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.20)
 project(
     surgescript
     VERSION 0.6.1.1
