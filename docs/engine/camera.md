@@ -49,7 +49,8 @@ The position of the camera in world space.
 using SurgeEngine.Camera;
 using SurgeEngine.Player;
 
-object "My Simple Camera" is "awake", "entity"
+// In the setup list of your .lev file, replace the "Default Camera" by this
+object "My Simple Camera" is "awake", "entity", "setup"
 {
     fun lateUpdate()
     {
