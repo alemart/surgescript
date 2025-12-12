@@ -185,7 +185,9 @@ Functions
 
 Spawns an object as a child of Level. Such objects won't be garbage collected.
 
-Use [spawnEntity](#spawnentity) instead if you intend to spawn an [entity](/engine/entity).
+!!! note
+
+    Use [spawnEntity](#spawnentity) instead if you intend to spawn an [entity](/engine/entity).
 
 *Arguments*
 
@@ -263,7 +265,7 @@ object "My Setup Object"
 
 `entityId(entityObject)`
 
-Returns the [ID](#entity) of the provided [entity](/engine/entity), if it is defined. If no such ID is defined, an empty string is returned.
+Returns the [ID](#entity) of the provided [entity](/engine/entity), if it is defined. If no such ID is defined, an empty string is returned. Only entities spawned with [spawnEntity](#spawnentity) are assigned an ID.
 
 *Available since:* Open Surge 0.6.1
 
