@@ -1,7 +1,7 @@
 Collider
 ========
 
-A collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually centered on the hot spot of sprites, but that can be changed by altering their *anchor*.
+A collider, or collision object, is used to detect collisions. There are different types of colliders, each with a different shape. They are usually centered on the hot spot of sprites, but that can be changed by altering their *anchor*. All of them are tagged `"collider"`.
 
 Colliders must be spawned as children of [entities](/engine/entity). To detect collisions, you may implement function `onCollision()` on the entity (see the example below), or use the colliders directly. Additionally, a single entity may have multiple colliders attached to it. This allows users to work with more complex shapes than simple primitives.
 
