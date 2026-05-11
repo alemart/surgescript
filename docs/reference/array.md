@@ -172,7 +172,10 @@ The position of the searched element - a number between `0` and `this.length - 1
 ```cs
 characters = [ "Surge", "Neon", "Charge" ];
 ...
-two = characters.indexOf("Neon"); // 2
+surge = characters.indexOf("Surge");       // 0
+neon = characters.indexOf("Neon");         // 1
+charge = characters.indexOf("Charge");     // 2
+
 gimacian = characters.indexOf("Gimacian"); // -1
 if(gimacian < 0)
     Console.print("Not found");
