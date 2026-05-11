@@ -3380,7 +3380,10 @@
 <h4 id="spawn">spawn</h4>
 <p><code>spawn(objectName)</code></p>
 <p>Spawns an object as a child of Level. Such objects won't be garbage collected.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>Use <a href="#spawnentity">spawnEntity</a> instead if you intend to spawn an <a href="/engine/entity">entity</a>.</p>
+</div>
 <p><em>Arguments</em></p>
 <ul>
 <li><code>objectName</code>: string. The name of the object to be spawned.</li>
@@ -3440,7 +3443,7 @@
 </code></pre></div>
 <h4 id="entityid">entityId</h4>
 <p><code>entityId(entityObject)</code></p>
-<p>Returns the <a href="#entity">ID</a> of the provided <a href="/engine/entity">entity</a>, if it is defined. If no such ID is defined, an empty string is returned.</p>
+<p>Returns the <a href="#entity">ID</a> of the provided <a href="/engine/entity">entity</a>, if it is defined. If no such ID is defined, an empty string is returned. Only entities spawned with <a href="#spawnentity">spawnEntity</a> are assigned an ID.</p>
 <p><em>Available since:</em> Open Surge 0.6.1</p>
 <p><em>Arguments</em></p>
 <ul>
