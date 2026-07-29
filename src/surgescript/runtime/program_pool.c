@@ -27,20 +27,12 @@
 #include "../util/util.h"
 #include "../util/ssarray.h"
 #include "../third_party/uthash.h"
+#include "../util/xxh.h"
 
 #define FASTHASH_INLINE
 #include "../util/fasthash.h"
 
-#define XXH_INLINE_ALL
-#include "../third_party/xxhash.h"
 
-#if defined(__arm__) || ((defined(i386) || defined(__i386__) || defined(__i386) || defined(_M_IX86)) && !(defined(__x86_64__) || defined(_M_X64)))
-#define XXH(input, len, seed) (XXH32_hash_t)(XXH3_64bits_withSeed((input), (len), (seed))) /* just discard the higher bits */
-typedef XXH32_hash_t xxhash_t;
-#else
-#define XXH(input, len, seed) (XXH3_64bits_withSeed((input), (len), (seed)) & UINT64_C(0xFFFFFFFF)) /* we set the higher 32 bits to zero before computing signatures */
-typedef XXH64_hash_t xxhash_t;
-#endif
 
 
 /*
