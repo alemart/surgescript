@@ -185,20 +185,17 @@ surgescript_program_t* surgescript_programpool_get(surgescript_programpool_t* po
 {
     surgescript_programpool_signature_t signature = generate_signature(object_name, program_name, pool->seed);
     surgescript_programpool_hashpair_t* pair = fasthash_get(pool->hash, signature); /* find the program */
+
+    /* found it? */
+    if(pair != NULL)
+        return pair->program;
     
-    /* if there is no such program */
-    if(!pair) {
-        /* try locating it in a common base for all objects */
-        signature = generate_signature("Object", program_name, pool->seed);
-        pair = fasthash_get(pool->hash, signature);
+    /* try locating it in a common base for all objects */
+    signature = generate_signature("Object", program_name, pool->seed);
+    pair = fasthash_get(pool->hash, signature);
 
-        /* really, the program doesn't exist */
-        if(!pair)
-            return NULL;
-    }
-
-    /* found it! */
-    return pair->program;
+    /* if pair is NULL, the program doesn't exist */
+    return pair != NULL ? pair->program : NULL;
 }
 
 /*
