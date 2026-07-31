@@ -1,7 +1,7 @@
 //
 // unit_testing.ss
 // A Unit Testing Script for SurgeScript
-// Copyright 2017-2020 Alexandre Martins <alemartf(at)gmail(dot)com>
+// Copyright 2017-2026 Alexandre Martins <alemartf(at)gmail(dot)com>
 //
 
 object "Application"
@@ -20,6 +20,7 @@ object "Application"
         test.getset();
         test.array();
         test.dictionary();
+        test.anonymous();
         exit();
     }
 }
@@ -467,6 +468,125 @@ object "SurgeScript Test" is "test"
         end();
     }
 
+    fun anonymous()
+    {
+        begin("Anonymous Object");
+
+        a = 1; b = 2; c = 3;
+        o1 = { a = 1, b = 2, c = 3 };
+        o2 = { a, b, c };
+        o3 = { c, b, a };
+        o4 = { c = 3, b = 2, a = 1 };
+
+        test(o1.a === 1 && o2.a === 1 && o3.a === 1 && o4.a === 1) || fail(1);
+        test(o1.b === 2 && o2.b === 2 && o3.b === 2 && o4.b === 2) || fail(2);
+        test(o1.c === 3 && o2.c === 3 && o3.c === 3 && o4.c === 3) || fail(3);
+
+        test(o1.equals(o2)) || fail(4);
+        test(o2.equals(o1)) || fail(5);
+        test(o3.equals(o4)) || fail(6);
+        test(o4.equals(o3)) || fail(7);
+        test(!o1.equals(o3)) || fail(8);
+        test(!o3.equals(o1)) || fail(9);
+        test(!o1.equals(o4)) || fail(10);
+        test(!o4.equals(o1)) || fail(11);
+        test(!o2.equals(o3)) || fail(12);
+        test(!o3.equals(o2)) || fail(13);
+        test(!o2.equals(o4)) || fail(14);
+        test(!o4.equals(o2)) || fail(15);
+
+        test(o1.toString() == '{ a = 1, b = 2, c = 3 }') || fail(16);
+        test(o2.toString() == '{ a = 1, b = 2, c = 3 }') || fail(17);
+        test(o3.toString() == '{ c = 3, b = 2, a = 1 }') || fail(18);
+        test(o4.toString() == '{ c = 3, b = 2, a = 1 }') || fail(19);
+
+        test(!o1.hasFunction("get_d")) || fail(20);
+        test(!o1.hasFunction("set_a")) || fail(21);
+        test(!o1.hasFunction("set_b")) || fail(22);
+        test(!o1.hasFunction("set_c")) || fail(23);
+        test(!o2.hasFunction("get_d")) || fail(24);
+        test(!o2.hasFunction("set_a")) || fail(25);
+        test(!o2.hasFunction("set_b")) || fail(26);
+        test(!o2.hasFunction("set_c")) || fail(27);
+
+        x = 100; y = 200;
+        p1 = { x = 100, y = 200 };
+        p2 = { x, y };
+        p3 = { x = 100, y, };
+        p4 = { x, y = 200, };
+        p5 = { y = 200, x = 100 };
+        p6 = { y, x };
+        p7 = { y, x = 100, };
+        p8 = { y = 200, x };
+        p9 = { x = 0, y = 0, };
+
+        test(p1.x === 100 && p1.y === 200) || fail(28);
+        test(p2.x === 100 && p2.y === 200) || fail(29);
+        test(p3.x === 100 && p3.y === 200) || fail(30);
+        test(p4.x === 100 && p4.y === 200) || fail(31);
+        test(p5.x === 100 && p5.y === 200) || fail(32);
+        test(p6.x === 100 && p6.y === 200) || fail(33);
+        test(p7.x === 100 && p7.y === 200) || fail(34);
+        test(p8.x === 100 && p8.y === 200) || fail(35);
+        test(p9.x === 0 && p9.y === 0) || fail(36);
+
+        test(p1.equals(p1)) || fail(37);
+        test(p2.equals(p2)) || fail(38);
+        test(p3.equals(p3)) || fail(39);
+        test(p4.equals(p4)) || fail(40);
+        test(p1.equals(p2) && p2.equals(p1)) || fail(41);
+        test(p1.equals(p3) && p3.equals(p1)) || fail(42);
+        test(p1.equals(p4) && p4.equals(p1)) || fail(43);
+        test(p2.equals(p3) && p3.equals(p2)) || fail(44);
+        test(p2.equals(p4) && p4.equals(p2)) || fail(45);
+        test(p3.equals(p4) && p4.equals(p3)) || fail(46);
+        test(p5.equals(p5)) || fail(47);
+        test(p5.equals(p6) && p6.equals(p5)) || fail(48);
+        test(!p1.equals(p5) && !p5.equals(p1) && p1.x === p5.x && p1.y === p5.y) || fail(49);
+        test(p7 !== p8 && p7.equals(p8) && p8.equals(p7)) || fail(50);
+        test(!p1.equals(p9) && !p5.equals(p9)) || fail(51);
+        test(p9.x * p9.x + p9.y * p9.y === 0) || fail(52);
+
+        r = "R"; s = "in \"quotes\" here";
+        t = this; n = null;
+        q1 = { r, s, t, n, };
+
+        test(q1.r === r) || fail(53);
+        test(q1.s === s) || fail(54);
+        test(q1.t === t) || fail(55);
+        test(q1.n === n) || fail(56);
+
+        test(q1.equals(q1)) || fail(57);
+        test(q1.toString() === "{ r = \"" + r + "\", s = \"in \\\"quotes\\\" here\", t = " + t.toString() + ", n = null }") || fail(58);
+        test(!q1.hasFunction("set_r")) || fail(59);
+        test(!q1.hasFunction("set_s")) || fail(60);
+        test(!q1.hasFunction("set_t")) || fail(61);
+        test(!q1.hasFunction("set_n")) || fail(62);
+
+        dict1 = { };
+        dict2 = { "x": { x } };
+        test(dict1.__name == "Dictionary" && dict2.__name == "Dictionary") || fail(63);
+        test(dict2["x"].equals({ x }) && { x }.equals(dict2["x"])) || fail(64);
+
+        anon = { x };
+        test(anon.x === x) || fail(65);
+        test(anon.__file === this.__file) || fail(66);
+        test(anon.__name !== "Dictionary" && anon.__name === {x,}.__name) || fail(76);
+        test(anon.equals({ x = x })) || fail(68);
+        test(anon.equals({ x = anon.x })) || fail(69);
+
+        test({ x }.equals({ x })) || fail(70);
+        test(!({ x }.equals({ y }))) || fail(71);
+        test(!({ x }.equals({ x = y }))) || fail(72);
+        test(!({ x = x }.equals({ "x": x }))) || fail(73);
+        test({ x = { x = { x } } }.equals({ x = { x = { x = x } } })) || fail(74);
+        test({ x = { x = { x } } }.toString() === "{ x = { x = { x = " + x + " } } }") || fail(75);
+
+        test({ z = 5*4 + 3*2 + 1 }.equals({ z = 27 })) || fail(76);
+        test({ x, z = 5*4 + 3*2 + 1, y }.equals({ x, z = 27, y = Number(y) + 0*x })) || fail(77);
+
+        end();
+    }
 
 
 
