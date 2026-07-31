@@ -352,7 +352,7 @@ surgescript_var_t* fun_setactive(surgescript_object_t* object, const surgescript
 surgescript_var_t* fun_file(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     /* subclass responsibility */
-    return NULL;
+    return surgescript_var_set_string(surgescript_var_create(), "<native>");
 }
 
 /* invokes a function, given by string param[0], with parameters specified in Array param[1] */
