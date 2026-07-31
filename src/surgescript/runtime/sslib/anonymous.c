@@ -219,6 +219,18 @@ void create_file_getter(surgescript_programpool_t* program_pool, const char* obj
     SSASM(SSOP_RET);
 
     surgescript_programpool_put(program_pool, object_name, program_name, program);
+
+    /*
+
+    This implementation is not entirely correct: different anonymous objects with
+    the same shape (fields names and order) may be defined in different files.
+    Thus, they will be mapped to the same class of objects, but this.__file will
+    return only one of the files. A possible solution is to make the source file
+    an instance member rather than a class member, leading to increased memory
+    usage. However, as I write this, I do not see how this property can be useful
+    in practice. Such extra complexity is hardly worth the trouble.
+
+    */
 }
 
 /* get_<field_name>() method */
