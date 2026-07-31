@@ -95,7 +95,7 @@
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
  * <lambdacall> := ( ) <lambdacall> | ( <funargsexprlist> ) <lambdacall> | e
- * <primaryexpr> := identifier | this | state | caller | <constant> | <arrayexpr> | <dictexpr> | ( <expr> )
+ * <primaryexpr> := identifier | this | state | caller | <constant> | <arrayexpr> | <dictexpr> | <anonobjexpr> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e
@@ -104,6 +104,10 @@
  * <dictexpr> := { <dictexpr1> } | { }
  * <dictexpr1> := string : <assignexpr> | string : <assignexpr> , <dictexpr1>
  *             |  number : <assignexpr> | number : <assignexpr> , <dictexpr1>
+ * <anonobjexpr> := { <anonobjexprlist> }
+ * <anonobjexprlist> := <anonobjfield> <anonobjexprlist1>
+ * <anonobjexprlist1> := , <anonobjfield> <anonobjexprlist1> | , | e
+ * <anonobjfield> := identifier = <conditionalexpr> | identifier
  *
  *
  *

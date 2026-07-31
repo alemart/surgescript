@@ -76,6 +76,9 @@ void emit_dictdecl1(surgescript_nodecontext_t context);
 void emit_dictdecl2(surgescript_nodecontext_t context);
 void emit_dictdeclkey(surgescript_nodecontext_t context);
 void emit_dictdeclvalue(surgescript_nodecontext_t context);
+void emit_anonobjexpr1(surgescript_nodecontext_t context, surgescript_program_label_t instantiation, surgescript_program_label_t initialization);
+void emit_anonobjexpr2(surgescript_nodecontext_t context, surgescript_program_label_t instantiation, surgescript_program_label_t initialization, const char* anonymous_object_name);
+void emit_anonobjinitfield(surgescript_nodecontext_t context);
 void emit_timeout(surgescript_nodecontext_t context);
 void emit_assert(surgescript_nodecontext_t context, int line, const char* message);
 

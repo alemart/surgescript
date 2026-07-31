@@ -66,7 +66,7 @@ static void expect_something(surgescript_parser_t* parser);
 static void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
 static void unexpected_symbol(surgescript_parser_t* parser);
 static void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static surgescript_var_t* empty_main(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
+static surgescript_program_t* create_empty_main_state();
 static void create_getter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier);
 static void create_setter(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* identifier);
 static void import_public_vars(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* object_name);
@@ -126,6 +126,7 @@ static void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t 
 static void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void arrayexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 static void stmtlist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -404,8 +405,8 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
     /* do we have a "main" state? */
     if(!surgescript_programpool_exists(parser->program_pool, context.object_name, "state:main")) {
         if(strcmp(context.object_name, "Application") != 0) {
-            surgescript_program_t* cprogram = surgescript_program_create_native(0, empty_main);
-            surgescript_programpool_put(parser->program_pool, context.object_name, "state:main", cprogram);
+            surgescript_program_t* empty_main_state = create_empty_main_state();
+            surgescript_programpool_put(parser->program_pool, context.object_name, "state:main", empty_main_state);
             /*sslog("Object \"%s\" in \"%s\" has omitted its \"main\" state and will be disabled.", context.object_name, context.source_file);*/
         }
         else
@@ -413,13 +414,16 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
     }
 }
 
-/* an empty "main" state */
-surgescript_var_t* empty_main(surgescript_object_t* object, const surgescript_var_t* param[], int num_params)
+/* create an empty main state */
+surgescript_program_t* create_empty_main_state()
 {
-    /* disable the object for optimization purposes?
-       no! what about the children? */
-    /*surgescript_object_set_active(object, false);*/
-    return NULL;
+    surgescript_program_t* program = surgescript_program_create(0);
+
+    /* very fast way to return null */
+    surgescript_program_add_line(program, SSOP_MOVN, SSOPu(0), SSOP());
+    surgescript_program_add_line(program, SSOP_RET, SSOP(), SSOP());
+
+    return program;
 }
 
 /* create a getter for the variable named identifier */
@@ -1280,7 +1284,11 @@ void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         match(parser, SSTOK_RBRACKET);
     }
     else if(optmatch(parser, SSTOK_LCURLY)) {
-        dictexpr(parser, context);
+        if(got_type(parser, SSTOK_IDENTIFIER))
+            anonobjexpr(parser, context);
+        else
+            dictexpr(parser, context);
+
         match(parser, SSTOK_RCURLY);
     }
     else if(optmatch(parser, SSTOK_THIS)) {
@@ -1370,6 +1378,72 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         } while(optmatch(parser, SSTOK_COMMA) && !got_type(parser, SSTOK_RCURLY));
     }
     emit_dictdecl2(context);
+}
+
+void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    surgescript_program_label_t instantiation = surgescript_program_new_label(context.program);
+    surgescript_program_label_t initialization = surgescript_program_new_label(context.program);
+    char anonymous_object_name[1+SS_NAMEMAX] = "";
+    SSARRAY(char*, fields);
+
+    /* start */
+    ssarray_init(fields);
+    emit_anonobjexpr1(context, instantiation, initialization);
+
+    /* read fields of the anonymous object */
+    do {
+        expect_something(parser);
+        const surgescript_token_t* token = parser->lookahead;
+        char* field_name = ssstrdup(surgescript_token_lexeme(token));
+
+        match(parser, SSTOK_IDENTIFIER);
+        ssarray_push(fields, field_name);
+
+        if(got_type(parser, SSTOK_ASSIGNOP)) {
+            /* long form: { field = value } */
+            match_exactly(parser, SSTOK_ASSIGNOP, "=");
+            conditionalexpr(parser, context);
+            emit_anonobjinitfield(context);
+        }
+        else if(got_type(parser, SSTOK_COMMA) || got_type(parser, SSTOK_RCURLY)) {
+            /* short form: { field } */
+            if(!surgescript_symtable_has_symbol(context.symtable, field_name))
+                ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", field_name, context.source_file, surgescript_token_linenumber(token));
+            surgescript_symtable_emit_read(context.symtable, field_name, context.program, 0);
+            emit_anonobjinitfield(context);
+        }
+        else
+            unexpected_symbol(parser);
+
+        /* Reminder: we don't use { field: value } because it looks too similar
+           to dictionaries, i.e., { "field": value }. Such syntax could confuse
+           users. We instead use { field = value }, or simply the shorter form
+           { field } if the value is the content of a variable named field. The
+           chosen syntax resembles C#'s Anonymous Types, an analogous feature to
+           SurgeScript's Anonymous Objects. Moreover, since there may be no
+           Anonymous Objects with no fields, it follows that { } must be an
+           empty dictionary. */
+
+    } while(optmatch(parser, SSTOK_COMMA) && !got_type(parser, SSTOK_RCURLY)); /* trailing commas are accepted */
+
+    /* fields[] is NULL-terminated */
+    ssarray_push(fields, NULL);
+
+    /* create an object class */
+    extern bool surgescript_register_anonymous_object(surgescript_programpool_t* program_pool, const char** field_names, const char* source_file, char* out_object_name, size_t out_object_name_size);
+    if(!surgescript_register_anonymous_object(parser->program_pool, (const char**)fields, context.source_file, anonymous_object_name, sizeof anonymous_object_name)) {
+        ssassert(parser->lookahead);
+        ssfatal("Compile Error: can't create anonymous object in %s:%d.", context.source_file, surgescript_token_linenumber(parser->lookahead));
+    }
+
+    /* spawn anonymous object */
+    emit_anonobjexpr2(context, instantiation, initialization, anonymous_object_name);
+
+    /* release fields[] */
+    for(int j = ssarray_length(fields) - 2; j >= 0; j--) /* last element is NULL */
+        ssfree(fields[j]);
+    ssarray_release(fields);
 }
 
 /* constant expressions */

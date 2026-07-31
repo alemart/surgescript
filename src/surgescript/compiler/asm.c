@@ -702,6 +702,45 @@ void emit_dictdeclvalue(surgescript_nodecontext_t context)
     SSASM(SSOP_POPN, U(2));
 }
 
+void emit_anonobjexpr1(surgescript_nodecontext_t context, surgescript_program_label_t instantiation, surgescript_program_label_t initialization)
+{
+    SSASM(SSOP_JMP, U(instantiation));
+    LABEL(initialization);
+}
+
+void emit_anonobjexpr2(surgescript_nodecontext_t context, surgescript_program_label_t instantiation, surgescript_program_label_t initialization, const char* anonymous_object_name)
+{
+    surgescript_program_label_t end = NEWLABEL();
+    ssassert(*anonymous_object_name != '\0');
+
+    /* end after initialization */
+    SSASM(SSOP_JMP, U(end));
+
+    /* spawn anonymous object */
+    LABEL(instantiation);
+    SSASM(SSOP_MOVO, T0, U(surgescript_objectmanager_system_object(NULL, "__Temp")));
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_MOVS, T0, TEXT(anonymous_object_name));
+    SSASM(SSOP_PUSH, T0);
+    SSASM(SSOP_CALL, TEXT("spawn"), U(1)); /* t0 = t0.spawn(anonymous_object_name) */
+    SSASM(SSOP_POPN, U(2));
+    SSASM(SSOP_PUSH, T0); /* save the handle */
+
+    /* initialize fields */
+    SSASM(SSOP_JMP, U(initialization));
+
+    /* end */
+    LABEL(end);
+    SSASM(SSOP_POP, T0); /* pop the handle in t0, giving the result of the expression */
+}
+
+void emit_anonobjinitfield(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_PUSH, T0); /* <expr> */
+    SSASM(SSOP_CALL, TEXT("__init"), U(1)); /* anon.__init(<expr>) */
+    SSASM(SSOP_POPN, U(1));
+}
+
 void emit_timeout(surgescript_nodecontext_t context)
 {
     SSASM(SSOP_SELF, T1);

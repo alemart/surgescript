@@ -53,6 +53,7 @@ set(
     src/surgescript/runtime/program.c
     src/surgescript/runtime/program_pool.c
     src/surgescript/runtime/renv.c
+    src/surgescript/runtime/sslib/anonymous.c
     src/surgescript/runtime/sslib/application.c
     src/surgescript/runtime/sslib/arguments.c
     src/surgescript/runtime/sslib/array.c
