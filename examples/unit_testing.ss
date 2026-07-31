@@ -585,6 +585,18 @@ object "SurgeScript Test" is "test"
         test({ z = 5*4 + 3*2 + 1 }.equals({ z = 27 })) || fail(76);
         test({ x, z = 5*4 + 3*2 + 1, y }.equals({ x, z = 27, y = Number(y) + 0*x })) || fail(77);
 
+        data = {
+            points = [
+                { x = 0, y = 0 },
+                { x = 10, y = 10 },
+                { x = 20, y = 30 },
+            ],
+        };
+
+        test(data.points[0].equals({ x = 0, y = 0 })) || fail(78);
+        test(data.points[1].equals({ x = 10, y = 5+5 })) || fail(79);
+        test(data.points[2].equals({ x = 7*3-1, y = 3*10 })) || fail(80);
+
         end();
     }
 
