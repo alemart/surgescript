@@ -23,6 +23,7 @@
 #define _SURGESCRIPT_RUNTIME_OBJECT_H
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 /* types */
 typedef struct surgescript_object_t surgescript_object_t;
@@ -55,6 +56,7 @@ void* surgescript_object_userdata(const surgescript_object_t* object); /* custom
 void surgescript_object_set_userdata(surgescript_object_t* object, void* data); /* set custom user data */
 bool surgescript_object_has_tag(const surgescript_object_t* object, const char* tag_name); /* is this object tagged tag_name? */
 bool surgescript_object_has_function(const surgescript_object_t* object, const char* fun_name); /* does the object have the specified function? */
+int surgescript_object_function_arity(surgescript_object_t* object, const char* fun_name); /* the number of parameters accepted by a function */
 double surgescript_object_elapsed_time(const surgescript_object_t* object); /* elapsed time (in seconds) since last state change */
 double surgescript_object_timespent(const surgescript_object_t* object); /* average time consumption (in seconds) */
 size_t surgescript_object_memspent(const surgescript_object_t* object); /* memory consumption (in bytes) */

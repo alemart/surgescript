@@ -266,6 +266,24 @@ bool surgescript_object_has_function(const surgescript_object_t* object, const c
     return surgescript_programpool_exists(pool, object->name, fun_name);
 }
 
+/*
+ * surgescript_object_function_arity()
+ * The number of parameters accepted by a function, or 0 if no such function exists
+ */
+int surgescript_object_function_arity(surgescript_object_t* object, const char* fun_name)
+{
+    surgescript_programpool_t* pool = surgescript_renv_programpool(object->renv);
+
+    if(surgescript_programpool_exists(pool, object->name, fun_name)) {
+        const surgescript_program_t* program = surgescript_programpool_get(pool, object->name, fun_name);
+        return surgescript_program_arity(program);
+    }
+
+    return 0;
+}
+
+
+
 
 
 
