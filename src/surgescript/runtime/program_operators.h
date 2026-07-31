@@ -48,7 +48,7 @@
     F( SSOP_MOVX, "movx" )                            /* t[a] = (int64)b */ \
     F( SSOP_XCHG, "xchg" )                           /* swap(t[a], t[b]) */ \
                                                                             \
-    F( SSOP_ALLOC, "alloc" )                   /* t[a] = allocate_cell() */ \
+    F( SSOP_ALLOC, "alloc" )                   /* t[a] = heap_allocate() */ \
     F( SSOP_PEEK, "peek" )                                /* t[a] = (*b) */ \
     F( SSOP_POKE, "poke" )                                /* (*b) = t[a] */ \
                                                                             \

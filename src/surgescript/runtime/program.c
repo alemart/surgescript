@@ -545,7 +545,7 @@ unsigned int run_instruction(const surgescript_program_t* program, const surgesc
 
         /* heap operations */
         case SSOP_ALLOC:
-            surgescript_var_set_number(t(a), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
+            surgescript_var_set_rawbits(t(a), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
             break;
 
         case SSOP_PEEK:
