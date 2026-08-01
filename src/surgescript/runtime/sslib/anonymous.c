@@ -56,6 +56,8 @@
 
 SS_STATIC_ASSERT(ANONYMOUS_OBJECT_NAME_MAXLEN <= SS_NAMEMAX);
 
+static int count_vowels(const char* str);
+static int count_non_vowels(const char* str);
 static int count_field_names(const char** field_names);
 static char* join_field_names(const char** field_names);
 static char* generate_object_name(const char** field_names, char* out_object_name, size_t out_object_name_size);
@@ -123,6 +125,24 @@ bool surgescript_register_anonymous_object(struct surgescript_programpool_t* pro
 
 /* -------------------------------------------------------------------------- */
 
+/* count the vowels in an ASCII string */
+int count_vowels(const char* str)
+{
+    static const int table[128] = { ['a'] = 1, ['e'] = 1, ['i'] = 1, ['o'] = 1, ['u'] = 1, ['A'] = 1, ['E'] = 1, ['I'] = 1, ['O'] = 1, ['U'] = 1 };
+    int count = 0;
+
+    while(*str)
+        count += table[*str++ & 127];
+
+    return count;
+}
+
+/* count the non-vowels in an ASCII string */
+int count_non_vowels(const char* str)
+{
+    return strlen(str) - count_vowels(str);
+}
+
 /* count the number of non-null elements of a NULL-terminated array of strings */
 int count_field_names(const char** field_names)
 {
@@ -175,16 +195,18 @@ char* generate_object_name(const char** field_names, char* out_object_name, size
     ha = XXH(field_list, field_list_length, seed);
 
     /* compute second 32-bit hash */
-    char tmp[64] = ""; uint32_t mix = 1u;
-    for(const char** it = field_names; *it != NULL; it++) mix *= 1u+strcspn(*it, "aeiouAEIOU");
-    snprintf(tmp, sizeof tmp, "c%d l%d m%x", field_count, field_list_length, mix);
-    hb = XXH(tmp, strlen(tmp), seed);
+    uint32_t mix = 1u;
+    for(const char** it = field_names; *it != NULL; it++)
+        mix *= 3u + count_non_vowels(*it);
+    uint32_t tmp[] = { mix, field_list_length, field_count };
+    hb = XXH(tmp, sizeof tmp, seed);
 
     /* write both hashes to the suffix of the object name */
     const char prefix[] = ANONYMOUS_OBJECT_NAME_PREFIX;
     const size_t suffix_position = sizeof prefix - 1;
     char* suffix = object_name + suffix_position;
     snprintf(suffix, 16+1, "%08x%08x", (uint32_t)ha, (uint32_t)hb); /* probably unique */
+    SS_STATIC_ASSERT(sizeof prefix + 16 < sizeof object_name);
 
     /* release */
     ssfree(field_list);
