@@ -390,7 +390,7 @@ surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_va
 
         /* primitive types can be compared easily */
         if(!surgescript_var_is_objecthandle(self_field_data) && !surgescript_var_is_objecthandle(other_field_data)) {
-            if(0 != surgescript_var_compare(self_field_data, other_field_data))
+            if(!surgescript_var_sametype(self_field_data, other_field_data) || 0 != surgescript_var_compare(self_field_data, other_field_data))
                 return result;
             else
                 continue;
@@ -409,7 +409,7 @@ surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_va
 
         /* test for field equality */
         surgescript_object_call_function(callee, "equals", param, 1, result);
-        if(surgescript_var_get_bool(result) == false) {
+        if(surgescript_var_get_bool(result) == false) { /* here we convert the return value of equals() to a boolean */
             /* we set result = false again just in case caller.equals() doesn't return a bool - as it should! */
             return surgescript_var_set_bool(result, false);
         }
