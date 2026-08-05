@@ -93,9 +93,33 @@ object "Application"
 
 Dictionaries have many interesting properties and operations that you can see in the [Language Reference](/reference/dictionary).
 
-!!! warning "Caution!"
+#### Anonymous objects
 
-    Whenever you define an array or a dictionary, you spawn a new object. You are advised to **NOT** define arrays or dictionaries within states, because the code within the states run continuously. New objects will be created at every frame, not just once.
+You may define an [Anonymous object](./anonymous_objects.md) to encapsulate values into a single read-only object by means of named fields:
+
+```cs
+object "Application"
+{
+    // An Anonymous object holding some data
+    hero = {
+        name = "Surge",
+        energy = 100,
+        score = 5000
+    };
+
+    // print the data
+    state "main"
+    {
+        Console.print(hero.name); // will print Surge
+        Console.print(hero.energy); // will print 100
+        Console.print(hero.score); // will print 1100
+    }
+}
+```
+
+!!! warning "Important"
+
+    Whenever you define an array, a dictionary, or an Anonymous object, you spawn a new object. It's recommended to **not** define them within states, because the code within states run continuously. New objects will be created at every frame, not just once.  In the above example, the objects are [object-level variables](#scoping). Hence, they are spawned only once.
 
 ```cs
 object "Application"
