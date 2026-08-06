@@ -70,6 +70,7 @@ static void create_native_methods(surgescript_programpool_t* program_pool, const
 static surgescript_var_t* fun_init(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
 static surgescript_var_t* fun_equals(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
 static surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
+static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t* param[], int num_params);
 
 
 
@@ -312,6 +313,7 @@ void create_native_methods(surgescript_programpool_t* program_pool, const char* 
     surgescript_programpool_put(program_pool, object_name, "__init", surgescript_program_create_native(1, fun_init));
     surgescript_programpool_put(program_pool, object_name, "equals", surgescript_program_create_native(1, fun_equals));
     surgescript_programpool_put(program_pool, object_name, "toString", surgescript_program_create_native(0, fun_tostring));
+    surgescript_programpool_put(program_pool, object_name, "destroy", surgescript_program_create_native(0, fun_destroy));
 }
 
 /* __init(value) method */
@@ -494,4 +496,11 @@ surgescript_var_t* fun_tostring(surgescript_object_t* object, const surgescript_
     surgescript_var_set_string(result, sb);
     ssarray_release(sb);
     return result;
+}
+
+/* destroy() method */
+surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t* param[], int num_params)
+{
+    /* can't destroy Anonymous objects because they meant to be immutable */
+    return NULL;
 }
