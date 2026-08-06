@@ -129,7 +129,10 @@ bool surgescript_register_anonymous_object(struct surgescript_programpool_t* pro
 /* count the vowels in an ASCII string */
 int count_vowels(const char* str)
 {
-    static const int table[128] = { ['a'] = 1, ['e'] = 1, ['i'] = 1, ['o'] = 1, ['u'] = 1, ['A'] = 1, ['E'] = 1, ['I'] = 1, ['O'] = 1, ['U'] = 1 };
+    static const int table[128] = {
+        ['a'] = 1, ['e'] = 1, ['i'] = 1, ['o'] = 1, ['u'] = 1,
+        ['A'] = 1, ['E'] = 1, ['I'] = 1, ['O'] = 1, ['U'] = 1
+    };
     int count = 0;
 
     while(*str)
@@ -196,11 +199,9 @@ char* generate_object_name(const char** field_names, char* out_object_name, size
     ha = XXH(field_list, field_list_length, seed);
 
     /* compute second 32-bit hash */
-    uint32_t mix = 1u;
-    for(const char** it = field_names; *it != NULL; it++)
-        mix *= 3u + count_non_vowels(*it);
-    uint32_t tmp[] = { mix, field_list_length, field_count };
-    hb = XXH(tmp, sizeof tmp, seed);
+    hb = 5381u * 33u + ((xxhash_t)((uintptr_t)(&hb) & 0x7Fu) + count_non_vowels(field_list));
+    for(const char* c = field_list; *c != '\0'; c++)
+        hb = hb * 33u + (*c); /* djb2 */
 
     /* write both hashes to the suffix of the object name */
     const char prefix[] = ANONYMOUS_OBJECT_NAME_PREFIX;
