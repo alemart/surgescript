@@ -518,6 +518,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#anonymous-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Anonymous objects
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -775,6 +784,29 @@
   
   <span class="md-ellipsis">
     Properties
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../anonymous_objects/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Anonymous objects
     
   </span>
   
@@ -2712,6 +2744,15 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#anonymous-objects" class="md-nav__link">
+    <span class="md-ellipsis">
+      Anonymous objects
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2860,52 +2901,72 @@
 <a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="p">}</span>
 </code></pre></div>
 <p>Dictionaries have many interesting properties and operations that you can see in the <a href="/reference/dictionary">Language Reference</a>.</p>
-<div class="admonition warning">
-<p class="admonition-title">Caution!</p>
-<p>Whenever you define an array or a dictionary, you spawn a new object. You are advised to <strong>NOT</strong> define arrays or dictionaries within states, because the code within the states run continuously. New objects will be created at every frame, not just once.</p>
-</div>
+<h4 id="anonymous-objects">Anonymous objects</h4>
+<p>You may define an <a href="../anonymous_objects/">Anonymous object</a> to encapsulate values into a single read-only object by means of named fields:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span>
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="p">{</span>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="c1">// arr will be instantiated once the object is created</span>
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="c1">// RIGHT!</span>
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span>
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="c1">// err is instantiated at every frame of the application,</span>
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">        </span><span class="c1">// thus memory is wasted with duplicate objects</span>
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s">&quot;don&#39;t&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;do&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;this&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="c1">// AVOID!</span>
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">}</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="c1">// An Anonymous object holding some data</span>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">hero</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">        </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Surge&quot;</span><span class="p">,</span>
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="n">energy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span>
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="n">score</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5000</span>
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="p">};</span>
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="c1">// print the data</span>
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span>
+<a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">hero</span><span class="p">.</span><span class="n">name</span><span class="p">);</span><span class="w"> </span><span class="c1">// will print Surge</span>
+<a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">hero</span><span class="p">.</span><span class="n">energy</span><span class="p">);</span><span class="w"> </span><span class="c1">// will print 100</span>
+<a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">hero</span><span class="p">.</span><span class="n">score</span><span class="p">);</span><span class="w"> </span><span class="c1">// will print 1100</span>
+<a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="p">}</span>
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Important</p>
+<p>Whenever you define an array, a dictionary, or an Anonymous object, you spawn a new object. It's recommended to <strong>not</strong> define them within states, because the code within states run continuously. New objects will be created at every frame, not just once.  In the above example, the objects are <a href="#scoping">object-level variables</a>. Hence, they are spawned only once.</p>
+</div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Application&quot;</span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="p">{</span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="c1">// arr will be instantiated once the object is created</span>
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="n">arr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="c1">// RIGHT!</span>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span>
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">        </span><span class="c1">// err is instantiated at every frame of the application,</span>
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="c1">// thus memory is wasted with duplicate objects</span>
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="n">err</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s">&quot;don&#39;t&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;do&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;this&quot;</span><span class="w"> </span><span class="p">];</span><span class="w"> </span><span class="c1">// AVOID!</span>
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="p">}</span>
 </code></pre></div>
 <h2 id="casting">Casting</h2>
 <p>You can use type-casting to change the type of values from number to string, from string to number, from boolean to string and so on. Casting values is as simple as calling <code>Number(value)</code>, <code>String(value)</code> or <code>Boolean(value)</code>. Example:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1">// Convert string to number</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="p">;</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Number</span><span class="p">(</span><span class="n">str</span><span class="p">);</span><span class="w"> </span><span class="c1">// val is 2</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1">// Convert number to string</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="p">;</span>
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">val</span><span class="p">);</span><span class="w"> </span><span class="c1">// str is &quot;123&quot;</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1">// Convert string to number</span>
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;2&quot;</span><span class="p">;</span>
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Number</span><span class="p">(</span><span class="n">str</span><span class="p">);</span><span class="w"> </span><span class="c1">// val is 2</span>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1">// Convert number to string</span>
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">val</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">123</span><span class="p">;</span>
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">str</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">String</span><span class="p">(</span><span class="n">val</span><span class="p">);</span><span class="w"> </span><span class="c1">// str is &quot;123&quot;</span>
 </code></pre></div>
 <p>When converting an object to a string, SurgeScript will implicitly call <code>object.toString()</code>.</p>
 <h2 id="scoping">Scoping</h2>
 <p>Variables that are defined before any state or function are <em>object-level</em> variables. They can be accessed throughout the whole object. On the other hand, variables used exclusively inside states or functions are <em>local variables</em>. This means that their accessibility and lifespan is restricted to their own locus of code.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Scope Test&quot;</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="p">{</span>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Surge the Rabbit&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// object-level variable</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">        </span><span class="n">weight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">35</span><span class="p">;</span><span class="w"> </span><span class="c1">// local variable</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;print-data&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// change the state</span>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;print-data&quot;</span>
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">    </span><span class="p">{</span>
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">name</span><span class="p">);</span><span class="w"> </span><span class="c1">// Surge the Rabbit</span>
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">weight</span><span class="p">);</span><span class="w"> </span><span class="c1">// ERROR: weight is not defined</span>
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="p">}</span>
-<a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="p">}</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kt">object</span><span class="w"> </span><span class="s">&quot;Scope Test&quot;</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="p">{</span>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Surge the Rabbit&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// object-level variable</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;main&quot;</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="n">weight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">35</span><span class="p">;</span><span class="w"> </span><span class="c1">// local variable</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">        </span><span class="n">state</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;print-data&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// change the state</span>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="n">state</span><span class="w"> </span><span class="s">&quot;print-data&quot;</span>
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="p">{</span>
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">name</span><span class="p">);</span><span class="w"> </span><span class="c1">// Surge the Rabbit</span>
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="n">Console</span><span class="p">.</span><span class="n">print</span><span class="p">(</span><span class="n">weight</span><span class="p">);</span><span class="w"> </span><span class="c1">// ERROR: weight is not defined</span>
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="p">}</span>
+<a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="p">}</span>
 </code></pre></div>
 <p>Furthermore, <em>object-level</em> variables may only be accessed within the object. Other objects may not read or write the variables directly (in other words, variables are <em>private</em> to the objects). You need to define <a href="/tutorials/functions">functions</a> or <a href="/tutorials/properties">getters and setters</a> to accomplish that.</p>
 
