@@ -133,6 +133,22 @@ game = {
 Console.print("The boss has " + game.boss.attack + " attack points.");
 ```
 
+Inspecting
+----------
+
+An easy way to inspect the content of an Anonymous object is to print it. The SurgeScript compiler defines a [toString](../reference/object.md#tostring) method for Anonymous objects, which returns a descriptive string.
+
+```cs
+hero = {
+    name = "Surge",
+    energy = 100,
+    score = 5000,
+};
+
+Console.print(hero);
+// same as: Console.print(hero.toString());
+```
+
 Shapes
 ------
 
