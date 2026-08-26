@@ -100,6 +100,9 @@
     F( SSTOK_READONLY, "readonly" )                                             \
     F( SSTOK_TIMEOUT, "timeout" )                                               \
     F( SSTOK_ANNOTATION, "annotation")                                          \
+    F( SSTOK_SIGNAL, "signal")                                                  \
+    F( SSTOK_EMITS, "emits")                                                    \
+    F( SSTOK_ON, "on")                                                          \
     F( SSTOK_UNKNOWN, "<unknown>" )
 
 typedef struct surgescript_token_t surgescript_token_t;

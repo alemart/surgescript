@@ -32,9 +32,12 @@
  *
  * <objectlist> := <object> <objectlist> | e
  * <object> := <annotations> object string <qualifiers> { <objectdecl> }
- * <objectdecl> := <vardecllist> <statedecllist> <fundecllist>
- * <qualifiers> := is <tags> | e
+ * <objectdecl> := <vardecllist> <statedecllist> <signalhandlerdecllist> <fundecllist>
+ * <qualifiers> := <tagqualifiers> <signalqualifiers>
+ * <tagqualifiers> := is <tags> | e
  * <tags> := string , <tags> | string
+ * <signalqualifiers> := emits <signallist> | e
+ * <signallist> := string , <signallist> | string
  * <annotations> := annotation <annotations> | e
  *
  * <vardecllist> := <vardecl> <vardecllist> | e
@@ -50,6 +53,9 @@
  *           |  fun identifier ( <funargs> ) { <stmtlist> }
  * <funargs> := identifier <funargs1>
  * <funargs1> := , identifier <funargs1> | e
+ *
+ * <signalhandlerdecllist> := <signalhandlerdecl> <signalhandlerdecllist> | e
+ * <signalhandlerdecl> := on string { <stmtlist> }
  *
  * <importlist> := using <plugin>; <importlist> | e
  * <plugin> := identifier | identifier . <plugin>
@@ -95,7 +101,7 @@
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
  * <lambdacall> := ( ) <lambdacall> | ( <funargsexprlist> ) <lambdacall> | e
- * <primaryexpr> := identifier | this | state | caller | <constant> | <arrayexpr> | <dictexpr> | <anonobjexpr> | ( <expr> )
+ * <primaryexpr> := identifier | this | state | caller | signal | <constant> | <arrayexpr> | <dictexpr> | <anonobjexpr> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e
