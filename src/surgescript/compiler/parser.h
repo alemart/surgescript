@@ -28,7 +28,12 @@
  *
  *
  *
- * <script> := <importlist> <objectlist> // start here
+ * <script> := <importlist> <signallist> <objectlist> // start here
+ *
+ * <signallist> := <signal> <signallist> | e
+ * <signal> := signal string { <signaldecl> }
+ * <signaldecl> := <signalgetterdecl> <signaldecl> | e
+ * <signalgetterdecl> := identifier[="get"] identifier ( ) ;
  *
  * <objectlist> := <object> <objectlist> | e
  * <object> := <annotations> object string <qualifiers> { <objectdecl> }
@@ -36,8 +41,8 @@
  * <qualifiers> := <tagqualifiers> <signalqualifiers>
  * <tagqualifiers> := is <tags> | e
  * <tags> := string , <tags> | string
- * <signalqualifiers> := emits <signallist> | e
- * <signallist> := string , <signallist> | string
+ * <signalqualifiers> := identifier[="emits"] <signals> | e
+ * <signals> := string , <signals> | string
  * <annotations> := annotation <annotations> | e
  *
  * <vardecllist> := <vardecl> <vardecllist> | e
@@ -55,7 +60,7 @@
  * <funargs1> := , identifier <funargs1> | e
  *
  * <signalhandlerdecllist> := <signalhandlerdecl> <signalhandlerdecllist> | e
- * <signalhandlerdecl> := on string { <stmtlist> }
+ * <signalhandlerdecl> := catch string { <stmtlist> }
  *
  * <importlist> := using <plugin>; <importlist> | e
  * <plugin> := identifier | identifier . <plugin>

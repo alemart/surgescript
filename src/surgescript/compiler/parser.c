@@ -58,8 +58,9 @@ static inline bool got_type(surgescript_parser_t* parser, surgescript_tokentype_
 static inline bool got_any_type(surgescript_parser_t* parser, const surgescript_tokentype_t symbol[], int number_of_symbols);
 static inline bool has_token(surgescript_parser_t* parser);
 static void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
-static bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
 static void match_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
+static bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
+static bool optmatch_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
 static void unmatch(surgescript_parser_t* parser);
 static void expect(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
 static void expect_something(surgescript_parser_t* parser);
@@ -90,6 +91,9 @@ static bool is_valid_name(const char* name);
 
 /* non-terminals */
 static void importlist(surgescript_parser_t* parser);
+static void signallist(surgescript_parser_t* parser);
+static void signal(surgescript_parser_t* parser);
+static char** signaldecl(surgescript_parser_t* parser, const char* signal_name);
 static void objectlist(surgescript_parser_t* parser);
 static void object(surgescript_parser_t* parser);
 static void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -260,6 +264,7 @@ void parse(surgescript_parser_t* parser)
     parser->base_table = configure_base_table(surgescript_symtable_create(NULL));
     parser->lookahead = surgescript_lexer_scan(parser->lexer); /* grab first symbol */
     importlist(parser);
+    signallist(parser);
     objectlist(parser);
     parser->base_table = surgescript_symtable_destroy(parser->base_table);
 }
@@ -293,6 +298,15 @@ void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
         expect(parser, symbol);
 }
 
+/* match exactly the given symbol with the given lexeme */
+void match_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme)
+{
+    if(got_type(parser, symbol) && strcmp(surgescript_token_lexeme(parser->lookahead), lexeme) == 0)
+        match(parser, symbol);
+    else
+        expect_exactly(parser, symbol, lexeme); /* error */
+}
+
 /* match the given symbol or the empty symbol */
 bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
@@ -304,13 +318,15 @@ bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
         return false;
 }
 
-/* match exactly the given symbol with the given lexeme */
-void match_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme)
+/* match exactly the given symbol with the given lexeme, or the empty symbol */
+bool optmatch_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme)
 {
-    if(got_type(parser, symbol) && strcmp(surgescript_token_lexeme(parser->lookahead), lexeme) == 0)
+    if(got_type(parser, symbol) && strcmp(surgescript_token_lexeme(parser->lookahead), lexeme) == 0) {
         match(parser, symbol);
+        return true;
+    }
     else
-        expect_exactly(parser, symbol, lexeme); /* error */
+        return false;
 }
 
 /* puts the last token back into the lexer */
@@ -594,6 +610,88 @@ bool is_valid_name(const char* name)
 
 /* non-terminals of the grammar */
 
+void signallist(surgescript_parser_t* parser)
+{
+    while(got_type(parser, SSTOK_SIGNAL))
+        signal(parser);
+}
+
+void signal(surgescript_parser_t* parser)
+{
+    char* signal_name;
+    char** getter_list; /* NULL-terminated array of strings */
+
+    /* read the header */
+    match(parser, SSTOK_SIGNAL);
+    expect(parser, SSTOK_STRING);
+    signal_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+
+    /* validate */
+    if(is_large_name(signal_name))
+        ssfatal("Compile Error: signal name \"%s\" is too large at %s:%d", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+    else if(!is_valid_name(signal_name))
+        ssfatal("Compile Error: invalid signal name \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+
+    /* read the body */
+    match(parser, SSTOK_STRING);
+    match(parser, SSTOK_LCURLY);
+    getter_list = signaldecl(parser, signal_name);
+    if(!optmatch(parser, SSTOK_RCURLY))
+        unexpected_symbol(parser);
+
+    /* register the signal */
+    // TODO
+#if 0
+    printf("signal \"%s\"\n", signal_name);
+    for(char** it = getter_list; *it; it++)
+        puts(*it);
+    puts("=====");
+#endif
+
+    /* cleanup */
+    for(char** it = getter_list; *it; it++)
+        ssfree(*it);
+    ssfree(getter_list);
+    ssfree(signal_name);
+}
+
+char** signaldecl(surgescript_parser_t* parser, const char* signal_name)
+{
+    char** getter_list = NULL;
+    int getter_count = 0;
+
+    /* read the names of the getters */
+    while(optmatch_exactly(parser, SSTOK_IDENTIFIER, "get")) {
+        expect(parser, SSTOK_IDENTIFIER);
+        {
+            const char* getter_name = surgescript_token_lexeme(parser->lookahead);
+
+            /* validate name */
+            if(is_large_name(getter_name))
+                ssfatal("Compile Error: property name \"%s\" of signal \"%s\" is too large at %s:%d", getter_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            if(!is_valid_name(getter_name))
+                ssfatal("Compile Error: invalid property name \"%s\" of signal \"%s\" at %s:%d", getter_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            for(int i = 0; i < getter_count; i++) {
+                if(0 == strcmp(getter_name, getter_list[i]))
+                    ssfatal("Compile Error: duplicate property name \"%s\" of signal \"%s\" in %s:%d.", getter_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            }
+
+            /* add name to the list */
+            getter_list = ssrealloc(getter_list, ++getter_count * sizeof(char*));
+            getter_list[getter_count - 1] = ssstrdup(getter_name);
+        }
+        match(parser, SSTOK_IDENTIFIER);
+        match(parser, SSTOK_LPAREN);
+        match(parser, SSTOK_RPAREN);
+        match(parser, SSTOK_SEMICOLON);
+    }
+
+    /* return a NULL-terminated array of strings */
+    getter_list = ssrealloc(getter_list, (1 + getter_count) * sizeof(char*));
+    getter_list[getter_count] = NULL;
+    return getter_list;
+}
+
 void objectlist(surgescript_parser_t* parser)
 {
     while(has_token(parser))
@@ -717,7 +815,7 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         }
     }
 
-    if(optmatch(parser, SSTOK_EMITS)) {
+    if(optmatch_exactly(parser, SSTOK_IDENTIFIER, "emits")) {
         /* validate */
         if(!got_type(parser, SSTOK_STRING))
             unexpected_symbol(parser);
@@ -850,7 +948,7 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void signalhandlerdecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    while(optmatch(parser, SSTOK_ON)) {
+    while(optmatch(parser, SSTOK_CATCH)) {
         expect(parser, SSTOK_STRING);
         signalhandlerdecl(parser, context);
     }
