@@ -619,7 +619,8 @@ void signallist(surgescript_parser_t* parser)
 void signal(surgescript_parser_t* parser)
 {
     char* signal_name;
-    char** getter_list; /* NULL-terminated array of strings */
+    char** property_list; /* NULL-terminated array of strings */
+    bool is_global = false;
 
     /* read the header */
     match(parser, SSTOK_SIGNAL);
@@ -632,64 +633,71 @@ void signal(surgescript_parser_t* parser)
     else if(!is_valid_name(signal_name))
         ssfatal("Compile Error: invalid signal name \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
 
-    /* read the body */
+    /* read the type */
     match(parser, SSTOK_STRING);
+    match(parser, SSTOK_IS);
+    if(optmatch_exactly(parser, SSTOK_IDENTIFIER, "global"))
+        is_global = true;
+    else if(optmatch_exactly(parser, SSTOK_IDENTIFIER, "bubble"))
+        is_global = false;
+    else
+        unexpected_symbol(parser);
+
+    /* read the body */
     match(parser, SSTOK_LCURLY);
-    getter_list = signaldecl(parser, signal_name);
+    property_list = signaldecl(parser, signal_name);
     if(!optmatch(parser, SSTOK_RCURLY))
         unexpected_symbol(parser);
 
     /* register the signal */
     // TODO
 #if 0
-    printf("signal \"%s\"\n", signal_name);
-    for(char** it = getter_list; *it; it++)
+    printf("signal \"%s\" is %s\n", signal_name, is_global ? "global" : "bubble");
+    for(char** it = property_list; *it; it++)
         puts(*it);
     puts("=====");
 #endif
 
     /* cleanup */
-    for(char** it = getter_list; *it; it++)
+    for(char** it = property_list; *it; it++)
         ssfree(*it);
-    ssfree(getter_list);
+    ssfree(property_list);
     ssfree(signal_name);
 }
 
 char** signaldecl(surgescript_parser_t* parser, const char* signal_name)
 {
-    char** getter_list = NULL;
-    int getter_count = 0;
+    char** property_list = NULL;
+    int property_count = 0;
 
-    /* read the names of the getters */
-    while(optmatch_exactly(parser, SSTOK_IDENTIFIER, "get")) {
-        expect(parser, SSTOK_IDENTIFIER);
-        {
-            const char* getter_name = surgescript_token_lexeme(parser->lookahead);
+    /* read the names of the properties */
+    while(got_type(parser, SSTOK_IDENTIFIER)) {
+        const char* property_name = surgescript_token_lexeme(parser->lookahead);
 
-            /* validate name */
-            if(is_large_name(getter_name))
-                ssfatal("Compile Error: property name \"%s\" of signal \"%s\" is too large at %s:%d", getter_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
-            if(!is_valid_name(getter_name))
-                ssfatal("Compile Error: invalid property name \"%s\" of signal \"%s\" at %s:%d", getter_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
-            for(int i = 0; i < getter_count; i++) {
-                if(0 == strcmp(getter_name, getter_list[i]))
-                    ssfatal("Compile Error: duplicate property name \"%s\" of signal \"%s\" in %s:%d.", getter_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
-            }
-
-            /* add name to the list */
-            getter_list = ssrealloc(getter_list, ++getter_count * sizeof(char*));
-            getter_list[getter_count - 1] = ssstrdup(getter_name);
+        /* validate name */
+        if(is_large_name(property_name))
+            ssfatal("Compile Error: property name \"%s\" of signal \"%s\" is too large at %s:%d", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+        if(!is_valid_name(property_name))
+            ssfatal("Compile Error: invalid property name \"%s\" of signal \"%s\" at %s:%d", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+        for(int i = 0; i < property_count; i++) {
+            if(0 == strcmp(property_name, property_list[i]))
+                ssfatal("Compile Error: duplicate property name \"%s\" of signal \"%s\" in %s:%d.", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
         }
+
+        /* add name to the list */
+        property_list = ssrealloc(property_list, ++property_count * sizeof(char*));
+        property_list[property_count - 1] = ssstrdup(property_name);
+
+        /* match token */
         match(parser, SSTOK_IDENTIFIER);
-        match(parser, SSTOK_LPAREN);
-        match(parser, SSTOK_RPAREN);
-        match(parser, SSTOK_SEMICOLON);
+        if(!optmatch(parser, SSTOK_COMMA))
+            break;
     }
 
     /* return a NULL-terminated array of strings */
-    getter_list = ssrealloc(getter_list, (1 + getter_count) * sizeof(char*));
-    getter_list[getter_count] = NULL;
-    return getter_list;
+    property_list = ssrealloc(property_list, (1 + property_count) * sizeof(char*));
+    property_list[property_count] = NULL;
+    return property_list;
 }
 
 void objectlist(surgescript_parser_t* parser)
