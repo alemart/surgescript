@@ -53,6 +53,7 @@ set(
     src/surgescript/runtime/program.c
     src/surgescript/runtime/program_pool.c
     src/surgescript/runtime/renv.c
+    src/surgescript/runtime/signal_system.c
     src/surgescript/runtime/sslib/anonymous.c
     src/surgescript/runtime/sslib/application.c
     src/surgescript/runtime/sslib/arguments.c
@@ -102,6 +103,7 @@ set(
     src/surgescript/runtime/program_operators.h
     src/surgescript/runtime/program_pool.h
     src/surgescript/runtime/renv.h
+    src/surgescript/runtime/signal_system.h
     src/surgescript/runtime/sslib/sslib.h
     src/surgescript/runtime/stack.h
     src/surgescript/runtime/tag_system.h

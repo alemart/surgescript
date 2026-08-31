@@ -104,7 +104,7 @@ static void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t cont
 static void statedecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void signalhandlerdecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context, char* out_signal_name, size_t buffer_size);
 static void fundecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
@@ -956,13 +956,15 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void signalhandlerdecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    char signal_name[1 + SS_NAMEMAX];
+
     while(optmatch(parser, SSTOK_CATCH)) {
         expect(parser, SSTOK_STRING);
-        signalhandlerdecl(parser, context);
+        signalhandlerdecl(parser, context, signal_name, sizeof(signal_name));
     }
 }
 
-void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context, char* out_signal_name, size_t buffer_size)
 {
     static const char prefix[] = "signal:";
     const char* signal_name = surgescript_token_lexeme(parser->lookahead);
@@ -970,7 +972,7 @@ void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t c
     int fun_header = 0;
     const int num_arguments = 1; /* signal handlers receive a single parameter */
 
-    /* read state name & generate function name */
+    /* generate function name */
     program_name = ssmalloc((1 + strlen(prefix) + strlen(signal_name)) * sizeof(*program_name));
     strcat(strcpy(program_name, prefix), signal_name);
     match(parser, SSTOK_STRING);
@@ -982,6 +984,9 @@ void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t c
         ssfatal("Compile Error: invalid signal name \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
     if(surgescript_programpool_shallowcheck(parser->program_pool, context.object_name, program_name))
         ssfatal("Compile Error: duplicate signal handler \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+
+    /* copy signal name */
+    surgescript_util_strncpy(out_signal_name, signal_name, buffer_size);
 
     /* create context */
     context = nodecontext(
