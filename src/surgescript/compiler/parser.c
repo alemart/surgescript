@@ -35,6 +35,7 @@
 #include "../runtime/tag_system.h"
 #include "../runtime/program_pool.h"
 #include "../runtime/program.h"
+#include "../runtime/signal_system.h"
 #include "../util/util.h"
 #include "../util/ssarray.h"
 
@@ -49,6 +50,7 @@ struct surgescript_parser_t
     surgescript_tagsystem_t* tag_system; /* reference to the tag system */
     surgescript_symtable_t* base_table; /* valid symbols in the current file (code unit) */
     SSARRAY(char*, known_plugins); /* known plugins in all files (the names of the objects) */
+    surgescript_signalsystembuilder_t* signal_system_builder; /* signal system builder */
     surgescript_parser_flags_t flags;
 };
 
@@ -81,13 +83,14 @@ static void release_annotations(char** annotations);
 static void process_annotations(surgescript_parser_t* parser, char** annotations, const char* object_name);
 static surgescript_program_t* make_file_program(const char* source_file);
 static void pick_non_natives(const char* program_name, void* data);
-static void remove_object_definition(surgescript_programpool_t* pool, const char* object_name);
+static void remove_object_definition(surgescript_parser_t* parser, const char* object_name);
 static bool forbid_duplicates(const surgescript_parser_t* parser, const char* object_name);
 static bool is_state_context(surgescript_nodecontext_t context);
 static bool is_signalhandler_context(surgescript_nodecontext_t context);
 static char* randstr(char* buf, size_t size);
 static bool is_large_name(const char* name);
 static bool is_valid_name(const char* name);
+static int index_of_string(const char* key, char* const* array, size_t length);
 
 /* non-terminals */
 static void importlist(surgescript_parser_t* parser);
@@ -169,6 +172,7 @@ surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* progr
     parser->program_pool = program_pool;
     parser->tag_system = tag_system;
     parser->base_table = NULL;
+    parser->signal_system_builder = surgescript_signalsystembuilder_create();
     parser->flags = SSPARSER_DEFAULTS;
     init_plugins_list(parser);
     return parser;
@@ -188,6 +192,7 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser)
         surgescript_token_destroy(parser->previous);
     if(parser->base_table)
         surgescript_symtable_destroy(parser->base_table);
+    surgescript_signalsystembuilder_destroy(parser->signal_system_builder);
     release_plugins_list(parser);
     return ssfree(parser);
 }
@@ -515,8 +520,9 @@ void pick_non_natives(const char* program_name, void* data)
 }
 
 /* removes a previously defined object */
-void remove_object_definition(surgescript_programpool_t* pool, const char* object_name)
+void remove_object_definition(surgescript_parser_t* parser, const char* object_name)
 {
+    surgescript_programpool_t* pool = parser->program_pool;
     char** programs = NULL; int count = 0;
     void* data[] = { pool, (void*)object_name, &count, &programs };
 
@@ -531,6 +537,11 @@ void remove_object_definition(surgescript_programpool_t* pool, const char* objec
     }
     
     /* FIXME: remove all tags of object_name (ps: how about tags added in C?) */
+
+    /* unregister all signal emissions and handlers from the builder */
+    surgescript_signalsystembuilder_t* builder = parser->signal_system_builder;
+    surgescript_signalsystembuilder_unregister_signal_emissions(builder, object_name);
+    surgescript_signalsystembuilder_unregister_signal_handlers(builder, object_name);
 }
 
 /* checks if duplicates of an object will be forbidden */
@@ -607,6 +618,17 @@ bool is_valid_name(const char* name)
     return (p - name) <= SS_NAMEMAX;
 }
 
+/* the index of a key in an array of strings, or -1 if not found */
+int index_of_string(const char* key, char* const* array, size_t length)
+{
+    /* start by the end (more efficient given the usage?) */
+    while(length--) {
+        if(0 == strcmp(key, array[length]))
+            return length;
+    }
+
+    return -1;
+}
 
 /* non-terminals of the grammar */
 
@@ -620,7 +642,9 @@ void signal(surgescript_parser_t* parser)
 {
     char* signal_name;
     char** property_list; /* NULL-terminated array of strings */
-    bool is_global = false;
+    bool is_global = true;
+    bool is_duplicate = false;
+    bool skip_registration = false;
 
     /* read the header */
     match(parser, SSTOK_SIGNAL);
@@ -632,6 +656,18 @@ void signal(surgescript_parser_t* parser)
         ssfatal("Compile Error: signal name \"%s\" is too large at %s:%d", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     else if(!is_valid_name(signal_name))
         ssfatal("Compile Error: invalid signal name \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+    else if((is_duplicate = surgescript_signalsystembuilder_is_signal_registered(parser->signal_system_builder, signal_name))) {
+        if(parser->flags & SSPARSER_SKIP_DUPLICATES) {
+            sslog("Warning: skipping duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            skip_registration = true;
+        }
+        else if(parser->flags & SSPARSER_ALLOW_DUPLICATES) {
+            sslog("Warning: reading duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            surgescript_signalsystembuilder_unregister_signal(parser->signal_system_builder, signal_name);
+        }
+        else
+            ssfatal("Compile Error: duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+    }
 
     /* read the type */
     match(parser, SSTOK_STRING);
@@ -650,8 +686,13 @@ void signal(surgescript_parser_t* parser)
         unexpected_symbol(parser);
 
     /* register the signal */
-    // TODO
+    if(!skip_registration) {
+        surgescript_signaltype_t signal_type = is_global ? SIGTYPE_GLOBAL : SIGTYPE_BUBBLE;
+        surgescript_signalsystembuilder_register_signal(parser->signal_system_builder, signal_name, signal_type, property_list);
+    }
+
 #if 0
+    /* test */
     printf("signal \"%s\" is %s\n", signal_name, is_global ? "global" : "bubble");
     for(char** it = property_list; *it; it++)
         puts(*it);
@@ -711,7 +752,7 @@ void object(surgescript_parser_t* parser)
     surgescript_nodecontext_t context;
     char** annotations;
     char* object_name;
-    bool duplicate = false;
+    bool is_duplicate = false;
 
     /* object name */
     read_annotations(parser, &annotations);
@@ -734,7 +775,7 @@ void object(surgescript_parser_t* parser)
         ssfatal("Compile Error: object name \"%s\" is too large at %s:%d", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     else if(!is_valid_name(object_name))
         ssfatal("Compile Error: invalid object name \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
-    else if((duplicate = surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))) {
+    else if((is_duplicate = surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))) {
         if(parser->flags & SSPARSER_SKIP_DUPLICATES) {
             char buf[32] = { '.', 'd', 'u', 'p', '.' };
             sslog("Warning: skipping duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
@@ -744,7 +785,7 @@ void object(surgescript_parser_t* parser)
         }
         else if((parser->flags & SSPARSER_ALLOW_DUPLICATES) && !forbid_duplicates(parser, object_name)) {
             sslog("Warning: reading duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
-            remove_object_definition(parser->program_pool, object_name);
+            remove_object_definition(parser, object_name);
         }
         else
             ssfatal("Compile Error: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
@@ -764,8 +805,8 @@ void object(surgescript_parser_t* parser)
         surgescript_programpool_put(parser->program_pool, object_name, "get___file", make_file_program(context.source_file));
 
     /* cleanup */
-    if(duplicate && (parser->flags & SSPARSER_SKIP_DUPLICATES))
-        remove_object_definition(parser->program_pool, object_name);
+    if(is_duplicate && (parser->flags & SSPARSER_SKIP_DUPLICATES))
+        remove_object_definition(parser, object_name);
     surgescript_symtable_destroy(context.symtable);
     release_annotations(annotations);
     ssfree(object_name);
@@ -812,9 +853,12 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
                 ssfatal("Compile Error: tag name \"%s\" of object \"%s\" is too large at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
             else if(!is_valid_name(tag_name))
                 ssfatal("Compile Error: invalid tag name \"%s\" in object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+            /* else if(tag already declared) => FIXME */
 
             /* okay, add tag */
             surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, tag_name);
+
+            /* continue */
             match(parser, SSTOK_STRING);
             if(optmatch(parser, SSTOK_COMMA))
                 expect(parser, SSTOK_STRING);
@@ -824,6 +868,9 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
 
     if(optmatch_exactly(parser, SSTOK_IDENTIFIER, "emits")) {
+        SSARRAY(char*, signal_names);
+        ssarray_init(signal_names);
+
         /* validate */
         if(!got_type(parser, SSTOK_STRING))
             unexpected_symbol(parser);
@@ -837,15 +884,28 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
                 ssfatal("Compile Error: signal name \"%s\" of object \"%s\" is too large at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
             else if(!is_valid_name(signal_name))
                 ssfatal("Compile Error: invalid signal name \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+            else if(index_of_string(signal_name, signal_names, ssarray_length(signal_names)) >= 0)
+                ssfatal("Compile Error: duplicate declaration of emitted signal \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
             /* okay, add signal */
-            // TODO
+            ssarray_push(signal_names, ssstrdup(signal_name));
+
+            /* continue */
             match(parser, SSTOK_STRING);
             if(optmatch(parser, SSTOK_COMMA))
                 expect(parser, SSTOK_STRING);
             else
                 break;
         }
+
+        /* register signals */
+        ssarray_push(signal_names, NULL);
+        surgescript_signalsystembuilder_register_signal_emissions(parser->signal_system_builder, context.object_name, signal_names);
+
+        /* release */
+        for(int i = ssarray_length(signal_names) - 2; i >= 0; i--) /* last element is NULL */
+            ssfree(signal_names[i]);
+        ssarray_release(signal_names);
     }
 }
 
@@ -956,12 +1016,35 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void signalhandlerdecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    SSARRAY(char*, signal_names);
     char signal_name[1 + SS_NAMEMAX];
+    surgescript_signalsystembuilder_t* builder = parser->signal_system_builder;
 
+    /* nothing to do */
+    if(!got_type(parser, SSTOK_CATCH))
+        return;
+
+    /* init */
+    ssarray_init(signal_names);
+
+    /* match signal handlers */
     while(optmatch(parser, SSTOK_CATCH)) {
         expect(parser, SSTOK_STRING);
         signalhandlerdecl(parser, context, signal_name, sizeof(signal_name));
+
+        /* store signal name */
+        ssassert(index_of_string(signal_name, signal_names, ssarray_length(signal_names) < 0)); /* no repetition */
+        ssarray_push(signal_names, ssstrdup(signal_name));
     }
+
+    /* register signal handlers */
+    ssarray_push(signal_names, NULL);
+    surgescript_signalsystembuilder_register_signal_handlers(builder, context.object_name, signal_names);
+
+    /* release */
+    for(int i = ssarray_length(signal_names) - 2; i >= 0; i--) /* last entry is NULL */
+        ssfree(signal_names[i]);
+    ssarray_release(signal_names);
 }
 
 void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context, char* out_signal_name, size_t buffer_size)
