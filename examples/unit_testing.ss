@@ -571,7 +571,7 @@ object "SurgeScript Test" is "test"
         anon = { x };
         test(anon.x === x) || fail(65);
         test(anon.__file === this.__file) || fail(66);
-        test(anon.__name !== "Dictionary" && anon.__name === {x,}.__name) || fail(76);
+        test(anon.__name !== "Dictionary" && anon.__name === {x,}.__name) || fail(67);
         test(anon.equals({ x = x })) || fail(68);
         test(anon.equals({ x = anon.x })) || fail(69);
 

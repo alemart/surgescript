@@ -199,7 +199,7 @@ char* generate_object_name(const char** field_names, char* out_object_name, size
     ha = XXH(field_list, field_list_length, seed);
 
     /* compute second 32-bit hash */
-    hb = 5381u * 33u + ((xxhash_t)((uintptr_t)(&hb) & 0x7Fu) + count_non_vowels(field_list));
+    hb = 5381u * 33u + ((xxhash_t)count_non_vowels(field_list) + seed);
     for(const char* c = field_list; *c != '\0'; c++)
         hb = hb * 33u + (*c); /* djb2 */
 
