@@ -73,7 +73,7 @@
  * ssarray_length()
  * returns the length of the array
  */
-#define ssarray_length(arr)                   (arr##_len)
+#define ssarray_length(arr)                   (int)(arr##_len) /* cast to int: we may compute length - 1, length - 2, etc. when length is zero */
 
 /*
  * ssarray_reset()
