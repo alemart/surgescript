@@ -25,9 +25,10 @@
 #include "../util/ssarray.h"
 #include "../util/util.h"
 
-static int length_of_list(const char** list);
-static char** clone_list(const char** list);
-static bool list_has_repetition(const char** list);
+static int length_of_list(char* const* list);
+static char** clone_list(char* const* list);
+static bool list_has_repetition(char* const* list);
+static int index_of_string(const char* key, char* const* array, size_t length);
 
 /*
 --------------------------------------------------------------------------------
@@ -57,6 +58,24 @@ struct surgescript_signalsystembuilder_t
     } handlers;
 };
 
+#define release_array_of_strings(list) \
+    for(int i = ssarray_length(list) - 1; i >= 0; i--) { \
+        ssfree(list[i]); \
+    } \
+    ssarray_release(list)
+
+#define release_list_of_strings(list) \
+    for(char** it = list; *it; it++) { \
+        ssfree(*it); \
+    } \
+    ssfree(list)
+
+#define release_array_of_lists_of_strings(list) \
+    for(int i = ssarray_length(list) - 1; i >= 0; i--) { \
+        release_list_of_strings(list[i]); \
+    } \
+    ssarray_release(list)
+
 /*
  * surgescript_signalsystembuilder_create()
  * Create a Signal System Builder
@@ -84,35 +103,17 @@ surgescript_signalsystembuilder_t* surgescript_signalsystembuilder_create()
  */
 surgescript_signalsystembuilder_t* surgescript_signalsystembuilder_destroy(surgescript_signalsystembuilder_t* builder)
 {
-    #define release_list_of_lists(list) \
-        for(int i = ssarray_length(list) - 1; i >= 0; i--) { \
-            for(char** it = list[i]; *it; it++) { \
-                ssfree(*it); \
-            } \
-            ssfree(list[i]); \
-        } \
-        ssarray_release(list)
+    release_array_of_lists_of_strings(builder->handlers.signal_names);
+    release_array_of_strings(builder->handlers.object_name);
 
-    #define release_list(list) \
-        for(int i = ssarray_length(list) - 1; i >= 0; i--) { \
-            ssfree(list[i]); \
-        } \
-        ssarray_release(list)
-
-    release_list_of_lists(builder->handlers.signal_names);
-    release_list(builder->handlers.object_name);
-
-    release_list_of_lists(builder->emissions.signal_names);
-    release_list(builder->emissions.object_name);
+    release_array_of_lists_of_strings(builder->emissions.signal_names);
+    release_array_of_strings(builder->emissions.object_name);
 
     ssarray_release(builder->declarations.signal_type);
-    release_list_of_lists(builder->declarations.field_names);
-    release_list(builder->declarations.signal_name);
+    release_array_of_lists_of_strings(builder->declarations.field_names);
+    release_array_of_strings(builder->declarations.signal_name);
 
     return ssfree(builder);
-
-    #undef release_list
-    #undef release_list_of_lists
 }
 
 /*
@@ -121,11 +122,39 @@ surgescript_signalsystembuilder_t* surgescript_signalsystembuilder_destroy(surge
  */
 bool surgescript_signalsystembuilder_is_signal_registered(surgescript_signalsystembuilder_t* builder, const char* signal_name)
 {
-    for(int i = ssarray_length(builder->declarations.signal_name) - 1; i >= 0; i--) {
-        if(0 == strcmp(builder->declarations.signal_name[i], signal_name))
-            return true;
-    }
+    int i = index_of_string(signal_name, builder->declarations.signal_name, ssarray_length(builder->declarations.signal_name));
+    return i >= 0;
+}
 
+/*
+ * surgescript_signalsystembuilder_is_signal_emission_registered()
+ * Check if a signal emission has already been registered for a given object
+ */
+bool surgescript_signalsystembuilder_is_signal_emission_registered(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name)
+{
+    int i = index_of_string(object_name, builder->emissions.object_name, ssarray_length(builder->emissions.object_name));
+    if(i >= 0) {
+        for(char* const* it = builder->emissions.signal_names[i]; *it; it++) {
+            if(0 == strcmp(*it, signal_name))
+                return true;
+        }
+    }
+    return false;
+}
+
+/*
+ * surgescript_signalsystembuilder_is_signal_handler_registered()
+ * Check if a signal handler has already been registered for a given object
+ */
+bool surgescript_signalsystembuilder_is_signal_handler_registered(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name)
+{
+    int i = index_of_string(object_name, builder->handlers.object_name, ssarray_length(builder->handlers.object_name));
+    if(i >= 0) {
+        for(char* const* it = builder->handlers.signal_names[i]; *it; it++) {
+            if(0 == strcmp(*it, signal_name))
+                return true;
+        }
+    }
     return false;
 }
 
@@ -135,12 +164,8 @@ bool surgescript_signalsystembuilder_is_signal_registered(surgescript_signalsyst
  */
 bool surgescript_signalsystembuilder_are_signal_emissions_registered(surgescript_signalsystembuilder_t* builder, const char* object_name)
 {
-    for(int i = ssarray_length(builder->emissions.object_name) - 1; i >= 0; i--) {
-        if(0 == strcmp(builder->emissions.object_name[i], object_name))
-            return true;
-    }
-
-    return false;
+    int i = index_of_string(object_name, builder->emissions.object_name, ssarray_length(builder->emissions.object_name));
+    return i >= 0;
 }
 
 /*
@@ -149,12 +174,8 @@ bool surgescript_signalsystembuilder_are_signal_emissions_registered(surgescript
  */
 bool surgescript_signalsystembuilder_are_signal_handlers_registered(surgescript_signalsystembuilder_t* builder, const char* object_name)
 {
-    for(int i = ssarray_length(builder->handlers.object_name) - 1; i >= 0; i--) {
-        if(0 == strcmp(builder->handlers.object_name[i], object_name))
-            return true;
-    }
-
-    return false;
+    int i = index_of_string(object_name, builder->handlers.object_name, ssarray_length(builder->handlers.object_name));
+    return i >= 0;
 }
 
 /*
@@ -163,7 +184,7 @@ bool surgescript_signalsystembuilder_are_signal_handlers_registered(surgescript_
  * see surgescript_signalsystembuilder_is_signal_registered().
  * field_names is a NULL-terminated array of strings
  */
-void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name, surgescript_signaltype_t signal_type, const char** field_names)
+void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name, surgescript_signaltype_t signal_type, char* const* field_names)
 {
     ssassert(!surgescript_signalsystembuilder_is_signal_registered(builder, signal_name));
     ssassert(!list_has_repetition(field_names));
@@ -179,7 +200,7 @@ void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembui
  * see surgescript_signalsystembuilder_are_signal_emissions_registered().
  * signal_names is a NULL-terminated array of strings
  */
-void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name, const char** signal_names)
+void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name, char* const* signal_names)
 {
     ssassert(!surgescript_signalsystembuilder_are_signal_emissions_registered(builder, object_name));
     ssassert(!list_has_repetition(signal_names));
@@ -194,13 +215,72 @@ void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signa
  * see surgescript_signalsystembuilder_are_signal_handlers_registered().
  * signal_names is a NULL-terminated array of strings
  */
-void surgescript_signalsystembuilder_register_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name, const char** signal_names)
+void surgescript_signalsystembuilder_register_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name, char* const* signal_names)
 {
     ssassert(!surgescript_signalsystembuilder_are_signal_handlers_registered(builder, object_name));
     ssassert(!list_has_repetition(signal_names));
 
     ssarray_push(builder->handlers.object_name, ssstrdup(object_name));
     ssarray_push(builder->handlers.signal_names, clone_list(signal_names));
+}
+
+/*
+ * surgescript_signalsystembuilder_unregister_signal()
+ * Unregister a signal declaration. Returns true on success.
+ */
+bool surgescript_signalsystembuilder_unregister_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name)
+{
+    int i = index_of_string(signal_name, builder->declarations.signal_name, ssarray_length(builder->declarations.signal_name));
+    if(i < 0)
+        return false;
+
+    release_list_of_strings(builder->declarations.field_names[i]);
+    ssarray_remove(builder->declarations.field_names, i);
+
+    ssarray_remove(builder->declarations.signal_type, i);
+
+    ssarray_remove(builder->declarations.signal_name, i);
+    ssfree(builder->declarations.signal_name[i]);
+
+    return true;
+}
+
+/*
+ * surgescript_signalsystembuilder_unregister_signal_emissions()
+ * Unregister signal emissions of an object. Returns true on success.
+ */
+bool surgescript_signalsystembuilder_unregister_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name)
+{
+    int i = index_of_string(object_name, builder->emissions.object_name, ssarray_length(builder->emissions.object_name));
+    if(i < 0)
+        return false;
+
+    release_list_of_strings(builder->emissions.signal_names[i]);
+    ssarray_remove(builder->emissions.signal_names, i);
+
+    ssfree(builder->emissions.object_name[i]);
+    ssarray_remove(builder->emissions.object_name, i);
+
+    return true;
+}
+
+/*
+ * surgescript_signalsystembuilder_unregister_signal()
+ * Unregister signal handlers of an object. Returns true on success.
+ */
+bool surgescript_signalsystembuilder_unregister_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name)
+{
+    int i = index_of_string(object_name, builder->handlers.object_name, ssarray_length(builder->handlers.object_name));
+    if(i < 0)
+        return false;
+
+    release_list_of_strings(builder->handlers.signal_names[i]);
+    ssarray_remove(builder->handlers.signal_names, i);
+
+    ssfree(builder->handlers.object_name[i]);
+    ssarray_remove(builder->handlers.object_name, i);
+
+    return true;
 }
 
 /*
@@ -220,21 +300,21 @@ private stuff
 */
 
 /* count the number of elements of a NULL-terminated array of strings */
-int length_of_list(const char** list)
+int length_of_list(char* const* list)
 {
     int count = 0;
 
     if(NULL == list) /* accept NULL? */
         return 0;
 
-    for(const char** it = list; *it; it++)
+    for(char* const* it = list; *it; it++)
         count++;
 
     return count;
 }
 
 /* clone a NULL-terminated array of strings */
-char** clone_list(const char** list)
+char** clone_list(char* const* list)
 {
     int length = length_of_list(list);
     char** clone = ssmalloc((1 + length) * sizeof(char*));
@@ -247,14 +327,26 @@ char** clone_list(const char** list)
 }
 
 /* check if a NULL-terminated array of strings has repeated elements */
-bool list_has_repetition(const char** list)
+bool list_has_repetition(char* const* list)
 {
-    for(const char** it = list; *it; it++) {
-        for(const char** it2 = list; it2 != it && *it2; it2++) {
+    for(char* const* it = list; *it; it++) {
+        for(char* const* it2 = list; it2 != it && *it2; it2++) {
             if(0 == strcmp(*it, *it2))
                 return true;
         }
     }
 
     return false;
+}
+
+/* the index of a key in an array of strings, or -1 if not found */
+int index_of_string(const char* key, char* const* array, size_t length)
+{
+    /* start by the end (more efficient given the usage?) */
+    while(length--) {
+        if(0 == strcmp(key, array[length]))
+            return length;
+    }
+
+    return -1;
 }
