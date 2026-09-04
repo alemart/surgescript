@@ -840,6 +840,9 @@ void objectdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     if(optmatch(parser, SSTOK_IS)) {
+        SSARRAY(char*, tag_names);
+        ssarray_init(tag_names);
+
         /* validate */
         if(!got_type(parser, SSTOK_STRING))
             unexpected_symbol(parser);
@@ -853,9 +856,11 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
                 ssfatal("Compile Error: tag name \"%s\" of object \"%s\" is too large at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
             else if(!is_valid_name(tag_name))
                 ssfatal("Compile Error: invalid tag name \"%s\" in object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
-            /* else if(tag already declared) => FIXME */
+            else if(index_of_string(tag_name, tag_names, ssarray_length(tag_names)) >= 0)
+                ssfatal("Compile Error: duplicate tag \"%s\" for object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
             /* okay, add tag */
+            ssarray_push(tag_names, ssstrdup(tag_name));
             surgescript_tagsystem_add_tag(parser->tag_system, context.object_name, tag_name);
 
             /* continue */
@@ -865,6 +870,11 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             else
                 break;
         }
+
+        /* release */
+        for(int i = ssarray_length(tag_names) - 1; i >= 0; i--)
+            ssfree(tag_names[i]);
+        ssarray_release(tag_names);
     }
 
     if(optmatch_exactly(parser, SSTOK_IDENTIFIER, "emits")) {
