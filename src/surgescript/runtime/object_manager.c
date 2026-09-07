@@ -25,6 +25,7 @@
 #include "object.h"
 #include "program_pool.h"
 #include "tag_system.h"
+#include "signal_system.h"
 #include "vm.h"
 #include "vm_time.h"
 #include "stack.h"
@@ -464,11 +465,20 @@ surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescri
 
 /*
  * surgescript_objectmanager_tagsystem()
- * Pointer to the tag manager
+ * Pointer to the tag system
  */
 surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_objectmanager_t* manager)
 {
     return surgescript_vm_tagsystem(manager->vm);
+}
+
+/*
+ * surgescript_objectmanager_signalsystem()
+ * Pointer to the signal system
+ */
+surgescript_signalsystem_t* surgescript_objectmanager_signalsystem(const surgescript_objectmanager_t* manager)
+{
+    return surgescript_vm_signalsystem(manager->vm);
 }
 
 /*

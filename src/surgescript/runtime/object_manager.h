@@ -34,6 +34,7 @@ struct surgescript_vm_t;
 struct surgescript_stack_t;
 struct surgescript_programpool_t;
 struct surgescript_tagsystem_t;
+struct surgescript_signalsystem_t;
 struct surgescript_vmargs_t;
 struct surgescript_vmtime_t;
 
@@ -59,7 +60,8 @@ bool surgescript_objectmanager_class_exists(const surgescript_objectmanager_t* m
 
 /* components */
 struct surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager); /* pointer to the program pool */
-struct surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_objectmanager_t* manager); /* pointer to the tag manager */
+struct surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_objectmanager_t* manager); /* pointer to the tag system */
+struct surgescript_signalsystem_t* surgescript_objectmanager_signalsystem(const surgescript_objectmanager_t* manager); /* pointer to the signal manager */
 struct surgescript_vmargs_t* surgescript_objectmanager_vmargs(const surgescript_objectmanager_t* manager); /* VM command-line arguments */
 
 /* garbage collector */

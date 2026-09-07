@@ -33,6 +33,7 @@ struct surgescript_parser_t;
 struct surgescript_programpool_t;
 struct surgescript_objectmanager_t;
 struct surgescript_tagsystem_t;
+struct surgescript_signalsystem_t;
 struct surgescript_vmargs_t;
 struct surgescript_vmtime_t;
 
@@ -60,6 +61,7 @@ bool surgescript_vm_is_paused(const surgescript_vm_t* vm); /* is the VM paused? 
 /* VM components */
 struct surgescript_programpool_t* surgescript_vm_programpool(const surgescript_vm_t* vm); /* gets the program pool */
 struct surgescript_tagsystem_t* surgescript_vm_tagsystem(const surgescript_vm_t* vm); /* gets the tag system */
+struct surgescript_signalsystem_t* surgescript_vm_signalsystem(const surgescript_vm_t* vm); /* gets the signal system */
 struct surgescript_objectmanager_t* surgescript_vm_objectmanager(const surgescript_vm_t* vm); /* gets the object manager */
 struct surgescript_parser_t* surgescript_vm_parser(const surgescript_vm_t* vm); /* gets the parser */
 const struct surgescript_vmargs_t* surgescript_vm_args(const surgescript_vm_t* vm); /* gets the command-line arguments */

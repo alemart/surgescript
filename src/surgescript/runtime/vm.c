@@ -28,6 +28,7 @@
 #include "program_pool.h"
 #include "tag_system.h"
 #include "object_manager.h"
+#include "signal_system.h"
 #include "vm_time.h"
 #include "managed_string.h"
 #include "sslib/sslib.h"
@@ -63,6 +64,8 @@ struct surgescript_vm_t
     surgescript_programpool_t* program_pool;
     surgescript_tagsystem_t* tag_system;
     surgescript_objectmanager_t* object_manager;
+    surgescript_signalsystembuilder_t* signal_system_builder;
+    surgescript_signalsystem_t* signal_system;
     surgescript_parser_t* parser;
     surgescript_vmargs_t* args;
     surgescript_vmtime_t* time;
@@ -242,6 +245,9 @@ void surgescript_vm_launch_ex(surgescript_vm_t* vm, int argc, char** argv)
     /* Generate class IDs */
     surgescript_objectmanager_generate_class_ids(vm->object_manager);
 
+    /* Build the Signal System */
+    vm->signal_system = surgescript_signalsystembuilder_build(vm->signal_system_builder, vm->object_manager);
+
     /* Create the root object */
     surgescript_objectmanager_spawn_root(vm->object_manager);
 }
@@ -366,6 +372,16 @@ surgescript_tagsystem_t* surgescript_vm_tagsystem(const surgescript_vm_t* vm)
 }
 
 /*
+ * surgescript_vm_signalsystem()
+ * Gets the signal system
+ */
+surgescript_signalsystem_t* surgescript_vm_signalsystem(const surgescript_vm_t* vm)
+{
+    ssassert(vm->signal_system != NULL);
+    return vm->signal_system;
+}
+
+/*
  * surgescript_vm_objectmanager()
  * Gets the object manager
  */
@@ -466,8 +482,10 @@ void init_vm(surgescript_vm_t* vm)
     vm->tag_system = surgescript_tagsystem_create();
     vm->args = surgescript_vmargs_create();
     vm->time = surgescript_vmtime_create();
-    vm->object_manager = surgescript_objectmanager_create(vm->program_pool, vm->tag_system, vm->stack, vm->args, vm->time);
-    vm->parser = surgescript_parser_create(vm->program_pool, vm->tag_system);
+    vm->object_manager = surgescript_objectmanager_create(vm->stack, vm, vm->args, vm->time);
+    vm->signal_system_builder = surgescript_signalsystembuilder_create();
+    vm->signal_system = NULL;
+    vm->parser = surgescript_parser_create(vm->program_pool, vm->tag_system, vm->signal_system_builder);
 
     /* load the SurgeScript standard library */
     surgescript_sslib_register_object(vm);
@@ -495,6 +513,8 @@ void release_vm(surgescript_vm_t* vm)
 {
     /* destroy the VM components */
     surgescript_parser_destroy(vm->parser);
+    surgescript_signalsystem_destroy(vm->signal_system);
+    surgescript_signalsystembuilder_destroy(vm->signal_system_builder);
     surgescript_objectmanager_destroy(vm->object_manager);
     surgescript_vmtime_destroy(vm->time);
     surgescript_vmargs_destroy(vm->args);

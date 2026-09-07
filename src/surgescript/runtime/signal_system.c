@@ -22,8 +22,10 @@
 #include <string.h>
 #include "signal_system.h"
 #include "object_manager.h"
+#include "../util/perfect_hash.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
+#include "../util/xxh.h"
 
 static int length_of_list(char* const* list);
 static char** clone_list(char* const* list);
@@ -284,13 +286,49 @@ bool surgescript_signalsystembuilder_unregister_signal_handlers(surgescript_sign
 }
 
 /*
+--------------------------------------------------------------------------------
+Signal System
+--------------------------------------------------------------------------------
+*/
+
+struct surgescript_signalsystem_t
+{
+    surgescript_perfecthashseed_t hash_seed;
+};
+
+static surgescript_perfecthashkey_t hash_of_signal_name(const char* signal_name, surgescript_perfecthashseed_t seed);
+
+/*
  * surgescript_signalsystembuilder_build()
  * Build a Signal System
  */
 surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescript_signalsystembuilder_t* builder, const surgescript_objectmanager_t* object_manager)
 {
+    /* find a perfect hash function for signal names */
+    surgescript_perfecthashseed_t hash_seed = surgescript_perfecthash_find_seed(hash_of_signal_name, builder->declarations.signal_name, ssarray_length(builder->declarations.signal_name));
+    //printf("Signal System hash seed: %u\n", hash_seed);
+
     // TODO
     return NULL;
+}
+
+/*
+ * surgescript_signalsystem_destroy()
+ * Release a Signal System instance
+ */
+surgescript_signalsystem_t* surgescript_signalsystem_destroy(surgescript_signalsystem_t* signal_system)
+{
+    // TODO
+    return NULL;
+}
+
+/*
+ * surgescript_signalsystem_signal_code()
+ * Get the code of a signal name
+ */
+surgescript_signalcode_t surgescript_signalsystem_signal_code(const surgescript_signalsystem_t* signal_system, const char* signal_name)
+{
+    return hash_of_signal_name(signal_name, signal_system->hash_seed);
 }
 
 /*
@@ -349,4 +387,10 @@ int index_of_string(const char* key, char* const* array, size_t length)
     }
 
     return -1;
+}
+
+/* hash of signal name */
+surgescript_perfecthashkey_t hash_of_signal_name(const char* signal_name, surgescript_perfecthashseed_t seed)
+{
+    return XXH(signal_name, strlen(signal_name), seed);
 }

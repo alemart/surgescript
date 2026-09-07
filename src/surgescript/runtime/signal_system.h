@@ -23,10 +23,11 @@
 #define _SURGESCRIPT_RUNTIME_SIGNAL_SYSTEM_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
+typedef uint32_t surgescript_signalcode_t;
 typedef struct surgescript_signalsystem_t surgescript_signalsystem_t;
 typedef struct surgescript_signalsystembuilder_t surgescript_signalsystembuilder_t;
-typedef struct surgescript_objectmanager_t surgescript_objectmanager_t;
 
 typedef enum surgescript_signaltype_t surgescript_signaltype_t;
 enum surgescript_signaltype_t
@@ -44,6 +45,8 @@ enum surgescript_signaltype_t
     /*SIGTYPE_MANUAL*/
 };
 
+struct surgescript_objectmanager_t;
+
 /* builder */
 surgescript_signalsystembuilder_t* surgescript_signalsystembuilder_create();
 surgescript_signalsystembuilder_t* surgescript_signalsystembuilder_destroy(surgescript_signalsystembuilder_t* builder);
@@ -58,6 +61,10 @@ void surgescript_signalsystembuilder_register_signal_handlers(surgescript_signal
 bool surgescript_signalsystembuilder_unregister_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name);
 bool surgescript_signalsystembuilder_unregister_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name);
 bool surgescript_signalsystembuilder_unregister_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name);
-surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescript_signalsystembuilder_t* builder, const surgescript_objectmanager_t* object_manager);
+surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescript_signalsystembuilder_t* builder, const struct surgescript_objectmanager_t* object_manager);
+
+/* signal system */
+surgescript_signalsystem_t* surgescript_signalsystem_destroy(surgescript_signalsystem_t* signal_system);
+surgescript_signalcode_t surgescript_signalsystem_signal_code(const surgescript_signalsystem_t* signal_system, const char* signal_name);
 
 #endif

@@ -163,7 +163,7 @@ static void signednum(surgescript_parser_t* parser, surgescript_nodecontext_t co
  * surgescript_parser_create()
  * Creates a new parser
  */
-surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* program_pool, surgescript_tagsystem_t* tag_system)
+surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* program_pool, surgescript_tagsystem_t* tag_system, surgescript_signalsystembuilder_t* signal_system_builder)
 {
     surgescript_parser_t* parser = ssmalloc(sizeof *parser);
     parser->lookahead = parser->previous = NULL;
@@ -172,7 +172,7 @@ surgescript_parser_t* surgescript_parser_create(surgescript_programpool_t* progr
     parser->program_pool = program_pool;
     parser->tag_system = tag_system;
     parser->base_table = NULL;
-    parser->signal_system_builder = surgescript_signalsystembuilder_create();
+    parser->signal_system_builder = signal_system_builder;
     parser->flags = SSPARSER_DEFAULTS;
     init_plugins_list(parser);
     return parser;
@@ -192,7 +192,6 @@ surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser)
         surgescript_token_destroy(parser->previous);
     if(parser->base_table)
         surgescript_symtable_destroy(parser->base_table);
-    surgescript_signalsystembuilder_destroy(parser->signal_system_builder);
     release_plugins_list(parser);
     return ssfree(parser);
 }

@@ -168,6 +168,7 @@
 typedef struct surgescript_parser_t surgescript_parser_t;
 struct surgescript_programpool_t;
 struct surgescript_tagsystem_t;
+struct surgescript_signalsystembuilder_t;
 
 /* parser flags (bitwise OR) */
 typedef enum surgescript_parser_flags_t {
@@ -177,7 +178,7 @@ typedef enum surgescript_parser_flags_t {
 } surgescript_parser_flags_t;
 
 /* create & destroy */
-surgescript_parser_t* surgescript_parser_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system);
+surgescript_parser_t* surgescript_parser_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system, struct surgescript_signalsystembuilder_t* signal_system_builder);
 surgescript_parser_t* surgescript_parser_destroy(surgescript_parser_t* parser);
 
 /* operations */
