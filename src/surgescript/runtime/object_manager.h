@@ -30,8 +30,9 @@ typedef struct surgescript_objectmanager_t surgescript_objectmanager_t;
 
 /* forward declarations */
 struct surgescript_object_t;
-struct surgescript_programpool_t;
+struct surgescript_vm_t;
 struct surgescript_stack_t;
+struct surgescript_programpool_t;
 struct surgescript_tagsystem_t;
 struct surgescript_vmargs_t;
 struct surgescript_vmtime_t;
@@ -40,7 +41,7 @@ struct surgescript_vmtime_t;
 /* public methods */
 
 /* life-cycle */
-surgescript_objectmanager_t* surgescript_objectmanager_create(struct surgescript_programpool_t* program_pool, struct surgescript_tagsystem_t* tag_system, struct surgescript_stack_t* stack, struct surgescript_vmargs_t* args, const struct surgescript_vmtime_t* vmtime);
+surgescript_objectmanager_t* surgescript_objectmanager_create(struct surgescript_stack_t* stack, struct surgescript_vm_t* vm, struct surgescript_vmargs_t* args, const struct surgescript_vmtime_t* vmtime);
 surgescript_objectmanager_t* surgescript_objectmanager_destroy(surgescript_objectmanager_t* manager);
 
 /* initialization */

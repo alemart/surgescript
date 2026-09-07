@@ -25,6 +25,7 @@
 #include "object.h"
 #include "program_pool.h"
 #include "tag_system.h"
+#include "vm.h"
 #include "vm_time.h"
 #include "stack.h"
 #include "heap.h"
@@ -47,10 +48,9 @@ struct surgescript_objectmanager_t
     surgescript_objecthandle_t next_handle; /* memory allocation */
     SSARRAY(surgescript_object_t*, data); /* object table */
 
-    surgescript_programpool_t* program_pool; /* reference to the program pool */
     surgescript_stack_t* stack; /* reference to the stack */
-    surgescript_tagsystem_t* tag_system; /* tag system */
 
+    surgescript_vm_t* vm; /* reference to the VM */
     surgescript_vmargs_t* args; /* VM command-line arguments (NULL-terminated array) */
     const surgescript_vmtime_t* vmtime; /* VM time */
 
@@ -139,7 +139,7 @@ SS_STATIC_ASSERT(sizeof(surgescript_objectclassid_t) == sizeof(surgescript_perfe
  * surgescript_objectmanager_create()
  * Creates a new object manager
  */
-surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_programpool_t* program_pool, surgescript_tagsystem_t* tag_system, surgescript_stack_t* stack, surgescript_vmargs_t* args, const surgescript_vmtime_t* vmtime)
+surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_stack_t* stack, surgescript_vm_t* vm, surgescript_vmargs_t* args, const surgescript_vmtime_t* vmtime)
 {
     surgescript_objectmanager_t* manager = ssmalloc(sizeof *manager);
 
@@ -149,10 +149,9 @@ surgescript_objectmanager_t* surgescript_objectmanager_create(surgescript_progra
     while(ssarray_length(manager->data) < INITIAL_OBJECT_TABLE_SIZE)
         ssarray_push(manager->data, NULL); /* fill the object table with NULL pointers */
 
-    manager->program_pool = program_pool;
-    manager->tag_system = tag_system;
     manager->stack = stack;
 
+    manager->vm = vm;
     manager->args = args;
     manager->vmtime = vmtime;
     manager->next_handle = ROOT_HANDLE;
@@ -198,6 +197,7 @@ bool surgescript_objectmanager_generate_class_ids(surgescript_objectmanager_t* m
 {
     /* class IDs are based on a perfect hash function applied to the name of
        the class of objects. The perfect hash function is based on a seed. */
+    surgescript_programpool_t* program_pool = surgescript_objectmanager_programpool(manager);
 
     /* don't change the seed after it's set */
     ssassert(manager->class_id_seed == NO_SEED);
@@ -205,7 +205,7 @@ bool surgescript_objectmanager_generate_class_ids(surgescript_objectmanager_t* m
     /* create a list of all object names */
     char** object_list = NULL;
     int object_count = 0;
-    surgescript_programpool_foreach_object_ex(manager->program_pool, (void*[]){ &object_list, &object_count }, accumulate_object_name);
+    surgescript_programpool_foreach_object_ex(program_pool, (void*[]){ &object_list, &object_count }, accumulate_object_name);
     ssassert(object_count > 0);
 
     /* compute a seed */
@@ -219,7 +219,7 @@ bool surgescript_objectmanager_generate_class_ids(surgescript_objectmanager_t* m
 
     /* lock the program pool, so that no new class of objects can be added to it
        (perfect hashing) */
-    surgescript_programpool_lock(manager->program_pool);
+    surgescript_programpool_lock(program_pool);
 
     /* done! */
     return true;
@@ -242,8 +242,9 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectman
     }
 
     /* create the object */
+    surgescript_programpool_t* program_pool = surgescript_objectmanager_programpool(manager);
     surgescript_objectclassid_t class_id = find_class_id(manager, object_name);
-    surgescript_object_t *object = surgescript_object_create(object_name, class_id, handle, manager, manager->program_pool, manager->stack, manager->vmtime, user_data);
+    surgescript_object_t *object = surgescript_object_create(object_name, class_id, handle, manager, program_pool, manager->stack, manager->vmtime, user_data);
 
     /* store the object */
     if(handle >= ssarray_length(manager->data)) {
@@ -288,8 +289,9 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_root(surgescript_obje
     char** data[] = { (char**)SYSTEM_OBJECTS, plugins };
 
     /* spawn the root object */
+    surgescript_programpool_t* program_pool = surgescript_objectmanager_programpool(manager);
     surgescript_objectclassid_t root_class_id = find_class_id(manager, ROOT_OBJECT);
-    surgescript_object_t* object = surgescript_object_create(ROOT_OBJECT, root_class_id, ROOT_HANDLE, manager, manager->program_pool, manager->stack, manager->vmtime, data);
+    surgescript_object_t* object = surgescript_object_create(ROOT_OBJECT, root_class_id, ROOT_HANDLE, manager, program_pool, manager->stack, manager->vmtime, data);
 
     ssassert(ssarray_length(manager->data) > ROOT_HANDLE);
     manager->data[ROOT_HANDLE] = object;
@@ -453,20 +455,20 @@ int surgescript_objectmanager_count(const surgescript_objectmanager_t* manager)
 
 /*
  * surgescript_objectmanager_programpool()
- * pointer to the program pool
+ * Pointer to the program pool
  */
 surgescript_programpool_t* surgescript_objectmanager_programpool(const surgescript_objectmanager_t* manager)
 {
-    return manager->program_pool;
+    return surgescript_vm_programpool(manager->vm);
 }
 
 /*
  * surgescript_objectmanager_tagsystem()
- * pointer to the tag manager
+ * Pointer to the tag manager
  */
 surgescript_tagsystem_t* surgescript_objectmanager_tagsystem(const surgescript_objectmanager_t* manager)
 {
-    return manager->tag_system;
+    return surgescript_vm_tagsystem(manager->vm);
 }
 
 /*
@@ -592,7 +594,8 @@ void surgescript_objectmanager_install_plugin(surgescript_objectmanager_t* manag
  */
 bool surgescript_objectmanager_class_exists(const surgescript_objectmanager_t* manager, const char* object_name)
 {
-    return surgescript_programpool_is_compiled(manager->program_pool, object_name);
+    surgescript_programpool_t* program_pool = surgescript_objectmanager_programpool(manager);
+    return surgescript_programpool_is_compiled(program_pool, object_name);
 }
 
 /* private stuff */
