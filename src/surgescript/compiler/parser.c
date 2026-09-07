@@ -1043,7 +1043,7 @@ void signalhandlerdecllist(surgescript_parser_t* parser, surgescript_nodecontext
         signalhandlerdecl(parser, context, signal_name, sizeof(signal_name));
 
         /* store signal name */
-        ssassert(index_of_string(signal_name, signal_names, ssarray_length(signal_names) < 0)); /* no repetition */
+        ssassert(index_of_string(signal_name, signal_names, ssarray_length(signal_names)) < 0); /* no repetition */
         ssarray_push(signal_names, ssstrdup(signal_name));
     }
 
