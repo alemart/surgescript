@@ -33,6 +33,6 @@ typedef surgescript_perfecthashkey_t (*surgescript_perfecthashfunction_t)(const 
 /* given a family H = { h_s(x) | s } of hash functions and a set K of strings,
    find a seed value s such that h_s(x) is a perfect hash function for K (i.e., no coliisions).
    Note: you must ensure that there are no repeated strings in the key[] array. */
-surgescript_perfecthashseed_t surgescript_perfecthash_find_seed(surgescript_perfecthashfunction_t hash_fn, const char** key, size_t key_count);
+surgescript_perfecthashseed_t surgescript_perfecthash_find_seed(surgescript_perfecthashfunction_t hash_fn, char* const* key, size_t key_count);
 
 #endif

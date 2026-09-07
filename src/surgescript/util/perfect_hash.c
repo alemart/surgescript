@@ -41,7 +41,7 @@ static treenode_t* treenode_insert(treenode_t* node, surgescript_perfecthashkey_
  * surgescript_perfecthash_find_seed()
  * Find a seed such that hash_fn() is a perfect hash function for key[]
  */
-surgescript_perfecthashseed_t surgescript_perfecthash_find_seed(surgescript_perfecthashfunction_t hash_fn, const char** key, size_t key_count)
+surgescript_perfecthashseed_t surgescript_perfecthash_find_seed(surgescript_perfecthashfunction_t hash_fn, char* const* key, size_t key_count)
 {
     /*
 

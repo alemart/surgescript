@@ -209,7 +209,7 @@ bool surgescript_objectmanager_generate_class_ids(surgescript_objectmanager_t* m
     ssassert(object_count > 0);
 
     /* compute a seed */
-    manager->class_id_seed = surgescript_perfecthash_find_seed(seeded_hash, (const char**)object_list, object_count);
+    manager->class_id_seed = surgescript_perfecthash_find_seed(seeded_hash, object_list, object_count);
     ssassert(manager->class_id_seed != NO_SEED); /* just in case */
 
     /* release the list of object names */
