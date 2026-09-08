@@ -40,7 +40,7 @@
  * ssarray_init_ex()
  * initializes the array with a pre-defined initial capacity
  */
-#define ssarray_init_ex(arr, cap)             (arr##_len = 0, arr##_cap = ((cap) > 0 ? (cap) : 4), arr = ssmalloc(arr##_cap * sizeof(*(arr))))
+#define ssarray_init_ex(arr, cap)             (arr##_len = 0, arr##_cap = ((cap) > 0 ? (cap) : 0), arr = ((cap) > 0 ? ssmalloc(arr##_cap * sizeof(*(arr))) : NULL))
 
 /*
  * ssarray_release()
@@ -53,7 +53,7 @@
  * pushes element 'x' into the array, returning the new length of the array
  */
 #define ssarray_push(arr, x)                  \
-    (*(((arr##_len >= arr##_cap) ? (arr = ssrealloc(arr, (arr##_cap *= 2) * sizeof(*(arr)))) : arr) + (arr##_len)) = (x), ++arr##_len)
+    (*(((arr##_len >= arr##_cap) ? (arr = ssrealloc(arr, (arr##_cap = arr##_cap > 0 ? arr##_cap * 2 : 4) * sizeof(*(arr)))) : arr) + (arr##_len)) = (x), ++arr##_len)
 
 /*
  * ssarray_pop()
