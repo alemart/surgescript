@@ -89,6 +89,7 @@ static bool is_state_context(surgescript_nodecontext_t context);
 static bool is_signalhandler_context(surgescript_nodecontext_t context);
 static char* randstr(char* buf, size_t size);
 static bool is_large_name(const char* name);
+static bool is_large_name_ex(const char* name, const char* prefix);
 static bool is_valid_name(const char* name);
 static int index_of_string(const char* key, char* const* array, size_t length);
 
@@ -589,10 +590,16 @@ char* randstr(char* buf, size_t size)
     return ret;
 }
 
-/* is the given [object|program|tag] name too large? */
+/* is the given [object|program|tag|signal] name too large? */
 bool is_large_name(const char* name)
 {
     return strlen(name) > SS_NAMEMAX;
+}
+
+/* is_large_name() with a prefix (or suffix) */
+bool is_large_name_ex(const char* name, const char* prefix)
+{
+    return strlen(prefix) + strlen(name) > SS_NAMEMAX;
 }
 
 /* checks if the given string is a valid name for:
@@ -651,7 +658,7 @@ void signal(surgescript_parser_t* parser)
     signal_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
 
     /* validate */
-    if(is_large_name(signal_name))
+    if(is_large_name_ex(signal_name, "signal:"))
         ssfatal("Compile Error: signal name \"%s\" is too large at %s:%d", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     else if(!is_valid_name(signal_name))
         ssfatal("Compile Error: invalid signal name \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
@@ -715,7 +722,7 @@ char** signaldecl(surgescript_parser_t* parser, const char* signal_name)
         const char* property_name = surgescript_token_lexeme(parser->lookahead);
 
         /* validate name */
-        if(is_large_name(property_name))
+        if(is_large_name_ex(property_name, "get_"))
             ssfatal("Compile Error: property name \"%s\" of signal \"%s\" is too large at %s:%d", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
         if(!is_valid_name(property_name))
             ssfatal("Compile Error: invalid property name \"%s\" of signal \"%s\" at %s:%d", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
@@ -1682,7 +1689,7 @@ void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
 {
     surgescript_program_label_t instantiation = surgescript_program_new_label(context.program);
     surgescript_program_label_t initialization = surgescript_program_new_label(context.program);
-    char anonymous_object_name[1+SS_NAMEMAX] = "";
+    char anonymous_object_name[1 + SS_NAMEMAX] = "";
     SSARRAY(char*, fields);
 
     /* start */
@@ -1694,6 +1701,9 @@ void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         expect_something(parser);
         const surgescript_token_t* token = parser->lookahead;
         char* field_name = ssstrdup(surgescript_token_lexeme(token));
+
+        if(is_large_name_ex(field_name, "get_"))
+            ssfatal("Compile Error: property name \"%s\" of anonymous object is too long in %s:%d.", field_name, context.source_file, surgescript_token_linenumber(token));
 
         match(parser, SSTOK_IDENTIFIER);
         ssarray_push(fields, field_name);
