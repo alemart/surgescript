@@ -353,40 +353,42 @@ surgescript_signaltype_t surgescript_signalsystem_signal_type(const surgescript_
 }
 
 /*
- * surgescript_signalsystem_can_emit()
+ * surgescript_signalsystem_object_can_emit()
  * Check if a class of objects can emit a given class of signals
  */
-bool surgescript_signalsystem_can_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id)
+bool surgescript_signalsystem_object_can_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id)
 {
     // TODO
     return false;
 }
 
 /*
- * surgescript_signalsystem_can_catch()
+ * surgescript_signalsystem_object_can_catch()
  * Check if a class of objects has a handler to catch a given class of signals
  */
-bool surgescript_signalsystem_can_catch(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id)
+bool surgescript_signalsystem_object_can_catch(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id)
 {
     // TODO
     return false;
 }
 
 /*
- * surgescript_signalsystem_has_handlers()
+ * surgescript_signalsystem_object_has_handlers()
  * Check if a class of objects has one or more signal handlers (i.e., can catch signals)
  */
-bool surgescript_signalsystem_has_handlers(const surgescript_signalsystem_t* signal_system, surgescript_objectclassid_t class_id)
+bool surgescript_signalsystem_object_has_handlers(const surgescript_signalsystem_t* signal_system, surgescript_objectclassid_t class_id)
 {
+    /* This operation must be fast! It's used in subscribe & unsubscribe */
+
     // TODO
     return false;
 }
 
 /*
- * surgescript_signalsystem_has_subscribers()
+ * surgescript_signalsystem_signal_has_subscribers()
  * Check if a class of signals has one or more subscribers
  */
-bool surgescript_signalsystem_has_subscribers(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code)
+bool surgescript_signalsystem_signal_has_subscribers(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code)
 {
     // TODO
     return false;
@@ -398,7 +400,12 @@ bool surgescript_signalsystem_has_subscribers(const surgescript_signalsystem_t* 
  */
 void surgescript_signalsystem_subscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object)
 {
-    /* This operation must be fast! */
+    /* This operation must be fast! It's used when spawning objects */
+    surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
+
+    /* nothing to do */
+    if(!surgescript_signalsystem_object_has_handlers(signal_system, class_id))
+        return;
 
     // TODO
     //printf("Sub %u\n", handle);
@@ -410,7 +417,12 @@ void surgescript_signalsystem_subscribe(surgescript_signalsystem_t* signal_syste
  */
 void surgescript_signalsystem_unsubscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object)
 {
-    /* This operation must be fast! */
+    /* This operation must be fast! It's used when deleting objects */
+    surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
+
+    /* nothing to do */
+    if(!surgescript_signalsystem_object_has_handlers(signal_system, class_id))
+        return;
 
     // TODO
     //printf("Unsub %u\n", handle);
