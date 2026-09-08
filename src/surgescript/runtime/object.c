@@ -39,7 +39,7 @@
 struct surgescript_object_t
 {
     /* general properties */
-    char* name; /* my name */
+    char name[1 + SS_NAMEMAX]; /* my name */
     surgescript_objectclassid_t class_id; /* the ID of the class of objects */
     surgescript_heap_t* heap; /* each object has its own heap */
     surgescript_renv_t* renv; /* runtime environment */
@@ -52,7 +52,7 @@ struct surgescript_object_t
 
     /* inner state */
     surgescript_program_t* current_state; /* current state */
-    char* state_name; /* current state name */
+    char state_name[1 + SS_NAMEMAX]; /* current state name */
     bool is_active; /* can i run programs? */
     bool is_killed; /* am i scheduled to be destroyed? */
     bool is_reachable; /* is this object reachable through some other? (garbage-collection) */
@@ -79,6 +79,7 @@ void surgescript_object_release(surgescript_object_t* object);
 /* private stuff */
 #define MAIN_STATE "main"
 #define STATE2FUN_BUFFER_SIZE ((SS_NAMEMAX+1)+6) /* prefix a string with "state:" */
+#define renv_of(object) ((object)->renv)
 static char* state2fun(const char* state, char* buffer, size_t size);
 static inline void run_current_state(const surgescript_object_t* object);
 static inline uint64_t run_and_measure_current_state(const surgescript_object_t* object);
@@ -110,7 +111,8 @@ surgescript_object_t* surgescript_object_create(const char* name, surgescript_ob
     if(!object_exists(program_pool, name))
         ssfatal("Runtime Error: can't spawn object \"%s\" - it doesn't exist!", name);
 
-    obj->name = ssstrdup(name);
+    surgescript_util_strncpy(obj->name, name, sizeof(obj->name));
+    ssassert(0 == strcmp(name, obj->name)); /* names can't be too long */
     obj->class_id = class_id;
     obj->heap = surgescript_heap_create();
     obj->renv = surgescript_renv_create(obj, stack, obj->heap, program_pool, object_manager, NULL);
@@ -120,7 +122,7 @@ surgescript_object_t* surgescript_object_create(const char* name, surgescript_ob
     ssarray_init(obj->child);
     obj->depth = 0;
 
-    obj->state_name = ssstrdup(MAIN_STATE);
+    surgescript_util_strncpy(obj->state_name, MAIN_STATE, sizeof(obj->state_name));
     obj->current_state = get_state_program(obj, obj->state_name);
     obj->is_active = true;
     obj->is_killed = false;
@@ -131,7 +133,7 @@ surgescript_object_t* surgescript_object_create(const char* name, surgescript_ob
     obj->time_spent = 0;
     obj->frames_spent = 0;
 
-    obj->bound_tag_system = surgescript_tagsystem_bind(surgescript_objectmanager_tagsystem(object_manager), name);
+    obj->bound_tag_system = surgescript_tagsystem_bind(surgescript_objectmanager_tagsystem(object_manager), obj->name);
 
     obj->transform = NULL;
     obj->user_data = user_data;
@@ -145,7 +147,7 @@ surgescript_object_t* surgescript_object_create(const char* name, surgescript_ob
  */
 surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(obj->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(obj));
     int i;
 
     /* call destructor */
@@ -172,8 +174,6 @@ surgescript_object_t* surgescript_object_destroy(surgescript_object_t* obj)
     /* clear up some data */
     surgescript_renv_destroy(obj->renv);
     surgescript_heap_destroy(obj->heap);
-    ssfree(obj->state_name);
-    ssfree(obj->name);
     ssfree(obj);
 
     /* done! */
@@ -221,7 +221,7 @@ surgescript_heap_t* surgescript_object_heap(const surgescript_object_t* object)
  */
 surgescript_objectmanager_t* surgescript_object_manager(const surgescript_object_t* object)
 {
-    return surgescript_renv_objectmanager(object->renv);
+    return surgescript_renv_objectmanager(renv_of(object));
 }
 
 /*
@@ -252,7 +252,7 @@ bool surgescript_object_has_tag(const surgescript_object_t* object, const char* 
     /* quicker tag test */
     return surgescript_boundtagsystem_has_tag(object->bound_tag_system, tag_name);
 #else
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     return surgescript_tagsystem_has_tag(surgescript_objectmanager_tagsystem(manager), object->name, tag_name);
 #endif
 }
@@ -263,7 +263,7 @@ bool surgescript_object_has_tag(const surgescript_object_t* object, const char* 
  */
 bool surgescript_object_has_function(const surgescript_object_t* object, const char* fun_name)
 {
-    surgescript_programpool_t* pool = surgescript_renv_programpool(object->renv);
+    surgescript_programpool_t* pool = surgescript_renv_programpool(renv_of(object));
     return surgescript_programpool_exists(pool, object->name, fun_name);
 }
 
@@ -273,7 +273,7 @@ bool surgescript_object_has_function(const surgescript_object_t* object, const c
  */
 int surgescript_object_function_arity(surgescript_object_t* object, const char* fun_name)
 {
-    surgescript_programpool_t* pool = surgescript_renv_programpool(object->renv);
+    surgescript_programpool_t* pool = surgescript_renv_programpool(renv_of(object));
 
     if(surgescript_programpool_exists(pool, object->name, fun_name)) {
         const surgescript_program_t* program = surgescript_programpool_get(pool, object->name, fun_name);
@@ -319,7 +319,7 @@ surgescript_objecthandle_t surgescript_object_nth_child(const surgescript_object
     if(index >= 0 && index < ssarray_length(object->child))
         return object->child[index];
     else
-        return surgescript_objectmanager_null(surgescript_renv_objectmanager(object->renv));
+        return surgescript_objectmanager_null(surgescript_renv_objectmanager(renv_of(object)));
 }
 
 /*
@@ -337,7 +337,7 @@ int surgescript_object_child_count(const surgescript_object_t* object)
  */
 surgescript_objecthandle_t surgescript_object_child(const surgescript_object_t* object, const char* name)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
 
     for(int i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
@@ -355,7 +355,7 @@ surgescript_objecthandle_t surgescript_object_child(const surgescript_object_t* 
  */
 int surgescript_object_children(const surgescript_object_t* object, const char* name, void* data, void (*callback)(surgescript_objecthandle_t,void*))
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     int count = 0;
 
     for(int i = 0; i < ssarray_length(object->child); i++) {
@@ -375,7 +375,7 @@ int surgescript_object_children(const surgescript_object_t* object, const char* 
  */
 surgescript_objecthandle_t surgescript_object_tagged_child(const surgescript_object_t* object, const char* tag_name)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
 
     for(int i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
@@ -393,7 +393,7 @@ surgescript_objecthandle_t surgescript_object_tagged_child(const surgescript_obj
  */
 int surgescript_object_tagged_children(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(surgescript_objecthandle_t,void*))
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     int count = 0;
 
     for(int i = 0; i < ssarray_length(object->child); i++) {
@@ -414,7 +414,7 @@ int surgescript_object_tagged_children(const surgescript_object_t* object, const
  */
 surgescript_objecthandle_t surgescript_object_find_descendant(const surgescript_object_t* object, const char* name)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
     int i;
 
@@ -442,7 +442,7 @@ surgescript_objecthandle_t surgescript_object_find_descendant(const surgescript_
  */
 int surgescript_object_find_descendants(const surgescript_object_t* object, const char* name, void* data, void (*callback)(surgescript_objecthandle_t,void*))
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
     int i, count = 0;
 
@@ -469,7 +469,7 @@ int surgescript_object_find_descendants(const surgescript_object_t* object, cons
  */
 surgescript_objecthandle_t surgescript_object_find_tagged_descendant(const surgescript_object_t* object, const char* tag_name)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
     int i;
 
@@ -497,7 +497,7 @@ surgescript_objecthandle_t surgescript_object_find_tagged_descendant(const surge
  */
 int surgescript_object_find_tagged_descendants(const surgescript_object_t* object, const char* tag_name, void* data, void (*callback)(surgescript_objecthandle_t,void*))
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
     int i, count = 0;
 
@@ -524,7 +524,7 @@ int surgescript_object_find_tagged_descendants(const surgescript_object_t* objec
  */
 surgescript_objecthandle_t surgescript_object_find_ascendant(const surgescript_object_t* object, const char* name)
 {
-    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
 
     object = surgescript_objectmanager_get(manager, object->parent);
     while(object->handle != object->parent) {
@@ -554,7 +554,7 @@ int surgescript_object_depth(const surgescript_object_t* object)
  */
 bool surgescript_object_is_ascendant(const surgescript_object_t* object, surgescript_objecthandle_t ascendant_handle)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
 
     if(object->handle == ascendant_handle)
         return false;
@@ -571,7 +571,7 @@ bool surgescript_object_is_ascendant(const surgescript_object_t* object, surgesc
  */
 bool surgescript_object_add_child(surgescript_object_t* object, surgescript_objecthandle_t child_handle)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     surgescript_object_t* child;
 
     /* check if it doesn't exist already */
@@ -608,7 +608,7 @@ bool surgescript_object_add_child(surgescript_object_t* object, surgescript_obje
  */
 bool surgescript_object_remove_child(surgescript_object_t* object, surgescript_objecthandle_t child_handle)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
 
     /* find the child */
     for(int i = 0; i < ssarray_length(object->child); i++) {
@@ -640,7 +640,7 @@ bool surgescript_object_reparent(surgescript_object_t* object, surgescript_objec
     /* WARNING: we make no guarantees that a cycle will not be introduced in the object tree !!!
                 e.g., reparent to a descendant. maybe we should check that with a flag? */
 
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     surgescript_object_t* old_parent = surgescript_objectmanager_get(manager, object->parent);
     surgescript_object_t* new_parent = surgescript_objectmanager_get(manager, new_parent_handle);
 
@@ -736,16 +736,20 @@ const char* surgescript_object_state(const surgescript_object_t *object)
  */
 void surgescript_object_set_state(surgescript_object_t* object, const char* state_name)
 {
-    if(strcmp(object->state_name, state_name) != 0) {
-        size_t new_size = (1 + strlen(state_name)) * sizeof(char);
-        object->state_name = ssrealloc(object->state_name, new_size);
-        memcpy(object->state_name, state_name, new_size); /* include '\0' */
+    /* nothing to do */
+    if(strcmp(object->state_name, state_name) == 0)
+        return;
 
-        object->current_state = get_state_program(object, object->state_name);
-        object->last_state_change = surgescript_vmtime_time(object->vmtime);
-        object->time_spent = 0;
-        object->frames_spent = 0;
-    }
+    /* copy state name */
+    surgescript_util_strncpy(object->state_name, state_name, sizeof(object->state_name));
+    if(strcmp(object->state_name, state_name) != 0)
+        ssfatal("Runtime Error: too long state name \"%s\" of object \"%s\"", state_name, object->name);
+
+    /* change state */
+    object->current_state = get_state_program(object, object->state_name);
+    object->last_state_change = surgescript_vmtime_time(object->vmtime);
+    object->time_spent = 0;
+    object->frames_spent = 0;
 }
 
 /*
@@ -857,28 +861,28 @@ void surgescript_object_init(surgescript_object_t* object)
 {
     static const char* CONSTRUCTOR_FUN = "constructor"; /* regular constructor */
     static const char* PRE_CONSTRUCTOR_FUN = "__ssconstructor"; /* a constructor reserved for the VM */
-    surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+    surgescript_programpool_t* program_pool = surgescript_renv_programpool(renv_of(object));
 
     /* subscribe to the signal system */
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(manager);
     surgescript_signalsystem_subscribe(signal_system, object);
 
     /* call internal & regular constructors */
-    surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
+    surgescript_stack_t* stack = surgescript_renv_stack(renv_of(object));
     surgescript_var_t* self = surgescript_var_set_objecthandle(surgescript_var_create(), object->handle);
     surgescript_stack_push(stack, self);
 
     if(surgescript_programpool_exists(program_pool, object->name, PRE_CONSTRUCTOR_FUN)) {
         surgescript_program_t* pre_constructor = surgescript_programpool_get(program_pool, object->name, PRE_CONSTRUCTOR_FUN);
-        surgescript_program_call(pre_constructor, object->renv, 0);
+        surgescript_program_call(pre_constructor, renv_of(object), 0);
     }
 
     if(surgescript_programpool_exists(program_pool, object->name, CONSTRUCTOR_FUN)) {
         surgescript_program_t* constructor = surgescript_programpool_get(program_pool, object->name, CONSTRUCTOR_FUN);
         if(surgescript_program_arity(constructor) != 0)
             ssfatal("Runtime Error: Object \"%s\"'s %s() cannot receive parameters", object->name, CONSTRUCTOR_FUN);
-        surgescript_program_call(constructor, object->renv, 0);
+        surgescript_program_call(constructor, renv_of(object), 0);
     }
 
     surgescript_stack_pop(stack);
@@ -891,11 +895,11 @@ void surgescript_object_init(surgescript_object_t* object)
 void surgescript_object_release(surgescript_object_t* object)
 {
     static const char* DESTRUCTOR_FUN = "destructor";
-    surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+    surgescript_programpool_t* program_pool = surgescript_renv_programpool(renv_of(object));
 
     /* call destructor */
     if(surgescript_programpool_exists(program_pool, object->name, DESTRUCTOR_FUN)) {
-        surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
+        surgescript_stack_t* stack = surgescript_renv_stack(renv_of(object));
         surgescript_program_t* destructor = surgescript_programpool_get(program_pool, object->name, DESTRUCTOR_FUN);
         surgescript_var_t* self = surgescript_var_set_objecthandle(surgescript_var_create(), object->handle);
         
@@ -903,12 +907,12 @@ void surgescript_object_release(surgescript_object_t* object)
             ssfatal("Runtime Error: Object \"%s\"'s %s() cannot receive parameters", object->name, DESTRUCTOR_FUN);
 
         surgescript_stack_push(stack, self);
-        surgescript_program_call(destructor, object->renv, 0);
+        surgescript_program_call(destructor, renv_of(object), 0);
         surgescript_stack_pop(stack);
     }
 
     /* unsubscribe from the signal system */
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(manager);
     surgescript_signalsystem_unsubscribe(signal_system, object);
 }
@@ -919,7 +923,7 @@ void surgescript_object_release(surgescript_object_t* object)
  */
 bool surgescript_object_update(surgescript_object_t* object)
 {
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
 
     /* check if I am destroyed */
     if(object->is_killed) {
@@ -948,7 +952,7 @@ void surgescript_object_traverse_tree(surgescript_object_t* object, bool (*callb
     if(!callback(object))
         return;
 
-    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     for(int i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
         surgescript_object_traverse_tree(child, callback);
@@ -969,7 +973,7 @@ void surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* dat
     if(!callback(object, data))
         return;
 
-    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
     for(int i = 0; i < ssarray_length(object->child); i++) {
         surgescript_object_t* child = surgescript_objectmanager_get(manager, object->child[i]);
         surgescript_object_traverse_tree_ex(child, data, callback);
@@ -1041,9 +1045,9 @@ size_t surgescript_object_memspent(const surgescript_object_t* object)
 /* call a SurgeScript function from C. You may pass NULL to return_value if you don't need it. You may also pass NULL to param if num_params is zero */
 void call_object_function(surgescript_object_t* object, const char* class_name, const char* fun_name, const surgescript_var_t* param[], int num_params, surgescript_var_t* return_value)
 {
-    surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+    surgescript_programpool_t* program_pool = surgescript_renv_programpool(renv_of(object));
     surgescript_program_t* program = surgescript_programpool_get(program_pool, class_name, fun_name);
-    surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
+    surgescript_stack_t* stack = surgescript_renv_stack(renv_of(object));
 
     /* sanity check */
     if(num_params < 0)
@@ -1062,9 +1066,9 @@ void call_object_function(surgescript_object_t* object, const char* class_name, 
         surgescript_stack_push(stack, surgescript_var_clone(param[i]));
 
     /* call the program */
-    surgescript_program_call(program, object->renv, num_params);
+    surgescript_program_call(program, renv_of(object), num_params);
     if(return_value != NULL)
-        surgescript_var_copy(return_value, *(surgescript_renv_tmp(object->renv) + 0)); /* the return value of the function (if any) */
+        surgescript_var_copy(return_value, *(surgescript_renv_tmp(renv_of(object)) + 0)); /* the return value of the function (if any) */
 
     /* pop stuff from the stack */
     surgescript_stack_popn(stack, 1 + num_params);
@@ -1094,9 +1098,9 @@ char* state2fun(const char* state, char* buffer, size_t size)
 
 void run_current_state(const surgescript_object_t* object)
 {
-    surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
+    surgescript_stack_t* stack = surgescript_renv_stack(renv_of(object));
     surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
-    surgescript_program_call(object->current_state, object->renv, 0);
+    surgescript_program_call(object->current_state, renv_of(object), 0);
     surgescript_stack_pop(stack);
 }
 
@@ -1119,7 +1123,7 @@ surgescript_program_t* get_state_program(const surgescript_object_t* object, con
 {
     char buffer[STATE2FUN_BUFFER_SIZE];
     char* fun_name = state2fun(state_name, buffer, sizeof(buffer));
-    surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
+    surgescript_programpool_t* program_pool = surgescript_renv_programpool(renv_of(object));
     surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
 
     if(program == NULL)
