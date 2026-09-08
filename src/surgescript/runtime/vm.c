@@ -477,14 +477,14 @@ void init_vm(surgescript_vm_t* vm)
     vm->is_paused = false;
 
     /* create the VM components */
+    vm->args = surgescript_vmargs_create();
+    vm->time = surgescript_vmtime_create();
     vm->stack = surgescript_stack_create();
     vm->program_pool = surgescript_programpool_create();
     vm->tag_system = surgescript_tagsystem_create();
-    vm->args = surgescript_vmargs_create();
-    vm->time = surgescript_vmtime_create();
-    vm->object_manager = surgescript_objectmanager_create(vm->stack, vm, vm->args, vm->time);
     vm->signal_system_builder = surgescript_signalsystembuilder_create();
     vm->signal_system = NULL;
+    vm->object_manager = surgescript_objectmanager_create(vm->stack, vm, vm->args, vm->time);
     vm->parser = surgescript_parser_create(vm->program_pool, vm->tag_system, vm->signal_system_builder);
 
     /* load the SurgeScript standard library */
@@ -513,14 +513,14 @@ void release_vm(surgescript_vm_t* vm)
 {
     /* destroy the VM components */
     surgescript_parser_destroy(vm->parser);
-    surgescript_signalsystem_destroy(vm->signal_system);
-    surgescript_signalsystembuilder_destroy(vm->signal_system_builder);
     surgescript_objectmanager_destroy(vm->object_manager);
-    surgescript_vmtime_destroy(vm->time);
-    surgescript_vmargs_destroy(vm->args);
+    //surgescript_signalsystem_destroy(vm->signal_system);
+    surgescript_signalsystembuilder_destroy(vm->signal_system_builder);
     surgescript_tagsystem_destroy(vm->tag_system);
     surgescript_programpool_destroy(vm->program_pool);
     surgescript_stack_destroy(vm->stack);
+    surgescript_vmtime_destroy(vm->time);
+    surgescript_vmargs_destroy(vm->args);
 }
 
 /* these auxiliary functions help traversing the object tree */

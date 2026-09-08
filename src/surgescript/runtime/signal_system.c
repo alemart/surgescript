@@ -291,9 +291,15 @@ Signal System
 --------------------------------------------------------------------------------
 */
 
+struct objecthandle_list_t
+{
+    SSARRAY(surgescript_objecthandle_t, handle);
+};
+
 struct surgescript_signalsystem_t
 {
-    surgescript_perfecthashseed_t hash_seed;
+    surgescript_perfecthashseed_t hash_seed; /* used to compute signal codes */
+    const surgescript_objectmanager_t* object_manager; /* reference to the object manager */
 };
 
 static surgescript_perfecthashkey_t hash_of_signal_name(const char* signal_name, surgescript_perfecthashseed_t seed);
@@ -308,8 +314,13 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
     surgescript_perfecthashseed_t hash_seed = surgescript_perfecthash_find_seed(hash_of_signal_name, builder->declarations.signal_name, ssarray_length(builder->declarations.signal_name));
     //printf("Signal System hash seed: %u\n", hash_seed);
 
-    // TODO
-    return NULL;
+    /* allocate an instance */
+    surgescript_signalsystem_t* signal_system = ssmalloc(sizeof *signal_system);
+    signal_system->hash_seed = hash_seed;
+    signal_system->object_manager = object_manager;
+
+    /* done! */
+    return signal_system;
 }
 
 /*
@@ -319,7 +330,7 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
 surgescript_signalsystem_t* surgescript_signalsystem_destroy(surgescript_signalsystem_t* signal_system)
 {
     // TODO
-    return NULL;
+    return ssfree(signal_system);
 }
 
 /*
@@ -329,6 +340,89 @@ surgescript_signalsystem_t* surgescript_signalsystem_destroy(surgescript_signals
 surgescript_signalcode_t surgescript_signalsystem_signal_code(const surgescript_signalsystem_t* signal_system, const char* signal_name)
 {
     return hash_of_signal_name(signal_name, signal_system->hash_seed);
+}
+
+/*
+ * surgescript_signalsystem_signal_type()
+ * Get the type of a given class of signals
+ */
+surgescript_signaltype_t surgescript_signalsystem_signal_type(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code)
+{
+    // TODO
+    return SIGTYPE_GLOBAL;
+}
+
+/*
+ * surgescript_signalsystem_can_emit()
+ * Check if a class of objects can emit a given class of signals
+ */
+bool surgescript_signalsystem_can_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id)
+{
+    // TODO
+    return false;
+}
+
+/*
+ * surgescript_signalsystem_can_catch()
+ * Check if a class of objects has a handler to catch a given class of signals
+ */
+bool surgescript_signalsystem_can_catch(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id)
+{
+    // TODO
+    return false;
+}
+
+/*
+ * surgescript_signalsystem_has_handlers()
+ * Check if a class of objects has one or more signal handlers (i.e., can catch signals)
+ */
+bool surgescript_signalsystem_has_handlers(const surgescript_signalsystem_t* signal_system, surgescript_objectclassid_t class_id)
+{
+    // TODO
+    return false;
+}
+
+/*
+ * surgescript_signalsystem_has_subscribers()
+ * Check if a class of signals has one or more subscribers
+ */
+bool surgescript_signalsystem_has_subscribers(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code)
+{
+    // TODO
+    return false;
+}
+
+/*
+ * surgescript_signalsystem_subscribe()
+ * Subscribe an object to all global signals that it can catch
+ */
+void surgescript_signalsystem_subscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object)
+{
+    /* This operation must be fast! */
+
+    // TODO
+    //printf("Sub %u\n", handle);
+}
+
+/*
+ * surgescript_signalsystem_unsubscribe()
+ * Unsubscribe an object from all global signals that it can catch
+ */
+void surgescript_signalsystem_unsubscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object)
+{
+    /* This operation must be fast! */
+
+    // TODO
+    //printf("Unsub %u\n", handle);
+}
+
+/*
+ * surgescript_signalsystem_emit_signal()
+ * Emit a signal
+ */
+void surgescript_signalsystem_emit_signal(const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context)
+{
+    // TODO
 }
 
 /*

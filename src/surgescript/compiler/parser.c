@@ -1540,7 +1540,7 @@ void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     match(parser, SSTOK_LPAREN);
 
     /* quick validation */
-    if(strcmp(fun_name, "constructor") == 0 || strcmp(fun_name, "destructor") == 0) {
+    if(strcmp(fun_name, "constructor") == 0 || strcmp(fun_name, "destructor") == 0 || strcmp(fun_name, "__ssconstructor") == 0) {
         ssfatal(
             "Compile Error: the %s of \"%s\" can't be called directly in %s:%d.",
             fun_name,

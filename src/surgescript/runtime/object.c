@@ -23,6 +23,7 @@
 #include "object.h"
 #include "program_pool.h"
 #include "tag_system.h"
+#include "signal_system.h"
 #include "object_manager.h"
 #include "program.h"
 #include "heap.h"
@@ -649,6 +650,10 @@ bool surgescript_object_reparent(surgescript_object_t* object, surgescript_objec
         return false;
     }
 
+    /* unsubscribe from the signal system */
+    surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(manager);
+    surgescript_signalsystem_unsubscribe(signal_system, object);
+
     /* remove previous parent */
     if(!surgescript_object_remove_child(old_parent, object->handle)) {
         sslog("Can't reparent object 0x%X (\"%s\")", object->handle, object->name); /* this shouldn't happen */
@@ -660,6 +665,9 @@ bool surgescript_object_reparent(surgescript_object_t* object, surgescript_objec
         ssfatal("Can't reparent object 0x%X (\"%s\")", object->handle, object->name);
         return false;
     }
+
+    /* resubscribe to the signal system */
+    surgescript_signalsystem_subscribe(signal_system, object);
 
     /* flags */
 
@@ -849,9 +857,17 @@ void surgescript_object_init(surgescript_object_t* object)
 {
     static const char* CONSTRUCTOR_FUN = "constructor"; /* regular constructor */
     static const char* PRE_CONSTRUCTOR_FUN = "__ssconstructor"; /* a constructor reserved for the VM */
-    surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
-    surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
+
+    /* subscribe to the signal system */
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(manager);
+    surgescript_signalsystem_subscribe(signal_system, object);
+
+    /* call internal & regular constructors */
+    surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
+    surgescript_var_t* self = surgescript_var_set_objecthandle(surgescript_var_create(), object->handle);
+    surgescript_stack_push(stack, self);
 
     if(surgescript_programpool_exists(program_pool, object->name, PRE_CONSTRUCTOR_FUN)) {
         surgescript_program_t* pre_constructor = surgescript_programpool_get(program_pool, object->name, PRE_CONSTRUCTOR_FUN);
@@ -877,17 +893,24 @@ void surgescript_object_release(surgescript_object_t* object)
     static const char* DESTRUCTOR_FUN = "destructor";
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(object->renv);
 
+    /* call destructor */
     if(surgescript_programpool_exists(program_pool, object->name, DESTRUCTOR_FUN)) {
         surgescript_stack_t* stack = surgescript_renv_stack(object->renv);
         surgescript_program_t* destructor = surgescript_programpool_get(program_pool, object->name, DESTRUCTOR_FUN);
+        surgescript_var_t* self = surgescript_var_set_objecthandle(surgescript_var_create(), object->handle);
         
         if(surgescript_program_arity(destructor) != 0)
             ssfatal("Runtime Error: Object \"%s\"'s %s() cannot receive parameters", object->name, DESTRUCTOR_FUN);
 
-        surgescript_stack_push(stack, surgescript_var_set_objecthandle(surgescript_var_create(), object->handle));
+        surgescript_stack_push(stack, self);
         surgescript_program_call(destructor, object->renv, 0);
         surgescript_stack_pop(stack);
     }
+
+    /* unsubscribe from the signal system */
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(object->renv);
+    surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(manager);
+    surgescript_signalsystem_unsubscribe(signal_system, object);
 }
 
 /*

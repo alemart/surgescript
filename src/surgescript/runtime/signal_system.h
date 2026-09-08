@@ -24,6 +24,7 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include "object.h"
 
 typedef uint32_t surgescript_signalcode_t;
 typedef struct surgescript_signalsystem_t surgescript_signalsystem_t;
@@ -66,5 +67,13 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
 /* signal system */
 surgescript_signalsystem_t* surgescript_signalsystem_destroy(surgescript_signalsystem_t* signal_system);
 surgescript_signalcode_t surgescript_signalsystem_signal_code(const surgescript_signalsystem_t* signal_system, const char* signal_name);
+surgescript_signaltype_t surgescript_signalsystem_signal_type(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code);
+bool surgescript_signalsystem_can_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id);
+bool surgescript_signalsystem_can_catch(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id);
+bool surgescript_signalsystem_has_handlers(const surgescript_signalsystem_t* signal_system, surgescript_objectclassid_t class_id);
+bool surgescript_signalsystem_has_subscribers(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code);
+void surgescript_signalsystem_subscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object);
+void surgescript_signalsystem_unsubscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object);
+void surgescript_signalsystem_emit_signal(const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context);
 
 #endif
