@@ -39,11 +39,15 @@ enum surgescript_signaltype_t
 
     /* a bubble signal can only be caught by the closest ancestor of the emitter
        that implements a matching signal handler (it may or may not be caught) */
-    SIGTYPE_BUBBLE
+    SIGTYPE_BUBBLE,
 
     /* a manual signal can only be caught by objects manually and explicitly
        connected to the emitter */
-    /*SIGTYPE_MANUAL*/
+    /*SIGTYPE_MANUAL,*/
+
+    /* a null signal does nothing; this is an error type that means "no such signal"
+       (this is the last entry) */
+    SIGTYPE_NULL = -1
 };
 
 struct surgescript_objectmanager_t;
