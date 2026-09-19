@@ -608,6 +608,16 @@ bool surgescript_objectmanager_class_exists(const surgescript_objectmanager_t* m
     return surgescript_programpool_is_compiled(program_pool, object_name);
 }
 
+/*
+ * surgescript_objectmanager_class_id()
+ * Get the class ID given the name of a class of objects
+ */
+surgescript_objectclassid_t surgescript_objectmanager_class_id(const surgescript_objectmanager_t* manager, const char* object_name)
+{
+    ssassert(manager->class_id_seed != NO_SEED); /* just in case */
+    return find_class_id(manager, object_name);
+}
+
 /* private stuff */
 
 /* garbage collector */
