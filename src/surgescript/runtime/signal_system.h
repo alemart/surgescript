@@ -45,9 +45,8 @@ enum surgescript_signaltype_t
        connected to the emitter */
     /*SIGTYPE_MANUAL,*/
 
-    /* a null signal does nothing; this is an error type that means "no such signal"
-       (this is the last entry) */
-    SIGTYPE_NULL = -1
+    /* a null signal does nothing; this is an error type */
+    SIGTYPE_NULL
 };
 
 struct surgescript_objectmanager_t;
@@ -70,6 +69,7 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
 
 /* signal system */
 surgescript_signalsystem_t* surgescript_signalsystem_destroy(surgescript_signalsystem_t* signal_system);
+bool surgescript_signalsystem_signal_exists(const surgescript_signalsystem_t* signal_system, const char* signal_name);
 surgescript_signalcode_t surgescript_signalsystem_signal_code(const surgescript_signalsystem_t* signal_system, const char* signal_name);
 surgescript_signaltype_t surgescript_signalsystem_signal_type(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code);
 bool surgescript_signalsystem_object_can_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id);

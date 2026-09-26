@@ -30,9 +30,9 @@
 #define FASTHASH_INLINE
 #include "../util/fasthash.h"
 
-static int length_of_list(char* const* list);
-static char** clone_list(char* const* list);
-static bool list_has_repetition(char* const* list);
+static int length_of_list_of_strings(char* const* list);
+static char** clone_list_of_strings(char* const* list);
+static bool list_of_strings_has_repetition(char* const* list);
 static int index_of_string(const char* key, char* const* array, size_t length);
 
 /*
@@ -192,11 +192,11 @@ bool surgescript_signalsystembuilder_are_signal_handlers_registered(surgescript_
 void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name, surgescript_signaltype_t signal_type, char* const* field_names)
 {
     ssassert(!surgescript_signalsystembuilder_is_signal_registered(builder, signal_name));
-    ssassert(!list_has_repetition(field_names));
+    ssassert(!list_of_strings_has_repetition(field_names));
 
     ssarray_push(builder->declarations.signal_name, ssstrdup(signal_name));
     ssarray_push(builder->declarations.signal_type, signal_type);
-    ssarray_push(builder->declarations.field_names, clone_list(field_names));
+    ssarray_push(builder->declarations.field_names, clone_list_of_strings(field_names));
 }
 
 /*
@@ -208,10 +208,10 @@ void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembui
 void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name, char* const* signal_names)
 {
     ssassert(!surgescript_signalsystembuilder_are_signal_emissions_registered(builder, object_name));
-    ssassert(!list_has_repetition(signal_names));
+    ssassert(!list_of_strings_has_repetition(signal_names));
 
     ssarray_push(builder->emissions.object_name, ssstrdup(object_name));
-    ssarray_push(builder->emissions.signal_names, clone_list(signal_names));
+    ssarray_push(builder->emissions.signal_names, clone_list_of_strings(signal_names));
 }
 
 /*
@@ -223,10 +223,10 @@ void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signa
 void surgescript_signalsystembuilder_register_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name, char* const* signal_names)
 {
     ssassert(!surgescript_signalsystembuilder_are_signal_handlers_registered(builder, object_name));
-    ssassert(!list_has_repetition(signal_names));
+    ssassert(!list_of_strings_has_repetition(signal_names));
 
     ssarray_push(builder->handlers.object_name, ssstrdup(object_name));
-    ssarray_push(builder->handlers.signal_names, clone_list(signal_names));
+    ssarray_push(builder->handlers.signal_names, clone_list_of_strings(signal_names));
 }
 
 /*
@@ -294,31 +294,32 @@ Signal System
 --------------------------------------------------------------------------------
 */
 
-typedef struct signalcode_list_t signalcode_list_t;
-typedef struct objecthandle_list_t objecthandle_list_t;
-typedef struct objectclassid_list_t objectclassid_list_t;
-typedef struct signalspec_t signalspec_t;
+typedef struct signaldata_t signaldata_t;
+typedef struct signaledclass_t signaledclass_t;
 
-struct signalcode_list_t
+struct signaldata_t
 {
-    SSARRAY(surgescript_signalcode_t, signal_code);
-};
-struct objectclassid_list_t
-{
-    SSARRAY(surgescript_objectclassid_t, class_id);
-};
+    surgescript_signalcode_t code; /* key */
 
-struct objecthandle_list_t
-{
-    SSARRAY(surgescript_objecthandle_t, handle);
-};
-
-struct signalspec_t
-{
-    surgescript_signalcode_t signal_code;
-    surgescript_signaltype_t signal_type;
-    char* signal_name;
+    surgescript_signaltype_t type;
+    char* name;
     char** field_names; /* NULL-terminated array */
+
+    SSARRAY(surgescript_objectclassid_t, subscribers); /* sorted array of class of objects capable of catching this signal */
+    SSARRAY(const struct signaledclass_t*, cached_subscribers); /* subscribers mapped to signaledclass_t */
+};
+
+struct signaledclass_t
+{
+    surgescript_objectclassid_t object_class; /* key */
+
+    SSARRAY(const struct signaldata_t*, emitted_signals);
+    SSARRAY(const struct signaldata_t*, caught_signals);
+
+    SSARRAY(surgescript_objecthandle_t, instances);
+    SSARRAY(surgescript_objecthandle_t, dirty_instances); /* cleanup queue */
+
+    bool catches_global_signal; /* is any caught signal global? */
 };
 
 struct surgescript_signalsystem_t
@@ -326,23 +327,19 @@ struct surgescript_signalsystem_t
     surgescript_perfecthashseed_t hash_seed; /* used to compute signal codes */
     const surgescript_objectmanager_t* object_manager; /* reference to the object manager */
 
-    fasthash_t* specifications; /* specifications indexed by signal codes */
-    fasthash_t* emitted_signal_codes_per_object_class; /* for each object class, we store a list of the emitted signals */
-    fasthash_t* caught_signal_codes_per_object_class; /* for each object class, we store a list of the caught signals */
-
-    fasthash_t* subscribers_per_signal_code; /* for each global signal, we store a list of subscribers as class IDs */
-    fasthash_t* instances_per_object_class; /* for each object class that catches global signals, we store a list of object instances */
-    fasthash_t* instances_scheduled_for_cleanup; /* for each object class that catches global signals, we store a list of object instances scheduled for cleanup */
-    SSARRAY(int, dirty_indices); /* auxiliary array for cleaning up */
+    fasthash_t* signals;
+    fasthash_t* signaled_classes;
 };
 
 static surgescript_perfecthashkey_t hash_of_signal_name(const char* signal_name, surgescript_perfecthashseed_t seed);
-static int index_of_signal_code(surgescript_signalcode_t signal_code, const surgescript_signalcode_t* array, size_t length);
+static int index_of_signal_code(surgescript_signalcode_t signal_code, const signaldata_t* const* array, size_t length);
 static int index_of_object_handle(surgescript_objecthandle_t handle, const surgescript_objecthandle_t* array, size_t length);
-static void release_specification(void* ptr);
-static void release_signalcode_list(void* ptr);
-static void release_objectclassid_list(void* ptr);
-static void release_objecthandle_list(void* ptr);
+static int binary_search_object_handle(surgescript_objecthandle_t target, const surgescript_objecthandle_t* array, size_t length);
+static int binary_search_object_class_id(surgescript_objectclassid_t target, const surgescript_objectclassid_t* array, size_t length);
+static signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surgescript_signaltype_t signal_type, const char* signal_name, char* const* field_names);
+static signaledclass_t* construct_signaled_class(surgescript_objectclassid_t object_class);
+static void destruct_signal_data(void* ptr);
+static void destruct_signaled_class(void* ptr);
 static const int LG2_MAX_OBJECT_CLASSES = 10; /* just a guess, not a strict limit */
 static const int LG2_MAX_SIGNAL_CLASSES = 9;
 #define LG2_INITIAL_CAPACITY(x) (2+(x)) /* make hash tables sparse */
@@ -361,149 +358,108 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
     surgescript_signalsystem_t* signal_system = ssmalloc(sizeof *signal_system);
     signal_system->hash_seed = hash_seed;
     signal_system->object_manager = object_manager;
-    signal_system->specifications = fasthash_create(release_specification, LG2_INITIAL_CAPACITY(LG2_MAX_SIGNAL_CLASSES));
-    signal_system->emitted_signal_codes_per_object_class = fasthash_create(release_signalcode_list, LG2_INITIAL_CAPACITY(LG2_MAX_OBJECT_CLASSES));
-    signal_system->caught_signal_codes_per_object_class = fasthash_create(release_signalcode_list, LG2_INITIAL_CAPACITY(LG2_MAX_OBJECT_CLASSES));
-    signal_system->subscribers_per_signal_code = fasthash_create(release_objectclassid_list, LG2_INITIAL_CAPACITY(LG2_MAX_SIGNAL_CLASSES));
-    signal_system->instances_per_object_class = fasthash_create(release_objecthandle_list, LG2_INITIAL_CAPACITY(LG2_MAX_OBJECT_CLASSES));
-    signal_system->instances_scheduled_for_cleanup = fasthash_create(release_objecthandle_list, LG2_INITIAL_CAPACITY(LG2_MAX_OBJECT_CLASSES));
-    ssarray_init(signal_system->dirty_indices);
+    signal_system->signals = fasthash_create(destruct_signal_data, LG2_INITIAL_CAPACITY(LG2_MAX_SIGNAL_CLASSES));
+    signal_system->signaled_classes = fasthash_create(destruct_signaled_class, LG2_INITIAL_CAPACITY(LG2_MAX_OBJECT_CLASSES));
 
-    /* ----- part one ----- */
-
-    /* store the specification of each signal */
+    /* store the declaration of each signal */
     for(int i = 0; i < ssarray_length(builder->declarations.signal_name); i++) {
-        char* signal_name = ssstrdup(builder->declarations.signal_name[i]);
-        char** field_names = clone_list(builder->declarations.field_names[i]);
+        const char* signal_name = builder->declarations.signal_name[i];
+        char* const* field_names = builder->declarations.field_names[i];
         surgescript_signaltype_t signal_type = builder->declarations.signal_type[i];
         surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
 
-        ssassert(NULL == fasthash_get(signal_system->specifications, signal_code)); /* no duplicates allowed */
+        ssassert(NULL == fasthash_get(signal_system->signals, signal_code)); /* no duplicates allowed */
 
-        signalspec_t* spec = ssmalloc(sizeof *spec);
-        spec->signal_name = signal_name;
-        spec->field_names = field_names;
-        spec->signal_type = signal_type;
-        spec->signal_code = signal_code;
-
-        fasthash_put(signal_system->specifications, signal_code, spec);
+        signaldata_t* signal = construct_signal_data(signal_code, signal_type, signal_name, field_names);
+        fasthash_put(signal_system->signals, signal_code, signal);
     }
 
     /* for each object class, store the emitted signal codes */
     for(int i = 0; i < ssarray_length(builder->emissions.object_name); i++) {
         const char* object_name = builder->emissions.object_name[i];
-        surgescript_objectclassid_t class_id = surgescript_objectmanager_class_id(object_manager, object_name);
+        surgescript_objectclassid_t object_class = surgescript_objectmanager_class_id(object_manager, object_name);
 
         char* const* signal_names = builder->emissions.signal_names[i];
         for(char* const* it = signal_names; *it; it++) {
             const char* signal_name = *it;
             surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
 
-            void* ptr = fasthash_get(signal_system->emitted_signal_codes_per_object_class, signal_code);
-            if(ptr == NULL) {
-                signalcode_list_t* list = ssmalloc(sizeof *list);
-                ssarray_init(list->signal_code);
-                ssarray_push(list->signal_code, signal_code);
-                fasthash_put(signal_system->emitted_signal_codes_per_object_class, signal_code, list);
+            const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+            if(signal == NULL) {
+                sslog("Warning: object \"%s\" can't emit undeclared signal \"%s\"", object_name, signal_name);
+                continue; /* ignore undeclared signals */
             }
-            else {
-                signalcode_list_t* list = (signalcode_list_t*)ptr;
-                ssarray_push(list->signal_code, signal_code);
+
+            signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
+            if(signaled_class == NULL) {
+                signaled_class = construct_signaled_class(object_class);
+                fasthash_put(signal_system->signaled_classes, object_class, signaled_class);
             }
+
+            ssarray_push(signaled_class->emitted_signals, signal);
         }
     }
 
     /* for each object class, store the caught signal codes */
     for(int i = 0; i < ssarray_length(builder->handlers.object_name); i++) {
         const char* object_name = builder->handlers.object_name[i];
-        surgescript_objectclassid_t class_id = surgescript_objectmanager_class_id(object_manager, object_name);
+        surgescript_objectclassid_t object_class = surgescript_objectmanager_class_id(object_manager, object_name);
 
         char* const* signal_names = builder->handlers.signal_names[i];
         for(char* const* it = signal_names; *it; it++) {
             const char* signal_name = *it;
             surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
 
-            void* ptr = fasthash_get(signal_system->caught_signal_codes_per_object_class, signal_code);
-            if(ptr == NULL) {
-                signalcode_list_t* list = ssmalloc(sizeof *list);
-                ssarray_init(list->signal_code);
-                ssarray_push(list->signal_code, signal_code);
-                fasthash_put(signal_system->caught_signal_codes_per_object_class, signal_code, list);
+            const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+            if(signal == NULL) {
+                sslog("Warning: object \"%s\" can't catch undeclared signal \"%s\"", object_name, signal_name);
+                continue; /* ignore undeclared signals */
             }
-            else {
-                signalcode_list_t* list = (signalcode_list_t*)ptr;
-                ssarray_push(list->signal_code, signal_code);
+
+            signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
+            if(signaled_class == NULL) {
+                signaled_class = construct_signaled_class(object_class);
+                fasthash_put(signal_system->signaled_classes, object_class, signaled_class);
             }
+
+            ssarray_push(signaled_class->caught_signals, signal);
+            if(signal->type == SIGTYPE_GLOBAL)
+                signaled_class->catches_global_signal = true;
         }
     }
 
-    /* ----- part two ----- */
-
-    /* for each global signal code, store the list of subscribers: class IDs that can catch it */
+    /* for each signal, find its subscribers */
     for(int i = 0; i < ssarray_length(builder->declarations.signal_name); i++) {
-        surgescript_signaltype_t signal_type = builder->declarations.signal_type[i];
+        const char* signal_name = builder->declarations.signal_name[i];
+        surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
 
-        /* for each signal code, check if it's global */
-        if(signal_type == SIGTYPE_GLOBAL) {
-            const char* signal_name = builder->declarations.signal_name[i];
-            surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
+        /* for each object that can catch a signal */
+        for(int j = 0; j < ssarray_length(builder->handlers.object_name); j++) {
+            const char* object_name = builder->handlers.object_name[j];
+            surgescript_objectclassid_t object_class = surgescript_objectmanager_class_id(object_manager, object_name);
 
-            ssassert(NULL == fasthash_get(signal_system->subscribers_per_signal_code, signal_code)); /* no duplicates allowed */
+            /* check if that object catches the signal we're inspecting */
+            const signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
+            if(signaled_class != NULL && index_of_signal_code(signal_code, signaled_class->caught_signals, ssarray_length(signaled_class->caught_signals)) >= 0) {
 
-            /* first, let's create an empty list for that global signal */
-            objectclassid_list_t* list = ssmalloc(sizeof *list);
-            ssarray_init(list->class_id);
-            fasthash_put(signal_system->subscribers_per_signal_code, signal_code, list);
+                /* add the object class to the list of subscribers of the signal */
+                signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+                ssassert(signal != NULL); /* the signal must exist */
+                ssarray_push(signal->subscribers, object_class);
+                ssarray_push(signal->cached_subscribers, signaled_class);
 
-            /* second, let's register all class IDs that can catch it */
-            for(int j = 0; j < ssarray_length(builder->handlers.object_name); j++) {
-                const char* object_name = builder->handlers.object_name[j];
-                surgescript_objectclassid_t class_id = surgescript_objectmanager_class_id(object_manager, object_name);
+                /* keep the subscribers list sorted */
+                for(int k = ssarray_length(signal->subscribers) - 1; k >= 1; k--) {
+                    if(signal->subscribers[k] >= signal->subscribers[k-1])
+                        break;
 
-                /* we assume that this function can be used at this point in time;
-                   hence this block of code belongs to "part two" */
-                if(surgescript_signalsystem_object_can_catch(signal_system, signal_code, class_id)) {
+                    signal->subscribers[k] = signal->subscribers[k-1];
+                    signal->subscribers[k-1] = object_class;
 
-                    /* we found a match */
-                    ssarray_push(list->class_id, class_id);
-
+                    signal->cached_subscribers[k] = signal->cached_subscribers[k-1];
+                    signal->cached_subscribers[k-1] = signaled_class;
                 }
-            }
-        }
-    }
 
-    /* for each object class that catches global signals, store empty lists of object instances */
-    for(int i = 0; i < ssarray_length(builder->handlers.object_name); i++) {
-        bool catches_global_signal = false;
-
-        /* for all signals that objects named object_name[i] catch, check if any of them is global */
-        char* const* signal_names = builder->handlers.signal_names[i];
-        for(char* const* it = signal_names; *it; it++) {
-            const char* signal_name = *it;
-            surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
-
-            /* we assume that this function can be used at this point in time;
-               hence this block of code belongs to "part two" */
-            if(surgescript_signalsystem_signal_type(signal_system, signal_code) == SIGTYPE_GLOBAL) {
-                catches_global_signal = true;
-                break;
-            }
-        }
-
-        /* if any of them is global, then objects named object_name[i] catch at least one global signal */
-        if(catches_global_signal) {
-            const char* object_name = builder->handlers.object_name[i];
-            surgescript_objectclassid_t class_id = surgescript_objectmanager_class_id(object_manager, object_name);
-
-            /* for each applicable hash table, store an empty list of object instances that catch global signals (per object class) */
-            fasthash_t* hashtables[2] = { signal_system->instances_per_object_class, signal_system->instances_scheduled_for_cleanup };
-            for(int j = 0; j < 2; j++) {
-                fasthash_t* hashtable = hashtables[j];
-                ssassert(NULL == fasthash_get(hashtable, class_id)); /* no duplicates allowed */
-
-                objecthandle_list_t* list = ssmalloc(sizeof *list);
-                ssarray_init(list->handle);
-                fasthash_put(hashtable, class_id, list);
             }
         }
     }
@@ -518,13 +474,8 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
  */
 surgescript_signalsystem_t* surgescript_signalsystem_destroy(surgescript_signalsystem_t* signal_system)
 {
-    ssarray_release(signal_system->dirty_indices);
-    fasthash_destroy(signal_system->instances_scheduled_for_cleanup);
-    fasthash_destroy(signal_system->instances_per_object_class);
-    fasthash_destroy(signal_system->subscribers_per_signal_code);
-    fasthash_destroy(signal_system->caught_signal_codes_per_object_class);
-    fasthash_destroy(signal_system->emitted_signal_codes_per_object_class);
-    fasthash_destroy(signal_system->specifications);
+    fasthash_destroy(signal_system->signaled_classes);
+    fasthash_destroy(signal_system->signals);
     return ssfree(signal_system);
 }
 
@@ -543,67 +494,65 @@ surgescript_signalcode_t surgescript_signalsystem_signal_code(const surgescript_
  */
 surgescript_signaltype_t surgescript_signalsystem_signal_type(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code)
 {
-    const signalspec_t* spec = (const signalspec_t*)fasthash_get(signal_system->specifications, signal_code);
+    const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
 
     /* no such signal? */
-    if(spec == NULL)
+    if(signal == NULL)
         return SIGTYPE_NULL;
 
     /* return the signal type */
-    return spec->signal_type;
+    return signal->type;
+}
+
+/*
+ * surgescript_signalsystem_signal_exists()
+ * Check if a signal exists (i.e., if it has been declared)
+ */
+bool surgescript_signalsystem_signal_exists(const surgescript_signalsystem_t* signal_system, const char* signal_name)
+{
+    surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
+    const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+    return signal != NULL;
 }
 
 /*
  * surgescript_signalsystem_object_can_emit()
  * Check if a class of objects can emit a given class of signals
  */
-bool surgescript_signalsystem_object_can_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id)
+bool surgescript_signalsystem_object_can_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t object_class)
 {
-    const signalcode_list_t* list = (const signalcode_list_t*)fasthash_get(signal_system->emitted_signal_codes_per_object_class, class_id);
-
-    /* no emitted signals for that class id, or no such class id? */
-    if(list == NULL)
-        return false;
-
-    /* check if signal_code is in the list */
-    return index_of_signal_code(signal_code, list->signal_code, ssarray_length(list->signal_code)) >= 0;
+    const signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
+    return (signaled_class != NULL) && (index_of_signal_code(signal_code, signaled_class->emitted_signals, ssarray_length(signaled_class->emitted_signals)) >= 0);
 }
 
 /*
  * surgescript_signalsystem_object_can_catch()
  * Check if a class of objects has a handler to catch a given class of signals
  */
-bool surgescript_signalsystem_object_can_catch(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t class_id)
+bool surgescript_signalsystem_object_can_catch(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objectclassid_t object_class)
 {
-    const signalcode_list_t* list = (const signalcode_list_t*)fasthash_get(signal_system->caught_signal_codes_per_object_class, class_id);
-
-    /* no caught signals for that class id, or no such class id? */
-    if(list == NULL)
-        return false;
-
-    /* check if signal_code is in the list */
-    return index_of_signal_code(signal_code, list->signal_code, ssarray_length(list->signal_code)) >= 0;
+    const signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
+    return (signaled_class != NULL) && (index_of_signal_code(signal_code, signaled_class->caught_signals, ssarray_length(signaled_class->caught_signals)) >= 0);
 }
 
 /*
  * surgescript_signalsystem_object_has_handlers()
  * Check if a class of objects has one or more signal handlers (i.e., can catch signals)
  */
-bool surgescript_signalsystem_object_has_handlers(const surgescript_signalsystem_t* signal_system, surgescript_objectclassid_t class_id)
+bool surgescript_signalsystem_object_has_handlers(const surgescript_signalsystem_t* signal_system, surgescript_objectclassid_t object_class)
 {
-    /* This operation must be fast! It's used in subscribe & unsubscribe */
-    const signalcode_list_t* list = (const signalcode_list_t*)fasthash_get(signal_system->caught_signal_codes_per_object_class, class_id);
-    return (list != NULL) && (ssarray_length(list->signal_code) > 0);
+    const signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
+    return (signaled_class != NULL) && (ssarray_length(signaled_class->caught_signals) > 0);
 }
 
 /*
  * surgescript_signalsystem_signal_has_subscribers()
- * Check if a class of signals has one or more subscribers
+ * Check if a class of signals has one or more subscribers (object class IDs, not object instances)
  */
 bool surgescript_signalsystem_signal_has_subscribers(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code)
 {
-    const objecthandle_list_t* list = (const objecthandle_list_t*)fasthash_get(signal_system->subscribers_per_signal_code, signal_code);
-    return (list != NULL) && (ssarray_length(list->handle) > 0);
+    const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+    return (signal != NULL) && (ssarray_length(signal->subscribers) > 0);
 }
 
 /*
@@ -612,15 +561,19 @@ bool surgescript_signalsystem_signal_has_subscribers(const surgescript_signalsys
  */
 void surgescript_signalsystem_subscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object)
 {
-    /* This operation must be fast! It's used when spawning objects */
-    surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
+    /* ************************************************************************ */
+    /* ***** This operation must be fast! It's used when spawning objects ***** */
+    /* ************************************************************************ */
+    surgescript_objectclassid_t object_class = surgescript_object_class_id(object);
+    signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
 
-    /* if this object has no signal handlers, we don't need to subscribe it, as there is nothing to do */
-    if(!surgescript_signalsystem_object_has_handlers(signal_system, class_id))
+    /* skip if the object can't catch any global signal */
+    if(signaled_class == NULL || !signaled_class->catches_global_signal)
         return;
 
-    // TODO
-    //printf("Sub %u\n", handle);
+    /* keep track of this instance */
+    surgescript_objecthandle_t handle = surgescript_object_handle(object);
+    ssarray_push(signaled_class->instances, handle);
 }
 
 /*
@@ -629,15 +582,19 @@ void surgescript_signalsystem_subscribe(surgescript_signalsystem_t* signal_syste
  */
 void surgescript_signalsystem_unsubscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object)
 {
-    /* This operation must be fast! It's used when deleting objects */
-    surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
+    /* ************************************************************************ */
+    /* ***** This operation must be fast! It's used when deleting objects ***** */
+    /* ************************************************************************ */
+    surgescript_objectclassid_t object_class = surgescript_object_class_id(object);
+    signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
 
-    /* nothing to do */
-    if(!surgescript_signalsystem_object_has_handlers(signal_system, class_id))
+    /* skip if the object can't catch any global signal */
+    if(signaled_class == NULL || !signaled_class->catches_global_signal)
         return;
 
-    // TODO
-    //printf("Unsub %u\n", handle);
+    /* in order to make this fast, let's postpone the removal; for now, just mark this instance as "dirty" */
+    surgescript_objecthandle_t handle = surgescript_object_handle(object);
+    ssarray_push(signaled_class->dirty_instances, handle);
 }
 
 /*
@@ -647,16 +604,44 @@ void surgescript_signalsystem_unsubscribe(surgescript_signalsystem_t* signal_sys
 void surgescript_signalsystem_emit_signal(const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context)
 {
     // TODO
+    /*
+
+    sketch for global signals:
+
+    1. cleanup
+    2. notify all
+
+    during cleanup,
+
+    _. skip cleanup if dirty list is empty
+    a. sort dirty instances (those scheduled for cleanup)
+    b. for each instance, use binary search to check if it's dirty
+    c. if it's dirty, quickly remove with swap-and-pop (last element is no-op)
+    d. clear dirty list
+
+    while iterating, take care of deletions happening at the same time
+
+    sketch for bubble signals:
+
+    think if caching is really worth it. reparenting problems.
+
+    */
 }
 
 /*
 --------------------------------------------------------------------------------
-private stuff
+private utilities
 --------------------------------------------------------------------------------
 */
 
+/* hash of signal name */
+surgescript_perfecthashkey_t hash_of_signal_name(const char* signal_name, surgescript_perfecthashseed_t seed)
+{
+    return XXH(signal_name, strlen(signal_name), seed);
+}
+
 /* count the number of elements of a NULL-terminated array of strings */
-int length_of_list(char* const* list)
+int length_of_list_of_strings(char* const* list)
 {
     int count = 0;
 
@@ -670,9 +655,9 @@ int length_of_list(char* const* list)
 }
 
 /* clone a NULL-terminated array of strings */
-char** clone_list(char* const* list)
+char** clone_list_of_strings(char* const* list)
 {
-    int length = length_of_list(list);
+    int length = length_of_list_of_strings(list);
     char** clone = ssmalloc((1 + length) * sizeof(char*));
 
     clone[length] = NULL;
@@ -683,7 +668,7 @@ char** clone_list(char* const* list)
 }
 
 /* check if a NULL-terminated array of strings has repeated elements */
-bool list_has_repetition(char* const* list)
+bool list_of_strings_has_repetition(char* const* list)
 {
     for(char* const* it = list; *it; it++) {
         for(char* const* it2 = list; it2 != it && *it2; it2++) {
@@ -707,17 +692,11 @@ int index_of_string(const char* key, char* const* array, size_t length)
     return -1;
 }
 
-/* hash of signal name */
-surgescript_perfecthashkey_t hash_of_signal_name(const char* signal_name, surgescript_perfecthashseed_t seed)
-{
-    return XXH(signal_name, strlen(signal_name), seed);
-}
-
 /* find the index of an entry in a surgescript_signalcode_t[] */
-int index_of_signal_code(surgescript_signalcode_t signal_code, const surgescript_signalcode_t* array, size_t length)
+int index_of_signal_code(surgescript_signalcode_t signal_code, const signaldata_t* const* array, size_t length)
 {
     while(length--) {
-        if(signal_code == array[length])
+        if(signal_code == array[length]->code)
             return length;
     }
 
@@ -735,36 +714,94 @@ int index_of_object_handle(surgescript_objecthandle_t handle, const surgescript_
     return -1;
 }
 
-/* a fasthash destructor for signalspec_t */
-void release_specification(void* ptr)
+/* use binary search to find the index of an entry in a surgescript_objecthandle_t[] */
+int binary_search_object_handle(surgescript_objecthandle_t target, const surgescript_objecthandle_t* array, size_t length)
 {
-    signalspec_t* spec = (signalspec_t*)ptr;
-    ssfree(spec->signal_name);
-    release_list_of_strings(spec->field_names);
-    ssfree(spec);
+    int l = 0, r = (int)length - 1;
+
+    while(l <= r) {
+        int m = (l + r) / 2; /* l + (r-l)/2 */
+
+        if(target < array[m])
+            r = m - 1;
+        else if(target > array[m])
+            l = m + 1;
+        else
+            return m;
+    }
+
+    return -1;
 }
 
-/* a fasthash destructor for signalcode_list_t */
-void release_signalcode_list(void* ptr)
+/* use binary search to find the index of an entry in a surgescript_classid_t[] */
+int binary_search_object_class_id(surgescript_objectclassid_t target, const surgescript_objectclassid_t* array, size_t length)
 {
-    signalcode_list_t* list = (signalcode_list_t*)ptr;
-    ssarray_release(list->signal_code);
-    ssfree(list);
+    int l = 0, r = (int)length - 1;
+
+    while(l <= r) {
+        int m = (l + r) / 2; /* l + (r-l)/2 */
+
+        if(target < array[m])
+            r = m - 1;
+        else if(target > array[m])
+            l = m + 1;
+        else
+            return m;
+    }
+
+    return -1;
 }
 
-/* a fasthash destructor for objectclassid_list_t */
-void release_objectclassid_list(void* ptr)
+/* create a signaldata_t */
+signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surgescript_signaltype_t signal_type, const char* signal_name, char* const* field_names)
 {
-    objectclassid_list_t* list = (objectclassid_list_t*)ptr;
-    ssarray_release(list->class_id);
-    ssfree(list);
+    signaldata_t* signal = ssmalloc(sizeof *signal);
+
+    signal->code = signal_code;
+    signal->type = signal_type;
+    signal->name = ssstrdup(signal_name);
+    signal->field_names = clone_list_of_strings(field_names);
+    ssarray_init(signal->subscribers);
+    ssarray_init(signal->cached_subscribers);
+
+    return signal;
 }
 
-/* a fasthash destructor for objecthandle_list_t */
-void release_objecthandle_list(void* ptr)
+/* create a signaledclass_t */
+signaledclass_t* construct_signaled_class(surgescript_objectclassid_t object_class)
 {
-    objecthandle_list_t* list = (objecthandle_list_t*)ptr;
-    ssarray_release(list->handle);
-    ssfree(list);
+    signaledclass_t* signaled_class = ssmalloc(sizeof *signaled_class);
+
+    signaled_class->object_class = object_class;
+    ssarray_init(signaled_class->emitted_signals);
+    ssarray_init(signaled_class->caught_signals);
+    ssarray_init(signaled_class->instances);
+    ssarray_init(signaled_class->dirty_instances);
+    signaled_class->catches_global_signal = false;
+
+    return signaled_class;
 }
 
+/* a fasthash destructor for signaldata_t */
+void destruct_signal_data(void* ptr)
+{
+    signaldata_t* signal = (signaldata_t*)ptr;
+
+    ssarray_release(signal->cached_subscribers);
+    ssarray_release(signal->subscribers);
+    release_list_of_strings(signal->field_names);
+    ssfree(signal->name);
+    ssfree(signal);
+}
+
+/* a fasthash destructor for signaledclass_t */
+void destruct_signaled_class(void* ptr)
+{
+    signaledclass_t* signaled_class = (signaledclass_t*)ptr;
+
+    ssarray_release(signaled_class->dirty_instances);
+    ssarray_release(signaled_class->instances);
+    ssarray_release(signaled_class->caught_signals);
+    ssarray_release(signaled_class->emitted_signals);
+    ssfree(signaled_class);
+}
