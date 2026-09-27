@@ -481,5 +481,9 @@ void add_to_function_array(const char* fun_name, void* arr)
 /* is fun_name publicly visible or not? */
 bool is_visible_function(const char* fun_name)
 {
-    return strncmp(fun_name, "state:", 6) && strcmp(fun_name, "__ssconstructor");
+#if 1
+    return strncmp(fun_name, "state:", 6) && strncmp(fun_name, "signal:", 7) && strcmp(fun_name, "__ssconstructor");
+#else
+    return !strchr(fun_name, ':') && strcmp(fun_name, "__ssconstructor");
+#endif
 }
