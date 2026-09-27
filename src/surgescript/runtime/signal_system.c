@@ -22,6 +22,7 @@
 #include <string.h>
 #include "signal_system.h"
 #include "object_manager.h"
+#include "program_pool.h"
 #include "../util/perfect_hash.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
@@ -80,6 +81,9 @@ struct surgescript_signalsystembuilder_t
         release_list_of_strings(list[i]); \
     } \
     ssarray_release(list)
+
+#define is_valid_signal_type(signal_type) \
+    ((signal_type) == SIGTYPE_GLOBAL || (signal_type) == SIGTYPE_BUBBLE)
 
 /*
  * surgescript_signalsystembuilder_create()
@@ -193,6 +197,7 @@ void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembui
 {
     ssassert(!surgescript_signalsystembuilder_is_signal_registered(builder, signal_name));
     ssassert(!list_of_strings_has_repetition(field_names));
+    ssassert(is_valid_signal_type(signal_type));
 
     ssarray_push(builder->declarations.signal_name, ssstrdup(signal_name));
     ssarray_push(builder->declarations.signal_type, signal_type);
@@ -327,8 +332,9 @@ struct surgescript_signalsystem_t
     surgescript_perfecthashseed_t hash_seed; /* used to compute signal codes */
     const surgescript_objectmanager_t* object_manager; /* reference to the object manager */
 
-    fasthash_t* signals;
-    fasthash_t* signaled_classes;
+    fasthash_t* signals; /* map: signal code -> signaldata_t */
+    fasthash_t* signaled_classes; /* map: object class -> signaledclass_t */
+    fasthash_t* context_validity; /* map: pair<signal code, signal context object class> -> bool */
 };
 
 static surgescript_perfecthashkey_t hash_of_signal_name(const char* signal_name, surgescript_perfecthashseed_t seed);
@@ -340,6 +346,9 @@ static signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code,
 static signaledclass_t* construct_signaled_class(surgescript_objectclassid_t object_class);
 static void destruct_signal_data(void* ptr);
 static void destruct_signaled_class(void* ptr);
+static void foreach_own_program(const char* emitter_name, void* data);
+static bool is_valid_signal_context(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context);
+static bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context);
 static const int LG2_MAX_OBJECT_CLASSES = 10; /* just a guess, not a strict limit */
 static const int LG2_MAX_SIGNAL_CLASSES = 9;
 #define LG2_INITIAL_CAPACITY(x) (2+(x)) /* make hash tables sparse */
@@ -360,6 +369,7 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
     signal_system->object_manager = object_manager;
     signal_system->signals = fasthash_create(destruct_signal_data, LG2_INITIAL_CAPACITY(LG2_MAX_SIGNAL_CLASSES));
     signal_system->signaled_classes = fasthash_create(destruct_signaled_class, LG2_INITIAL_CAPACITY(LG2_MAX_OBJECT_CLASSES));
+    signal_system->context_validity = fasthash_create(NULL, LG2_INITIAL_CAPACITY(LG2_MAX_SIGNAL_CLASSES));
 
     /* store the declaration of each signal */
     for(int i = 0; i < ssarray_length(builder->declarations.signal_name); i++) {
@@ -449,10 +459,7 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
                 ssarray_push(signal->cached_subscribers, signaled_class);
 
                 /* keep the subscribers list sorted */
-                for(int k = ssarray_length(signal->subscribers) - 1; k >= 1; k--) {
-                    if(signal->subscribers[k] >= signal->subscribers[k-1])
-                        break;
-
+                for(int k = ssarray_length(signal->subscribers) - 1; k >= 1 && signal->subscribers[k-1] > signal->subscribers[k]; k--) {
                     signal->subscribers[k] = signal->subscribers[k-1];
                     signal->subscribers[k-1] = object_class;
 
@@ -474,6 +481,7 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
  */
 surgescript_signalsystem_t* surgescript_signalsystem_destroy(surgescript_signalsystem_t* signal_system)
 {
+    fasthash_destroy(signal_system->context_validity);
     fasthash_destroy(signal_system->signaled_classes);
     fasthash_destroy(signal_system->signals);
     return ssfree(signal_system);
@@ -502,6 +510,22 @@ surgescript_signaltype_t surgescript_signalsystem_signal_type(const surgescript_
 
     /* return the signal type */
     return signal->type;
+}
+
+/*
+ * surgescript_signalsystem_signal_name()
+ * Get the name of a given class of signals
+ */
+const char* surgescript_signalsystem_signal_name(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code)
+{
+     const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+
+    /* no such signal? */
+    if(signal == NULL)
+        return "<unknown_signal>";
+
+    /* return the signal name */
+    return signal->name;
 }
 
 /*
@@ -595,14 +619,43 @@ void surgescript_signalsystem_unsubscribe(surgescript_signalsystem_t* signal_sys
     /* in order to make this fast, let's postpone the removal; for now, just mark this instance as "dirty" */
     surgescript_objecthandle_t handle = surgescript_object_handle(object);
     ssarray_push(signaled_class->dirty_instances, handle);
+
+    /* FIXME however, if the list gets too big, maybe we're never recycling things */
+    /* not too big: recycling object handles may happen */
 }
 
 /*
  * surgescript_signalsystem_emit_signal()
  * Emit a signal
  */
+
 void surgescript_signalsystem_emit_signal(const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context)
 {
+    const surgescript_object_t* emitter_instance = surgescript_objectmanager_get(signal_system->object_manager, emitter);
+    surgescript_objectclassid_t emitter_class = surgescript_object_class_id(emitter_instance);
+
+    /* check whether or not the emitter is able to emit this signal */
+    if(!surgescript_signalsystem_object_can_emit(signal_system, signal_code, emitter_class)) {
+        const char* emitter_name = surgescript_object_name(emitter_instance);
+        const char* signal_name = surgescript_signalsystem_signal_name(signal_system, signal_code);
+
+        if(surgescript_signalsystem_signal_exists(signal_system, signal_name))
+            ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\". Double check the list of emitted signals for this object.", emitter_name, signal_name);
+        else
+            ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\". There is no such signal.", emitter_name, signal_name); /* this shouldn't happen */
+
+        return;
+    }
+
+    /* check whether or not the provided signal context is valid for this signal */
+    if(!is_valid_signal_context_cached(signal_system, signal_code, signal_context)) {
+        const char* emitter_name = surgescript_object_name(emitter_instance);
+        const char* signal_name = surgescript_signalsystem_signal_name(signal_system, signal_code);
+
+        ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\". The provided context does not match the required shape.", emitter_name, signal_name);
+        return;
+    }
+
     // TODO
     /*
 
@@ -804,4 +857,109 @@ void destruct_signaled_class(void* ptr)
     ssarray_release(signaled_class->caught_signals);
     ssarray_release(signaled_class->emitted_signals);
     ssfree(signaled_class);
+}
+
+/* helper function */
+void foreach_own_program(const char* program_name, void* data)
+{
+    void** params = (void**)data;
+    bool* has_wanted_shape = (bool*)(params[2]);
+
+    /* skip if the tested failed previously */
+    if(!(*has_wanted_shape))
+        return;
+
+    /* skip if it's not a getter */
+    else if(strncmp(program_name, "get_", 4) != 0)
+        return;
+
+    /* skip if it's __file */
+    else if(strcmp(program_name, "get___file") == 0)
+        return;
+
+    char* const* field_names = (char* const*)(params[0]);
+    int list_size = *((const int*)(params[1]));
+
+    /* the getter name must belong to the list of fields
+       program_name + 4 is a valid pointer, since program_name[0..3] is "get_" */
+    int j = index_of_string(program_name + 4, field_names, list_size);
+    *has_wanted_shape = (j >= 0);
+}
+
+/* check if a signal context object matches the required shape for the given signal code */
+bool is_valid_signal_context(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context)
+{
+    /* we'll validate the shape of the signal context */
+    const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+
+    /* no such signal */
+    if(signal == NULL)
+        return false;
+
+    /* if there are no declared fields, then only null is acceptable as a signal context */
+    surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(signal_system->object_manager);
+    if(signal->field_names == NULL)
+        return signal_context == null_handle;
+    else if(signal_context == null_handle) /* if there are declared fields, then null is not acceptable as a signal context */
+        return false;
+
+    /* for each declared field of the signal, check if the object has a corresponding getter */
+    const surgescript_object_t* context_instance = surgescript_objectmanager_get(signal_system->object_manager, signal_context);
+    char getter_name[4 + SS_NAMEMAX + 1] = "get_";
+
+    for(char* const* it = signal->field_names; *it; it++) {
+        const char* field_name = *it;
+        surgescript_util_strncpy(getter_name + 4, field_name, sizeof(getter_name) - 4);
+        if(!surgescript_object_has_own_function(context_instance, getter_name))
+            return false;
+    }
+
+    /* for each (own) getter of the object, excluding __file, check if it's declared as a field of the signal */
+    surgescript_programpool_t* pool = surgescript_objectmanager_programpool(signal_system->object_manager);
+    const char* context_instance_name = surgescript_object_name(context_instance);
+    bool has_wanted_shape = true;
+    int list_size = length_of_list_of_strings(signal->field_names);
+    void* params[3] = { signal->field_names, &list_size, &has_wanted_shape };
+    surgescript_programpool_foreach_ex(pool, context_instance_name, params, foreach_own_program);
+
+    if(!has_wanted_shape)
+        return false;
+
+    /* the shape is valid */
+    return true;
+}
+
+/* cached version of is_valid_signal_context() */
+bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context)
+{
+    /* we'll validate the shape of the signal context */
+    const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+
+    /* no such signal */
+    if(signal == NULL)
+        return false;
+
+    /* if there are no declared fields, then only null is acceptable as a signal context */
+    surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(signal_system->object_manager);
+    if(signal->field_names == NULL)
+        return signal_context == null_handle;
+    else if(signal_context == null_handle) /* if there are declared fields, then null is not acceptable as a signal context */
+        return false;
+
+    /* check if there is a cached result */
+    const surgescript_object_t* context_instance = surgescript_objectmanager_get(signal_system->object_manager, signal_context);
+    surgescript_objectclassid_t context_class = surgescript_object_class_id(context_instance);
+    uint64_t key = ((uint64_t)signal_code << 32) | (uint64_t)context_class;
+    SS_STATIC_ASSERT(sizeof(surgescript_signalcode_t) + sizeof(surgescript_objectclassid_t) == sizeof(uint64_t));
+
+    const bool* cached_result = fasthash_get(signal_system->context_validity, key);
+    if(cached_result != NULL)
+        return *cached_result;
+
+    /* if there is no cached result, then validate and cache the result */
+    static const bool TRUE_RESULT = true, FALSE_RESULT = false;
+    bool is_valid = is_valid_signal_context(signal_system, signal_code, signal_context);
+    const bool* result = is_valid ? &TRUE_RESULT : &FALSE_RESULT;
+    fasthash_put(signal_system->context_validity, key, (void*)result);
+    return is_valid;
 }
