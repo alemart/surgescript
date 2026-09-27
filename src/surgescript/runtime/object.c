@@ -268,6 +268,16 @@ bool surgescript_object_has_function(const surgescript_object_t* object, const c
 }
 
 /*
+ * surgescript_object_has_own_function()
+ * Checks if the object has the specified function in its own class (i.e., not in a super class)
+ */
+bool surgescript_object_has_own_function(const surgescript_object_t* object, const char* fun_name)
+{
+    surgescript_programpool_t* pool = surgescript_renv_programpool(renv_of(object));
+    return surgescript_programpool_shallowcheck(pool, object->name, fun_name);
+}
+
+/*
  * surgescript_object_function_arity()
  * The number of parameters accepted by a function, or 0 if no such function exists
  */
