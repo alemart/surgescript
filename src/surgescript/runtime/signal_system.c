@@ -301,6 +301,7 @@ Signal System
 
 typedef struct signaldata_t signaldata_t;
 typedef struct signaledclass_t signaledclass_t;
+typedef struct cachedsignalcontext_t cachedsignalcontext_t;
 
 struct signaldata_t
 {
@@ -312,6 +313,7 @@ struct signaldata_t
 
     SSARRAY(surgescript_objectclassid_t, subscribers); /* sorted array of class of objects capable of catching this signal */
     SSARRAY(const struct signaledclass_t*, cached_subscribers); /* subscribers mapped to signaledclass_t */
+    SSARRAY(struct cachedsignalcontext_t, cached_contexts); /* cached signal context object classes; typical length: 1 */
 };
 
 struct signaledclass_t
@@ -327,6 +329,12 @@ struct signaledclass_t
     bool catches_global_signal; /* is any caught signal global? */
 };
 
+struct cachedsignalcontext_t
+{
+    surgescript_objectclassid_t object_class;
+    bool is_valid;
+};
+
 struct surgescript_signalsystem_t
 {
     surgescript_perfecthashseed_t hash_seed; /* used to compute signal codes */
@@ -334,12 +342,11 @@ struct surgescript_signalsystem_t
 
     fasthash_t* signals; /* map: signal code -> signaldata_t */
     fasthash_t* signaled_classes; /* map: object class -> signaledclass_t */
-    fasthash_t* context_validity; /* map: pair<signal code, signal context object class> -> bool */
 };
 
 static surgescript_perfecthashkey_t hash_of_signal_name(const char* signal_name, surgescript_perfecthashseed_t seed);
-static int index_of_signal_code(surgescript_signalcode_t signal_code, const signaldata_t* const* array, size_t length);
-static int index_of_object_handle(surgescript_objecthandle_t handle, const surgescript_objecthandle_t* array, size_t length);
+static int index_of_signal_code(surgescript_signalcode_t target, const signaldata_t* const* array, size_t length);
+static int index_of_object_handle(surgescript_objecthandle_t target, const surgescript_objecthandle_t* array, size_t length);
 static int binary_search_object_handle(surgescript_objecthandle_t target, const surgescript_objecthandle_t* array, size_t length);
 static int binary_search_object_class_id(surgescript_objectclassid_t target, const surgescript_objectclassid_t* array, size_t length);
 static signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surgescript_signaltype_t signal_type, const char* signal_name, char* const* field_names);
@@ -369,7 +376,6 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
     signal_system->object_manager = object_manager;
     signal_system->signals = fasthash_create(destruct_signal_data, LG2_INITIAL_CAPACITY(LG2_MAX_SIGNAL_CLASSES));
     signal_system->signaled_classes = fasthash_create(destruct_signaled_class, LG2_INITIAL_CAPACITY(LG2_MAX_OBJECT_CLASSES));
-    signal_system->context_validity = fasthash_create(NULL, LG2_INITIAL_CAPACITY(LG2_MAX_SIGNAL_CLASSES));
 
     /* store the declaration of each signal */
     for(int i = 0; i < ssarray_length(builder->declarations.signal_name); i++) {
@@ -481,7 +487,6 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
  */
 surgescript_signalsystem_t* surgescript_signalsystem_destroy(surgescript_signalsystem_t* signal_system)
 {
-    fasthash_destroy(signal_system->context_validity);
     fasthash_destroy(signal_system->signaled_classes);
     fasthash_destroy(signal_system->signals);
     return ssfree(signal_system);
@@ -746,10 +751,10 @@ int index_of_string(const char* key, char* const* array, size_t length)
 }
 
 /* find the index of an entry in a surgescript_signalcode_t[] */
-int index_of_signal_code(surgescript_signalcode_t signal_code, const signaldata_t* const* array, size_t length)
+int index_of_signal_code(surgescript_signalcode_t target, const signaldata_t* const* array, size_t length)
 {
     while(length--) {
-        if(signal_code == array[length]->code)
+        if(target == array[length]->code)
             return length;
     }
 
@@ -757,10 +762,10 @@ int index_of_signal_code(surgescript_signalcode_t signal_code, const signaldata_
 }
 
 /* find the index of an entry in a surgescript_objecthandle_t[] */
-int index_of_object_handle(surgescript_objecthandle_t handle, const surgescript_objecthandle_t* array, size_t length)
+int index_of_object_handle(surgescript_objecthandle_t target, const surgescript_objecthandle_t* array, size_t length)
 {
     while(length--) {
-        if(handle == array[length])
+        if(target == array[length])
             return length;
     }
 
@@ -816,6 +821,7 @@ signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surges
     signal->field_names = clone_list_of_strings(field_names);
     ssarray_init(signal->subscribers);
     ssarray_init(signal->cached_subscribers);
+    ssarray_init(signal->cached_contexts);
 
     return signal;
 }
@@ -840,6 +846,7 @@ void destruct_signal_data(void* ptr)
 {
     signaldata_t* signal = (signaldata_t*)ptr;
 
+    ssarray_release(signal->cached_contexts);
     ssarray_release(signal->cached_subscribers);
     ssarray_release(signal->subscribers);
     release_list_of_strings(signal->field_names);
@@ -933,7 +940,7 @@ bool is_valid_signal_context(const surgescript_signalsystem_t* signal_system, su
 bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context)
 {
     /* we'll validate the shape of the signal context */
-    const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+    signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
 
     /* no such signal */
     if(signal == NULL)
@@ -949,17 +956,14 @@ bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_sys
     /* check if there is a cached result */
     const surgescript_object_t* context_instance = surgescript_objectmanager_get(signal_system->object_manager, signal_context);
     surgescript_objectclassid_t context_class = surgescript_object_class_id(context_instance);
-    uint64_t key = ((uint64_t)signal_code << 32) | (uint64_t)context_class;
-    SS_STATIC_ASSERT(sizeof(surgescript_signalcode_t) + sizeof(surgescript_objectclassid_t) == sizeof(uint64_t));
-
-    const bool* cached_result = fasthash_get(signal_system->context_validity, key);
-    if(cached_result != NULL)
-        return *cached_result;
+    for(int j = ssarray_length(signal->cached_contexts) - 1; j >= 0; j--) {
+        if(signal->cached_contexts[j].object_class == context_class)
+            return signal->cached_contexts[j].is_valid;
+    }
 
     /* if there is no cached result, then validate and cache the result */
-    static const bool TRUE_RESULT = true, FALSE_RESULT = false;
     bool is_valid = is_valid_signal_context(signal_system, signal_code, signal_context);
-    const bool* result = is_valid ? &TRUE_RESULT : &FALSE_RESULT;
-    fasthash_put(signal_system->context_validity, key, (void*)result);
+    cachedsignalcontext_t cached_context = { .object_class = context_class, .is_valid = is_valid };
+    ssarray_push(signal->cached_contexts, cached_context);
     return is_valid;
 }
