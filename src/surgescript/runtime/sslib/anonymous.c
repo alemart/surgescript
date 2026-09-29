@@ -254,6 +254,8 @@ void create_file_getter(surgescript_programpool_t* program_pool, const char* obj
     usage. However, as I write this, I do not see how this property can be useful
     in practice. Such extra complexity is hardly worth the trouble.
 
+    TLDR: this inaccuracy does not matter, apparently.
+
     */
 }
 
