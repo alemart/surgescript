@@ -57,6 +57,7 @@ struct surgescript_parser_t
 /* helpers */
 static void parse(surgescript_parser_t* parser);
 static inline bool got_type(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
+static inline bool got_type_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme);
 static inline bool got_any_type(surgescript_parser_t* parser, const surgescript_tokentype_t symbol[], int number_of_symbols);
 static inline bool has_token(surgescript_parser_t* parser);
 static void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol);
@@ -280,6 +281,12 @@ bool got_type(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
     return parser->lookahead && surgescript_token_type(parser->lookahead) == symbol;
 }
 
+/* does the lookahead symbol have the given type with the given lexeme? */
+bool got_type_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme)
+{
+    return got_type(parser, symbol) && strcmp(surgescript_token_lexeme(parser->lookahead), lexeme) == 0;
+}
+
 /* does the lookahead symbol have any of the given types? */
 bool got_any_type(surgescript_parser_t* parser, const surgescript_tokentype_t symbol[], int number_of_symbols)
 {
@@ -306,7 +313,7 @@ void match(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 /* match exactly the given symbol with the given lexeme */
 void match_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme)
 {
-    if(got_type(parser, symbol) && strcmp(surgescript_token_lexeme(parser->lookahead), lexeme) == 0)
+    if(got_type_exactly(parser, symbol, lexeme))
         match(parser, symbol);
     else
         expect_exactly(parser, symbol, lexeme); /* error */
@@ -326,7 +333,7 @@ bool optmatch(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 /* match exactly the given symbol with the given lexeme, or the empty symbol */
 bool optmatch_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme)
 {
-    if(got_type(parser, symbol) && strcmp(surgescript_token_lexeme(parser->lookahead), lexeme) == 0) {
+    if(got_type_exactly(parser, symbol, lexeme)) {
         match(parser, symbol);
         return true;
     }
@@ -640,7 +647,7 @@ int index_of_string(const char* key, char* const* array, size_t length)
 
 void signallist(surgescript_parser_t* parser)
 {
-    while(got_type(parser, SSTOK_SIGNAL))
+    while(got_type(parser, SSTOK_SIGNAL) || got_type_exactly(parser, SSTOK_IDENTIFIER, "bubble"))
         signal(parser);
 }
 
@@ -648,11 +655,12 @@ void signal(surgescript_parser_t* parser)
 {
     char* signal_name;
     char** property_list; /* NULL-terminated array of strings */
-    bool is_global = true;
+    bool is_bubble = false;
     bool is_duplicate = false;
     bool skip_registration = false;
 
     /* read the header */
+    is_bubble = optmatch_exactly(parser, SSTOK_IDENTIFIER, "bubble"); /* qualifier */
     match(parser, SSTOK_SIGNAL);
     expect(parser, SSTOK_STRING);
     signal_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
@@ -675,17 +683,8 @@ void signal(surgescript_parser_t* parser)
             ssfatal("Compile Error: duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     }
 
-    /* read the type */
-    match(parser, SSTOK_STRING);
-    match(parser, SSTOK_IS);
-    if(optmatch_exactly(parser, SSTOK_IDENTIFIER, "global"))
-        is_global = true;
-    else if(optmatch_exactly(parser, SSTOK_IDENTIFIER, "bubble"))
-        is_global = false;
-    else
-        unexpected_symbol(parser);
-
     /* read the body */
+    match(parser, SSTOK_STRING);
     match(parser, SSTOK_LCURLY);
     property_list = signaldecl(parser, signal_name);
     if(!optmatch(parser, SSTOK_RCURLY))
@@ -693,17 +692,9 @@ void signal(surgescript_parser_t* parser)
 
     /* register the signal */
     if(!skip_registration) {
-        surgescript_signaltype_t signal_type = is_global ? SIGTYPE_GLOBAL : SIGTYPE_BUBBLE;
+        surgescript_signaltype_t signal_type = is_bubble ? SIGTYPE_BUBBLE : SIGTYPE_GLOBAL;
         surgescript_signalsystembuilder_register_signal(parser->signal_system_builder, signal_name, signal_type, property_list);
     }
-
-#if 0
-    /* test */
-    printf("signal \"%s\" is %s\n", signal_name, is_global ? "global" : "bubble");
-    for(char** it = property_list; *it; it++)
-        puts(*it);
-    puts("=====");
-#endif
 
     /* cleanup */
     for(char** it = property_list; *it; it++)

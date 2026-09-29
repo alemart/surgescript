@@ -31,8 +31,8 @@
  * <script> := <importlist> <signallist> <objectlist> // start here
  *
  * <signallist> := <signal> <signallist> | e
- * <signal> := signal string is <signaltype> { <signaldecl> }
- * <signaltype> := identifier[="global"] | identifier[="bubble"]
+ * <signal> := <signalqualifier> signal string { <signaldecl> }
+ * <signalqualifier> := identifier[="bubble"] | e
  * <signaldecl> := identifier <signaldecl1> | e
  * <signaldecl1> := , identifier <signaldecl1> | , | e
  *
