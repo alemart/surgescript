@@ -37,6 +37,7 @@ static int length_of_list_of_strings(char* const* list);
 static char** clone_list_of_strings(char* const* list);
 static bool list_of_strings_has_repetition(char* const* list);
 static int index_of_string(const char* key, char* const* array, size_t length);
+static char* join_list_of_strings(char* const* list, const char* separator, char* dest, size_t dest_size);
 
 /*
 --------------------------------------------------------------------------------
@@ -669,8 +670,10 @@ void surgescript_signalsystem_emit(const surgescript_signalsystem_t* signal_syst
     if(!is_valid_signal_context_cached(signal_system, signal_code, signal_context, &signal) || signal == NULL) {
         const char* emitter_name = surgescript_object_name(emitter_instance);
         const char* signal_name = surgescript_signalsystem_signal_name(signal_system, signal_code);
+        char signal_fields[256];
 
-        ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\". The provided context does not match the required shape.", emitter_name, signal_name);
+        join_list_of_strings(signal->field_names, ", ", signal_fields, sizeof signal_fields);
+        ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\".\nThe provided context does not match the required shape:\n\n{ %s }", emitter_name, signal_name, signal_fields);
         return;
     }
 
@@ -729,6 +732,32 @@ bool list_of_strings_has_repetition(char* const* list)
     }
 
     return false;
+}
+
+/* join a NULL-terminated list of strings */
+char* join_list_of_strings(char* const* list, const char* separator, char* dest, size_t dest_size)
+{
+    SSARRAY(char, buffer);
+    ssarray_init_ex(buffer, 256);
+
+    if(list != NULL && *list != NULL && dest_size > 1) {
+        for(char* const* it = list; *it; it++) {
+            for(const char* p = *it; *p; p++)
+                ssarray_push(buffer, *p);
+            for(const char* q = separator; *q; q++)
+                ssarray_push(buffer, *q);
+        }
+        ssarray_push(buffer, '\0'); /* separator may be "" */
+
+        int last = ssarray_length(buffer) - 1;
+        buffer[last - strlen(separator)] = '\0';
+    }
+    else
+        ssarray_push(buffer, '\0');
+
+    surgescript_util_strncpy(dest, buffer, dest_size);
+    ssarray_release(buffer);
+    return dest;
 }
 
 /* the index of a key in an array of strings, or -1 if not found */
