@@ -19,10 +19,12 @@
  * SurgeScript Signal System
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include "signal_system.h"
 #include "object_manager.h"
 #include "program_pool.h"
+#include "variable.h"
 #include "../util/perfect_hash.h"
 #include "../util/ssarray.h"
 #include "../util/util.h"
@@ -312,8 +314,10 @@ struct signaldata_t
     char** field_names; /* NULL-terminated array */
 
     SSARRAY(surgescript_objectclassid_t, subscribers); /* sorted array of class of objects capable of catching this signal */
-    SSARRAY(const struct signaledclass_t*, cached_subscribers); /* subscribers mapped to signaledclass_t */
-    SSARRAY(struct cachedsignalcontext_t, cached_contexts); /* cached signal context object classes; typical length: 1 */
+    SSARRAY(signaledclass_t*, cached_subscribers); /* subscribers mapped to signaledclass_t */
+    SSARRAY(cachedsignalcontext_t, cached_contexts); /* cached signal context object classes; typical length: 1 */
+
+    void (*emit)(signaldata_t*,const surgescript_signalsystem_t*,surgescript_objecthandle_t,surgescript_objecthandle_t); /* emit this signal */
 };
 
 struct signaledclass_t
@@ -355,9 +359,16 @@ static void destruct_signal_data(void* ptr);
 static void destruct_signaled_class(void* ptr);
 static void foreach_own_program(const char* emitter_name, void* data);
 static bool is_valid_signal_context(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context);
-static bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context);
+static bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context, signaldata_t** out_signal);
+static char* signal2fun(const char* signal_name, char* buffer, size_t size);
+static int sort_object_handles(const void* a, const void* b);
+static void cleanup_dirty_instances(signaledclass_t* subscriber);
+static void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
+static void emit_bubble(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
+static void emit_nothing(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
 static const int LG2_MAX_OBJECT_CLASSES = 10; /* just a guess, not a strict limit */
 static const int LG2_MAX_SIGNAL_CLASSES = 9;
+static const int MAX_DIRTY_INSTANCES = 32; /*16;*/
 #define LG2_INITIAL_CAPACITY(x) (2+(x)) /* make hash tables sparse */
 
 /*
@@ -455,7 +466,7 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
             surgescript_objectclassid_t object_class = surgescript_objectmanager_class_id(object_manager, object_name);
 
             /* check if that object catches the signal we're inspecting */
-            const signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
+            signaledclass_t* signaled_class = fasthash_get(signal_system->signaled_classes, object_class);
             if(signaled_class != NULL && index_of_signal_code(signal_code, signaled_class->caught_signals, ssarray_length(signaled_class->caught_signals)) >= 0) {
 
                 /* add the object class to the list of subscribers of the signal */
@@ -625,19 +636,21 @@ void surgescript_signalsystem_unsubscribe(surgescript_signalsystem_t* signal_sys
     surgescript_objecthandle_t handle = surgescript_object_handle(object);
     ssarray_push(signaled_class->dirty_instances, handle);
 
-    /* FIXME however, if the list gets too big, maybe we're never recycling things */
-    /* not too big: recycling object handles may happen */
+    /* however, if the list gets too large, maybe we're never recycling things */
+    /* don't wait for it to become too large: recycling object handles may happen */
+    if(ssarray_length(signaled_class->dirty_instances) >= MAX_DIRTY_INSTANCES)
+        cleanup_dirty_instances(signaled_class);
 }
 
 /*
- * surgescript_signalsystem_emit_signal()
+ * surgescript_signalsystem_emit()
  * Emit a signal
  */
-
-void surgescript_signalsystem_emit_signal(const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context)
+void surgescript_signalsystem_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
 {
     const surgescript_object_t* emitter_instance = surgescript_objectmanager_get(signal_system->object_manager, emitter);
     surgescript_objectclassid_t emitter_class = surgescript_object_class_id(emitter_instance);
+    signaldata_t* signal = NULL;
 
     /* check whether or not the emitter is able to emit this signal */
     if(!surgescript_signalsystem_object_can_emit(signal_system, signal_code, emitter_class)) {
@@ -653,7 +666,7 @@ void surgescript_signalsystem_emit_signal(const surgescript_signalsystem_t* sign
     }
 
     /* check whether or not the provided signal context is valid for this signal */
-    if(!is_valid_signal_context_cached(signal_system, signal_code, signal_context)) {
+    if(!is_valid_signal_context_cached(signal_system, signal_code, signal_context, &signal) || signal == NULL) {
         const char* emitter_name = surgescript_object_name(emitter_instance);
         const char* signal_name = surgescript_signalsystem_signal_name(signal_system, signal_code);
 
@@ -661,29 +674,9 @@ void surgescript_signalsystem_emit_signal(const surgescript_signalsystem_t* sign
         return;
     }
 
-    // TODO
-    /*
-
-    sketch for global signals:
-
-    1. cleanup
-    2. notify all
-
-    during cleanup,
-
-    _. skip cleanup if dirty list is empty
-    a. sort dirty instances (those scheduled for cleanup)
-    b. for each instance, use binary search to check if it's dirty
-    c. if it's dirty, quickly remove with swap-and-pop (last element is no-op)
-    d. clear dirty list
-
-    while iterating, take care of deletions happening at the same time
-
-    sketch for bubble signals:
-
-    think if caching is really worth it. reparenting problems.
-
-    */
+    /* emit the signal */
+    if(signal)
+        signal->emit(signal, signal_system, emitter, signal_context);
 }
 
 /*
@@ -823,6 +816,13 @@ signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surges
     ssarray_init(signal->cached_subscribers);
     ssarray_init(signal->cached_contexts);
 
+    if(signal_type == SIGTYPE_GLOBAL)
+        signal->emit = emit_global;
+    else if(signal_type == SIGTYPE_BUBBLE)
+        signal->emit = emit_bubble;
+    else
+        signal->emit = emit_nothing;
+
     return signal;
 }
 
@@ -937,10 +937,11 @@ bool is_valid_signal_context(const surgescript_signalsystem_t* signal_system, su
 }
 
 /* cached version of is_valid_signal_context() */
-bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context)
+bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context, signaldata_t** out_signal)
 {
     /* we'll validate the shape of the signal context */
     signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
+    *out_signal = signal;
 
     /* no such signal */
     if(signal == NULL)
@@ -966,4 +967,153 @@ bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_sys
     cachedsignalcontext_t cached_context = { .object_class = context_class, .is_valid = is_valid };
     ssarray_push(signal->cached_contexts, cached_context);
     return is_valid;
+}
+
+/* convert a signal name to a function name */
+char* signal2fun(const char* signal_name, char* buffer, size_t size)
+{
+    ssassert(size >= 7 + SS_NAMEMAX + 1);
+    memcpy(buffer, "signal:", 7);
+    surgescript_util_strncpy(buffer + 7, signal_name, size - 7);
+    return buffer;
+}
+
+/* comparison function for qsort() */
+int sort_object_handles(const void* a, const void* b)
+{
+    surgescript_objecthandle_t x = *((const surgescript_objecthandle_t*)a);
+    surgescript_objecthandle_t y = *((const surgescript_objecthandle_t*)b);
+
+    return (x > y) - (x < y);
+}
+
+/* helper */
+void cleanup_dirty_instances(signaledclass_t* subscriber)
+{
+    /* skip cleanup if there are no dirty instances */
+    if(ssarray_length(subscriber->dirty_instances) == 0)
+        return;
+
+    /* sort dirty instances */
+    qsort(subscriber->dirty_instances, ssarray_length(subscriber->dirty_instances), sizeof(surgescript_objecthandle_t), sort_object_handles);
+
+    /* for each instance */
+    for(int i = ssarray_length(subscriber->instances) - 1; i >= 0; i--) {
+        surgescript_objecthandle_t instance = subscriber->instances[i];
+
+        /* quickly check if it's dirty. Skip if it's not */
+        if(0 > binary_search_object_handle(instance, subscriber->dirty_instances, ssarray_length(subscriber->dirty_instances)))
+            continue;
+
+        /* if it's dirty, quickly remove it from the instances array with swap-and-pop
+           (notice the backward order of the loop) */
+        int last = ssarray_length(subscriber->instances) - 1; /* previously seen */
+        subscriber->instances[i] = subscriber->instances[last];
+        /*subscriber->instances[last] = instance;*/ /* no need to swap, as this will be popped */
+        ssarray_pop(subscriber->instances, instance); /* we don't need this 'instance' anymore */
+    }
+
+    /* clear dirty instances */
+    ssarray_reset(subscriber->dirty_instances);
+}
+
+/* emit a global signal */
+void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
+{
+    const surgescript_objectmanager_t* manager = signal_system->object_manager;
+
+    /* skip if nobody is listening */
+    int listeners = 0;
+    for(int i = 0; i < ssarray_length(signal->cached_subscribers) && !listeners; i++)
+        listeners += ssarray_length(signal->cached_subscribers[i]->instances); /* minus length(dirty_instances), but we must cleanup them */
+    if(!listeners)
+        return;
+
+    /* preprocess function name */
+    char fun_name[7 + SS_NAMEMAX + 1];
+    signal2fun(signal->name, fun_name, sizeof fun_name);
+
+    /* setup the signal object */
+    surgescript_objecthandle_t signal_object_handle = signal_context; // TODO
+
+    /* preprocess the parameter passed to the signal handler */
+    surgescript_var_t* signal_var = surgescript_var_set_objecthandle(surgescript_var_create(), signal_object_handle);
+    const surgescript_var_t* param = signal_var;
+
+    /* for each subscribed class */
+    for(int i = 0; i < ssarray_length(signal->cached_subscribers); i++) {
+        signaledclass_t* subscriber = signal->cached_subscribers[i];
+
+        /* cleanup dirty instances */
+        if(ssarray_length(subscriber->dirty_instances) > 0)
+            cleanup_dirty_instances(subscriber);
+
+        /* notify instances after cleanup */
+        for(int j = 0; j < ssarray_length(subscriber->instances); j++) {
+            surgescript_objecthandle_t instance = subscriber->instances[j]; /* must exist */
+            ssassert(surgescript_objectmanager_exists(manager, instance));
+            surgescript_object_t* object = surgescript_objectmanager_get(manager, instance);
+            surgescript_object_call_function(object, fun_name, &param, 1, NULL);
+        }
+    }
+
+    /* done */
+    surgescript_var_destroy(signal_var);
+}
+
+/* emit a bubble signal */
+void emit_bubble(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
+{
+    const surgescript_objectmanager_t* manager = signal_system->object_manager;
+    const surgescript_object_t* emitter_instance = surgescript_objectmanager_get(manager, emitter);
+    surgescript_objecthandle_t parent = surgescript_object_parent(emitter_instance);
+    surgescript_objecthandle_t handle;
+    char fun_name[7 + SS_NAMEMAX + 1];
+
+    /* bubble: look for the nearest ancestor of the emitter that can catch the signal */
+    do {
+        handle = parent;
+
+        surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
+        surgescript_objectclassid_t object_class = surgescript_object_class_id(object);
+
+        /* found the target */
+#if 0
+        if(surgescript_signalsystem_object_can_catch(signal_system, signal->code, object_class)) {
+#else
+        if(0 <= binary_search_object_class_id(object_class, signal->subscribers, ssarray_length(signal->subscribers))) {
+#endif
+
+            /* setup the signal object */
+            surgescript_objecthandle_t signal_object_handle = signal_context; // TODO
+
+            /* call the signal handler */
+            surgescript_var_t* signal_var = surgescript_var_set_objecthandle(surgescript_var_create(), signal_object_handle);
+            const surgescript_var_t* param = signal_var;
+            surgescript_object_call_function(object, signal2fun(signal->name, fun_name, sizeof fun_name), &param, 1, NULL);
+            surgescript_var_destroy(signal_var);
+
+            /* stop the iteration */
+            return;
+
+        }
+
+        /* bubble up */
+        parent = surgescript_object_parent(object);
+    } while(handle != parent);
+
+    /* Caching the catching object for every emitter may lead to reparenting
+       issues: if the emitter or any of its ancestors is reparented, then the
+       cache should be invalidated.
+
+       Note that the current routine with the lookup isn't really expensive. */
+}
+
+/* emit no signal */
+void emit_nothing(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
+{
+    (void)signal;
+    (void)signal_system;
+    (void)emitter;
+    (void)signal_context;
 }
