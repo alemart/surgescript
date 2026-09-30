@@ -79,6 +79,7 @@ static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surges
  * surgescript_register_anonymous_object()
  * Create an object class for an anonymous object (this does not spawn anything)
  * Parameter field_names is a NULL-terminated array of strings
+ * Parameter source_file may be set to NULL for anonymous objects defined in native code
  * Output parameter out_object_name gives the name of the object
  * Returns true on success
  */
@@ -89,6 +90,10 @@ bool surgescript_register_anonymous_object(struct surgescript_programpool_t* pro
     /* validate: must have 1 or more fields */
     if(field_names == NULL || *field_names == NULL)
         return false;
+
+    /* we'll accept source_file == NULL as indicating an anonymous object defined in native code */
+    if(source_file == NULL)
+        source_file = "<native>";
 
     /* generate a name for the anonymous object */
     generate_object_name(field_names, object_name, sizeof object_name);
