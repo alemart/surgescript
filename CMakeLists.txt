@@ -67,6 +67,7 @@ set(
     src/surgescript/runtime/sslib/number.c
     src/surgescript/runtime/sslib/object.c
     src/surgescript/runtime/sslib/plugin.c
+    src/surgescript/runtime/sslib/signal.c
     src/surgescript/runtime/sslib/string.c
     src/surgescript/runtime/sslib/surgescript.c
     src/surgescript/runtime/sslib/system.c
