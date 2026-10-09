@@ -27,6 +27,7 @@ option(WANT_SHARED "Build SurgeScript as a shared library" ON)
 option(WANT_STATIC "Build SurgeScript as a static library" ON)
 option(WANT_EXECUTABLE "Build the SurgeScript CLI" ON)
 option(WANT_EXECUTABLE_MULTITHREAD "Enable multithreading on the SurgeScript CLI" ON)
+option(WANT_DETERMINISTIC_BUILD "Enable deterministic builds. This option cannot affect any dependencies" OFF)
 set(PKGCONFIG_PATH "pkgconfig" CACHE PATH "Destination folder of the pkg-config (.pc) file")
 if(UNIX)
     set(METAINFO_PATH "metainfo" CACHE PATH "Destination folder of the metainfo file")
@@ -143,10 +144,24 @@ endfunction()
 generate_file("misc/info.c")
 generate_file("util/version.h")
 
-# Use relative paths in __FILE__
-function(drop_compilation_paths TARGET)
-    if(NOT MSVC)
+function(make_deterministic TARGET)
+    if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang" OR CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        # Use relative paths in __FILE__
         target_compile_options(${TARGET} PUBLIC "-ffile-prefix-map=${CMAKE_SOURCE_DIR}=.")
+        target_compile_options(${TARGET} PUBLIC "-ffile-prefix-map=${CMAKE_BINARY_DIR}=.") # useful for auto-generated sources
+
+        # Pick a random seed
+        target_compile_options(${TARGET} PUBLIC "-frandom-seed=${CMAKE_PROJECT_NAME}")
+
+        # Remove the build-id
+        target_link_options(${TARGET} PUBLIC "-Wl,--build-id=none")
+    else()
+        message(FATAL_ERROR "Deterministic builds: unsupported compiler")
+    endif()
+
+    # Check if SOURCE_DATE_EPOCH is set
+    if(NOT DEFINED ENV{SOURCE_DATE_EPOCH})
+        message(FATAL_ERROR "Deterministic builds: environment variable SOURCE_DATE_EPOCH is not set!")
     endif()
 endfunction()
 
@@ -160,22 +175,26 @@ if(WANT_SHARED)
     message(STATUS "Will build libsurgescript")
     generate_pc_file("shared")
     add_library(surgescript SHARED ${SURGESCRIPT_SOURCES} ${SURGESCRIPT_HEADERS})
-    if (SURGESCRIPT_libm_EXISTS)
+    if(SURGESCRIPT_libm_EXISTS)
         target_link_libraries(surgescript m)
     endif()
     set_target_properties(surgescript PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION ${LIB_SOVERSION})
-    drop_compilation_paths(surgescript)
+    if(WANT_DETERMINISTIC_BUILD)
+        make_deterministic(surgescript)
+    endif()
 endif()
 
 if(WANT_STATIC)
     message(STATUS "Will build libsurgescript-static")
     generate_pc_file("static")
     add_library(surgescript-static STATIC ${SURGESCRIPT_SOURCES} ${SURGESCRIPT_HEADERS})
-    if (SURGESCRIPT_libm_EXISTS)
+    if(SURGESCRIPT_libm_EXISTS)
         target_link_libraries(surgescript-static m)
-    endif ()
+    endif()
     set_target_properties(surgescript-static PROPERTIES VERSION ${PROJECT_VERSION})
-    drop_compilation_paths(surgescript-static)
+    if(WANT_DETERMINISTIC_BUILD)
+        make_deterministic(surgescript-static)
+    endif()
 endif()
 
 # Install the headers
@@ -230,7 +249,9 @@ if(WANT_EXECUTABLE)
     target_link_libraries(surgescript.bin ${LIBSURGESCRIPT} ${LIBTHREADS})
     target_include_directories(surgescript.bin PRIVATE src)
     set_target_properties(surgescript.bin PROPERTIES OUTPUT_NAME surgescript)
-    drop_compilation_paths(surgescript.bin)
+    if(WANT_DETERMINISTIC_BUILD)
+        make_deterministic(surgescript.bin)
+    endif()
 
     # WebAssembly
     if(EMSCRIPTEN)
