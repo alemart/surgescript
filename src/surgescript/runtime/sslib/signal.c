@@ -73,16 +73,6 @@ void surgescript_sslib_register_signal(surgescript_vm_t* vm)
 surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     ssassert(NULL == surgescript_object_userdata(object));
-
-#if 0
-    /* if this is a top-level object, then we'll empty-initialize it */
-    if(surgescript_object_depth(object) <= 1) {
-        privatesignaldata_t* data = ssmalloc(sizeof *data);
-        *data = EMPTY_SIGNAL;
-        surgescript_object_set_userdata(object, data);
-    }
-#endif
-
     return NULL;
 }
 
@@ -116,12 +106,18 @@ surgescript_var_t* fun_init(surgescript_object_t* object, const surgescript_var_
         .emitter = emitter,
         .context = context
     };
-
-    /* just to make sure */
-    SS_STATIC_ASSERT(sizeof(signal_code_i64) > sizeof(data->signal_code));
+    SS_STATIC_ASSERT(sizeof(signal_code_i64) > sizeof(data->signal_code)); /* just to make sure */
 
     /* store data */
     surgescript_object_set_userdata(object, data);
+
+    /* keep a reference to the signal context to prevent garbage collection */
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_heapptr_t heap_addr = surgescript_heap_malloc(heap);
+    surgescript_var_t* heap_var = surgescript_heap_at(heap, heap_addr);
+    surgescript_var_set_objecthandle(heap_var, context);
+
+    /* done */
     return NULL;
 }
 
