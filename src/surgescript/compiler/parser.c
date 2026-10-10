@@ -149,7 +149,7 @@ static void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t c
 static void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void miscstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void assertstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 static void constexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -1883,7 +1883,7 @@ bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         return true;
     }
     else if(got_type(parser, SSTOK_ASSERT)) {
-        miscstmt(parser, context);
+        assertstmt(parser, context);
         return true;
     }
     else if(has_token(parser) && !got_type(parser, SSTOK_RCURLY) && !got_type(parser, SSTOK_CASE) && !got_type(parser, SSTOK_DEFAULT)) {
@@ -2206,7 +2206,7 @@ void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
 }
 
-void miscstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+void assertstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     if(optmatch(parser, SSTOK_ASSERT)) {
         int line = surgescript_token_linenumber(parser->lookahead);
