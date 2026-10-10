@@ -86,7 +86,7 @@ struct surgescript_signalsystembuilder_t
     ssarray_release(list)
 
 #define is_valid_signal_type(signal_type) \
-    ((signal_type) == SIGTYPE_GLOBAL || (signal_type) == SIGTYPE_BUBBLE)
+    ((signal_type) == SIGTYPE_GLOBAL || (signal_type) == SIGTYPE_LOCAL)
 
 /*
  * surgescript_signalsystembuilder_create()
@@ -365,7 +365,7 @@ static char* signal2fun(const char* signal_name, char* buffer, size_t size);
 static int sort_object_handles(const void* a, const void* b);
 static void cleanup_dirty_instances(signaledclass_t* subscriber);
 static void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
-static void emit_bubble(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
+static void emit_local(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
 static void emit_nothing(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
 static const int LG2_MAX_OBJECT_CLASSES = 10; /* just a guess, not a strict limit */
 static const int LG2_MAX_SIGNAL_CLASSES = 9;
@@ -847,8 +847,8 @@ signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surges
 
     if(signal_type == SIGTYPE_GLOBAL)
         signal->emit = emit_global;
-    else if(signal_type == SIGTYPE_BUBBLE)
-        signal->emit = emit_bubble;
+    else if(signal_type == SIGTYPE_LOCAL)
+        signal->emit = emit_local;
     else
         signal->emit = emit_nothing;
 
@@ -1064,6 +1064,7 @@ void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_
 
     /* setup the signal object */
     surgescript_objecthandle_t signal_object_handle = signal_context; // TODO
+    // need to spawn: stack problems (recursion with duplicated signal names)
 
     /* preprocess the parameter passed to the signal handler */
     surgescript_var_t* signal_var = surgescript_var_set_objecthandle(surgescript_var_create(), signal_object_handle);
@@ -1090,8 +1091,8 @@ void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_
     surgescript_var_destroy(signal_var);
 }
 
-/* emit a bubble signal */
-void emit_bubble(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
+/* emit a local signal */
+void emit_local(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
 {
     const surgescript_objectmanager_t* manager = signal_system->object_manager;
     const surgescript_object_t* emitter_instance = surgescript_objectmanager_get(manager, emitter);
@@ -1099,7 +1100,7 @@ void emit_bubble(signaldata_t* signal, const surgescript_signalsystem_t* signal_
     surgescript_objecthandle_t handle;
     char fun_name[7 + SS_NAMEMAX + 1];
 
-    /* bubble: look for the nearest ancestor of the emitter that can catch the signal */
+    /* A local signal travels like a bubble in soda-pop: it looks for the nearest ancestor of the emitter that can catch the signal */
     do {
         handle = parent;
 
@@ -1115,6 +1116,7 @@ void emit_bubble(signaldata_t* signal, const surgescript_signalsystem_t* signal_
 
             /* setup the signal object */
             surgescript_objecthandle_t signal_object_handle = signal_context; // TODO
+            // if we delete the object, then we'll have dangling references if the user stores this handle
 
             /* call the signal handler */
             surgescript_var_t* signal_var = surgescript_var_set_objecthandle(surgescript_var_create(), signal_object_handle);
@@ -1130,6 +1132,8 @@ void emit_bubble(signaldata_t* signal, const surgescript_signalsystem_t* signal_
         /* bubble up */
         parent = surgescript_object_parent(object);
     } while(handle != parent);
+
+    /* uncaught signal */
 
     /* Caching the catching object for every emitter may lead to reparenting
        issues: if the emitter or any of its ancestors is reparented, then the

@@ -32,7 +32,7 @@
  *
  * <signallist> := <signal> <signallist> | e
  * <signal> := <signalqualifier> signal string { <signaldecl> }
- * <signalqualifier> := identifier[="bubble"] | e
+ * <signalqualifier> := identifier[="local"] | e
  * <signaldecl> := identifier <signaldecl1> | e
  * <signaldecl1> := , identifier <signaldecl1> | , | e
  *

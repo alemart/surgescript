@@ -647,7 +647,7 @@ int index_of_string(const char* key, char* const* array, size_t length)
 
 void signallist(surgescript_parser_t* parser)
 {
-    while(got_type(parser, SSTOK_SIGNAL) || got_type_exactly(parser, SSTOK_IDENTIFIER, "bubble"))
+    while(got_type(parser, SSTOK_SIGNAL) || got_type_exactly(parser, SSTOK_IDENTIFIER, "local"))
         signal(parser);
 }
 
@@ -655,12 +655,12 @@ void signal(surgescript_parser_t* parser)
 {
     char* signal_name;
     char** property_list; /* NULL-terminated array of strings */
-    bool is_bubble = false;
+    bool is_local = false;
     bool is_duplicate = false;
     bool skip_registration = false;
 
     /* read the header */
-    is_bubble = optmatch_exactly(parser, SSTOK_IDENTIFIER, "bubble"); /* qualifier */
+    is_local = optmatch_exactly(parser, SSTOK_IDENTIFIER, "local"); /* qualifier */
     match(parser, SSTOK_SIGNAL);
     expect(parser, SSTOK_STRING);
     signal_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
@@ -692,7 +692,7 @@ void signal(surgescript_parser_t* parser)
 
     /* register the signal */
     if(!skip_registration) {
-        surgescript_signaltype_t signal_type = is_bubble ? SIGTYPE_BUBBLE : SIGTYPE_GLOBAL;
+        surgescript_signaltype_t signal_type = is_local ? SIGTYPE_LOCAL : SIGTYPE_GLOBAL;
         surgescript_signalsystembuilder_register_signal(parser->signal_system_builder, signal_name, signal_type, property_list);
     }
 

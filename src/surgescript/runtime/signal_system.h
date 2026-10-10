@@ -37,9 +37,9 @@ enum surgescript_signaltype_t
       (i.e., objects having a registered signal handler matching that signal) */
     SIGTYPE_GLOBAL,
 
-    /* a bubble signal can only be caught by the closest ancestor of the emitter
+    /* a local signal can only be caught by the nearest ancestor of the emitter
        that implements a matching signal handler (it may or may not be caught) */
-    SIGTYPE_BUBBLE,
+    SIGTYPE_LOCAL,
 
     /* a manual signal can only be caught by objects manually and explicitly
        connected to the emitter */
