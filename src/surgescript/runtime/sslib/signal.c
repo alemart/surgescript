@@ -24,6 +24,7 @@
 #include "../heap.h"
 #include "../object.h"
 #include "../object_manager.h"
+#include "../tag_system.h"
 #include "../signal_system.h"
 #include "../../util/util.h"
 
@@ -54,6 +55,9 @@ static const privatesignaldata_t EMPTY_SIGNAL = { 0 };
  */
 void surgescript_sslib_register_signal(surgescript_vm_t* vm)
 {
+    surgescript_tagsystem_t* tag_system = surgescript_vm_tagsystem(vm);
+    surgescript_tagsystem_add_tag(tag_system, "Signal", "signal");
+
     surgescript_vm_bind(vm, "Signal", "constructor", fun_constructor, 0);
     surgescript_vm_bind(vm, "Signal", "destructor", fun_destructor, 0);
     surgescript_vm_bind(vm, "Signal", "state:main", fun_main, 0);
