@@ -150,6 +150,7 @@ static void loopstmt(surgescript_parser_t* parser, surgescript_nodecontext_t con
 static void jumpstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void assertstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 static void constexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -1590,11 +1591,13 @@ void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     else if(optmatch(parser, SSTOK_CALLER)) {
         emit_caller(context);
     }
-    else if(optmatch(parser, SSTOK_SIGNAL)) {
-        if(is_signalhandler_context(context))
+    else if(got_type(parser, SSTOK_SIGNAL)) {
+        if(is_signalhandler_context(context)) {
             emit_identifier(context, surgescript_tokentype_name(SSTOK_SIGNAL), surgescript_token_linenumber(parser->lookahead));
+            match(parser, SSTOK_SIGNAL);
+        }
         else
-            emit_null(context); // TODO
+            unexpected_symbol(parser);
     }
     else if(got_type(parser, SSTOK_IDENTIFIER)) {
         const char* identifier = surgescript_token_lexeme(parser->lookahead);
@@ -1884,6 +1887,10 @@ bool stmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
     else if(got_type(parser, SSTOK_ASSERT)) {
         assertstmt(parser, context);
+        return true;
+    }
+    else if(got_type(parser, SSTOK_EMIT)) {
+        emitstmt(parser, context);
         return true;
     }
     else if(has_token(parser) && !got_type(parser, SSTOK_RCURLY) && !got_type(parser, SSTOK_CASE) && !got_type(parser, SSTOK_DEFAULT)) {
@@ -2208,20 +2215,39 @@ void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void assertstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    if(optmatch(parser, SSTOK_ASSERT)) {
-        int line = surgescript_token_linenumber(parser->lookahead);
-        match(parser, SSTOK_LPAREN);
-        assignexpr(parser, context);
-        if(optmatch(parser, SSTOK_COMMA)) {
-            const char* message = surgescript_token_lexeme(parser->lookahead);
-            match(parser, SSTOK_STRING);
-            emit_assert(context, line, message);
-        }
-        else
-            emit_assert(context, line, NULL);
-        match(parser, SSTOK_RPAREN);
-        match(parser, SSTOK_SEMICOLON);
+    int line = surgescript_token_linenumber(parser->lookahead);
+    match(parser, SSTOK_ASSERT);
+    match(parser, SSTOK_LPAREN);
+    assignexpr(parser, context);
+    if(optmatch(parser, SSTOK_COMMA)) {
+        const char* message = surgescript_token_lexeme(parser->lookahead);
+        match(parser, SSTOK_STRING);
+        emit_assert(context, line, message);
     }
+    else
+        emit_assert(context, line, NULL);
+    match(parser, SSTOK_RPAREN);
+    match(parser, SSTOK_SEMICOLON);
+}
+
+void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    match(parser, SSTOK_EMIT);
+    match(parser, SSTOK_LPAREN);
+    expect(parser, SSTOK_STRING);
+    char* signal_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+    match(parser, SSTOK_STRING);
+    if(optmatch(parser, SSTOK_COMMA)) {
+        assignexpr(parser, context); /* signal context object */
+        emit_emitsignal(context, signal_name);
+    }
+    else {
+        emit_null(context); /* no signal context object */
+        emit_emitsignal(context, signal_name);
+    }
+    match(parser, SSTOK_RPAREN);
+    match(parser, SSTOK_SEMICOLON);
+    ssfree(signal_name);
 }
 
 /* utilities */

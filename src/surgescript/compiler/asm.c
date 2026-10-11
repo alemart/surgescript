@@ -768,6 +768,12 @@ void emit_assert(surgescript_nodecontext_t context, int line, const char* messag
     SSASM(SSOP_POPN, U(4));
 }
 
+void emit_emitsignal(surgescript_nodecontext_t context, const char* signal_name)
+{
+    /* assumption: T0 holds a signal context object handle, or null */
+    SSASM(SSOP_INT, U(0xE317u), TEXT(signal_name));
+}
+
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope)
 {

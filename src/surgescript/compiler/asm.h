@@ -81,6 +81,7 @@ void emit_anonobjexpr2(surgescript_nodecontext_t context, surgescript_program_la
 void emit_anonobjinitfield(surgescript_nodecontext_t context);
 void emit_timeout(surgescript_nodecontext_t context);
 void emit_assert(surgescript_nodecontext_t context, int line, const char* message);
+void emit_emitsignal(surgescript_nodecontext_t context, const char* signal_name);
 
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope);

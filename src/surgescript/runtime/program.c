@@ -32,6 +32,7 @@
 #include "renv.h"
 #include "object_manager.h"
 #include "program_pool.h"
+#include "signal_system.h"
 #include "../util/util.h"
 #include "../util/ssarray.h"
 
@@ -945,6 +946,17 @@ void run_interrupt(const surgescript_program_t* program, const surgescript_renv_
         case 0xA110Cu:
             surgescript_var_set_rawbits(t(b), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
             break;
+
+        /* emit signal named t[b] with context t[0]. The context may be null */
+        case 0xE317u: {
+            surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(surgescript_renv_objectmanager(runtime_environment));
+            const char* signal_name = (b.u < ssarray_length(program->text)) ? program->text[b.u] : "";
+            surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name); /* cheap to compute, but we could cache this on the instruction anyway */
+            surgescript_objecthandle_t signal_context = surgescript_var_get_objecthandle(_t[0]); /* possibly NULL_HANDLE */
+            surgescript_objecthandle_t emitter = surgescript_object_handle(surgescript_renv_owner(runtime_environment));
+            surgescript_signalsystem_emit(signal_system, signal_code, emitter, signal_context);
+            break;
+        }
 
         /* no op */
         default:

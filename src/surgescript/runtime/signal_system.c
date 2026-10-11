@@ -198,6 +198,7 @@ bool surgescript_signalsystembuilder_are_signal_handlers_registered(surgescript_
  */
 void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name, surgescript_signaltype_t signal_type, char* const* field_names)
 {
+    ssassert(signal_name && *signal_name);
     ssassert(!surgescript_signalsystembuilder_is_signal_registered(builder, signal_name));
     ssassert(!list_of_strings_has_repetition(field_names));
     ssassert(is_valid_signal_type(signal_type));
@@ -673,13 +674,15 @@ void surgescript_signalsystem_emit(const surgescript_signalsystem_t* signal_syst
         char signal_fields[256];
 
         join_list_of_strings(signal->field_names, ", ", signal_fields, sizeof signal_fields);
-        ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\".\nThe provided context does not match the required shape:\n\n{ %s }", emitter_name, signal_name, signal_fields);
+        ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\".\nThe provided context does not match the required shape:\n{ %s }", emitter_name, signal_name, signal_fields);
         return;
     }
 
     /* emit the signal */
     if(signal)
         signal->emit(signal, signal_system, emitter, signal_context);
+    else
+        ssassert(signal);
 }
 
 /*
@@ -1100,7 +1103,7 @@ void emit_local(signaldata_t* signal, const surgescript_signalsystem_t* signal_s
     surgescript_objecthandle_t handle;
     char fun_name[7 + SS_NAMEMAX + 1];
 
-    /* A local signal travels like a bubble in soda-pop: it looks for the nearest ancestor of the emitter that can catch the signal */
+    /* A local signal travels like a bubble in a soda-pop: it looks for the nearest ancestor of the emitter that can catch it */
     do {
         handle = parent;
 

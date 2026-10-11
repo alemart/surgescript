@@ -136,6 +136,7 @@
  *        |  <jumpstmt>
  *        |  <retstmt>
  *        |  <assertstmt>
+ *        |  <emitstmt>
  * <blockstmt> := { <stmtlist> }
  * <exprstmt> := ;
  *            |  <expr> ;
@@ -162,6 +163,8 @@
  *            |  continue ;
  * <assertstmt> := assert ( <assignexpr> ) ;
  *              |  assert ( <assignexpr> , string ) ;
+ * <emitstmt> := emit ( string ) ;
+ *            |  emit ( string , <assignexpr> ) ;
  */
 
 #include <stdbool.h>

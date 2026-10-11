@@ -873,6 +873,12 @@ void surgescript_object_init(surgescript_object_t* object)
     static const char* PRE_CONSTRUCTOR_FUN = "__ssconstructor"; /* a constructor reserved for the VM */
     surgescript_programpool_t* program_pool = surgescript_renv_programpool(renv_of(object));
 
+    /* subscribe to the signal system before calling the constructors */
+    /* if a signal of interest is emitted during a constructor call, we'll catch it right away */
+    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
+    surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(manager);
+    surgescript_signalsystem_subscribe(signal_system, object);
+
     /* call internal & regular constructors */
     surgescript_stack_t* stack = surgescript_renv_stack(renv_of(object));
     surgescript_var_t* self = surgescript_var_set_objecthandle(surgescript_var_create(), object->handle);
@@ -891,11 +897,6 @@ void surgescript_object_init(surgescript_object_t* object)
     }
 
     surgescript_stack_pop(stack);
-
-    /* subscribe to the signal system */
-    surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
-    surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(manager);
-    surgescript_signalsystem_subscribe(signal_system, object);
 }
 
 /*
