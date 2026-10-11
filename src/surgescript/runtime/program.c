@@ -89,11 +89,13 @@ static SS_FORCE_INLINE unsigned int run_instruction(const surgescript_program_t*
 static unsigned int run_call_instruction(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, surgescript_program_operand_t a, surgescript_program_operand_t b);
 static unsigned int run_optcall_instruction(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operation_t* operation, surgescript_program_operand_t a, surgescript_program_operand_t b);
 static surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_environment, int number_of_given_params, const char* program_name, surgescript_program_t* program, surgescript_objectclassid_t* out_class_id);
+static inline void run_interrupt(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operand_t a, surgescript_program_operand_t b);
 static inline bool is_jump_instruction(surgescript_program_operator_t instruction);
 static inline bool remove_labels(surgescript_program_t* program);
 static char* hexdump(unsigned data, char* buf); /* writes the bytes stored in data to buf, in hex format */
 static void fputs_escaped(const char* str, FILE* fp); /* works like fputs, but escapes the string */
 static const int MAX_PROGRAM_ARITY = 256;
+#undef t /* helper for run_instruction() */
 
 /* debug mode? */
 #define SURGESCRIPT_DEBUG_MODE          0
@@ -466,11 +468,7 @@ void run_cprogram(surgescript_program_t* program, const surgescript_renv_t* runt
 /* runs an instruction and returns a new value for the instruction pointer */
 unsigned int run_instruction(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, unsigned int ip)
 {
-    /* helper macro */
-    #ifdef t
-    #undef t
-    #endif
-    #define t(k)             _t[(k).u & 3]
+    #define t(k) _t[(k).u & 3]
 
     /* temporary variables */
     surgescript_var_t** _t = surgescript_renv_tmp(runtime_environment);
@@ -491,22 +489,12 @@ unsigned int run_instruction(const surgescript_program_t* program, const surgesc
         case SSOP_NOP: /* no-operation */
             break;
 
+        case SSOP_INT: /* software interruption */
+            run_interrupt(program, runtime_environment, a, b);
+            break;
+
         case SSOP_SELF: /* owner object ("this" pointer) */
             surgescript_var_set_objecthandle(t(a), surgescript_object_handle(surgescript_renv_owner(runtime_environment)));
-            break;
-
-        case SSOP_STATE: /* t[a] receives the current state. If b == -1, then the current state is set to t[a] instead. */
-            if(b.i == -1) {
-                char state[256] = "";
-                surgescript_var_to_string(t(a), state, sizeof(state));
-                surgescript_object_set_state(surgescript_renv_owner(runtime_environment), state);
-            }
-            else
-                surgescript_var_set_string(t(a), surgescript_object_state(surgescript_renv_owner(runtime_environment)));
-            break;
-
-        case SSOP_CALLER: /* caller object */
-            surgescript_var_set_objecthandle(t(a), surgescript_renv_caller(runtime_environment));
             break;
 
         /* assignment operations */
@@ -544,10 +532,6 @@ unsigned int run_instruction(const surgescript_program_t* program, const surgesc
             break;
 
         /* heap operations */
-        case SSOP_ALLOC:
-            surgescript_var_set_rawbits(t(a), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
-            break;
-
         case SSOP_PEEK:
             surgescript_var_copy(t(a), surgescript_heap_at(surgescript_renv_heap(runtime_environment), b.u));
             break;
@@ -930,6 +914,44 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
 
     /* done */
     return program;
+}
+
+/* run a software interruption */
+void run_interrupt(const surgescript_program_t* program, const surgescript_renv_t* runtime_environment, surgescript_program_operand_t a, surgescript_program_operand_t b)
+{
+    #define t(k) _t[(k).u & 3]
+    surgescript_var_t** _t = surgescript_renv_tmp(runtime_environment);
+
+    switch(a.u) {
+        /* get state: t[b] = current state */
+        case 0x57A7Eu:
+            surgescript_var_set_string(t(b), surgescript_object_state(surgescript_renv_owner(runtime_environment)));
+            break;
+
+        /* set state: current state = t[b] */
+        case 0x5E757A7Eu: {
+            char state[2 * (1 + SS_NAMEMAX)] = "";
+            surgescript_var_to_string(t(b), state, sizeof(state));
+            surgescript_object_set_state(surgescript_renv_owner(runtime_environment), state);
+            break;
+        }
+
+        /* get caller: t[b] = handle to the caller object */
+        case 0xCA11E2u:
+            surgescript_var_set_objecthandle(t(b), surgescript_renv_caller(runtime_environment));
+            break;
+
+        /* allocate: t[b] = newly allocated heap memory address */
+        case 0xA110Cu:
+            surgescript_var_set_rawbits(t(b), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
+            break;
+
+        /* no op */
+        default:
+            break;
+    }
+
+    #undef t
 }
 
 /* writes data to buf, in hex/big-endian format (writes (1 + 2 * sizeof(unsigned)) bytes to buf) */

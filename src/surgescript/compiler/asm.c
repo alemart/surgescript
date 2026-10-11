@@ -78,7 +78,7 @@ void emit_object_footer(surgescript_nodecontext_t context, surgescript_program_l
         SSASM(SSOP_MOVX, T2, I(surgescript_symtable_local_count(context.symtable)));
         LABEL(aloc);
             SSASM(SSOP_JE, U(start));
-            SSASM(SSOP_ALLOC);
+            SSASM(SSOP_INT, U(0xA110Cu));
             SSASM(SSOP_DEC, T2);
             SSASM(SSOP_JMP, U(aloc));
 }
@@ -992,12 +992,12 @@ void emit_this(surgescript_nodecontext_t context)
 
 void emit_state(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_STATE, T0);
+    SSASM(SSOP_INT, U(0x57A7Eu), T0);
 }
 
 void emit_caller(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_CALLER, T0);
+    SSASM(SSOP_INT, U(0xCA11E2u), T0);
 }
 
 void emit_identifier(surgescript_nodecontext_t context, const char* identifier, int line)
@@ -1041,7 +1041,7 @@ void emit_zero(surgescript_nodecontext_t context)
 /* misc */
 void emit_setstate(surgescript_nodecontext_t context)
 {
-    SSASM(SSOP_STATE, T0, I(-1)); /* return value is in t[0] */
+    SSASM(SSOP_INT, U(0x5E757A7Eu), T0); /* return value is in t[0] */
 }
 
 void emit_nop(surgescript_nodecontext_t context)
