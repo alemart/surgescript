@@ -344,7 +344,7 @@ struct cachedsignalcontext_t
 struct surgescript_signalsystem_t
 {
     surgescript_perfecthashseed_t hash_seed; /* used to compute signal codes */
-    const surgescript_objectmanager_t* object_manager; /* reference to the object manager */
+    surgescript_objectmanager_t* object_manager; /* reference to the object manager */
 
     fasthash_t* signals; /* map: signal code -> signaldata_t */
     fasthash_t* signaled_classes; /* map: object class -> signaledclass_t */
@@ -368,6 +368,7 @@ static void cleanup_dirty_instances(signaledclass_t* subscriber);
 static void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
 static void emit_local(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
 static void emit_nothing(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
+static surgescript_objecthandle_t spawn_signal_object(surgescript_objectmanager_t* manager, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_emitter, surgescript_objecthandle_t signal_context);
 static const int LG2_MAX_OBJECT_CLASSES = 10; /* just a guess, not a strict limit */
 static const int LG2_MAX_SIGNAL_CLASSES = 9;
 static const int MAX_DIRTY_INSTANCES = 32; /*16;*/
@@ -377,7 +378,7 @@ static const int MAX_DIRTY_INSTANCES = 32; /*16;*/
  * surgescript_signalsystembuilder_build()
  * Build a Signal System
  */
-surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescript_signalsystembuilder_t* builder, const surgescript_objectmanager_t* object_manager)
+surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescript_signalsystembuilder_t* builder, surgescript_objectmanager_t* object_manager)
 {
     /* find a perfect hash function for signal names */
     surgescript_perfecthashseed_t hash_seed = surgescript_perfecthash_find_seed(hash_of_signal_name, builder->declarations.signal_name, ssarray_length(builder->declarations.signal_name));
@@ -1052,7 +1053,7 @@ void cleanup_dirty_instances(signaledclass_t* subscriber)
 /* emit a global signal */
 void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
 {
-    const surgescript_objectmanager_t* manager = signal_system->object_manager;
+    surgescript_objectmanager_t* manager = signal_system->object_manager;
 
     /* skip if nobody is listening */
     int listeners = 0;
@@ -1065,9 +1066,8 @@ void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_
     char fun_name[7 + SS_NAMEMAX + 1];
     signal2fun(signal->name, fun_name, sizeof fun_name);
 
-    /* setup the signal object */
-    surgescript_objecthandle_t signal_object_handle = signal_context; // TODO
-    // need to spawn: stack problems (recursion with duplicated signal names)
+    /* create the signal object */
+    surgescript_objecthandle_t signal_object_handle = spawn_signal_object(manager, signal->code, emitter, signal_context);
 
     /* preprocess the parameter passed to the signal handler */
     surgescript_var_t* signal_var = surgescript_var_set_objecthandle(surgescript_var_create(), signal_object_handle);
@@ -1090,14 +1090,20 @@ void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_
         }
     }
 
-    /* done */
+    /* cleanup */
     surgescript_var_destroy(signal_var);
+
+    /* destroy the signal object
+       we'll have a dangling reference error if the user stores this handle in a variable somewhere
+       if we don't destroy the signal object now, then we'll leave extra work to the garbage collector */
+    ssassert(surgescript_objectmanager_exists(manager, signal_object_handle));
+    surgescript_object_kill(surgescript_objectmanager_get(manager, signal_object_handle));
 }
 
 /* emit a local signal */
 void emit_local(signaldata_t* signal, const surgescript_signalsystem_t* signal_system, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
 {
-    const surgescript_objectmanager_t* manager = signal_system->object_manager;
+    surgescript_objectmanager_t* manager = signal_system->object_manager;
     const surgescript_object_t* emitter_instance = surgescript_objectmanager_get(manager, emitter);
     surgescript_objecthandle_t parent = surgescript_object_parent(emitter_instance);
     surgescript_objecthandle_t handle;
@@ -1117,15 +1123,20 @@ void emit_local(signaldata_t* signal, const surgescript_signalsystem_t* signal_s
         if(0 <= binary_search_object_class_id(object_class, signal->subscribers, ssarray_length(signal->subscribers))) {
 #endif
 
-            /* setup the signal object */
-            surgescript_objecthandle_t signal_object_handle = signal_context; // TODO
-            // if we delete the object, then we'll have dangling references if the user stores this handle
+            /* create the signal object */
+            surgescript_objecthandle_t signal_object_handle = spawn_signal_object(manager, signal->code, emitter, signal_context);
 
             /* call the signal handler */
             surgescript_var_t* signal_var = surgescript_var_set_objecthandle(surgescript_var_create(), signal_object_handle);
             const surgescript_var_t* param = signal_var;
             surgescript_object_call_function(object, signal2fun(signal->name, fun_name, sizeof fun_name), &param, 1, NULL);
             surgescript_var_destroy(signal_var);
+
+            /* destroy the signal object
+               we'll have a dangling reference error if the user stores this handle in a variable somewhere
+               if we don't destroy the signal object now, then we'll leave extra work to the garbage collector */
+            ssassert(surgescript_objectmanager_exists(manager, signal_object_handle));
+            surgescript_object_kill(surgescript_objectmanager_get(manager, signal_object_handle));
 
             /* stop the iteration */
             return;
@@ -1152,4 +1163,24 @@ void emit_nothing(signaldata_t* signal, const surgescript_signalsystem_t* signal
     (void)signal_system;
     (void)emitter;
     (void)signal_context;
+}
+
+/* spawn a Signal object */
+surgescript_objecthandle_t spawn_signal_object(surgescript_objectmanager_t* manager, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_emitter, surgescript_objecthandle_t signal_context)
+{
+    surgescript_objecthandle_t signal_handle = surgescript_objectmanager_spawn_temp(manager, "Signal");
+    surgescript_object_t* signal_object = surgescript_objectmanager_get(manager, signal_handle);
+
+    surgescript_var_t* code = surgescript_var_set_rawbits(surgescript_var_create(), signal_code);
+    surgescript_var_t* emitter = surgescript_var_set_objecthandle(surgescript_var_create(), signal_emitter);
+    surgescript_var_t* context = surgescript_var_set_objecthandle(surgescript_var_create(), signal_context); /* possibly NULL_HANDLE */
+
+    const surgescript_var_t* params[] = { code, emitter, context };
+    surgescript_object_call_function(signal_object, "__init", params, 3, NULL);
+
+    surgescript_var_destroy(context);
+    surgescript_var_destroy(emitter);
+    surgescript_var_destroy(code);
+
+    return signal_handle;
 }
