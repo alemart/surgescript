@@ -2236,6 +2236,19 @@ void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     match(parser, SSTOK_LPAREN);
     expect(parser, SSTOK_STRING);
     char* signal_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+
+    /* compile-time validation */
+    if(!surgescript_signalsystembuilder_is_signal_emission_registered(parser->signal_system_builder, context.object_name, signal_name)) {
+        ssfatal(
+            "Compile Error: object \"%s\" cannot emit signal \"%s\" in %s:%d. Double check the list of signals that the object can emit.",
+            context.object_name,
+            signal_name,
+            context.source_file,
+            surgescript_token_linenumber(parser->lookahead)
+        );
+    }
+
+    /* emit */
     match(parser, SSTOK_STRING);
     if(optmatch(parser, SSTOK_COMMA)) {
         assignexpr(parser, context); /* signal context object */
