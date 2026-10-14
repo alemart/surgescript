@@ -44,10 +44,13 @@
 static void mem_crash(const char* file, int line);
 static void my_adapter_function(const char* message, void* context);
 static void my_log_function(const char* message, void* context);
+static void my_warn_function(const char* message, void* context);
 static void my_crash_function(const char* message, void* context);
 static void (*log_function)(const char* message, void* context) = my_log_function;
+static void (*warn_function)(const char* message, void* context) = my_warn_function;
 static void (*crash_function)(const char* message, void* context) = my_crash_function;
 static void* log_context = NULL;
+static void* warn_context = NULL;
 static void* crash_context = NULL;
 
 
@@ -111,6 +114,23 @@ void surgescript_util_log(const char* fmt, ...)
     va_end(args);
 
     log_function(buf, log_context);
+}
+
+/*
+ * surgescript_util_warn()
+ * Display a warning
+ */
+void surgescript_util_warn(const char* fmt, ...)
+{
+    char buf[1024] = "[surgescript-warning] ";
+    int len = strlen(buf);
+    va_list args;
+
+    va_start(args, fmt);
+    vsnprintf(buf+len, sizeof(buf)-len, fmt, args);
+    va_end(args);
+
+    warn_function(buf, log_context);
 }
 
 /*
@@ -214,6 +234,22 @@ void surgescript_util_set_log_function(void (*fn)(const char*,void*), void* cont
 }
 
 /*
+ * surgescript_util_set_warn_function()
+ * Set a custom warn function fn.
+ */
+void surgescript_util_set_warn_function(void (*fn)(const char*,void*), void* context)
+{
+    if(fn != NULL) {
+        warn_function = fn;
+        warn_context = context;
+    }
+    else {
+        warn_function = my_warn_function;
+        warn_context = NULL;
+    }
+}
+
+/*
  * surgescript_util_set_crash_function()
  * Set a custom crash function fn. It must exit the app / thread.
  */
@@ -237,6 +273,7 @@ void surgescript_util_set_crash_function(void (*fn)(const char*,void*), void* co
 void surgescript_util_set_error_functions(void (*log)(const char*), void (*crash)(const char*))
 {
     surgescript_util_set_log_function(my_adapter_function, log);
+    surgescript_util_set_warn_function(my_adapter_function, log);
     surgescript_util_set_crash_function(my_adapter_function, crash);
 }
 
@@ -467,6 +504,11 @@ void my_adapter_function(const char* message, void* context)
 }
 
 void my_log_function(const char* message, void* context)
+{
+    printf("%s\n", message);
+}
+
+void my_warn_function(const char* message, void* context)
 {
     printf("%s\n", message);
 }

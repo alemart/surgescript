@@ -44,6 +44,7 @@
 #define ssrealloc(p, n)             surgescript_util_realloc((p), (n), __FILE__, __LINE__)
 #define ssfree                      surgescript_util_free
 #define sslog                       surgescript_util_log
+#define sswarn                      surgescript_util_warn
 #define ssfatal                     surgescript_util_fatal
 #define ssstrdup(str)               surgescript_util_strdup((str), __FILE__, __LINE__)
 #define ssatof(str)                 surgescript_util_strtod((str), NULL)
@@ -78,8 +79,9 @@ void* surgescript_util_malloc(size_t bytes, const char* file, int line); /* memo
 void* surgescript_util_realloc(void* ptr, size_t bytes, const char* file, int line); /* memory reallocation */
 void* surgescript_util_free(void* ptr); /* memory deallocation */
 
-void surgescript_util_log(const char* fmt, ...); /* logs a message */
-void surgescript_util_fatal(const char* fmt, ...); /* logs a message and kills the app */
+void surgescript_util_log(const char* fmt, ...); /* log a message */
+void surgescript_util_warn(const char* fmt, ...); /* display a warning */
+void surgescript_util_fatal(const char* fmt, ...); /* kill the application with a message */
 void surgescript_util_set_log_function(void (*fn)(const char*,void*), void* context); /* set a custom log function */
 void surgescript_util_set_crash_function(void (*fn)(const char*,void*), void* context); /* set a custom crash function */
 void surgescript_util_set_error_functions(void (*log)(const char*), void (*crash)(const char*)); /* (obsolete) set custom log & crash functions */
