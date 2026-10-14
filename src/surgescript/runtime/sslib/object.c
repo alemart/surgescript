@@ -436,7 +436,7 @@ surgescript_var_t* fun_assert(surgescript_object_t* object, const surgescript_va
     if(!expr) {
         if(!surgescript_var_is_null(param[1])) {
             const char* message = surgescript_var_fast_get_string(param[1]);
-            ssfatal("Assertion failed!\nMessage: %s\nObject: \"%s\"\nLocation: %s:%d", message, object_name, file, line);
+            ssfatal("Assertion failed!\nObject: \"%s\"\nLocation: %s:%d\n\n%s", object_name, file, line, message);
         }
         else
             ssfatal("Assertion failed!\nObject: \"%s\"\nLocation: %s:%d", object_name, file, line);
