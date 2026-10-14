@@ -416,7 +416,7 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
 
             const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
             if(signal == NULL) {
-                sslog("Warning: object \"%s\" can't emit undeclared signal \"%s\"", object_name, signal_name);
+                sswarn("Object \"%s\" can't emit undeclared signal \"%s\"", object_name, signal_name);
                 continue; /* ignore undeclared signals */
             }
 
@@ -442,7 +442,7 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
 
             const signaldata_t* signal = fasthash_get(signal_system->signals, signal_code);
             if(signal == NULL) {
-                sslog("Warning: object \"%s\" can't catch undeclared signal \"%s\"", object_name, signal_name);
+                sswarn("Object \"%s\" can't catch undeclared signal \"%s\"", object_name, signal_name);
                 continue; /* ignore undeclared signals */
             }
 

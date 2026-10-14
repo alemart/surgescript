@@ -113,10 +113,10 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
             ssfree(accessor_name);
         }
         else
-            sslog("Warning: illegal plugin name \"%s\".", plugin_name);
+            sswarn("Illegal plugin name \"%s\".", plugin_name);
     }
     else
-        sslog("Warning: duplicate plugin \"%s\". Ignoring...", plugin_name);
+        sswarn("Duplicate plugin \"%s\". Ignoring...", plugin_name);
 
     /* done! */
     return surgescript_var_set_objecthandle(surgescript_var_create(), plugin_handle);

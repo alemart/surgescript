@@ -673,11 +673,11 @@ void signal(surgescript_parser_t* parser)
         ssfatal("Compile Error: invalid signal name \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     else if((is_duplicate = surgescript_signalsystembuilder_is_signal_registered(parser->signal_system_builder, signal_name))) {
         if(parser->flags & SSPARSER_SKIP_DUPLICATES) {
-            sslog("Warning: skipping duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            sswarn("Skipping duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
             skip_registration = true;
         }
         else if(parser->flags & SSPARSER_ALLOW_DUPLICATES) {
-            sslog("Warning: reading duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            sswarn("Reading duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
             surgescript_signalsystembuilder_unregister_signal(parser->signal_system_builder, signal_name);
         }
         else
@@ -776,13 +776,13 @@ void object(surgescript_parser_t* parser)
     else if((is_duplicate = surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))) {
         if(parser->flags & SSPARSER_SKIP_DUPLICATES) {
             char buf[32] = { '.', 'd', 'u', 'p', '.' };
-            sslog("Warning: skipping duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            sswarn("Skipping duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
             ssfree(object_name);
             object_name = ssstrdup(randstr(buf + 5, sizeof(buf) - 5) - 5);
             context.object_name = object_name;
         }
         else if((parser->flags & SSPARSER_ALLOW_DUPLICATES) && !forbid_duplicates(parser, object_name)) {
-            sslog("Warning: reading duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            sswarn("Reading duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
             remove_object_definition(parser, object_name);
         }
         else
