@@ -297,7 +297,7 @@ void create_constructor(surgescript_programpool_t* program_pool, const char* obj
 
     /* allocate memory for the metadata */
     for(int i = 0; i < METADATA_COUNT; i++)
-        SSASM(SSOP_INT, U(0xA110Cu));
+        SSASM(SSOP_INT, U(0xA110C));
 
     /* set up metadata */
     SSASM(SSOP_MOVS, T1, TEXT(field_list));
