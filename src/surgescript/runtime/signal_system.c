@@ -33,11 +33,11 @@
 #define FASTHASH_INLINE
 #include "../util/fasthash.h"
 
-static int length_of_list_of_strings(char* const* list);
-static char** clone_list_of_strings(char* const* list);
-static bool list_of_strings_has_repetition(char* const* list);
-static int index_of_string(const char* key, char* const* array, size_t length);
-static char* join_list_of_strings(char* const* list, const char* separator, char* dest, size_t dest_size);
+static int length_of_list_of_strings(char** list);
+static char** clone_list_of_strings(char** list);
+static bool list_of_strings_has_repetition(char** list);
+static int index_of_string(const char* key, char** array, size_t length);
+static char* join_list_of_strings(char** list, const char* separator, char* dest, size_t dest_size);
 
 /*
 --------------------------------------------------------------------------------
@@ -146,7 +146,7 @@ bool surgescript_signalsystembuilder_is_signal_emission_registered(surgescript_s
 {
     int i = index_of_string(object_name, builder->emissions.object_name, ssarray_length(builder->emissions.object_name));
     if(i >= 0) {
-        for(char* const* it = builder->emissions.signal_names[i]; *it; it++) {
+        for(char** it = builder->emissions.signal_names[i]; *it; it++) {
             if(0 == strcmp(*it, signal_name))
                 return true;
         }
@@ -162,7 +162,7 @@ bool surgescript_signalsystembuilder_is_signal_handler_registered(surgescript_si
 {
     int i = index_of_string(object_name, builder->handlers.object_name, ssarray_length(builder->handlers.object_name));
     if(i >= 0) {
-        for(char* const* it = builder->handlers.signal_names[i]; *it; it++) {
+        for(char** it = builder->handlers.signal_names[i]; *it; it++) {
             if(0 == strcmp(*it, signal_name))
                 return true;
         }
@@ -196,16 +196,16 @@ bool surgescript_signalsystembuilder_are_signal_handlers_registered(surgescript_
  * see surgescript_signalsystembuilder_is_signal_registered().
  * field_names is a NULL-terminated array of strings
  */
-void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name, surgescript_signaltype_t signal_type, char* const* field_names)
+void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name, surgescript_signaltype_t signal_type, const char* const* field_names)
 {
     ssassert(signal_name && *signal_name);
     ssassert(!surgescript_signalsystembuilder_is_signal_registered(builder, signal_name));
-    ssassert(!list_of_strings_has_repetition(field_names));
+    ssassert(!list_of_strings_has_repetition((char**)field_names));
     ssassert(is_valid_signal_type(signal_type));
 
     ssarray_push(builder->declarations.signal_name, ssstrdup(signal_name));
     ssarray_push(builder->declarations.signal_type, signal_type);
-    ssarray_push(builder->declarations.field_names, clone_list_of_strings(field_names));
+    ssarray_push(builder->declarations.field_names, clone_list_of_strings((char**)field_names));
 }
 
 /*
@@ -214,13 +214,13 @@ void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembui
  * see surgescript_signalsystembuilder_are_signal_emissions_registered().
  * signal_names is a NULL-terminated array of strings
  */
-void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name, char* const* signal_names)
+void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* const* signal_names)
 {
     ssassert(!surgescript_signalsystembuilder_are_signal_emissions_registered(builder, object_name));
-    ssassert(!list_of_strings_has_repetition(signal_names));
+    ssassert(!list_of_strings_has_repetition((char**)signal_names));
 
     ssarray_push(builder->emissions.object_name, ssstrdup(object_name));
-    ssarray_push(builder->emissions.signal_names, clone_list_of_strings(signal_names));
+    ssarray_push(builder->emissions.signal_names, clone_list_of_strings((char**)signal_names));
 }
 
 /*
@@ -229,13 +229,13 @@ void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signa
  * see surgescript_signalsystembuilder_are_signal_handlers_registered().
  * signal_names is a NULL-terminated array of strings
  */
-void surgescript_signalsystembuilder_register_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name, char* const* signal_names)
+void surgescript_signalsystembuilder_register_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* const* signal_names)
 {
     ssassert(!surgescript_signalsystembuilder_are_signal_handlers_registered(builder, object_name));
-    ssassert(!list_of_strings_has_repetition(signal_names));
+    ssassert(!list_of_strings_has_repetition((char**)signal_names));
 
     ssarray_push(builder->handlers.object_name, ssstrdup(object_name));
-    ssarray_push(builder->handlers.signal_names, clone_list_of_strings(signal_names));
+    ssarray_push(builder->handlers.signal_names, clone_list_of_strings((char**)signal_names));
 }
 
 /*
@@ -355,7 +355,7 @@ static int index_of_signal_code(surgescript_signalcode_t target, const signaldat
 static int index_of_object_handle(surgescript_objecthandle_t target, const surgescript_objecthandle_t* array, size_t length);
 static int binary_search_object_handle(surgescript_objecthandle_t target, const surgescript_objecthandle_t* array, size_t length);
 static int binary_search_object_class_id(surgescript_objectclassid_t target, const surgescript_objectclassid_t* array, size_t length);
-static signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surgescript_signaltype_t signal_type, const char* signal_name, char* const* field_names);
+static signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surgescript_signaltype_t signal_type, const char* signal_name, const char* const* field_names);
 static signaledclass_t* construct_signaled_class(surgescript_objectclassid_t object_class);
 static void destruct_signal_data(void* ptr);
 static void destruct_signaled_class(void* ptr);
@@ -394,13 +394,13 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
     /* store the declaration of each signal */
     for(int i = 0; i < ssarray_length(builder->declarations.signal_name); i++) {
         const char* signal_name = builder->declarations.signal_name[i];
-        char* const* field_names = builder->declarations.field_names[i];
+        char** field_names = builder->declarations.field_names[i];
         surgescript_signaltype_t signal_type = builder->declarations.signal_type[i];
         surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
 
         ssassert(NULL == fasthash_get(signal_system->signals, signal_code)); /* no duplicates allowed */
 
-        signaldata_t* signal = construct_signal_data(signal_code, signal_type, signal_name, field_names);
+        signaldata_t* signal = construct_signal_data(signal_code, signal_type, signal_name, (const char* const*)field_names);
         fasthash_put(signal_system->signals, signal_code, signal);
     }
 
@@ -409,8 +409,8 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
         const char* object_name = builder->emissions.object_name[i];
         surgescript_objectclassid_t object_class = surgescript_objectmanager_class_id(object_manager, object_name);
 
-        char* const* signal_names = builder->emissions.signal_names[i];
-        for(char* const* it = signal_names; *it; it++) {
+        char** signal_names = builder->emissions.signal_names[i];
+        for(char** it = signal_names; *it; it++) {
             const char* signal_name = *it;
             surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
 
@@ -435,8 +435,8 @@ surgescript_signalsystem_t* surgescript_signalsystembuilder_build(const surgescr
         const char* object_name = builder->handlers.object_name[i];
         surgescript_objectclassid_t object_class = surgescript_objectmanager_class_id(object_manager, object_name);
 
-        char* const* signal_names = builder->handlers.signal_names[i];
-        for(char* const* it = signal_names; *it; it++) {
+        char** signal_names = builder->handlers.signal_names[i];
+        for(char** it = signal_names; *it; it++) {
             const char* signal_name = *it;
             surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
 
@@ -699,21 +699,21 @@ surgescript_perfecthashkey_t hash_of_signal_name(const char* signal_name, surges
 }
 
 /* count the number of elements of a NULL-terminated array of strings */
-int length_of_list_of_strings(char* const* list)
+int length_of_list_of_strings(char** list)
 {
     int count = 0;
 
     if(NULL == list) /* accept NULL? */
         return 0;
 
-    for(char* const* it = list; *it; it++)
+    for(char** it = list; *it; it++)
         count++;
 
     return count;
 }
 
 /* clone a NULL-terminated array of strings */
-char** clone_list_of_strings(char* const* list)
+char** clone_list_of_strings(char** list)
 {
     int length = length_of_list_of_strings(list);
     char** clone = ssmalloc((1 + length) * sizeof(char*));
@@ -726,10 +726,10 @@ char** clone_list_of_strings(char* const* list)
 }
 
 /* check if a NULL-terminated array of strings has repeated elements */
-bool list_of_strings_has_repetition(char* const* list)
+bool list_of_strings_has_repetition(char** list)
 {
-    for(char* const* it = list; *it; it++) {
-        for(char* const* it2 = list; it2 != it && *it2; it2++) {
+    for(char** it = list; *it; it++) {
+        for(char** it2 = list; it2 != it && *it2; it2++) {
             if(0 == strcmp(*it, *it2))
                 return true;
         }
@@ -739,13 +739,13 @@ bool list_of_strings_has_repetition(char* const* list)
 }
 
 /* join a NULL-terminated list of strings */
-char* join_list_of_strings(char* const* list, const char* separator, char* dest, size_t dest_size)
+char* join_list_of_strings(char** list, const char* separator, char* dest, size_t dest_size)
 {
     SSARRAY(char, buffer);
     ssarray_init_ex(buffer, 256);
 
     if(list != NULL && *list != NULL && dest_size > 1) {
-        for(char* const* it = list; *it; it++) {
+        for(char** it = list; *it; it++) {
             for(const char* p = *it; *p; p++)
                 ssarray_push(buffer, *p);
             for(const char* q = separator; *q; q++)
@@ -765,7 +765,7 @@ char* join_list_of_strings(char* const* list, const char* separator, char* dest,
 }
 
 /* the index of a key in an array of strings, or -1 if not found */
-int index_of_string(const char* key, char* const* array, size_t length)
+int index_of_string(const char* key, char** array, size_t length)
 {
     /* start by the end (more efficient given the usage?) */
     while(length--) {
@@ -837,14 +837,14 @@ int binary_search_object_class_id(surgescript_objectclassid_t target, const surg
 }
 
 /* create a signaldata_t */
-signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surgescript_signaltype_t signal_type, const char* signal_name, char* const* field_names)
+signaldata_t* construct_signal_data(surgescript_signalcode_t signal_code, surgescript_signaltype_t signal_type, const char* signal_name, const char* const* field_names)
 {
     signaldata_t* signal = ssmalloc(sizeof *signal);
 
     signal->code = signal_code;
     signal->type = signal_type;
     signal->name = ssstrdup(signal_name);
-    signal->field_names = clone_list_of_strings(field_names);
+    signal->field_names = clone_list_of_strings((char**)field_names);
     ssarray_init(signal->subscribers);
     ssarray_init(signal->cached_subscribers);
     ssarray_init(signal->cached_contexts);
@@ -917,8 +917,8 @@ void foreach_own_program(const char* program_name, void* data)
     else if(strcmp(program_name, "get___file") == 0)
         return;
 
-    char* const* field_names = (char* const*)(params[0]);
-    int list_size = *((const int*)(params[1]));
+    char** field_names = (char**)(params[0]);
+    int list_size = *((int*)(params[1]));
 
     /* the getter name must belong to the list of fields
        program_name + 4 is a valid pointer, since program_name[0..3] is "get_" */
@@ -947,7 +947,7 @@ bool is_valid_signal_context(const surgescript_signalsystem_t* signal_system, su
     const surgescript_object_t* context_instance = surgescript_objectmanager_get(signal_system->object_manager, signal_context);
     char getter_name[4 + SS_NAMEMAX + 1] = "get_";
 
-    for(char* const* it = signal->field_names; *it; it++) {
+    for(char** it = signal->field_names; *it; it++) {
         const char* field_name = *it;
         surgescript_util_strncpy(getter_name + 4, field_name, sizeof(getter_name) - 4);
         if(!surgescript_object_has_own_function(context_instance, getter_name))

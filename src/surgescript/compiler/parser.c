@@ -694,7 +694,7 @@ void signal(surgescript_parser_t* parser)
     /* register the signal */
     if(!skip_registration) {
         surgescript_signaltype_t signal_type = is_local ? SIGTYPE_LOCAL : SIGTYPE_GLOBAL;
-        surgescript_signalsystembuilder_register_signal(parser->signal_system_builder, signal_name, signal_type, property_list);
+        surgescript_signalsystembuilder_register_signal(parser->signal_system_builder, signal_name, signal_type, (const char* const*)property_list);
     }
 
     /* cleanup */
@@ -908,7 +908,7 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
         /* register signals */
         ssarray_push(signal_names, NULL);
-        surgescript_signalsystembuilder_register_signal_emissions(parser->signal_system_builder, context.object_name, signal_names);
+        surgescript_signalsystembuilder_register_signal_emissions(parser->signal_system_builder, context.object_name, (const char* const*)signal_names);
 
         /* release */
         for(int i = ssarray_length(signal_names) - 2; i >= 0; i--) /* last element is NULL */
@@ -1047,7 +1047,7 @@ void signalhandlerdecllist(surgescript_parser_t* parser, surgescript_nodecontext
 
     /* register signal handlers */
     ssarray_push(signal_names, NULL);
-    surgescript_signalsystembuilder_register_signal_handlers(builder, context.object_name, signal_names);
+    surgescript_signalsystembuilder_register_signal_handlers(builder, context.object_name, (const char* const*)signal_names);
 
     /* release */
     for(int i = ssarray_length(signal_names) - 2; i >= 0; i--) /* last entry is NULL */
