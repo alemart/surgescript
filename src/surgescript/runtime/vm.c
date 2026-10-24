@@ -22,6 +22,7 @@
 #include <string.h>
 #include <errno.h>
 #include <time.h>
+#include <stdarg.h>
 #include "vm.h"
 #include "stack.h"
 #include "variable.h"
@@ -460,6 +461,54 @@ void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const ch
 }
 
 /*
+ * surgescript_vm_register_signal()
+ * Register a signal
+ */
+void surgescript_vm_register_signal(surgescript_vm_t* vm, const char* signal_name, surgescript_signaltype_t signal_type, int context_field_count, ...)
+{
+    enum { MAX_CONTEXT_FIELD_COUNT = 15 };
+    const char* field_names[1 + MAX_CONTEXT_FIELD_COUNT] = { NULL }; /* NULL-terminated array of strings */
+    va_list ap; /* argument pointer */
+
+    /* validate */
+    ssassert(context_field_count <= MAX_CONTEXT_FIELD_COUNT && context_field_count >= 0);
+    ssassert(vm->signal_system == NULL);
+
+    /* grab field names */
+    va_start(ap, context_field_count);
+    for(int i = 0; i < context_field_count; i++)
+        field_names[i] = va_arg(ap, const char*);
+    va_end(ap);
+
+    /* register signal */
+    surgescript_signalsystembuilder_register_signal(vm->signal_system_builder, signal_name, signal_type, field_names);
+}
+
+/*
+ * surgescript_vm_register_signal_emissions()
+ * Register that certain objects can emit certain signals
+ */
+void surgescript_vm_register_signal_emissions(surgescript_vm_t* vm, const char* object_name, int signal_count, ...)
+{
+    enum { MAX_SIGNAL_COUNT = 15 };
+    const char* signal_names[1 + MAX_SIGNAL_COUNT] = { NULL }; /* NULL-terminated array of strings */
+    va_list ap; /* argument pointer */
+
+    /* validate */
+    ssassert(signal_count <= MAX_SIGNAL_COUNT && signal_count >= 0);
+    ssassert(vm->signal_system == NULL);
+
+    /* grab signal names */
+    va_start(ap, signal_count);
+    for(int i = 0; i < signal_count; i++)
+        signal_names[i] = va_arg(ap, const char*);
+    va_end(ap);
+
+    /* register signal emissions */
+    surgescript_signalsystembuilder_register_signal_emissions(vm->signal_system_builder, object_name, signal_names);
+}
+
+/*
  * surgescript_vm_install_plugin()
  * Sets a certain object as a plugin. Call before launching the VM.
  */
@@ -513,15 +562,16 @@ void init_vm(surgescript_vm_t* vm)
 void release_vm(surgescript_vm_t* vm)
 {
     /* destroy the VM components */
-    surgescript_parser_destroy(vm->parser);
-    surgescript_objectmanager_destroy(vm->object_manager);
-    //surgescript_signalsystem_destroy(vm->signal_system);
-    surgescript_signalsystembuilder_destroy(vm->signal_system_builder);
-    surgescript_tagsystem_destroy(vm->tag_system);
-    surgescript_programpool_destroy(vm->program_pool);
-    surgescript_stack_destroy(vm->stack);
-    surgescript_vmtime_destroy(vm->time);
-    surgescript_vmargs_destroy(vm->args);
+    vm->parser = surgescript_parser_destroy(vm->parser);
+    vm->object_manager = surgescript_objectmanager_destroy(vm->object_manager);
+    if(vm->signal_system)
+        vm->signal_system = surgescript_signalsystem_destroy(vm->signal_system); /* set to NULL to flag an "unbuilt" signal system */
+    vm->signal_system_builder = surgescript_signalsystembuilder_destroy(vm->signal_system_builder);
+    vm->tag_system = surgescript_tagsystem_destroy(vm->tag_system);
+    vm->program_pool = surgescript_programpool_destroy(vm->program_pool);
+    vm->stack = surgescript_stack_destroy(vm->stack);
+    vm->time = surgescript_vmtime_destroy(vm->time);
+    vm->args = surgescript_vmargs_destroy(vm->args);
 }
 
 /* these auxiliary functions help traversing the object tree */
