@@ -24,11 +24,13 @@
 
 #include <stdbool.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 /* types */
 typedef struct surgescript_object_t surgescript_object_t;
 typedef unsigned surgescript_objecthandle_t;
 typedef unsigned surgescript_objectclassid_t;
+typedef uint64_t surgescript_anonymousobjecttype_t;
 
 /* forward declarations */
 struct surgescript_programpool_t;

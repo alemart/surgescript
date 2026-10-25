@@ -21,6 +21,7 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <stdarg.h>
 #include "object_manager.h"
 #include "object.h"
 #include "program_pool.h"
@@ -580,12 +581,65 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_dictionary(surgescrip
 
 /*
  * surgescript_objectmanager_spawn_temp()
- * Spawns an object on __Temp and return its handle
+ * Spawns an object on __Temp and returns its handle
  */
 surgescript_objecthandle_t surgescript_objectmanager_spawn_temp(surgescript_objectmanager_t* manager, const char* object_name)
 {
     surgescript_objecthandle_t temp = surgescript_objectmanager_system_object(manager, "__Temp");
     return surgescript_objectmanager_spawn(manager, temp, object_name, NULL);
+}
+
+/*
+ * surgescript_objectmanager_spawn_anonymous()
+ * Spawns an anonymous object on __Temp, initializes its fields with the provided variables, and returns its handle
+ * Pass a NULL-terminated list of SurgeScript variables, which will be assigned to the fields of the anonymous object in the order of their declaration
+ */
+surgescript_objecthandle_t surgescript_objectmanager_spawn_anonymous(surgescript_objectmanager_t* manager, surgescript_anonymousobjecttype_t anon_type, ...)
+{
+    /* obtain the name of the object - this should be fast! */
+    static const char prefix[] = "__Anonymous$";
+    char object_name[32] = { 0 };
+    char* begin = object_name + 12;
+    char* end = begin + 16;
+
+    *end = '\0'; /* this does no harm, but it's not strictly needed, since we initialize object_name[] with zeroes */
+    for(char* p = end - 1; p >= begin; p--) {
+        static const char table[] = "0123456789abcdef";
+        *p = table[anon_type & 15];
+        anon_type >>= 4; /* note that we do not preserve anon_type */
+    }
+    memcpy(object_name, prefix, 12);
+
+    /* spawn the anonymous object as a child of __Temp */
+    surgescript_objecthandle_t handle = surgescript_objectmanager_spawn_temp(manager, object_name);
+    surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
+
+    /* initialize the fields, which are assumed to match the order of their declaration */
+    const surgescript_var_t* field = NULL;
+    surgescript_var_t* ret = surgescript_var_create();
+    surgescript_var_t* tmp = surgescript_var_create();
+    int field_count = 0;
+
+    va_list ap;
+    va_start(ap, anon_type);
+    while(NULL != (field = va_arg(ap, const surgescript_var_t*))) {
+        surgescript_object_call_function(object, "__init", &field, 1, ret);
+        ssassert(surgescript_var_get_bool(ret) == true); /* validate */
+        ++field_count;
+    }
+    va_end(ap);
+    ssassert(field_count > 0); /* validate */
+
+    /* ensure that the anonymous object expects no more fields to be initialized */
+    surgescript_object_call_function(object, "__init", &tmp, 1, ret);
+    ssassert(surgescript_var_get_bool(ret) == false); /* validate spurious call */
+
+    /* cleanup */
+    surgescript_var_destroy(tmp);
+    surgescript_var_destroy(ret);
+
+    /* done */
+    return handle;
 }
 
 /*

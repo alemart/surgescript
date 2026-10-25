@@ -509,6 +509,59 @@ void surgescript_vm_register_signal_emissions(surgescript_vm_t* vm, const char* 
 }
 
 /*
+ * surgescript_vm_register_anonymous_object()
+ * Register a native Anonymous Object class. Use the returned value to spawn them.
+ * In addition to the vm, pass a NULL-terminated list of field names as strings
+ */
+surgescript_anonymousobjecttype_t surgescript_vm_register_anonymous_object(surgescript_vm_t* vm, ...)
+{
+    enum { MAX_FIELD_COUNT = 14 };
+    const char* field_names[2 + MAX_FIELD_COUNT] = { NULL }; /* NULL-terminated array of strings */
+    char object_name[32] = { 0 };
+    int field_count = 0;
+    va_list ap; /* argument pointer */
+
+    /* grab field names */
+    va_start(ap, vm);
+    do {
+        field_names[field_count] = va_arg(ap, const char*);
+    } while(field_names[field_count] != NULL && ++field_count <= MAX_FIELD_COUNT);
+    va_end(ap);
+
+    /* validate */
+    ssassert(field_count > 0);
+    if(field_names[MAX_FIELD_COUNT] != NULL)
+        ssfatal("Too many fields (%d) in %s", field_count, __func__);
+
+    /* register the native class of Anonymous Objects */
+    extern bool surgescript_register_anonymous_object(surgescript_programpool_t* program_pool, const char** field_names, const char* source_file, char* out_object_name, size_t out_object_name_size);
+    if(!surgescript_register_anonymous_object(vm->program_pool, field_names, NULL, object_name, sizeof(object_name))) {
+        ssfatal(
+            "Runtime Error: can't register native anonymous object with fields %s %s %s %s %s",
+            field_names[0] ? field_names[0] : "(null)",
+            field_names[1] ? field_names[1] : "",
+            field_names[2] ? field_names[2] : "",
+            field_names[3] ? field_names[3] : "",
+            field_count > 4 ? "..." : ""
+        );
+    }
+
+    /* make sure that the object name matches the expected format */
+    ssassert(0 == strncmp(object_name, "__Anonymous$", 12));
+    ssassert(16 == strlen(object_name + 12));
+    ssassert(16 == strspn(object_name + 12, "0123456789abcdef"));
+
+    /* obtain and return the type ID */
+    surgescript_anonymousobjecttype_t anon_type = 0;
+    for(char* p = object_name + 12; *p; p++) {
+        int k = (*p >= 'a' && *p <= 'f') ? (*p - 'a') : (*p - '0');
+        anon_type = anon_type * 16 + k;
+    }
+
+    return anon_type;
+}
+
+/*
  * surgescript_vm_install_plugin()
  * Sets a certain object as a plugin. Call before launching the VM.
  */
