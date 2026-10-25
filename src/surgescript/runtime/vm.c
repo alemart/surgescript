@@ -463,22 +463,25 @@ void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const ch
 /*
  * surgescript_vm_register_signal()
  * Register a signal
+ * Pass a NULL-terminated list of field names of the context object. If the context object has no fields, just pass NULL
  */
-void surgescript_vm_register_signal(surgescript_vm_t* vm, const char* signal_name, surgescript_signaltype_t signal_type, int context_field_count, ...)
+void surgescript_vm_register_signal(surgescript_vm_t* vm, const char* signal_name, surgescript_signaltype_t signal_type, ...)
 {
     enum { MAX_CONTEXT_FIELD_COUNT = 15 };
     const char* field_names[1 + MAX_CONTEXT_FIELD_COUNT] = { NULL }; /* NULL-terminated array of strings */
+    int field_count = 0; /* fields of the context object */
     va_list ap; /* argument pointer */
 
-    /* validate */
-    ssassert(context_field_count <= MAX_CONTEXT_FIELD_COUNT && context_field_count >= 0);
-    ssassert(vm->signal_system == NULL);
-
     /* grab field names */
-    va_start(ap, context_field_count);
-    for(int i = 0; i < context_field_count; i++)
-        field_names[i] = va_arg(ap, const char*);
+    va_start(ap, signal_type);
+    do {
+        field_names[field_count] = va_arg(ap, const char*);
+    } while(field_names[field_count] != NULL && ++field_count <= MAX_CONTEXT_FIELD_COUNT);
     va_end(ap);
+
+    /* validate */
+    ssassert(vm->signal_system == NULL);
+    ssassert(field_count >= 0 && field_names[MAX_CONTEXT_FIELD_COUNT] == NULL);
 
     /* register signal */
     surgescript_signalsystembuilder_register_signal(vm->signal_system_builder, signal_name, signal_type, field_names);
@@ -487,22 +490,25 @@ void surgescript_vm_register_signal(surgescript_vm_t* vm, const char* signal_nam
 /*
  * surgescript_vm_register_signal_emissions()
  * Register that certain objects can emit certain signals
+ * Pass a NULL-terminated list of signal names
  */
-void surgescript_vm_register_signal_emissions(surgescript_vm_t* vm, const char* object_name, int signal_count, ...)
+void surgescript_vm_register_signal_emissions(surgescript_vm_t* vm, const char* object_name, ...)
 {
     enum { MAX_SIGNAL_COUNT = 15 };
     const char* signal_names[1 + MAX_SIGNAL_COUNT] = { NULL }; /* NULL-terminated array of strings */
+    int signal_count = 0;
     va_list ap; /* argument pointer */
 
-    /* validate */
-    ssassert(signal_count <= MAX_SIGNAL_COUNT && signal_count >= 0);
-    ssassert(vm->signal_system == NULL);
-
     /* grab signal names */
-    va_start(ap, signal_count);
-    for(int i = 0; i < signal_count; i++)
-        signal_names[i] = va_arg(ap, const char*);
+    va_start(ap, object_name);
+    do {
+        signal_names[signal_count] = va_arg(ap, const char*);
+    } while(signal_names[signal_count] != NULL && ++signal_count <= MAX_SIGNAL_COUNT);
     va_end(ap);
+
+    /* validate */
+    ssassert(vm->signal_system == NULL);
+    ssassert(signal_count > 0 && signal_names[MAX_SIGNAL_COUNT] == NULL);
 
     /* register signal emissions */
     surgescript_signalsystembuilder_register_signal_emissions(vm->signal_system_builder, object_name, signal_names);
@@ -515,8 +521,8 @@ void surgescript_vm_register_signal_emissions(surgescript_vm_t* vm, const char* 
  */
 surgescript_anonymousobjecttype_t surgescript_vm_register_anonymous_object(surgescript_vm_t* vm, ...)
 {
-    enum { MAX_FIELD_COUNT = 14 };
-    const char* field_names[2 + MAX_FIELD_COUNT] = { NULL }; /* NULL-terminated array of strings */
+    enum { MAX_FIELD_COUNT = 15 };
+    const char* field_names[1 + MAX_FIELD_COUNT] = { NULL }; /* NULL-terminated array of strings */
     char object_name[32] = { 0 };
     int field_count = 0;
     va_list ap; /* argument pointer */
@@ -529,9 +535,7 @@ surgescript_anonymousobjecttype_t surgescript_vm_register_anonymous_object(surge
     va_end(ap);
 
     /* validate */
-    ssassert(field_count > 0);
-    if(field_names[MAX_FIELD_COUNT] != NULL)
-        ssfatal("Too many fields (%d) in %s", field_count, __func__);
+    ssassert(field_count > 0 && field_names[MAX_FIELD_COUNT] == NULL);
 
     /* register the native class of Anonymous Objects */
     extern bool surgescript_register_anonymous_object(surgescript_programpool_t* program_pool, const char** field_names, const char* source_file, char* out_object_name, size_t out_object_name_size);
