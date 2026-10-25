@@ -334,7 +334,7 @@ surgescript_var_t* fun_init(surgescript_object_t* object, const surgescript_var_
     surgescript_var_t* var_remaining_writes = surgescript_heap_at(heap, METADATA_ADDR_REMAINING_WRITES);
     int remaining_writes = surgescript_var_get_number(var_remaining_writes);
     if(remaining_writes <= 0)
-        return NULL;
+        return surgescript_var_set_bool(surgescript_var_create(), false);
 
     /* in the i-th call to this method, we'll initialize the
        i-th field of this anonymous object (i = 0, 1, 2,...)
@@ -353,7 +353,7 @@ surgescript_var_t* fun_init(surgescript_object_t* object, const surgescript_var_
 
     /* update remaining_writes */
     surgescript_var_set_number(var_remaining_writes, --remaining_writes);
-    return NULL;
+    return surgescript_var_set_bool(surgescript_var_create(), true);
 }
 
 /* equals() method */
