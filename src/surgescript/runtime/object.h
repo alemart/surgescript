@@ -94,6 +94,9 @@ void surgescript_object_set_active(surgescript_object_t* object, bool active); /
 bool surgescript_object_is_killed(const surgescript_object_t* object); /* has this object been killed? */
 void surgescript_object_kill(surgescript_object_t* object); /* will destroy the object as soon as the opportunity arises */
 
+/* signals */
+void surgescript_object_emit_signal(const surgescript_object_t* object, uint32_t signal_code, surgescript_objecthandle_t signal_context);
+
 /* transform */
 void surgescript_object_peek_transform(const surgescript_object_t* object, struct surgescript_transform_t* transform); /* reads the local transform */
 void surgescript_object_poke_transform(surgescript_object_t* object, const struct surgescript_transform_t* transform); /* sets the local transform */

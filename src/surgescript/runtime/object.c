@@ -992,6 +992,19 @@ void surgescript_object_traverse_tree_ex(surgescript_object_t* object, void* dat
 }
 
 /*
+ * surgescript_object_emit_signal()
+ * Emit a signal
+ */
+void surgescript_object_emit_signal(const surgescript_object_t* object, surgescript_signalcode_t signal_code, surgescript_objecthandle_t signal_context)
+{
+    const surgescript_objectmanager_t* manager = surgescript_renv_objectmanager(renv_of(object));
+    surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(manager);
+    surgescript_objecthandle_t emitter = surgescript_object_handle(object);
+
+    surgescript_signalsystem_emit(signal_system, signal_code, emitter, signal_context);
+}
+
+/*
  * surgescript_object_call_function()
  * Call SurgeScript functions from C (you may pass NULL to return_value;
  * you may also pass NULL to param iff num_params is 0)
