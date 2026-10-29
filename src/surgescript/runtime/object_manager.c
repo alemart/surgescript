@@ -623,7 +623,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_anonymous(surgescript
     va_list ap;
     va_start(ap, anon_type);
     while(NULL != (field = va_arg(ap, const surgescript_var_t*))) {
-        surgescript_object_call_function(object, "__init", &field, 1, ret);
+        surgescript_object_call_function(object, "__init", (const surgescript_var_t**)(&field), 1, ret);
         ssassert(surgescript_var_get_bool(ret) == true); /* validate */
         ++field_count;
     }
@@ -631,7 +631,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_anonymous(surgescript
     ssassert(field_count > 0); /* validate */
 
     /* ensure that the anonymous object expects no more fields to be initialized */
-    surgescript_object_call_function(object, "__init", &tmp, 1, ret);
+    surgescript_object_call_function(object, "__init", (const surgescript_var_t**)(&tmp), 1, ret);
     ssassert(surgescript_var_get_bool(ret) == false); /* validate spurious call */
 
     /* cleanup */
