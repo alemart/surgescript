@@ -515,6 +515,33 @@ void surgescript_vm_register_signal_emissions(surgescript_vm_t* vm, const char* 
 }
 
 /*
+ * surgescript_vm_register_signal_handlers()
+ * Register that certain objects can handle certain signals
+ * Pass a NULL-terminated list of signal names
+ */
+void surgescript_vm_register_signal_handlers(surgescript_vm_t* vm, const char* object_name, ...)
+{
+    enum { MAX_SIGNAL_COUNT = 15 };
+    const char* signal_names[1 + MAX_SIGNAL_COUNT] = { NULL }; /* NULL-terminated array of strings */
+    int signal_count = 0;
+    va_list ap; /* argument pointer */
+
+    /* grab signal names */
+    va_start(ap, object_name);
+    do {
+        signal_names[signal_count] = va_arg(ap, const char*);
+    } while(signal_names[signal_count] != NULL && ++signal_count <= MAX_SIGNAL_COUNT);
+    va_end(ap);
+
+    /* validate */
+    ssassert(vm->signal_system == NULL);
+    ssassert(signal_count > 0 && signal_names[MAX_SIGNAL_COUNT] == NULL);
+
+    /* register signal handlers */
+    surgescript_signalsystembuilder_register_signal_handlers(vm->signal_system_builder, object_name, signal_names);
+}
+
+/*
  * surgescript_vm_register_anonymous_object()
  * Register a native Anonymous Object class. Use the returned value to spawn them.
  * In addition to the vm, pass a NULL-terminated list of field names as strings

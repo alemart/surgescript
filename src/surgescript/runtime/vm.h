@@ -75,6 +75,7 @@ surgescript_object_t* surgescript_vm_find_object(surgescript_vm_t* vm, const cha
 void surgescript_vm_bind(surgescript_vm_t* vm, const char* object_name, const char* fun_name, surgescript_program_cfunction_t cfun, int num_params); /* binds a C function to an object */
 void surgescript_vm_register_signal(surgescript_vm_t* vm, const char* signal_name, surgescript_signaltype_t signal_type, ...); /* register a signal */
 void surgescript_vm_register_signal_emissions(surgescript_vm_t* vm, const char* object_name, ...); /* register that certain objects can emit certain signals */
+void surgescript_vm_register_signal_handlers(surgescript_vm_t* vm, const char* object_name, ...); /* register that certain objects can handle certain signals */
 surgescript_anonymousobjecttype_t surgescript_vm_register_anonymous_object(surgescript_vm_t* vm, ...); /* register a native anonymous object */
 void surgescript_vm_install_plugin(surgescript_vm_t* vm, const char* object_name); /* sets a certain object as a plugin */
 
