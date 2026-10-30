@@ -938,7 +938,7 @@ bool is_valid_signal_context(const surgescript_signalsystem_t* signal_system, su
 
     /* if there are no declared fields, then only null is acceptable as a signal context */
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(signal_system->object_manager);
-    if(signal->field_names == NULL)
+    if(signal->field_names == NULL || signal->field_names[0] == NULL)
         return signal_context == null_handle;
     else if(signal_context == null_handle) /* if there are declared fields, then null is not acceptable as a signal context */
         return false;
@@ -982,7 +982,7 @@ bool is_valid_signal_context_cached(const surgescript_signalsystem_t* signal_sys
 
     /* if there are no declared fields, then only null is acceptable as a signal context */
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(signal_system->object_manager);
-    if(signal->field_names == NULL)
+    if(signal->field_names == NULL || signal->field_names[0] == NULL)
         return signal_context == null_handle;
     else if(signal_context == null_handle) /* if there are declared fields, then null is not acceptable as a signal context */
         return false;
