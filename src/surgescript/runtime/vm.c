@@ -631,6 +631,7 @@ void init_vm(surgescript_vm_t* vm)
     surgescript_sslib_register_dictionary(vm);
     surgescript_sslib_register_signal(vm);
     surgescript_sslib_register_time(vm);
+    surgescript_sslib_register_timer(vm);
     surgescript_sslib_register_date(vm);
     surgescript_sslib_register_math(vm);
     surgescript_sslib_register_console(vm);
