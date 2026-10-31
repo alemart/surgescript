@@ -628,7 +628,9 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn_anonymous(surgescript
         ++field_count;
     }
     va_end(ap);
-    ssassert(field_count > 0); /* validate */
+
+    /* validate; anonymous objects can't have no fields */
+    ssassert(field_count > 0);
 
     /* ensure that the anonymous object expects no more fields to be initialized */
     surgescript_object_call_function(object, "__init", (const surgescript_var_t**)(&tmp), 1, ret);

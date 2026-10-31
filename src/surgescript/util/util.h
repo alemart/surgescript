@@ -54,7 +54,7 @@
 
 /* compile-time assertions */
 #define SS_STATIC_ASSERT(expr, ...) \
-    struct SSCAT(static_assert_at_ ## __VA_ARGS__ ## _line_, __LINE__) { int x: !!(expr); }
+    struct SSCAT(static_assert_ ## __VA_ARGS__ ## _at_line_, __LINE__) { int x: !!(expr); }
 
 /* inlining hints */
 #if defined(__GNUC__) || defined(__clang__)
