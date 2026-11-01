@@ -20,14 +20,21 @@
  */
 
 #include "../vm.h"
+#include "../heap.h"
 #include "../object.h"
+#include "../object_manager.h"
 #include "../../util/util.h"
 
 /* private stuff */
+static surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_gettimer(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+
+static const char surgescript_code[];
+static const surgescript_heapptr_t TIMERFACTORY_ADDR = 0;
 
 /*
  * surgescript_sslib_register_surgescript()
@@ -35,15 +42,35 @@ static surgescript_var_t* fun_main(surgescript_object_t* object, const surgescri
  */
 void surgescript_sslib_register_surgescript(surgescript_vm_t* vm)
 {
+    surgescript_vm_bind(vm, "SurgeScript", "constructor", fun_constructor, 0);
+    surgescript_vm_bind(vm, "SurgeScript", "state:main", fun_main, 0);
     surgescript_vm_bind(vm, "SurgeScript", "destroy", fun_destroy, 0);
     surgescript_vm_bind(vm, "SurgeScript", "spawn", fun_spawn, 1);
     surgescript_vm_bind(vm, "SurgeScript", "get_version", fun_getversion, 0);
-    surgescript_vm_bind(vm, "SurgeScript", "state:main", fun_main, 0);
+    surgescript_vm_bind(vm, "SurgeScript", "get_Timer", fun_gettimer, 0);
+
+    surgescript_vm_compile_code_in_memory(vm, surgescript_code);
 }
 
 
 
 /* my functions */
+
+/* constructor */
+surgescript_var_t* fun_constructor(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    ssassert(TIMERFACTORY_ADDR == surgescript_heap_malloc(heap));
+
+    /* SurgeScript is a system object. Thus, the spawning of children must be
+       delayed until all other system objects, which have fixed and known object
+       handles, are spawned. Alternatively, the SurgeScript object could become
+       a Plugin global, so that it's spawned after all system objects. */
+    ;
+
+    /* done */
+    return NULL;
+}
 
 /* destroy function */
 surgescript_var_t* fun_destroy(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
@@ -71,3 +98,35 @@ surgescript_var_t* fun_getversion(surgescript_object_t* object, const surgescrip
 {
     return surgescript_var_set_string(surgescript_var_create(), surgescript_util_version());
 }
+
+/* Timer factory */
+surgescript_var_t* fun_gettimer(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+{
+    surgescript_heap_t* heap = surgescript_object_heap(object);
+    surgescript_var_t* timer_var = surgescript_heap_at(heap, TIMERFACTORY_ADDR);
+
+    /* lazy spawn */
+    if(surgescript_var_is_null(timer_var)) {
+        surgescript_objectmanager_t* manager = surgescript_object_manager(object);
+        surgescript_objecthandle_t self_handle = surgescript_object_handle(object);
+        surgescript_objecthandle_t timer_factory_handle = surgescript_objectmanager_spawn(manager, self_handle, "TimerFactory", NULL);
+        surgescript_var_set_objecthandle(timer_var, timer_factory_handle);
+    }
+
+    /* done! */
+    return surgescript_var_clone(timer_var);
+}
+
+
+
+
+/* SurgeScript code */
+static const char surgescript_code[] = "\
+object 'TimerFactory' \n\
+{ \n\
+    fun call() { return caller.spawn('Timer'); } \n\
+    fun destroy() { } \n\
+} \n\
+";
+
+/* EOF */
