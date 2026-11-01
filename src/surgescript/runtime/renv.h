@@ -40,14 +40,13 @@ typedef struct surgescript_renv_t
     struct surgescript_programpool_t* program_pool; /* pointer to the program pool */
     struct surgescript_objectmanager_t* object_manager; /* pointer to the object manager */
     struct surgescript_var_t** tmp; /* temporary variables */
-    struct surgescript_renv_t* (*_destructor)(struct surgescript_renv_t*); /* internal destructor */
     const struct surgescript_renv_t* parent; /* runtime environment of the caller, if any (possibly NULL) */
 } surgescript_renv_t ;
 
-/* creates a new renv (the tmp parameter may be NULL) */
-surgescript_renv_t* surgescript_renv_create(struct surgescript_object_t* owner, struct surgescript_stack_t* stack, struct surgescript_heap_t* heap, struct surgescript_programpool_t* program_pool, struct surgescript_objectmanager_t* object_manager, struct surgescript_var_t** tmp);
+/* create a new runtime environment */
+surgescript_renv_t* surgescript_renv_create(struct surgescript_object_t* owner, struct surgescript_stack_t* stack, struct surgescript_heap_t* heap, struct surgescript_programpool_t* program_pool, struct surgescript_objectmanager_t* object_manager);
 
-/* destroys a renv */
+/* destroy a runtime environment */
 surgescript_renv_t* surgescript_renv_destroy(surgescript_renv_t* runtime_environment);
 
 /* getters */

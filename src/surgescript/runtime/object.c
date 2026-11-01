@@ -115,7 +115,7 @@ surgescript_object_t* surgescript_object_create(const char* name, surgescript_ob
     ssassert(0 == strcmp(name, obj->name)); /* names can't be too long */
     obj->class_id = class_id;
     obj->heap = surgescript_heap_create();
-    obj->renv = surgescript_renv_create(obj, stack, obj->heap, program_pool, object_manager, NULL);
+    obj->renv = surgescript_renv_create(obj, stack, obj->heap, program_pool, object_manager);
 
     obj->handle = handle; /* handle == parent implies I am a root */
     obj->parent = handle;

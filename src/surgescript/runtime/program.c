@@ -904,7 +904,6 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
         pool,
         manager,
         surgescript_renv_tmp(caller_runtime_environment),
-        NULL,
         caller_runtime_environment
     };
 
