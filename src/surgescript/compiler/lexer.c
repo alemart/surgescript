@@ -138,7 +138,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
             }
 
             if(*(lexer->p) == 0)
-                ssfatal("Lexical Error: unexpected end of commentary block around line %d.", prev->line);
+                sslexical_error("unexpected end of commentary block around line %d.", prev->line);
             else
                 lexer->p += 2;
 
@@ -156,7 +156,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
         while(isnumeric(*(lexer->p))) {
             if(*(lexer->p) == '.') {
                 if(dot) /* only one dot is allowed */
-                    ssfatal("Lexical Error: unexpected '%c' around \"%s\" on line %d", *(lexer->p), lexer->buf, lexer->line);
+                    sslexical_error("unexpected '%c' around \"%s\" on line %d", *(lexer->p), lexer->buf, lexer->line);
                 else if(!isdigit(*(lexer->p + 1))) /* there must be a digit after the dot */
                     break;
                 dot = true;
@@ -191,7 +191,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
                     case 'v': bufadd(lexer, '\v'); break;
                     case 'b': bufadd(lexer, '\b'); break;
                     default:
-                        ssfatal("Lexical Error: invalid character '\\%c' around \"%s\" on line %d.", *(lexer->p) != 0 ? *(lexer->p) : '0', lexer->buf, lexer->line);
+                        sslexical_error("invalid character '\\%c' around \"%s\" on line %d.", *(lexer->p) != 0 ? *(lexer->p) : '0', lexer->buf, lexer->line);
                         break;
                 }
                 lexer->p++;
@@ -200,7 +200,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
 
             /* found a new line */
             if(*(lexer->p) == '\n') {
-                ssfatal("Lexical Error: unexpected end of line around \"%s\" on line %d.", lexer->buf, lexer->line);
+                sslexical_error("unexpected end of line around \"%s\" on line %d.", lexer->buf, lexer->line);
                 lexer->line++;
             }
 
@@ -210,7 +210,7 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
 
         /* is everything ok? */
         if(*(lexer->p) != quo)
-            ssfatal("Lexical Error: unexpected end of string around \"%s\" on line %d.", lexer->buf, lexer->line); /* found a NULL character */
+            sslexical_error("unexpected end of string around \"%s\" on line %d.", lexer->buf, lexer->line); /* found a NULL character */
         else
             lexer->p++; /* skip ending quotation mark */
 
@@ -480,7 +480,7 @@ void bufadd(surgescript_lexer_t* lexer, char c)
         lexer->buf[lexer->bufptr] = 0;
     }
     else
-        ssfatal("Lexical Error: found a token that is too large! See \"%s\" around line %d.", lexer->buf, lexer->line);
+        sslexical_error("found a token that is too large! See \"%s\" around line %d.", lexer->buf, lexer->line);
 }
 
 /* clears the stringbuffer */

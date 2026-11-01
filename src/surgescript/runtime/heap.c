@@ -87,7 +87,7 @@ surgescript_heapptr_t surgescript_heap_malloc(surgescript_heap_t* heap)
     }
 
     if(heap->size * 2 >= SSHEAP_MAX_SIZE) { /* just in case... */
-        ssfatal("surgescript_heap_malloc(): max size exceeded.");
+        ssruntime_error("surgescript_heap_malloc(): max size exceeded (%d).", SSHEAP_MAX_SIZE);
         return heap->size - 1;
     }
 
@@ -124,7 +124,7 @@ surgescript_var_t* surgescript_heap_at(const surgescript_heap_t* heap, surgescri
     if(ptr >= 0 && ptr < heap->size && heap->mem[ptr] != NULL)
         return heap->mem[ptr];
 
-    ssfatal("surgescript_heap_at(0x%X): null pointer exception.", ptr);
+    ssruntime_error("surgescript_heap_at(0x%X): null pointer exception.", ptr);
     return NULL;
 }
 

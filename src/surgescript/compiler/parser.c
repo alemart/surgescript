@@ -350,25 +350,25 @@ void unmatch(surgescript_parser_t* parser)
         parser->lookahead = surgescript_lexer_scan(parser->lexer);
     }
     else if(parser->previous)
-        ssfatal("Parse Error: can\'t unmatch symbol \"%s\" on %s:%d.", surgescript_tokentype_name(surgescript_token_type(parser->previous)), parser->filename, surgescript_token_linenumber(parser->previous));
+        ssparse_error("can\'t unmatch symbol \"%s\" on %s:%d.", surgescript_tokentype_name(surgescript_token_type(parser->previous)), parser->filename, surgescript_token_linenumber(parser->previous));
     else
-        ssfatal("Parse Error: can\'t unmatch symbol on %s.", parser->filename);
+        ssparse_error("can\'t unmatch symbol on %s.", parser->filename);
 }
 
 /* throw an error if the lookahead is not of the expected type */
 void expect(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 {
     if(parser->lookahead && surgescript_token_type(parser->lookahead) != symbol) {
-        ssfatal(
-            "Parse Error: expected \"%s\" on %s:%d.",
+        ssparse_error(
+            "expected \"%s\" on %s:%d.",
             surgescript_tokentype_name(symbol),
             parser->filename,
             surgescript_token_linenumber(parser->lookahead)
         );
     }
     else if(NULL == parser->lookahead) {
-         ssfatal(
-            "Parse Error: unexpected end of the file on %s (did you forget a \"%s\"?)",
+         ssparse_error(
+            "unexpected end of the file on %s (did you forget a \"%s\"?)",
             parser->filename,
             surgescript_tokentype_name(symbol)
         );
@@ -379,8 +379,8 @@ void expect(surgescript_parser_t* parser, surgescript_tokentype_t symbol)
 void expect_something(surgescript_parser_t* parser)
 {
     if(NULL == parser->lookahead) {
-         ssfatal(
-            "Parse Error: unexpected end of file on %s.",
+        ssparse_error(
+            "unexpected end of file on %s.",
             parser->filename
         );
     }   
@@ -390,16 +390,16 @@ void expect_something(surgescript_parser_t* parser)
 void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol, const char* lexeme)
 {
     if(parser->lookahead && (surgescript_token_type(parser->lookahead) != symbol || strcmp(surgescript_token_lexeme(parser->lookahead), lexeme) != 0)) {
-        ssfatal(
-            "Parse Error: expected \"%s\" on %s:%d.",
+        ssparse_error(
+            "expected \"%s\" on %s:%d.",
             lexeme,
             parser->filename,
             surgescript_token_linenumber(parser->lookahead)
         );
     }
     else if(NULL == parser->lookahead) {
-         ssfatal(
-            "Parse Error: unexpected end of the file on %s (did you forget a \"%s\"?)",
+        ssparse_error(
+            "unexpected end of the file on %s (did you forget a \"%s\"?)",
             parser->filename,
             lexeme
         );
@@ -410,8 +410,8 @@ void expect_exactly(surgescript_parser_t* parser, surgescript_tokentype_t symbol
 void unexpected_symbol(surgescript_parser_t* parser)
 {
      if(parser->lookahead) {
-        ssfatal(
-            "Parse Error: unexpected \"%s\" on %s:%d.",
+        ssparse_error(
+            "unexpected \"%s\" on %s:%d.",
             surgescript_token_lexeme(parser->lookahead),
             parser->filename,
             surgescript_token_linenumber(parser->lookahead)
@@ -442,7 +442,7 @@ void validate_object(surgescript_parser_t* parser, surgescript_nodecontext_t con
             /*sslog("Object \"%s\" in \"%s\" has omitted its \"main\" state and will be disabled.", context.object_name, context.source_file);*/
         }
         else
-            ssfatal("Compile Error: object \"%s\" in %s must have a \"main\" state.", context.object_name, parser->filename);
+            sscompile_error("object \"%s\" in %s must have a \"main\" state.", context.object_name, parser->filename);
     }
 }
 
@@ -668,9 +668,9 @@ void signal(surgescript_parser_t* parser)
 
     /* validate */
     if(is_large_name_ex(signal_name, "signal:"))
-        ssfatal("Compile Error: signal name \"%s\" is too large at %s:%d", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("signal name \"%s\" is too large at %s:%d", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     else if(!is_valid_name(signal_name))
-        ssfatal("Compile Error: invalid signal name \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("invalid signal name \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     else if((is_duplicate = surgescript_signalsystembuilder_is_signal_registered(parser->signal_system_builder, signal_name))) {
         if(parser->flags & SSPARSER_SKIP_DUPLICATES) {
             sswarn("Skipping duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
@@ -681,7 +681,7 @@ void signal(surgescript_parser_t* parser)
             surgescript_signalsystembuilder_unregister_signal(parser->signal_system_builder, signal_name);
         }
         else
-            ssfatal("Compile Error: duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            sscompile_error("duplicate definition of signal \"%s\" in %s:%d.", signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     }
 
     /* read the body */
@@ -715,12 +715,12 @@ char** signaldecl(surgescript_parser_t* parser, const char* signal_name)
 
         /* validate name */
         if(is_large_name_ex(property_name, "get_"))
-            ssfatal("Compile Error: property name \"%s\" of signal \"%s\" is too large at %s:%d", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            sscompile_error("property name \"%s\" of signal \"%s\" is too large at %s:%d", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
         if(!is_valid_name(property_name))
-            ssfatal("Compile Error: invalid property name \"%s\" of signal \"%s\" at %s:%d", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            sscompile_error("invalid property name \"%s\" of signal \"%s\" at %s:%d", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
         for(int i = 0; i < property_count; i++) {
             if(0 == strcmp(property_name, property_list[i]))
-                ssfatal("Compile Error: duplicate property name \"%s\" of signal \"%s\" in %s:%d.", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+                sscompile_error("duplicate property name \"%s\" of signal \"%s\" in %s:%d.", property_name, signal_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
         }
 
         /* add name to the list */
@@ -770,9 +770,9 @@ void object(surgescript_parser_t* parser)
 
     /* validate */
     if(is_large_name(object_name))
-        ssfatal("Compile Error: object name \"%s\" is too large at %s:%d", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("object name \"%s\" is too large at %s:%d", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     else if(!is_valid_name(object_name))
-        ssfatal("Compile Error: invalid object name \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("invalid object name \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     else if((is_duplicate = surgescript_programpool_exists(parser->program_pool, object_name, "state:main"))) {
         if(parser->flags & SSPARSER_SKIP_DUPLICATES) {
             char buf[32] = { '.', 'd', 'u', 'p', '.' };
@@ -786,7 +786,7 @@ void object(surgescript_parser_t* parser)
             remove_object_definition(parser, object_name);
         }
         else
-            ssfatal("Compile Error: duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
+            sscompile_error("duplicate definition of object \"%s\" in %s:%d.", object_name, parser->filename, surgescript_token_linenumber(parser->lookahead));
     }
 
     /* read the object */
@@ -851,11 +851,11 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
             /* validate */
             if(is_large_name(tag_name))
-                ssfatal("Compile Error: tag name \"%s\" of object \"%s\" is too large at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+                sscompile_error("tag name \"%s\" of object \"%s\" is too large at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
             else if(!is_valid_name(tag_name))
-                ssfatal("Compile Error: invalid tag name \"%s\" in object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+                sscompile_error("invalid tag name \"%s\" in object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
             else if(index_of_string(tag_name, tag_names, ssarray_length(tag_names)) >= 0)
-                ssfatal("Compile Error: duplicate tag \"%s\" for object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+                sscompile_error("duplicate tag \"%s\" for object \"%s\" at %s:%d", tag_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
             /* okay, add tag */
             ssarray_push(tag_names, ssstrdup(tag_name));
@@ -889,11 +889,11 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
             /* validate */
             if(is_large_name(signal_name))
-                ssfatal("Compile Error: signal name \"%s\" of object \"%s\" is too large at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+                sscompile_error("signal name \"%s\" of object \"%s\" is too large at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
             else if(!is_valid_name(signal_name))
-                ssfatal("Compile Error: invalid signal name \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+                sscompile_error("invalid signal name \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
             else if(index_of_string(signal_name, signal_names, ssarray_length(signal_names)) >= 0)
-                ssfatal("Compile Error: duplicate declaration of emitted signal \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+                sscompile_error("duplicate declaration of emitted signal \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
             /* okay, add signal */
             ssarray_push(signal_names, ssstrdup(signal_name));
@@ -994,11 +994,11 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* validation */
     if(is_large_name(program_name))
-        ssfatal("Compile Error: state name \"%s\" of object \"%s\" is too large at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("state name \"%s\" of object \"%s\" is too large at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
     if(!is_valid_name(program_name))
-        ssfatal("Compile Error: invalid state name \"%s\" in object \"%s\" at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("invalid state name \"%s\" in object \"%s\" at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
     if(surgescript_programpool_shallowcheck(parser->program_pool, context.object_name, program_name))
-        ssfatal("Compile Error: duplicate state \"%s\" in object \"%s\" at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("duplicate state \"%s\" in object \"%s\" at %s:%d", state_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* create context */
     context = nodecontext(
@@ -1070,11 +1070,11 @@ void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t c
 
     /* validation */
     if(is_large_name(program_name))
-        ssfatal("Compile Error: signal name \"%s\" in object \"%s\" is too large at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("signal name \"%s\" in object \"%s\" is too large at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
     if(!is_valid_name(program_name))
-        ssfatal("Compile Error: invalid signal name \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("invalid signal name \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
     if(surgescript_programpool_shallowcheck(parser->program_pool, context.object_name, program_name))
-        ssfatal("Compile Error: duplicate signal handler \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("duplicate signal handler \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* copy signal name */
     surgescript_util_strncpy(out_signal_name, signal_name, buffer_size);
@@ -1123,11 +1123,11 @@ void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* validation */
     if(is_large_name(program_name))
-        ssfatal("Compile Error: function name \"%s\" in object \"%s\" is too large at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("function name \"%s\" in object \"%s\" is too large at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
     if(!is_valid_name(program_name))
-        ssfatal("Compile Error: invalid function name \"%s\" in object \"%s\" at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("invalid function name \"%s\" in object \"%s\" at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
     if(surgescript_programpool_shallowcheck(parser->program_pool, context.object_name, program_name))
-        ssfatal("Compile Error: duplicate function \"%s\" in object \"%s\" at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("duplicate function \"%s\" in object \"%s\" at %s:%d", program_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
     /* read list of arguments */
     match(parser, SSTOK_IDENTIFIER);
@@ -1400,7 +1400,7 @@ void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
     else if(optmatch(parser, SSTOK_TIMEOUT)) {
         if(!is_state_context(context))
-            ssfatal("Compile Error: timeout can only be used inside a state (see %s:%d).", context.source_file, surgescript_token_linenumber(parser->previous));
+            sscompile_error("timeout can only be used inside a state (see %s:%d).", context.source_file, surgescript_token_linenumber(parser->previous));
         match(parser, SSTOK_LPAREN);
         assignexpr(parser, context);
         emit_timeout(context);
@@ -1540,8 +1540,8 @@ void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
 
     /* quick validation */
     if(strcmp(fun_name, "constructor") == 0 || strcmp(fun_name, "destructor") == 0 || strcmp(fun_name, "__ssconstructor") == 0) {
-        ssfatal(
-            "Compile Error: the %s of \"%s\" can't be called directly in %s:%d.",
+        sscompile_error(
+            "the %s of \"%s\" can't be called directly in %s:%d.",
             fun_name,
             context.object_name,
             context.source_file,
@@ -1640,7 +1640,7 @@ void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             break;
 
         default:
-            ssfatal("Parse Error: expected a constant on %s:%d.", context.source_file, surgescript_token_linenumber(token));
+            ssparse_error("expected a constant on %s:%d.", context.source_file, surgescript_token_linenumber(token));
             break;
     }
 }
@@ -1697,7 +1697,7 @@ void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         char* field_name = ssstrdup(surgescript_token_lexeme(token));
 
         if(is_large_name_ex(field_name, "get_"))
-            ssfatal("Compile Error: property name \"%s\" of anonymous object is too long in %s:%d.", field_name, context.source_file, surgescript_token_linenumber(token));
+            sscompile_error("property name \"%s\" of anonymous object is too long in %s:%d.", field_name, context.source_file, surgescript_token_linenumber(token));
 
         match(parser, SSTOK_IDENTIFIER);
         ssarray_push(fields, field_name);
@@ -1711,7 +1711,7 @@ void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         else if(got_type(parser, SSTOK_COMMA) || got_type(parser, SSTOK_RCURLY)) {
             /* short form: { field } */
             if(!surgescript_symtable_has_symbol(context.symtable, field_name))
-                ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", field_name, context.source_file, surgescript_token_linenumber(token));
+                sscompile_error("undefined symbol \"%s\" in %s:%d.", field_name, context.source_file, surgescript_token_linenumber(token));
             surgescript_symtable_emit_read(context.symtable, field_name, context.program, 0);
             emit_anonobjinitfield(context);
         }
@@ -1736,7 +1736,7 @@ void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     extern bool surgescript_register_anonymous_object(surgescript_programpool_t* program_pool, const char** field_names, const char* source_file, char* out_object_name, size_t out_object_name_size);
     if(!surgescript_register_anonymous_object(parser->program_pool, (const char**)fields, context.source_file, anonymous_object_name, sizeof anonymous_object_name)) {
         ssassert(parser->lookahead);
-        ssfatal("Compile Error: can't create anonymous object in %s:%d.", context.source_file, surgescript_token_linenumber(parser->lookahead));
+        sscompile_error("can't create anonymous object in %s:%d.", context.source_file, surgescript_token_linenumber(parser->lookahead));
     }
 
     /* spawn anonymous object */
@@ -1803,7 +1803,7 @@ void signedconst(surgescript_parser_t* parser, surgescript_nodecontext_t context
             break;
 
         default:
-            ssfatal("Parse Error: expected a literal on %s:%d.", context.source_file, surgescript_token_linenumber(token));
+            ssparse_error("expected a literal on %s:%d.", context.source_file, surgescript_token_linenumber(token));
             break;
     }
 }
@@ -1973,7 +1973,7 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         } \
         \
         /* error */ \
-        ssfatal("Compile Error: found an unterminated section of a switch statement at %s:%d. Did you forget a break or a return statement?", context.source_file, surgescript_token_linenumber(parser->previous)); \
+        sscompile_error("found an unterminated section of a switch statement at %s:%d. Did you forget a break or a return statement?", context.source_file, surgescript_token_linenumber(parser->previous)); \
     } while(0)
 
     /* prevent repeated case constants */
@@ -1996,7 +1996,7 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         for(int j = ssarray_length(case_constant) - 1; j >= 0; j--) { \
             const struct caseconst_t* ref = &case_constant[j]; \
             if(ref->op == cc.op && ref->b.u64 == cc.b.u64) \
-                ssfatal("Compile Error: found a duplicate case constant in a switch statement at %s:%d", context.source_file, surgescript_token_linenumber(parser->previous)); \
+                sscompile_error("found a duplicate case constant in a switch statement at %s:%d", context.source_file, surgescript_token_linenumber(parser->previous)); \
         } \
         \
         /* store the constant */ \
@@ -2066,7 +2066,7 @@ void switchstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             );
 
             if(def != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
-                ssfatal("Compile Error: found a duplicate default label in a switch statement at %s:%d", context.source_file, surgescript_token_linenumber(parser->previous));
+                sscompile_error("found a duplicate default label in a switch statement at %s:%d", context.source_file, surgescript_token_linenumber(parser->previous));
             def = surgescript_program_new_label(context.program);
             emit_default(context, test, next_test, def);
 
@@ -2203,9 +2203,9 @@ void retstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* found return <expr>; */
     if(is_state_context(context))
-        ssfatal("Compile Error: found a non-empty return statement inside a state in %s:%d. Did you mean \"return;\"?", context.source_file, surgescript_token_linenumber(parser->previous));
+        sscompile_error("found a non-empty return statement inside a state in %s:%d. Did you mean \"return;\"?", context.source_file, surgescript_token_linenumber(parser->previous));
     else if(is_signalhandler_context(context))
-        ssfatal("Compile Error: found a non-empty return statement inside a signal handler in %s:%d. Did you mean \"return;\"?", context.source_file, surgescript_token_linenumber(parser->previous));
+        sscompile_error("found a non-empty return statement inside a signal handler in %s:%d. Did you mean \"return;\"?", context.source_file, surgescript_token_linenumber(parser->previous));
     else {
         expr(parser, context);
         match(parser, SSTOK_SEMICOLON);
@@ -2239,8 +2239,8 @@ void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* compile-time validation */
     if(!surgescript_signalsystembuilder_is_signal_emission_registered(parser->signal_system_builder, context.object_name, signal_name)) {
-        ssfatal(
-            "Compile Error: object \"%s\" cannot emit signal \"%s\" in %s:%d. Double check the list of signals that the object can emit.",
+        sscompile_error(
+            "object \"%s\" cannot emit signal \"%s\" in %s:%d. Double check the list of signals that the object can emit.",
             context.object_name,
             signal_name,
             context.source_file,
@@ -2367,7 +2367,7 @@ void process_annotations(surgescript_parser_t* parser, char** annotations, const
             if(strcmp(annotation, "@Package") == 0 || strcmp(annotation, "@Plugin") == 0)
                 add_to_plugins_list(parser, object_name);
             else
-                ssfatal("Compile Error: unrecognized annotation \"%s\" around object \"%s\" in %s.", annotation, object_name, parser->filename);
+                sscompile_error("unrecognized annotation \"%s\" around object \"%s\" in %s.", annotation, object_name, parser->filename);
         }
     }
 }

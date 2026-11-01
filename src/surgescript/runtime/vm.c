@@ -176,7 +176,7 @@ bool surgescript_vm_compile(surgescript_vm_t* vm, const char* absolute_path)
     /* open the file in binary mode, so that offsets don't get messed up */
     FILE* fp = surgescript_util_fopen_utf8(absolute_path, "rb");
     if(!fp) {
-        ssfatal("Can't read file \"%s\": %s", absolute_path, strerror(errno));
+        sscompile_error("can't read file \"%s\": %s", absolute_path, strerror(errno));
         return false;
     }
 
@@ -567,8 +567,7 @@ surgescript_anonymousobjecttype_t surgescript_vm_register_anonymous_object(surge
     /* register the native class of Anonymous Objects */
     extern bool surgescript_register_anonymous_object(surgescript_programpool_t* program_pool, const char** field_names, const char* source_file, char* out_object_name, size_t out_object_name_size);
     if(!surgescript_register_anonymous_object(vm->program_pool, field_names, NULL, object_name, sizeof(object_name))) {
-        ssfatal(
-            "Runtime Error: can't register native anonymous object with fields %s %s %s %s %s",
+        ssruntime_error("can't register native anonymous object with fields %s %s %s %s %s",
             field_names[0] ? field_names[0] : "(null)",
             field_names[1] ? field_names[1] : "",
             field_names[2] ? field_names[2] : "",

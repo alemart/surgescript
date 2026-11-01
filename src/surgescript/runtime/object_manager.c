@@ -239,7 +239,7 @@ surgescript_objecthandle_t surgescript_objectmanager_spawn(surgescript_objectman
 
     /* can't spawn the root object, neither using the C API nor via SurgeScript code (i.e., Object.spawn("System")) */
     if(handle == ROOT_HANDLE || 0 == strcmp(object_name, "System")) {
-        ssfatal("Object \"%s\" can't spawn the root object.", surgescript_object_name(parent_object));
+        ssruntime_error("object \"%s\" can't spawn the root object.", surgescript_object_name(parent_object));
         return NULL_HANDLE;
     }
 
@@ -328,7 +328,8 @@ surgescript_object_t* surgescript_objectmanager_get(const surgescript_objectmana
             return manager->data[handle];
     }
 
-    ssfatal("Runtime Error: null pointer exception (can't find object 0x%X)", handle);
+    /* not found */
+    ssruntime_error("null pointer exception. Can't find object 0x%X.", handle);
     return NULL;
 }
 

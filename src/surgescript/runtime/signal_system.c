@@ -661,9 +661,9 @@ void surgescript_signalsystem_emit(const surgescript_signalsystem_t* signal_syst
         const char* signal_name = surgescript_signalsystem_signal_name(signal_system, signal_code);
 
         if(surgescript_signalsystem_signal_exists(signal_system, signal_name))
-            ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\". Double check the list of emitted signals for this object.", emitter_name, signal_name);
+            ssruntime_error("object \"%s\" can't emit signal \"%s\". Double check the list of emitted signals for this object.", emitter_name, signal_name);
         else
-            ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\". There is no such signal.", emitter_name, signal_name); /* this shouldn't happen */
+            ssruntime_error("object \"%s\" can't emit signal \"%s\". There is no such signal.", emitter_name, signal_name); /* this shouldn't happen */
 
         return;
     }
@@ -675,7 +675,7 @@ void surgescript_signalsystem_emit(const surgescript_signalsystem_t* signal_syst
         char signal_fields[256];
 
         join_list_of_strings(signal->field_names, ", ", signal_fields, sizeof signal_fields);
-        ssfatal("Runtime Error: object \"%s\" can't emit signal \"%s\".\nThe provided context does not match the required shape:\n{ %s }", emitter_name, signal_name, signal_fields);
+        ssruntime_error("object \"%s\" can't emit signal \"%s\".\nThe provided context does not match the required shape:\n{ %s }", emitter_name, signal_name, signal_fields);
         return;
     }
 

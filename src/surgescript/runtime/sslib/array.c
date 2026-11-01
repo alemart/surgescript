@@ -170,7 +170,7 @@ surgescript_var_t* fun_set(surgescript_object_t* object, const surgescript_var_t
 
     /* sanity check & leak prevention */
     if(index < 0 || index >= length + 1024) {
-        ssfatal("Can't set %d-%s element of the array: the index is out of bounds.", index, ORDINAL(index));
+        ssruntime_error("can't set %d-%s element of the array: the index is out of bounds.", index, ORDINAL(index));
         return NULL;
     }
 

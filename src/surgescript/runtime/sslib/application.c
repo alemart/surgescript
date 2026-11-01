@@ -73,7 +73,7 @@ surgescript_var_t* fun_crash(surgescript_object_t* object, const surgescript_var
 {
     const surgescript_objectmanager_t* manager = surgescript_object_manager(object);
     char* text = surgescript_var_get_string(param[0], manager);
-    ssfatal("Script Error: %s", text); /* change ssfatal to something else? */
+    ssruntime_error("scripting error. %s", text);
     ssfree(text);
     return fun_exit(object, NULL, 0);
 }

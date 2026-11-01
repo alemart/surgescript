@@ -338,7 +338,7 @@ void surgescript_program_call(surgescript_program_t* program, surgescript_renv_t
     }
     else {
         surgescript_object_t* owner = surgescript_renv_owner(runtime_environment);
-        ssfatal("Runtime Error: internal program call - function of object \"%s\" expects %d parameters, but received %d.", surgescript_object_name(owner), program->arity, num_params);
+        ssruntime_error("internal program call: function of object \"%s\" expects %d parameters, but received %d.", surgescript_object_name(owner), program->arity, num_params);
     }
 }
 
@@ -413,7 +413,7 @@ surgescript_program_t* init_program(surgescript_program_t* program, int arity, v
 {
     /* sanity check */
     if(arity > MAX_PROGRAM_ARITY)
-        ssfatal("MAX_PROGRAM_ARITY (%d) exceeded.", MAX_PROGRAM_ARITY); /* really?? */
+        ssruntime_error("init_program(): MAX_PROGRAM_ARITY (%d) exceeded.", MAX_PROGRAM_ARITY); /* really?? */
 
     /* initialization */
     program->arity = ssmax(0, arity);
@@ -901,13 +901,13 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
                 /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(&callee_runtime_environment));*/
             }
             else
-                ssfatal("Runtime Error: function %s.%s (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
+                ssruntime_error("function %s.%s (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
         }
         else
-            ssfatal("Runtime Error: can't find function %s.%s (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
+            ssruntime_error("can't find function %s.%s (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
     }
     else
-        ssfatal("Runtime Error: null pointer exception - can't call function %s (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
+        ssruntime_error("null pointer exception - can't call function %s (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
 
     /* clean up */
     cleanup:
@@ -1038,7 +1038,7 @@ bool remove_labels(surgescript_program_t* program)
                 program->line[i].a.u = program->label[label];
             }
             else
-                ssfatal("Runtime Error: invalid jump instruction - unknown label 0x%X.", label);
+                ssruntime_error("invalid jump instruction - unknown label 0x%X.", label);
         }
     }
 

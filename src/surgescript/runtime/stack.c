@@ -100,7 +100,7 @@ void surgescript_stack_push(surgescript_stack_t* stack, surgescript_var_t* data)
     if(++stack->sp < stack->size)
         stack->data[stack->sp] = data;
     else
-        ssfatal("Runtime Error: surgescript_stack_push() - stack overflow");
+        ssruntime_error("surgescript_stack_push(): stack overflow");
 }
 
 /*
@@ -114,7 +114,7 @@ void surgescript_stack_pop(surgescript_stack_t* stack)
         stack->sp--;
     }
     else
-        ssfatal("Runtime Error: can't surgescript_stack_pop() - empty stack");
+        ssruntime_error("can't surgescript_stack_pop(): empty stack");
 }
 
 /*
@@ -147,7 +147,7 @@ void surgescript_stack_popenv(surgescript_stack_t* stack)
         stack->bp = prev_bp;
     }
     else
-        ssfatal("Runtime Error: surgescript_stack_popenv() has found an empty stack");
+        ssruntime_error("surgescript_stack_popenv() has found an empty stack");
 }
 
 /*
@@ -191,7 +191,7 @@ const surgescript_var_t* surgescript_stack_peek(const surgescript_stack_t* stack
     if(idx >= 0 && idx <= stack->sp)
         return stack->data[idx];
 
-    ssfatal("Runtime Error: surgescript_stack_peek() can't read an element (%d) that is out of bounds [%d, %d]", idx, 0, stack->sp);
+    ssruntime_error("surgescript_stack_peek() can't read an element (%d) that is out of bounds [%d, %d]", idx, 0, stack->sp);
     return NULL;
 }
 
@@ -206,7 +206,7 @@ void surgescript_stack_poke(surgescript_stack_t* stack, surgescript_stackptr_t o
     if(idx >= 0 && idx <= stack->sp)
         surgescript_var_copy(stack->data[idx], data);
     else
-        ssfatal("Runtime Error: surgescript_stack_poke() can't write to an element (%d) that is out of bounds [%d, %d]", idx, 0, stack->sp);
+        ssruntime_error("surgescript_stack_poke() can't write to an element (%d) that is out of bounds [%d, %d]", idx, 0, stack->sp);
 }
 
 /*

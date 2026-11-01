@@ -109,7 +109,7 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
 {
     /* put the identifier on the symbol table, and assign the symbol an address */
     if(!surgescript_symtable_has_parent(context.symtable))
-        ssfatal("Compile Error: invalid attribution (\"%s %s ...\") in object \"%s\" (%s:%d) - only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
+        sscompile_error("invalid attribution (\"%s %s ...\") in object \"%s\" (%s:%d) - only a single attribution is allowed.", identifier, assignop, context.object_name, context.source_file, line);
     else if(!surgescript_symtable_has_symbol(context.symtable, identifier))
         surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(1 + surgescript_symtable_local_count(context.symtable) - surgescript_program_arity(context.program))); /* fact: local_count >= arity */
 
@@ -161,7 +161,7 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
             break;
 
         default:
-            ssfatal("Compile Error: invalid assignment expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
+            sscompile_error("invalid assignment expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
             break;
     }
 }
@@ -312,7 +312,7 @@ void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveo
             break;
 
         default:
-            ssfatal("Compile Error: invalid additive expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
+            sscompile_error("invalid additive expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
             break;
     }
 }
@@ -341,7 +341,7 @@ void emit_multiplicativeexpr2(surgescript_nodecontext_t context, const char* mul
             break;
 
         default:
-            ssfatal("Compile Error: invalid multiplicative expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
+            sscompile_error("invalid multiplicative expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
             break;
     }
 }
@@ -363,7 +363,7 @@ void emit_unaryincdec(surgescript_nodecontext_t context, const char* op, const c
         surgescript_symtable_emit_write(context.symtable, identifier, context.program, 0);
     }
     else
-        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
+        sscompile_error("undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
 }
 
 void emit_unarynot(surgescript_nodecontext_t context)
@@ -420,7 +420,7 @@ void emit_postincdec(surgescript_nodecontext_t context, const char* op, const ch
         surgescript_symtable_emit_write(context.symtable, identifier, context.program, 1);
     }
     else
-        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
+        sscompile_error("undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
 }
 
 void emit_pushparam(surgescript_nodecontext_t context)
@@ -523,7 +523,7 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
             break;
 
         default:
-            ssfatal("Compile Error: invalid dictset expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
+            sscompile_error("invalid dictset expression in \"%s\" (object \"%s\")", context.source_file, context.object_name);
             break;
     }
 }
@@ -626,7 +626,7 @@ void emit_setter2(surgescript_nodecontext_t context, const char* property_name, 
             break;
 
         default:
-            ssfatal("Compile Error: invalid setter call in \"%s\" (object \"%s\")", context.source_file, context.object_name);
+            sscompile_error("invalid setter call in \"%s\" (object \"%s\")", context.source_file, context.object_name);
             break;
     }
 
@@ -886,7 +886,7 @@ void emit_break(surgescript_nodecontext_t context, int line)
     if(context.loop_break != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
         SSASM(SSOP_JMP, U(context.loop_break));
     else
-        ssfatal("Compile Error: invalid usage of the \"break\" statement in %s:%d - break may only be used inside loops or switch statements.", context.source_file, line);
+        sscompile_error("invalid usage of the \"break\" statement in %s:%d - break may only be used inside loops or switch statements.", context.source_file, line);
 }
 
 void emit_continue(surgescript_nodecontext_t context, int line)
@@ -894,7 +894,7 @@ void emit_continue(surgescript_nodecontext_t context, int line)
     if(context.loop_continue != SURGESCRIPT_PROGRAM_UNDEFINED_LABEL)
         SSASM(SSOP_JMP, U(context.loop_continue));
     else
-        ssfatal("Compile Error: invalid usage of the \"continue\" statement in %s:%d - continue may only be used inside loops.", context.source_file, line);
+        sscompile_error("invalid usage of the \"continue\" statement in %s:%d - continue may only be used inside loops.", context.source_file, line);
 }
 
 void emit_switch1(surgescript_nodecontext_t context, surgescript_program_label_t first_test)
@@ -982,7 +982,7 @@ void emit_function_argument(surgescript_nodecontext_t context, const char* ident
     if(!surgescript_symtable_has_local_symbol(context.symtable, identifier))
         surgescript_symtable_put_stack_symbol(context.symtable, identifier, (surgescript_stackptr_t)(idx-argc));
     else
-        ssfatal("Duplicate function parameter \"%s\" in %s:%d.", identifier, context.source_file, line);
+        sscompile_error("duplicate function parameter \"%s\" in %s:%d.", identifier, context.source_file, line);
 }
 
 void emit_ret(surgescript_nodecontext_t context)
@@ -1011,7 +1011,7 @@ void emit_identifier(surgescript_nodecontext_t context, const char* identifier, 
     if(surgescript_symtable_has_symbol(context.symtable, identifier))
         surgescript_symtable_emit_read(context.symtable, identifier, context.program, 0);
     else
-        ssfatal("Compile Error: undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
+        sscompile_error("undefined symbol \"%s\" in %s:%d.", identifier, context.source_file, line);
 }
 
 void emit_null(surgescript_nodecontext_t context)

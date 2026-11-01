@@ -87,7 +87,7 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
 
     /* exceptional check */
     if(is_builtin_object(plugin_name, manager)) {
-        ssfatal("Runtime Error: can't spawn \"%s\" as a plugin.", plugin_name);
+        ssruntime_error("can't spawn \"%s\" as a plugin.", plugin_name);
         return NULL;
     }
 
@@ -109,7 +109,7 @@ surgescript_var_t* fun_spawn(surgescript_object_t* object, const surgescript_var
                 surgescript_programpool_put(pool, object_name, accessor_name, accessor);
             }
             else
-                ssfatal("Runtime Error: duplicate plugin name \"%s\".", plugin_name); /* this shouldn't happen */
+                ssruntime_error("duplicate plugin name \"%s\".", plugin_name); /* this shouldn't happen */
             ssfree(accessor_name);
         }
         else

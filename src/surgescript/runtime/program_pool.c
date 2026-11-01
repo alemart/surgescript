@@ -149,13 +149,13 @@ bool surgescript_programpool_put(surgescript_programpool_t* pool, const char* ob
 {
     if(pool->is_locked) {
         if(!surgescript_programpool_is_compiled(pool, object_name)) {
-            ssfatal("Runtime Error: can't add function \"%s\" of object \"%s\" in a locked pool", program_name, object_name);
+            ssruntime_error("can't add function \"%s\" of object \"%s\" in a locked pool", program_name, object_name);
             return false;
         }
     }
 
     if(surgescript_programpool_shallowcheck(pool, object_name, program_name)) {
-        ssfatal("Runtime Error: duplicate function \"%s\" in object \"%s\"", program_name, object_name);
+        ssruntime_error("duplicate function \"%s\" in object \"%s\"", program_name, object_name);
         return false;
     }
 

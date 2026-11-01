@@ -395,17 +395,17 @@ surgescript_var_t* fun_invoke(surgescript_object_t* object, const surgescript_va
                 }
                 else {
                     surgescript_var_set_null(ret);
-                    ssfatal("Runtime Error: can't invoke \"%s.%s()\" - function requires %d argument%s.", object_name, program_name, arity, arity != 1 ? "s" : "");
+                    ssruntime_error("can't invoke \"%s.%s()\" - function requires %d argument%s.", object_name, program_name, arity, arity != 1 ? "s" : "");
                 }
             }
             else
-                ssfatal("Runtime Error: can't invoke \"%s.%s()\" - missing parameters array.", object_name, program_name);
+                ssruntime_error("can't invoke \"%s.%s()\" - missing parameters array.", object_name, program_name);
         }
         else
-            ssfatal("Runtime Error: can't invoke \"%s.%s()\" - missing parameters array.", object_name, program_name);
+            ssruntime_error("can't invoke \"%s.%s()\" - missing parameters array.", object_name, program_name);
     }
     else
-        ssfatal("Runtime Error: can't invoke \"%s.%s()\" - function doesn't exist.", object_name, program_name);
+        ssruntime_error("can't invoke \"%s.%s()\" - function doesn't exist.", object_name, program_name);
 
     ssfree(program_name);
     return ret;
@@ -436,10 +436,10 @@ surgescript_var_t* fun_assert(surgescript_object_t* object, const surgescript_va
     if(!expr) {
         if(!surgescript_var_is_null(param[1])) {
             const char* message = surgescript_var_fast_get_string(param[1]);
-            ssfatal("Assertion failed!\nObject: \"%s\"\nLocation: %s:%d\n\n%s", object_name, file, line, message);
+            ssruntime_error("assertion failed!\nObject: \"%s\"\nLocation: %s:%d\n\n%s", object_name, file, line, message);
         }
         else
-            ssfatal("Assertion failed!\nObject: \"%s\"\nLocation: %s:%d", object_name, file, line);
+            ssruntime_error("assertion failed!\nObject: \"%s\"\nLocation: %s:%d", object_name, file, line);
     }
 
     return NULL;

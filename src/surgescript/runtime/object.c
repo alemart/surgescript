@@ -109,7 +109,7 @@ surgescript_object_t* surgescript_object_create(const char* name, surgescript_ob
     surgescript_object_t* obj = ssmalloc(sizeof *obj);
 
     if(!object_exists(program_pool, name))
-        ssfatal("Runtime Error: can't spawn object \"%s\" - it doesn't exist!", name);
+        ssruntime_error("can't spawn object \"%s\" - it doesn't exist!", name);
 
     surgescript_util_strncpy(obj->name, name, sizeof(obj->name));
     ssassert(0 == strcmp(name, obj->name)); /* names can't be too long */
@@ -592,14 +592,14 @@ bool surgescript_object_add_child(surgescript_object_t* object, surgescript_obje
 
     /* check if the child isn't myself */
     if(object->handle == child_handle) {
-        ssfatal("Runtime Error: object 0x%X (\"%s\") can't be a child of itself.", object->handle, object->name);
+        ssruntime_error("surgescript_object_add_child(): object 0x%X (\"%s\") can't be a child of itself.", object->handle, object->name);
         return false;
     }
 
     /* check if the child belongs to someone else */
     child = surgescript_objectmanager_get(manager, child_handle);
     if(child->parent != child->handle) {
-        ssfatal("Runtime Error: can't add child 0x%X (\"%s\") to object 0x%X (\"%s\") - child already registered", child->handle, child->name, object->handle, object->name);
+        ssruntime_error("surgescript_object_add_child(): can't add child 0x%X (\"%s\") to object 0x%X (\"%s\") - child already registered", child->handle, child->name, object->handle, object->name);
         return false;
     }
 
@@ -656,7 +656,7 @@ bool surgescript_object_reparent(surgescript_object_t* object, surgescript_objec
 
     /* can't make it a root */
     if(object->handle == new_parent_handle) {
-        ssfatal("Can't reparent object 0x%X (\"%s\"): can't turn it into root", object->handle, object->name);
+        ssruntime_error("can't reparent object 0x%X (\"%s\"): can't turn it into root", object->handle, object->name);
         return false;
     }
 
@@ -666,13 +666,13 @@ bool surgescript_object_reparent(surgescript_object_t* object, surgescript_objec
 
     /* remove previous parent */
     if(!surgescript_object_remove_child(old_parent, object->handle)) {
-        sslog("Can't reparent object 0x%X (\"%s\")", object->handle, object->name); /* this shouldn't happen */
+        ssruntime_error("can't reparent object 0x%X (\"%s\")", object->handle, object->name); /* this shouldn't happen */
         return false;
     }
 
     /* add new parent */
     if(!surgescript_object_add_child(new_parent, object->handle)) {
-        ssfatal("Can't reparent object 0x%X (\"%s\")", object->handle, object->name);
+        ssruntime_error("can't reparent object 0x%X (\"%s\")", object->handle, object->name);
         return false;
     }
 
@@ -689,7 +689,7 @@ bool surgescript_object_reparent(surgescript_object_t* object, surgescript_objec
 
     */
     if(flags != 0) {
-        ssfatal("Can't reparent object 0x%X (\"%s\"): unsupported flags 0x%X", object->handle, object->name, flags);
+        ssruntime_error("can't reparent object 0x%X (\"%s\"): unsupported flags 0x%X", object->handle, object->name, flags);
         return false;
     }
 
@@ -753,7 +753,7 @@ void surgescript_object_set_state(surgescript_object_t* object, const char* stat
     /* copy state name */
     surgescript_util_strncpy(object->state_name, state_name, sizeof(object->state_name));
     if(strcmp(object->state_name, state_name) != 0)
-        ssfatal("Runtime Error: too long state name \"%s\" of object \"%s\"", state_name, object->name);
+        ssruntime_error("too long state name \"%s\" of object \"%s\"", state_name, object->name);
 
     /* change state */
     object->current_state = get_state_program(object, object->state_name);
@@ -892,7 +892,7 @@ void surgescript_object_init(surgescript_object_t* object)
     if(surgescript_programpool_exists(program_pool, object->name, CONSTRUCTOR_FUN)) {
         surgescript_program_t* constructor = surgescript_programpool_get(program_pool, object->name, CONSTRUCTOR_FUN);
         if(surgescript_program_arity(constructor) != 0)
-            ssfatal("Runtime Error: Object \"%s\"'s %s() cannot receive parameters", object->name, CONSTRUCTOR_FUN);
+            ssruntime_error("object \"%s\"'s %s() cannot receive parameters", object->name, CONSTRUCTOR_FUN);
         surgescript_program_call(constructor, renv_of(object), 0);
     }
 
@@ -915,7 +915,7 @@ void surgescript_object_release(surgescript_object_t* object)
         surgescript_var_t* self = surgescript_var_set_objecthandle(surgescript_var_create(), object->handle);
         
         if(surgescript_program_arity(destructor) != 0)
-            ssfatal("Runtime Error: Object \"%s\"'s %s() cannot receive parameters", object->name, DESTRUCTOR_FUN);
+            ssruntime_error("object \"%s\"'s %s() cannot receive parameters", object->name, DESTRUCTOR_FUN);
 
         surgescript_stack_push(stack, self);
         surgescript_program_call(destructor, renv_of(object), 0);
@@ -1079,7 +1079,7 @@ void call_object_function(surgescript_object_t* object, const char* class_name, 
 
     /* does the program exist? */
     if(program == NULL) {
-        ssfatal("Runtime Error: function %s.%s/%d doesn't exist.", class_name, fun_name, num_params);
+        ssruntime_error("call_object_function(): function %s.%s/%d doesn't exist.", class_name, fun_name, num_params);
         return;
     }
 
@@ -1151,7 +1151,7 @@ surgescript_program_t* get_state_program(const surgescript_object_t* object, con
     surgescript_program_t* program = surgescript_programpool_get(program_pool, object->name, fun_name);
 
     if(program == NULL)
-        ssfatal("Runtime Error: state \"%s\" of object \"%s\" doesn't exist.", state_name, object->name);
+        ssruntime_error("state \"%s\" of object \"%s\" doesn't exist.", state_name, object->name);
 
     return program;
 }

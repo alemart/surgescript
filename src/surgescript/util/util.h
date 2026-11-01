@@ -43,11 +43,15 @@
 #define ssmalloc(n)                 surgescript_util_malloc((n), __FILE__, __LINE__)
 #define ssrealloc(p, n)             surgescript_util_realloc((p), (n), __FILE__, __LINE__)
 #define ssfree                      surgescript_util_free
+#define ssstrdup(str)               surgescript_util_strdup((str), __FILE__, __LINE__)
+#define ssatof(str)                 surgescript_util_strtod((str), NULL)
 #define sslog                       surgescript_util_log
 #define sswarn                      surgescript_util_warn
 #define ssfatal                     surgescript_util_fatal
-#define ssstrdup(str)               surgescript_util_strdup((str), __FILE__, __LINE__)
-#define ssatof(str)                 surgescript_util_strtod((str), NULL)
+#define ssparse_error(...)          ssfatal("Parse Error: " __VA_ARGS__)
+#define sscompile_error(...)        ssfatal("Compile Error: " __VA_ARGS__)
+#define sslexical_error(...)        ssfatal("Lexical Error: " __VA_ARGS__)
+#define ssruntime_error(...)        ssfatal("Runtime Error: " __VA_ARGS__)
 
 /* constants */
 #define SS_NAMEMAX                  63 /* names can't be larger than this (computes hashes quickly) */

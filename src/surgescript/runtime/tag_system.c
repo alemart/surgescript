@@ -172,7 +172,7 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
 
     /* reject empty tags */
     if(*tag_name == '\0') {
-        ssfatal("Can't add empty tag to object \"%s\"", object_name);
+        ssruntime_error("can't add empty tag to object \"%s\"", object_name);
         return;
     }
 
@@ -187,7 +187,7 @@ void surgescript_tagsystem_add_tag(surgescript_tagsystem_t* tag_system, const ch
     else {
         /* conflict check */
         if(entry->tag != tag || strcmp(entry->object_name, object_name) != 0 || strcmp(entry->tag_name, tag_name) != 0)
-            ssfatal("Tag \"%s\" of object \"%s\" conflicts with tag \"%s\" of object \"%s\"", entry->tag_name, entry->object_name, tag_name, object_name);
+            ssruntime_error("tag \"%s\" of object \"%s\" conflicts with tag \"%s\" of object \"%s\"", entry->tag_name, entry->object_name, tag_name, object_name);
 
         /* this is an already existing tag */
         return;

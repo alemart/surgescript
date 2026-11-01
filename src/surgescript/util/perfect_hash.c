@@ -91,7 +91,7 @@ surgescript_perfecthashseed_t surgescript_perfecthash_find_seed(surgescript_perf
 
     /* failed? */
     if(failed)
-        ssfatal("Can't find a perfect hash function for a set of %d strings", key_count);
+        ssruntime_error("can't find a perfect hash function for a set of %d strings", key_count);
 
     /* done! */
     sslog("Perfect!", seed);

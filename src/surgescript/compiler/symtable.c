@@ -140,7 +140,7 @@ void surgescript_symtable_put_heap_symbol(surgescript_symtable_t* symtable, cons
         ssarray_push(symtable->entry, entry);
     }
     else
-        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
+        sscompile_error("duplicate entry of symbol \"%s\".", symbol);
 }
 
 /*
@@ -155,7 +155,7 @@ void surgescript_symtable_put_stack_symbol(surgescript_symtable_t* symtable, con
         ssarray_push(symtable->entry, entry);
     }
     else
-        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
+        sscompile_error("duplicate entry of symbol \"%s\".", symbol);
 }
 
 /*
@@ -170,7 +170,7 @@ void surgescript_symtable_put_accessor_symbol(surgescript_symtable_t* symtable, 
         ssarray_push(symtable->entry, entry);
     }
     else
-        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
+        sscompile_error("duplicate entry of symbol \"%s\".", symbol);
 }
 
 /*
@@ -185,7 +185,7 @@ void surgescript_symtable_put_imported_symbol(surgescript_symtable_t* symtable, 
         ssarray_push(symtable->entry, entry);
     }
     else
-        ssfatal("Compile Error: found duplicate symbol \"%s\" when importing \"%s\" in %s.", imported_symbol(path), path, filename);
+        sscompile_error("found duplicate symbol \"%s\" when importing \"%s\" in %s.", imported_symbol(path), path, filename);
 }
 
 /*
@@ -200,7 +200,7 @@ void surgescript_symtable_put_static_symbol(surgescript_symtable_t* symtable, co
         ssarray_push(symtable->entry, entry);
     }
     else
-        ssfatal("Compile Error: duplicate entry of symbol \"%s\".", symbol);
+        sscompile_error("duplicate entry of symbol \"%s\".", symbol);
 }
 
 /*
@@ -218,7 +218,7 @@ void surgescript_symtable_emit_write(surgescript_symtable_t* symtable, const cha
     else if(symtable->parent)
         surgescript_symtable_emit_write(symtable->parent, symbol, program, k);
     else
-        ssfatal("Compile Error: undefined symbol \"%s\".", symbol);
+        sscompile_error("undefined symbol \"%s\".", symbol);
 }
 
 /*
@@ -236,7 +236,7 @@ void surgescript_symtable_emit_read(surgescript_symtable_t* symtable, const char
     else if(symtable->parent)
         surgescript_symtable_emit_read(symtable->parent, symbol, program, k);
     else
-        ssfatal("Compile Error: undefined symbol \"%s\".", symbol);
+        sscompile_error("undefined symbol \"%s\".", symbol);
 }
 
 /*
