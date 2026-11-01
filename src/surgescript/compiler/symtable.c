@@ -38,13 +38,13 @@ static void write_to_heap(surgescript_symtable_entry_t* entry, surgescript_progr
 static void write_to_stack(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void read_from_getter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void write_to_setter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
-static void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
-static void write_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+static void read_imported(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
+static void write_imported(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void read_static(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
 static void write_static(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k);
-static char* pack_plugin_path(const char* path);
-static char* unpack_plugin_path(const char* symbol);
-static const char* plugin_symbol(const char* path);
+static char* pack_imported_path(const char* path);
+static char* unpack_imported_path(const char* symbol);
+static const char* imported_symbol(const char* path);
 
 /* vtable for the entries of the symbol table */
 struct surgescript_symtable_entry_vtable_t
@@ -55,7 +55,7 @@ struct surgescript_symtable_entry_vtable_t
 static const surgescript_symtable_entry_vtable_t heapvt = { read_from_heap, write_to_heap };
 static const surgescript_symtable_entry_vtable_t stackvt = { read_from_stack, write_to_stack };
 static const surgescript_symtable_entry_vtable_t accvt = { read_from_getter, write_to_setter };
-static const surgescript_symtable_entry_vtable_t pluginvt = { read_plugin, write_plugin };
+static const surgescript_symtable_entry_vtable_t importedvt = { read_imported, write_imported };
 static const surgescript_symtable_entry_vtable_t staticvt = { read_static, write_static };
 
 /* a symbol table entry */
@@ -174,18 +174,18 @@ void surgescript_symtable_put_accessor_symbol(surgescript_symtable_t* symtable, 
 }
 
 /*
- * surgescript_symtable_put_plugin_symbol()
- * Puts a symbol that is a reference to a plugin object.
+ * surgescript_symtable_put_imported_symbol()
+ * Puts a symbol that is a reference to an imported object.
  */
-void surgescript_symtable_put_plugin_symbol(surgescript_symtable_t* symtable, const char* path, const char* filename)
+void surgescript_symtable_put_imported_symbol(surgescript_symtable_t* symtable, const char* path, const char* filename)
 {
-    if(indexof_symbol(symtable, plugin_symbol(path)) < 0) {
-        char* symname = pack_plugin_path(path);
-        surgescript_symtable_entry_t entry = { .symbol = symname, .vtable = &pluginvt };
+    if(indexof_symbol(symtable, imported_symbol(path)) < 0) {
+        char* symname = pack_imported_path(path);
+        surgescript_symtable_entry_t entry = { .symbol = symname, .vtable = &importedvt };
         ssarray_push(symtable->entry, entry);
     }
     else
-        ssfatal("Compile Error: found duplicate symbol \"%s\" when importing \"%s\" in %s.", plugin_symbol(path), path, filename);
+        ssfatal("Compile Error: found duplicate symbol \"%s\" when importing \"%s\" in %s.", imported_symbol(path), path, filename);
 }
 
 /*
@@ -333,14 +333,23 @@ void write_static(surgescript_symtable_entry_t* entry, surgescript_program_t* pr
     ; /* do nothing; static objects can't have their references messed up */
 }
 
-void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
+void read_imported(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-    surgescript_objecthandle_t plugin_object = surgescript_objectmanager_system_object(NULL, "Plugin");
-    char* path = unpack_plugin_path(entry->symbol);
+    surgescript_objecthandle_t base_object = surgescript_objectmanager_system_object(NULL, "Plugin");
+    char* path = unpack_imported_path(entry->symbol);
     char* next, *tok = path, *getter;
 
-    /* generate the bytecode to access the plugin */
-    surgescript_program_add_line(program, SSOP_MOVO, SSOPu(0), SSOPu(plugin_object));
+    /* usually, we import plugins. However, if the beginning of the path references
+       the SurgeScript object, then we'll change the base_object handle accordingly.
+       Note: importing just the SurgeScript object isn't needed, as it's a built-in.
+       Reminder: alternatively, the SurgeScript object could become a Plugin global. */
+    if(0 == strncmp("SurgeScript.", path, 12)) {
+        base_object = surgescript_objectmanager_system_object(NULL, "SurgeScript");
+        tok = path + 12;
+    }
+
+    /* generate the bytecode to access the imported object */
+    surgescript_program_add_line(program, SSOP_MOVO, SSOPu(0), SSOPu(base_object));
     while((next = strchr(tok, '.')) != NULL) {
         *next = 0;
         surgescript_program_add_line(program, SSOP_PUSH, SSOPu(0), SSOPu(0));
@@ -357,7 +366,7 @@ void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* pro
     ), SSOPu(0));
     surgescript_program_add_line(program, SSOP_POPN, SSOPu(1), SSOPu(0));
 
-    /* set t[k] to the address of the plugin */
+    /* set t[k] to the address of the imported object */
     if(k != 0)
         surgescript_program_add_line(program, SSOP_MOV, SSOPu(k), SSOPu(0));
 
@@ -366,9 +375,9 @@ void read_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* pro
     ssfree(path);
 }
 
-void write_plugin(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
+void write_imported(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
 {
-    ; /* do nothing; plugin objects can't have their references changed */
+    ; /* do nothing; imported objects can't have their references changed */
 }
 
 void read_from_getter(surgescript_symtable_entry_t* entry, surgescript_program_t* program, unsigned k)
@@ -396,9 +405,9 @@ void write_to_setter(surgescript_symtable_entry_t* entry, surgescript_program_t*
     ssfree(fun_name);
 }
 
-char* pack_plugin_path(const char* path)
+char* pack_imported_path(const char* path)
 {
-    const char* symbol = plugin_symbol(path);
+    const char* symbol = imported_symbol(path);
     size_t symbol_len = strlen(symbol);
     char* buf = ssmalloc((3 + symbol_len + strlen(path)) * sizeof(*buf));
     strcpy(buf, symbol);
@@ -406,13 +415,13 @@ char* pack_plugin_path(const char* path)
     return buf;
 }
 
-char* unpack_plugin_path(const char* symbol)
+char* unpack_imported_path(const char* symbol)
 {
     size_t symbol_len = strlen(symbol);
     return ssstrdup(symbol + symbol_len + 1);
 }
 
-const char* plugin_symbol(const char* path)
+const char* imported_symbol(const char* path)
 {
     const char* symbol = strrchr(path, '.');
     return symbol ? symbol + 1 : path;
