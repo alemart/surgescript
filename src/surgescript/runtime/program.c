@@ -183,7 +183,7 @@ int surgescript_program_add_line(surgescript_program_t* program, surgescript_pro
 int surgescript_program_chg_line(surgescript_program_t* program, int line, surgescript_program_operator_t op, surgescript_program_operand_t a, surgescript_program_operand_t b)
 {
     surgescript_program_operation_t newline = { op, a, b };
-    ssassert(op != SSOP_CALL); /* can't change the line do CALL due to the NOP optimization trick in surgescript_program_add_line(); won't change the labels */
+    ssassert(op != SSOP_CALL); /* can't change the line to CALL due to the NOP optimization trick in surgescript_program_add_line(); won't change the labels */
 
     if(line >= 0 && line < ssarray_length(program->line)) {
         program->line[line] = newline;
@@ -852,62 +852,67 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
     if(!surgescript_var_is_objecthandle(callee)) /* callee is of a primitive type */
         number_of_given_params++; /* object_handle points to the appropriate wrapper */
 
-    /* find the program */
-    if(surgescript_objectmanager_exists(manager, object_handle)) {
-        surgescript_programpool_t* pool = surgescript_renv_programpool(caller_runtime_environment);
-        surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
-        const char* object_name = surgescript_object_name(object);
-        surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
-
-        if(program == NULL) {
-            /* do a program lookup. this is a bottleneck!
-               use a cached program if possible */
-            program = surgescript_programpool_get(pool, object_name, program_name);
-            *inout_class_id = class_id;
-        }
-        else if(class_id != *inout_class_id) {
-            /* we're using a cached program, but the callee
-               is incompatible. Let's abort the execution. */
-            program = NULL;
-            goto cleanup;
-        }
-#if 0
-        /* verify the cached program; for testing only, as it performs a lookup */
-        else ssassert(
-            program_name != NULL &&
-            program == surgescript_programpool_get(pool, object_name, program_name)
-        );
-#endif
-        
-        /* does the selected program exist? */
-        if(program != NULL) {
-            if(number_of_given_params == program->arity) {
-                /* the parameters are pushed onto the stack (left-to-right) */
-                surgescript_renv_t callee_runtime_environment = {
-                    object,
-                    stack,
-                    surgescript_object_heap(object),
-                    pool,
-                    manager,
-                    surgescript_renv_tmp(caller_runtime_environment),
-                    NULL,
-                    caller_runtime_environment
-                };
-
-                /* call the program */
-                program->run(program, &callee_runtime_environment);
-
-                /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
-                /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(&callee_runtime_environment));*/
-            }
-            else
-                ssruntime_error("function %s.%s (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
-        }
-        else
-            ssruntime_error("can't find function %s.%s (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
-    }
-    else
+    /* does the callee exist? */
+    if(!surgescript_objectmanager_exists(manager, object_handle)) {
         ssruntime_error("null pointer exception - can't call function %s (called in \"%s\").", program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
+        goto cleanup;
+    }
+
+    /* find the program */
+    surgescript_programpool_t* pool = surgescript_renv_programpool(caller_runtime_environment);
+    surgescript_object_t* object = surgescript_objectmanager_get(manager, object_handle);
+    const char* object_name = surgescript_object_name(object);
+    surgescript_objectclassid_t class_id = surgescript_object_class_id(object);
+
+    if(program == NULL) {
+        /* do a program lookup. this is a bottleneck!
+           use a cached program if possible */
+        program = surgescript_programpool_get(pool, object_name, program_name);
+        *inout_class_id = class_id;
+    }
+    else if(class_id != *inout_class_id) {
+        /* we're using a cached program, but the callee
+           is incompatible. Let's abort the execution. */
+        program = NULL;
+        goto cleanup;
+    }
+#if 0
+    /* verify the cached program; for testing only, as it performs a lookup */
+    else ssassert(
+        program_name != NULL &&
+        program == surgescript_programpool_get(pool, object_name, program_name)
+    );
+#endif
+
+    /* does the selected program exist? */
+    if(program == NULL) {
+        ssruntime_error("can't find function %s.%s (called in \"%s\").", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)));
+        goto cleanup;
+    }
+
+    /* is the number of parameters correct? */
+    if(number_of_given_params != program->arity) {
+        ssruntime_error("function %s.%s (called in \"%s\") expects %d parameters, but received %d.", object_name, program_name, surgescript_object_name(surgescript_renv_owner(caller_runtime_environment)), program->arity, number_of_given_params);
+        goto cleanup;
+    }
+
+    /* create a new runtime environment; allocate it on the stack for performance */
+    surgescript_renv_t callee_runtime_environment = {
+        object,
+        stack,
+        surgescript_object_heap(object),
+        pool,
+        manager,
+        surgescript_renv_tmp(caller_runtime_environment),
+        NULL,
+        caller_runtime_environment
+    };
+
+    /* call the program. The parameters are pushed onto the stack (left-to-right) */
+    program->run(program, &callee_runtime_environment);
+
+    /* callee_tmp[0] = caller_tmp[0] is the return value of the program (so, no need to copy anything) */
+    /*surgescript_var_copy(*surgescript_renv_tmp(caller_runtime_environment), *surgescript_renv_tmp(&callee_runtime_environment));*/
 
     /* clean up */
     cleanup:
@@ -947,7 +952,7 @@ void run_interrupt(const surgescript_program_t* program, const surgescript_renv_
             surgescript_var_set_rawbits(t(b), surgescript_heap_malloc(surgescript_renv_heap(runtime_environment)));
             break;
 
-        /* emit signal named t[b] with context t[0]. The context may be null */
+        /* emit signal named text[b] with context t[0]. The context may be null */
         case 0xE317: {
             surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(surgescript_renv_objectmanager(runtime_environment));
             const char* signal_name = (b.u < ssarray_length(program->text)) ? program->text[b.u] : "";
