@@ -128,8 +128,8 @@ void emit_assignexpr(surgescript_nodecontext_t context, const char* assignop, co
             SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
             LABEL(cat);
-            SSASM(SSOP_MOVO, T2, U(surgescript_objectmanager_system_object(NULL, "String")));
-            SSASM(SSOP_PUSH, T2);
+            SSASM(SSOP_MOVO, T3, U(surgescript_objectmanager_system_object(NULL, "String")));
+            SSASM(SSOP_PUSH, T3);
             SSASM(SSOP_PUSH, T1);
             SSASM(SSOP_PUSH, T0);
             SSASM(SSOP_CALL, TEXT("concat"), U(2));
@@ -296,8 +296,8 @@ void emit_additiveexpr2(surgescript_nodecontext_t context, const char* additiveo
             SSASM(SSOP_ADD, T0, T1);
             SSASM(SSOP_JMP, U(end));
             LABEL(cat);
-            SSASM(SSOP_MOVO, T2, U(surgescript_objectmanager_system_object(NULL, "String")));
-            SSASM(SSOP_PUSH, T2);
+            SSASM(SSOP_MOVO, T3, U(surgescript_objectmanager_system_object(NULL, "String")));
+            SSASM(SSOP_PUSH, T3);
             SSASM(SSOP_PUSH, T1);
             SSASM(SSOP_PUSH, T0);
             SSASM(SSOP_CALL, TEXT("concat"), U(2));
@@ -498,8 +498,8 @@ void emit_dictset(surgescript_nodecontext_t context, const char* assignop)
                 SSASM(SSOP_ADD, T0, T1); /* t0 = dict.get(<expr>) + <assignexpr> */
                 SSASM(SSOP_JMP, U(end));
                 LABEL(cat);
-                SSASM(SSOP_MOVO, T2, U(surgescript_objectmanager_system_object(NULL, "String")));
-                SSASM(SSOP_PUSH, T2);
+                SSASM(SSOP_MOVO, T3, U(surgescript_objectmanager_system_object(NULL, "String")));
+                SSASM(SSOP_PUSH, T3);
                 SSASM(SSOP_PUSH, T0);
                 SSASM(SSOP_PUSH, T1);
                 SSASM(SSOP_CALL, TEXT("concat"), U(2)); /* t0 = dict.get(<expr>).concat(<assignexpr>) */
@@ -586,8 +586,8 @@ void emit_setter2(surgescript_nodecontext_t context, const char* property_name, 
             SSASM(SSOP_ADD, T0, T1); /* t0 = object.property_name + <assignexpr> */
             SSASM(SSOP_JMP, U(end));
             LABEL(cat);
-            SSASM(SSOP_MOVO, T2, U(surgescript_objectmanager_system_object(NULL, "String")));
-            SSASM(SSOP_PUSH, T2);
+            SSASM(SSOP_MOVO, T3, U(surgescript_objectmanager_system_object(NULL, "String")));
+            SSASM(SSOP_PUSH, T3);
             SSASM(SSOP_PUSH, T0);
             SSASM(SSOP_PUSH, T1);
             SSASM(SSOP_CALL, TEXT("concat"), U(2)); /* t0 = object.property_name.concat(<assignexpr>) */
