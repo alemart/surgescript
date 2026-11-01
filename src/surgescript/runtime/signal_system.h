@@ -37,8 +37,8 @@ enum surgescript_signaltype_t
       (i.e., objects having a registered signal handler matching that signal) */
     SIGTYPE_GLOBAL,
 
-    /* a local signal can only be caught by the nearest ancestor of the emitter
-       that implements a matching signal handler (it may or may not be caught) */
+    /* a local signal can only be caught by the parent object of the emitter,
+       provided that the parent implements a matching signal handler */
     SIGTYPE_LOCAL,
 
     /* a manual signal can only be caught by objects manually and explicitly

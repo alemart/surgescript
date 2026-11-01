@@ -1106,54 +1106,38 @@ void emit_local(signaldata_t* signal, const surgescript_signalsystem_t* signal_s
     surgescript_objectmanager_t* manager = signal_system->object_manager;
     const surgescript_object_t* emitter_instance = surgescript_objectmanager_get(manager, emitter);
     surgescript_objecthandle_t parent = surgescript_object_parent(emitter_instance);
-    surgescript_objecthandle_t handle;
-    char fun_name[7 + SS_NAMEMAX + 1];
 
-    /* A local signal travels like a bubble in a soda-pop: it looks for the nearest ancestor of the emitter that can catch it */
-    do {
-        handle = parent;
+    /* A local signal can only be caught by the parent of the emitter */
+    surgescript_objecthandle_t handle = parent;
+    surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
+    surgescript_objectclassid_t object_class = surgescript_object_class_id(object);
 
-        surgescript_object_t* object = surgescript_objectmanager_get(manager, handle);
-        surgescript_objectclassid_t object_class = surgescript_object_class_id(object);
-
-        /* found the target */
+    /* Check if the signal will be caught */
 #if 0
-        if(surgescript_signalsystem_object_can_catch(signal_system, signal->code, object_class)) {
+    if(surgescript_signalsystem_object_can_catch(signal_system, signal->code, object_class)) {
 #else
-        if(0 <= binary_search_object_class_id(object_class, signal->subscribers, ssarray_length(signal->subscribers))) {
+    if(0 <= binary_search_object_class_id(object_class, signal->subscribers, ssarray_length(signal->subscribers))) {
 #endif
+        char fun_name[7 + SS_NAMEMAX + 1]; /* signal:<signal_name> */
 
-            /* create the signal object */
-            surgescript_objecthandle_t signal_object_handle = spawn_signal_object(manager, signal->code, emitter, signal_context);
+        /* create the signal object */
+        surgescript_objecthandle_t signal_object_handle = spawn_signal_object(manager, signal->code, emitter, signal_context);
 
-            /* call the signal handler */
-            surgescript_var_t* signal_var = surgescript_var_set_objecthandle(surgescript_var_create(), signal_object_handle);
-            const surgescript_var_t* param = signal_var;
-            surgescript_object_call_function(object, signal2fun(signal->name, fun_name, sizeof fun_name), &param, 1, NULL);
-            surgescript_var_destroy(signal_var);
+        /* call the signal handler */
+        surgescript_var_t* signal_var = surgescript_var_set_objecthandle(surgescript_var_create(), signal_object_handle);
+        const surgescript_var_t* param = signal_var;
+        surgescript_object_call_function(object, signal2fun(signal->name, fun_name, sizeof fun_name), &param, 1, NULL);
+        surgescript_var_destroy(signal_var);
 
-            /* destroy the signal object
-               we'll have a dangling reference error if the user stores this handle in a variable somewhere
-               if we don't destroy the signal object now, then we'll leave extra work to the garbage collector */
-            ssassert(surgescript_objectmanager_exists(manager, signal_object_handle));
-            surgescript_object_kill(surgescript_objectmanager_get(manager, signal_object_handle));
-
-            /* stop the iteration */
-            return;
-
-        }
-
-        /* bubble up */
-        parent = surgescript_object_parent(object);
-    } while(handle != parent);
-
-    /* uncaught signal */
-
-    /* Caching the catching object for every emitter may lead to reparenting
-       issues: if the emitter or any of its ancestors is reparented, then the
-       cache should be invalidated.
-
-       Note that the current routine with the lookup isn't really expensive. */
+        /* destroy the signal object
+           we'll have a dangling reference error if the user stores this handle in a variable somewhere
+           on the other hand, if we don't destroy the signal object now, then we'll leave extra work to the garbage collector */
+        ssassert(surgescript_objectmanager_exists(manager, signal_object_handle));
+        surgescript_object_kill(surgescript_objectmanager_get(manager, signal_object_handle));
+    }
+#if 0
+    else { /* Uncaught signal */ }
+#endif
 }
 
 /* emit no signal */
