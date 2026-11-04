@@ -22,6 +22,7 @@
 #ifndef _SURGESCRIPT_COMPILER_NODECONTEXT_H
 #define _SURGESCRIPT_COMPILER_NODECONTEXT_H
 
+#include <stdbool.h>
 #include "../runtime/program.h"
 
 struct surgescript_symtable_t;
@@ -36,12 +37,13 @@ typedef struct surgescript_nodecontext_t
     surgescript_program_t* program;
     surgescript_program_label_t loop_continue; /* continue statement helper; inner-most loop */
     surgescript_program_label_t loop_break; /* break statement helper; inner-most loop or switch statement */
+    bool disable_cascade;
 } surgescript_nodecontext_t;
 
 /* node context constructor */
 static inline surgescript_nodecontext_t nodecontext(const char* source_file, const char* object_name, const char* program_name, struct surgescript_symtable_t* symbol_table, surgescript_program_t* program)
 {
-    surgescript_nodecontext_t ctx = { source_file, object_name, program_name, symbol_table, program, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL };
+    surgescript_nodecontext_t ctx = { source_file, object_name, program_name, symbol_table, program, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL, SURGESCRIPT_PROGRAM_UNDEFINED_LABEL, false };
     return ctx;
 }
 

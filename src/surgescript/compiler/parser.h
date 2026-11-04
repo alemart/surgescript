@@ -73,7 +73,8 @@
  * <assignexpr> := identifier assignop <baseexpr>
  *              |  state = <baseexpr>
  * <nonassignexpr> := <conditionalexpr>
- * <conditionalexpr> := <logicalorexpr> | <logicalorexpr> ? <expr> : <conditionalexpr>
+ *                 |  <conditionalexpr> .. <cascadeexpr>
+ * <conditionalexpr> := <logicalorexpr> | <logicalorexpr> ? <expr_without_cascadeexpr> : <baseexpr_without_cascadeexpr>
  * <logicalorexpr> := <logicalandexpr> <logicalorexpr1>
  * <logicalorexpr1> := || <logicalandexpr> <logicalorexpr1> | e
  * <logicalandexpr> := <equalityexpr> <logicalandexpr1>
@@ -101,6 +102,11 @@
  *                |  . identifier <dictgetexpr> <propertyexpr>
  *                |  . identifier ++ | . identifier --
  *                |  . identifier assignop <baseexpr>
+ * <cascadeexpr> := .. identifier assignop <baseexpr_without_cascadeexpr> <cascadeexpr1>
+ *               |  .. identifier ++ <cascadeexpr1> | .. identifier -- <cascadeexpr1>
+ *               |  .. identifier <dictgetexpr_without_cascadeexpr> <propertyexpr_without_cascadeexpr> <cascadeexpr1>
+ *               |  .. <funcallexpr_without_cascadeexpr> <lambdacall_without_cascadeexpr> <dictgetexpr_without_cascadeexpr> <propertyexpr_without_cascadeexpr> <cascadeexpr1>
+ * <cascadeexpr1> := <cascadeexpr> | e
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
  * <funargsexprlist> := <baseexpr> <funargsexprlist1>

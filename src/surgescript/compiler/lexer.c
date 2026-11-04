@@ -243,9 +243,16 @@ surgescript_token_t* surgescript_lexer_scan(surgescript_lexer_t* lexer)
     }
 
     /* dot */
-    if(*(lexer->p) == '.' && !isdigit(*(lexer->p + 1))) {
+    if(*(lexer->p) == '.' && *(lexer->p + 1) != '.' && !isdigit(*(lexer->p + 1))) {
         bufadd(lexer, *(lexer->p++));
         return surgescript_token_create(SSTOK_DOT, lexer->buf, lexer->line, prev);
+    }
+
+    /* cascade operator */
+    if(*(lexer->p) == '.' && *(lexer->p + 1) == '.') {
+        bufadd(lexer, *(lexer->p++));
+        bufadd(lexer, *(lexer->p++));
+        return surgescript_token_create(SSTOK_CASCADE, lexer->buf, lexer->line, prev);
     }
 
     /* arrow operator */

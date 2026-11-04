@@ -32,6 +32,7 @@
     F( SSTOK_SEMICOLON, ";" )                                                   \
     F( SSTOK_COMMA, "," )                                                       \
     F( SSTOK_DOT, "." )                                                         \
+    F( SSTOK_CASCADE, ".." )                                                    \
     F( SSTOK_CONDITIONALOP, "?" )                                               \
     F( SSTOK_COLON, ":" )                                                       \
     F( SSTOK_LPAREN, "(" )                                                      \

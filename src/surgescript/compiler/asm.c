@@ -774,6 +774,16 @@ void emit_emitsignal(surgescript_nodecontext_t context, const char* signal_name)
     SSASM(SSOP_INT, U(0xE317), TEXT(signal_name));
 }
 
+void emit_cascade1(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_PUSH, T0);
+}
+
+void emit_cascade2(surgescript_nodecontext_t context)
+{
+    SSASM(SSOP_POP, T0);
+}
+
 /* statements */
 void emit_if(surgescript_nodecontext_t context, surgescript_program_label_t nope)
 {

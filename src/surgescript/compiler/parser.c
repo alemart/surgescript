@@ -119,21 +119,16 @@ static void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t c
 static void nonassignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void logicalorexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void logicalorexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void logicalandexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void logicalandexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void equalityexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void equalityexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void relationalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void relationalexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void additiveexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void additiveexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void multiplicativeexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void multiplicativeexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void propertyexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void cascadeexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name);
 static void dictgetexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -1261,6 +1256,8 @@ void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 void nonassignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     conditionalexpr(parser, context);
+    if(got_type(parser, SSTOK_CASCADE) && !context.disable_cascade)
+        cascadeexpr(parser, context);
 }
 
 void conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -1269,12 +1266,15 @@ void conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t con
     if(optmatch(parser, SSTOK_CONDITIONALOP)) {
         surgescript_program_label_t nope = surgescript_program_new_label(context.program);
         surgescript_program_label_t done = surgescript_program_new_label(context.program);
+
+        surgescript_nodecontext_t context_without_cascade = context;
+        context_without_cascade.disable_cascade = true;
         
         emit_conditionalexpr1(context, nope, done);
-        expr(parser, context);
+        expr(parser, context_without_cascade);
         match(parser, SSTOK_COLON);
         emit_conditionalexpr2(context, nope, done);
-        conditionalexpr(parser, context);
+        baseexpr(parser, context_without_cascade);
         emit_conditionalexpr3(context, nope, done);
     }
 }
@@ -1460,6 +1460,7 @@ void propertyexpr(surgescript_parser_t* parser, surgescript_nodecontext_t contex
         char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
         match(parser, SSTOK_IDENTIFIER);
         if(got_type(parser, SSTOK_LPAREN)) {
+            /* obj.method() */
             funcallexpr(parser, context, identifier);
             lambdacall(parser, context);
             dictgetexpr(parser, context);
@@ -1491,6 +1492,99 @@ void propertyexpr(surgescript_parser_t* parser, surgescript_nodecontext_t contex
             ssfree(identifier);
         }
     }
+}
+
+void cascadeexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    ssassert(!context.disable_cascade);
+    expect(parser, SSTOK_CASCADE);
+
+    /*
+
+    Unless we disabled cascades in some cases, there would be ambiguity
+    regarding which object is the target of the chain of operations.
+    Example:
+
+    target
+    ..prop1 = foo
+    ..prop2 = bar
+    ..prop3 = baz;
+
+    Is prop2 a property of target or of foo? It should be of target.
+    Can we make it a property of foo? Yes, by proceeding as follows:
+
+    target
+    ..prop1 = (foo..prop2 = bar)
+    ..prop3 = baz;
+
+    In both cases, prop1 and prop3 are a property of target, prop1 is
+    set to foo, prop2 is set to bar, and prop3 is set to baz.
+
+    Another example:
+
+    target
+    ..prop1 = foo.x
+    ..prop2 = bar.y
+    ..prop3 = baz.z;
+
+    Is prop2 a property of target or of foo.x? It should be of target.
+    The same reasoning applies.
+
+    */
+    surgescript_nodecontext_t context_without_cascade = context;
+    context_without_cascade.disable_cascade = true;
+
+    /* save the return value of the expression */
+    emit_cascade1(context);
+
+    /* the cascade operator enables easy chaining */
+    while(optmatch(parser, SSTOK_CASCADE)) {
+        char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_IDENTIFIER);
+        if(got_type(parser, SSTOK_LPAREN)) {
+            /* obj..method() <=> (obj.method(), obj) */
+            funcallexpr(parser, context_without_cascade, identifier);
+            lambdacall(parser, context_without_cascade);
+            dictgetexpr(parser, context_without_cascade);
+            ssfree(identifier);
+
+            if(got_type(parser, SSTOK_DOT))
+                propertyexpr(parser, context_without_cascade);
+        }
+        else if(got_type(parser, SSTOK_INCDECOP)) {
+            /* obj..property++ <=> (obj.set_property(obj.get_property() + 1), obj) */
+            const char* op = surgescript_token_lexeme(parser->lookahead);
+            emit_setterincdec(context, identifier, op);
+            match(parser, SSTOK_INCDECOP);
+            ssfree(identifier);
+        }
+        else if(got_type(parser, SSTOK_ASSIGNOP)) {
+            /* obj..property = value <=> (obj.set_property(value), obj) */
+            char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+            match(parser, SSTOK_ASSIGNOP);
+            emit_setter1(context, identifier);
+            baseexpr(parser, context_without_cascade);
+            emit_setter2(context, identifier, op);
+            ssfree(op);
+            ssfree(identifier);
+        }
+        else {
+            /* obj..property <=> (obj.get_property(), obj) */
+            emit_getter(context, identifier);
+            dictgetexpr(parser, context_without_cascade);
+            ssfree(identifier);
+
+            if(got_type(parser, SSTOK_DOT))
+                propertyexpr(parser, context_without_cascade);
+        }
+
+        /* enable chaining */
+        emit_cascade2(context);
+        emit_cascade1(context);
+    }
+
+    /* restore the return value of the expression */
+    emit_cascade2(context);
 }
 
 void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -1563,8 +1657,11 @@ void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
 
 void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    surgescript_nodecontext_t context_with_cascade = context;
+    context_with_cascade.disable_cascade = false;
+
     if(optmatch(parser, SSTOK_LPAREN)) {
-        expr(parser, context);
+        expr(parser, context_with_cascade);
         match(parser, SSTOK_RPAREN);
     }
     else if(optmatch(parser, SSTOK_LBRACKET)) {
