@@ -37,8 +37,6 @@ static surgescript_var_t* fun_getwaittime(surgescript_object_t* object, const su
 static surgescript_var_t* fun_setwaittime(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getpaused(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setpaused(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getautostart(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_setautostart(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getrepeat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setrepeat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -52,8 +50,6 @@ typedef struct timerstate_t {
     bool is_stopped;
     bool is_paused;
     bool repeat;
-    bool autostart;
-    bool is_first_run;
 } timerstate_t;
 
 static const timerstate_t INITIAL_STATE = {
@@ -61,9 +57,7 @@ static const timerstate_t INITIAL_STATE = {
     .wait_time = 1.0, /* one second */
     .is_stopped = true,
     .is_paused = false,
-    .repeat = true,
-    .autostart = false,
-    .is_first_run = true
+    .repeat = true
 };
 
 /* signals */
@@ -95,8 +89,6 @@ void surgescript_sslib_register_timer(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Timer", "set_waitTime", fun_setwaittime, 1);
     surgescript_vm_bind(vm, "Timer", "get_paused", fun_getpaused, 0);
     surgescript_vm_bind(vm, "Timer", "set_paused", fun_setpaused, 1);
-    surgescript_vm_bind(vm, "Timer", "get_autoStart", fun_getautostart, 0);
-    surgescript_vm_bind(vm, "Timer", "set_autoStart", fun_setautostart, 1);
     surgescript_vm_bind(vm, "Timer", "get_repeat", fun_getrepeat, 0);
     surgescript_vm_bind(vm, "Timer", "set_repeat", fun_setrepeat, 1);
 
@@ -157,16 +149,6 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 {
     timerstate_t* state = surgescript_object_userdata(object);
 
-    /* Autostart the timer. The internal state is assumed to be INITIAL_STATE.
-       We can't autostart it in the constructor because the autostart option
-       may or may not be set after the constructor is executed, and before
-       this main state runs for the first time */
-    if(state->is_first_run) {
-        state->is_first_run = false;
-        if(state->autostart)
-            surgescript_object_call_function(object, "start", NULL, 0, NULL);
-    }
-
     /* do nothing if the timer is paused or stopped */
     if(state->is_stopped || state->is_paused)
         return NULL;
@@ -211,22 +193,6 @@ surgescript_var_t* fun_stop(surgescript_object_t* object, const surgescript_var_
 {
     timerstate_t* state = surgescript_object_userdata(object);
     state->is_stopped = true;
-    return NULL;
-}
-
-/* (getter) autostart: if true, the timer will start automatically just after being spawned, */
-surgescript_var_t* fun_getautostart(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    const timerstate_t* state = surgescript_object_userdata(object);
-    return surgescript_var_set_bool(surgescript_var_create(), state->autostart);
-}
-
-/* (setter) autostart: if true, the timer will start automatically just after being spawned. */
-surgescript_var_t* fun_setautostart(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
-{
-    timerstate_t* state = surgescript_object_userdata(object);
-    bool autostart = surgescript_var_get_bool(param[0]);
-    state->autostart = autostart;
     return NULL;
 }
 
