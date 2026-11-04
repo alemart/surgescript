@@ -873,7 +873,7 @@ surgescript_program_t* call_program(const surgescript_renv_t* caller_runtime_env
     else if(class_id != *inout_class_id) {
         /* we're using a cached program, but the callee
            is incompatible. Let's abort the execution. */
-        program = NULL;
+        program = NULL; /* signals the error; we'll return NULL */
         goto cleanup;
     }
 #if 0

@@ -1095,7 +1095,7 @@ void emit_global(signaldata_t* signal, const surgescript_signalsystem_t* signal_
 
     /* destroy the signal object
        we'll have a dangling reference error if the user stores this handle in a variable somewhere
-       if we don't destroy the signal object now, then we'll leave extra work to the garbage collector */
+       on the other hand, if we don't destroy the signal object now, then we'll leave extra work to the garbage collector */
     ssassert(surgescript_objectmanager_exists(manager, signal_object_handle));
     surgescript_object_kill(surgescript_objectmanager_get(manager, signal_object_handle));
 }
