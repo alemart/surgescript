@@ -94,19 +94,15 @@
  * <postfixexpr> := identifier ++ | identifier --
  *               |  <funcallexpr> <postfixexpr1>
  *               |  <primaryexpr> <postfixexpr1>
- *               |  <primaryexpr> <postfixexpr1> <dictgetexpr> <postfixexpr1>
- *               |  <primaryexpr> <postfixexpr1> <dictgetexpr> <postfixexpr1> assignop <assignexpr>
- *               |  <primaryexpr> <postfixexpr1> <dictgetexpr> ++ | <primaryexpr> <postfixexpr1> <dictgetexpr> --
- * <postfixexpr1> := . <funcallexpr> <lambdacall> <dictgetexpr1> <postfixexpr1>
- *                |  . identifier <lambdacall> <dictgetexpr1> <postfixexpr1>
+ * <postfixexpr1> := . <funcallexpr> <lambdacall> <dictgetexpr> <postfixexpr1>
+ *                |  . identifier <lambdacall> <dictgetexpr> <postfixexpr1>
  *                |  . identifier ++ | identifier --
  *                |  . identifier assignop <assignexpr>
- *                |  <lambdacall> <dictgetexpr1>
- * <dictgetexpr> := [ <expr> ] <dictgetexpr1>
- * <dictgetexpr1> := [ <expr> ] <dictgetexpr1> | e
+ *                |  <lambdacall> <dictgetexpr>
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
  * <lambdacall> := ( ) <lambdacall> | ( <funargsexprlist> ) <lambdacall> | e
+ * <dictgetexpr> := [ <expr> ] <postfixexpr1> | [ <expr> ] <dictgetexpr> | [ <expr> ] assignop <assignexpr> | [ <expr> ] ++ | [ <expr> ] -- | e
  * <primaryexpr> := identifier | this | state | caller | signal | <constant> | <arrayexpr> | <dictexpr> | <anonobjexpr> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
