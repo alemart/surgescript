@@ -94,19 +94,27 @@
  * <postfixexpr> := identifier ++ | identifier --
  *               |  <funcallexpr> <postfixexpr1>
  *               |  <primaryexpr> <postfixexpr1>
- * <postfixexpr1> := . <funcallexpr> <lambdacall> <dictgetexpr> <postfixexpr1>
- *                |  . identifier <lambdacall> <dictgetexpr> <postfixexpr1>
- *                |  . identifier ++ | identifier --
- *                |  . identifier assignop <assignexpr>
+ * <postfixexpr1> := <propertyexpr>
  *                |  <lambdacall> <dictgetexpr>
+ * <propertyexpr> := . <funcallexpr> <lambdacall> <dictgetexpr> <propertyexpr>
+ *                |  . identifier <dictgetexpr> <propertyexpr>
+ *                |  . identifier ++ | . identifier --
+ *                |  . identifier assignop <assignexpr>
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
- * <lambdacall> := ( ) <lambdacall> | ( <funargsexprlist> ) <lambdacall> | e
- * <dictgetexpr> := [ <expr> ] <postfixexpr1> | [ <expr> ] <dictgetexpr> | [ <expr> ] assignop <assignexpr> | [ <expr> ] ++ | [ <expr> ] -- | e
- * <primaryexpr> := identifier | this | state | caller | signal | <constant> | <arrayexpr> | <dictexpr> | <anonobjexpr> | ( <expr> )
- * <constant> := number | string | true | false | null
  * <funargsexprlist> := <assignexpr> <funargsexprlist1>
  * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e
+ * <lambdacall> := ( ) <lambdacall>
+ *              |  ( <funargsexprlist> ) <lambdacall>
+ *              |  e
+ * <dictgetexpr> := [ <expr> ] <postfixexpr1>
+ *               |  [ <expr> ] <dictgetexpr>
+ *               |  [ <expr> ] assignop <assignexpr>
+ *               |  [ <expr> ] ++
+ *               |  [ <expr> ] --
+ *               |  e
+ * <primaryexpr> := identifier | this | state | caller | signal | <constant> | <arrayexpr> | <dictexpr> | <anonobjexpr> | ( <expr> )
+ * <constant> := number | string | true | false | null
  * <arrayexpr> := [ <arrayexpr1> ] | [ ]
  * <arrayexpr1> := <assignexpr> | <assignexpr> , <arrayexpr1>
  * <dictexpr> := { <dictexpr1> } | { }

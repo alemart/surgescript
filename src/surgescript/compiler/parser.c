@@ -131,6 +131,7 @@ static void multiplicativeexpr1(surgescript_parser_t* parser, surgescript_nodeco
 static void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void propertyexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context, const char* fun_name);
 static void dictgetexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void lambdacall(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -1452,47 +1453,51 @@ void postfixexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
 
 void postfixexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    if(optmatch(parser, SSTOK_DOT)) {
-        do {
-            char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
-            match(parser, SSTOK_IDENTIFIER);
-            if(got_type(parser, SSTOK_LPAREN)) {
-                funcallexpr(parser, context, identifier);
-                lambdacall(parser, context);
-                dictgetexpr(parser, context);
-                ssfree(identifier);
-            }
-            else if(got_type(parser, SSTOK_INCDECOP)) {
-                /* obj.property++ <=> obj.set_property(obj.get_property() + 1) */
-                const char* op = surgescript_token_lexeme(parser->lookahead);
-                emit_setterincdec(context, identifier, op);
-                match(parser, SSTOK_INCDECOP);
-                ssfree(identifier);
-                break;
-            }
-            else if(got_type(parser, SSTOK_ASSIGNOP)) {
-                /* obj.property = value <=> obj.set_property(value) */
-                char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
-                match(parser, SSTOK_ASSIGNOP);
-                emit_setter1(context, identifier);
-                assignexpr(parser, context);
-                emit_setter2(context, identifier, op);
-                ssfree(op);
-                ssfree(identifier);
-                break;
-            }
-            else {
-                /* obj.property <=> obj.get_property() */
-                emit_getter(context, identifier);
-                lambdacall(parser, context);
-                dictgetexpr(parser, context);
-                ssfree(identifier);
-            }
-        } while(optmatch(parser, SSTOK_DOT));
+    if(got_type(parser, SSTOK_DOT)) {
+        propertyexpr(parser, context);
     }
     else {
         lambdacall(parser, context);
         dictgetexpr(parser, context);
+    }
+}
+
+void propertyexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    while(optmatch(parser, SSTOK_DOT)) {
+        char* identifier = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_IDENTIFIER);
+        if(got_type(parser, SSTOK_LPAREN)) {
+            funcallexpr(parser, context, identifier);
+            lambdacall(parser, context);
+            dictgetexpr(parser, context);
+            ssfree(identifier);
+        }
+        else if(got_type(parser, SSTOK_INCDECOP)) {
+            /* obj.property++ <=> obj.set_property(obj.get_property() + 1) */
+            const char* op = surgescript_token_lexeme(parser->lookahead);
+            emit_setterincdec(context, identifier, op);
+            match(parser, SSTOK_INCDECOP);
+            ssfree(identifier);
+            break;
+        }
+        else if(got_type(parser, SSTOK_ASSIGNOP)) {
+            /* obj.property = value <=> obj.set_property(value) */
+            char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+            match(parser, SSTOK_ASSIGNOP);
+            emit_setter1(context, identifier);
+            assignexpr(parser, context);
+            emit_setter2(context, identifier, op);
+            ssfree(op);
+            ssfree(identifier);
+            break;
+        }
+        else {
+            /* obj.property <=> obj.get_property() */
+            emit_getter(context, identifier);
+            dictgetexpr(parser, context);
+            ssfree(identifier);
+        }
     }
 }
 
