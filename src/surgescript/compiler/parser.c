@@ -114,7 +114,9 @@ static void fundecllist(surgescript_parser_t* parser, surgescript_nodecontext_t 
 static void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
 static void expr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void baseexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
+static void nonassignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void logicalorexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void logicalorexpr1(surgescript_parser_t* parser, surgescript_nodecontext_t context);
@@ -960,7 +962,7 @@ void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     match(parser, SSTOK_IDENTIFIER);
     match_exactly(parser, SSTOK_ASSIGNOP, "=");
-    conditionalexpr(parser, context);
+    nonassignexpr(parser, context);
     match(parser, SSTOK_SEMICOLON);
 
     emit_vardecl(context, id);
@@ -1203,7 +1205,7 @@ void expr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     const int n = sizeof(acceptable_lookaheads) / sizeof(surgescript_tokentype_t);
 
     for(;;) {
-        assignexpr(parser, context);
+        baseexpr(parser, context);
 
         /* comma operator: lowest precedence */
         if(!optmatch(parser, SSTOK_COMMA))
@@ -1215,6 +1217,22 @@ void expr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     }
 }
 
+void baseexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    if(optmatch(parser, SSTOK_IDENTIFIER) || optmatch(parser, SSTOK_STATE)) {
+        if(got_type(parser, SSTOK_ASSIGNOP)) {
+            unmatch(parser);
+            assignexpr(parser, context);
+        }
+        else {
+            unmatch(parser);
+            nonassignexpr(parser, context);
+        }
+    }
+    else
+        nonassignexpr(parser, context);
+}
+
 void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     if(got_type(parser, SSTOK_IDENTIFIER)) {
@@ -1222,53 +1240,27 @@ void assignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         int line = surgescript_token_linenumber(parser->lookahead);
         match(parser, SSTOK_IDENTIFIER);
 
-        if(got_type(parser, SSTOK_ASSIGNOP)) {
-            char* assignop = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        char* assignop = ssstrdup(surgescript_token_lexeme(parser->lookahead));
+        match(parser, SSTOK_ASSIGNOP);
 
-            match(parser, SSTOK_ASSIGNOP);
-            assignexpr(parser, context);
-            emit_assignexpr(context, assignop, identifier, line);
+        baseexpr(parser, context);
+        emit_assignexpr(context, assignop, identifier, line);
 
-            ssfree(assignop);
-        }
-        /*else if(got_type(parser, SSTOK_LBRACKET)) {
-            match(parser, SSTOK_LBRACKET);
-            expr(parser, context);
-            match(parser, SSTOK_RBRACKET);
-
-            if(got_type(parser, SSTOK_ASSIGNOP)) {
-                char* assignop = ssstrdup(surgescript_token_lexeme(parser->lookahead));
-                
-                match(parser, SSTOK_ASSIGNOP);
-                emit_dictset1(context, assignop, identifier, line);
-                assignexpr(parser, context);
-                emit_dictset2(context, assignop, identifier, line);
-
-                ssfree(assignop);
-            }
-            else
-                emit_dictget(context, identifier, line);
-        }*/
-        else {
-            unmatch(parser);
-            conditionalexpr(parser, context);
-        }
-
+        ssfree(assignop);
         ssfree(identifier);
     }
     else if(optmatch(parser, SSTOK_STATE)) {
-        if(got_type(parser, SSTOK_ASSIGNOP)) {
-            match_exactly(parser, SSTOK_ASSIGNOP, "=");
-            assignexpr(parser, context);
-            emit_setstate(context);
-        }
-        else {
-            unmatch(parser);
-            conditionalexpr(parser, context);
-        }
+        match_exactly(parser, SSTOK_ASSIGNOP, "=");
+        baseexpr(parser, context);
+        emit_setstate(context);
     }
     else
-        conditionalexpr(parser, context);
+        unexpected_symbol(parser);
+}
+
+void nonassignexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
+{
+    conditionalexpr(parser, context);
 }
 
 void conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -1403,7 +1395,7 @@ void unaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         if(!is_state_context(context))
             sscompile_error("timeout can only be used inside a state (see %s:%d).", context.source_file, surgescript_token_linenumber(parser->previous));
         match(parser, SSTOK_LPAREN);
-        assignexpr(parser, context);
+        baseexpr(parser, context);
         emit_timeout(context);
         match(parser, SSTOK_RPAREN);
     }
@@ -1486,7 +1478,7 @@ void propertyexpr(surgescript_parser_t* parser, surgescript_nodecontext_t contex
             char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
             match(parser, SSTOK_ASSIGNOP);
             emit_setter1(context, identifier);
-            assignexpr(parser, context);
+            baseexpr(parser, context);
             emit_setter2(context, identifier, op);
             ssfree(op);
             ssfree(identifier);
@@ -1517,7 +1509,7 @@ void dictgetexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         if(got_type(parser, SSTOK_ASSIGNOP)) {
             char* op = ssstrdup(surgescript_token_lexeme(parser->lookahead));
             match(parser, SSTOK_ASSIGNOP);
-            assignexpr(parser, context);
+            baseexpr(parser, context);
             emit_dictset(context, op);
             ssfree(op);
             break;
@@ -1559,7 +1551,7 @@ void funcallexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     if(!got_type(parser, SSTOK_RPAREN)) { /* read the parameters */
         do {
             ++num_params;
-            assignexpr(parser, context);
+            baseexpr(parser, context);
             emit_pushparam(context); /* push the i-th param */
         } while(optmatch(parser, SSTOK_COMMA));
     }
@@ -1655,7 +1647,7 @@ void arrayexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     emit_arrayexpr1(context);
     if(!got_type(parser, SSTOK_RBRACKET)) {
         do {
-            assignexpr(parser, context);
+            baseexpr(parser, context);
             emit_arrayelement(context);
         } while(optmatch(parser, SSTOK_COMMA) && !got_type(parser, SSTOK_RBRACKET));
     }
@@ -1677,7 +1669,7 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             match(parser, SSTOK_COLON);
 
             /* read value */
-            assignexpr(parser, context);
+            baseexpr(parser, context);
             emit_dictdeclvalue(context);
         } while(optmatch(parser, SSTOK_COMMA) && !got_type(parser, SSTOK_RCURLY));
     }
@@ -1710,7 +1702,7 @@ void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         if(got_type(parser, SSTOK_ASSIGNOP)) {
             /* long form: { field = value } */
             match_exactly(parser, SSTOK_ASSIGNOP, "=");
-            conditionalexpr(parser, context);
+            nonassignexpr(parser, context);
             emit_anonobjinitfield(context);
         }
         else if(got_type(parser, SSTOK_COMMA) || got_type(parser, SSTOK_RCURLY)) {
@@ -2223,7 +2215,7 @@ void assertstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     int line = surgescript_token_linenumber(parser->lookahead);
     match(parser, SSTOK_ASSERT);
     match(parser, SSTOK_LPAREN);
-    assignexpr(parser, context);
+    baseexpr(parser, context);
     if(optmatch(parser, SSTOK_COMMA)) {
         const char* message = surgescript_token_lexeme(parser->lookahead);
         match(parser, SSTOK_STRING);
@@ -2256,7 +2248,7 @@ void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
     /* emit */
     match(parser, SSTOK_STRING);
     if(optmatch(parser, SSTOK_COMMA)) {
-        assignexpr(parser, context); /* signal context object */
+        baseexpr(parser, context); /* signal context object */
         emit_emitsignal(context, signal_name);
     }
     else {

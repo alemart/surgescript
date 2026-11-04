@@ -47,9 +47,9 @@
  * <annotations> := annotation <annotations> | e
  *
  * <vardecllist> := <vardecl> <vardecllist> | e
- * <vardecl> := identifier = <conditionalexpr> ;
- *            | public identifier = <conditionalexpr> ;
- *            | public readonly identifier = <conditionalexpr> ;
+ * <vardecl> := identifier = <nonassignexpr> ;
+ *            | public identifier = <nonassignexpr> ;
+ *            | public readonly identifier = <nonassignexpr> ;
  *
  * <statedecllist> := <statedecl> <statedecllist> | e
  * <statedecl> := state string { <stmtlist> }
@@ -68,10 +68,11 @@
  *
  *
  *
- * <expr> := <assignexpr> , <expr> | <assignexpr>
- * <assignexpr> := <conditionalexpr>
- *              |  identifier assignop <assignexpr>
- *              |  state = <assignexpr>
+ * <expr> := <baseexpr> , <expr> | <baseexpr>
+ * <baseexpr> := <assignexpr> | <nonassignexpr>
+ * <assignexpr> := identifier assignop <baseexpr>
+ *              |  state = <baseexpr>
+ * <nonassignexpr> := <conditionalexpr>
  * <conditionalexpr> := <logicalorexpr> | <logicalorexpr> ? <expr> : <conditionalexpr>
  * <logicalorexpr> := <logicalandexpr> <logicalorexpr1>
  * <logicalorexpr1> := || <logicalandexpr> <logicalorexpr1> | e
@@ -89,7 +90,7 @@
  *             |  ! <unaryexpr>
  *             |  typeof <unaryexpr> | typeof ( <expr> )
  *             |  ++ identifier | -- identifier
- *             |  timeout ( <assignexpr> )
+ *             |  timeout ( <baseexpr> )
  *             |  <postfixexpr>
  * <postfixexpr> := identifier ++ | identifier --
  *               |  <funcallexpr> <postfixexpr1>
@@ -99,31 +100,31 @@
  * <propertyexpr> := . <funcallexpr> <lambdacall> <dictgetexpr> <propertyexpr>
  *                |  . identifier <dictgetexpr> <propertyexpr>
  *                |  . identifier ++ | . identifier --
- *                |  . identifier assignop <assignexpr>
+ *                |  . identifier assignop <baseexpr>
  * <funcallexpr> := identifier ( )
  *               |  identifier ( <funargsexprlist> )
- * <funargsexprlist> := <assignexpr> <funargsexprlist1>
- * <funargsexprlist1> := , <assignexpr> <funargsexprlist1> | e
+ * <funargsexprlist> := <baseexpr> <funargsexprlist1>
+ * <funargsexprlist1> := , <baseexpr> <funargsexprlist1> | e
  * <lambdacall> := ( ) <lambdacall>
  *              |  ( <funargsexprlist> ) <lambdacall>
  *              |  e
  * <dictgetexpr> := [ <expr> ] <postfixexpr1>
  *               |  [ <expr> ] <dictgetexpr>
- *               |  [ <expr> ] assignop <assignexpr>
+ *               |  [ <expr> ] assignop <baseexpr>
  *               |  [ <expr> ] ++
  *               |  [ <expr> ] --
  *               |  e
  * <primaryexpr> := identifier | this | state | caller | signal | <constant> | <arrayexpr> | <dictexpr> | <anonobjexpr> | ( <expr> )
  * <constant> := number | string | true | false | null
  * <arrayexpr> := [ <arrayexpr1> ] | [ ]
- * <arrayexpr1> := <assignexpr> | <assignexpr> , <arrayexpr1>
+ * <arrayexpr1> := <baseexpr> | <baseexpr> , <arrayexpr1>
  * <dictexpr> := { <dictexpr1> } | { }
- * <dictexpr1> := string : <assignexpr> | string : <assignexpr> , <dictexpr1>
- *             |  number : <assignexpr> | number : <assignexpr> , <dictexpr1>
+ * <dictexpr1> := string : <baseexpr> | string : <baseexpr> , <dictexpr1>
+ *             |  number : <baseexpr> | number : <baseexpr> , <dictexpr1>
  * <anonobjexpr> := { <anonobjexprlist> }
  * <anonobjexprlist> := <anonobjfield> <anonobjexprlist1>
  * <anonobjexprlist1> := , <anonobjfield> <anonobjexprlist1> | , | e
- * <anonobjfield> := identifier = <conditionalexpr> | identifier
+ * <anonobjfield> := identifier = <nonassignexpr> | identifier
  *
  *
  *
@@ -165,10 +166,10 @@
  *           |  return ;
  * <jumpstmt> := break ;
  *            |  continue ;
- * <assertstmt> := assert ( <assignexpr> ) ;
- *              |  assert ( <assignexpr> , string ) ;
+ * <assertstmt> := assert ( <baseexpr> ) ;
+ *              |  assert ( <baseexpr> , string ) ;
  * <emitstmt> := emit ( string ) ;
- *            |  emit ( string , <assignexpr> ) ;
+ *            |  emit ( string , <baseexpr> ) ;
  */
 
 #include <stdbool.h>
