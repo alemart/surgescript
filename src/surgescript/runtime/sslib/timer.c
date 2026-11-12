@@ -61,10 +61,10 @@ static const timerstate_t INITIAL_STATE = {
 };
 
 /* signals */
-enum { TIMEOUT, SIGNAL_COUNT };
+enum { TIMER_FIRED, SIGNAL_COUNT };
 static surgescript_signalcode_t signal_code[SIGNAL_COUNT] = { 0 };
 static const char* SIGNAL_NAME[SIGNAL_COUNT] = {
-    [TIMEOUT] = "timer timeout"
+    [TIMER_FIRED] = "timer fired"
 };
 
 /* misc */
@@ -95,8 +95,8 @@ void surgescript_sslib_register_timer(surgescript_vm_t* vm)
     surgescript_vm_bind(vm, "Timer", "get_timeLeft", fun_gettimeleft, 0);
     surgescript_vm_bind(vm, "Timer", "get_stopped", fun_getstopped, 0);
 
-    surgescript_vm_register_signal(vm, SIGNAL_NAME[TIMEOUT], SIGTYPE_LOCAL, NULL);
-    surgescript_vm_register_signal_emissions(vm, "Timer", SIGNAL_NAME[TIMEOUT], NULL);
+    surgescript_vm_register_signal(vm, SIGNAL_NAME[TIMER_FIRED], SIGTYPE_LOCAL, NULL);
+    surgescript_vm_register_signal_emissions(vm, "Timer", SIGNAL_NAME[TIMER_FIRED], NULL);
 
     is_class_initialized = false;
 }
@@ -165,9 +165,9 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
     if(state->elapsed_time < state->wait_time)
         return NULL;
 
-    /* otherwise, emit a timeout signal */
+    /* otherwise, emit a signal */
     surgescript_objecthandle_t null_handle = surgescript_objectmanager_null(manager);
-    surgescript_object_emit_signal(object, signal_code[TIMEOUT], null_handle);
+    surgescript_object_emit_signal(object, signal_code[TIMER_FIRED], null_handle);
 
     /* stop or restart the timer */
     if(state->repeat)
