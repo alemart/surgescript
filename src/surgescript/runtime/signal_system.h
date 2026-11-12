@@ -33,20 +33,16 @@ typedef struct surgescript_signalsystembuilder_t surgescript_signalsystembuilder
 typedef enum surgescript_signaltype_t surgescript_signaltype_t;
 enum surgescript_signaltype_t
 {
+    /* a null signal does nothing; this is an error type */
+    SIGTYPE_NULL,
+
     /* a global signal is broadcasted to all existing objects able to catch it
       (i.e., objects having a registered signal handler matching that signal) */
     SIGTYPE_GLOBAL,
 
     /* a local signal can only be caught by the parent object of the emitter,
        provided that the parent implements a matching signal handler */
-    SIGTYPE_LOCAL,
-
-    /* a manual signal can only be caught by objects manually and explicitly
-       connected to the emitter */
-    /*SIGTYPE_MANUAL,*/
-
-    /* a null signal does nothing; this is an error type */
-    SIGTYPE_NULL
+    SIGTYPE_LOCAL
 };
 
 struct surgescript_objectmanager_t;

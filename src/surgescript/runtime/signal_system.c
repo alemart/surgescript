@@ -1113,6 +1113,7 @@ void emit_local(signaldata_t* signal, const surgescript_signalsystem_t* signal_s
     surgescript_objectclassid_t object_class = surgescript_object_class_id(object);
 
     /* Check if the signal will be caught */
+    /* maybe TODO: forward signals / bubble up? */
 #if 0
     if(surgescript_signalsystem_object_can_catch(signal_system, signal->code, object_class)) {
 #else
