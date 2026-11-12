@@ -52,6 +52,7 @@ nav:
         - 'Components': 'tutorials/components.md'
         - 'Properties': 'tutorials/properties.md'
         - 'Anonymous objects': 'tutorials/anonymous_objects.md'
+        - 'Signals': 'tutorials/signals.md'
         - 'Packages': 'tutorials/packages.md'
         - 'Advanced features': 'tutorials/advanced_features.md'
         - 'Best practices': 'tutorials/best_practices.md'
