@@ -3,6 +3,8 @@ Signals
 
 Signals provide an easy way for objects to communicate without holding references to each other. Objects can *emit* signals, which are then *caught* by others. With this feature, you can easily respond to events of interest in your game.
 
+![Signals diagram](/img/signals.png)
+
 *Available since:* SurgeScript 7
 
 Basics
@@ -14,7 +16,7 @@ In code, we proceed as follows:
 
 1. We declare the signal
 2. The emitter object emits the signal
-3. Other objects catch the signal
+3. Other objects catch the signal using its name
 
 ```cs
 // this is the declaration of the signal named "button pressed"
@@ -37,7 +39,7 @@ object "My Button" emits "button pressed"
     }
 }
 
-// object "My Door" will catch the signal
+// "My Door" is a receiver. It will catch the signal
 object "My Door"
 {
     state "main"
@@ -106,7 +108,7 @@ A door was opened
 A door was opened
 ```
 
-Note what just happened: with the same structure of the previous example, a single emitter (button) notified multiple objects (doors) of an event of interest (the button was pressed).
+Note what just happened: with the same structure of the previous example, a single emitter (button) notified multiple objects (doors) of an event of interest (the button was just pressed).
 
 !!! info "Convention for signal handlers"
 
@@ -153,9 +155,9 @@ signal "broadcast started"
 }
 ```
 
-This means that signals named `"broadcast started"` carry a context with two fields: `name` and `host`. Note that you can specify multiple fields by separating them with commas.
+This code means that signals named `"broadcast started"` carry a context with two fields: `name` and `host`. Note that you can specify multiple fields by separating them with commas.
 
-Whenever a radio station emits a `"broadcast started"` signal, it must include the appropriate context. Such context must be provided as an object featuring two [properties](./properties.md): `name` and `host`. When emitting any signal, we typically specify the context as an [anonymous object](./anonymous_objects.md), and we pass it to `emit()` immediately after the signal name. Let's see an example:
+Whenever a radio station emits a `"broadcast started"` signal, it must include the appropriate context. Such context must be provided as an object featuring two [properties](./properties.md): `name` and `host`. We pass it to `emit()` after the signal name, typically as an [anonymous object](./anonymous_objects.md). Take a look:
 
 ```cs
 object "Gamedev Radio Station" emits "broadcast started"
@@ -212,7 +214,7 @@ object "Gamedev Radio Station" emits "broadcast started"
 }
 ```
 
-In this example, object `"Gamedev Radio Station"` broadcasts three programs: Gamedev Stories, Gamedev News, and Video Game Music Show, each with a different host. Individual radio receivers may pick them up by accessing the context of the emitted signals in a `catch` block (also known as a _signal handler_).
+In this example, object `"Gamedev Radio Station"` broadcasts three programs: Gamedev Stories, Gamedev News, and Video Game Music Show, each with a different host. Individual radio receivers may pick them up by accessing the context of the emitted signals in a `catch` block, which is also known as a _signal handler_.
 
 The `signal` keyword, when typed inside a `catch` block, references a special [Signal](../reference/signal.md) object containing data about the received signal. Its most important properties are:
 
@@ -221,7 +223,7 @@ The `signal` keyword, when typed inside a `catch` block, references a special [S
 | `signal.context` | The context of the signal |
 | `signal.emitter` | The object that emitted the signal |
 
-In our example, `signal.context` is an object with two fields: `name` and `host`. Moreover, `signal.emitter` is the `"Gamedev Radio Station"` object which emitted the signal. Let's see how individual radio receivers may pick up those signals:
+In our example, `signal.context` is an object with two fields: `name` and `host`. Moreover, `signal.emitter` is the `"Gamedev Radio Station"` object. Let's see how individual radio receivers may pick up those signals:
 
 ```cs
 object "My Radio Receiver"
@@ -235,8 +237,8 @@ object "My Radio Receiver"
         name = signal.context.name;
         host = signal.context.host;
 
-        Console.print("New program: " + name);
-        Console.print("Presented by: " + host);
+        Console.print("We're now live with: " + name);
+        Console.print("This program is presented by: " + host);
     }
 }
 ```
@@ -258,8 +260,8 @@ object "My Radio Receiver"
             name = signal.context.name;
             host = signal.context.host;
 
-            Console.print("New program: " + name);
-            Console.print("Presented by: " + host);
+            Console.print("We're now live with: " + name);
+            Console.print("This program is presented by: " + host);
         }
     }
 }
