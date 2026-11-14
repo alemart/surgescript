@@ -2284,15 +2284,17 @@ void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* emit */
     match(parser, SSTOK_STRING);
-    if(optmatch(parser, SSTOK_WITH)) {
-        baseexpr(parser, context); /* signal context object */
-        emit_emitsignal(context, signal_name);
-    }
-    else {
+    if(optmatch(parser, SSTOK_SEMICOLON)) {
         emit_null(context); /* no signal context object */
         emit_emitsignal(context, signal_name);
     }
-    match(parser, SSTOK_SEMICOLON);
+    else if(optmatch(parser, SSTOK_WITH)) {
+        baseexpr(parser, context); /* signal context object */
+        emit_emitsignal(context, signal_name);
+        match(parser, SSTOK_SEMICOLON);
+    }
+    else
+        unexpected_symbol(parser);
     ssfree(signal_name);
 }
 
