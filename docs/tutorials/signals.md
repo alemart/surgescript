@@ -10,7 +10,7 @@ Signals provide an easy way for objects to communicate without holding reference
 Basics
 ------
 
-Consider this example: when a button is pressed, you want to open a door. In this scenario, a button object emits a signal communicating that it has just been pressed. A door object then catches that signal and opens itself in response to that occurrence. Button and door need not be tightly coupled in the code: they communicate with each other by means of a signal.
+Consider this example: when a button is pressed, you want to open a door. In this scenario, a button object emits a signal communicating that it has just been pressed. A door object then catches that signal and opens itself in response to that occurrence. Button and door don't need to hold references to each other: they communicate by means of a signal, with no tight coupling.
 
 In code, we proceed as follows:
 
@@ -18,13 +18,14 @@ In code, we proceed as follows:
 2. The emitter object emits the signal
 3. Other objects catch the signal using its name
 
+Example:
+
 ```cs
-// this is the declaration of the signal named "button pressed"
+// We begin by declaring a signal named "button pressed"
 signal "button pressed" { }
 
-// "My Button" is the emitter object. We declare that it can emit
-// signals named "button pressed"
-object "My Button" emits "button pressed"
+// Emitter: Object "Button" emits "button pressed" signals
+object "Button"
 {
     state "main"
     {
@@ -34,20 +35,19 @@ object "My Button" emits "button pressed"
     {
         Console.print("The button was pressed");
 
-        // we emit the signal when appropriate
-        emit("button pressed");
+        // We emit a signal whenever an event of interest happens
+        emit "button pressed";
     }
 }
 
-// "My Door" is a receiver. It will catch the signal
-object "My Door"
+// Receiver: Object "Door" catches "button pressed" signals
+object "Door"
 {
     state "main"
     {
     }
 
-    // this is a signal handler. All existing objects with a matching signal
-    // handler will be notified whenever the specified signal is emitted
+    // This is a signal handler. Here we respond to the event of interest
     catch "button pressed"
     {
         open();
@@ -59,10 +59,11 @@ object "My Door"
     }
 }
 
+// Let's write a simple test
 object "Application"
 {
-    button = spawn("My Button");
-    door = spawn("My Door");
+    button = spawn("Button");
+    door = spawn("Door");
 
     state "main"
     {
@@ -92,14 +93,14 @@ Note that `button` and `door` do not hold references to each other. Moreover, if
 
 object "Application"
 {
-    button = spawn("My Button");
-    doors = [ spawn("My Door"), spawn("My Door"), spawn("My Door") ];
+    button = spawn("Button");
+    doors = [ spawn("Door"), spawn("Door"), spawn("Door") ];
 
     ...
 }
 ```
 
-This extended example spawns 3 doors. Since each door prints a message, the output of the program is:
+This extended version of the application spawns three doors. Since each door prints a message, the output of the program is:
 
 ```
 The button was pressed
@@ -112,16 +113,16 @@ Note what just happened: with the same structure of the previous example, a sing
 
 !!! info "Convention for signal handlers"
 
-    The `catch` blocks must be written after the states and before the functions of an object.
+    The `catch` blocks are also known as *signal handlers*. They must be placed immediately after the states of an object (before the functions, if any).
 
 !!! note "Signal names"
 
-    As of SurgeScript 7, the signal name passed to `emit()` must be a string literal. This helps to determine at compile-time all signals that can be emitted by an object.
+    As of SurgeScript 7, the signal name passed to `emit` must be a string literal. This constraint helps to determine at compile-time all signals that can be emitted by an object.
 
 Naming convention
 -----------------
 
-All signals have a name. These names should briefly describe an action or change that has just occurred. When naming your signals, abide by the following convention as much as possible:
+All signals have a name. Signal names should briefly describe an action or change that has just occurred. When naming your signals, abide by the following convention as much as possible:
 
 _signal name = subject + verb in the past tense_
 
@@ -145,22 +146,22 @@ Context
 
 It's often useful to attach data to a signal. For example, if a button is pressed, we may wish to know which character pressed it. If the player has scored points, we may wish to know just how many points. We can think of many other examples. In any case, the additional data, if present, depends on the nature of the signal. We call such additional data the *context* of the signal.
 
-Suppose that radio stations of a game world emit signals as soon as starting to broadcast a program. Those signals include additional information: the name and the host of the program. Let's declare a signal with this context:
+Suppose that radio stations of a game world emit signals as soon as starting to broadcast a program. Those signals include additional data: the name and the host of the show. Let's declare a signal with this context:
 
 ```cs
 signal "broadcast started"
 {
-    name,
+    show,
     host
 }
 ```
 
-This code means that signals named `"broadcast started"` carry a context with two fields: `name` and `host`. Note that you can specify multiple fields by separating them with commas.
+This code means that signals named `"broadcast started"` carry a context with two fields: `show` and `host`. Note that you can specify multiple fields by separating them with commas.
 
-Whenever a radio station emits a `"broadcast started"` signal, it must include the appropriate context. Such context must be provided as an object featuring two [properties](./properties.md): `name` and `host`. We pass it to `emit()` after the signal name, typically as an [anonymous object](./anonymous_objects.md). Take a look:
+Whenever a radio station emits a `"broadcast started"` signal, it must include the appropriate context. Such context must be provided as an object featuring two [properties](./properties.md): `show` and `host`. We pass it to `emit` after the signal name, typically as an [anonymous object](./anonymous_objects.md). Take a look:
 
 ```cs
-object "Gamedev Radio Station" emits "broadcast started"
+object "Gamedev Radio Station"
 {
     ONE_SECOND = 1;
     ONE_MINUTE = 60 * ONE_SECOND;
@@ -170,23 +171,23 @@ object "Gamedev Radio Station" emits "broadcast started"
     {
         state = "broadcasting stories";
 
-        /* let's emit a signal
-           "broadcast started" is the name of the signal
-           { name = ... , host = ... } is the context */
-        emit("broadcast started", {
-            name = "Gamedev Stories",
+        // Let's emit a signal
+        // "broadcast started" is the name of the signal
+        // { show = ... , host = ... } is the context
+        emit "broadcast started" with {
+            show = "Gamedev Stories",
             host = "Surge the Rabbit"
-        });
+        };
     }
 
     state "broadcasting stories"
     {
         if(timeout(ONE_HOUR)) {
             state = "broadcasting music";
-            emit("broadcast started", {
-                name = "Video Game Music Show",
+            emit "broadcast started" with {
+                show = "Video Game Music Show",
                 host = "Neon the Squirrel"
-            });
+            };
         }
     }
 
@@ -194,10 +195,10 @@ object "Gamedev Radio Station" emits "broadcast started"
     {
         if(timeout(ONE_HOUR)) {
             state = "broadcasting news";
-            emit("broadcast started", {
-                name = "Gamedev News",
+            emit "broadcast started" with {
+                show = "Gamedev News",
                 host = "Tux the Penguin"
-            });
+            };
         }
     }
 
@@ -205,16 +206,16 @@ object "Gamedev Radio Station" emits "broadcast started"
     {
         if(timeout(ONE_HOUR)) {
             state = "broadcasting stories";
-            emit("broadcast started", {
-                name = "Gamedev Stories",
+            emit "broadcast started" with {
+                show = "Gamedev Stories",
                 host = "Surge the Rabbit"
-            });
+            };
         }
     }
 }
 ```
 
-In this example, object `"Gamedev Radio Station"` broadcasts three programs: Gamedev Stories, Gamedev News, and Video Game Music Show, each with a different host. Individual radio receivers may pick them up by accessing the context of the emitted signals in a `catch` block, which is also known as a _signal handler_.
+In this example, object Gamedev Radio Station broadcasts three shows: Gamedev Stories, Gamedev News, and Video Game Music Show, each with a different host. Individual radio receivers may pick them up by accessing the context of the emitted signals in a `catch` block.
 
 The `signal` keyword, when typed inside a `catch` block, references a special [Signal](../reference/signal.md) object containing data about the received signal. Its most important properties are:
 
@@ -223,10 +224,10 @@ The `signal` keyword, when typed inside a `catch` block, references a special [S
 | `signal.context` | The context of the signal |
 | `signal.emitter` | The object that emitted the signal |
 
-In our example, `signal.context` is an object with two fields: `name` and `host`. Moreover, `signal.emitter` is the `"Gamedev Radio Station"` object. Let's see how individual radio receivers may pick up those signals:
+In our example, `signal.context` is an object with two fields: `show` and `host`. Moreover, `signal.emitter` is the Gamedev Radio Station object. Let's see how individual radio receivers may pick up those signals:
 
 ```cs
-object "My Radio Receiver"
+object "Radio Receiver"
 {
     state "main"
     {
@@ -234,11 +235,11 @@ object "My Radio Receiver"
 
     catch "broadcast started"
     {
-        name = signal.context.name;
+        show = signal.context.show;
         host = signal.context.host;
 
-        Console.print("We're now live with: " + name);
-        Console.print("This program is presented by: " + host);
+        Console.print("Welcome to our show, " + show);
+        Console.print("I am your host, " + host);
     }
 }
 ```
@@ -246,7 +247,7 @@ object "My Radio Receiver"
 The above radio receiver works fine if there is only a single station, but what if there are more? Since it picks up signals named `"broadcast started"` emitted by **any** object, this means that it picks up the programs broadcasted by **all** radio stations. This is not what we want, for a radio receiver should be tuned only to a single station of choice. Luckily, this is easy to fix. We can simply check if `signal.emitter` is our station of choice:
 
 ```cs
-object "My Radio Receiver"
+object "Radio Receiver"
 {
     public station = "Gamedev Radio Station";
 
@@ -257,11 +258,11 @@ object "My Radio Receiver"
     catch "broadcast started"
     {
         if(signal.emitter.__name == station) {
-            name = signal.context.name;
+            show = signal.context.show;
             host = signal.context.host;
 
-            Console.print("We're now live with: " + name);
-            Console.print("This program is presented by: " + host);
+            Console.print("Welcome to our show, " + show);
+            Console.print("I am your host, " + host);
         }
     }
 }
@@ -271,14 +272,16 @@ Now, tuning the receiver to a different station is just a matter of changing its
 
 !!! info "Required fields"
 
-    Object `signal.context` is guaranteed to contain all fields specified in the declaration of the signal. It is an error to emit a signal without all the required fields. If no fields are declared, then there is no context and `signal.context` will be `null`.
+    Object `signal.context` is guaranteed to contain all fields specified in the declaration of the signal. It is an error to emit a signal without all the required fields. If no fields are specified in the declaration of the signal, then there is no context and `signal.context` evaluates to `null`.
 
 !!! note
 
-    The special `signal` object may not be accessed outside of a signal handler (i.e., outside of a `catch` block). Storing a reference to it is an error that leads to undefined behavior.
+    The special `signal` object may not be accessed outside of a `catch` block. Storing a reference to it is an error that leads to undefined behavior.
 
 Local signals
 -------------
 
-Signals are _global_ by default
+Signals are _global_ by default. This means that they are broadcasted to all objects with a corresponding `catch` block.
 Timer example
+
+![Local signals diagram](/img/local_signals.png)
