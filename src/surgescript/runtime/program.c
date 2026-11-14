@@ -955,10 +955,9 @@ void run_interrupt(const surgescript_program_t* program, const surgescript_renv_
         case 0xE317: {
             surgescript_signalsystem_t* signal_system = surgescript_objectmanager_signalsystem(surgescript_renv_objectmanager(runtime_environment));
             const char* signal_name = (b.u < ssarray_length(program->text)) ? program->text[b.u] : "";
-            surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name); /* cheap to compute, but we could cache this on the instruction anyway */
+            surgescript_objecthandle_t signal_emitter = surgescript_object_handle(surgescript_renv_owner(runtime_environment));
             surgescript_objecthandle_t signal_context = surgescript_var_get_objecthandle(_t[0]); /* possibly NULL_HANDLE */
-            surgescript_objecthandle_t emitter = surgescript_object_handle(surgescript_renv_owner(runtime_environment));
-            surgescript_signalsystem_emit(signal_system, signal_code, emitter, signal_context);
+            surgescript_signalsystem_emit_by_name(signal_system, signal_name, signal_emitter, signal_context);
             break;
         }
 

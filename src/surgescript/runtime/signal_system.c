@@ -35,7 +35,9 @@
 
 static int length_of_list_of_strings(char** list);
 static char** clone_list_of_strings(char** list);
+static char** append_to_list_of_strings(char** list, const char* entry);
 static bool list_of_strings_has_repetition(char** list);
+static int index_in_list_of_strings(char** list, const char* entry);
 static int index_of_string(const char* key, char** array, size_t length);
 static char* join_list_of_strings(char** list, const char* separator, char* dest, size_t dest_size);
 
@@ -145,13 +147,7 @@ bool surgescript_signalsystembuilder_is_signal_registered(surgescript_signalsyst
 bool surgescript_signalsystembuilder_is_signal_emission_registered(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name)
 {
     int i = index_of_string(object_name, builder->emissions.object_name, ssarray_length(builder->emissions.object_name));
-    if(i >= 0) {
-        for(char** it = builder->emissions.signal_names[i]; *it; it++) {
-            if(0 == strcmp(*it, signal_name))
-                return true;
-        }
-    }
-    return false;
+    return i >= 0 && index_in_list_of_strings(builder->emissions.signal_names[i], signal_name) >= 0;
 }
 
 /*
@@ -161,33 +157,7 @@ bool surgescript_signalsystembuilder_is_signal_emission_registered(surgescript_s
 bool surgescript_signalsystembuilder_is_signal_handler_registered(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name)
 {
     int i = index_of_string(object_name, builder->handlers.object_name, ssarray_length(builder->handlers.object_name));
-    if(i >= 0) {
-        for(char** it = builder->handlers.signal_names[i]; *it; it++) {
-            if(0 == strcmp(*it, signal_name))
-                return true;
-        }
-    }
-    return false;
-}
-
-/*
- * surgescript_signalsystembuilder_are_signal_emissions_registered()
- * Check if signal emissions have already been registered for a given class of objects
- */
-bool surgescript_signalsystembuilder_are_signal_emissions_registered(surgescript_signalsystembuilder_t* builder, const char* object_name)
-{
-    int i = index_of_string(object_name, builder->emissions.object_name, ssarray_length(builder->emissions.object_name));
-    return i >= 0;
-}
-
-/*
- * surgescript_signalsystembuilder_are_signal_handlers_registered()
- * Check if signal handlers have already been registered for a given class of objects
- */
-bool surgescript_signalsystembuilder_are_signal_handlers_registered(surgescript_signalsystembuilder_t* builder, const char* object_name)
-{
-    int i = index_of_string(object_name, builder->handlers.object_name, ssarray_length(builder->handlers.object_name));
-    return i >= 0;
+    return i >= 0 && index_in_list_of_strings(builder->handlers.signal_names[i], signal_name) >= 0;
 }
 
 /*
@@ -209,33 +179,47 @@ void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembui
 }
 
 /*
- * surgescript_signalsystembuilder_register_signal_emissions()
- * Register a signal emission. You must ensure uniqueness;
- * see surgescript_signalsystembuilder_are_signal_emissions_registered().
- * signal_names is a NULL-terminated array of strings
+ * surgescript_signalsystembuilder_register_signal_emission()
+ * Register a signal emission of an object
  */
-void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* const* signal_names)
+bool surgescript_signalsystembuilder_register_signal_emission(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name)
 {
-    ssassert(!surgescript_signalsystembuilder_are_signal_emissions_registered(builder, object_name));
-    ssassert(!list_of_strings_has_repetition((char**)signal_names));
+    int i = index_of_string(object_name, builder->emissions.object_name, ssarray_length(builder->emissions.object_name));
+    if(i < 0) {
+        const char* empty_list[] = { NULL };
+        ssarray_push(builder->emissions.object_name, ssstrdup(object_name));
+        ssarray_push(builder->emissions.signal_names, clone_list_of_strings((char**)empty_list));
+        i = ssarray_length(builder->emissions.signal_names) - 1;
+    }
 
-    ssarray_push(builder->emissions.object_name, ssstrdup(object_name));
-    ssarray_push(builder->emissions.signal_names, clone_list_of_strings((char**)signal_names));
+    int j = index_in_list_of_strings(builder->emissions.signal_names[i], signal_name);
+    if(j >= 0)
+        return false; /* forbid duplicates */
+
+    builder->emissions.signal_names[i] = append_to_list_of_strings(builder->emissions.signal_names[i], signal_name);
+    return true;
 }
 
 /*
- * surgescript_signalsystembuilder_register_signal_handlers()
- * Register a signal handler. You must ensure uniqueness;
- * see surgescript_signalsystembuilder_are_signal_handlers_registered().
- * signal_names is a NULL-terminated array of strings
+ * surgescript_signalsystembuilder_register_signal_handler()
+ * Register a signal handler of an object
  */
-void surgescript_signalsystembuilder_register_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* const* signal_names)
+bool surgescript_signalsystembuilder_register_signal_handler(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name)
 {
-    ssassert(!surgescript_signalsystembuilder_are_signal_handlers_registered(builder, object_name));
-    ssassert(!list_of_strings_has_repetition((char**)signal_names));
+    int i = index_of_string(object_name, builder->handlers.object_name, ssarray_length(builder->handlers.object_name));
+    if(i < 0) {
+        const char* empty_list[] = { NULL };
+        ssarray_push(builder->handlers.object_name, ssstrdup(object_name));
+        ssarray_push(builder->handlers.signal_names, clone_list_of_strings((char**)empty_list));
+        i = ssarray_length(builder->handlers.signal_names) - 1;
+    }
 
-    ssarray_push(builder->handlers.object_name, ssstrdup(object_name));
-    ssarray_push(builder->handlers.signal_names, clone_list_of_strings((char**)signal_names));
+    int j = index_in_list_of_strings(builder->handlers.signal_names[i], signal_name);
+    if(j >= 0)
+        return false; /* forbid duplicates */
+
+    builder->handlers.signal_names[i] = append_to_list_of_strings(builder->handlers.signal_names[i], signal_name);
+    return true;
 }
 
 /*
@@ -647,7 +631,7 @@ void surgescript_signalsystem_unsubscribe(surgescript_signalsystem_t* signal_sys
 
 /*
  * surgescript_signalsystem_emit()
- * Emit a signal
+ * Emit a signal; signal_context may be a null handle
  */
 void surgescript_signalsystem_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
 {
@@ -687,6 +671,24 @@ void surgescript_signalsystem_emit(const surgescript_signalsystem_t* signal_syst
 }
 
 /*
+ * surgescript_signalsystem_emit_by_name()
+ * Emit a signal using a signal name instead of a signal code
+ */
+void surgescript_signalsystem_emit_by_name(const surgescript_signalsystem_t* signal_system, const char* signal_name, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context)
+{
+    /* validate */
+    if(!surgescript_signalsystem_signal_exists(signal_system, signal_name)) {
+        const surgescript_object_t* emitter_instance = surgescript_objectmanager_get(signal_system->object_manager, emitter);
+        ssruntime_error("object \"%s\" can't emit signal \"%s\". You must first declare that signal.", surgescript_object_name(emitter_instance), signal_name);
+        return;
+    }
+
+    /* emit the signal */
+    surgescript_signalcode_t signal_code = surgescript_signalsystem_signal_code(signal_system, signal_name);
+    surgescript_signalsystem_emit(signal_system, signal_code, emitter, signal_context);
+}
+
+/*
 --------------------------------------------------------------------------------
 private utilities
 --------------------------------------------------------------------------------
@@ -715,7 +717,7 @@ int length_of_list_of_strings(char** list)
 /* clone a NULL-terminated array of strings */
 char** clone_list_of_strings(char** list)
 {
-    int length = length_of_list_of_strings(list);
+    int length = length_of_list_of_strings(list); /* length may be zero */
     char** clone = ssmalloc((1 + length) * sizeof(char*));
 
     clone[length] = NULL;
@@ -723,6 +725,18 @@ char** clone_list_of_strings(char** list)
         clone[i] = ssstrdup(list[i]);
 
     return clone;
+}
+
+/* append an element to a NULL-terminated array of strings, possibly invalidating the original list pointer */
+char** append_to_list_of_strings(char** list, const char* entry)
+{
+    int length = length_of_list_of_strings(list); /* possibly zero */
+    list = ssrealloc(list, (2 + length) * sizeof(char*));
+
+    list[length] = ssstrdup(entry);
+    list[length + 1] = NULL;
+
+    return list;
 }
 
 /* check if a NULL-terminated array of strings has repeated elements */
@@ -762,6 +776,20 @@ char* join_list_of_strings(char** list, const char* separator, char* dest, size_
     surgescript_util_strncpy(dest, buffer, dest_size);
     ssarray_release(buffer);
     return dest;
+}
+
+/* the index of an entry in a NULL-terminated array of strings, or -1 if not found */
+int index_in_list_of_strings(char** list, const char* entry)
+{
+    for(char** it = list; *it; ++it) {
+        if(0 == strcmp(*it, entry)) {
+            /* Lists are small. When performing pointer subtraction, we ignore
+               the distinction between 32-bit (int) vs 64-bit (ptrdiff_t) */
+            return it - list;
+        }
+    }
+
+    return -1;
 }
 
 /* the index of a key in an array of strings, or -1 if not found */

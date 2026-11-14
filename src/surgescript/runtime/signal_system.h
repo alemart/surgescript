@@ -53,11 +53,9 @@ surgescript_signalsystembuilder_t* surgescript_signalsystembuilder_destroy(surge
 bool surgescript_signalsystembuilder_is_signal_registered(surgescript_signalsystembuilder_t* builder, const char* signal_name);
 bool surgescript_signalsystembuilder_is_signal_emission_registered(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name);
 bool surgescript_signalsystembuilder_is_signal_handler_registered(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name);
-bool surgescript_signalsystembuilder_are_signal_emissions_registered(surgescript_signalsystembuilder_t* builder, const char* object_name);
-bool surgescript_signalsystembuilder_are_signal_handlers_registered(surgescript_signalsystembuilder_t* builder, const char* object_name);
 void surgescript_signalsystembuilder_register_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name, surgescript_signaltype_t signal_type, const char* const* field_names);
-void surgescript_signalsystembuilder_register_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* const* signal_names);
-void surgescript_signalsystembuilder_register_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* const* signal_names);
+bool surgescript_signalsystembuilder_register_signal_emission(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name);
+bool surgescript_signalsystembuilder_register_signal_handler(surgescript_signalsystembuilder_t* builder, const char* object_name, const char* signal_name);
 bool surgescript_signalsystembuilder_unregister_signal(surgescript_signalsystembuilder_t* builder, const char* signal_name);
 bool surgescript_signalsystembuilder_unregister_signal_emissions(surgescript_signalsystembuilder_t* builder, const char* object_name);
 bool surgescript_signalsystembuilder_unregister_signal_handlers(surgescript_signalsystembuilder_t* builder, const char* object_name);
@@ -76,5 +74,6 @@ bool surgescript_signalsystem_signal_has_subscribers(const surgescript_signalsys
 void surgescript_signalsystem_subscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object);
 void surgescript_signalsystem_unsubscribe(surgescript_signalsystem_t* signal_system, const surgescript_object_t* object);
 void surgescript_signalsystem_emit(const surgescript_signalsystem_t* signal_system, surgescript_signalcode_t signal_code, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
+void surgescript_signalsystem_emit_by_name(const surgescript_signalsystem_t* signal_system, const char* signal_name, surgescript_objecthandle_t emitter, surgescript_objecthandle_t signal_context);
 
 #endif

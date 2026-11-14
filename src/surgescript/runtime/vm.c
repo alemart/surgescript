@@ -494,24 +494,17 @@ void surgescript_vm_register_signal(surgescript_vm_t* vm, const char* signal_nam
  */
 void surgescript_vm_register_signal_emissions(surgescript_vm_t* vm, const char* object_name, ...)
 {
-    enum { MAX_SIGNAL_COUNT = 15 };
-    const char* signal_names[1 + MAX_SIGNAL_COUNT] = { NULL }; /* NULL-terminated array of strings */
-    int signal_count = 0;
     va_list ap; /* argument pointer */
+    const char* signal_name;
 
-    /* grab signal names */
-    va_start(ap, object_name);
-    do {
-        signal_names[signal_count] = va_arg(ap, const char*);
-    } while(signal_names[signal_count] != NULL && ++signal_count <= MAX_SIGNAL_COUNT);
-    va_end(ap);
-
-    /* validate */
+    /* we can only register signal emissions if we haven't yet built the signal system */
     ssassert(vm->signal_system == NULL);
-    ssassert(signal_count > 0 && signal_names[MAX_SIGNAL_COUNT] == NULL);
 
-    /* register signal emissions */
-    surgescript_signalsystembuilder_register_signal_emissions(vm->signal_system_builder, object_name, signal_names);
+    /* grab and register */
+    va_start(ap, object_name);
+    while(NULL != (signal_name = va_arg(ap, const char*)))
+        surgescript_signalsystembuilder_register_signal_emission(vm->signal_system_builder, object_name, signal_name);
+    va_end(ap);
 }
 
 /*
@@ -521,24 +514,17 @@ void surgescript_vm_register_signal_emissions(surgescript_vm_t* vm, const char* 
  */
 void surgescript_vm_register_signal_handlers(surgescript_vm_t* vm, const char* object_name, ...)
 {
-    enum { MAX_SIGNAL_COUNT = 15 };
-    const char* signal_names[1 + MAX_SIGNAL_COUNT] = { NULL }; /* NULL-terminated array of strings */
-    int signal_count = 0;
     va_list ap; /* argument pointer */
+    const char* signal_name;
 
-    /* grab signal names */
-    va_start(ap, object_name);
-    do {
-        signal_names[signal_count] = va_arg(ap, const char*);
-    } while(signal_names[signal_count] != NULL && ++signal_count <= MAX_SIGNAL_COUNT);
-    va_end(ap);
-
-    /* validate */
+    /* we can only register signal handlers if we haven't yet built the signal system */
     ssassert(vm->signal_system == NULL);
-    ssassert(signal_count > 0 && signal_names[MAX_SIGNAL_COUNT] == NULL);
 
-    /* register signal handlers */
-    surgescript_signalsystembuilder_register_signal_handlers(vm->signal_system_builder, object_name, signal_names);
+    /* grab and register */
+    va_start(ap, object_name);
+    while(NULL != (signal_name = va_arg(ap, const char*)))
+        surgescript_signalsystembuilder_register_signal_handler(vm->signal_system_builder, object_name, signal_name);
+    va_end(ap);
 }
 
 /*
