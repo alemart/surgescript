@@ -2288,9 +2288,10 @@ void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         emit_null(context); /* no signal context object */
         emit_emitsignal(context, signal_name);
     }
-    else if(optmatch(parser, SSTOK_WITH)) {
-        baseexpr(parser, context); /* signal context object */
+    else if(optmatch(parser, SSTOK_LCURLY)) {
+        anonobjexpr(parser, context); /* signal context object */
         emit_emitsignal(context, signal_name);
+        match(parser, SSTOK_RCURLY);
         match(parser, SSTOK_SEMICOLON);
     }
     else

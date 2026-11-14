@@ -172,7 +172,7 @@
  * <assertstmt> := assert ( <baseexpr> ) ;
  *              |  assert ( <baseexpr> , string ) ;
  * <emitstmt> := emit string ;
- *            |  emit string with <baseexpr> ;
+ *            |  emit string <anonobjexpr> ;
  */
 
 #include <stdbool.h>

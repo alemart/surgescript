@@ -158,7 +158,7 @@ signal "broadcast started"
 
 This code means that signals named `"broadcast started"` carry a context with two fields: `show` and `host`. Note that you can specify multiple fields by separating them with commas.
 
-Whenever a radio station emits a `"broadcast started"` signal, it must include the appropriate context. Such context must be provided as an object featuring two [properties](./properties.md): `show` and `host`. We pass it to `emit` after the signal name, typically as an [anonymous object](./anonymous_objects.md). Take a look:
+Whenever a radio station emits a `"broadcast started"` signal, it must include the appropriate context. Such context must be provided as an [anonymous object](./anonymous_objects.md) featuring two [properties](./properties.md): `show` and `host`. We pass it to `emit` after the signal name. Take a look:
 
 ```cs
 object "Gamedev Radio Station"
@@ -174,7 +174,7 @@ object "Gamedev Radio Station"
         // Let's emit a signal
         // "broadcast started" is the name of the signal
         // { show = ... , host = ... } is the context
-        emit "broadcast started" with {
+        emit "broadcast started" {
             show = "Gamedev Stories",
             host = "Surge the Rabbit"
         };
@@ -184,7 +184,7 @@ object "Gamedev Radio Station"
     {
         if(timeout(ONE_HOUR)) {
             state = "broadcasting music";
-            emit "broadcast started" with {
+            emit "broadcast started" {
                 show = "Video Game Music Show",
                 host = "Neon the Squirrel"
             };
@@ -195,7 +195,7 @@ object "Gamedev Radio Station"
     {
         if(timeout(ONE_HOUR)) {
             state = "broadcasting news";
-            emit "broadcast started" with {
+            emit "broadcast started" {
                 show = "Gamedev News",
                 host = "Tux the Penguin"
             };
@@ -206,7 +206,7 @@ object "Gamedev Radio Station"
     {
         if(timeout(ONE_HOUR)) {
             state = "broadcasting stories";
-            emit "broadcast started" with {
+            emit "broadcast started" {
                 show = "Gamedev Stories",
                 host = "Surge the Rabbit"
             };
@@ -257,13 +257,14 @@ object "Radio Receiver"
 
     catch "broadcast started"
     {
-        if(signal.emitter.__name == station) {
-            show = signal.context.show;
-            host = signal.context.host;
+        if(signal.emitter.__name != station)
+            return;
 
-            Console.print("Welcome to our show, " + show);
-            Console.print("I am your host, " + host);
-        }
+        show = signal.context.show;
+        host = signal.context.host;
+
+        Console.print("Welcome to our show, " + show);
+        Console.print("I am your host, " + host);
     }
 }
 ```
