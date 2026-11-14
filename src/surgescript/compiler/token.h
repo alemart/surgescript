@@ -103,6 +103,7 @@
     F( SSTOK_ANNOTATION, "annotation")                                          \
     F( SSTOK_SIGNAL, "signal")                                                  \
     F( SSTOK_EMIT, "emit")                                                      \
+    F( SSTOK_WITH, "with" )                                                     \
     F( SSTOK_UNKNOWN, "<unknown>" )
 
 typedef struct surgescript_token_t surgescript_token_t;
