@@ -109,7 +109,7 @@ static void vardecl(surgescript_parser_t* parser, surgescript_nodecontext_t cont
 static void statedecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void signalhandlerdecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
-static void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context, char* out_signal_name, size_t buffer_size);
+static void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void fundecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 static void fundecl(surgescript_parser_t* parser, surgescript_nodecontext_t context);
 
@@ -872,47 +872,6 @@ void qualifiers(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             ssfree(tag_names[i]);
         ssarray_release(tag_names);
     }
-
-    if(optmatch_exactly(parser, SSTOK_IDENTIFIER, "emits")) {
-        SSARRAY(char*, signal_names);
-        ssarray_init(signal_names);
-
-        /* validate */
-        if(!got_type(parser, SSTOK_STRING))
-            unexpected_symbol(parser);
-
-        /* read signals */
-        while(got_type(parser, SSTOK_STRING)) {
-            const char* signal_name = surgescript_token_lexeme(parser->lookahead);
-
-            /* validate */
-            if(is_large_name(signal_name))
-                sscompile_error("signal name \"%s\" of object \"%s\" is too large at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
-            else if(!is_valid_name(signal_name))
-                sscompile_error("invalid signal name \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
-            else if(index_of_string(signal_name, signal_names, ssarray_length(signal_names)) >= 0)
-                sscompile_error("duplicate declaration of emitted signal \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
-
-            /* okay, add signal */
-            ssarray_push(signal_names, ssstrdup(signal_name));
-
-            /* continue */
-            match(parser, SSTOK_STRING);
-            if(optmatch(parser, SSTOK_COMMA))
-                expect(parser, SSTOK_STRING);
-            else
-                break;
-        }
-
-        /* register signals */
-        ssarray_push(signal_names, NULL);
-        surgescript_signalsystembuilder_register_signal_emissions(parser->signal_system_builder, context.object_name, (const char* const*)signal_names);
-
-        /* release */
-        for(int i = ssarray_length(signal_names) - 2; i >= 0; i--) /* last element is NULL */
-            ssfree(signal_names[i]);
-        ssarray_release(signal_names);
-    }
 }
 
 void importlist(surgescript_parser_t* parser)
@@ -1022,38 +981,13 @@ void statedecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void signalhandlerdecllist(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
-    SSARRAY(char*, signal_names);
-    char signal_name[1 + SS_NAMEMAX];
-    surgescript_signalsystembuilder_t* builder = parser->signal_system_builder;
-
-    /* nothing to do */
-    if(!got_type(parser, SSTOK_CATCH))
-        return;
-
-    /* init */
-    ssarray_init(signal_names);
-
-    /* match signal handlers */
     while(optmatch(parser, SSTOK_CATCH)) {
         expect(parser, SSTOK_STRING);
-        signalhandlerdecl(parser, context, signal_name, sizeof(signal_name));
-
-        /* store signal name */
-        ssassert(index_of_string(signal_name, signal_names, ssarray_length(signal_names)) < 0); /* no repetition */
-        ssarray_push(signal_names, ssstrdup(signal_name));
+        signalhandlerdecl(parser, context);
     }
-
-    /* register signal handlers */
-    ssarray_push(signal_names, NULL);
-    surgescript_signalsystembuilder_register_signal_handlers(builder, context.object_name, (const char* const*)signal_names);
-
-    /* release */
-    for(int i = ssarray_length(signal_names) - 2; i >= 0; i--) /* last entry is NULL */
-        ssfree(signal_names[i]);
-    ssarray_release(signal_names);
 }
 
-void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context, char* out_signal_name, size_t buffer_size)
+void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     static const char prefix[] = "signal:";
     const char* signal_name = surgescript_token_lexeme(parser->lookahead);
@@ -1065,6 +999,7 @@ void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t c
     program_name = ssmalloc((1 + strlen(prefix) + strlen(signal_name)) * sizeof(*program_name));
     strcat(strcpy(program_name, prefix), signal_name);
     match(parser, SSTOK_STRING);
+    signal_name = program_name + strlen(prefix);
 
     /* validation */
     if(is_large_name(program_name))
@@ -1074,8 +1009,9 @@ void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t c
     if(surgescript_programpool_shallowcheck(parser->program_pool, context.object_name, program_name))
         sscompile_error("duplicate signal handler \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
 
-    /* copy signal name */
-    surgescript_util_strncpy(out_signal_name, signal_name, buffer_size);
+    /* register signal handler */
+    surgescript_signalsystembuilder_t* builder = parser->signal_system_builder;
+    surgescript_signalsystembuilder_register_signal_handler(builder, context.object_name, signal_name);
 
     /* create context */
     context = nodecontext(
@@ -1097,8 +1033,10 @@ void signalhandlerdecl(surgescript_parser_t* parser, surgescript_nodecontext_t c
     emit_function_footer(context, surgescript_symtable_local_count(context.symtable) - num_arguments, fun_header);
     match(parser, SSTOK_RCURLY);
 
-    /* register the function and cleanup */
+    /* register the function */
     surgescript_programpool_put(parser->program_pool, context.object_name, program_name, context.program);
+
+    /* cleanup */
     surgescript_symtable_destroy(context.symtable);
     ssfree(program_name);
 }
@@ -2327,24 +2265,26 @@ void assertstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
     match(parser, SSTOK_EMIT);
-    match(parser, SSTOK_LPAREN);
     expect(parser, SSTOK_STRING);
     char* signal_name = ssstrdup(surgescript_token_lexeme(parser->lookahead));
 
-    /* compile-time validation */
+    /* signal names are available at compile-time */
     if(!surgescript_signalsystembuilder_is_signal_emission_registered(parser->signal_system_builder, context.object_name, signal_name)) {
-        sscompile_error(
-            "object \"%s\" cannot emit signal \"%s\" in %s:%d. Double check the list of signals that the object can emit.",
-            context.object_name,
-            signal_name,
-            context.source_file,
-            surgescript_token_linenumber(parser->lookahead)
-        );
+
+        /* compile-time validation */
+        if(is_large_name(signal_name))
+            sscompile_error("signal name \"%s\" of object \"%s\" is too large at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+        else if(!is_valid_name(signal_name))
+            sscompile_error("invalid signal name \"%s\" in object \"%s\" at %s:%d", signal_name, context.object_name, context.source_file, surgescript_token_linenumber(parser->lookahead));
+
+        /* register the signal */
+        surgescript_signalsystembuilder_register_signal_emission(parser->signal_system_builder, context.object_name, signal_name);
+
     }
 
     /* emit */
     match(parser, SSTOK_STRING);
-    if(optmatch(parser, SSTOK_COMMA)) {
+    if(optmatch(parser, SSTOK_WITH)) {
         baseexpr(parser, context); /* signal context object */
         emit_emitsignal(context, signal_name);
     }
@@ -2352,7 +2292,6 @@ void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
         emit_null(context); /* no signal context object */
         emit_emitsignal(context, signal_name);
     }
-    match(parser, SSTOK_RPAREN);
     match(parser, SSTOK_SEMICOLON);
     ssfree(signal_name);
 }

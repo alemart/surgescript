@@ -39,11 +39,8 @@
  * <objectlist> := <object> <objectlist> | e
  * <object> := <annotations> object string <qualifiers> { <objectdecl> }
  * <objectdecl> := <vardecllist> <statedecllist> <signalhandlerdecllist> <fundecllist>
- * <qualifiers> := <tagqualifiers> <signalqualifiers>
- * <tagqualifiers> := is <tags> | e
+ * <qualifiers> := is <tags> | e
  * <tags> := string , <tags> | string
- * <signalqualifiers> := identifier[="emits"] <signals> | e
- * <signals> := string , <signals> | string
  * <annotations> := annotation <annotations> | e
  *
  * <vardecllist> := <vardecl> <vardecllist> | e
@@ -174,8 +171,8 @@
  *            |  continue ;
  * <assertstmt> := assert ( <baseexpr> ) ;
  *              |  assert ( <baseexpr> , string ) ;
- * <emitstmt> := emit ( string ) ;
- *            |  emit ( string , <baseexpr> ) ;
+ * <emitstmt> := emit string ;
+ *            |  emit string with <baseexpr> ;
  */
 
 #include <stdbool.h>
