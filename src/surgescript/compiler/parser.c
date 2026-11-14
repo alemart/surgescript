@@ -1602,17 +1602,18 @@ void primaryexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
         expr(parser, context_with_cascade);
         match(parser, SSTOK_RPAREN);
     }
-    else if(optmatch(parser, SSTOK_LBRACKET)) {
+    else if(got_type(parser, SSTOK_LBRACKET)) {
         arrayexpr(parser, context);
-        match(parser, SSTOK_RBRACKET);
     }
     else if(optmatch(parser, SSTOK_LCURLY)) {
-        if(got_type(parser, SSTOK_IDENTIFIER))
+        if(got_type(parser, SSTOK_IDENTIFIER)) {
+            unmatch(parser);
             anonobjexpr(parser, context);
-        else
+        }
+        else {
+            unmatch(parser);
             dictexpr(parser, context);
-
-        match(parser, SSTOK_RCURLY);
+        }
     }
     else if(optmatch(parser, SSTOK_THIS)) {
         emit_this(context);
@@ -1679,19 +1680,25 @@ void constant(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
 void arrayexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    match(parser, SSTOK_LBRACKET);
     emit_arrayexpr1(context);
+
     if(!got_type(parser, SSTOK_RBRACKET)) {
         do {
             baseexpr(parser, context);
             emit_arrayelement(context);
         } while(optmatch(parser, SSTOK_COMMA) && !got_type(parser, SSTOK_RBRACKET));
     }
+
     emit_arrayexpr2(context);
+    match(parser, SSTOK_RBRACKET);
 }
 
 void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 {
+    match(parser, SSTOK_LCURLY);
     emit_dictdecl1(context);
+
     if(!got_type(parser, SSTOK_RCURLY)) {
         do {
             /* dict keys must be either strings or numbers (will be converted to strings at runtime) */
@@ -1708,7 +1715,9 @@ void dictexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
             emit_dictdeclvalue(context);
         } while(optmatch(parser, SSTOK_COMMA) && !got_type(parser, SSTOK_RCURLY));
     }
+
     emit_dictdecl2(context);
+    match(parser, SSTOK_RCURLY);
 }
 
 void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context)
@@ -1717,6 +1726,9 @@ void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     surgescript_program_label_t initialization = surgescript_program_new_label(context.program);
     char anonymous_object_name[1 + SS_NAMEMAX] = "";
     SSARRAY(char*, fields);
+
+    /* match delimiter */
+    match(parser, SSTOK_LCURLY);
 
     /* start */
     ssarray_init(fields);
@@ -1778,6 +1790,9 @@ void anonobjexpr(surgescript_parser_t* parser, surgescript_nodecontext_t context
     for(int j = ssarray_length(fields) - 2; j >= 0; j--) /* last element is NULL */
         ssfree(fields[j]);
     ssarray_release(fields);
+
+    /* match delimiter */
+    match(parser, SSTOK_RCURLY);
 }
 
 /* constant expressions */
@@ -2284,15 +2299,14 @@ void emitstmt(surgescript_parser_t* parser, surgescript_nodecontext_t context)
 
     /* emit */
     match(parser, SSTOK_STRING);
-    if(optmatch(parser, SSTOK_SEMICOLON)) {
-        emit_null(context); /* no signal context object */
-        emit_emitsignal(context, signal_name);
-    }
-    else if(optmatch(parser, SSTOK_LCURLY)) {
+    if(got_type(parser, SSTOK_LCURLY)) {
         anonobjexpr(parser, context); /* signal context object */
         emit_emitsignal(context, signal_name);
-        match(parser, SSTOK_RCURLY);
         match(parser, SSTOK_SEMICOLON);
+    }
+    else if(optmatch(parser, SSTOK_SEMICOLON)) {
+        emit_null(context); /* no signal context object */
+        emit_emitsignal(context, signal_name);
     }
     else
         unexpected_symbol(parser);
