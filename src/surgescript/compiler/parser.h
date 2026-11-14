@@ -71,7 +71,7 @@
  *              |  state = <baseexpr>
  * <nonassignexpr> := <conditionalexpr>
  *                 |  <conditionalexpr> .. <cascadeexpr>
- * <conditionalexpr> := <logicalorexpr> | <logicalorexpr> ? <expr_without_cascadeexpr> : <baseexpr_without_cascadeexpr>
+ * <conditionalexpr> := <logicalorexpr> | <logicalorexpr> ? <baseexpr_without_cascadeexpr> : <baseexpr_without_cascadeexpr>
  * <logicalorexpr> := <logicalandexpr> <logicalorexpr1>
  * <logicalorexpr1> := || <logicalandexpr> <logicalorexpr1> | e
  * <logicalandexpr> := <equalityexpr> <logicalandexpr1>

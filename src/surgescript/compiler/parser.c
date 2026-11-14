@@ -1209,7 +1209,7 @@ void conditionalexpr(surgescript_parser_t* parser, surgescript_nodecontext_t con
         context_without_cascade.disable_cascade = true;
         
         emit_conditionalexpr1(context, nope, done);
-        expr(parser, context_without_cascade);
+        baseexpr(parser, context_without_cascade);
         match(parser, SSTOK_COLON);
         emit_conditionalexpr2(context, nope, done);
         baseexpr(parser, context_without_cascade);
