@@ -19,6 +19,7 @@
  * SurgeScript standard library: Timer component
  */
 
+#include <math.h>
 #include "../vm.h"
 #include "../heap.h"
 #include "../object.h"
@@ -170,10 +171,14 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
     surgescript_object_emit_signal(object, signal_code[TIMER_FIRED], null_handle);
 
     /* stop or restart the timer */
-    if(state->repeat)
-        state->elapsed_time -= state->wait_time;
-    else
+    if(state->repeat) {
+        state->elapsed_time = fmod(state->elapsed_time, state->wait_time);
+        /*state->elapsed_time -= state->wait_time;*/ /* what if delta >> wait_time? */
+    }
+    else {
+        state->elapsed_time = state->wait_time;
         state->is_stopped = true;
+    }
 
     /* done */
     return NULL;
