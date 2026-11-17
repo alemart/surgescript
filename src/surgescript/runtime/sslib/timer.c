@@ -196,14 +196,14 @@ surgescript_var_t* fun_stop(surgescript_object_t* object, const surgescript_var_
     return NULL;
 }
 
-/* (getter) paused: if true, the timer is paused. A paused timer does not emit timeout signals until it's unpaused. */
+/* (getter) paused: if true, the timer is paused. A paused timer does not fire until it's unpaused. */
 surgescript_var_t* fun_getpaused(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const timerstate_t* state = surgescript_object_userdata(object);
     return surgescript_var_set_bool(surgescript_var_create(), state->is_paused);
 }
 
-/* (setter) paused: if true, the timer is paused. A paused timer does not emit timeout signals until it's unpaused. */
+/* (setter) paused: if true, the timer is paused. A paused timer does not fire until it's unpaused. */
 surgescript_var_t* fun_setpaused(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     timerstate_t* state = surgescript_object_userdata(object);
@@ -212,14 +212,14 @@ surgescript_var_t* fun_setpaused(surgescript_object_t* object, const surgescript
     return NULL;
 }
 
-/* (getter) waitTime: the time, in seconds, required for the timer to end. */
+/* (getter) waitTime: the time, in seconds, required for the timer to fire. */
 surgescript_var_t* fun_getwaittime(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const timerstate_t* state = surgescript_object_userdata(object);
     return surgescript_var_set_number(surgescript_var_create(), state->wait_time);
 }
 
-/* (setter) waitTime: the time, in seconds, required for the timer to end. */
+/* (setter) waitTime: the time, in seconds, required for the timer to fire. */
 surgescript_var_t* fun_setwaittime(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     timerstate_t* state = surgescript_object_userdata(object);
@@ -228,14 +228,14 @@ surgescript_var_t* fun_setwaittime(surgescript_object_t* object, const surgescri
     return NULL;
 }
 
-/* (getter) repeat: if true, the timer will restart automatically after a timeout. Otherwise, it will stop. */
+/* (getter) repeat: if true, the timer will restart automatically after it fires. Otherwise, it will stop. */
 surgescript_var_t* fun_getrepeat(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const timerstate_t* state = surgescript_object_userdata(object);
     return surgescript_var_set_bool(surgescript_var_create(), state->repeat);
 }
 
-/* (setter) repeat: if true, the timer will restart automatically after a timeout. Otherwise, it will stop. */
+/* (setter) repeat: if true, the timer will restart automatically after it fires. Otherwise, it will stop. */
 surgescript_var_t* fun_setrepeat(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     timerstate_t* state = surgescript_object_userdata(object);
@@ -244,7 +244,7 @@ surgescript_var_t* fun_setrepeat(surgescript_object_t* object, const surgescript
     return NULL;
 }
 
-/* (getter, read-only) timeLeft: the remaining time, in seconds, of the timer. If the timer is stopped, this is always zero. */
+/* (getter, read-only) timeLeft: the remaining time, in seconds, for the timer to fire. If the timer is stopped, this is always zero. */
 surgescript_var_t* fun_gettimeleft(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const timerstate_t* state = surgescript_object_userdata(object);
@@ -252,7 +252,7 @@ surgescript_var_t* fun_gettimeleft(surgescript_object_t* object, const surgescri
     return surgescript_var_set_number(surgescript_var_create(), time_left);
 }
 
-/* (getter, read-only) stopped: true if the timer is stopped or has not started. A stopped timer does not emit timeout signals. */
+/* (getter, read-only) stopped: true if the timer is stopped or has not started. A stopped timer does not fire. */
 surgescript_var_t* fun_getstopped(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const timerstate_t* state = surgescript_object_userdata(object);
