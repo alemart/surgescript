@@ -687,6 +687,29 @@
   
   
     <li class="md-nav__item">
+      <a href="../../tutorials/signals/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Signals
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../tutorials/packages/" class="md-nav__link">
         
   
@@ -1198,6 +1221,29 @@
   
   <span class="md-ellipsis">
     Time
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../reference/timer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Timer
     
   </span>
   
@@ -2713,6 +2759,10 @@
 
 
 <h1 id="event">Event</h1>
+<div class="admonition warning">
+<p class="admonition-title">Events are obsolete</p>
+<p>Even though events continue to work for backwards compatibility, they are considered obsolete. Prefer using <a href="../../tutorials/signals/">signals</a> whenever possible. Signals are richer and easier to use.</p>
+</div>
 <p>An event is a <a href="/tutorials/advanced_features/#function-objects">function object</a> with zero parameters and no return value that is tagged <em>"event"</em>. Events are used to run code when triggered.</p>
 <p>Events let you seamlessly connect <a href="/engine/entity">entities</a> and write cause and effect relationships. Suppose you have an on/off switch in a level. Whenever that switch is pressed by the player, you want something to happen: raise the water level, open a door, make it rain, teleport the player, and so on. Events are important because they let you decouple the source of the happening (the pressing of the switch) from the results that are experienced (e.g., the raising of the water).</p>
 <p>Events let you reuse your entities in multiple ways and for multiple purposes. You may design an entity and make it trigger an event, but you do not need to specify in advance what the event actually is. Rather, the concrete event (what must happen) will be configured in your <a href="/engine/level/#setup">level setup</a>.</p>
