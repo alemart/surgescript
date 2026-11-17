@@ -216,7 +216,6 @@ d = (c++, a); // Results in c = 4, d = 1
 e = (++a, f = 2, 3); // Results in a = 2, e = 3, f = 2
 ```
 
-
 Other expressions
 -----------------
 
@@ -256,3 +255,5 @@ object "Application"
     }
 }
 ```
+
+See also: [Timer](../reference/timer.md).

@@ -3,7 +3,7 @@ Anonymous objects
 
 You can encapsulate data into a single immutable object by means of a convenient syntax featuring named fields. When defining such an object, the SurgeScript compiler will generate a class of objects containing the specified fields. A new object of the generated class will be spawned and initialized with the provided values. Such object is called an Anonymous object.
 
-*Available since:* SurgeScript 7
+*Available since:* SurgeScript 7.0
 
 Syntax
 ------

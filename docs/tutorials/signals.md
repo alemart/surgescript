@@ -5,7 +5,7 @@ Signals provide an easy way for objects to communicate without holding reference
 
 ![Signals diagram](/img/signals.png)
 
-*Available since:* SurgeScript 7
+*Available since:* SurgeScript 7.0
 
 Basics
 ------
@@ -117,7 +117,7 @@ Note what just happened: with the same structure of the previous example, a sing
 
 !!! note "Signal names"
 
-    As of SurgeScript 7, the signal name passed to `emit` must be a string literal. This constraint helps to determine at compile-time all signals that can be emitted by an object.
+    The signal name passed to `emit` must be a string literal. This constraint helps to determine at compile-time all signals that can be emitted by an object.
 
 Naming convention
 -----------------
@@ -298,6 +298,8 @@ local signal "component changed"
 {
 }
 ```
+
+Local signals are emitted the same way as global signals.
 
 In order to see the usefulness of local signals, consider the example of a spaceship that spawns a [Timer component](../reference/timer.md) to shoot lasers at predefined times. Here, the Timer component emits a local signal called `"timer fired"` every second. It's not relevant for all other objects of the game to know when that internal timer of the spaceship has fired. That occurrence is only relevant for the spaceship itself. Let's see an example:
 
