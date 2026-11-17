@@ -1,6 +1,10 @@
 Event
 =====
 
+!!! warning "Events are obsolete"
+
+    Even though events continue to work for backwards compatibility, they are considered obsolete. Prefer using [signals](../tutorials/signals.md) whenever possible. Signals are richer and easier to use.
+
 An event is a [function object](/tutorials/advanced_features/#function-objects) with zero parameters and no return value that is tagged *"event"*. Events are used to run code when triggered.
 
 Events let you seamlessly connect [entities](/engine/entity) and write cause and effect relationships. Suppose you have an on/off switch in a level. Whenever that switch is pressed by the player, you want something to happen: raise the water level, open a door, make it rain, teleport the player, and so on. Events are important because they let you decouple the source of the happening (the pressing of the switch) from the results that are experienced (e.g., the raising of the water).
