@@ -158,7 +158,7 @@ signal "broadcast started"
 
 This code means that signals named `"broadcast started"` carry a context with two fields: `show` and `host`. Note that you can specify multiple fields by separating them with commas.
 
-Whenever a radio station emits a `"broadcast started"` signal, it must include the appropriate context. Such context must be provided as an [anonymous object](./anonymous_objects.md) featuring two [properties](./properties.md): `show` and `host`. We pass it to `emit` after the signal name. Take a look:
+Whenever a radio station emits a `"broadcast started"` signal, it must include the appropriate context. Such context must be provided as an [anonymous object](./anonymous_objects.md) featuring two [properties](./properties.md): `show` and `host`. It's written after the signal name, as in the following example:
 
 ```cs
 object "Gamedev Radio Station"
@@ -257,6 +257,7 @@ object "Radio Receiver"
 
     catch "broadcast started"
     {
+        // stop execution if we've caught the wrong station
         if(signal.emitter.__name != station)
             return;
 
@@ -275,14 +276,101 @@ Now, tuning the receiver to a different station is just a matter of changing its
 
     Object `signal.context` is guaranteed to contain all fields specified in the declaration of the signal. It is an error to emit a signal without all the required fields. If no fields are specified in the declaration of the signal, then there is no context and `signal.context` evaluates to `null`.
 
-!!! note
+!!! tip
+
+    You can easily inspect the fields of any signal context simply by printing it: `Console.print(signal.context);`
+
+!!! warning
 
     The special `signal` object may not be accessed outside of a `catch` block. Storing a reference to it is an error that leads to undefined behavior.
 
 Local signals
 -------------
 
-Signals are _global_ by default. This means that they are broadcasted to all objects with a corresponding `catch` block.
-Timer example
+Signals are _global_ by default. They are broadcasted to all objects with a matching `catch` block. _Local signals_ work differently. They are used by [components](./components.md) in order to communicate some occurrence. Unlike global signals, **local signals can only be caught by the [parent](./object_tree.md) of the emitter**. Objects other than the parent of the emitter cannot catch them, even if they have a matching `catch` block. Consequently, for any given local signal, if the parent of the emitter does not implement a matching `catch` block, then that local signal will be lost.
 
 ![Local signals diagram](/img/local_signals.png)
+
+In order to make a signal local, all you need to do is prefix its declaration with the `local` qualifier:
+
+```cs
+local signal "component changed"
+{
+}
+```
+
+In order to see the usefulness of local signals, consider the example of a spaceship that spawns a [Timer component](../reference/timer.md) to shoot lasers at predefined times. Here, the Timer component emits a local signal called `"timer fired"` every second. It's not relevant for all other objects of the game to know when that internal timer of the spaceship has fired. That occurrence is only relevant for the spaceship itself. Let's see an example:
+
+```cs
+using SurgeScript.Timer;
+
+object "Spaceship"
+{
+    timer = Timer()
+            ..waitTime = 1.0
+            ..repeat = true
+            ..start();
+
+    state "main"
+    {
+    }
+
+    // we'll catch this signal every second
+    catch "timer fired"
+    {
+        shoot();
+    }
+
+    fun shoot()
+    {
+        Console.print("Spaceship: SHOOT!");
+    }
+}
+```
+
+Since a local signal can only be caught by the parent of the emitter, it follows that the Timer of a spaceship does not interfere with the Timer of another spaceship. They are independent.
+
+Now, consider this scenario: what if a spaceship holds multiple Timers, say, one for shooting and another for blinking? Each Timer will emit a `"timer fired"` signal. How can we distinguish between the two? We can use `signal.emitter`. Example:
+
+```cs
+using SurgeScript.Timer;
+
+object "Spaceship"
+{
+    shootTimer = Timer()
+                 ..waitTime = 1.0
+                 ..repeat = true
+                 ..start();
+
+    blinkTimer = Timer()
+                 ..waitTime = 0.25
+                 ..repeat = true
+                 ..start();
+
+    state "main"
+    {
+    }
+
+    catch "timer fired"
+    {
+        if(signal.emitter == shootTimer) {
+            shoot();
+        }
+        else {
+            blink();
+        }
+    }
+
+    fun shoot()
+    {
+        Console.print("Spaceship: SHOOT!");
+    }
+
+    fun blink()
+    {
+        Console.print("Spaceship: blink");
+    }
+}
+```
+
+Local signals lets us reuse the basic architecture of global signals in order to solve a different problem in an elegant way.
