@@ -62,11 +62,11 @@ The time, in seconds, required for the timer to fire. Defaults to one second.
 
 If `true`, the timer will restart automatically after it fires. Otherwise, it will [stop](#stop). Defaults to `true`.
 
-#### paused
+#### frozen
 
-`paused`: boolean.
+`frozen`: boolean.
 
-If `true`, the timer is paused. A paused timer does not fire until it's unpaused. Defaults to `false`.
+If `true`, the timer is frozen. A frozen timer does not fire until it's unfrozen. Defaults to `false`.
 
 #### stopped
 
@@ -89,13 +89,13 @@ Functions
 
 `start()`
 
-Start the timer, or reset it if it was already started. This function does not resume a [paused](#paused) timer.
+Start the timer, or reset it if it was already started. This function does not unfreeze a [frozen](#frozen) timer.
 
 #### stop
 
 `stop()`
 
-Stop the timer. A [stopped](#stopped) timer can only be restarted, unlike a [paused](#paused) timer.
+Stop the timer. A [stopped](#stopped) timer can only be restarted, unlike a [frozen](#frozen) timer.
 
 Signals
 -------

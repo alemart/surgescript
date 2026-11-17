@@ -36,8 +36,8 @@ static surgescript_var_t* fun_stop(surgescript_object_t* object, const surgescri
 
 static surgescript_var_t* fun_getwaittime(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setwaittime(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_getpaused(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
-static surgescript_var_t* fun_setpaused(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_getfrozen(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
+static surgescript_var_t* fun_setfrozen(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_getrepeat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 static surgescript_var_t* fun_setrepeat(surgescript_object_t* object, const surgescript_var_t** param, int num_params);
 
@@ -49,7 +49,7 @@ typedef struct timerstate_t {
     double elapsed_time;
     double wait_time;
     bool is_stopped;
-    bool is_paused;
+    bool is_frozen;
     bool repeat;
 } timerstate_t;
 
@@ -57,7 +57,7 @@ static const timerstate_t INITIAL_STATE = {
     .elapsed_time = 0.0, /* measured in seconds */
     .wait_time = 1.0, /* one second */
     .is_stopped = true,
-    .is_paused = false,
+    .is_frozen = false,
     .repeat = true
 };
 
@@ -88,8 +88,8 @@ void surgescript_sslib_register_timer(surgescript_vm_t* vm)
 
     surgescript_vm_bind(vm, "Timer", "get_waitTime", fun_getwaittime, 0);
     surgescript_vm_bind(vm, "Timer", "set_waitTime", fun_setwaittime, 1);
-    surgescript_vm_bind(vm, "Timer", "get_paused", fun_getpaused, 0);
-    surgescript_vm_bind(vm, "Timer", "set_paused", fun_setpaused, 1);
+    surgescript_vm_bind(vm, "Timer", "get_frozen", fun_getfrozen, 0);
+    surgescript_vm_bind(vm, "Timer", "set_frozen", fun_setfrozen, 1);
     surgescript_vm_bind(vm, "Timer", "get_repeat", fun_getrepeat, 0);
     surgescript_vm_bind(vm, "Timer", "set_repeat", fun_setrepeat, 1);
 
@@ -150,8 +150,8 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
 {
     timerstate_t* state = surgescript_object_userdata(object);
 
-    /* do nothing if the timer is paused or stopped */
-    if(state->is_stopped || state->is_paused)
+    /* do nothing if the timer is frozen or stopped */
+    if(state->is_stopped || state->is_frozen)
         return NULL;
 
     /* increment the time: elapsed += Time.delta */
@@ -184,7 +184,7 @@ surgescript_var_t* fun_main(surgescript_object_t* object, const surgescript_var_
     return NULL;
 }
 
-/* start the timer, or reset it if it was already started. This operation does not resume a paused timer. */
+/* start the timer, or reset it if it was already started. This operation does not unfreeze a frozen timer. */
 surgescript_var_t* fun_start(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     timerstate_t* state = surgescript_object_userdata(object);
@@ -193,7 +193,7 @@ surgescript_var_t* fun_start(surgescript_object_t* object, const surgescript_var
     return NULL;
 }
 
-/* stop the timer. A stopped timer can only be restarted, unlike a paused timer. */
+/* stop the timer. A stopped timer can only be restarted, unlike a frozen timer. */
 surgescript_var_t* fun_stop(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     timerstate_t* state = surgescript_object_userdata(object);
@@ -201,19 +201,19 @@ surgescript_var_t* fun_stop(surgescript_object_t* object, const surgescript_var_
     return NULL;
 }
 
-/* (getter) paused: if true, the timer is paused. A paused timer does not fire until it's unpaused. */
-surgescript_var_t* fun_getpaused(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+/* (getter) frozen: if true, the timer is frozen. A frozen timer does not fire until it's unfrozen. */
+surgescript_var_t* fun_getfrozen(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     const timerstate_t* state = surgescript_object_userdata(object);
-    return surgescript_var_set_bool(surgescript_var_create(), state->is_paused);
+    return surgescript_var_set_bool(surgescript_var_create(), state->is_frozen);
 }
 
-/* (setter) paused: if true, the timer is paused. A paused timer does not fire until it's unpaused. */
-surgescript_var_t* fun_setpaused(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
+/* (setter) frozen: if true, the timer is frozen. A frozen timer does not fire until it's unfrozen. */
+surgescript_var_t* fun_setfrozen(surgescript_object_t* object, const surgescript_var_t** param, int num_params)
 {
     timerstate_t* state = surgescript_object_userdata(object);
-    bool is_paused = surgescript_var_get_bool(param[0]);
-    state->is_paused = is_paused;
+    bool is_frozen = surgescript_var_get_bool(param[0]);
+    state->is_frozen = is_frozen;
     return NULL;
 }
 
