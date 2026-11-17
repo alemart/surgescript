@@ -113,6 +113,49 @@ We call that function a *chainable function*. You may call such a function from 
 parrot = spawn("Parrot").setMessage("Hello!").setInterval(2.0);
 ```
 
+Cascades
+--------
+
+Since SurgeScript 7.0, you can take [chaining](#chaining) to the next level using cascades (`..`). This handy operator lets you perform a sequence of operations on the same object, including setting properties and calling methods, with no need to write chainable functions. This feature makes it easy to write fluid code.
+
+The canonical example of cascades is the configuration of the [Timer component](../reference/timer.md), spawned by means of a [factory](#factory):
+
+```cs
+using SurgeScript.Timer;
+
+object "My Test"
+{
+    timer = Timer()
+            ..waitTime = 1.0
+            ..repeat = true
+            ..start();
+
+    // ...
+}
+```
+
+The factory, `Timer`, returns a new Timer object. Operations following the cascades operate on that Timer object. Any values returned by any of these operations are ignored, as expressions with cascades return the object itself. The above example is equivalent to the following:
+
+```cs
+using SurgeScript.Timer;
+
+object "My Test"
+{
+    timer = Timer();
+
+    // ...
+
+    fun constructor()
+    {
+        timer.waitTime = 1.0;
+        timer.repeat = true;
+        timer.start();
+    }
+}
+```
+
+*Available since:* SurgeScript 7.0
+
 Factory
 -------
 
