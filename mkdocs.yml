@@ -75,6 +75,7 @@ nav:
         - 'System': 'reference/system.md'
         - 'TagSystem': 'reference/tags.md'
         - 'Time': 'reference/time.md'
+        - 'Timer': 'reference/timer.md'
     - 'SurgeEngine Reference':
         - 'Actor': 'engine/actor.md'
         - 'Animation': 'engine/animation.md'
